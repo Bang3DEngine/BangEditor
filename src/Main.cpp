@@ -62,15 +62,21 @@ int main(int argc, char **argv)
 
     SceneManager::LoadScene(scene);
 
-    GameObject *plGo = GameObjectFactory::CreateGameObject();
-    plGo->transform->SetPosition( Vector3(5) );
-    PointLight *light = plGo->AddComponent<PointLight>();
-    // DirectionalLight *light = plGo->AddComponent<DirectionalLight>();
-    plGo->transform->LookInDirection(Vector3(5,0,0));
-    light->SetRange(20.0f);
+    GameObject *lightGo = GameObjectFactory::CreateGameObject();
+    PointLight *light = lightGo->AddComponent<PointLight>();
+    lightGo->transform->SetPosition( Vector3(5) );
+    light->SetRange(15.0f);
     light->SetIntensity(1.0f);
-    light->SetColor(Color::White);
-    plGo->SetParent(scene);
+    light->SetColor(Color::Yellow);
+    lightGo->SetParent(scene);
+
+    GameObject *lightGo2 = GameObjectFactory::CreateGameObject();
+    PointLight *light2 = lightGo2->AddComponent<PointLight>();
+    lightGo2->transform->SetPosition( Vector3(0, 5, -5) );
+    light2->SetRange(15.0f);
+    light2->SetIntensity(1.0f);
+    light2->SetColor(Color::Pink);
+    lightGo2->SetParent(scene);
 
     GameObject *camGoPivot = GameObjectFactory::CreateGameObject();
     GameObject *camGo = GameObjectFactory::CreateGameObject();
@@ -88,7 +94,7 @@ int main(int argc, char **argv)
     MeshRenderer *spMR = sphere->AddComponent<MeshRenderer>();
     spMR->SetMesh( MeshFactory::GetSphere() );
     spMR->UseMaterialCopy();
-    spMR->GetMaterial()->SetDiffuseColor(Color::Green);
+    spMR->GetMaterial()->SetDiffuseColor(Color::White);
     sphere->SetParent(scene);
 
     camGo->transform->LookAt(sphere->transform->GetPosition());

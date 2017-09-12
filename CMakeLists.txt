@@ -2,6 +2,19 @@ cmake_minimum_required(VERSION 2.8)
 
 project(BangEditor C CXX)
 
+include(CMakeConfig.txt OPTIONAL)
+
+# Compile Bang, if BANG_PROJECT_ROOT is set
+if(NOT "${BANG_PROJECT_ROOT}" STREQUAL "")
+	set(BANG_INSTALL_SCRIPT "${BANG_PROJECT_ROOT}/scripts/install.sh")
+	if(EXISTS "${BANG_INSTALL_SCRIPT}")
+	   message("Installing Bang using ${BANG_INSTALL_SCRIPT}")
+	   execute_process(COMMAND "${BANG_INSTALL_SCRIPT}")
+	else()
+	   message("Can't find ${BANG_INSTALL_SCRIPT} to install. Not installing Bang.")
+	endif()
+endif()
+
 set(CMAKE_BINARY_DIR bin)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 

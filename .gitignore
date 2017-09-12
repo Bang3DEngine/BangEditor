@@ -33,6 +33,7 @@ bin/*
 *CMakeFiles/*
 objs*/*
 build/*
+CMakeConfig.txt
 
 # QtCreator
 *.autosave
