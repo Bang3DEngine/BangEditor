@@ -2,6 +2,7 @@
 
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
+#include "Bang/Paths.h"
 #include "Bang/Camera.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
@@ -14,6 +15,10 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/GameObjectFactory.h"
+
+#ifndef BANG_PROJECT_ROOT
+    #define BANG_PROJECT_ROOT
+#endif
 
 using namespace Bang;
 
@@ -38,9 +43,11 @@ public:
     }
 };
 
+void CaptureDefinedBangRootPath(const Application &app);
+
 int main(int argc, char **argv)
 {
-    Application app(argc, argv);
+    Application app(argc, argv, Path("" BANG_PROJECT_ROOT));
     app.CreateWindow();
 
     Scene *scene = new Scene();
@@ -61,6 +68,9 @@ int main(int argc, char **argv)
     textGo->SetParent(scene);
 
     SceneManager::LoadScene(scene);
+
+    Scene *scene2 = new Scene();
+    scene2->AddComponent<Transform>();
 
     GameObject *lightGo = GameObjectFactory::CreateGameObject();
     PointLight *light = lightGo->AddComponent<PointLight>();

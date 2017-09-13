@@ -21,4 +21,10 @@ cd build${RD} && \
 ${CMAKE_CMD} && \
 make all --no-print-directory VERBOSE=${VERBOSE} -j${NUM_THREADS}
 
+if [[ $? != 0 ]]
+then
+        Error "ERROR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        EndHeader
+        exit 3
+fi
 
