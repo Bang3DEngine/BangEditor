@@ -1,4 +1,4 @@
-#include "Bang/Application.h"
+#include "BangEditor/EditorApplication.h"
 
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
@@ -21,6 +21,7 @@
 #endif
 
 using namespace Bang;
+using namespace BangEditor;
 
 class Rotator : public Component
 {
@@ -47,7 +48,7 @@ void CaptureDefinedBangRootPath(const Application &app);
 
 int main(int argc, char **argv)
 {
-    Application app(argc, argv, Path("" BANG_PROJECT_ROOT));
+    EditorApplication app(argc, argv, Path("" BANG_PROJECT_ROOT));
     app.CreateWindow();
 
     Scene *scene = new Scene();
@@ -66,11 +67,6 @@ int main(int argc, char **argv)
     text->SetVerticalAlign(VerticalAlignment::Top);
 
     textGo->SetParent(scene);
-
-    SceneManager::LoadScene(scene);
-
-    Scene *scene2 = new Scene();
-    scene2->AddComponent<Transform>();
 
     GameObject *lightGo = GameObjectFactory::CreateGameObject();
     PointLight *light = lightGo->AddComponent<PointLight>();
@@ -108,6 +104,8 @@ int main(int argc, char **argv)
     sphere->SetParent(scene);
 
     camGo->transform->LookAt(sphere->transform->GetPosition());
+
+    SceneManager::LoadScene(scene);
 
     return app.MainLoop();
 }

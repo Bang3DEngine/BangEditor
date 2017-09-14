@@ -25,6 +25,7 @@ message("Compiling Bang using ${BANG_COMPILE_SCRIPT}")
 add_custom_target(CompileBang ALL "${BANG_COMPILE_SCRIPT}" "${CMAKE_BUILD_TYPE}")
 
 include_directories(${BANG_PROJECT_ROOT}/include)
+include_directories(${CMAKE_SOURCE_DIR}/include)
 add_definitions(-DBANG_PROJECT_ROOT="${BANG_PROJECT_ROOT}")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -45,6 +46,7 @@ set(BANG_LIB_NAME "libBang.so")
 link_libraries("${BANG_LIBS_DIR}/${BANG_LIB_NAME}")
 
 add_executable(BangEditor
+${SRC_DIR}/EditorApplication.cpp
 ${SRC_DIR}/Main.cpp
 )
 
