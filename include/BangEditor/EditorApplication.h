@@ -14,6 +14,8 @@ FORWARD NAMESPACE_BANG_END
 NAMESPACE_BANG_EDITOR_BEGIN
 USING_NAMESPACE_BANG
 
+FORWARD class EditorScene;
+
 class EditorApplication : public Application
 {
 public:
@@ -22,17 +24,12 @@ public:
     virtual ~EditorApplication();
 
     virtual void CreateWindow() override;
-    virtual int MainLoop() override;
-    virtual bool MainLoopIteration() override;
-
-    virtual void UpdateScene() override;
     virtual void RenderScene() override;
-    virtual void OnResize(int newWidth, int newHeight) override;
+
+    EditorScene *GetEditorScene() const;
 
 private:
-    Texture2D *m_openSceneRenderTexture = nullptr;
-    UIImageRenderer *m_openSceneImage = nullptr;
-    Scene *m_openScene = nullptr;
+    EditorScene *m_editorScene = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

@@ -24,8 +24,11 @@ endif ()
 message("Compiling Bang using ${BANG_COMPILE_SCRIPT}")
 add_custom_target(CompileBang ALL "${BANG_COMPILE_SCRIPT}" "${CMAKE_BUILD_TYPE}")
 
-include_directories(${BANG_PROJECT_ROOT}/include)
-include_directories(${CMAKE_SOURCE_DIR}/include)
+set(SRC_DIR "src")
+
+set(INCLUDE_ROOT "${CMAKE_SOURCE_DIR}/include")
+include_directories("${INCLUDE_ROOT}")
+include_directories("${BANG_PROJECT_ROOT}/include")
 add_definitions(-DBANG_PROJECT_ROOT="${BANG_PROJECT_ROOT}")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -38,7 +41,19 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--export-dynamic")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
-set(SRC_DIR "src")
+macro(add_info_files)
+     foreach(_it ${ARGN})
+         if(NOT IS_DIRECTORY ${_it})
+             get_filename_component(name ${_it} NAME)
+             if(NOT ${_it} MATCHES "^/\\\\..*$;~$")
+                set_source_files_properties(${_it} PROPERTIES HEADER_FILE_ONLY TRUE)
+             endif()
+         endif()
+     endforeach()
+endmacro()
+file(GLOB_RECURSE OTHER_FILES "${INCLUDE_ROOT}/BangEditor/*.h")
+set(OTHER_FILES README.md "${OTHER_FILES}")
+add_info_files(${OTHER_FILES})
 
 message("Building BangEditor in ${CMAKE_BUILD_TYPE} mode...")
 set(BANG_LIBS_DIR "${BANG_PROJECT_ROOT}/bin/${CMAKE_BUILD_TYPE}/lib")
@@ -46,7 +61,9 @@ set(BANG_LIB_NAME "libBang.so")
 link_libraries("${BANG_LIBS_DIR}/${BANG_LIB_NAME}")
 
 add_executable(BangEditor
+${SRC_DIR}/EditorScene.cpp
 ${SRC_DIR}/EditorApplication.cpp
 ${SRC_DIR}/Main.cpp
+${OTHER_FILES}
 )
 
