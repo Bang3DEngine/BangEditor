@@ -14,6 +14,8 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class MenuBar;
+
 class EditorScene : public Scene
 {
 public:
@@ -26,6 +28,9 @@ public:
 
 private:
     Scene *p_openScene = nullptr;
+
+    MenuBar *m_menuBar = nullptr;
+
     UIGameObject *m_openSceneContainer = nullptr;
     UIImageRenderer *m_openSceneImage  = nullptr;
 

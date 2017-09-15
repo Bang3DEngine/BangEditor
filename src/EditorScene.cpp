@@ -7,6 +7,7 @@
 #include "Bang/Texture2D.h"
 #include "Bang/UIBorderRect.h"
 #include "Bang/UIGameObject.h"
+#include "BangEditor/MenuBar.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
@@ -19,8 +20,11 @@ EditorScene::EditorScene()
     AddComponent<RectTransform>();
 
     Camera *cam = AddComponent<Camera>();
-    cam->SetClearColor(Color::Gray);
+    cam->SetClearColor(Color::DarkGray);
     SetCamera(cam);
+
+    m_menuBar = new MenuBar();
+    m_menuBar->SetParent(this);
 
     m_openSceneContainer = GameObjectFactory::CreateUIGameObject();
     RectTransform *openSceneRT = m_openSceneContainer->GetRectTransform();
