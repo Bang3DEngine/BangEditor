@@ -24,7 +24,6 @@ public:
     virtual ~EditorApplication();
 
     virtual void CreateWindow() override;
-    virtual void RenderScene() override;
 
     EditorScene *GetEditorScene() const;
 

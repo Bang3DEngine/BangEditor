@@ -7,7 +7,6 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
-FORWARD class Texture2D;
 FORWARD class UIGameObject;
 FORWARD class UIImageRenderer;
 FORWARD NAMESPACE_BANG_END
@@ -21,10 +20,6 @@ public:
     EditorScene();
     virtual ~EditorScene();
 
-    // Scene
-    virtual void Update() override;
-    virtual void ParentSizeChanged() override;
-
     void SetOpenScene(Scene *openScene);
 
     Scene *GetOpenScene() const;
@@ -33,9 +28,6 @@ private:
     Scene *p_openScene = nullptr;
     UIGameObject *m_openSceneContainer = nullptr;
     UIImageRenderer *m_openSceneImage  = nullptr;
-    Texture2D *m_openSceneRenderTexture = nullptr;
-
-    void RenderEditor();
 
     friend class EditorApplication;
 };

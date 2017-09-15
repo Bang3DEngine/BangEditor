@@ -27,11 +27,6 @@ void EditorApplication::CreateWindow()
     SceneManager::LoadScene(m_editorScene);
 }
 
-void EditorApplication::RenderScene()
-{
-    m_editorScene->RenderEditor();
-}
-
 EditorScene *EditorApplication::GetEditorScene() const
 {
     return m_editorScene;
