@@ -3,7 +3,9 @@
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Window.h"
+#include "Bang/Project.h"
 #include "Bang/SceneManager.h"
+#include "Bang/ProjectManager.h"
 #include "BangEditor/EditorScene.h"
 
 USING_NAMESPACE_BANG
@@ -25,6 +27,15 @@ void EditorApplication::CreateWindow()
 
     m_editorScene = new EditorScene();
     SceneManager::LoadScene(m_editorScene);
+
+    Scene *scene = new Scene();
+    Project *proj = ProjectManager::GetCurrentProject();
+    if (proj)
+    {
+        Debug_Log(proj->GetFirstFoundScenePath());
+        scene->ImportXMLFromFile(proj->GetFirstFoundScenePath());
+    }
+    m_editorScene->SetOpenScene(scene);
 }
 
 EditorScene *EditorApplication::GetEditorScene() const
