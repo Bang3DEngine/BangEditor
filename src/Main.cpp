@@ -2,6 +2,7 @@
 
 #include "Bang/Scene.h"
 #include "Bang/Project.h"
+#include "Bang/DialogWindow.h"
 #include "Bang/ProjectManager.h"
 #include "BangEditor/EditorScene.h"
 
@@ -30,7 +31,9 @@ int main(int argc, char **argv)
         }
     }
 
-    edApp.CreateWindow();
+    Window *mainWindow = edApp.CreateWindow();
+    mainWindow->SetTitle("Bang Editor");
+    edApp.OpenEditorScene(mainWindow);
 
     return edApp.MainLoop();
 }

@@ -8,6 +8,7 @@
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
 FORWARD class Texture2D;
+FORWARD class DialogWindow;
 FORWARD class UIImageRenderer;
 FORWARD NAMESPACE_BANG_END
 
@@ -23,11 +24,12 @@ public:
                       const Path &engineRootPath = Path::Empty);
     virtual ~EditorApplication();
 
-    virtual void CreateWindow() override;
-
+    void OpenEditorScene(Window *containingWindow);
     EditorScene *GetEditorScene() const;
 
 private:
+    virtual void SetupWindow(Window *window) override;
+
     EditorScene *m_editorScene = nullptr;
 };
 

@@ -21,22 +21,26 @@ EditorApplication::~EditorApplication()
 {
 }
 
-void EditorApplication::CreateWindow()
+void EditorApplication::OpenEditorScene(Window *containingWindow)
 {
-    Application::CreateWindow();
-
     m_editorScene = new EditorScene();
-    SceneManager::LoadScene(m_editorScene);
+    containingWindow->GetSceneManager()->LoadScene(m_editorScene);
 
     Scene *scene = new Scene();
     Project *proj = ProjectManager::GetCurrentProject();
     if (proj)
     {
-        Debug_Log(proj->GetFirstFoundScenePath());
         scene->ImportXMLFromFile(proj->GetFirstFoundScenePath());
     }
     m_editorScene->SetOpenScene(scene);
 }
+
+void EditorApplication::SetupWindow(Window *window)
+{
+    Application::SetupWindow(window);
+}
+
+
 
 EditorScene *EditorApplication::GetEditorScene() const
 {
