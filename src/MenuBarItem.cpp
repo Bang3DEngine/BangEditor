@@ -46,20 +46,26 @@ MenuBarItem::MenuBarItem(bool toTheRight)
     m_childrenContainer = GameObjectFactory::CreateUIGameObject();
 
     UIContentSizeFitter *csf = m_childrenContainer->AddComponent<UIContentSizeFitter>();
+    csf->SetVerticalSizeFitMode(SizeFitMode::Sum);
+    csf->SetHorizontalSizeFitMode(SizeFitMode::Max);
     csf->SetVerticalSizeType(LayoutSizeType::Preferred);
+    csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
 
     m_childrenContainerVL = m_childrenContainer->AddComponent<UIVerticalLayout>();
     m_childrenContainerVL->SetChildrenHorizontalStretch(Stretch::Full);
+    m_childrenContainer->GetRectTransform()->SetPivotPosition(Vector2(-1));
     if (toTheRight)
     {
         m_childrenContainer->GetRectTransform()->SetAnchors(Vector2(1, 1));
+        m_childrenContainer->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
     }
     else
     {
         m_childrenContainer->GetRectTransform()->SetAnchors(Vector2(-1, -1));
+        m_childrenContainer->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
     }
-    m_childrenContainer->GetRectTransform()->SetMarginRight(-150);
-    m_childrenContainer->GetRectTransform()->SetMarginBot(-250);
+    // m_childrenContainer->GetRectTransform()->SetMarginRight(-150);
+    // m_childrenContainer->GetRectTransform()->SetMarginBot(-250);
     m_childrenContainer->SetEnabled(false);
     m_childrenContainer->SetParent(this);
 }
