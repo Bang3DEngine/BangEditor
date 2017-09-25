@@ -1,5 +1,6 @@
 #include "BangEditor/EditorApplication.h"
 
+#include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Window.h"
@@ -15,6 +16,9 @@ EditorApplication::EditorApplication(int argc, char **argv,
                                      const Path &engineRootPath)
     : Application(argc, argv, engineRootPath)
 {
+    GetPaths()->InitEditorPath( Paths::ExecutablePath().GetDirectory()
+                                                       .GetDirectory()
+                                                       .GetDirectory());
 }
 
 EditorApplication::~EditorApplication()

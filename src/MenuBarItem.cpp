@@ -36,7 +36,7 @@ MenuBarItem::MenuBarItem(bool toTheRight)
     textGo->SetParent(this);
 
     m_buttonWithTint = AddComponent<UITintedInteractive>();
-    m_buttonWithTint->AddGameObjectToTint(this);
+    m_buttonWithTint->AddToTint(this);
     m_buttonWithTint->SetIdleTintColor(BgColor);
     m_buttonWithTint->SetOverTintColor(Color::White);
     m_buttonWithTint->SetPressedTintColor(Color::White);
@@ -92,7 +92,9 @@ void MenuBarItem::Update()
     }
     if (Input::GetKeyDown(Input::Key::E))
     {
-        Dialog::Error("ErrorOMG", "WololoError");
+        Dialog::Error("ErrorOMG", "Lorem ipsum dolor sit amet consecteur"
+                                  " adiscipilim. Bangerino Pizzerino con un"
+                                  " poco de oregano.");
     }
 }
 
