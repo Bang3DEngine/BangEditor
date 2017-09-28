@@ -4,7 +4,7 @@
 #include "Bang/RectTransform.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
-#include "Bang/UITintedInteractive.h"
+#include "Bang/UITintedButton.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
@@ -17,6 +17,7 @@ MenuBarItem::MenuBarItem(bool toTheRight)
     RectTransform *rt = AddComponent<RectTransform>();
     UIFrameLayout *fl = AddComponent<UIFrameLayout>();
     fl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
+    fl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
     fl->SetPaddingLeft(5);
     fl->SetPaddingRight(5);
     fl->SetPaddingTop(4);
@@ -35,7 +36,7 @@ MenuBarItem::MenuBarItem(bool toTheRight)
     GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
     textGo->SetParent(this);
 
-    m_buttonWithTint = AddComponent<UITintedInteractive>();
+    m_buttonWithTint = AddComponent<UITintedButton>();
     m_buttonWithTint->AddToTint(this);
     m_buttonWithTint->SetIdleTintColor(BgColor);
     m_buttonWithTint->SetOverTintColor(Color::White);
@@ -45,6 +46,10 @@ MenuBarItem::MenuBarItem(bool toTheRight)
 
     m_childrenContainer = GameObjectFactory::CreateUIGameObject();
 
+    UIImageRenderer *childrenContainerBg = m_childrenContainer->AddComponent<UIImageRenderer>();
+    m_childrenContainer->SetName("BG");
+    childrenContainerBg->SetTint(BgColor);
+
     UIContentSizeFitter *csf = m_childrenContainer->AddComponent<UIContentSizeFitter>();
     csf->SetVerticalSizeFitMode(SizeFitMode::Sum);
     csf->SetHorizontalSizeFitMode(SizeFitMode::Max);
@@ -52,6 +57,7 @@ MenuBarItem::MenuBarItem(bool toTheRight)
     csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
 
     m_childrenContainerVL = m_childrenContainer->AddComponent<UIVerticalLayout>();
+    m_childrenContainerVL->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
     m_childrenContainerVL->SetChildrenHorizontalStretch(Stretch::Full);
     m_childrenContainer->GetRectTransform()->SetPivotPosition(Vector2(-1));
     if (toTheRight)
@@ -64,8 +70,6 @@ MenuBarItem::MenuBarItem(bool toTheRight)
         m_childrenContainer->GetRectTransform()->SetAnchors(Vector2(-1, -1));
         m_childrenContainer->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
     }
-    // m_childrenContainer->GetRectTransform()->SetMarginRight(-150);
-    // m_childrenContainer->GetRectTransform()->SetMarginBot(-250);
     m_childrenContainer->SetEnabled(false);
     m_childrenContainer->SetParent(this);
 }
@@ -75,27 +79,12 @@ MenuBarItem::~MenuBarItem()
 
 }
 
-#include "Bang/Scene.h"
-#include "Bang/Dialog.h"
-#include "Bang/Window.h"
-#include "Bang/SceneManager.h"
-#include "Bang/UILayoutManager.h"
-void MenuBarItem::Update()
+void MenuBarItem::AddSeparator()
 {
-    UIGameObject::Update();
-
-    if (Input::GetKeyDown(Input::Key::A))
-    {
-        Window *win = Window::GetCurrent();
-        win->SetSize(win->GetWidth(), win->GetHeight());
-        UILayoutManager::InvalidateAll(this);
-    }
-    if (Input::GetKeyDown(Input::Key::E))
-    {
-        Dialog::Error("ErrorOMG", "Lorem ipsum dolor sit amet consecteur"
-                                  " adiscipilim. Bangerino Pizzerino con un"
-                                  " poco de oregano.");
-    }
+    UIGameObject *sep =
+            GameObjectFactory::CreateGUIHSeparator(LayoutSizeType::Preferred, 5);
+    sep->SetName("SEP");
+    sep->SetParent(m_childrenContainer);
 }
 
 void MenuBarItem::AddChild(MenuBarItem *childItem)
@@ -118,17 +107,22 @@ UITextRenderer *MenuBarItem::GetText() const
     return m_text;
 }
 
-void MenuBarItem::OnButton_MouseEnter(UIInteractive *btn)
+UIButton *MenuBarItem::GetButton() const
+{
+    return m_buttonWithTint;
+}
+
+void MenuBarItem::OnButton_MouseEnter(UIButton *btn)
 {
     m_childrenContainer->SetEnabled(true);
 }
 
-void MenuBarItem::OnButton_MouseExit(UIInteractive *btn)
+void MenuBarItem::OnButton_MouseExit(UIButton *btn)
 {
     m_childrenContainer->SetEnabled(false);
 }
 
-void MenuBarItem::OnButton_Clicked(UIInteractive *btn)
+void MenuBarItem::OnButton_Clicked(UIButton *btn)
 {
 
 }

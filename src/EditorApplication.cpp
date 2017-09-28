@@ -8,6 +8,8 @@
 #include "Bang/SceneManager.h"
 #include "Bang/ProjectManager.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorWindow.h"
+#include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -25,11 +27,17 @@ EditorApplication::~EditorApplication()
 {
 }
 
+SceneManager *EditorApplication::CreateSceneManager() const
+{
+    return new EditorSceneManager();
+}
+
 void EditorApplication::OpenEditorScene(Window *containingWindow)
 {
     m_editorScene = new EditorScene();
     containingWindow->GetSceneManager()->LoadScene(m_editorScene);
 
+    /*
     Scene *scene = new Scene();
     Project *proj = ProjectManager::GetCurrentProject();
     if (proj)
@@ -37,6 +45,8 @@ void EditorApplication::OpenEditorScene(Window *containingWindow)
         scene->ImportXMLFromFile(proj->GetFirstFoundScenePath());
     }
     m_editorScene->SetOpenScene(scene);
+    */
+    // m_editorScene->SetOpenScene(m_editorScene->Clone());
 }
 
 void EditorApplication::SetupWindow(Window *window)
@@ -44,9 +54,12 @@ void EditorApplication::SetupWindow(Window *window)
     Application::SetupWindow(window);
 }
 
-
-
 EditorScene *EditorApplication::GetEditorScene() const
 {
     return m_editorScene;
+}
+
+Window *EditorApplication::_CreateWindow()
+{
+    return new EditorWindow();
 }

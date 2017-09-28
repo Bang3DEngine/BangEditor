@@ -17,8 +17,12 @@ public:
     MenuBar();
     virtual ~MenuBar();
 
+    void Update() override;
+
     MenuBarItem* AddItem();
     MenuBarItem* GetItem(int i);
+
+    static constexpr int GetFixedHeight();
 
 private:
     MenuBarItem *m_fileItem = nullptr;

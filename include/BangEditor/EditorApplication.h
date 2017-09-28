@@ -12,8 +12,8 @@ FORWARD class DialogWindow;
 FORWARD class UIImageRenderer;
 FORWARD NAMESPACE_BANG_END
 
-NAMESPACE_BANG_EDITOR_BEGIN
 USING_NAMESPACE_BANG
+NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class EditorScene;
 
@@ -24,10 +24,13 @@ public:
                       const Path &engineRootPath = Path::Empty);
     virtual ~EditorApplication();
 
+    SceneManager* CreateSceneManager() const override;
+
     void OpenEditorScene(Window *containingWindow);
     EditorScene *GetEditorScene() const;
 
 private:
+    Window* _CreateWindow() override;
     virtual void SetupWindow(Window *window) override;
 
     EditorScene *m_editorScene = nullptr;

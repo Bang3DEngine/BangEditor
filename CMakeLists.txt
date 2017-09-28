@@ -62,9 +62,13 @@ link_libraries("${BANG_LIBS_DIR}/${BANG_LIB_NAME}")
 
 add_executable(BangEditor
 ${SRC_DIR}/EditorApplication.cpp
+${SRC_DIR}/EditorSceneManager.cpp
 ${SRC_DIR}/EditorScene.cpp
+${SRC_DIR}/EditorWindow.cpp
+${SRC_DIR}/Inspector.cpp
 ${SRC_DIR}/MenuBar.cpp
 ${SRC_DIR}/MenuBarItem.cpp
+${SRC_DIR}/UISceneContainer.cpp
 
 ${SRC_DIR}/Main.cpp
 

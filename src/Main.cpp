@@ -1,8 +1,8 @@
 #include "BangEditor/EditorApplication.h"
 
 #include "Bang/Scene.h"
+#include "Bang/Window.h"
 #include "Bang/Project.h"
-#include "Bang/DialogWindow.h"
 #include "Bang/ProjectManager.h"
 #include "BangEditor/EditorScene.h"
 
