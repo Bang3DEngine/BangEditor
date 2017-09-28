@@ -110,5 +110,5 @@ MenuBarItem* MenuBar::GetItem(int i)
 
 constexpr int MenuBar::GetFixedHeight()
 {
-    return 20;
+    return 18;
 }

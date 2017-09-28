@@ -14,11 +14,13 @@ USING_NAMESPACE_BANG_EDITOR
 
 MenuBarItem::MenuBarItem(bool toTheRight)
 {
-    RectTransform *rt = AddComponent<RectTransform>();
+    AddComponent<RectTransform>();
     UIFrameLayout *fl = AddComponent<UIFrameLayout>();
+    fl->SetChildrenVerticalStretch(Stretch::Full);
+    fl->SetChildrenHorizontalStretch(Stretch::Full);
     fl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
     fl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
-    fl->SetPaddingLeft(5);
+    fl->SetPaddingLeft(2);
     fl->SetPaddingRight(5);
     fl->SetPaddingTop(4);
     fl->SetPaddingBot(4);

@@ -40,8 +40,9 @@ Inspector::Inspector()
     m_text->SetWrapping(true);
     textCont->SetParent(this);
 
+    m_text->SetContent("");
     m_text->SetHorizontalAlign(HorizontalAlignment::Left);
-    m_text->SetVerticalAlign(VerticalAlignment::Top);
+    m_text->SetVerticalAlign(VerticalAlignment::Center);
     m_text->SetTextSize(10);
 
 }
