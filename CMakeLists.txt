@@ -61,10 +61,14 @@ set(BANG_LIB_NAME "libBang.so")
 link_libraries("${BANG_LIBS_DIR}/${BANG_LIB_NAME}")
 
 add_executable(BangEditor
+${SRC_DIR}/Console.cpp
 ${SRC_DIR}/EditorApplication.cpp
 ${SRC_DIR}/EditorSceneManager.cpp
 ${SRC_DIR}/EditorScene.cpp
+${SRC_DIR}/EditorUITab.cpp
 ${SRC_DIR}/EditorWindow.cpp
+${SRC_DIR}/Explorer.cpp
+${SRC_DIR}/Hierarchy.cpp
 ${SRC_DIR}/Inspector.cpp
 ${SRC_DIR}/MenuBar.cpp
 ${SRC_DIR}/MenuBarItem.cpp

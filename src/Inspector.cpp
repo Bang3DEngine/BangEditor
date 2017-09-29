@@ -6,45 +6,43 @@
 #include "Bang/Material.h"
 #include "Bang/Selection.h"
 #include "Bang/SceneManager.h"
+#include "Bang/UIBorderRect.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIFrameLayout.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-Inspector::Inspector()
+Inspector::Inspector() : EditorUITab("Inspector")
 {
-    AddComponent<RectTransform>();
-    m_background = AddComponent<UIImageRenderer>();
-    m_background->SetTint(Color::LightGray);
-
-    UIFrameLayout *fl = AddComponent<UIFrameLayout>();
-    fl->SetChildrenVerticalStretch(Stretch::Full);
-    fl->SetChildrenHorizontalStretch(Stretch::Full);
-    fl->SetChildrenVerticalAlignment(VerticalAlignment::Top);
-    fl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
-    fl->SetPaddings(5);
-
-    UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetPriority(1);
+    UILayoutElement *le = GetComponent<UILayoutElement>();
     le->SetMinWidth(100);
     le->SetPreferredWidth(250);
 
+    UIGameObject *propertiesContainer = GameObjectFactory::CreateUIGameObject();
+    UIFrameLayout *fl = propertiesContainer->AddComponent<UIFrameLayout>();
+    fl->SetChildrenVerticalAlignment(VerticalAlignment::Top);
+    fl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
+    fl->SetPaddings(5);
+    AddChild(propertiesContainer);
+
     UIGameObject *textCont = GameObjectFactory::CreateUIGameObject();
+    p_text = textCont->AddComponent<UITextRenderer>();
+    p_text->SetHorizontalAlign(HorizontalAlignment::Left);
+    p_text->SetVerticalAlign(VerticalAlignment::Center);
+    p_text->SetWrapping(true);
+    p_text->SetTextSize(10);
+    p_text->SetContent("");
 
-    m_text = textCont->AddComponent<UITextRenderer>();
-    m_text->SetWrapping(true);
-    textCont->SetParent(this);
+    UILayoutElement *textLE = textCont->AddComponent<UILayoutElement>();
+    textLE->SetFlexibleSize( Vector2(99999) );
 
-    m_text->SetContent("");
-    m_text->SetHorizontalAlign(HorizontalAlignment::Left);
-    m_text->SetVerticalAlign(VerticalAlignment::Center);
-    m_text->SetTextSize(10);
-
+    propertiesContainer->AddChild(textCont);
 }
 
 Inspector::~Inspector()
@@ -54,7 +52,7 @@ Inspector::~Inspector()
 
 void Inspector::Update()
 {
-    GameObject::Update();
+    EditorUITab::Update();
 
     Scene *openScene = SceneManager::GetActiveScene();
     if (Input::GetMouseButtonDown(MouseButton::Left))
@@ -62,9 +60,8 @@ void Inspector::Update()
         GameObject *selectedGameObject = Selection::GetOveredGameObject(openScene);
         if (selectedGameObject)
         {
-            m_text->SetContent( selectedGameObject->GetXMLInfo().ToString() );
+            p_text->SetContent( selectedGameObject->GetXMLInfo().ToString() );
         }
-        else { m_text->SetContent(""); }
-        Debug_Log(selectedGameObject);
+        else { p_text->SetContent(""); }
     }
 }

@@ -20,6 +20,7 @@ class UISceneContainer : public UIFrameLayout
 
 public:
     UISceneContainer();
+
     virtual ~UISceneContainer();
 
 private:

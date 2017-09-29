@@ -1,8 +1,7 @@
 #ifndef INSPECTOR_H
 #define INSPECTOR_H
 
-#include "Bang/UIGameObject.h"
-#include "BangEditor/BangEditor.h"
+#include "BangEditor/EditorUITab.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UITextRenderer;
@@ -12,7 +11,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class Inspector : public UIGameObject
+class Inspector : public EditorUITab
 {
 public:
     Inspector();
@@ -21,8 +20,7 @@ public:
     void Update() override;
 
 private:
-    UITextRenderer *m_text = nullptr;
-    UIImageRenderer *m_background = nullptr;
+    UITextRenderer *p_text = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

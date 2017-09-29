@@ -4,6 +4,7 @@
 #include "Bang/Random.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
+#include "Bang/UIBorderRect.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
@@ -22,7 +23,6 @@ MenuBar::MenuBar()
 
     m_horizontalLayout = AddComponent<UIHorizontalLayout>();
     m_horizontalLayout->SetSpacing(5);
-    m_horizontalLayout->SetChildrenVerticalStretch(Stretch::Full);
 
     m_fileItem        = AddItem();
     m_editItem        = AddItem();
@@ -106,9 +106,4 @@ MenuBarItem* MenuBar::AddItem()
 MenuBarItem* MenuBar::GetItem(int i)
 {
     return m_items[i];
-}
-
-constexpr int MenuBar::GetFixedHeight()
-{
-    return 18;
 }

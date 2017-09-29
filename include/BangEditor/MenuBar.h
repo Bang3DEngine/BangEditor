@@ -22,7 +22,7 @@ public:
     MenuBarItem* AddItem();
     MenuBarItem* GetItem(int i);
 
-    static constexpr int GetFixedHeight();
+    static constexpr int GetFixedHeight() { return 18; }
 
 private:
     MenuBarItem *m_fileItem = nullptr;

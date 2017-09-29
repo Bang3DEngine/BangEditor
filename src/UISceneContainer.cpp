@@ -10,7 +10,6 @@ USING_NAMESPACE_BANG_EDITOR
 
 UISceneContainer::UISceneContainer()
 {
-
 }
 
 UISceneContainer::~UISceneContainer()

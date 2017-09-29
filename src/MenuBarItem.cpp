@@ -1,10 +1,11 @@
 #include "BangEditor/MenuBarItem.h"
 
+#include "Bang/UIBorderRect.h"
 #include "Bang/UIFrameLayout.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UILayoutElement.h"
-#include "Bang/UIImageRenderer.h"
 #include "Bang/UITintedButton.h"
+#include "Bang/UIImageRenderer.h"
+#include "Bang/UILayoutElement.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
@@ -16,14 +17,22 @@ MenuBarItem::MenuBarItem(bool toTheRight)
 {
     AddComponent<RectTransform>();
     UIFrameLayout *fl = AddComponent<UIFrameLayout>();
-    fl->SetChildrenVerticalStretch(Stretch::Full);
-    fl->SetChildrenHorizontalStretch(Stretch::Full);
     fl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
     fl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
-    fl->SetPaddingLeft(2);
-    fl->SetPaddingRight(5);
-    fl->SetPaddingTop(4);
-    fl->SetPaddingBot(4);
+
+    bool isTopItem = !toTheRight;
+    if (!isTopItem)
+    {
+        fl->SetPaddingLeft(15);
+        fl->SetPaddingRight(30);
+    }
+    else
+    {
+        fl->SetPaddingLeft(5);
+        fl->SetPaddingRight(5);
+    }
+    fl->SetPaddingTop(2);
+    fl->SetPaddingBot(2);
 
     const Color BgColor = Color::LightGray;
     UIImageRenderer *bg = AddComponent<UIImageRenderer>();
@@ -60,7 +69,6 @@ MenuBarItem::MenuBarItem(bool toTheRight)
 
     m_childrenContainerVL = m_childrenContainer->AddComponent<UIVerticalLayout>();
     m_childrenContainerVL->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
-    m_childrenContainerVL->SetChildrenHorizontalStretch(Stretch::Full);
     m_childrenContainer->GetRectTransform()->SetPivotPosition(Vector2(-1));
     if (toTheRight)
     {
@@ -85,7 +93,6 @@ void MenuBarItem::AddSeparator()
 {
     UIGameObject *sep =
             GameObjectFactory::CreateGUIHSeparator(LayoutSizeType::Preferred, 5);
-    sep->SetName("SEP");
     sep->SetParent(m_childrenContainer);
 }
 

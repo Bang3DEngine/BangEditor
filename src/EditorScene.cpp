@@ -9,13 +9,17 @@
 #include "Bang/UIGameObject.h"
 #include "Bang/UIFrameLayout.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UITextRenderer.h"
 #include "Bang/UILayoutManager.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 
+#include "BangEditor/Console.h"
 #include "BangEditor/MenuBar.h"
+#include "BangEditor/Explorer.h"
+#include "BangEditor/Hierarchy.h"
 #include "BangEditor/Inspector.h"
 #include "BangEditor/UISceneContainer.h"
 
@@ -28,20 +32,17 @@ EditorScene::EditorScene()
     AddComponent<UICanvas>();
 
     m_menuBar = new MenuBar();
-    m_menuBar->transform->TranslateLocal( Vector3(0,0,-1) );
+    m_menuBar->transform->TranslateLocal( Vector3(0, 0, -0.01) );
     m_menuBar->SetParent(this);
 
     UIGameObject *vlGo = GameObjectFactory::CreateUIGameObject();
     vlGo->GetRectTransform()->AddMarginTop(MenuBar::GetFixedHeight());
     UIVerticalLayout *vl = vlGo->AddComponent<UIVerticalLayout>();
-    vl->SetChildrenHorizontalStretch(Stretch::Full);
     vlGo->SetParent(this);
 
     GameObject *hlGo = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *hl = hlGo->AddComponent<UIHorizontalLayout>();
-    hl->SetChildrenVerticalStretch(Stretch::Full);
     UILayoutElement *hlLe = hlGo->AddComponent<UILayoutElement>();
-    hlLe->SetPreferredSize( Vector2i(1, 1) );
     hlLe->SetFlexibleSize( Vector2(999999) );
     hlGo->SetParent(vlGo);
 
@@ -54,12 +55,36 @@ EditorScene::EditorScene()
     fle->SetFlexibleSize( Vector2(99999) );
 
     m_sceneContainerGo = GameObjectFactory::CreateUIGameObject();
+    m_noSceneImg  = m_sceneContainerGo->AddComponent<UIImageRenderer>();
+    m_noSceneImg->SetTint(Color::White);
+
+    m_noSceneText = m_sceneContainerGo->AddComponent<UITextRenderer>();
+    m_noSceneText->SetContent("Empty Scene");
+    m_noSceneText->SetWrapping(true);
+    m_noSceneText->SetTextSize(50);
+
     UILayoutElement *fle2 = m_sceneContainerGo->AddComponent<UILayoutElement>();
     fle2->SetFlexibleSize( Vector2(99999) );
     m_sceneContainerGo->SetParent(overSceneCont);
 
-    Inspector *inspector = new Inspector();
-    inspector->SetParent(hlGo);
+    m_inspector = new Inspector();
+    m_inspector->SetParent(hlGo);
+
+    m_hierarchy = new Hierarchy();
+    m_hierarchy->SetParent(hlGo, 0);
+
+    GameObject *botHLGo = GameObjectFactory::CreateUIGameObject();
+    UIHorizontalLayout *botHL = botHLGo->AddComponent<UIHorizontalLayout>();
+    UILayoutElement *botHLLe = botHLGo->AddComponent<UILayoutElement>();
+    botHLLe->SetMinSize( Vector2i(1, 150) );
+    botHLLe->SetFlexibleSize( Vector2(999999, 0) );
+    botHLGo->SetParent(vlGo);
+
+    m_console = new Console();
+    m_console->SetParent(botHLGo);
+
+    m_explorer = new Explorer();
+    m_explorer->SetParent(botHLGo);
 
     Camera *cam = AddComponent<Camera>();
     cam->SetClearColor(Color::Zero);
@@ -105,6 +130,9 @@ void EditorScene::RenderOpenScene()
             GL::SetViewport(prevViewport);
         }
     }
+
+    m_noSceneImg->SetEnabled (!openScene);
+    m_noSceneText->SetEnabled(!openScene);
 }
 
 void EditorScene::SetOpenScene(Scene *openScene)
