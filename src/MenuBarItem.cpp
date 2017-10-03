@@ -16,23 +16,12 @@ USING_NAMESPACE_BANG_EDITOR
 MenuBarItem::MenuBarItem(bool toTheRight)
 {
     AddComponent<RectTransform>();
+
     UIFrameLayout *fl = AddComponent<UIFrameLayout>();
     fl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
     fl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
-
-    bool isTopItem = !toTheRight;
-    if (!isTopItem)
-    {
-        fl->SetPaddingLeft(15);
-        fl->SetPaddingRight(30);
-    }
-    else
-    {
-        fl->SetPaddingLeft(5);
-        fl->SetPaddingRight(5);
-    }
-    fl->SetPaddingTop(2);
-    fl->SetPaddingBot(2);
+    if (!toTheRight) { fl->SetPaddings(2); }
+    else             { fl->SetPaddings(3); }
 
     const Color BgColor = Color::LightGray;
     UIImageRenderer *bg = AddComponent<UIImageRenderer>();
@@ -68,6 +57,7 @@ MenuBarItem::MenuBarItem(bool toTheRight)
     csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
 
     m_childrenContainerVL = m_childrenContainer->AddComponent<UIVerticalLayout>();
+    m_childrenContainerVL->SetChildrenVerticalAlignment(VerticalAlignment::Bot);
     m_childrenContainerVL->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
     m_childrenContainer->GetRectTransform()->SetPivotPosition(Vector2(-1));
     if (toTheRight)

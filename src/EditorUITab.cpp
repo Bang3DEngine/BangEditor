@@ -12,20 +12,27 @@ USING_NAMESPACE_BANG_EDITOR
 
 EditorUITab::EditorUITab(const String &title)
 {
+    SetName(title);
+
     AddComponent<RectTransform>();
     UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
 
-    UIImageRenderer *background = AddComponent<UIImageRenderer>();
-    background->SetTint(Color::LightGray);
-
     AddComponent<UILayoutElement>();
+    UIImageRenderer *bg = AddComponent<UIImageRenderer>();
+    bg->SetTint(Random::GetColorOpaque());
 
-    UIGameObject *titleCont = GameObjectFactory::CreateUIGameObject();
-    p_titleText = titleCont->AddComponent<UITextRenderer>();
-    p_titleText->SetContent(title);
-    AddChild(titleCont);
+    // UIGameObject *titleCont = GameObjectFactory::CreateUIGameObject();
+    // p_titleText = titleCont->AddComponent<UITextRenderer>();
+    // p_titleText->SetContent(title);
+    // titleCont->SetParent(this);
 
-    AddChild(GameObjectFactory::CreateGUIHSeparator(LayoutSizeType::Min, 10));
+    // UIGameObject *imgCont = GameObjectFactory::CreateUIGameObject();
+    // UIImageRenderer *img = imgCont->AddComponent<UIImageRenderer>();
+    // img->SetTint(Color::Blue);
+    // imgCont->AddComponent<UILayoutElement>();
+    // AddChild(imgCont);
+
+    // AddChild(GameObjectFactory::CreateGUIHSeparator(LayoutSizeType::Min, 10));
 }
 
 EditorUITab::~EditorUITab()

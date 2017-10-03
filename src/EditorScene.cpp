@@ -2,6 +2,8 @@
 
 #include "Bang/UIMask.h"
 #include "Bang/Camera.h"
+#include "Bang/Window.h"
+#include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
 #include "Bang/UICanvas.h"
 #include "Bang/Texture2D.h"
@@ -32,19 +34,21 @@ EditorScene::EditorScene()
     AddComponent<UICanvas>();
 
     m_menuBar = new MenuBar();
-    m_menuBar->transform->TranslateLocal( Vector3(0, 0, -0.01) );
-    m_menuBar->SetParent(this);
+    m_menuBar->transform->TranslateLocal( Vector3(0, 0, -0.1) );
+    // m_menuBar->SetParent(this);
 
-    UIGameObject *vlGo = GameObjectFactory::CreateUIGameObject();
-    vlGo->GetRectTransform()->AddMarginTop(MenuBar::GetFixedHeight());
-    UIVerticalLayout *vl = vlGo->AddComponent<UIVerticalLayout>();
-    vlGo->SetParent(this);
+    m_mainEditorVL = GameObjectFactory::CreateUIGameObject();
+    m_mainEditorVL->GetRectTransform()->AddMarginTop(MenuBar::GetFixedHeight());
+    UIVerticalLayout *vl = m_mainEditorVL->AddComponent<UIVerticalLayout>();
+    m_mainEditorVL->SetParent(this);
 
     GameObject *hlGo = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *hl = hlGo->AddComponent<UIHorizontalLayout>();
     UILayoutElement *hlLe = hlGo->AddComponent<UILayoutElement>();
-    hlLe->SetFlexibleSize( Vector2(999999) );
-    hlGo->SetParent(vlGo);
+    hlGo->SetParent(m_mainEditorVL);
+
+    m_mainEditorVL->AddChild(
+              GameObjectFactory::CreateGUIHSeparator(LayoutSizeType::Min, 10));
 
     UIGameObject *overSceneCont = GameObjectFactory::CreateUIGameObject();
     m_sceneContainer = overSceneCont->AddComponent<UISceneContainer>();
@@ -52,11 +56,12 @@ EditorScene::EditorScene()
     overSceneCont->SetParent(hlGo);
 
     UILayoutElement *fle = overSceneCont->AddComponent<UILayoutElement>();
-    fle->SetFlexibleSize( Vector2(99999) );
+    fle->SetFlexibleSize( Vector2(6) );
 
     m_sceneContainerGo = GameObjectFactory::CreateUIGameObject();
-    m_noSceneImg  = m_sceneContainerGo->AddComponent<UIImageRenderer>();
-    m_noSceneImg->SetTint(Color::White);
+    m_sceneImg  = m_sceneContainerGo->AddComponent<UIImageRenderer>();
+    m_sceneImg->SetTint(Color::White);
+    m_sceneImg->SetUvMultiply(Vector2(1, -1));
 
     m_noSceneText = m_sceneContainerGo->AddComponent<UITextRenderer>();
     m_noSceneText->SetContent("Empty Scene");
@@ -64,7 +69,6 @@ EditorScene::EditorScene()
     m_noSceneText->SetTextSize(50);
 
     UILayoutElement *fle2 = m_sceneContainerGo->AddComponent<UILayoutElement>();
-    fle2->SetFlexibleSize( Vector2(99999) );
     m_sceneContainerGo->SetParent(overSceneCont);
 
     m_inspector = new Inspector();
@@ -77,8 +81,7 @@ EditorScene::EditorScene()
     UIHorizontalLayout *botHL = botHLGo->AddComponent<UIHorizontalLayout>();
     UILayoutElement *botHLLe = botHLGo->AddComponent<UILayoutElement>();
     botHLLe->SetMinSize( Vector2i(1, 150) );
-    botHLLe->SetFlexibleSize( Vector2(999999, 0) );
-    botHLGo->SetParent(vlGo);
+    botHLGo->SetParent(m_mainEditorVL);
 
     m_console = new Console();
     m_console->SetParent(botHLGo);
@@ -86,9 +89,9 @@ EditorScene::EditorScene()
     m_explorer = new Explorer();
     m_explorer->SetParent(botHLGo);
 
-    Camera *cam = AddComponent<Camera>();
-    cam->SetClearColor(Color::Zero);
-    SetCamera(cam);
+    SetFirstFoundCameraOrDefaultOne();
+    // Camera *cam = AddComponent<Camera>();
+    GetCamera()->SetClearColor(Color::Yellow);
 }
 
 EditorScene::~EditorScene()
@@ -98,14 +101,26 @@ EditorScene::~EditorScene()
 void EditorScene::Update()
 {
     Scene::Update();
-}
-
-void EditorScene::Render(RenderPass rp, bool renderChildren)
-{
-    Scene::Render(rp, renderChildren);
+    if (GetOpenScene()) { GetOpenScene()->Update(); }
 }
 
 void EditorScene::RenderOpenScene()
+{
+    Scene *openScene = GetOpenScene();
+    if (openScene)
+    {
+        Recti prevViewport = GL::GetViewportRect();
+        SetViewportForOpenScene();
+
+        GEngine::GetInstance()->Render(openScene);
+
+        GL::SetViewport(prevViewport);
+    }
+
+    m_noSceneText->SetEnabled(!openScene);
+}
+
+void EditorScene::SetViewportForOpenScene()
 {
     Scene *openScene = GetOpenScene();
     if (openScene)
@@ -122,17 +137,9 @@ void EditorScene::RenderOpenScene()
                Vector2i(ndcRectNorm.GetMin() * Vector2(GL::GetViewportSize())),
                Vector2i(ndcRectNorm.GetMax() * Vector2(GL::GetViewportSize())));
 
-            Recti prevViewport = GL::GetViewportRect();
             GL::SetViewport(vpRectPx);
-
-            GEngine::GetInstance()->Render(openScene);
-
-            GL::SetViewport(prevViewport);
         }
     }
-
-    m_noSceneImg->SetEnabled (!openScene);
-    m_noSceneText->SetEnabled(!openScene);
 }
 
 void EditorScene::SetOpenScene(Scene *openScene)
@@ -149,4 +156,39 @@ void EditorScene::SetOpenScene(Scene *openScene)
 Scene *EditorScene::GetOpenScene() const
 {
     return p_openScene;
+}
+
+void EditorScene::RenderAndBlitToScreen()
+{
+    Window *window = Window::GetCurrent();
+    window->Clear();
+
+    UILayoutManager::RebuildLayout(this);
+    GetUILayoutManager()->OnBeforeRender(this);
+    /*
+    Scene *openScene = GetOpenScene();
+    if (openScene)
+    {
+        UILayoutManager::RebuildLayout(openScene);
+        openScene->GetUILayoutManager()->OnBeforeRender(openScene);
+    }
+    */
+
+    Texture2D *openSceneTex = nullptr;
+    /*
+    if (openScene)
+    {
+        Camera *cam = openScene->GetCamera();
+        if (cam)
+        {
+            GBuffer *gbuffer =  cam->GetGBuffer();
+            openSceneTex = gbuffer->GetAttachmentTexture(GBuffer::AttColor);
+        }
+    }*/
+    m_sceneImg->SetImageTexture(openSceneTex);
+
+    GEngine *gEngine = GEngine::GetInstance();
+    // RenderOpenScene();
+    gEngine->Render(this);
+    window->BlitToScreen(GetCamera());
 }

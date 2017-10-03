@@ -21,8 +21,8 @@ USING_NAMESPACE_BANG_EDITOR
 Inspector::Inspector() : EditorUITab("Inspector")
 {
     UILayoutElement *le = GetComponent<UILayoutElement>();
-    le->SetMinWidth(100);
-    le->SetPreferredWidth(250);
+    le->SetMinSize( Vector2i(100) );
+    le->SetPreferredSize( Vector2i(200) );
 
     UIGameObject *propertiesContainer = GameObjectFactory::CreateUIGameObject();
     UIFrameLayout *fl = propertiesContainer->AddComponent<UIFrameLayout>();
@@ -38,9 +38,7 @@ Inspector::Inspector() : EditorUITab("Inspector")
     p_text->SetWrapping(true);
     p_text->SetTextSize(10);
     p_text->SetContent("");
-
     UILayoutElement *textLE = textCont->AddComponent<UILayoutElement>();
-    textLE->SetFlexibleSize( Vector2(99999) );
 
     propertiesContainer->AddChild(textCont);
 }

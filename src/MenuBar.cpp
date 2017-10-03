@@ -73,10 +73,16 @@ MenuBar::~MenuBar()
 {
 }
 
+#include "Bang/UILayoutManager.h"
 void MenuBar::Update()
 {
     UIGameObject::Update();
     EditorScene *edScene = SCAST<EditorScene*>(SceneManager::GetRootScene());
+    if (Input::GetKeyDown(Key::A))
+    {
+        UILayoutManager::InvalidateAll(edScene);
+        UILayoutManager::ForceRebuildLayout(edScene);
+    }
     if (Input::GetKeyDown(Key::E))
     {
         edScene->SetOpenScene( GameObjectFactory::CreateDefaultScene() );

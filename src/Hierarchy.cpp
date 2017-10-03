@@ -8,8 +8,8 @@ USING_NAMESPACE_BANG_EDITOR
 Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
 {
     UILayoutElement *le = GetComponent<UILayoutElement>();
-    le->SetMinWidth(100);
-    le->SetPreferredWidth(250);
+    le->SetMinSize( Vector2i(100) );
+    le->SetPreferredSize( Vector2i(200) );
 }
 
 Hierarchy::~Hierarchy()

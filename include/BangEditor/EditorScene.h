@@ -30,11 +30,13 @@ public:
     virtual ~EditorScene();
 
     void Update() override;
-    void Render(RenderPass rp, bool renderChildren) override;
     void RenderOpenScene();
+    void SetViewportForOpenScene();
 
     void SetOpenScene(Scene *openScene);
     Scene *GetOpenScene() const;
+
+    void RenderAndBlitToScreen();
 
 private:
     Console *m_console     = nullptr;
@@ -43,12 +45,13 @@ private:
     Hierarchy *m_hierarchy = nullptr;
 
     Scene *p_openScene = nullptr;
+    UIImageRenderer *m_sceneImg = nullptr;
     UISceneContainer *m_sceneContainer = nullptr;
 
     MenuBar *m_menuBar = nullptr;
+    UIGameObject *m_mainEditorVL = nullptr;
 
     UITextRenderer *m_noSceneText = nullptr;
-    UIImageRenderer *m_noSceneImg = nullptr;
     UIGameObject *m_sceneContainerGo = nullptr;
 
     friend class EditorApplication;
