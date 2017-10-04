@@ -4,14 +4,14 @@
 #include "BangEditor/BangEditor.h"
 
 #include "Bang/Array.h"
-#include "Bang/UIGameObject.h"
+#include "Bang/GameObject.h"
 #include "BangEditor/MenuBarItem.h"
 #include "Bang/UIHorizontalLayout.h"
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class MenuBar : public UIGameObject
+class MenuBar : public GameObject
 {
 public:
     MenuBar();
@@ -33,6 +33,11 @@ private:
 
     Array<MenuBarItem*> m_items;
     UIHorizontalLayout *m_horizontalLayout = nullptr;
+
+    static void OnOpenProject (UIButton *btn);
+    static void OnNewScene    (UIButton *btn);
+    static void OnSaveScene   (UIButton *btn);
+    static void OnOpenScene   (UIButton *btn);
 };
 
 NAMESPACE_BANG_EDITOR_END

@@ -7,8 +7,8 @@
 #include "Bang/GEngine.h"
 #include "Bang/UICanvas.h"
 #include "Bang/Texture2D.h"
+#include "Bang/GameObject.h"
 #include "Bang/UIBorderRect.h"
-#include "Bang/UIGameObject.h"
 #include "Bang/UIFrameLayout.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
@@ -35,10 +35,11 @@ EditorScene::EditorScene()
 
     m_menuBar = new MenuBar();
     m_menuBar->transform->TranslateLocal( Vector3(0, 0, -0.1) );
-    // m_menuBar->SetParent(this);
+    m_menuBar->SetParent(this);
 
     m_mainEditorVL = GameObjectFactory::CreateUIGameObject();
-    m_mainEditorVL->GetRectTransform()->AddMarginTop(MenuBar::GetFixedHeight());
+    m_mainEditorVL->GetComponent<RectTransform>()->
+                    AddMarginTop(MenuBar::GetFixedHeight());
     UIVerticalLayout *vl = m_mainEditorVL->AddComponent<UIVerticalLayout>();
     m_mainEditorVL->SetParent(this);
 
@@ -50,7 +51,7 @@ EditorScene::EditorScene()
     m_mainEditorVL->AddChild(
               GameObjectFactory::CreateGUIHSeparator(LayoutSizeType::Min, 10));
 
-    UIGameObject *overSceneCont = GameObjectFactory::CreateUIGameObject();
+    GameObject *overSceneCont = GameObjectFactory::CreateUIGameObject();
     m_sceneContainer = overSceneCont->AddComponent<UISceneContainer>();
     m_sceneContainer->SetPaddings(10);
     overSceneCont->SetParent(hlGo);
@@ -89,9 +90,9 @@ EditorScene::EditorScene()
     m_explorer = new Explorer();
     m_explorer->SetParent(botHLGo);
 
-    SetFirstFoundCameraOrDefaultOne();
-    // Camera *cam = AddComponent<Camera>();
-    GetCamera()->SetClearColor(Color::Yellow);
+    Camera *cam = AddComponent<Camera>();
+    SetCamera(cam);
+    GetCamera()->SetClearColor(Color::LightGray);
 }
 
 EditorScene::~EditorScene()
@@ -165,17 +166,14 @@ void EditorScene::RenderAndBlitToScreen()
 
     UILayoutManager::RebuildLayout(this);
     GetUILayoutManager()->OnBeforeRender(this);
-    /*
     Scene *openScene = GetOpenScene();
     if (openScene)
     {
         UILayoutManager::RebuildLayout(openScene);
         openScene->GetUILayoutManager()->OnBeforeRender(openScene);
     }
-    */
 
     Texture2D *openSceneTex = nullptr;
-    /*
     if (openScene)
     {
         Camera *cam = openScene->GetCamera();
@@ -184,11 +182,11 @@ void EditorScene::RenderAndBlitToScreen()
             GBuffer *gbuffer =  cam->GetGBuffer();
             openSceneTex = gbuffer->GetAttachmentTexture(GBuffer::AttColor);
         }
-    }*/
+    }
     m_sceneImg->SetImageTexture(openSceneTex);
 
     GEngine *gEngine = GEngine::GetInstance();
-    // RenderOpenScene();
+    RenderOpenScene();
     gEngine->Render(this);
     window->BlitToScreen(GetCamera());
 }

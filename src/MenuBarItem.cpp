@@ -13,21 +13,28 @@
 
 USING_NAMESPACE_BANG_EDITOR
 
-MenuBarItem::MenuBarItem(bool toTheRight)
+MenuBarItem::MenuBarItem(bool topItem)
 {
     AddComponent<RectTransform>();
 
     UIFrameLayout *fl = AddComponent<UIFrameLayout>();
     fl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
     fl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
-    if (!toTheRight) { fl->SetPaddings(2); }
+
+    m_isTopItem = topItem;
+    if (m_isTopItem) { fl->SetPaddings(2); }
     else             { fl->SetPaddings(3); }
+
+    UILayoutElement *le = AddComponent<UILayoutElement>();
+    le->SetMinSize( Vector2i(-1) );
+    le->SetPreferredSize( Vector2i(-1) );
+    le->SetFlexibleSize( Vector2(0) );
 
     const Color BgColor = Color::LightGray;
     UIImageRenderer *bg = AddComponent<UIImageRenderer>();
     bg->SetTint(BgColor);
 
-    UIGameObject *textGo = GameObjectFactory::CreateUIGameObject();
+    GameObject *textGo = GameObjectFactory::CreateUIGameObject();
     m_text = textGo->AddComponent<UITextRenderer>();
     GetText()->SetContent("MenuItem");
     GetText()->SetTextColor(Color::Black);
@@ -56,19 +63,20 @@ MenuBarItem::MenuBarItem(bool toTheRight)
     csf->SetVerticalSizeType(LayoutSizeType::Preferred);
     csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
 
+    RectTransform *contRT = m_childrenContainer->GetComponent<RectTransform>();
     m_childrenContainerVL = m_childrenContainer->AddComponent<UIVerticalLayout>();
     m_childrenContainerVL->SetChildrenVerticalAlignment(VerticalAlignment::Bot);
     m_childrenContainerVL->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
-    m_childrenContainer->GetRectTransform()->SetPivotPosition(Vector2(-1));
-    if (toTheRight)
+    contRT->SetPivotPosition(Vector2(-1));
+    if (m_isTopItem)
     {
-        m_childrenContainer->GetRectTransform()->SetAnchors(Vector2(1, 1));
-        m_childrenContainer->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
+        contRT->SetAnchors(Vector2(-1, -1));
+        contRT->SetPivotPosition(Vector2(-1,1));
     }
     else
     {
-        m_childrenContainer->GetRectTransform()->SetAnchors(Vector2(-1, -1));
-        m_childrenContainer->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
+        contRT->SetAnchors(Vector2(1, 1));
+        contRT->SetPivotPosition(Vector2(-1,1));
     }
     m_childrenContainer->SetEnabled(false);
     m_childrenContainer->SetParent(this);
@@ -81,7 +89,7 @@ MenuBarItem::~MenuBarItem()
 
 void MenuBarItem::AddSeparator()
 {
-    UIGameObject *sep =
+    GameObject *sep =
             GameObjectFactory::CreateGUIHSeparator(LayoutSizeType::Preferred, 5);
     sep->SetParent(m_childrenContainer);
 }
@@ -94,7 +102,7 @@ void MenuBarItem::AddChild(MenuBarItem *childItem)
 
 MenuBarItem *MenuBarItem::AddChild(const String &text)
 {
-    MenuBarItem *newItem = new MenuBarItem(true);
+    MenuBarItem *newItem = new MenuBarItem(false);
     newItem->GetText()->SetContent(text);
     newItem->SetName(text);
     AddChild(newItem);
@@ -123,5 +131,5 @@ void MenuBarItem::OnButton_MouseExit(UIButton *btn)
 
 void MenuBarItem::OnButton_Clicked(UIButton *btn)
 {
-
+    if (!m_isTopItem) { parent->SetEnabled(false); }
 }

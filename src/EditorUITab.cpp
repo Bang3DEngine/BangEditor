@@ -18,21 +18,13 @@ EditorUITab::EditorUITab(const String &title)
     UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
 
     AddComponent<UILayoutElement>();
-    UIImageRenderer *bg = AddComponent<UIImageRenderer>();
-    bg->SetTint(Random::GetColorOpaque());
 
-    // UIGameObject *titleCont = GameObjectFactory::CreateUIGameObject();
-    // p_titleText = titleCont->AddComponent<UITextRenderer>();
-    // p_titleText->SetContent(title);
-    // titleCont->SetParent(this);
+    GameObject *titleCont = GameObjectFactory::CreateUIGameObject();
+    p_titleText = titleCont->AddComponent<UITextRenderer>();
+    p_titleText->SetContent(title);
+    titleCont->SetParent(this);
 
-    // UIGameObject *imgCont = GameObjectFactory::CreateUIGameObject();
-    // UIImageRenderer *img = imgCont->AddComponent<UIImageRenderer>();
-    // img->SetTint(Color::Blue);
-    // imgCont->AddComponent<UILayoutElement>();
-    // AddChild(imgCont);
-
-    // AddChild(GameObjectFactory::CreateGUIHSeparator(LayoutSizeType::Min, 10));
+    AddChild(GameObjectFactory::CreateGUIHSeparator(LayoutSizeType::Min, 10));
 }
 
 EditorUITab::~EditorUITab()

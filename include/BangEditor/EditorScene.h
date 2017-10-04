@@ -8,7 +8,7 @@
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
 FORWARD class Texture2D;
-FORWARD class UIGameObject;
+FORWARD class GameObject;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
 FORWARD NAMESPACE_BANG_END
@@ -49,10 +49,10 @@ private:
     UISceneContainer *m_sceneContainer = nullptr;
 
     MenuBar *m_menuBar = nullptr;
-    UIGameObject *m_mainEditorVL = nullptr;
+    GameObject *m_mainEditorVL = nullptr;
 
     UITextRenderer *m_noSceneText = nullptr;
-    UIGameObject *m_sceneContainerGo = nullptr;
+    GameObject *m_sceneContainerGo = nullptr;
 
     friend class EditorApplication;
 };

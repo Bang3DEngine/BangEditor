@@ -5,7 +5,7 @@
 
 #include "Bang/List.h"
 #include "Bang/UIButton.h"
-#include "Bang/UIGameObject.h"
+#include "Bang/GameObject.h"
 #include "Bang/UITextRenderer.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
@@ -17,11 +17,11 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class MenuBarItem : public UIGameObject,
+class MenuBarItem : public GameObject,
                     public UIButtonListener
 {
 public:
-    MenuBarItem(bool toTheRight);
+    MenuBarItem(bool topItem);
     virtual ~MenuBarItem();
 
     void AddSeparator();
@@ -32,11 +32,12 @@ public:
     UIButton *GetButton() const;
 
 private:
+    bool m_isTopItem = false;
     UITextRenderer *m_text = nullptr;
     UITintedButton *m_buttonWithTint = nullptr;
 
     List<MenuBarItem*> m_childrenItems;
-    UIGameObject *m_childrenContainer = nullptr;
+    GameObject *m_childrenContainer = nullptr;
     UIVerticalLayout *m_childrenContainerVL = nullptr;
 
     virtual void OnButton_MouseEnter(UIButton *btn);

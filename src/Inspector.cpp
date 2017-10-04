@@ -24,14 +24,14 @@ Inspector::Inspector() : EditorUITab("Inspector")
     le->SetMinSize( Vector2i(100) );
     le->SetPreferredSize( Vector2i(200) );
 
-    UIGameObject *propertiesContainer = GameObjectFactory::CreateUIGameObject();
+    GameObject *propertiesContainer = GameObjectFactory::CreateUIGameObject();
     UIFrameLayout *fl = propertiesContainer->AddComponent<UIFrameLayout>();
     fl->SetChildrenVerticalAlignment(VerticalAlignment::Top);
     fl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
     fl->SetPaddings(5);
     AddChild(propertiesContainer);
 
-    UIGameObject *textCont = GameObjectFactory::CreateUIGameObject();
+    GameObject *textCont = GameObjectFactory::CreateUIGameObject();
     p_text = textCont->AddComponent<UITextRenderer>();
     p_text->SetHorizontalAlign(HorizontalAlignment::Left);
     p_text->SetVerticalAlign(VerticalAlignment::Center);
