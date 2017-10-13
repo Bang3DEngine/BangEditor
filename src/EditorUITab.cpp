@@ -17,14 +17,16 @@ EditorUITab::EditorUITab(const String &title)
     AddComponent<RectTransform>();
     UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
 
-    AddComponent<UILayoutElement>();
+    UILayoutElement *le = AddComponent<UILayoutElement>();
+    le->SetFlexibleSize(Vector2(1));
 
     GameObject *titleCont = GameObjectFactory::CreateUIGameObject();
     p_titleText = titleCont->AddComponent<UITextRenderer>();
     p_titleText->SetContent(title);
     titleCont->SetParent(this);
 
-    AddChild(GameObjectFactory::CreateGUIHSeparator(LayoutSizeType::Min, 10));
+    AddChild(GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10));
+
 }
 
 EditorUITab::~EditorUITab()

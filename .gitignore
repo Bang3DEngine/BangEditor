@@ -16,6 +16,7 @@ tmp
 *.cfg
 callgrind.*
 nohup.out
+*.user.*
 bin/*
 
 # Visual Studio

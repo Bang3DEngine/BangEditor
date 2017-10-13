@@ -48,18 +48,15 @@ MenuBarItem::MenuBarItem(bool topItem)
     m_buttonWithTint->SetIdleTintColor(BgColor);
     m_buttonWithTint->SetOverTintColor(Color::White);
     m_buttonWithTint->SetPressedTintColor(Color::White);
+    m_buttonWithTint->SetMode(UIButtonMode::UseRender);
     m_buttonWithTint->AddListener(this);
     m_buttonWithTint->AddAgent(this);
 
     m_childrenContainer = GameObjectFactory::CreateUIGameObject();
+    auto childrenContBg = m_childrenContainer->AddComponent<UIImageRenderer>();
+    childrenContBg->SetTint(BgColor);
 
-    UIImageRenderer *childrenContainerBg = m_childrenContainer->AddComponent<UIImageRenderer>();
-    m_childrenContainer->SetName("BG");
-    childrenContainerBg->SetTint(BgColor);
-
-    UIContentSizeFitter *csf = m_childrenContainer->AddComponent<UIContentSizeFitter>();
-    csf->SetVerticalSizeFitMode(SizeFitMode::Sum);
-    csf->SetHorizontalSizeFitMode(SizeFitMode::Max);
+    auto csf = m_childrenContainer->AddComponent<UIContentSizeFitter>();
     csf->SetVerticalSizeType(LayoutSizeType::Preferred);
     csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
 
@@ -71,12 +68,12 @@ MenuBarItem::MenuBarItem(bool topItem)
     if (m_isTopItem)
     {
         contRT->SetAnchors(Vector2(-1, -1));
-        contRT->SetPivotPosition(Vector2(-1,1));
+        contRT->SetPivotPosition(Vector2(-1, 1));
     }
     else
     {
         contRT->SetAnchors(Vector2(1, 1));
-        contRT->SetPivotPosition(Vector2(-1,1));
+        contRT->SetPivotPosition(Vector2(-1, 1));
     }
     m_childrenContainer->SetEnabled(false);
     m_childrenContainer->SetParent(this);
@@ -90,7 +87,7 @@ MenuBarItem::~MenuBarItem()
 void MenuBarItem::AddSeparator()
 {
     GameObject *sep =
-            GameObjectFactory::CreateGUIHSeparator(LayoutSizeType::Preferred, 5);
+            GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Preferred, 5);
     sep->SetParent(m_childrenContainer);
 }
 

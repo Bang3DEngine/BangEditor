@@ -1,9 +1,10 @@
 #ifndef EDITORSCENE_H
 #define EDITORSCENE_H
 
-#include "BangEditor/BangEditor.h"
-
+#include "Bang/Rect.h"
 #include "Bang/Scene.h"
+
+#include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
@@ -30,13 +31,18 @@ public:
     virtual ~EditorScene();
 
     void Update() override;
+    virtual void OnResize(int newWidth, int newHeight);
+
     void RenderOpenScene();
     void SetViewportForOpenScene();
 
     void SetOpenScene(Scene *openScene);
     Scene *GetOpenScene() const;
 
+    Rect GetOpenSceneRectNDC() const;
+
     void RenderAndBlitToScreen();
+    static EditorScene *GetInstance();
 
 private:
     Console *m_console     = nullptr;
@@ -53,6 +59,11 @@ private:
 
     UITextRenderer *m_noSceneText = nullptr;
     GameObject *m_sceneContainerGo = nullptr;
+
+    Recti m_prevGLViewport = Recti::Zero;
+
+    void SaveGLViewport();
+    void LoadGLViewport();
 
     friend class EditorApplication;
 };

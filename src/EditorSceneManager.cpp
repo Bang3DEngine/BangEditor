@@ -50,8 +50,6 @@ Scene *EditorSceneManager::_GetRootScene() const
 
 Scene *EditorSceneManager::_GetActiveScene() const
 {
-    Scene *_edScene = GetEditorScene();
-    if (!_edScene) { return nullptr; }
-    EditorScene *edScene =  SCAST<EditorScene*>(_edScene);
+    EditorScene *edScene = GetEditorScene();
     return edScene->GetOpenScene();
 }

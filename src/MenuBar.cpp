@@ -3,6 +3,7 @@
 #include "Bang/Scene.h"
 #include "Bang/Dialog.h"
 #include "Bang/Random.h"
+#include "Bang/Extensions.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
 #include "Bang/UIBorderRect.h"
@@ -68,15 +69,10 @@ MenuBar::~MenuBar()
 void MenuBar::Update()
 {
     GameObject::Update();
-    EditorScene *edScene = SCAST<EditorScene*>(SceneManager::GetRootScene());
-    if (Input::GetKeyDown(Key::A))
-    {
-        UILayoutManager::InvalidateAll(edScene);
-        UILayoutManager::ForceRebuildLayout(edScene);
-    }
+    EditorScene *edScene = EditorScene::GetInstance();
     if (Input::GetKeyDown(Key::E))
     {
-        edScene->SetOpenScene( GameObjectFactory::CreateDefaultScene() );
+        MenuBar::OnNewScene(nullptr);
     }
 
     Scene *openScene = edScene->GetOpenScene();
@@ -105,34 +101,42 @@ MenuBarItem* MenuBar::GetItem(int i)
     return m_items[i];
 }
 
-void MenuBar::OnOpenProject(UIButton *btn)
+void MenuBar::OnOpenProject(UIButton*)
 {
     Dialog::GetFilePath("Open Project...");
 }
 
-void MenuBar::OnNewScene(UIButton *btn)
+void MenuBar::OnNewScene(UIButton*)
 {
-    EditorScene *edScene = SCAST<EditorScene*>(SceneManager::GetRootScene());
+    EditorScene *edScene = EditorScene::GetInstance();
     Scene *defaultScene = GameObjectFactory::CreateDefaultScene();
     edScene->SetOpenScene(defaultScene);
 }
 
-void MenuBar::OnSaveScene(UIButton *btn)
+void MenuBar::OnSaveScene(UIButton*)
 {
-    Path saveScenePath = Dialog::GetFilePath("Save Scene...");
-    EditorScene *edScene = SCAST<EditorScene*>(SceneManager::GetRootScene());
+    EditorScene *edScene = EditorScene::GetInstance();
     Scene *openScene = edScene->GetOpenScene();
     if (openScene)
     {
-        openScene->ExportXMLToFile( Path("Test.bscene") );
+        Path saveScenePath = Dialog::GetFilePath("Save Scene...",
+                                                 { Extensions::Get<Scene>() });
+        if (saveScenePath.IsFile())
+        {
+            openScene->ExportXMLToFile( Path(saveScenePath) );
+        }
     }
 }
 
-void MenuBar::OnOpenScene(UIButton *btn)
+void MenuBar::OnOpenScene(UIButton*)
 {
-    Path openScenePath = Dialog::GetFilePath("Open Scene...");
-    EditorScene *edScene = SCAST<EditorScene*>(SceneManager::GetRootScene());
-    Scene *scene = new Scene();
-    scene->ImportXMLFromFile( Path("Test.bscene") );
-    edScene->SetOpenScene(scene);
+    Path openScenePath = Dialog::GetFilePath("Open Scene...",
+                                             { Extensions::Get<Scene>() });
+    if (openScenePath.IsFile())
+    {
+        EditorScene *edScene = EditorScene::GetInstance();
+        Scene *scene = new Scene();
+        scene->ImportXMLFromFile(openScenePath);
+        edScene->SetOpenScene(scene);
+    }
 }

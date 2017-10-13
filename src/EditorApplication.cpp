@@ -36,17 +36,6 @@ void EditorApplication::OpenEditorScene(Window *containingWindow)
 {
     m_editorScene = new EditorScene();
     containingWindow->GetSceneManager()->LoadScene(m_editorScene);
-
-    /*
-    Scene *scene = new Scene();
-    Project *proj = ProjectManager::GetCurrentProject();
-    if (proj)
-    {
-        scene->ImportXMLFromFile(proj->GetFirstFoundScenePath());
-    }
-    m_editorScene->SetOpenScene(scene);
-    */
-    // m_editorScene->SetOpenScene(m_editorScene->Clone());
 }
 
 void EditorApplication::SetupWindow(Window *window)

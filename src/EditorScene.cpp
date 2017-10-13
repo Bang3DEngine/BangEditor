@@ -9,6 +9,7 @@
 #include "Bang/Texture2D.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIBorderRect.h"
+#include "Bang/SceneManager.h"
 #include "Bang/UIFrameLayout.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
@@ -46,10 +47,11 @@ EditorScene::EditorScene()
     GameObject *hlGo = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *hl = hlGo->AddComponent<UIHorizontalLayout>();
     UILayoutElement *hlLe = hlGo->AddComponent<UILayoutElement>();
+    hlLe->SetFlexibleSize(Vector2(1));
     hlGo->SetParent(m_mainEditorVL);
 
     m_mainEditorVL->AddChild(
-              GameObjectFactory::CreateGUIHSeparator(LayoutSizeType::Min, 10));
+              GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10));
 
     GameObject *overSceneCont = GameObjectFactory::CreateUIGameObject();
     m_sceneContainer = overSceneCont->AddComponent<UISceneContainer>();
@@ -82,6 +84,7 @@ EditorScene::EditorScene()
     UIHorizontalLayout *botHL = botHLGo->AddComponent<UIHorizontalLayout>();
     UILayoutElement *botHLLe = botHLGo->AddComponent<UILayoutElement>();
     botHLLe->SetMinSize( Vector2i(1, 150) );
+    botHLLe->SetFlexibleSize( Vector2(1) );
     botHLGo->SetParent(m_mainEditorVL);
 
     m_console = new Console();
@@ -105,17 +108,28 @@ void EditorScene::Update()
     if (GetOpenScene()) { GetOpenScene()->Update(); }
 }
 
+void EditorScene::OnResize(int newWidth, int newHeight)
+{
+    Scene::OnResize(newWidth, newHeight);
+    Scene *openScene = GetOpenScene();
+    if (openScene)
+    {
+        SaveGLViewport();
+        SetViewportForOpenScene();
+        openScene->InvalidateCanvas();
+        LoadGLViewport();
+    }
+}
+
 void EditorScene::RenderOpenScene()
 {
     Scene *openScene = GetOpenScene();
     if (openScene)
     {
-        Recti prevViewport = GL::GetViewportRect();
+        SaveGLViewport();
         SetViewportForOpenScene();
-
         GEngine::GetInstance()->Render(openScene);
-
-        GL::SetViewport(prevViewport);
+        LoadGLViewport();
     }
 
     m_noSceneText->SetEnabled(!openScene);
@@ -129,10 +143,7 @@ void EditorScene::SetViewportForOpenScene()
         Camera *openSceneCam = openScene->GetCamera();
         if (openSceneCam)
         {
-            RectTransform *sceneContRT =
-                    m_sceneContainerGo->GetComponent<RectTransform>();
-            Rect ndcRect = sceneContRT->GetScreenSpaceRectNDC();
-
+            Rect ndcRect = GetOpenSceneRectNDC();
             Rect ndcRectNorm = ndcRect * 0.5f + 0.5f;
             Recti vpRectPx(
                Vector2i(ndcRectNorm.GetMin() * Vector2(GL::GetViewportSize())),
@@ -149,7 +160,7 @@ void EditorScene::SetOpenScene(Scene *openScene)
     if (p_openScene)
     {
         p_openScene->SetFirstFoundCameraOrDefaultOne();
-        UILayoutManager::ForceRebuildLayout(p_openScene);
+        p_openScene->InvalidateCanvas();
         p_openScene->Start();
     }
 }
@@ -159,18 +170,25 @@ Scene *EditorScene::GetOpenScene() const
     return p_openScene;
 }
 
+Rect EditorScene::GetOpenSceneRectNDC() const
+{
+    return m_sceneContainerGo->GetComponent<RectTransform>()->GetScreenSpaceRectNDC();
+}
+
 void EditorScene::RenderAndBlitToScreen()
 {
     Window *window = Window::GetCurrent();
     window->Clear();
 
     UILayoutManager::RebuildLayout(this);
-    GetUILayoutManager()->OnBeforeRender(this);
+
     Scene *openScene = GetOpenScene();
     if (openScene)
     {
+        SaveGLViewport();
+        SetViewportForOpenScene();
         UILayoutManager::RebuildLayout(openScene);
-        openScene->GetUILayoutManager()->OnBeforeRender(openScene);
+        LoadGLViewport();
     }
 
     Texture2D *openSceneTex = nullptr;
@@ -189,4 +207,19 @@ void EditorScene::RenderAndBlitToScreen()
     RenderOpenScene();
     gEngine->Render(this);
     window->BlitToScreen(GetCamera());
+}
+
+EditorScene *EditorScene::GetInstance()
+{
+    return SCAST<EditorScene*>( SceneManager::GetRootScene() );
+}
+
+void EditorScene::SaveGLViewport()
+{
+    m_prevGLViewport = GL::GetViewportRect();
+}
+
+void EditorScene::LoadGLViewport()
+{
+    GL::SetViewport(m_prevGLViewport);
 }
