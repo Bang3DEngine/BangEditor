@@ -7,7 +7,9 @@
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
 #include "Bang/UIBorderRect.h"
+#include "Bang/UIFocusTaker.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
 #include "BangEditor/EditorScene.h"
@@ -16,9 +18,8 @@ USING_NAMESPACE_BANG_EDITOR
 
 MenuBar::MenuBar()
 {
-    RectTransform *rt = AddComponent<RectTransform>();
-    rt->SetAnchors(Vector2(-1.0f, 1.0f), Vector2(1.0f, 1.0f));
-    rt->SetMarginBot(-GetFixedHeight());
+    SetName("MenuBar");
+    GameObjectFactory::CreateUIGameObjectInto(this);
 
     UIImageRenderer *bg = AddComponent<UIImageRenderer>();
     bg->SetTint(Color::LightGray);
@@ -73,6 +74,10 @@ void MenuBar::Update()
     if (Input::GetKeyDown(Key::E))
     {
         MenuBar::OnNewScene(nullptr);
+    }
+    else if (Input::GetKeyDown(Key::O))
+    {
+        MenuBar::OnOpenProject(nullptr);
     }
 
     Scene *openScene = edScene->GetOpenScene();

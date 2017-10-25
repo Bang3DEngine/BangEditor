@@ -9,7 +9,6 @@
 #include "Bang/UIBorderRect.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UIFrameLayout.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -30,6 +29,7 @@ Inspector::Inspector() : EditorUITab("Inspector")
     le->SetFlexibleSize( Vector2(1) );
 
     UIScrollPanel *scrollPanel = GameObjectFactory::CreateUIScrollPanel();
+    scrollPanel->GetGameObject()->SetName("scrollPanel");
     UILayoutElement *scrollLE = scrollPanel->gameObject->
                                 AddComponent<UILayoutElement>();
     scrollPanel->GetScrollArea()->GetBackground()->SetVisible(false);
@@ -37,6 +37,7 @@ Inspector::Inspector() : EditorUITab("Inspector")
     scrollLE->SetFlexibleSize( Vector2(1) );
 
     GameObject *textCont = GameObjectFactory::CreateUIGameObject();
+    textCont->SetName("textCont");
     p_text = textCont->AddComponent<UITextRenderer>();
     p_text->SetHorizontalAlign(HorizontalAlignment::Left);
     p_text->SetVerticalAlign(VerticalAlignment::Center);
@@ -45,6 +46,9 @@ Inspector::Inspector() : EditorUITab("Inspector")
     p_text->SetWrapping(true);
     p_text->SetTextSize(10);
     p_text->SetContent("");
+
+    UILayoutElement *textLE = textCont->AddComponent<UILayoutElement>();
+    textLE->SetFlexibleSize( Vector2(1) );
 
     AddChild(scrollPanel->gameObject);
     scrollPanel->GetContainer()->AddChild(textCont);

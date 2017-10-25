@@ -10,7 +10,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/UIBorderRect.h"
 #include "Bang/SceneManager.h"
-#include "Bang/UIFrameLayout.h"
+#include "Bang/UIFocusTaker.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UILayoutManager.h"
@@ -31,20 +31,21 @@ USING_NAMESPACE_BANG_EDITOR
 
 EditorScene::EditorScene()
 {
-    AddComponent<RectTransform>();
-    AddComponent<UICanvas>();
-
-    m_menuBar = new MenuBar();
-    m_menuBar->transform->TranslateLocal( Vector3(0, 0, -0.1) );
-    m_menuBar->SetParent(this);
+    SetName("EditorScene");
+    GameObjectFactory::CreateUIGameObjectInto(this);
+    GameObjectFactory::CreateUICanvasInto(this);
 
     m_mainEditorVL = GameObjectFactory::CreateUIGameObject();
-    m_mainEditorVL->GetComponent<RectTransform>()->
-                    AddMarginTop(MenuBar::GetFixedHeight());
+    m_mainEditorVL->SetName("m_mainEditorVL");
     UIVerticalLayout *vl = m_mainEditorVL->AddComponent<UIVerticalLayout>();
     m_mainEditorVL->SetParent(this);
 
+    m_menuBar = new MenuBar();
+    m_menuBar->transform->TranslateLocal( Vector3(0, 0, -0.1) );
+    m_menuBar->SetParent(m_mainEditorVL);
+
     GameObject *hlGo = GameObjectFactory::CreateUIGameObject();
+    hlGo->SetName("hlGo");
     UIHorizontalLayout *hl = hlGo->AddComponent<UIHorizontalLayout>();
     UILayoutElement *hlLe = hlGo->AddComponent<UILayoutElement>();
     hlLe->SetFlexibleSize(Vector2(1));
@@ -54,6 +55,7 @@ EditorScene::EditorScene()
               GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10));
 
     GameObject *overSceneCont = GameObjectFactory::CreateUIGameObject();
+    overSceneCont->SetName("overSceneCont");
     m_sceneContainer = overSceneCont->AddComponent<UISceneContainer>();
     m_sceneContainer->SetPaddings(10);
     overSceneCont->SetParent(hlGo);
@@ -62,6 +64,7 @@ EditorScene::EditorScene()
     fle->SetFlexibleSize( Vector2(6) );
 
     m_sceneContainerGo = GameObjectFactory::CreateUIGameObject();
+    m_sceneContainerGo->SetName("m_sceneContainerGo");
     m_sceneImg  = m_sceneContainerGo->AddComponent<UIImageRenderer>();
     m_sceneImg->SetTint(Color::White);
     m_sceneImg->SetUvMultiply(Vector2(1, -1));
@@ -72,6 +75,7 @@ EditorScene::EditorScene()
     m_noSceneText->SetTextSize(50);
 
     UILayoutElement *fle2 = m_sceneContainerGo->AddComponent<UILayoutElement>();
+    fle2->SetFlexibleSize( Vector2(1) );
     m_sceneContainerGo->SetParent(overSceneCont);
 
     m_inspector = new Inspector();
@@ -81,6 +85,7 @@ EditorScene::EditorScene()
     m_hierarchy->SetParent(hlGo, 0);
 
     GameObject *botHLGo = GameObjectFactory::CreateUIGameObject();
+    botHLGo->SetName("botHLGo");
     UIHorizontalLayout *botHL = botHLGo->AddComponent<UIHorizontalLayout>();
     UILayoutElement *botHLLe = botHLGo->AddComponent<UILayoutElement>();
     botHLLe->SetMinSize( Vector2i(1, 150) );
@@ -102,9 +107,14 @@ EditorScene::~EditorScene()
 {
 }
 
+#include "Bang/Dialog.h"
 void EditorScene::Update()
 {
     Scene::Update();
+    if (Input::GetKeyDown(Key::X))
+    {
+        Dialog::Error("HOLA", "ADIOS");
+    }
     if (GetOpenScene()) { GetOpenScene()->Update(); }
 }
 

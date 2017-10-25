@@ -1,7 +1,6 @@
 #include "BangEditor/MenuBarItem.h"
 
 #include "Bang/UIBorderRect.h"
-#include "Bang/UIFrameLayout.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITintedButton.h"
 #include "Bang/UIImageRenderer.h"
@@ -15,15 +14,17 @@ USING_NAMESPACE_BANG_EDITOR
 
 MenuBarItem::MenuBarItem(bool topItem)
 {
-    AddComponent<RectTransform>();
+    GameObjectFactory::CreateUIGameObjectInto(this);
 
-    UIFrameLayout *fl = AddComponent<UIFrameLayout>();
-    fl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
-    fl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
+    UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
+    vl->SetChildrenVerticalStretch(Stretch::None);
+    vl->SetChildrenHorizontalStretch(Stretch::None);
+    vl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
+    vl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
 
     m_isTopItem = topItem;
-    if (m_isTopItem) { fl->SetPaddings(2); }
-    else             { fl->SetPaddings(3); }
+    if (m_isTopItem) { vl->SetPaddings(2); }
+    else             { vl->SetPaddings(3); }
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinSize( Vector2i(-1) );
@@ -75,8 +76,12 @@ MenuBarItem::MenuBarItem(bool topItem)
         contRT->SetAnchors(Vector2(1, 1));
         contRT->SetPivotPosition(Vector2(-1, 1));
     }
+    m_childrenContainerVL->SetIgnoreLayout(true);
     m_childrenContainer->SetEnabled(false);
     m_childrenContainer->SetParent(this);
+    m_childrenContainer->SetName("m_childrenContainer");
+
+    SetName("MenuBarItem");
 }
 
 MenuBarItem::~MenuBarItem()

@@ -14,7 +14,7 @@ EditorUITab::EditorUITab(const String &title)
 {
     SetName(title);
 
-    AddComponent<RectTransform>();
+    GameObjectFactory::CreateUIGameObjectInto(this);
     UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
@@ -26,7 +26,6 @@ EditorUITab::EditorUITab(const String &title)
     titleCont->SetParent(this);
 
     AddChild(GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10));
-
 }
 
 EditorUITab::~EditorUITab()
