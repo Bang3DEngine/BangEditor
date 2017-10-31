@@ -35,8 +35,7 @@ EditorScene::EditorScene()
     GameObjectFactory::CreateUIGameObjectInto(this);
     GameObjectFactory::CreateUICanvasInto(this);
 
-    m_mainEditorVL = GameObjectFactory::CreateUIGameObject();
-    m_mainEditorVL->SetName("m_mainEditorVL");
+    m_mainEditorVL = GameObjectFactory::CreateUIGameObject("MainEditorVL");
     UIVerticalLayout *vl = m_mainEditorVL->AddComponent<UIVerticalLayout>();
     m_mainEditorVL->SetParent(this);
 
@@ -45,7 +44,6 @@ EditorScene::EditorScene()
     m_menuBar->SetParent(m_mainEditorVL);
 
     GameObject *hlGo = GameObjectFactory::CreateUIGameObject();
-    hlGo->SetName("hlGo");
     UIHorizontalLayout *hl = hlGo->AddComponent<UIHorizontalLayout>();
     UILayoutElement *hlLe = hlGo->AddComponent<UILayoutElement>();
     hlLe->SetFlexibleSize(Vector2(1));
@@ -54,8 +52,7 @@ EditorScene::EditorScene()
     m_mainEditorVL->AddChild(
               GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10));
 
-    GameObject *overSceneCont = GameObjectFactory::CreateUIGameObject();
-    overSceneCont->SetName("overSceneCont");
+    GameObject *overSceneCont = GameObjectFactory::CreateUIGameObject("OverSceneCont");
     m_sceneContainer = overSceneCont->AddComponent<UISceneContainer>();
     m_sceneContainer->SetPaddings(10);
     overSceneCont->SetParent(hlGo);
@@ -63,8 +60,7 @@ EditorScene::EditorScene()
     UILayoutElement *fle = overSceneCont->AddComponent<UILayoutElement>();
     fle->SetFlexibleSize( Vector2(6) );
 
-    m_sceneContainerGo = GameObjectFactory::CreateUIGameObject();
-    m_sceneContainerGo->SetName("m_sceneContainerGo");
+    m_sceneContainerGo = GameObjectFactory::CreateUIGameObject("SceneContainer");
     m_sceneImg  = m_sceneContainerGo->AddComponent<UIImageRenderer>();
     m_sceneImg->SetTint(Color::White);
     m_sceneImg->SetUvMultiply(Vector2(1, -1));
@@ -84,8 +80,7 @@ EditorScene::EditorScene()
     m_hierarchy = new Hierarchy();
     m_hierarchy->SetParent(hlGo, 0);
 
-    GameObject *botHLGo = GameObjectFactory::CreateUIGameObject();
-    botHLGo->SetName("botHLGo");
+    GameObject *botHLGo = GameObjectFactory::CreateUIGameObject("BotHL");
     UIHorizontalLayout *botHL = botHLGo->AddComponent<UIHorizontalLayout>();
     UILayoutElement *botHLLe = botHLGo->AddComponent<UILayoutElement>();
     botHLLe->SetMinSize( Vector2i(1, 150) );

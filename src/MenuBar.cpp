@@ -12,6 +12,7 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
+
 #include "BangEditor/EditorScene.h"
 
 USING_NAMESPACE_BANG_EDITOR
@@ -23,6 +24,9 @@ MenuBar::MenuBar()
 
     UIImageRenderer *bg = AddComponent<UIImageRenderer>();
     bg->SetTint(Color::LightGray);
+
+    UILayoutElement *le = AddComponent<UILayoutElement>();
+    le->SetMinHeight(15);
 
     m_horizontalLayout = AddComponent<UIHorizontalLayout>();
     m_horizontalLayout->SetSpacing(5);

@@ -5,6 +5,7 @@
 #include "Bang/UITintedButton.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/UILayoutIgnorer.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
@@ -19,7 +20,7 @@ MenuBarItem::MenuBarItem(bool topItem)
     UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
     vl->SetChildrenVerticalStretch(Stretch::None);
     vl->SetChildrenHorizontalStretch(Stretch::None);
-    vl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
+    vl->SetChildrenVerticalAlignment(VerticalAlignment::Bot);
     vl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
 
     m_isTopItem = topItem;
@@ -53,7 +54,7 @@ MenuBarItem::MenuBarItem(bool topItem)
     m_buttonWithTint->AddListener(this);
     m_buttonWithTint->AddAgent(this);
 
-    m_childrenContainer = GameObjectFactory::CreateUIGameObject();
+    m_childrenContainer = GameObjectFactory::CreateUIGameObject("m_childrenContainer");
     auto childrenContBg = m_childrenContainer->AddComponent<UIImageRenderer>();
     childrenContBg->SetTint(BgColor);
 
@@ -66,6 +67,7 @@ MenuBarItem::MenuBarItem(bool topItem)
     m_childrenContainerVL->SetChildrenVerticalAlignment(VerticalAlignment::Bot);
     m_childrenContainerVL->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
     contRT->SetPivotPosition(Vector2(-1));
+
     if (m_isTopItem)
     {
         contRT->SetAnchors(Vector2(-1, -1));
@@ -76,10 +78,9 @@ MenuBarItem::MenuBarItem(bool topItem)
         contRT->SetAnchors(Vector2(1, 1));
         contRT->SetPivotPosition(Vector2(-1, 1));
     }
-    m_childrenContainerVL->SetIgnoreLayout(true);
+    m_childrenContainer->AddComponent<UILayoutIgnorer>(true);
     m_childrenContainer->SetEnabled(false);
     m_childrenContainer->SetParent(this);
-    m_childrenContainer->SetName("m_childrenContainer");
 
     SetName("MenuBarItem");
 }
