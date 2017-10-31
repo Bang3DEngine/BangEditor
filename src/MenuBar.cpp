@@ -7,7 +7,6 @@
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
 #include "Bang/UIBorderRect.h"
-#include "Bang/UIFocusTaker.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"

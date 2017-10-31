@@ -1,7 +1,7 @@
 #ifndef CWTRANSFORM_H
 #define CWTRANSFORM_H
 
-#include "BangEditor/InspectorWidget.h"
+#include "BangEditor/ComponentWidget.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Transform;
@@ -10,7 +10,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class CWTransform : public InspectorWidget
+class CWTransform : public ComponentWidget
 {
 public:
     CWTransform(Transform *transform);

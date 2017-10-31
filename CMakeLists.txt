@@ -71,7 +71,9 @@ ${SRC_DIR}/Explorer.cpp
 ${SRC_DIR}/Hierarchy.cpp
 ${SRC_DIR}/Inspector/Inspector.cpp
 ${SRC_DIR}/Inspector/InspectorWidget.cpp
+${SRC_DIR}/Inspector/ComponentWidget.cpp
 ${SRC_DIR}/Inspector/CWTransform.cpp
+${SRC_DIR}/Inspector/UIInputVector.cpp
 ${SRC_DIR}/MenuBar.cpp
 ${SRC_DIR}/MenuBarItem.cpp
 ${SRC_DIR}/UISceneContainer.cpp

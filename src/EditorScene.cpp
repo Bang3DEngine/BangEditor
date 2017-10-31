@@ -10,7 +10,6 @@
 #include "Bang/GameObject.h"
 #include "Bang/UIBorderRect.h"
 #include "Bang/SceneManager.h"
-#include "Bang/UIFocusTaker.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UILayoutManager.h"
@@ -102,14 +101,9 @@ EditorScene::~EditorScene()
 {
 }
 
-#include "Bang/Dialog.h"
 void EditorScene::Update()
 {
     Scene::Update();
-    if (Input::GetKeyDown(Key::X))
-    {
-        Dialog::Error("HOLA", "ADIOS");
-    }
     if (GetOpenScene()) { GetOpenScene()->Update(); }
 }
 

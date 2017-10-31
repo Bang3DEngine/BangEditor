@@ -42,6 +42,7 @@ echo "\
 #ifndef ${CLASS_INC}
 #define ${CLASS_INC}
 
+#include \"Bang/Bang.h\"
 #include \"BangEditor/BangEditor.h\"
 
 USING_NAMESPACE_BANG

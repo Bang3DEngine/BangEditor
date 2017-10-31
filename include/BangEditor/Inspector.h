@@ -1,4 +1,4 @@
-#ifndef INSPECTOR_H
+﻿#ifndef INSPECTOR_H
 #define INSPECTOR_H
 
 #include "BangEditor/EditorUITab.h"
@@ -33,6 +33,7 @@ private:
     UIVerticalLayout *GetMainVL() const;
     UIScrollPanel* GetScrollPanel() const;
 
+    void SetGameObject(GameObject *go);
     void AddWidget(InspectorWidget *widget);
     void RemoveWidget(InspectorWidget *widget);
     void Clear();

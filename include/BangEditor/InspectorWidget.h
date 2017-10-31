@@ -5,6 +5,10 @@
 
 #include "BangEditor/BangEditor.h"
 
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UITextRenderer;
+FORWARD NAMESPACE_BANG_END
+
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
@@ -13,6 +17,16 @@ class InspectorWidget : public GameObject
 public:
 	InspectorWidget();
 	virtual ~InspectorWidget();
+
+    void SetBackgroundColor(const Color &bgColor);
+
+protected:
+    void SetTitle(const String &title);
+    GameObject *GetContainer() const;
+
+private:
+    UITextRenderer *p_title = nullptr;
+    GameObject *p_container = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

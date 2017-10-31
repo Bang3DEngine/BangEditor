@@ -39,14 +39,22 @@ Inspector::Inspector() : EditorUITab("Inspector")
     scrollLE->SetPreferredSize( Vector2i(100, 100) );
     scrollLE->SetFlexibleSize( Vector2(1) );
 
+    GameObject *topSpacer =
+            GameObjectFactory::CreateUISpacer(LayoutSizeType::Min,
+                                              Vector2i(0, 30));
+
     GameObject *mainVLGo = GameObjectFactory::CreateUIGameObject("MainVL");
     mainVLGo->GetComponent<RectTransform>()->SetPivotPosition( Vector2(-1, 1) );
+
     UIVerticalLayout *mainVL = mainVLGo->AddComponent<UIVerticalLayout>();
+    mainVL->SetSpacing(5);
+
     UIContentSizeFitter *vlCSF = mainVLGo->AddComponent<UIContentSizeFitter>();
     vlCSF->SetVerticalSizeType(LayoutSizeType::Preferred);
 
     p_mainVL = mainVL;
     p_scrollPanel = scrollPanel;
+
     GetScrollPanel()->GetScrollArea()->SetContainedGameObject(
                                                 GetMainVL()->GetGameObject() );
 
@@ -72,9 +80,7 @@ void Inspector::Update()
             GameObject *selectedGameObject = Selection::GetOveredGameObject(openScene);
             if (selectedGameObject)
             {
-                CWTransform *cwTransform =
-                        new CWTransform(selectedGameObject->GetComponent<Transform>());
-                AddWidget(cwTransform);
+                SetGameObject(selectedGameObject);
             }
         }
     }
@@ -87,20 +93,37 @@ GameObject *Inspector::GetContainer() const
 UIVerticalLayout *Inspector::GetMainVL() const { return p_mainVL; }
 UIScrollPanel* Inspector::GetScrollPanel() const { return p_scrollPanel; }
 
+void Inspector::SetGameObject(GameObject *go)
+{
+    Clear();
+
+    CWTransform *cwTransform = new CWTransform(go->GetComponent<Transform>());
+    AddWidget(cwTransform);
+
+    /*
+    for (Component *comp : go)
+    {
+
+    }*/
+}
+
 void Inspector::AddWidget(InspectorWidget *widget)
 {
+    m_widgets.PushBack(widget);
     GetContainer()->AddChild(widget);
 }
 
 void Inspector::RemoveWidget(InspectorWidget *widget)
 {
+    m_widgets.Remove(widget);
     delete widget;
 }
 
 void Inspector::Clear()
 {
-    for (InspectorWidget *widget : m_widgets)
+    while (!m_widgets.IsEmpty())
     {
+        InspectorWidget *widget = m_widgets.Front();
         RemoveWidget(widget);
     }
 }
