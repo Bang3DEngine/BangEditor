@@ -134,5 +134,5 @@ void MenuBarItem::OnButton_MouseExit(UIButton *btn)
 
 void MenuBarItem::OnButton_Clicked(UIButton *btn)
 {
-    if (!m_isTopItem) { parent->SetEnabled(false); }
+    if (!m_isTopItem) { GetParent()->SetEnabled(false); }
 }

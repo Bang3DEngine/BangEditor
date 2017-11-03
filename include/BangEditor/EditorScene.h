@@ -30,7 +30,9 @@ public:
     EditorScene();
     virtual ~EditorScene();
 
+    void PreUpdate() override;
     void Update() override;
+    void PostUpdate() override;
     virtual void OnResize(int newWidth, int newHeight);
 
     void RenderOpenScene();

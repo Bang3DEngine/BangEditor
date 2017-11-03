@@ -39,7 +39,7 @@ EditorScene::EditorScene()
     m_mainEditorVL->SetParent(this);
 
     m_menuBar = new MenuBar();
-    m_menuBar->transform->TranslateLocal( Vector3(0, 0, -0.1) );
+    m_menuBar->GetTransform()->TranslateLocal( Vector3(0, 0, -0.1) );
     m_menuBar->SetParent(m_mainEditorVL);
 
     GameObject *hlGo = GameObjectFactory::CreateUIGameObject();
@@ -101,10 +101,22 @@ EditorScene::~EditorScene()
 {
 }
 
+void EditorScene::PreUpdate()
+{
+    Scene::PreUpdate();
+    if (GetOpenScene()) { GetOpenScene()->PreUpdate(); }
+}
+
 void EditorScene::Update()
 {
     Scene::Update();
     if (GetOpenScene()) { GetOpenScene()->Update(); }
+}
+
+void EditorScene::PostUpdate()
+{
+    Scene::PostUpdate();
+    if (GetOpenScene()) { GetOpenScene()->PostUpdate(); }
 }
 
 void EditorScene::OnResize(int newWidth, int newHeight)

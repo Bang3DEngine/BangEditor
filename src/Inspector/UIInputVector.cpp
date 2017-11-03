@@ -4,6 +4,7 @@
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
 #include "Bang/UILabel.h"
+#include "Bang/UIInputText.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -35,6 +36,8 @@ UIInputVector::UIInputVector()
     m_inputNumbers.PushBack( GameObjectFactory::CreateUIInputNumber() );
     m_inputNumbers.PushBack( GameObjectFactory::CreateUIInputNumber() );
 
+    for (int i = 0; i < 4; ++i) { m_inputNumbers[i]->RegisterListener(this); }
+
     AddChild(p_label->GetGameObject());
     AddChild(m_inputNumbers[0]->GetGameObject());
     AddChild(m_inputNumbers[1]->GetGameObject());
@@ -61,8 +64,6 @@ void UIInputVector::SetLabelText(const String &text)
 void UIInputVector::SetSize(int size)
 {
     ASSERT(size >= 1 && size <= 4);
-
-    m_values.Resize(size);
     for (int i = 0; i < 4; ++i)
     {
         m_inputNumbers[i]->GetGameObject()->SetEnabled( i < size );
@@ -83,20 +84,30 @@ void UIInputVector::Set(const Vector4 &v)
 }
 void UIInputVector::Set(int i, float v)
 {
-    m_values[i] = v;
     m_inputNumbers[i]->SetNumber(v);
+}
+
+float UIInputVector::Get(int i) const
+{
+    return m_inputNumbers[i]->GetNumber();
 }
 
 Vector2 UIInputVector::GetVector2() const
 {
-    return Vector2(m_values[0], m_values[1]);
+    return Vector2(Get(0), Get(1));
 }
 Vector3 UIInputVector::GetVector3() const
 {
-    return Vector3(m_values[0], m_values[1], m_values[2]);
+    return Vector3(Get(0), Get(1), Get(2));
 }
 Vector4 UIInputVector::GetVector4() const
 {
-    return Vector4(m_values[0], m_values[1], m_values[2], m_values[3]);
+    return Vector4(Get(0), Get(1), Get(2), Get(3));
+}
+
+void UIInputVector::OnValueChanged(const IEventEmitter *emitter)
+{
+    Propagate(&IValueChangedListener::OnValueChanged,
+              SCAST<const IEventEmitter*>(this));
 }
 

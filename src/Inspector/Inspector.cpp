@@ -97,7 +97,8 @@ void Inspector::SetGameObject(GameObject *go)
 {
     Clear();
 
-    CWTransform *cwTransform = new CWTransform(go->GetComponent<Transform>());
+    CWTransform *cwTransform = new CWTransform(go->GetTransform());
+    Debug_Log(go->GetTransform());
     AddWidget(cwTransform);
 
     /*

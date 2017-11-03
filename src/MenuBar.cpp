@@ -89,8 +89,8 @@ void MenuBar::Update()
         if (Input::GetKeyDownRepeat(Key::C))
         {
             GameObject *sphere = MeshFactory::GetSphereGameObject();
-            sphere->transform->SetPosition( Random::InsideUnitSphere() );
-            sphere->transform->SetScale( Vector3(Random::Range(0.3f, 1.0f)) );
+            sphere->GetTransform()->SetPosition( Random::InsideUnitSphere() );
+            sphere->GetTransform()->SetScale( Vector3(Random::Range(0.3f, 1.0f)) );
             openScene->AddChild(sphere);
         }
     }

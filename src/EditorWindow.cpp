@@ -22,8 +22,7 @@ EditorWindow::~EditorWindow()
 
 void EditorWindow::Update()
 {
-    EditorScene *edScene = GetEditorScene();
-    edScene->Update();
+    GetSceneManager()->Update();
 }
 
 void EditorWindow::Render()
