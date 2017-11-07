@@ -51,27 +51,8 @@ EditorScene::EditorScene()
     m_mainEditorVL->AddChild(
               GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10));
 
-    GameObject *overSceneCont = GameObjectFactory::CreateUIGameObject("OverSceneCont");
-    m_sceneContainer = overSceneCont->AddComponent<UISceneContainer>();
-    m_sceneContainer->SetPaddings(10);
-    overSceneCont->SetParent(hlGo);
-
-    UILayoutElement *fle = overSceneCont->AddComponent<UILayoutElement>();
-    fle->SetFlexibleSize( Vector2(6) );
-
-    m_sceneContainerGo = GameObjectFactory::CreateUIGameObject("SceneContainer");
-    m_sceneImg  = m_sceneContainerGo->AddComponent<UIImageRenderer>();
-    m_sceneImg->SetTint(Color::White);
-    m_sceneImg->SetUvMultiply(Vector2(1, -1));
-
-    m_noSceneText = m_sceneContainerGo->AddComponent<UITextRenderer>();
-    m_noSceneText->SetContent("Empty Scene");
-    m_noSceneText->SetWrapping(true);
-    m_noSceneText->SetTextSize(50);
-
-    UILayoutElement *fle2 = m_sceneContainerGo->AddComponent<UILayoutElement>();
-    fle2->SetFlexibleSize( Vector2(1) );
-    m_sceneContainerGo->SetParent(overSceneCont);
+    m_sceneContainer = new UISceneContainer();
+    m_sceneContainer->SetParent(hlGo);
 
     m_inspector = new Inspector();
     m_inspector->SetParent(hlGo);
@@ -142,8 +123,6 @@ void EditorScene::RenderOpenScene()
         GEngine::GetInstance()->Render(openScene);
         LoadGLViewport();
     }
-
-    m_noSceneText->SetEnabled(!openScene);
 }
 
 void EditorScene::SetViewportForOpenScene()
@@ -183,7 +162,7 @@ Scene *EditorScene::GetOpenScene() const
 
 Rect EditorScene::GetOpenSceneRectNDC() const
 {
-    return m_sceneContainerGo->GetComponent<RectTransform>()->GetScreenSpaceRectNDC();
+    return m_sceneContainer->GetImageRect();
 }
 
 void EditorScene::RenderAndBlitToScreen()
@@ -212,7 +191,7 @@ void EditorScene::RenderAndBlitToScreen()
             openSceneTex = gbuffer->GetAttachmentTexture(GBuffer::AttColor);
         }
     }
-    m_sceneImg->SetImageTexture(openSceneTex);
+    m_sceneContainer->SetSceneImageTexture(openSceneTex);
 
     GEngine *gEngine = GEngine::GetInstance();
     RenderOpenScene();
@@ -224,6 +203,11 @@ EditorScene *EditorScene::GetInstance()
 {
     return SCAST<EditorScene*>( SceneManager::GetRootScene() );
 }
+
+Console *EditorScene::GetConsole() const { return m_console; }
+Explorer *EditorScene::GetExplorer() const { return m_explorer; }
+Inspector *EditorScene::GetInspector() const { return m_inspector; }
+Hierarchy *EditorScene::GetHierarchy() const { return m_hierarchy; }
 
 void EditorScene::SaveGLViewport()
 {

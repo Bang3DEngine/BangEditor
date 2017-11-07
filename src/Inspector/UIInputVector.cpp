@@ -36,7 +36,10 @@ UIInputVector::UIInputVector()
     m_inputNumbers.PushBack( GameObjectFactory::CreateUIInputNumber() );
     m_inputNumbers.PushBack( GameObjectFactory::CreateUIInputNumber() );
 
-    for (int i = 0; i < 4; ++i) { m_inputNumbers[i]->RegisterListener(this); }
+    for (int i = 0; i < 4; ++i)
+    {
+        m_inputNumbers[i]->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    }
 
     AddChild(p_label->GetGameObject());
     AddChild(m_inputNumbers[0]->GetGameObject());
@@ -105,9 +108,10 @@ Vector4 UIInputVector::GetVector4() const
     return Vector4(Get(0), Get(1), Get(2), Get(3));
 }
 
-void UIInputVector::OnValueChanged(const IEventEmitter *emitter)
+void UIInputVector::OnValueChanged(const IEventEmitter*)
 {
-    Propagate(&IValueChangedListener::OnValueChanged,
-              SCAST<const IEventEmitter*>(this));
+    auto emitter = SCAST< EventEmitter<IValueChangedListener>* >(this);
+    emitter->Propagate(&IValueChangedListener::OnValueChanged,
+                       SCAST<const IEventEmitter*>(emitter));
 }
 

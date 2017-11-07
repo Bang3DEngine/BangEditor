@@ -82,6 +82,7 @@ void Inspector::Update()
             {
                 SetGameObject(selectedGameObject);
             }
+            else { SetGameObject(nullptr); }
         }
     }
 }
@@ -96,6 +97,7 @@ UIScrollPanel* Inspector::GetScrollPanel() const { return p_scrollPanel; }
 void Inspector::SetGameObject(GameObject *go)
 {
     Clear();
+    ENSURE(go);
 
     CWTransform *cwTransform = new CWTransform(go->GetTransform());
     Debug_Log(go->GetTransform());

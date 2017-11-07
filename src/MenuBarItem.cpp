@@ -46,13 +46,13 @@ MenuBarItem::MenuBarItem(bool topItem)
     textGo->SetParent(this);
 
     m_buttonWithTint = AddComponent<UITintedButton>();
-    m_buttonWithTint->AddToTint(this);
     m_buttonWithTint->SetIdleTintColor(BgColor);
     m_buttonWithTint->SetOverTintColor(Color::White);
     m_buttonWithTint->SetPressedTintColor(Color::White);
     m_buttonWithTint->SetMode(UIButtonMode::UseRender);
-    m_buttonWithTint->AddListener(this);
-    m_buttonWithTint->AddAgent(this);
+    m_buttonWithTint->EventEmitter<IUIButtonListener>::RegisterListener(this);
+    m_buttonWithTint->AddToTint(this);
+    m_buttonWithTint->RegisterEmitter(this);
 
     m_childrenContainer = GameObjectFactory::CreateUIGameObject("m_childrenContainer");
     auto childrenContBg = m_childrenContainer->AddComponent<UIImageRenderer>();

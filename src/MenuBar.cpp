@@ -127,8 +127,9 @@ void MenuBar::OnSaveScene(UIButton*)
     Scene *openScene = edScene->GetOpenScene();
     if (openScene)
     {
-        Path saveScenePath = Dialog::GetFilePath("Save Scene...",
-                                                 { Extensions::Get<Scene>() });
+        Path saveScenePath =
+                Dialog::GetFilePath("Save Scene...",
+                                    { Extensions::GetSceneExtension() });
         if (saveScenePath.IsFile())
         {
             openScene->ExportXMLToFile( Path(saveScenePath) );
@@ -139,7 +140,7 @@ void MenuBar::OnSaveScene(UIButton*)
 void MenuBar::OnOpenScene(UIButton*)
 {
     Path openScenePath = Dialog::GetFilePath("Open Scene...",
-                                             { Extensions::Get<Scene>() });
+                                             { Extensions::GetSceneExtension() });
     if (openScenePath.IsFile())
     {
         EditorScene *edScene = EditorScene::GetInstance();

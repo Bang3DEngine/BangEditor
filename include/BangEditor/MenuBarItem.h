@@ -18,7 +18,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class MenuBarItem : public GameObject,
-                    public UIButtonListener
+                    public IUIButtonListener
 {
 public:
     MenuBarItem(bool topItem);

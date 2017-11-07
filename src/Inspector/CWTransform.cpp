@@ -34,9 +34,9 @@ CWTransform::CWTransform(Transform *transform)
     p_rotIV->Set(transform->GetLocalRotation().GetEulerAngles());
     p_scaleIV->Set(transform->GetLocalScale());
 
-    p_posIV->RegisterListener(this);
-    p_rotIV->RegisterListener(this);
-    p_scaleIV->RegisterListener(this);
+    p_posIV->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_rotIV->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_scaleIV->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     GetContainer()->AddChild(vlGo);
     vlGo->AddChild(p_posIV);

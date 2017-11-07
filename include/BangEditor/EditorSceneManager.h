@@ -19,11 +19,11 @@ class EditorSceneManager : public SceneManager
 public:
     virtual ~EditorSceneManager();
 
-protected:
-    EditorSceneManager();
-
     Scene *GetOpenScene() const;
     EditorScene *GetEditorScene() const;
+
+protected:
+    EditorSceneManager();
 
     void _LoadScene(Scene *scene) override;
     Scene* _GetRootScene() const override;

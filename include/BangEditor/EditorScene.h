@@ -46,6 +46,11 @@ public:
     void RenderAndBlitToScreen();
     static EditorScene *GetInstance();
 
+    Console *GetConsole() const;
+    Explorer *GetExplorer() const;
+    Inspector *GetInspector() const;
+    Hierarchy *GetHierarchy() const;
+
 private:
     Console *m_console     = nullptr;
     Explorer *m_explorer   = nullptr;
@@ -53,14 +58,10 @@ private:
     Hierarchy *m_hierarchy = nullptr;
 
     Scene *p_openScene = nullptr;
-    UIImageRenderer *m_sceneImg = nullptr;
     UISceneContainer *m_sceneContainer = nullptr;
 
     MenuBar *m_menuBar = nullptr;
     GameObject *m_mainEditorVL = nullptr;
-
-    UITextRenderer *m_noSceneText = nullptr;
-    GameObject *m_sceneContainerGo = nullptr;
 
     Recti m_prevGLViewport = Recti::Zero;
 
