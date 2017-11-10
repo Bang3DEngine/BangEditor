@@ -17,6 +17,8 @@ FORWARD class InspectorWidget;
 
 class Inspector : public EditorUITab
 {
+    GAMEOBJECT_EDITOR(Inspector)
+
 public:
     Inspector();
     virtual ~Inspector();

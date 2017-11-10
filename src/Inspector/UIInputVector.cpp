@@ -41,11 +41,11 @@ UIInputVector::UIInputVector()
         m_inputNumbers[i]->EventEmitter<IValueChangedListener>::RegisterListener(this);
     }
 
-    AddChild(p_label->GetGameObject());
-    AddChild(m_inputNumbers[0]->GetGameObject());
-    AddChild(m_inputNumbers[1]->GetGameObject());
-    AddChild(m_inputNumbers[2]->GetGameObject());
-    AddChild(m_inputNumbers[3]->GetGameObject());
+    SetAsChild(p_label->GetGameObject());
+    SetAsChild(m_inputNumbers[0]->GetGameObject());
+    SetAsChild(m_inputNumbers[1]->GetGameObject());
+    SetAsChild(m_inputNumbers[2]->GetGameObject());
+    SetAsChild(m_inputNumbers[3]->GetGameObject());
 }
 
 UIInputVector::UIInputVector(const String &labelText, int size) : UIInputVector()
@@ -108,10 +108,8 @@ Vector4 UIInputVector::GetVector4() const
     return Vector4(Get(0), Get(1), Get(2), Get(3));
 }
 
-void UIInputVector::OnValueChanged(const IEventEmitter*)
+void UIInputVector::OnValueChanged(Object *object)
 {
-    auto emitter = SCAST< EventEmitter<IValueChangedListener>* >(this);
-    emitter->Propagate(&IValueChangedListener::OnValueChanged,
-                       SCAST<const IEventEmitter*>(emitter));
+    PROPAGATE(IValueChangedListener, OnValueChanged, object);
 }
 

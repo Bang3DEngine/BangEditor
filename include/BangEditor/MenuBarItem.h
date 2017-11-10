@@ -20,16 +20,20 @@ NAMESPACE_BANG_EDITOR_BEGIN
 class MenuBarItem : public GameObject,
                     public IUIButtonListener
 {
-public:
-    MenuBarItem(bool topItem);
-    virtual ~MenuBarItem();
+    GAMEOBJECT(MenuBarItem)
 
+public:
     void AddSeparator();
-    void AddChild(MenuBarItem *childItem);
-    MenuBarItem* AddChild(const String &text);
+    void SetAsChild(MenuBarItem *childItem);
+    MenuBarItem* SetAsChild(const String &text);
 
     UITextRenderer *GetText() const;
     UIButton *GetButton() const;
+
+protected:
+    MenuBarItem() = default;
+    MenuBarItem(bool topItem);
+    virtual ~MenuBarItem();
 
 private:
     bool m_isTopItem = false;
@@ -43,6 +47,8 @@ private:
     virtual void OnButton_MouseEnter(UIButton *btn);
     virtual void OnButton_MouseExit(UIButton *btn);
     virtual void OnButton_Clicked(UIButton *btn);
+
+    friend class Bang::ObjectManager;
 };
 
 NAMESPACE_BANG_EDITOR_END

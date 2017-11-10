@@ -34,7 +34,7 @@ SceneManager *EditorApplication::CreateSceneManager() const
 
 void EditorApplication::OpenEditorScene(Window *containingWindow)
 {
-    m_editorScene = new EditorScene();
+    m_editorScene = ObjectManager::Create<EditorScene>();
     containingWindow->GetSceneManager()->LoadScene(m_editorScene);
 }
 

@@ -3,12 +3,17 @@
 #include "Bang/Paths.h"
 #include "Bang/UILabel.h"
 #include "Bang/UIGridLayout.h"
+#include "Bang/UIScrollArea.h"
+#include "Bang/RectTransform.h"
+#include "Bang/UIScrollPanel.h"
+#include "Bang/UITintedButton.h"
 #include "Bang/UIButtonDriver.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
+#include "Bang/UIContentSizeFitter.h"
 
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/IconManager.h"
@@ -23,44 +28,66 @@ Explorer::Explorer() : EditorUITab("Explorer")
     le->SetMinSize( Vector2i(100) );
     le->SetPreferredWidth(250);
 
+    // Tool Bar
     GameObject *toolBar = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *toolBarHL = toolBar->AddComponent<UIHorizontalLayout>();
     toolBarHL->SetPaddingLeft(3);
     toolBarHL->SetPaddingRight( toolBarHL->GetPaddingLeft() );
     toolBarHL->SetSpacing(3);
 
-    UIButtonDriver *upBtn = GameObjectFactory::CreateUIButton("", nullptr);
-    upBtn->SetIcon(IconManager::GetBackArrowIcon(), Vector2i(15), 0);
-    upBtn->GetText()->SetContent("");
+    // Scroll Panel
+    p_scrollPanel = GameObjectFactory::CreateUIScrollPanel();
+    p_scrollPanel->GetScrollArea()->GetBackground()->SetTint(Color::Zero);
+    GameObject *scrollPanelGo = p_scrollPanel->GetGameObject();
+    UILayoutElement *spLE = scrollPanelGo->AddComponent<UILayoutElement>();
+    spLE->SetFlexibleSize( Vector2::One );
+
+    // Back button
+    p_backButton = GameObjectFactory::CreateUIButton("", nullptr);
+    p_backButton->SetIcon(IconManager::GetBackArrowIcon(), Vector2i(15), 0);
+    p_backButton->GetText()->SetContent("");
+    p_backButton->GetButton()->EventEmitter<IUIButtonListener>::RegisterListener(this);
 
     UILayoutElement *toolBarLE = toolBar->AddComponent<UILayoutElement>();
     toolBarLE->SetMinHeight(15);
     toolBarLE->SetFlexibleHeight(0);
 
+    // Direction label
     p_directionLabel = GameObjectFactory::CreateUILabel();
     p_directionLabel->GetText()->SetTextSize(9);
     p_directionLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::Right);
 
     GameObject *dirBar = p_directionLabel->GetGameObject();
 
+    // Entries Container
     p_entriesContainer = GameObjectFactory::CreateUIGameObject();
+
+    p_entriesContainer->GetComponent<RectTransform>()->
+                        SetPivotPosition(Vector2(-1,1));
+    UIContentSizeFitter *csf = p_entriesContainer->AddComponent<UIContentSizeFitter>();
+    csf->SetHorizontalSizeType(LayoutSizeType::None);
+    csf->SetVerticalSizeType(LayoutSizeType::Preferred);
+
     UIGridLayout *gridLayout = p_entriesContainer->AddComponent<UIGridLayout>();
+    gridLayout->SetCellSize( Vector2i(80) );
     gridLayout->SetSpacing(10);
 
-    SetCurrentFilepath( Paths::EngineAssets() );
+    SetCurrentPath( Paths::EngineAssets() );
 
-    AddChild(toolBar);
-    toolBar->AddChild(upBtn->GetGameObject());
-    toolBar->AddChild(dirBar);
-    AddChild(GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5));
-    AddChild(p_entriesContainer);
+    SetAsChild(toolBar);
+    toolBar->SetAsChild(p_backButton->GetGameObject());
+    toolBar->SetAsChild(dirBar);
+    SetAsChild(GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5));
+
+    SetAsChild(p_scrollPanel->GetGameObject());
+    p_scrollPanel->GetScrollArea()->SetContainedGameObject(p_entriesContainer);
 }
 
 Explorer::~Explorer()
 {
 }
 
-void Explorer::SetCurrentFilepath(const Path &path)
+void Explorer::SetCurrentPath(const Path &path)
 {
     if (GetCurrentPath() != path)
     {
@@ -68,7 +95,7 @@ void Explorer::SetCurrentFilepath(const Path &path)
         p_directionLabel->GetText()->SetContent(m_currentPath.GetAbsolute());
 
         Clear();
-        List<Path> subPaths = m_currentPath.FindSubPaths(Path::FindFlag::Default);
+        List<Path> subPaths = m_currentPath.FindSubPaths(Path::FindFlag::Simple);
         for (const Path &subPath : subPaths)
         {
             AddEntry(subPath);
@@ -92,11 +119,19 @@ void Explorer::Clear()
 
 void Explorer::AddEntry(const Path &entryPath)
 {
-    ExplorerEntry *explorerEntry = new ExplorerEntry();
+    ExplorerEntry *explorerEntry = ObjectManager::Create<ExplorerEntry>();
     explorerEntry->SetFilepath(entryPath);
-    p_entriesContainer->AddChild(explorerEntry);
+    p_entriesContainer->SetAsChild(explorerEntry);
 
     p_entries.PushBack(explorerEntry);
+}
+
+void Explorer::OnButton_Clicked(UIButton *btn)
+{
+    if (btn == SCAST<UIButton*>(p_backButton->GetButton()) )
+    {
+        SetCurrentPath( GetCurrentPath().GetDirectory() );
+    }
 }
 
 Explorer *Explorer::GetInstance()

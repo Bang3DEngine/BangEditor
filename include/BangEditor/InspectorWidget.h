@@ -14,13 +14,15 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class InspectorWidget : public GameObject
 {
-public:
-	InspectorWidget();
-	virtual ~InspectorWidget();
+    GAMEOBJECT_EDITOR(InspectorWidget)
 
+public:
     void SetBackgroundColor(const Color &bgColor);
 
 protected:
+    InspectorWidget();
+    virtual ~InspectorWidget();
+
     void SetTitle(const String &title);
     GameObject *GetContainer() const;
 

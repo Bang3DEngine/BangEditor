@@ -20,9 +20,10 @@ ExplorerEntry::ExplorerEntry()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetMinSize( Vector2i(50) );
+    le->SetPreferredSize( Vector2i(100) );
 
-    constexpr int textPixels = 10;
+    constexpr int textPixels = 30;
+    constexpr int spacing = 5;
 
     GameObject *bgGo = GameObjectFactory::CreateUIGameObject();
     p_bg = bgGo->AddComponent<UIImageRenderer>();
@@ -31,7 +32,7 @@ ExplorerEntry::ExplorerEntry()
     RectTransform *iconRT = iconGo->GetComponent<RectTransform>();
     iconRT->SetAnchorX( Vector2(-1,  1) );
     iconRT->SetAnchorY( Vector2(-1,  1) );
-    iconRT->SetMarginBot(textPixels);
+    iconRT->SetMarginBot(textPixels + spacing);
     p_icon = iconGo->AddComponent<UIImageRenderer>();
     p_icon->SetAspectRatioMode(AspectRatioMode::Keep);
 
@@ -44,7 +45,7 @@ ExplorerEntry::ExplorerEntry()
     p_label->GetText()->SetTextSize(9);
     p_label->GetText()->SetContent("");
     p_label->GetText()->SetWrapping(true);
-    p_label->GetText()->SetVerticalAlign(VerticalAlignment::Top);
+    p_label->GetText()->SetVerticalAlign(VerticalAlignment::Center);
     p_label->SetSelectable(false);
 
     p_button = AddComponent<UITintedButton>();
@@ -53,12 +54,14 @@ ExplorerEntry::ExplorerEntry()
     p_button->SetOverTintColor(Color::VeryLightBlue);
     p_button->SetPressedTintColor(Color::LightBlue);
     p_button->AddToTint(p_bg);
-    p_button->RegisterEmitter(this);
+    p_button->RegisterButtonPart(this);
     p_button->EventEmitter<IUIButtonListener>::RegisterListener(this);
 
-    AddChild(bgGo);
-    AddChild(iconGo);
-    AddChild(labelGo);
+    SetAsChild(bgGo);
+    SetAsChild(iconGo);
+    SetAsChild(labelGo);
+
+    SetSelected(false);
 }
 
 ExplorerEntry::~ExplorerEntry()
@@ -85,7 +88,7 @@ void ExplorerEntry::SetFilepath(const Path &path)
     {
         m_filepath = path;
         p_icon->SetImageTexture( IconManager::GetIcon(GetFilepath()) );
-        p_label->GetText()->SetContent(GetFilepath().GetName());
+        p_label->GetText()->SetContent(GetFilepath().GetNameExt());
     }
 }
 
@@ -115,7 +118,7 @@ void ExplorerEntry::OnButton_DoubleClicked(UIButton*)
 {
     if (GetFilepath().IsDir())
     {
-        Explorer::GetInstance()->SetCurrentFilepath(GetFilepath());
+        Explorer::GetInstance()->SetCurrentPath(GetFilepath());
     }
 }
 

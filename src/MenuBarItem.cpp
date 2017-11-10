@@ -52,7 +52,7 @@ MenuBarItem::MenuBarItem(bool topItem)
     m_buttonWithTint->SetMode(UIButtonMode::UseRender);
     m_buttonWithTint->EventEmitter<IUIButtonListener>::RegisterListener(this);
     m_buttonWithTint->AddToTint(this);
-    m_buttonWithTint->RegisterEmitter(this);
+    m_buttonWithTint->RegisterButtonPart(this);
 
     m_childrenContainer = GameObjectFactory::CreateUIGameObject("m_childrenContainer");
     auto childrenContBg = m_childrenContainer->AddComponent<UIImageRenderer>();
@@ -97,18 +97,18 @@ void MenuBarItem::AddSeparator()
     sep->SetParent(m_childrenContainer);
 }
 
-void MenuBarItem::AddChild(MenuBarItem *childItem)
+void MenuBarItem::SetAsChild(MenuBarItem *childItem)
 {
     childItem->SetParent(m_childrenContainer);
     m_childrenItems.PushBack(childItem);
 }
 
-MenuBarItem *MenuBarItem::AddChild(const String &text)
+MenuBarItem *MenuBarItem::SetAsChild(const String &text)
 {
-    MenuBarItem *newItem = new MenuBarItem(false);
+    MenuBarItem *newItem = ObjectManager::Create<MenuBarItem>(false);
     newItem->GetText()->SetContent(text);
     newItem->SetName(text);
-    AddChild(newItem);
+    SetAsChild(newItem);
     return newItem;
 }
 

@@ -26,9 +26,9 @@ CWTransform::CWTransform(Transform *transform)
     UIVerticalLayout *vl = vlGo->AddComponent<UIVerticalLayout>();
     vl->SetSpacing(2);
 
-    p_posIV   = new UIInputVector("Position", 3);
-    p_rotIV   = new UIInputVector("Rotation", 3);
-    p_scaleIV = new UIInputVector("Scale   ", 3);
+    p_posIV   = ObjectManager::Create<UIInputVector>("Position", 3);
+    p_rotIV   = ObjectManager::Create<UIInputVector>("Rotation", 3);
+    p_scaleIV = ObjectManager::Create<UIInputVector>("Scale   ", 3);
 
     p_posIV->Set(transform->GetLocalPosition());
     p_rotIV->Set(transform->GetLocalRotation().GetEulerAngles());
@@ -38,10 +38,10 @@ CWTransform::CWTransform(Transform *transform)
     p_rotIV->EventEmitter<IValueChangedListener>::RegisterListener(this);
     p_scaleIV->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
-    GetContainer()->AddChild(vlGo);
-    vlGo->AddChild(p_posIV);
-    vlGo->AddChild(p_rotIV);
-    vlGo->AddChild(p_scaleIV);
+    GetContainer()->SetAsChild(vlGo);
+    vlGo->SetAsChild(p_posIV);
+    vlGo->SetAsChild(p_rotIV);
+    vlGo->SetAsChild(p_scaleIV);
 
     p_relatedTransform = transform;
 }
@@ -50,7 +50,7 @@ CWTransform::~CWTransform()
 {
 }
 
-void CWTransform::OnValueChanged(const IEventEmitter *emitter)
+void CWTransform::OnValueChanged(Object *object)
 {
     p_relatedTransform->SetLocalPosition(p_posIV->GetVector3());
     p_relatedTransform->SetLocalEuler(p_rotIV->GetVector3());

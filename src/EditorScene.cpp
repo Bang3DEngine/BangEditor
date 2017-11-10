@@ -38,7 +38,7 @@ EditorScene::EditorScene()
     UIVerticalLayout *vl = m_mainEditorVL->AddComponent<UIVerticalLayout>();
     m_mainEditorVL->SetParent(this);
 
-    m_menuBar = new MenuBar();
+    m_menuBar = ObjectManager::Create<MenuBar>();
     m_menuBar->GetTransform()->TranslateLocal( Vector3(0, 0, -0.1) );
     m_menuBar->SetParent(m_mainEditorVL);
 
@@ -48,16 +48,16 @@ EditorScene::EditorScene()
     hlLe->SetFlexibleSize(Vector2(1));
     hlGo->SetParent(m_mainEditorVL);
 
-    m_mainEditorVL->AddChild(
+    m_mainEditorVL->SetAsChild(
               GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10));
 
-    m_sceneContainer = new UISceneContainer();
+    m_sceneContainer = ObjectManager::Create<UISceneContainer>();
     m_sceneContainer->SetParent(hlGo);
 
-    m_inspector = new Inspector();
+    m_inspector = ObjectManager::Create<Inspector>();
     m_inspector->SetParent(hlGo);
 
-    m_hierarchy = new Hierarchy();
+    m_hierarchy = ObjectManager::Create<Hierarchy>();
     m_hierarchy->SetParent(hlGo, 0);
 
     GameObject *botHLGo = GameObjectFactory::CreateUIGameObject("BotHL");
@@ -67,10 +67,10 @@ EditorScene::EditorScene()
     botHLLe->SetFlexibleSize( Vector2(1) );
     botHLGo->SetParent(m_mainEditorVL);
 
-    m_console = new Console();
+    m_console = ObjectManager::Create<Console>();
     m_console->SetParent(botHLGo);
 
-    m_explorer = new Explorer();
+    m_explorer = ObjectManager::Create<Explorer>();
     m_explorer->SetParent(botHLGo);
 
     Camera *cam = AddComponent<Camera>();
@@ -151,7 +151,6 @@ void EditorScene::SetOpenScene(Scene *openScene)
     {
         p_openScene->SetFirstFoundCameraOrDefaultOne();
         p_openScene->InvalidateCanvas();
-        p_openScene->Start();
     }
 }
 

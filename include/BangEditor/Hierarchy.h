@@ -8,6 +8,8 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class Hierarchy : public EditorUITab
 {
+    GAMEOBJECT_EDITOR(Hierarchy)
+
 public:
     Hierarchy();
     virtual ~Hierarchy();

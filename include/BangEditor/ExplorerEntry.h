@@ -20,10 +20,9 @@ NAMESPACE_BANG_EDITOR_BEGIN
 class ExplorerEntry : public GameObject,
                       public IUIButtonListener
 {
-public:
-	ExplorerEntry();
-	virtual ~ExplorerEntry();
+    GAMEOBJECT_EDITOR(ExplorerEntry)
 
+public:
     void Update() override;
 
     void SetFilepath(const Path &path);
@@ -31,6 +30,10 @@ public:
 
     bool IsSelected() const;
     const Path& GetFilepath() const;
+
+protected:
+    ExplorerEntry();
+    virtual ~ExplorerEntry();
 
 private:
     bool m_selected = false;

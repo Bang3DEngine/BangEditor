@@ -26,10 +26,9 @@ FORWARD class UISceneContainer;
 
 class EditorScene : public Scene
 {
-public:
-    EditorScene();
-    virtual ~EditorScene();
+    GAMEOBJECT(EditorScene)
 
+public:
     void PreUpdate() override;
     void Update() override;
     void PostUpdate() override;
@@ -51,6 +50,10 @@ public:
     Inspector *GetInspector() const;
     Hierarchy *GetHierarchy() const;
 
+protected:
+    EditorScene();
+    virtual ~EditorScene();
+
 private:
     Console *m_console     = nullptr;
     Explorer *m_explorer   = nullptr;
@@ -69,6 +72,7 @@ private:
     void LoadGLViewport();
 
     friend class EditorApplication;
+    friend class Bang::ObjectManager;
 };
 
 NAMESPACE_BANG_EDITOR_END

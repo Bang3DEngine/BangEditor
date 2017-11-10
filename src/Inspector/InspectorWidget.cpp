@@ -34,10 +34,10 @@ InspectorWidget::InspectorWidget()
     p_container = container;
     p_title = text;
 
-    AddChild(titleGo);
-    AddChild(topSeparator);
-    AddChild(container);
-    AddChild(botSeparator);
+    SetAsChild(titleGo);
+    SetAsChild(topSeparator);
+    SetAsChild(container);
+    SetAsChild(botSeparator);
 }
 
 InspectorWidget::~InspectorWidget()

@@ -58,7 +58,7 @@ Inspector::Inspector() : EditorUITab("Inspector")
     GetScrollPanel()->GetScrollArea()->SetContainedGameObject(
                                                 GetMainVL()->GetGameObject() );
 
-    AddChild(scrollPanel->GetGameObject());
+    SetAsChild(scrollPanel->GetGameObject());
 }
 
 Inspector::~Inspector()
@@ -66,6 +66,8 @@ Inspector::~Inspector()
 
 }
 
+#include "Bang/GL.h"
+#include "Bang/GLUniforms.h"
 #include "BangEditor/CWTransform.h"
 void Inspector::Update()
 {
@@ -99,7 +101,8 @@ void Inspector::SetGameObject(GameObject *go)
     Clear();
     ENSURE(go);
 
-    CWTransform *cwTransform = new CWTransform(go->GetTransform());
+    CWTransform *cwTransform = ObjectManager::Create<CWTransform>(
+                                                           go->GetTransform());
     Debug_Log(go->GetTransform());
     AddWidget(cwTransform);
 
@@ -113,13 +116,13 @@ void Inspector::SetGameObject(GameObject *go)
 void Inspector::AddWidget(InspectorWidget *widget)
 {
     m_widgets.PushBack(widget);
-    GetContainer()->AddChild(widget);
+    GetContainer()->SetAsChild(widget);
 }
 
 void Inspector::RemoveWidget(InspectorWidget *widget)
 {
     m_widgets.Remove(widget);
-    delete widget;
+    ObjectManager::Destroy(widget);
 }
 
 void Inspector::Clear()

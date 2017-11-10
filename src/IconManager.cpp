@@ -18,49 +18,49 @@ IconManager::~IconManager()
 Texture2D *IconManager::GetIcon(const Path &path)
 {
     if (path.IsDir()) { return GetIconTexture("Folder"); }
+    else
+    {
+        if (Extensions::Has(path, Extensions::GetImageExtensions()))
+        {
+            return Resources::Load<Texture2D>(path);
+        }
+    }
     return GetIcon(path.GetExtension());
 }
 
-Texture2D *IconManager::GetIcon(const String &extension)
+Texture2D *IconManager::GetIcon(const String &ext)
 {
-    if (extension == Extensions::GetFontExtension())
+    if (ext == Extensions::GetFontExtension() ||
+        Extensions::Equals(ext, Extensions::GetTTFExtensions()) )
     {
-
+        return GetIconTexture("Letter");
     }
-    else if (extension == Extensions::GetAudioClipExtension())
+    else if (ext == Extensions::GetAudioClipExtension())
     {
-
+        return GetIconTexture("Audio");
     }
-    else if (extension == Extensions::GetSceneExtension())
+    else if (ext == Extensions::GetSceneExtension())
     {
-
+        return GetIconTexture("Scene");
     }
-    else if (extension == Extensions::GetAudioClipExtension())
+    else if (ext == Extensions::GetPrefabExtension())
     {
-
+        return GetIconTexture("Pill");
     }
-    else if (extension == Extensions::GetAudioClipExtension())
+    else if (Extensions::Equals(ext, Extensions::GetModelExtensions()))
     {
-
+        return GetIconTexture("Cube");
     }
-    else if (extension == Extensions::GetAudioClipExtension())
+    else if (Extensions::Equals(ext, Extensions::GetBehaviourExtensions()))
     {
-
+        return GetIconTexture("Brackets");
     }
-    else if (extension == Extensions::GetAudioClipExtension())
+    else if (Extensions::Equals(ext, Extensions::GetImageExtensions()))
     {
-
-    }
-    else if (extension == Extensions::GetAudioClipExtension())
-    {
-
-    }
-    else if (extension == Extensions::GetAudioClipExtension())
-    {
-
+        return GetIconTexture("Image");
     }
 
-    return nullptr;
+    return GetIconTexture("File");
 }
 
 Texture2D *IconManager::GetBackArrowIcon() { return GetIconTexture("BackArrow"); }

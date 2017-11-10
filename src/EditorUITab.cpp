@@ -29,7 +29,7 @@ EditorUITab::EditorUITab(const String &title)
 
     titleCont->SetParent(this);
 
-    AddChild(GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10));
+    SetAsChild(GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10));
 }
 
 EditorUITab::~EditorUITab()

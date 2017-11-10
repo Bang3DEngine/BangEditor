@@ -13,16 +13,19 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class MenuBar : public GameObject
 {
-public:
-    MenuBar();
-    virtual ~MenuBar();
+    GAMEOBJECT(MenuBar)
 
+public:
     void Update() override;
 
     MenuBarItem* AddItem();
     MenuBarItem* GetItem(int i);
 
     static constexpr int GetFixedHeight() { return 18; }
+
+protected:
+    MenuBar();
+    virtual ~MenuBar();
 
 private:
     MenuBarItem *m_fileItem = nullptr;
@@ -38,6 +41,8 @@ private:
     static void OnNewScene    (UIButton *btn);
     static void OnSaveScene   (UIButton *btn);
     static void OnOpenScene   (UIButton *btn);
+
+    friend class Bang::ObjectManager;
 };
 
 NAMESPACE_BANG_EDITOR_END

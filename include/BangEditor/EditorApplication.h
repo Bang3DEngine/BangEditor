@@ -30,10 +30,10 @@ public:
     EditorScene *GetEditorScene() const;
 
 private:
+    EditorScene *m_editorScene = nullptr;
+
     Window* _CreateWindow() override;
     virtual void SetupWindow(Window *window) override;
-
-    EditorScene *m_editorScene = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

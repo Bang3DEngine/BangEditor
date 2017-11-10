@@ -29,7 +29,7 @@ UISceneContainer::UISceneContainer()
     UILayoutElement *imgLE = sceneImgGo->AddComponent<UILayoutElement>();
     imgLE->SetFlexibleSize( Vector2(1) );
 
-    AddChild(sceneImgGo);
+    SetAsChild(sceneImgGo);
 }
 
 UISceneContainer::~UISceneContainer()

@@ -28,7 +28,7 @@ private:
     UIInputVector *p_rotIV   = nullptr;
     UIInputVector *p_scaleIV = nullptr;
 
-    void OnValueChanged(const IEventEmitter *emitter) override;
+    void OnValueChanged(Object *object) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

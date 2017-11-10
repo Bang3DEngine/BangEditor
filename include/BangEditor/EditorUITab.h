@@ -13,11 +13,15 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class EditorUITab : public GameObject
 {
+    GAMEOBJECT_EDITOR(EditorUITab)
+
 public:
+    UITextRenderer *GetTitleText() const;
+
+protected:
+    EditorUITab() = default;
     EditorUITab(const String &title);
     virtual ~EditorUITab();
-
-    UITextRenderer *GetTitleText() const;
 
 private:
     UITextRenderer *p_titleText = nullptr;

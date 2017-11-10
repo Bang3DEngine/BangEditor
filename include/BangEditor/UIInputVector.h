@@ -20,11 +20,9 @@ class UIInputVector : public GameObject,
                       public IValueChangedListener,
                       public EventEmitter<IValueChangedListener>
 {
-public:
-	UIInputVector();
-    UIInputVector(const String &labelText, int size);
-	virtual ~UIInputVector();
+    GAMEOBJECT_EDITOR(UIInputVector)
 
+public:
     void SetLabelText(const String &text);
     void SetSize(int size);
 
@@ -38,7 +36,12 @@ public:
     Vector3 GetVector3() const;
     Vector4 GetVector4() const;
 
-    void OnValueChanged(const IEventEmitter *emitter) override;
+    void OnValueChanged(Object *object) override;
+
+protected:
+    UIInputVector();
+    UIInputVector(const String &labelText, int size);
+    virtual ~UIInputVector();
 
 private:
     Array<UIInputNumber*> m_inputNumbers;

@@ -14,12 +14,15 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class UISceneContainer : public GameObject
 {
-public:
-    UISceneContainer();
-    virtual ~UISceneContainer();
+    GAMEOBJECT_EDITOR(UISceneContainer)
 
+public:
     Rect GetImageRect() const;
     void SetSceneImageTexture(Texture2D *texture);
+
+protected:
+    UISceneContainer();
+    virtual ~UISceneContainer();
 
 private:
     UIImageRenderer *p_sceneImg = nullptr;
