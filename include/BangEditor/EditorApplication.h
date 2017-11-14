@@ -24,8 +24,6 @@ public:
                       const Path &engineRootPath = Path::Empty);
     virtual ~EditorApplication();
 
-    SceneManager* CreateSceneManager() const override;
-
     void OpenEditorScene(Window *containingWindow);
     EditorScene *GetEditorScene() const;
 

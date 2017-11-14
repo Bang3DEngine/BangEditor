@@ -29,9 +29,7 @@ class EditorScene : public Scene
     GAMEOBJECT(EditorScene)
 
 public:
-    void PreUpdate() override;
     void Update() override;
-    void PostUpdate() override;
     virtual void OnResize(int newWidth, int newHeight);
 
     void RenderOpenScene();

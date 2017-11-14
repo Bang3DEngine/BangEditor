@@ -27,11 +27,6 @@ EditorApplication::~EditorApplication()
 {
 }
 
-SceneManager *EditorApplication::CreateSceneManager() const
-{
-    return new EditorSceneManager();
-}
-
 void EditorApplication::OpenEditorScene(Window *containingWindow)
 {
     m_editorScene = ObjectManager::Create<EditorScene>();

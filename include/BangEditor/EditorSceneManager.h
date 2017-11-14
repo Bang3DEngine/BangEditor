@@ -17,17 +17,22 @@ FORWARD class EditorScene;
 class EditorSceneManager : public SceneManager
 {
 public:
+    EditorSceneManager();
     virtual ~EditorSceneManager();
 
-    Scene *GetOpenScene() const;
-    EditorScene *GetEditorScene() const;
+    static Scene *GetOpenScene();
+    static EditorScene *GetEditorScene();
 
 protected:
-    EditorSceneManager();
+    Scene *_GetOpenScene() const;
+    EditorScene *_GetEditorScene() const;
 
+    void _Update() override;
     void _LoadScene(Scene *scene) override;
     Scene* _GetRootScene() const override;
     Scene* _GetActiveScene() const override;
+
+    static EditorSceneManager *GetInstance();
 
     friend class EditorApplication;
 };

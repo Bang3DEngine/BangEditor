@@ -15,7 +15,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class ExplorerEntry;
+FORWARD class ExplorerItem;
 
 class Explorer : public EditorUITab,
                  public IUIButtonListener
@@ -35,14 +35,14 @@ public:
 
 private:
     Path m_currentPath = Path::Empty;
-    List<ExplorerEntry*> p_entries;
+    List<ExplorerItem*> p_items;
 
     UILabel *p_directionLabel = nullptr;
     UIButtonDriver *p_backButton = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
-    GameObject *p_entriesContainer = nullptr;
+    GameObject *p_itemsContainer = nullptr;
 
-    void AddEntry(const Path &entryPath);
+    void AddItem(const Path &itemPath);
 
     virtual void OnButton_Clicked(UIButton *btn) override;
 };

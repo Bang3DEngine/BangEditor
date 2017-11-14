@@ -68,8 +68,9 @@ ${SRC_DIR}/EditorScene.cpp
 ${SRC_DIR}/EditorUITab.cpp
 ${SRC_DIR}/EditorWindow.cpp
 ${SRC_DIR}/Explorer/Explorer.cpp
-${SRC_DIR}/Explorer/ExplorerEntry.cpp
-${SRC_DIR}/Hierarchy.cpp
+${SRC_DIR}/Explorer/ExplorerItem.cpp
+${SRC_DIR}/Hierarchy/Hierarchy.cpp
+${SRC_DIR}/Hierarchy/HierarchyItem.cpp
 ${SRC_DIR}/IconManager.cpp
 ${SRC_DIR}/Inspector/Inspector.cpp
 ${SRC_DIR}/Inspector/InspectorWidget.cpp

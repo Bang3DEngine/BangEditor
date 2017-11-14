@@ -1,6 +1,5 @@
 #include "BangEditor/MenuBarItem.h"
 
-#include "Bang/UIBorderRect.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITintedButton.h"
 #include "Bang/UIImageRenderer.h"
@@ -45,16 +44,8 @@ MenuBarItem::MenuBarItem(bool topItem)
     GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
     textGo->SetParent(this);
 
-    m_buttonWithTint = AddComponent<UITintedButton>();
-    m_buttonWithTint->SetIdleTintColor(BgColor);
-    m_buttonWithTint->SetOverTintColor(Color::White);
-    m_buttonWithTint->SetPressedTintColor(Color::White);
-    m_buttonWithTint->SetMode(UIButtonMode::UseRender);
-    m_buttonWithTint->EventEmitter<IUIButtonListener>::RegisterListener(this);
-    m_buttonWithTint->AddToTint(this);
-    m_buttonWithTint->RegisterButtonPart(this);
-
-    m_childrenContainer = GameObjectFactory::CreateUIGameObject("m_childrenContainer");
+    m_childrenContainer =
+            GameObjectFactory::CreateUIGameObjectNamed("m_childrenContainer");
     auto childrenContBg = m_childrenContainer->AddComponent<UIImageRenderer>();
     childrenContBg->SetTint(BgColor);
 
@@ -81,6 +72,16 @@ MenuBarItem::MenuBarItem(bool topItem)
     m_childrenContainer->AddComponent<UILayoutIgnorer>(true);
     m_childrenContainer->SetEnabled(false);
     m_childrenContainer->SetParent(this);
+
+    m_buttonWithTint = AddComponent<UITintedButton>();
+    m_buttonWithTint->SetIdleTintColor(BgColor);
+    m_buttonWithTint->SetOverTintColor(Color::White);
+    m_buttonWithTint->SetPressedTintColor(Color::White);
+    m_buttonWithTint->SetMode(UIButtonMode::UseRectTransform);
+    m_buttonWithTint->EventEmitter<IUIButtonListener>::RegisterListener(this);
+    m_buttonWithTint->AddToTint(this);
+    m_buttonWithTint->RegisterButtonPart(this);
+    m_buttonWithTint->RegisterButtonPart(m_childrenContainer);
 
     SetName("MenuBarItem");
 }

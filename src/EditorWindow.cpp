@@ -8,7 +8,9 @@
 #include "Bang/Texture2D.h"
 #include "Bang/SceneManager.h"
 #include "Bang/UILayoutManager.h"
+
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG_EDITOR
 
@@ -29,6 +31,11 @@ void EditorWindow::Render()
 {
     EditorScene *edScene = GetEditorScene(); ENSURE(edScene);
     edScene->RenderAndBlitToScreen();
+}
+
+SceneManager *EditorWindow::CreateSceneManager() const
+{
+    return new EditorSceneManager();
 }
 
 EditorScene *EditorWindow::GetEditorScene() const

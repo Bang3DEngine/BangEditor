@@ -6,7 +6,6 @@
 #include "Bang/Material.h"
 #include "Bang/Selection.h"
 #include "Bang/SceneManager.h"
-#include "Bang/UIBorderRect.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIScrollPanel.h"
@@ -43,7 +42,7 @@ Inspector::Inspector() : EditorUITab("Inspector")
             GameObjectFactory::CreateUISpacer(LayoutSizeType::Min,
                                               Vector2i(0, 30));
 
-    GameObject *mainVLGo = GameObjectFactory::CreateUIGameObject("MainVL");
+    GameObject *mainVLGo = GameObjectFactory::CreateUIGameObjectNamed("MainVL");
     mainVLGo->GetComponent<RectTransform>()->SetPivotPosition( Vector2(-1, 1) );
 
     UIVerticalLayout *mainVL = mainVLGo->AddComponent<UIVerticalLayout>();
@@ -55,8 +54,11 @@ Inspector::Inspector() : EditorUITab("Inspector")
     p_mainVL = mainVL;
     p_scrollPanel = scrollPanel;
 
+    GetScrollPanel()->SetHorizontalScrollEnabled(false);
+    GetScrollPanel()->SetVerticalScrollBarSide(HorizontalSide::Right);
     GetScrollPanel()->GetScrollArea()->SetContainedGameObject(
                                                 GetMainVL()->GetGameObject() );
+    GetScrollPanel()->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
 
     SetAsChild(scrollPanel->GetGameObject());
 }

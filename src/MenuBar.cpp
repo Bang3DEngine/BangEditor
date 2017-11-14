@@ -6,7 +6,6 @@
 #include "Bang/Extensions.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
-#include "Bang/UIBorderRect.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
@@ -89,8 +88,8 @@ void MenuBar::Update()
         if (Input::GetKeyDownRepeat(Key::C))
         {
             GameObject *sphere = MeshFactory::GetSphereGameObject();
-            sphere->GetTransform()->SetPosition( Random::InsideUnitSphere() );
-            sphere->GetTransform()->SetScale( Vector3(Random::Range(0.3f, 1.0f)) );
+            sphere->GetTransform()->SetPosition( Random::GetInsideUnitSphere() );
+            sphere->GetTransform()->SetScale( Vector3(Random::GetRange(0.3f, 1.0f)) );
             openScene->SetAsChild(sphere);
         }
     }

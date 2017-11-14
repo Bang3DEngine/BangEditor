@@ -22,7 +22,7 @@ CWTransform::CWTransform(Transform *transform)
     SetName("CWTransform");
     SetTitle("Transform");
 
-    GameObject *vlGo = GameObjectFactory::CreateUIGameObject("VLGo");
+    GameObject *vlGo = GameObjectFactory::CreateUIGameObjectNamed("VLGo");
     UIVerticalLayout *vl = vlGo->AddComponent<UIVerticalLayout>();
     vl->SetSpacing(2);
 

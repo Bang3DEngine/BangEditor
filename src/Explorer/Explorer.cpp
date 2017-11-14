@@ -17,7 +17,7 @@
 
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/IconManager.h"
-#include "BangEditor/ExplorerEntry.h"
+#include "BangEditor/ExplorerItem.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -59,16 +59,16 @@ Explorer::Explorer() : EditorUITab("Explorer")
 
     GameObject *dirBar = p_directionLabel->GetGameObject();
 
-    // Entries Container
-    p_entriesContainer = GameObjectFactory::CreateUIGameObject();
-
-    p_entriesContainer->GetComponent<RectTransform>()->
+    // Items Container
+    p_itemsContainer = GameObjectFactory::CreateUIGameObject();
+    p_itemsContainer->GetComponent<RectTransform>()->
                         SetPivotPosition(Vector2(-1,1));
-    UIContentSizeFitter *csf = p_entriesContainer->AddComponent<UIContentSizeFitter>();
+
+    UIContentSizeFitter *csf = p_itemsContainer->AddComponent<UIContentSizeFitter>();
     csf->SetHorizontalSizeType(LayoutSizeType::None);
     csf->SetVerticalSizeType(LayoutSizeType::Preferred);
 
-    UIGridLayout *gridLayout = p_entriesContainer->AddComponent<UIGridLayout>();
+    UIGridLayout *gridLayout = p_itemsContainer->AddComponent<UIGridLayout>();
     gridLayout->SetCellSize( Vector2i(80) );
     gridLayout->SetSpacing(10);
 
@@ -80,7 +80,11 @@ Explorer::Explorer() : EditorUITab("Explorer")
     SetAsChild(GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5));
 
     SetAsChild(p_scrollPanel->GetGameObject());
-    p_scrollPanel->GetScrollArea()->SetContainedGameObject(p_entriesContainer);
+
+    p_scrollPanel->GetScrollArea()->SetContainedGameObject(p_itemsContainer);
+    p_scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
+    p_scrollPanel->SetVerticalScrollBarSide(HorizontalSide::Right);
+    p_scrollPanel->SetHorizontalScrollEnabled(false);
 }
 
 Explorer::~Explorer()
@@ -98,8 +102,9 @@ void Explorer::SetCurrentPath(const Path &path)
         List<Path> subPaths = m_currentPath.FindSubPaths(Path::FindFlag::Simple);
         for (const Path &subPath : subPaths)
         {
-            AddEntry(subPath);
+            AddItem(subPath);
         }
+        p_scrollPanel->SetScrolling(Vector2i::Zero);
     }
 }
 
@@ -110,20 +115,20 @@ const Path &Explorer::GetCurrentPath() const
 
 void Explorer::Clear()
 {
-    for (ExplorerEntry *explorerEntry : p_entries)
+    for (ExplorerItem *explorerItem : p_items)
     {
-        GameObject::Destroy(explorerEntry);
+        GameObject::Destroy(explorerItem);
     }
-    p_entries.Clear();
+    p_items.Clear();
 }
 
-void Explorer::AddEntry(const Path &entryPath)
+void Explorer::AddItem(const Path &itemPath)
 {
-    ExplorerEntry *explorerEntry = ObjectManager::Create<ExplorerEntry>();
-    explorerEntry->SetFilepath(entryPath);
-    p_entriesContainer->SetAsChild(explorerEntry);
+    ExplorerItem *explorerItem = ObjectManager::Create<ExplorerItem>();
+    explorerItem->SetFilepath(itemPath);
+    p_itemsContainer->SetAsChild(explorerItem);
 
-    p_entries.PushBack(explorerEntry);
+    p_items.PushBack(explorerItem);
 }
 
 void Explorer::OnButton_Clicked(UIButton *btn)

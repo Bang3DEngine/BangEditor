@@ -1,5 +1,5 @@
-#ifndef EXPLORERENTRY_H
-#define EXPLORERENTRY_H
+#ifndef EXPLORERITEM_H
+#define EXPLORERITEM_H
 
 #include "Bang/Path.h"
 #include "Bang/UIButton.h"
@@ -17,10 +17,10 @@ FORWARD NAMESPACE_BANG_END
 
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class ExplorerEntry : public GameObject,
+class ExplorerItem : public GameObject,
                       public IUIButtonListener
 {
-    GAMEOBJECT_EDITOR(ExplorerEntry)
+    GAMEOBJECT_EDITOR(ExplorerItem)
 
 public:
     void Update() override;
@@ -32,8 +32,8 @@ public:
     const Path& GetFilepath() const;
 
 protected:
-    ExplorerEntry();
-    virtual ~ExplorerEntry();
+    ExplorerItem();
+    virtual ~ExplorerItem();
 
 private:
     bool m_selected = false;
@@ -50,5 +50,5 @@ private:
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // EXPLORERENTRY_H
+#endif // EXPLORERITEM_H
 

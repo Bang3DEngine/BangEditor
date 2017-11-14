@@ -8,7 +8,6 @@
 #include "Bang/UICanvas.h"
 #include "Bang/Texture2D.h"
 #include "Bang/GameObject.h"
-#include "Bang/UIBorderRect.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
@@ -34,7 +33,7 @@ EditorScene::EditorScene()
     GameObjectFactory::CreateUIGameObjectInto(this);
     GameObjectFactory::CreateUICanvasInto(this);
 
-    m_mainEditorVL = GameObjectFactory::CreateUIGameObject("MainEditorVL");
+    m_mainEditorVL = GameObjectFactory::CreateUIGameObjectNamed("MainEditorVL");
     UIVerticalLayout *vl = m_mainEditorVL->AddComponent<UIVerticalLayout>();
     m_mainEditorVL->SetParent(this);
 
@@ -60,7 +59,7 @@ EditorScene::EditorScene()
     m_hierarchy = ObjectManager::Create<Hierarchy>();
     m_hierarchy->SetParent(hlGo, 0);
 
-    GameObject *botHLGo = GameObjectFactory::CreateUIGameObject("BotHL");
+    GameObject *botHLGo = GameObjectFactory::CreateUIGameObjectNamed("BotHL");
     UIHorizontalLayout *botHL = botHLGo->AddComponent<UIHorizontalLayout>();
     UILayoutElement *botHLLe = botHLGo->AddComponent<UILayoutElement>();
     botHLLe->SetMinSize( Vector2i(1, 150) );
@@ -82,22 +81,9 @@ EditorScene::~EditorScene()
 {
 }
 
-void EditorScene::PreUpdate()
-{
-    Scene::PreUpdate();
-    if (GetOpenScene()) { GetOpenScene()->PreUpdate(); }
-}
-
 void EditorScene::Update()
 {
     Scene::Update();
-    if (GetOpenScene()) { GetOpenScene()->Update(); }
-}
-
-void EditorScene::PostUpdate()
-{
-    Scene::PostUpdate();
-    if (GetOpenScene()) { GetOpenScene()->PostUpdate(); }
 }
 
 void EditorScene::OnResize(int newWidth, int newHeight)

@@ -18,6 +18,8 @@ public:
     virtual void Update() override;
     virtual void Render() override;
 
+    virtual SceneManager* CreateSceneManager() const override;
+
 private:
     EditorScene* GetEditorScene() const;
 };

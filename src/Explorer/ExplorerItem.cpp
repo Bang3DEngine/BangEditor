@@ -1,4 +1,4 @@
-#include "BangEditor/ExplorerEntry.h"
+#include "BangEditor/ExplorerItem.h"
 
 #include "Bang/UILabel.h"
 #include "Bang/RectTransform.h"
@@ -15,7 +15,7 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-ExplorerEntry::ExplorerEntry()
+ExplorerItem::ExplorerItem()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
@@ -64,11 +64,11 @@ ExplorerEntry::ExplorerEntry()
     SetSelected(false);
 }
 
-ExplorerEntry::~ExplorerEntry()
+ExplorerItem::~ExplorerItem()
 {
 }
 
-void ExplorerEntry::Update()
+void ExplorerItem::Update()
 {
     GameObject::Update();
 
@@ -82,7 +82,7 @@ void ExplorerEntry::Update()
     }
 }
 
-void ExplorerEntry::SetFilepath(const Path &path)
+void ExplorerItem::SetFilepath(const Path &path)
 {
     if (GetFilepath() != path)
     {
@@ -92,29 +92,29 @@ void ExplorerEntry::SetFilepath(const Path &path)
     }
 }
 
-void ExplorerEntry::SetSelected(bool selected)
+void ExplorerItem::SetSelected(bool selected)
 {
     m_selected = selected;
     p_button->SetTintEnabled( !IsSelected() );
     p_bg->SetTint(IsSelected() ? Color::LightBlue : Color::Zero);
 }
 
-bool ExplorerEntry::IsSelected() const
+bool ExplorerItem::IsSelected() const
 {
     return m_selected;
 }
 
-const Path &ExplorerEntry::GetFilepath() const
+const Path &ExplorerItem::GetFilepath() const
 {
     return m_filepath;
 }
 
-void ExplorerEntry::OnButton_Clicked(UIButton *btn)
+void ExplorerItem::OnButton_Clicked(UIButton *btn)
 {
     SetSelected(true);
 }
 
-void ExplorerEntry::OnButton_DoubleClicked(UIButton*)
+void ExplorerItem::OnButton_DoubleClicked(UIButton*)
 {
     if (GetFilepath().IsDir())
     {
