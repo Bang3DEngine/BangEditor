@@ -22,10 +22,11 @@ EditorUITab::EditorUITab(const String &title)
 
     GameObject *titleCont = GameObjectFactory::CreateUIGameObject();
     p_titleText = titleCont->AddComponent<UITextRenderer>();
+    p_titleText->SetTextSize(16);
     p_titleText->SetContent(title);
 
     UILayoutElement *titleLE = titleCont->AddComponent<UILayoutElement>();
-    titleLE->SetMinHeight(25);
+    titleLE->SetMinHeight(16);
 
     titleCont->SetParent(this);
 

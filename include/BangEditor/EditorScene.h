@@ -17,6 +17,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class Editor;
 FORWARD class Console;
 FORWARD class MenuBar;
 FORWARD class Explorer;
@@ -43,6 +44,7 @@ public:
     void RenderAndBlitToScreen();
     static EditorScene *GetInstance();
 
+    Editor *GetEditor() const;
     Console *GetConsole() const;
     Explorer *GetExplorer() const;
     Inspector *GetInspector() const;
@@ -57,6 +59,7 @@ private:
     Explorer *m_explorer   = nullptr;
     Inspector *m_inspector = nullptr;
     Hierarchy *m_hierarchy = nullptr;
+    Editor *m_editor = nullptr;
 
     Scene *p_openScene = nullptr;
     UISceneContainer *m_sceneContainer = nullptr;

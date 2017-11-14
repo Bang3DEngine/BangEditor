@@ -106,7 +106,7 @@ void MenuBarItem::SetAsChild(MenuBarItem *childItem)
 
 MenuBarItem *MenuBarItem::SetAsChild(const String &text)
 {
-    MenuBarItem *newItem = ObjectManager::Create<MenuBarItem>(false);
+    MenuBarItem *newItem = GameObject::Create<MenuBarItem>(false);
     newItem->GetText()->SetContent(text);
     newItem->SetName(text);
     SetAsChild(newItem);

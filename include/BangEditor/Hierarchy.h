@@ -3,6 +3,8 @@
 
 #include "Bang/Map.h"
 #include "Bang/UIList.h"
+
+#include "BangEditor/Editor.h"
 #include "BangEditor/EditorUITab.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
@@ -14,7 +16,8 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class HierarchyItem;
 
-class Hierarchy : public EditorUITab
+class Hierarchy : public EditorUITab,
+                  public IEditorSelectionListener
 {
     GAMEOBJECT_EDITOR(Hierarchy)
 
@@ -23,6 +26,14 @@ public:
     virtual ~Hierarchy();
 
     void Clear();
+
+    // Object
+    void OnStart() override;
+
+    // IEditorSelectionListener
+    void OnGameObjectSelected(GameObject *selectedGameObject) override;
+
+    static Hierarchy *GetInstance();
 
 private:
     UITree *p_tree = nullptr;
@@ -36,6 +47,8 @@ private:
     HierarchyItem* GetItemFromGameObject(GameObject *go);
 
     UITree *GetUITree() const;
+
+    friend class HierarchyItem;
 };
 NAMESPACE_BANG_EDITOR_END
 

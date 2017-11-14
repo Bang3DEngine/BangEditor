@@ -124,7 +124,7 @@ void Explorer::Clear()
 
 void Explorer::AddItem(const Path &itemPath)
 {
-    ExplorerItem *explorerItem = ObjectManager::Create<ExplorerItem>();
+    ExplorerItem *explorerItem = GameObject::Create<ExplorerItem>();
     explorerItem->SetFilepath(itemPath);
     p_itemsContainer->SetAsChild(explorerItem);
 

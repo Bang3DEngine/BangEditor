@@ -1,5 +1,7 @@
 #include "BangEditor/Hierarchy.h"
 
+#include <functional>
+
 #include "Bang/Timer.h"
 #include "Bang/Scene.h"
 #include "Bang/UIList.h"
@@ -11,6 +13,7 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
 
+#include "BangEditor/EditorScene.h"
 #include "BangEditor/HierarchyItem.h"
 #include "BangEditor/EditorSceneManager.h"
 
@@ -39,6 +42,10 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
     UILayoutElement *treeLE = treeGo->AddComponent<UILayoutElement>();
     treeLE->SetFlexibleSize( Vector2::One );
 
+    GetUITree()->SetSelectionCallback(
+                          [this](GOItem *item, UIList::Action action)
+                          { this->TreeSelectionCallback(item, action); } );
+
     SetAsChild(treeGo);
 }
 
@@ -47,10 +54,29 @@ Hierarchy::~Hierarchy()
 
 }
 
+void Hierarchy::OnStart()
+{
+    Editor::RegisterListener<IEditorSelectionListener>(this);
+}
+
+void Hierarchy::OnGameObjectSelected(GameObject *selectedGameObject)
+{
+    HierarchyItem *selectedHItem = GetItemFromGameObject(selectedGameObject);
+    ENSURE(selectedHItem);
+
+    GOItem *selectedHItemContainer = selectedHItem->GetParent();
+    GetUITree()->GetUIList()->SetSelection(selectedHItemContainer);
+}
+
 void Hierarchy::Clear()
 {
     GetUITree()->Clear();
     m_gameObjectToItem.Clear();
+}
+
+Hierarchy *Hierarchy::GetInstance()
+{
+    return EditorSceneManager::GetEditorScene()->GetHierarchy();
 }
 
 void Hierarchy::UpdateFromScene()
@@ -63,69 +89,74 @@ void Hierarchy::UpdateFromScene()
     else { Clear(); }
 }
 
-void Hierarchy::UpdateItemFromGameObject(GOItem *item, GameObject *gameObject)
+void Hierarchy::UpdateItemFromGameObject(GOItem *parentItem,
+                                         GameObject *parentGo)
 {
     // Compare the hierarchy tree and the scene implicit tree, and find the
     // differences.
-    List<GOItem*> itemChildren = GetUITree()->GetChildrenItems(item);
-    const List<GameObject*>& goChildren = gameObject->GetChildren();
+    List<GOItem*> itemChildren = GetUITree()->GetChildrenItems(parentItem);
+    const List<GameObject*>& goChildren = parentGo->GetChildren();
 
     // Two lists to keep track of which things to add and remove after diff
     List<GameObject*> gameObjectsToAdd;
     List<HierarchyItem*> itemsToRemove;
 
     // Begin the comparison iterating through both lists
-    auto goIt = goChildren.Begin();
-    auto itemIt = itemChildren.Begin();
-    while (goIt != goChildren.End() && itemIt != itemChildren.End())
+    auto childGoIt = goChildren.Begin();
+    auto childItemIt = itemChildren.Begin();
+    while (childGoIt != goChildren.End() && childItemIt != itemChildren.End())
     {
-        GameObject *go = *goIt;
-        HierarchyItem *item = SCAST<HierarchyItem*>(*itemIt);
-        if (go != item->GetReferencedGameObject())
+        GameObject *childGo = *childGoIt;
+        HierarchyItem *childItem = SCAST<HierarchyItem*>(*childItemIt);
+        if (childGo != childItem->GetReferencedGameObject())
         {
-            gameObjectsToAdd.PushBack(go);
-            itemsToRemove.PushBack(item);
+            gameObjectsToAdd.PushBack(childGo);
+            itemsToRemove.PushBack(childItem);
         }
         else
         {
             // No difference, so just update
-            UpdateItemFromGameObject(item, gameObject);
+            UpdateItemFromGameObject(childItem, childGo);
         }
+        ++childGoIt;
+        ++childItemIt;
     }
 
     // Consume both iterators if they are not already ended
-    while (goIt != goChildren.End())
+    while (childGoIt != goChildren.End())
     {
-        gameObjectsToAdd.PushBack(*goIt);
+        gameObjectsToAdd.PushBack(*childGoIt);
+        ++childGoIt;
     }
 
-    while (itemIt != itemChildren.End())
+    while (childItemIt != itemChildren.End())
     {
-        itemsToRemove.PushBack( SCAST<HierarchyItem*>(*itemIt) );
+        itemsToRemove.PushBack( SCAST<HierarchyItem*>(*childItemIt) );
+        ++childItemIt;
     }
 
     // Now that we have the diff, add the new gameObject items, and remove the
     // outdated ones
-    for (GameObject *gameObjectChild : gameObjectsToAdd) // Add
+    for (HierarchyItem *itemToRemove : itemsToRemove) // Remove
     {
-        AddGameObjectItemToHierarchy(gameObjectChild, true);
+        GetUITree()->RemoveItem(itemToRemove);
     }
 
-    for (HierarchyItem *item : itemsToRemove) // Remove
+    for (GameObject *goToAdd : gameObjectsToAdd) // Add
     {
-        GetUITree()->RemoveItem(item);
+        AddGameObjectItemToHierarchy(goToAdd, true);
     }
 }
 
 void Hierarchy::TreeSelectionCallback(GOItem *item, UIList::Action action)
 {
-    HierarchyItem *hItem = DCAST<HierarchyItem*>(item); ASSERT(hItem);
+    HierarchyItem *hItem = SCAST<HierarchyItem*>(item);
     hItem->OnSelectionCallback(action);
 }
 
 void Hierarchy::AddGameObjectItemToHierarchy(GameObject *go, bool topItem)
 {
-    HierarchyItem *goItem = ObjectManager::Create<HierarchyItem>();
+    HierarchyItem *goItem = GameObject::Create<HierarchyItem>();
     goItem->SetReferencedGameObject( go );
 
     HierarchyItem *parentItem = GetItemFromGameObject(go->GetParent());

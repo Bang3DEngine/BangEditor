@@ -1,10 +1,13 @@
 #include "BangEditor/Inspector.h"
 
+#include "Bang/GL.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
 #include "Bang/XMLNode.h"
+#include "Bang/UILabel.h"
 #include "Bang/Material.h"
 #include "Bang/Selection.h"
+#include "Bang/GLUniforms.h"
 #include "Bang/SceneManager.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
@@ -16,6 +19,7 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIContentSizeFitter.h"
 
+#include "BangEditor/CWTransform.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/InspectorWidget.h"
 
@@ -45,6 +49,15 @@ Inspector::Inspector() : EditorUITab("Inspector")
     GameObject *mainVLGo = GameObjectFactory::CreateUIGameObjectNamed("MainVL");
     mainVLGo->GetComponent<RectTransform>()->SetPivotPosition( Vector2(-1, 1) );
 
+    UILabel *goNameLabel = GameObjectFactory::CreateUILabel();
+    GameObject *goNameLabelGo = goNameLabel->GetGameObject();
+    UILayoutElement *goNameLE = goNameLabelGo->GetComponent<UILayoutElement>();
+    goNameLE->SetFlexibleHeight(0.0f);
+    p_goNameText = goNameLabel->GetText();
+    p_goNameText->SetHorizontalAlign(HorizontalAlignment::Left);
+
+    p_nameSeparator = GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5);
+
     UIVerticalLayout *mainVL = mainVLGo->AddComponent<UIVerticalLayout>();
     mainVL->SetSpacing(5);
 
@@ -60,6 +73,8 @@ Inspector::Inspector() : EditorUITab("Inspector")
                                                 GetMainVL()->GetGameObject() );
     GetScrollPanel()->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
 
+    SetAsChild(goNameLabel->GetGameObject());
+    SetAsChild(p_nameSeparator);
     SetAsChild(scrollPanel->GetGameObject());
 }
 
@@ -68,27 +83,20 @@ Inspector::~Inspector()
 
 }
 
-#include "Bang/GL.h"
-#include "Bang/GLUniforms.h"
-#include "BangEditor/CWTransform.h"
+void Inspector::OnStart()
+{
+    Object::OnStart();
+    Editor::RegisterListener<IEditorSelectionListener>(this);
+}
+
 void Inspector::Update()
 {
     EditorUITab::Update();
+}
 
-    Scene *openScene = SceneManager::GetActiveScene();
-    if (Input::GetMouseButtonDown(MouseButton::Left))
-    {
-        Rect ndcRect = EditorScene::GetInstance()->GetOpenSceneRectNDC();
-        if ( ndcRect.Contains( Input::GetMouseCoordsNDC() ) )
-        {
-            GameObject *selectedGameObject = Selection::GetOveredGameObject(openScene);
-            if (selectedGameObject)
-            {
-                SetGameObject(selectedGameObject);
-            }
-            else { SetGameObject(nullptr); }
-        }
-    }
+void Inspector::OnGameObjectSelected(GameObject *selectedGameObject)
+{
+    SetGameObject(selectedGameObject);
 }
 
 GameObject *Inspector::GetContainer() const
@@ -103,16 +111,11 @@ void Inspector::SetGameObject(GameObject *go)
     Clear();
     ENSURE(go);
 
-    CWTransform *cwTransform = ObjectManager::Create<CWTransform>(
-                                                           go->GetTransform());
-    Debug_Log(go->GetTransform());
+    p_nameSeparator->SetEnabled(true);
+    p_goNameText->SetContent(go->GetName());
+    CWTransform *cwTransform =
+                           GameObject::Create<CWTransform>(go->GetTransform());
     AddWidget(cwTransform);
-
-    /*
-    for (Component *comp : go)
-    {
-
-    }*/
 }
 
 void Inspector::AddWidget(InspectorWidget *widget)
@@ -124,7 +127,7 @@ void Inspector::AddWidget(InspectorWidget *widget)
 void Inspector::RemoveWidget(InspectorWidget *widget)
 {
     m_widgets.Remove(widget);
-    ObjectManager::Destroy(widget);
+    GameObject::Destroy(widget);
 }
 
 void Inspector::Clear()
@@ -132,6 +135,8 @@ void Inspector::Clear()
     while (!m_widgets.IsEmpty())
     {
         InspectorWidget *widget = m_widgets.Front();
+        p_goNameText->SetContent("");
+        p_nameSeparator->SetEnabled(false);
         RemoveWidget(widget);
     }
 }

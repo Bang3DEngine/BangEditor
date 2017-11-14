@@ -26,9 +26,9 @@ CWTransform::CWTransform(Transform *transform)
     UIVerticalLayout *vl = vlGo->AddComponent<UIVerticalLayout>();
     vl->SetSpacing(2);
 
-    p_posIV   = ObjectManager::Create<UIInputVector>("Position", 3);
-    p_rotIV   = ObjectManager::Create<UIInputVector>("Rotation", 3);
-    p_scaleIV = ObjectManager::Create<UIInputVector>("Scale   ", 3);
+    p_posIV   = GameObject::Create<UIInputVector>("Position", 3);
+    p_rotIV   = GameObject::Create<UIInputVector>("Rotation", 3);
+    p_scaleIV = GameObject::Create<UIInputVector>("Scale   ", 3);
 
     p_posIV->Set(transform->GetLocalPosition());
     p_rotIV->Set(transform->GetLocalRotation().GetEulerAngles());

@@ -7,6 +7,7 @@
 #include "Bang/Project.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ProjectManager.h"
+
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorWindow.h"
 #include "BangEditor/EditorSceneManager.h"
@@ -29,7 +30,7 @@ EditorApplication::~EditorApplication()
 
 void EditorApplication::OpenEditorScene(Window *containingWindow)
 {
-    m_editorScene = ObjectManager::Create<EditorScene>();
+    m_editorScene = GameObject::Create<EditorScene>();
     containingWindow->GetSceneManager()->LoadScene(m_editorScene);
 }
 

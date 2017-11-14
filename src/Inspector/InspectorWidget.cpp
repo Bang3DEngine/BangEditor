@@ -21,7 +21,7 @@ InspectorWidget::InspectorWidget()
     UITextRenderer *text = titleGo->AddComponent<UITextRenderer>();
     text->SetHorizontalAlign(HorizontalAlignment::Left);
     text->SetContent("InspectorWidget");
-    text->SetTextSize(13);
+    text->SetTextSize(10);
 
     GameObject *topSeparator =
             GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5, 1.0f);

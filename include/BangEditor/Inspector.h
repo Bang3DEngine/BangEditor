@@ -1,6 +1,7 @@
 ﻿#ifndef INSPECTOR_H
 #define INSPECTOR_H
 
+#include "BangEditor/Editor.h"
 #include "BangEditor/EditorUITab.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
@@ -15,7 +16,8 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class InspectorWidget;
 
-class Inspector : public EditorUITab
+class Inspector : public EditorUITab,
+                  public IEditorSelectionListener
 {
     GAMEOBJECT_EDITOR(Inspector)
 
@@ -23,13 +25,20 @@ public:
     Inspector();
     virtual ~Inspector();
 
+    // GameObject
+    void OnStart() override;
     void Update() override;
+
+    // IEditorSelectionListener
+    void OnGameObjectSelected(GameObject *selectedGameObject) override;
 
 private:
     List<InspectorWidget*> m_widgets;
 
     UIVerticalLayout *p_mainVL   = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
+    UITextRenderer *p_goNameText = nullptr;
+    GameObject *p_nameSeparator = nullptr;
 
     GameObject* GetContainer() const;
     UIVerticalLayout *GetMainVL() const;

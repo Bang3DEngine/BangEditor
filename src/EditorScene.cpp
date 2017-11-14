@@ -7,6 +7,7 @@
 #include "Bang/GEngine.h"
 #include "Bang/UICanvas.h"
 #include "Bang/Texture2D.h"
+#include "Bang/Selection.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
@@ -17,6 +18,7 @@
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 
+#include "BangEditor/Editor.h"
 #include "BangEditor/Console.h"
 #include "BangEditor/MenuBar.h"
 #include "BangEditor/Explorer.h"
@@ -29,6 +31,8 @@ USING_NAMESPACE_BANG_EDITOR
 
 EditorScene::EditorScene()
 {
+    m_editor = new Editor();
+
     SetName("EditorScene");
     GameObjectFactory::CreateUIGameObjectInto(this);
     GameObjectFactory::CreateUICanvasInto(this);
@@ -37,7 +41,7 @@ EditorScene::EditorScene()
     UIVerticalLayout *vl = m_mainEditorVL->AddComponent<UIVerticalLayout>();
     m_mainEditorVL->SetParent(this);
 
-    m_menuBar = ObjectManager::Create<MenuBar>();
+    m_menuBar = GameObject::Create<MenuBar>();
     m_menuBar->GetTransform()->TranslateLocal( Vector3(0, 0, -0.1) );
     m_menuBar->SetParent(m_mainEditorVL);
 
@@ -50,13 +54,13 @@ EditorScene::EditorScene()
     m_mainEditorVL->SetAsChild(
               GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10));
 
-    m_sceneContainer = ObjectManager::Create<UISceneContainer>();
+    m_sceneContainer = GameObject::Create<UISceneContainer>();
     m_sceneContainer->SetParent(hlGo);
 
-    m_inspector = ObjectManager::Create<Inspector>();
+    m_inspector = GameObject::Create<Inspector>();
     m_inspector->SetParent(hlGo);
 
-    m_hierarchy = ObjectManager::Create<Hierarchy>();
+    m_hierarchy = GameObject::Create<Hierarchy>();
     m_hierarchy->SetParent(hlGo, 0);
 
     GameObject *botHLGo = GameObjectFactory::CreateUIGameObjectNamed("BotHL");
@@ -66,10 +70,10 @@ EditorScene::EditorScene()
     botHLLe->SetFlexibleSize( Vector2(1) );
     botHLGo->SetParent(m_mainEditorVL);
 
-    m_console = ObjectManager::Create<Console>();
+    m_console = GameObject::Create<Console>();
     m_console->SetParent(botHLGo);
 
-    m_explorer = ObjectManager::Create<Explorer>();
+    m_explorer = GameObject::Create<Explorer>();
     m_explorer->SetParent(botHLGo);
 
     Camera *cam = AddComponent<Camera>();
@@ -79,11 +83,27 @@ EditorScene::EditorScene()
 
 EditorScene::~EditorScene()
 {
+    delete m_editor;
 }
 
 void EditorScene::Update()
 {
     Scene::Update();
+
+    Scene *openScene = SceneManager::GetActiveScene();
+    if (Input::GetMouseButtonDown(MouseButton::Left))
+    {
+        Rect ndcRect = EditorScene::GetInstance()->GetOpenSceneRectNDC();
+        if ( ndcRect.Contains( Input::GetMouseCoordsNDC() ) )
+        {
+            GameObject *selectedGameObject = Selection::GetOveredGameObject(openScene);
+            if (selectedGameObject)
+            {
+                Editor::SelectGameObject(selectedGameObject);
+            }
+            else { Editor::SelectGameObject(nullptr); }
+        }
+    }
 }
 
 void EditorScene::OnResize(int newWidth, int newHeight)
@@ -193,6 +213,11 @@ Console *EditorScene::GetConsole() const { return m_console; }
 Explorer *EditorScene::GetExplorer() const { return m_explorer; }
 Inspector *EditorScene::GetInspector() const { return m_inspector; }
 Hierarchy *EditorScene::GetHierarchy() const { return m_hierarchy; }
+
+Editor *EditorScene::GetEditor() const
+{
+    return m_editor;
+}
 
 void EditorScene::SaveGLViewport()
 {

@@ -26,11 +26,14 @@ public:
 
     void OnSelectionCallback(UIList::Action action);
 
+    String ToString() const override;
+
 private:
     String m_text = "";
     GameObject *p_refGameObject = nullptr;
 
     UILabel *p_label = nullptr;
+    UIImageRenderer *p_bg = nullptr;
 
     void SetText(const String &text);
 };
