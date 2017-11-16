@@ -57,6 +57,7 @@ Inspector::Inspector() : EditorUITab("Inspector")
     p_goNameText->SetHorizontalAlign(HorizontalAlignment::Left);
 
     p_nameSeparator = GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5);
+    p_nameSeparator->SetEnabled(false);
 
     UIVerticalLayout *mainVL = mainVLGo->AddComponent<UIVerticalLayout>();
     mainVL->SetSpacing(5);

@@ -41,22 +41,22 @@ MenuBar::MenuBar()
     m_componentsItem->GetText()->SetContent("Components");
     m_gameObjectsItem->GetText()->SetContent("GameObjects");
 
-    MenuBarItem *newProject = m_fileItem->AddChild("New Project...");
-    MenuBarItem *openProject = m_fileItem->AddChild("Open Project...");
-    MenuBarItem *openRecentProject = m_fileItem->AddChild("Open Recent Project");
-        openRecentProject->AddChild("Wololo/hehe.bproject");
-        openRecentProject->AddChild("Wololo/hoho.bproject");
-        openRecentProject->AddChild("Wololo/bangbangbang.bproject");
+    MenuItem *newProject = m_fileItem->AddItem("New Project...");
+    MenuItem *openProject = m_fileItem->AddItem("Open Project...");
+    MenuItem *openRecentProject = m_fileItem->AddItem("Open Recent Project");
+        openRecentProject->AddItem("Wololo/hehe.bproject");
+        openRecentProject->AddItem("Wololo/hoho.bproject");
+        openRecentProject->AddItem("Wololo/bangbangbang.bproject");
 
-    MenuBarItem *saveProject = m_fileItem->AddChild("Save Project");
-    MenuBarItem *saveProjectAs = m_fileItem->AddChild("Save Project As...");
+    MenuItem *saveProject = m_fileItem->AddItem("Save Project");
+    MenuItem *saveProjectAs = m_fileItem->AddItem("Save Project As...");
     m_fileItem->AddSeparator();
-    MenuBarItem *newScene = m_fileItem->AddChild("New Scene");
-    MenuBarItem *openScene = m_fileItem->AddChild("Open Scene");
-    MenuBarItem *saveScene = m_fileItem->AddChild("Save Scene");
-    MenuBarItem *saveSceneAs= m_fileItem->AddChild("Save Scene As...");
+    MenuItem *newScene = m_fileItem->AddItem("New Scene");
+    MenuItem *openScene = m_fileItem->AddItem("Open Scene");
+    MenuItem *saveScene = m_fileItem->AddItem("Save Scene");
+    MenuItem *saveSceneAs= m_fileItem->AddItem("Save Scene As...");
 
-    MenuBarItem *copyChild = m_editItem->AddChild("Copy");
+    MenuItem *copyChild = m_editItem->AddItem("Copy");
 
     openProject->GetButton()->AddClickedCallback(MenuBar::OnOpenProject);
     newScene->GetButton()->AddClickedCallback(MenuBar::OnNewScene);
@@ -95,15 +95,15 @@ void MenuBar::Update()
     }
 }
 
-MenuBarItem* MenuBar::AddItem()
+MenuItem* MenuBar::AddItem()
 {
-    MenuBarItem *item = GameObject::Create<MenuBarItem>(true);
+    MenuItem *item = GameObject::Create<MenuItem>(true);
     item->SetParent(this);
     m_items.PushBack(item);
     return item;
 }
 
-MenuBarItem* MenuBar::GetItem(int i)
+MenuItem* MenuBar::GetItem(int i)
 {
     return m_items[i];
 }

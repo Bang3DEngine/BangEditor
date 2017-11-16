@@ -45,15 +45,13 @@ private:
 template <class ListenerClass>
 void Editor::RegisterListener(ListenerClass *selectionListener)
 {
-    Editor::GetInstance()->
-       EventEmitter<ListenerClass>::RegisterListener(selectionListener);
+    Editor::GetInstance()->EventEmitter<ListenerClass>::RegisterListener(selectionListener);
 }
 
 template <class ListenerClass>
 void Editor::UnRegisterListener(ListenerClass *selectionListener)
 {
-    Editor::GetInstance()->
-       EventEmitter<ListenerClass>::UnRegisterListener(selectionListener);
+    Editor::GetInstance()->EventEmitter<ListenerClass>::UnRegisterListener(selectionListener);
 }
 
 NAMESPACE_BANG_EDITOR_END

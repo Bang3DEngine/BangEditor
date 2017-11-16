@@ -5,7 +5,7 @@
 
 #include "Bang/Array.h"
 #include "Bang/GameObject.h"
-#include "BangEditor/MenuBarItem.h"
+#include "BangEditor/MenuItem.h"
 #include "Bang/UIHorizontalLayout.h"
 
 USING_NAMESPACE_BANG
@@ -18,8 +18,8 @@ class MenuBar : public GameObject
 public:
     void Update() override;
 
-    MenuBarItem* AddItem();
-    MenuBarItem* GetItem(int i);
+    MenuItem* AddItem();
+    MenuItem* GetItem(int i);
 
     static constexpr int GetFixedHeight() { return 18; }
 
@@ -28,13 +28,13 @@ protected:
     virtual ~MenuBar();
 
 private:
-    MenuBarItem *m_fileItem = nullptr;
-    MenuBarItem *m_editItem = nullptr;
-    MenuBarItem *m_assetsItem = nullptr;
-    MenuBarItem *m_componentsItem  = nullptr;
-    MenuBarItem *m_gameObjectsItem = nullptr;
+    MenuItem *m_fileItem = nullptr;
+    MenuItem *m_editItem = nullptr;
+    MenuItem *m_assetsItem = nullptr;
+    MenuItem *m_componentsItem  = nullptr;
+    MenuItem *m_gameObjectsItem = nullptr;
 
-    Array<MenuBarItem*> m_items;
+    Array<MenuItem*> m_items;
     UIHorizontalLayout *m_horizontalLayout = nullptr;
 
     static void OnOpenProject (UIButton *btn);

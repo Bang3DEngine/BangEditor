@@ -71,10 +71,17 @@ void Hierarchy::OnStart()
 
 void Hierarchy::OnGameObjectSelected(GameObject *selectedGameObject)
 {
-    HierarchyItem *selectedHItem = GetItemFromGameObject(selectedGameObject);
-    ENSURE(selectedHItem);
+    if (selectedGameObject)
+    {
+        HierarchyItem *selectedHItem = GetItemFromGameObject(selectedGameObject);
+        ENSURE(selectedHItem);
 
-    GetUITree()->SetSelection(selectedHItem);
+        GetUITree()->SetSelection(selectedHItem);
+    }
+    else
+    {
+        GetUITree()->GetUIList()->ClearSelection();
+    }
 }
 
 void Hierarchy::Clear()

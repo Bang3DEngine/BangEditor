@@ -18,6 +18,9 @@ HierarchyItem::HierarchyItem()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
+    UIContextMenu *ctxMenu = AddComponent<UIContextMenu>();
+    ctxMenu->EventEmitter<IUIContextMenuable>::RegisterListener(this);
+
     p_bg = AddComponent<UIImageRenderer>();
     p_bg->SetTint(Color::Zero);
 
@@ -35,6 +38,12 @@ HierarchyItem::HierarchyItem()
 
 HierarchyItem::~HierarchyItem()
 {
+}
+
+void HierarchyItem::OnStart()
+{
+    GameObject::OnStart();
+    GetComponent<UIContextMenu>()->AddButtonPart(GetParent());
 }
 
 void HierarchyItem::Update()
@@ -56,6 +65,14 @@ GameObject *HierarchyItem::GetReferencedGameObject() const
     return p_refGameObject;
 }
 
+void HierarchyItem::OnSetContextMenu(Menu *menu)
+{
+    MenuItem *hola = menu->AddItem("Hola");
+    hola->AddItem("Holita");
+    hola->AddItem("Hehe");
+    MenuItem *item = menu->AddItem("Adios");
+}
+
 void HierarchyItem::SetText(const String &text)
 {
     m_text = text;
@@ -66,12 +83,22 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
     GameObject *refGo = GetReferencedGameObject();
     switch (action)
     {
+        case UIList::Action::MouseOver:
+            if (!m_isSelected) { p_bg->SetTint(Color::VeryLightBlue); }
+        break;
+
+        case UIList::Action::MouseOut:
+            if (!m_isSelected) { p_bg->SetTint(Color::Zero); }
+        break;
+
         case UIList::Action::SelectionIn:
+            m_isSelected = true;
             p_bg->SetTint(Color::LightBlue);
             Editor::SelectGameObject(refGo);
         break;
 
         case UIList::Action::SelectionOut:
+            m_isSelected = false;
             p_bg->SetTint(Color::Zero);
         break;
 

@@ -79,7 +79,8 @@ ${SRC_DIR}/Inspector/ComponentWidget.cpp
 ${SRC_DIR}/Inspector/CWTransform.cpp
 ${SRC_DIR}/Inspector/UIInputVector.cpp
 ${SRC_DIR}/MenuBar.cpp
-${SRC_DIR}/MenuBarItem.cpp
+${SRC_DIR}/MenuItem.cpp
+${SRC_DIR}/UIContextMenu.cpp
 ${SRC_DIR}/UISceneContainer.cpp
 
 ${SRC_DIR}/Main.cpp

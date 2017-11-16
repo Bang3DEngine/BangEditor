@@ -1,5 +1,5 @@
-#ifndef MENUBARITEM_H
-#define MENUBARITEM_H
+#ifndef MENUITEM_H
+#define MENUITEM_H
 
 #include "BangEditor/BangEditor.h"
 
@@ -16,18 +16,18 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class MenuBarItem : public GameObject,
-                    public IUIButtonListener
+class MenuItem : public GameObject,
+                 public IUIButtonListener
 {
-    GAMEOBJECT(MenuBarItem)
+    GAMEOBJECT(MenuItem)
 
 public:
     // GameObject
     void Update() override;
 
     void AddSeparator();
-    void AddChild(MenuBarItem *childItem);
-    MenuBarItem* AddChild(const String &text);
+    void AddItem(MenuItem *childItem);
+    MenuItem* AddItem(const String &text);
 
     UITextRenderer *GetText() const;
     UIButton *GetButton() const;
@@ -35,15 +35,15 @@ public:
     bool MustDisplayChildren() const;
 
 protected:
-    MenuBarItem() = default;
-    MenuBarItem(bool topItem);
-    virtual ~MenuBarItem();
+    MenuItem() = default;
+    MenuItem(bool topItem);
+    virtual ~MenuItem();
 
 private:
     UIButton *m_button = nullptr;
     UITextRenderer *m_text = nullptr;
 
-    List<MenuBarItem*> m_childrenItems;
+    List<MenuItem*> m_childrenItems;
     GameObject *m_childrenContainer = nullptr;
     UIVerticalLayout *m_childrenContainerVL = nullptr;
 
@@ -52,4 +52,4 @@ private:
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // MENUBARITEM_H
+#endif // MENUITEM_H
