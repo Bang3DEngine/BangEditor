@@ -9,6 +9,7 @@
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/Hierarchy.h"
+#include "BangEditor/EditorIconManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -34,6 +35,11 @@ HierarchyItem::HierarchyItem()
 
 HierarchyItem::~HierarchyItem()
 {
+}
+
+void HierarchyItem::Update()
+{
+    GameObject::Update();
 }
 
 void HierarchyItem::SetReferencedGameObject(GameObject *referencedGameObject)
@@ -67,6 +73,10 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
 
         case UIList::Action::SelectionOut:
             p_bg->SetTint(Color::Zero);
+        break;
+
+        case UIList::Action::DoubleClickedLeft:
+            Hierarchy::GetInstance()->ToggleItemCollapsed(this);
         break;
 
         default: break;

@@ -25,6 +25,8 @@ public:
     Hierarchy();
     virtual ~Hierarchy();
 
+    void ToggleItemCollapsed(HierarchyItem *item);
+    void SetItemCollapsed(HierarchyItem *item, bool collapsed);
     void Clear();
 
     // Object

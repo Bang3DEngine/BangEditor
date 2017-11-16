@@ -1,5 +1,5 @@
-#ifndef ICONMANAGER_H
-#define ICONMANAGER_H
+#ifndef EDITORICONMANAGER_H
+#define EDITORICONMANAGER_H
 
 #include "Bang/Path.h"
 
@@ -13,21 +13,21 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 
-class IconManager
+class EditorIconManager
 {
 public:
-	IconManager();
-	virtual ~IconManager();
-
     static Texture2D *GetIcon(const Path &path);
     static Texture2D *GetIcon(const String &extension);
     static Texture2D *GetBackArrowIcon();
 
 private:
+    EditorIconManager() = default;
+    virtual ~EditorIconManager() = default;
+
     static Texture2D *GetIconTexture(const String &filename);
 };
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // ICONMANAGER_H
+#endif // EDITORICONMANAGER_H
 

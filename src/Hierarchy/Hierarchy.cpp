@@ -54,6 +54,16 @@ Hierarchy::~Hierarchy()
 
 }
 
+void Hierarchy::ToggleItemCollapsed(HierarchyItem *item)
+{
+    SetItemCollapsed(item, !p_tree->IsItemCollapsed(item));
+}
+
+void Hierarchy::SetItemCollapsed(HierarchyItem *item, bool collapsed)
+{
+    p_tree->SetItemCollapsed(item, collapsed);
+}
+
 void Hierarchy::OnStart()
 {
     Editor::RegisterListener<IEditorSelectionListener>(this);
@@ -64,8 +74,7 @@ void Hierarchy::OnGameObjectSelected(GameObject *selectedGameObject)
     HierarchyItem *selectedHItem = GetItemFromGameObject(selectedGameObject);
     ENSURE(selectedHItem);
 
-    GOItem *selectedHItemContainer = selectedHItem->GetParent();
-    GetUITree()->GetUIList()->SetSelection(selectedHItemContainer);
+    GetUITree()->SetSelection(selectedHItem);
 }
 
 void Hierarchy::Clear()

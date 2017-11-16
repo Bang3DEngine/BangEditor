@@ -10,7 +10,7 @@
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/Explorer.h"
-#include "BangEditor/IconManager.h"
+#include "BangEditor/EditorIconManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -87,7 +87,7 @@ void ExplorerItem::SetFilepath(const Path &path)
     if (GetFilepath() != path)
     {
         m_filepath = path;
-        p_icon->SetImageTexture( IconManager::GetIcon(GetFilepath()) );
+        p_icon->SetImageTexture( EditorIconManager::GetIcon(GetFilepath()) );
         p_label->GetText()->SetContent(GetFilepath().GetNameExt());
     }
 }

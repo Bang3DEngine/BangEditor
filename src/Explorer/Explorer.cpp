@@ -16,7 +16,7 @@
 #include "Bang/UIContentSizeFitter.h"
 
 #include "BangEditor/EditorScene.h"
-#include "BangEditor/IconManager.h"
+#include "BangEditor/EditorIconManager.h"
 #include "BangEditor/ExplorerItem.h"
 
 USING_NAMESPACE_BANG
@@ -44,7 +44,7 @@ Explorer::Explorer() : EditorUITab("Explorer")
 
     // Back button
     p_backButton = GameObjectFactory::CreateUIButton("", nullptr);
-    p_backButton->SetIcon(IconManager::GetBackArrowIcon(), Vector2i(15), 0);
+    p_backButton->SetIcon(EditorIconManager::GetBackArrowIcon(), Vector2i(15), 0);
     p_backButton->GetText()->SetContent("");
     p_backButton->GetButton()->EventEmitter<IUIButtonListener>::RegisterListener(this);
 

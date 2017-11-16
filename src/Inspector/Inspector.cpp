@@ -44,7 +44,7 @@ Inspector::Inspector() : EditorUITab("Inspector")
 
     GameObject *topSpacer =
             GameObjectFactory::CreateUISpacer(LayoutSizeType::Min,
-                                              Vector2i(0, 30));
+                                              Vector2i(0, 30)); (void)topSpacer;
 
     GameObject *mainVLGo = GameObjectFactory::CreateUIGameObjectNamed("MainVL");
     mainVLGo->GetComponent<RectTransform>()->SetPivotPosition( Vector2(-1, 1) );

@@ -1,4 +1,4 @@
-#include "BangEditor/IconManager.h"
+#include "BangEditor/EditorIconManager.h"
 
 #include "Bang/Texture2D.h"
 #include "Bang/Resources.h"
@@ -7,15 +7,7 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-IconManager::IconManager()
-{
-}
-
-IconManager::~IconManager()
-{
-}
-
-Texture2D *IconManager::GetIcon(const Path &path)
+Texture2D *EditorIconManager::GetIcon(const Path &path)
 {
     if (path.IsDir()) { return GetIconTexture("Folder"); }
     else
@@ -28,7 +20,7 @@ Texture2D *IconManager::GetIcon(const Path &path)
     return GetIcon(path.GetExtension());
 }
 
-Texture2D *IconManager::GetIcon(const String &ext)
+Texture2D *EditorIconManager::GetIcon(const String &ext)
 {
     if (ext == Extensions::GetFontExtension() ||
         Extensions::Equals(ext, Extensions::GetTTFExtensions()) )
@@ -63,9 +55,9 @@ Texture2D *IconManager::GetIcon(const String &ext)
     return GetIconTexture("File");
 }
 
-Texture2D *IconManager::GetBackArrowIcon() { return GetIconTexture("BackArrow"); }
+Texture2D *EditorIconManager::GetBackArrowIcon() { return GetIconTexture("BackArrow"); }
 
-Texture2D *IconManager::GetIconTexture(const String &filename)
+Texture2D *EditorIconManager::GetIconTexture(const String &filename)
 {
     Texture2D *iconTex =
             Resources::Load<Texture2D>(Paths::EditorResources().

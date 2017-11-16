@@ -3,6 +3,7 @@
 
 #include "Bang/UIList.h"
 #include "Bang/GameObject.h"
+
 #include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
@@ -20,10 +21,14 @@ public:
     HierarchyItem();
     virtual ~HierarchyItem();
 
+    // GameObject
+    void Update() override;
 
     void SetReferencedGameObject(GameObject *referencedGameObject);
-    GameObject *GetReferencedGameObject() const;
 
+    bool IsCollapsed() const;
+    GameObject *GetReferencedGameObject() const;
+    // UIList Item
     void OnSelectionCallback(UIList::Action action);
 
     String ToString() const override;
