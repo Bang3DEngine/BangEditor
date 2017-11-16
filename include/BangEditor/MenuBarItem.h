@@ -11,7 +11,6 @@
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIButton;
 FORWARD class UIVerticalLayout;
-FORWARD class UITintedButton;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -23,12 +22,17 @@ class MenuBarItem : public GameObject,
     GAMEOBJECT(MenuBarItem)
 
 public:
+    // GameObject
+    void Update() override;
+
     void AddSeparator();
-    void SetAsChild(MenuBarItem *childItem);
-    MenuBarItem* SetAsChild(const String &text);
+    void AddChild(MenuBarItem *childItem);
+    MenuBarItem* AddChild(const String &text);
 
     UITextRenderer *GetText() const;
     UIButton *GetButton() const;
+
+    bool MustDisplayChildren() const;
 
 protected:
     MenuBarItem() = default;
@@ -36,17 +40,12 @@ protected:
     virtual ~MenuBarItem();
 
 private:
-    bool m_isTopItem = false;
+    UIButton *m_button = nullptr;
     UITextRenderer *m_text = nullptr;
-    UITintedButton *m_buttonWithTint = nullptr;
 
     List<MenuBarItem*> m_childrenItems;
     GameObject *m_childrenContainer = nullptr;
     UIVerticalLayout *m_childrenContainerVL = nullptr;
-
-    virtual void OnButton_MouseEnter(UIButton *btn);
-    virtual void OnButton_MouseExit(UIButton *btn);
-    virtual void OnButton_Clicked(UIButton *btn);
 
     friend class Bang::ObjectManager;
 };

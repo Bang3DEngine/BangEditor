@@ -22,9 +22,8 @@ MenuBarItem::MenuBarItem(bool topItem)
     vl->SetChildrenVerticalAlignment(VerticalAlignment::Bot);
     vl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
 
-    m_isTopItem = topItem;
-    if (m_isTopItem) { vl->SetPaddings(2); }
-    else             { vl->SetPaddings(3); }
+    if (topItem) { vl->SetPaddings(2); }
+    else         { vl->SetPaddings(3); }
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinSize( Vector2i(-1) );
@@ -59,7 +58,7 @@ MenuBarItem::MenuBarItem(bool topItem)
     m_childrenContainerVL->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
     contRT->SetPivotPosition(Vector2(-1));
 
-    if (m_isTopItem)
+    if (topItem)
     {
         contRT->SetAnchors(Vector2(-1, -1));
         contRT->SetPivotPosition(Vector2(-1, 1));
@@ -73,15 +72,9 @@ MenuBarItem::MenuBarItem(bool topItem)
     m_childrenContainer->SetEnabled(false);
     m_childrenContainer->SetParent(this);
 
-    m_buttonWithTint = AddComponent<UITintedButton>();
-    m_buttonWithTint->SetIdleTintColor(BgColor);
-    m_buttonWithTint->SetOverTintColor(Color::White);
-    m_buttonWithTint->SetPressedTintColor(Color::White);
-    m_buttonWithTint->SetMode(UIButtonMode::UseRectTransform);
-    m_buttonWithTint->EventEmitter<IUIButtonListener>::RegisterListener(this);
-    m_buttonWithTint->AddToTint(this);
-    m_buttonWithTint->RegisterButtonPart(this);
-    m_buttonWithTint->RegisterButtonPart(m_childrenContainer);
+    m_button = AddComponent<UIButton>();
+    m_button->SetMode(UIButtonMode::UseRectTransform);
+    m_button->RegisterButtonPart(this);
 
     SetName("MenuBarItem");
 }
@@ -91,6 +84,17 @@ MenuBarItem::~MenuBarItem()
 
 }
 
+void MenuBarItem::Update()
+{
+    GameObject::Update();
+
+    bool mustDisplayChildren = MustDisplayChildren();
+    m_childrenContainer->SetEnabled(mustDisplayChildren);
+
+    GetComponent<UIImageRenderer>()->SetTint(mustDisplayChildren ? Color::White :
+                                                                   Color::Zero);
+}
+
 void MenuBarItem::AddSeparator()
 {
     GameObject *sep =
@@ -98,18 +102,18 @@ void MenuBarItem::AddSeparator()
     sep->SetParent(m_childrenContainer);
 }
 
-void MenuBarItem::SetAsChild(MenuBarItem *childItem)
+void MenuBarItem::AddChild(MenuBarItem *childItem)
 {
-    childItem->SetParent(m_childrenContainer);
+    m_childrenContainer->SetAsChild(childItem);
     m_childrenItems.PushBack(childItem);
 }
 
-MenuBarItem *MenuBarItem::SetAsChild(const String &text)
+MenuBarItem *MenuBarItem::AddChild(const String &text)
 {
     MenuBarItem *newItem = GameObject::Create<MenuBarItem>(false);
     newItem->GetText()->SetContent(text);
     newItem->SetName(text);
-    SetAsChild(newItem);
+    AddChild(newItem);
     return newItem;
 }
 
@@ -120,20 +124,15 @@ UITextRenderer *MenuBarItem::GetText() const
 
 UIButton *MenuBarItem::GetButton() const
 {
-    return m_buttonWithTint;
+    return m_button;
 }
 
-void MenuBarItem::OnButton_MouseEnter(UIButton *btn)
+bool MenuBarItem::MustDisplayChildren() const
 {
-    m_childrenContainer->SetEnabled(true);
-}
-
-void MenuBarItem::OnButton_MouseExit(UIButton *btn)
-{
-    m_childrenContainer->SetEnabled(false);
-}
-
-void MenuBarItem::OnButton_Clicked(UIButton *btn)
-{
-    if (!m_isTopItem) { GetParent()->SetEnabled(false); }
+    if (GetButton()->IsMouseOverSomePart()) { return true; }
+    for (MenuBarItem *childItem : m_childrenItems)
+    {
+        if (childItem->MustDisplayChildren()) { return true; }
+    }
+    return false;
 }

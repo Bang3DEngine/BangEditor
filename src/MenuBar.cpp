@@ -41,22 +41,22 @@ MenuBar::MenuBar()
     m_componentsItem->GetText()->SetContent("Components");
     m_gameObjectsItem->GetText()->SetContent("GameObjects");
 
-    MenuBarItem *newProject = m_fileItem->SetAsChild("New Project...");
-    MenuBarItem *openProject = m_fileItem->SetAsChild("Open Project...");
-    MenuBarItem *openRecentProject = m_fileItem->SetAsChild("Open Recent Project");
-        openRecentProject->SetAsChild("Wololo/hehe.bproject");
-        openRecentProject->SetAsChild("Wololo/hoho.bproject");
-        openRecentProject->SetAsChild("Wololo/bangbangbang.bproject");
+    MenuBarItem *newProject = m_fileItem->AddChild("New Project...");
+    MenuBarItem *openProject = m_fileItem->AddChild("Open Project...");
+    MenuBarItem *openRecentProject = m_fileItem->AddChild("Open Recent Project");
+        openRecentProject->AddChild("Wololo/hehe.bproject");
+        openRecentProject->AddChild("Wololo/hoho.bproject");
+        openRecentProject->AddChild("Wololo/bangbangbang.bproject");
 
-    MenuBarItem *saveProject = m_fileItem->SetAsChild("Save Project");
-    MenuBarItem *saveProjectAs = m_fileItem->SetAsChild("Save Project As...");
+    MenuBarItem *saveProject = m_fileItem->AddChild("Save Project");
+    MenuBarItem *saveProjectAs = m_fileItem->AddChild("Save Project As...");
     m_fileItem->AddSeparator();
-    MenuBarItem *newScene = m_fileItem->SetAsChild("New Scene");
-    MenuBarItem *openScene = m_fileItem->SetAsChild("Open Scene");
-    MenuBarItem *saveScene = m_fileItem->SetAsChild("Save Scene");
-    MenuBarItem *saveSceneAs= m_fileItem->SetAsChild("Save Scene As...");
+    MenuBarItem *newScene = m_fileItem->AddChild("New Scene");
+    MenuBarItem *openScene = m_fileItem->AddChild("Open Scene");
+    MenuBarItem *saveScene = m_fileItem->AddChild("Save Scene");
+    MenuBarItem *saveSceneAs= m_fileItem->AddChild("Save Scene As...");
 
-    MenuBarItem *copyChild = m_editItem->SetAsChild("Copy");
+    MenuBarItem *copyChild = m_editItem->AddChild("Copy");
 
     openProject->GetButton()->AddClickedCallback(MenuBar::OnOpenProject);
     newScene->GetButton()->AddClickedCallback(MenuBar::OnNewScene);
