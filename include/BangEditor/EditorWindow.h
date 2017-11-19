@@ -19,9 +19,6 @@ public:
     virtual void Render() override;
 
     virtual SceneManager* CreateSceneManager() const override;
-
-private:
-    EditorScene* GetEditorScene() const;
 };
 
 NAMESPACE_BANG_EDITOR_END

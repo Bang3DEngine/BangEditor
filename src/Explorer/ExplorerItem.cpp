@@ -1,8 +1,8 @@
 #include "BangEditor/ExplorerItem.h"
 
 #include "Bang/UILabel.h"
+#include "Bang/UIButtoneable.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UITintedButton.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -48,13 +48,9 @@ ExplorerItem::ExplorerItem()
     p_label->GetText()->SetVerticalAlign(VerticalAlignment::Center);
     p_label->SetSelectable(false);
 
-    p_button = AddComponent<UITintedButton>();
-    p_button->SetMode(UIButtonMode::UseRectTransform);
-    p_button->SetIdleTintColor(Color::Zero);
-    p_button->SetOverTintColor(Color::VeryLightBlue);
-    p_button->SetPressedTintColor(Color::LightBlue);
-    p_button->AddToTint(p_bg);
+    p_button = AddComponent<UIButtoneable>();
     p_button->RegisterButtonPart(this);
+    p_button->SetMode(UIButtoneableMode::RectTransform);
     p_button->EventEmitter<IUIButtonListener>::RegisterListener(this);
 
     SetAsChild(bgGo);
@@ -95,7 +91,6 @@ void ExplorerItem::SetFilepath(const Path &path)
 void ExplorerItem::SetSelected(bool selected)
 {
     m_selected = selected;
-    p_button->SetTintEnabled( !IsSelected() );
     p_bg->SetTint(IsSelected() ? Color::LightBlue : Color::Zero);
 }
 
@@ -109,12 +104,28 @@ const Path &ExplorerItem::GetFilepath() const
     return m_filepath;
 }
 
-void ExplorerItem::OnButton_Clicked(UIButton *btn)
+void ExplorerItem::OnButton_MouseEnter(UIButtoneable *btn)
+{
+    if (!IsSelected())
+    {
+        p_bg->SetTint(Color::VeryLightBlue);
+    }
+}
+
+void ExplorerItem::OnButton_MouseExit(UIButtoneable *btn)
+{
+    if (!IsSelected())
+    {
+        p_bg->SetTint(Color::Zero);
+    }
+}
+
+void ExplorerItem::OnButton_Clicked(UIButtoneable *btn)
 {
     SetSelected(true);
 }
 
-void ExplorerItem::OnButton_DoubleClicked(UIButton*)
+void ExplorerItem::OnButton_DoubleClicked(UIButtoneable*)
 {
     if (GetFilepath().IsDir())
     {

@@ -29,16 +29,12 @@ void EditorWindow::Update()
 
 void EditorWindow::Render()
 {
-    EditorScene *edScene = GetEditorScene(); ENSURE(edScene);
+    EditorScene *edScene = EditorSceneManager::GetEditorScene();
+    ENSURE(edScene);
     edScene->RenderAndBlitToScreen();
 }
 
 SceneManager *EditorWindow::CreateSceneManager() const
 {
     return new EditorSceneManager();
-}
-
-EditorScene *EditorWindow::GetEditorScene() const
-{
-    return SCAST<EditorScene*>( GetSceneManager()->GetRootScene() );
 }

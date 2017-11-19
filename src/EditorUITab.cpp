@@ -15,7 +15,7 @@ EditorUITab::EditorUITab(const String &title)
     SetName(title);
 
     GameObjectFactory::CreateUIGameObjectInto(this);
-    UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
+    AddComponent<UIVerticalLayout>();
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetFlexibleSize(Vector2(1));

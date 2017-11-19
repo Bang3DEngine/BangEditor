@@ -1,7 +1,6 @@
 #include "BangEditor/MenuItem.h"
 
 #include "Bang/RectTransform.h"
-#include "Bang/UITintedButton.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UILayoutIgnorer.h"
@@ -61,8 +60,8 @@ MenuItem::MenuItem(bool topItem)
     m_childrenContainer->SetEnabled(false);
     m_childrenContainer->SetParent(this);
 
-    m_button = AddComponent<UIButton>();
-    m_button->SetMode(UIButtonMode::UseRectTransform);
+    m_button = AddComponent<UIButtoneable>();
+    m_button->SetMode(UIButtoneableMode::RectTransform);
     m_button->RegisterButtonPart(this);
 
     SetName("MenuItem");
@@ -111,7 +110,7 @@ UITextRenderer *MenuItem::GetText() const
     return m_text;
 }
 
-UIButton *MenuItem::GetButton() const
+UIButtoneable *MenuItem::GetButton() const
 {
     return m_button;
 }

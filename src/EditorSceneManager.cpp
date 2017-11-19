@@ -7,20 +7,9 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-EditorSceneManager::EditorSceneManager()
-{
-
-}
-
-EditorSceneManager::~EditorSceneManager()
-{
-
-}
-
 void EditorSceneManager::_Update()
 {
-    SceneManager::UpdateScene(GetRootScene());
-    SceneManager::UpdateScene(GetOpenScene());
+    SceneManager::UpdateScene( GetActiveScene() );
 }
 
 Scene *EditorSceneManager::GetOpenScene()
@@ -41,7 +30,7 @@ Scene *EditorSceneManager::_GetOpenScene() const
 
 EditorScene *EditorSceneManager::_GetEditorScene() const
 {
-    Scene *edScene = _GetRootScene();
+    Scene *edScene = _GetActiveScene();
     return edScene ? SCAST<EditorScene*>(edScene) : nullptr;
 }
 
@@ -59,15 +48,9 @@ void EditorSceneManager::_LoadScene(Scene *scene)
     }
 }
 
-Scene *EditorSceneManager::_GetRootScene() const
+void EditorSceneManager::SetActiveScene(Scene *activeScene)
 {
-    return m_activeScene;
-}
-
-Scene *EditorSceneManager::_GetActiveScene() const
-{
-    EditorScene *edScene = GetEditorScene();
-    return edScene->GetOpenScene();
+    GetInstance()->_SetActiveScene(activeScene);
 }
 
 EditorSceneManager *EditorSceneManager::GetInstance()

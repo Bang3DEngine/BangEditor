@@ -2,8 +2,8 @@
 #define EXPLORERITEM_H
 
 #include "Bang/Path.h"
-#include "Bang/UIButton.h"
 #include "Bang/GameObject.h"
+#include "Bang/UIButtoneable.h"
 
 #include "BangEditor/BangEditor.h"
 
@@ -11,14 +11,14 @@ USING_NAMESPACE_BANG
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UILabel;
-FORWARD class UITintedButton;
+FORWARD class UIButtoneable;
 FORWARD class UIImageRenderer;
 FORWARD NAMESPACE_BANG_END
 
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class ExplorerItem : public GameObject,
-                      public IUIButtonListener
+                     public IUIButtonListener
 {
     GAMEOBJECT_EDITOR(ExplorerItem)
 
@@ -40,12 +40,15 @@ private:
     Path m_filepath = Path::Empty;
 
     UILabel *p_label = nullptr;
+    UIButtoneable *p_button = nullptr;
     UIImageRenderer *p_bg = nullptr;
     UIImageRenderer *p_icon = nullptr;
-    UITintedButton *p_button = nullptr;
 
-    virtual void OnButton_Clicked(UIButton *btn) override;
-    virtual void OnButton_DoubleClicked(UIButton *btn) override;
+    // IUIButtonListener
+    virtual void OnButton_MouseEnter(UIButtoneable *btn) override;
+    virtual void OnButton_MouseExit(UIButtoneable *btn) override;
+    virtual void OnButton_Clicked(UIButtoneable *btn) override;
+    virtual void OnButton_DoubleClicked(UIButtoneable *btn) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

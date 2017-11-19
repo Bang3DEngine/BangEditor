@@ -4,12 +4,12 @@
 #include "BangEditor/BangEditor.h"
 
 #include "Bang/List.h"
-#include "Bang/UIButton.h"
 #include "Bang/GameObject.h"
+#include "Bang/UIButtoneable.h"
 #include "Bang/UITextRenderer.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIButton;
+FORWARD class UIButtoneable;
 FORWARD class UIVerticalLayout;
 FORWARD NAMESPACE_BANG_END
 
@@ -30,7 +30,7 @@ public:
     MenuItem* AddItem(const String &text);
 
     UITextRenderer *GetText() const;
-    UIButton *GetButton() const;
+    UIButtoneable *GetButton() const;
 
     bool MustDisplayChildren() const;
 
@@ -40,7 +40,7 @@ protected:
     virtual ~MenuItem();
 
 private:
-    UIButton *m_button = nullptr;
+    UIButtoneable *m_button = nullptr;
     UITextRenderer *m_text = nullptr;
 
     List<MenuItem*> m_childrenItems;
