@@ -37,10 +37,10 @@ private:
     Array<MenuItem*> m_items;
     UIHorizontalLayout *m_horizontalLayout = nullptr;
 
-    static void OnOpenProject (UIButton *btn);
-    static void OnNewScene    (UIButton *btn);
-    static void OnSaveScene   (UIButton *btn);
-    static void OnOpenScene   (UIButton *btn);
+    static void OnOpenProject (UIButtoneable *btn);
+    static void OnNewScene    (UIButtoneable *btn);
+    static void OnSaveScene   (UIButtoneable *btn);
+    static void OnOpenScene   (UIButtoneable *btn);
 
     friend class Bang::ObjectManager;
 };

@@ -5,9 +5,9 @@
 #include "Bang/UIGridLayout.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UIButtoneable.h"
 #include "Bang/UIScrollPanel.h"
-#include "Bang/UITintedButton.h"
-#include "Bang/UIButtonDriver.h"
+#include "Bang/UIButton.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -131,9 +131,9 @@ void Explorer::AddItem(const Path &itemPath)
     p_items.PushBack(explorerItem);
 }
 
-void Explorer::OnButton_Clicked(UIButton *btn)
+void Explorer::OnButton_Clicked(UIButtoneable *btn)
 {
-    if (btn == SCAST<UIButton*>(p_backButton->GetButton()) )
+    if (btn == SCAST<UIButtoneable*>(p_backButton->GetButton()) )
     {
         SetCurrentPath( GetCurrentPath().GetDirectory() );
     }

@@ -2,8 +2,8 @@
 #define EXPLORER_H
 
 #include "Bang/Path.h"
+#include "Bang/UIButtoneable.h"
 #include "Bang/UIButton.h"
-#include "Bang/UIButtonDriver.h"
 
 #include "BangEditor/EditorUITab.h"
 
@@ -38,13 +38,13 @@ private:
     List<ExplorerItem*> p_items;
 
     UILabel *p_directionLabel = nullptr;
-    UIButtonDriver *p_backButton = nullptr;
+    UIButton *p_backButton = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
     GameObject *p_itemsContainer = nullptr;
 
     void AddItem(const Path &itemPath);
 
-    virtual void OnButton_Clicked(UIButton *btn) override;
+    virtual void OnButton_Clicked(UIButtoneable *btn) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

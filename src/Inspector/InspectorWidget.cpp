@@ -29,7 +29,7 @@ InspectorWidget::InspectorWidget()
             GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5, 1.0f);
 
     GameObject *container = GameObjectFactory::CreateUIGameObjectNamed("Container");
-    UIVerticalLayout *containerVL = container->AddComponent<UIVerticalLayout>();
+    container->AddComponent<UIVerticalLayout>();
 
     p_container = container;
     p_title = text;

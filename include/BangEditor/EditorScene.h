@@ -63,6 +63,7 @@ private:
 
     Scene *p_openScene = nullptr;
     UISceneContainer *m_sceneContainer = nullptr;
+    UITextRenderer *m_fpsText = nullptr;
 
     MenuBar *m_menuBar = nullptr;
     GameObject *m_mainEditorVL = nullptr;

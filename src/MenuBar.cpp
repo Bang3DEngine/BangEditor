@@ -108,19 +108,19 @@ MenuItem* MenuBar::GetItem(int i)
     return m_items[i];
 }
 
-void MenuBar::OnOpenProject(UIButton*)
+void MenuBar::OnOpenProject(UIButtoneable*)
 {
     Dialog::GetFilePath("Open Project...");
 }
 
-void MenuBar::OnNewScene(UIButton*)
+void MenuBar::OnNewScene(UIButtoneable*)
 {
     EditorScene *edScene = EditorScene::GetInstance();
     Scene *defaultScene = GameObjectFactory::CreateDefaultScene();
     edScene->SetOpenScene(defaultScene);
 }
 
-void MenuBar::OnSaveScene(UIButton*)
+void MenuBar::OnSaveScene(UIButtoneable*)
 {
     EditorScene *edScene = EditorScene::GetInstance();
     Scene *openScene = edScene->GetOpenScene();
@@ -136,7 +136,7 @@ void MenuBar::OnSaveScene(UIButton*)
     }
 }
 
-void MenuBar::OnOpenScene(UIButton*)
+void MenuBar::OnOpenScene(UIButtoneable*)
 {
     Path openScenePath = Dialog::GetFilePath("Open Scene...",
                                              { Extensions::GetSceneExtension() });

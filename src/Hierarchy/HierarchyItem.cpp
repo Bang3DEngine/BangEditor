@@ -70,7 +70,7 @@ void HierarchyItem::OnSetContextMenu(Menu *menu)
     MenuItem *hola = menu->AddItem("Hola");
     hola->AddItem("Holita");
     hola->AddItem("Hehe");
-    MenuItem *item = menu->AddItem("Adios");
+    menu->AddItem("Adios");
 }
 
 void HierarchyItem::SetText(const String &text)

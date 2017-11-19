@@ -23,7 +23,7 @@ USING_NAMESPACE_BANG_EDITOR
 Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
 {
     Timer *updateTimer = AddComponent<Timer>();
-    updateTimer->SetInterval(1.0f);
+    updateTimer->SetInterval(0.1f);
     updateTimer->AddCallback( std::bind(&Hierarchy::UpdateFromScene, this) );
     updateTimer->Run();
 

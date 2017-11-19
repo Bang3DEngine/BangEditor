@@ -25,6 +25,7 @@
 #include "BangEditor/Hierarchy.h"
 #include "BangEditor/Inspector.h"
 #include "BangEditor/UISceneContainer.h"
+#include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -38,7 +39,7 @@ EditorScene::EditorScene()
     GameObjectFactory::CreateUICanvasInto(this);
 
     m_mainEditorVL = GameObjectFactory::CreateUIGameObjectNamed("MainEditorVL");
-    UIVerticalLayout *vl = m_mainEditorVL->AddComponent<UIVerticalLayout>();
+    m_mainEditorVL->AddComponent<UIVerticalLayout>();
     m_mainEditorVL->SetParent(this);
 
     m_menuBar = GameObject::Create<MenuBar>();
@@ -46,7 +47,7 @@ EditorScene::EditorScene()
     m_menuBar->SetParent(m_mainEditorVL);
 
     GameObject *hlGo = GameObjectFactory::CreateUIGameObject();
-    UIHorizontalLayout *hl = hlGo->AddComponent<UIHorizontalLayout>();
+    hlGo->AddComponent<UIHorizontalLayout>();
     UILayoutElement *hlLe = hlGo->AddComponent<UILayoutElement>();
     hlLe->SetFlexibleSize(Vector2(1));
     hlGo->SetParent(m_mainEditorVL);
@@ -64,7 +65,7 @@ EditorScene::EditorScene()
     m_hierarchy->SetParent(hlGo, 0);
 
     GameObject *botHLGo = GameObjectFactory::CreateUIGameObjectNamed("BotHL");
-    UIHorizontalLayout *botHL = botHLGo->AddComponent<UIHorizontalLayout>();
+    botHLGo->AddComponent<UIHorizontalLayout>();
     UILayoutElement *botHLLe = botHLGo->AddComponent<UILayoutElement>();
     botHLLe->SetMinSize( Vector2i(1, 150) );
     botHLLe->SetFlexibleSize( Vector2(1) );
@@ -75,6 +76,13 @@ EditorScene::EditorScene()
 
     m_explorer = GameObject::Create<Explorer>();
     m_explorer->SetParent(botHLGo);
+
+    GameObject *fpsTextGo = GameObjectFactory::CreateUIGameObject();
+    m_fpsText = fpsTextGo->AddComponent<UITextRenderer>();
+    m_fpsText->SetHorizontalAlign(HorizontalAlignment::Right);
+    m_fpsText->SetVerticalAlign(VerticalAlignment::Bot);
+
+    SetAsChild(fpsTextGo);
 
     Camera *cam = AddComponent<Camera>();
     SetCamera(cam);
@@ -88,9 +96,17 @@ EditorScene::~EditorScene()
 
 void EditorScene::Update()
 {
+    EditorSceneManager::SetActiveScene(this);
     Scene::Update();
 
-    Scene *openScene = SceneManager::GetActiveScene();
+    Scene *openScene = GetOpenScene();
+    if (openScene)
+    {
+        EditorSceneManager::SetActiveScene(openScene);
+        openScene->Update();
+        EditorSceneManager::SetActiveScene(this);
+    }
+
     if (Input::GetMouseButtonDown(MouseButton::Left))
     {
         Rect ndcRect = EditorScene::GetInstance()->GetOpenSceneRectNDC();
@@ -104,18 +120,32 @@ void EditorScene::Update()
             else { Editor::SelectGameObject(nullptr); }
         }
     }
+
+    static Array<float> lastDeltas = {99,99,99,99};
+    for (int i = 1; i < lastDeltas.Size(); ++i) { lastDeltas[i] = lastDeltas[i-1]; }
+    lastDeltas[0] = Time::GetDeltaTime();
+    float meanDeltas = 0.0f;
+    for (int i = 0; i < lastDeltas.Size(); ++i) { meanDeltas += lastDeltas[i]; }
+    meanDeltas /= lastDeltas.Size();
+    float meanFPS = (1.0f / Math::Max(0.001f, meanDeltas));
+    m_fpsText->SetContent( String(meanFPS) + " fps" );
+    Debug_Peek(meanFPS);
 }
 
 void EditorScene::OnResize(int newWidth, int newHeight)
 {
+    EditorSceneManager::SetActiveScene(this);
     Scene::OnResize(newWidth, newHeight);
+
     Scene *openScene = GetOpenScene();
     if (openScene)
     {
+        EditorSceneManager::SetActiveScene(openScene);
         SaveGLViewport();
         SetViewportForOpenScene();
         openScene->InvalidateCanvas();
         LoadGLViewport();
+        EditorSceneManager::SetActiveScene(this);
     }
 }
 
@@ -124,10 +154,12 @@ void EditorScene::RenderOpenScene()
     Scene *openScene = GetOpenScene();
     if (openScene)
     {
+        EditorSceneManager::SetActiveScene(openScene);
         SaveGLViewport();
         SetViewportForOpenScene();
-        GEngine::GetInstance()->Render(openScene);
+        GEngine::GetActive()->Render(openScene);
         LoadGLViewport();
+        EditorSceneManager::SetActiveScene(this);
     }
 }
 
@@ -172,17 +204,14 @@ Rect EditorScene::GetOpenSceneRectNDC() const
 
 void EditorScene::RenderAndBlitToScreen()
 {
-    Window *window = Window::GetCurrent();
+    Window *window = Window::GetActive();
     window->Clear();
-
-    UILayoutManager::RebuildLayout(this);
 
     Scene *openScene = GetOpenScene();
     if (openScene)
     {
         SaveGLViewport();
         SetViewportForOpenScene();
-        UILayoutManager::RebuildLayout(openScene);
         LoadGLViewport();
     }
 
@@ -198,7 +227,7 @@ void EditorScene::RenderAndBlitToScreen()
     }
     m_sceneContainer->SetSceneImageTexture(openSceneTex);
 
-    GEngine *gEngine = GEngine::GetInstance();
+    GEngine *gEngine = GEngine::GetActive();
     RenderOpenScene();
     gEngine->Render(this);
     window->BlitToScreen(GetCamera());
@@ -206,7 +235,7 @@ void EditorScene::RenderAndBlitToScreen()
 
 EditorScene *EditorScene::GetInstance()
 {
-    return SCAST<EditorScene*>( SceneManager::GetRootScene() );
+    return SCAST<EditorScene*>( EditorSceneManager::GetEditorScene() );
 }
 
 Console *EditorScene::GetConsole() const { return m_console; }
