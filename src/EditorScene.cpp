@@ -157,7 +157,7 @@ void EditorScene::RenderOpenScene()
         EditorSceneManager::SetActiveScene(openScene);
         SaveGLViewport();
         SetViewportForOpenScene();
-        GEngine::GetInstance()->Render(openScene);
+        GEngine::GetActive()->Render(openScene);
         LoadGLViewport();
         EditorSceneManager::SetActiveScene(this);
     }
@@ -204,7 +204,7 @@ Rect EditorScene::GetOpenSceneRectNDC() const
 
 void EditorScene::RenderAndBlitToScreen()
 {
-    Window *window = Window::GetCurrent();
+    Window *window = Window::GetActive();
     window->Clear();
 
     Scene *openScene = GetOpenScene();
@@ -227,7 +227,7 @@ void EditorScene::RenderAndBlitToScreen()
     }
     m_sceneContainer->SetSceneImageTexture(openSceneTex);
 
-    GEngine *gEngine = GEngine::GetInstance();
+    GEngine *gEngine = GEngine::GetActive();
     RenderOpenScene();
     gEngine->Render(this);
     window->BlitToScreen(GetCamera());
