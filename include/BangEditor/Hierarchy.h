@@ -3,6 +3,7 @@
 
 #include "Bang/Map.h"
 #include "Bang/UIList.h"
+#include "Bang/ICreateListener.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorUITab.h"
@@ -17,6 +18,8 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class HierarchyItem;
 
 class Hierarchy : public EditorUITab,
+                  public ICreateListener,
+                  public IDestroyListener,
                   public IEditorSelectionListener
 {
     GAMEOBJECT_EDITOR(Hierarchy)
@@ -31,6 +34,13 @@ public:
 
     // Object
     void OnStart() override;
+    void Update() override;
+
+    // ICreateListener
+    void OnCreated(Object *object) override;
+
+    // IDestroyListener
+    void OnDestroyed(Object *object) override;
 
     // IEditorSelectionListener
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
@@ -41,12 +51,16 @@ private:
     UITree *p_tree = nullptr;
     Map<GameObject*, HierarchyItem*> m_gameObjectToItem;
 
-    void UpdateFromScene();
-    void UpdateItemFromGameObject(GOItem *item, GameObject *gameObject);
     void TreeSelectionCallback(GOItem *item, UIList::Action action);
-    void AddGameObjectItemToHierarchy(GameObject *go, bool topItem);
+    void AddGameObject(GameObject *go);
+    void RemoveGameObject(GameObject *go);
+    void OnCreatedDestroyed(Object *object, bool created);
 
-    HierarchyItem* GetItemFromGameObject(GameObject *go);
+    GOItem *GetSelectedGameObject() const;
+    GOItem *GetSelectedItem() const;
+
+    HierarchyItem* GetItemFromGameObject(GameObject *go) const;
+    GameObject* GetGameObjectFromItem(GOItem *item) const;
 
     UITree *GetUITree() const;
 
