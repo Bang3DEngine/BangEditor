@@ -30,8 +30,10 @@ EditorApplication::~EditorApplication()
 
 void EditorApplication::OpenEditorScene(Window *containingWindow)
 {
+    SetActiveWindow(containingWindow);
     m_editorScene = GameObject::Create<EditorScene>();
     containingWindow->GetSceneManager()->LoadScene(m_editorScene);
+    SetActiveWindow(nullptr);
 }
 
 void EditorApplication::SetupWindow(Window *window)
