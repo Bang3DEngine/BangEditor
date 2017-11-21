@@ -10,7 +10,7 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class IEditorSelectionListener : public IEventListener
+class IEditorSelectionListener : public virtual IEventListener
 {
 public:
     virtual void OnGameObjectSelected(GameObject *selectedGameObject) = 0;

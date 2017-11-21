@@ -56,7 +56,7 @@ void HierarchyItem::SetReferencedGameObject(GameObject *referencedGameObject)
     if (referencedGameObject != GetReferencedGameObject())
     {
         p_refGameObject = referencedGameObject;
-        p_label->GetText()->SetContent( GetReferencedGameObject()->GetName() );
+        SetText( GetReferencedGameObject()->GetName() );
     }
 }
 
@@ -76,6 +76,7 @@ void HierarchyItem::OnSetContextMenu(Menu *menu)
 void HierarchyItem::SetText(const String &text)
 {
     m_text = text;
+    p_label->GetText()->SetContent(text);;
 }
 
 void HierarchyItem::OnSelectionCallback(UIList::Action action)

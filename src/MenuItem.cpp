@@ -63,6 +63,7 @@ MenuItem::MenuItem(bool topItem)
     m_button = AddComponent<UIButtoneable>();
     m_button->SetMode(UIButtoneableMode::RectTransform);
     m_button->RegisterButtonPart(this);
+    m_button->RegisterButtonPart(m_childrenContainer);
 
     SetName("MenuItem");
 }

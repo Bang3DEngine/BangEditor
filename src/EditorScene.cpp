@@ -129,7 +129,7 @@ void EditorScene::Update()
     meanDeltas /= lastDeltas.Size();
     float meanFPS = (1.0f / Math::Max(0.001f, meanDeltas));
     m_fpsText->SetContent( String(meanFPS) + " fps" );
-    Debug_Peek(meanFPS);
+    // Debug_Peek(meanFPS);
 }
 
 void EditorScene::OnResize(int newWidth, int newHeight)
@@ -184,6 +184,8 @@ void EditorScene::SetViewportForOpenScene()
 
 void EditorScene::SetOpenScene(Scene *openScene)
 {
+    if (p_openScene) { GameObject::Destroy(p_openScene); }
+
     p_openScene = openScene;
     if (p_openScene)
     {

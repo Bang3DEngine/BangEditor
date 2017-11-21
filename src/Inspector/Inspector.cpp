@@ -95,6 +95,16 @@ void Inspector::Update()
     EditorUITab::Update();
 }
 
+Object *Inspector::GetCurrentObject() const
+{
+    return p_currentObject;
+}
+
+void Inspector::OnDestroyed(Object *destroyedObject)
+{
+    Clear();
+}
+
 void Inspector::OnGameObjectSelected(GameObject *selectedGameObject)
 {
     SetGameObject(selectedGameObject);
@@ -112,10 +122,12 @@ void Inspector::SetGameObject(GameObject *go)
     Clear();
     ENSURE(go);
 
+    p_currentObject = go;
+
     p_nameSeparator->SetEnabled(true);
     p_goNameText->SetContent(go->GetName());
-    CWTransform *cwTransform =
-                           GameObject::Create<CWTransform>(go->GetTransform());
+    GetCurrentObject()->EventEmitter<IDestroyListener>::RegisterListener(this);
+    CWTransform *cwTransform = GameObject::Create<CWTransform>(go->GetTransform());
     AddWidget(cwTransform);
 }
 
@@ -133,11 +145,15 @@ void Inspector::RemoveWidget(InspectorWidget *widget)
 
 void Inspector::Clear()
 {
-    while (!m_widgets.IsEmpty())
+    while (!m_widgets.IsEmpty() && GetCurrentObject())
     {
         InspectorWidget *widget = m_widgets.Front();
         p_goNameText->SetContent("");
         p_nameSeparator->SetEnabled(false);
         RemoveWidget(widget);
+
+        GetCurrentObject()->EventEmitter<IDestroyListener>::
+                    UnRegisterListener(this);
+        p_currentObject = nullptr;
     }
 }

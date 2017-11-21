@@ -17,6 +17,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class InspectorWidget;
 
 class Inspector : public EditorUITab,
+                  public IDestroyListener,
                   public IEditorSelectionListener
 {
     GAMEOBJECT_EDITOR(Inspector)
@@ -29,12 +30,18 @@ public:
     void OnStart() override;
     void Update() override;
 
+    Object *GetCurrentObject() const;
+
+    // IDestroyListener
+    void OnDestroyed(Object *destroyedObject) override;
+
     // IEditorSelectionListener
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
 
 private:
     List<InspectorWidget*> m_widgets;
 
+    Object *p_currentObject = nullptr;
     UIVerticalLayout *p_mainVL   = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
     UITextRenderer *p_goNameText = nullptr;

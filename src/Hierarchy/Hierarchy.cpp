@@ -20,6 +20,7 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
+#include "Bang/Material.h"
 Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
 {
     UILayoutElement *le = GetComponent<UILayoutElement>();
@@ -32,6 +33,18 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
     scrollPanel->GetScrollArea()->GetBackground()->SetTint(Color::Zero);
     scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
     scrollPanel->SetHorizontalShowScrollMode(ShowScrollMode::WhenNeeded);
+
+    for (int i = 0; i < 99; ++i)
+    {
+        Material *mat = Asset::Create<Material>();
+        Asset::Destroy(mat);
+        Asset::Destroy(mat);
+        Asset::Destroy(mat);
+        GameObject *go = GameObject::Create();
+        GameObject::Destroy(go);
+        GameObject::Destroy(go);
+        GameObject::Destroy(go);
+    }
 
     GameObject *treeGo = GetUITree()->GetGameObject();
     UILayoutElement *treeLE = treeGo->AddComponent<UILayoutElement>();
@@ -48,7 +61,17 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
 
 Hierarchy::~Hierarchy()
 {
-
+    for (int i = 0; i < 99; ++i)
+    {
+        Material *mat = Asset::Create<Material>();
+        Asset::Destroy(mat);
+        Asset::Destroy(mat);
+        Asset::Destroy(mat);
+        GameObject *go = GameObject::Create();
+        GameObject::Destroy(go);
+        GameObject::Destroy(go);
+        GameObject::Destroy(go);
+    }
 }
 
 void Hierarchy::ToggleItemCollapsed(HierarchyItem *item)
@@ -66,6 +89,7 @@ void Hierarchy::OnStart()
     Editor::RegisterListener<IEditorSelectionListener>(this);
 }
 
+#include "Bang/XMLNode.h"
 void Hierarchy::Update()
 {
     EditorUITab::Update();
