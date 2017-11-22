@@ -75,6 +75,7 @@ void MenuBar::Update()
     EditorScene *edScene = EditorScene::GetInstance();
     if (Input::GetKeyDown(Key::E))
     {
+        Debug_Log("New Scene! E");
         MenuBar::OnNewScene(nullptr);
     }
     else if (Input::GetKeyDown(Key::O))

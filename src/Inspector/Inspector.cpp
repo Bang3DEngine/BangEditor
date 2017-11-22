@@ -120,7 +120,7 @@ UIScrollPanel* Inspector::GetScrollPanel() const { return p_scrollPanel; }
 void Inspector::SetGameObject(GameObject *go)
 {
     Clear();
-    ENSURE(go);
+    ENSURE(go && !go->IsWaitingToBeDestroyed());
 
     p_currentObject = go;
 
@@ -154,6 +154,7 @@ void Inspector::Clear()
 
         GetCurrentObject()->EventEmitter<IDestroyListener>::
                     UnRegisterListener(this);
+
         p_currentObject = nullptr;
     }
 }

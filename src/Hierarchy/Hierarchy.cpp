@@ -34,18 +34,6 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
     scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
     scrollPanel->SetHorizontalShowScrollMode(ShowScrollMode::WhenNeeded);
 
-    for (int i = 0; i < 99; ++i)
-    {
-        Material *mat = Asset::Create<Material>();
-        Asset::Destroy(mat);
-        Asset::Destroy(mat);
-        Asset::Destroy(mat);
-        GameObject *go = GameObject::Create();
-        GameObject::Destroy(go);
-        GameObject::Destroy(go);
-        GameObject::Destroy(go);
-    }
-
     GameObject *treeGo = GetUITree()->GetGameObject();
     UILayoutElement *treeLE = treeGo->AddComponent<UILayoutElement>();
     treeLE->SetFlexibleSize( Vector2::One );
@@ -61,17 +49,6 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
 
 Hierarchy::~Hierarchy()
 {
-    for (int i = 0; i < 99; ++i)
-    {
-        Material *mat = Asset::Create<Material>();
-        Asset::Destroy(mat);
-        Asset::Destroy(mat);
-        Asset::Destroy(mat);
-        GameObject *go = GameObject::Create();
-        GameObject::Destroy(go);
-        GameObject::Destroy(go);
-        GameObject::Destroy(go);
-    }
 }
 
 void Hierarchy::ToggleItemCollapsed(HierarchyItem *item)
