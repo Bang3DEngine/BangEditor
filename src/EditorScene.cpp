@@ -81,7 +81,6 @@ EditorScene::EditorScene()
     m_fpsText = fpsTextGo->AddComponent<UITextRenderer>();
     m_fpsText->SetHorizontalAlign(HorizontalAlignment::Right);
     m_fpsText->SetVerticalAlign(VerticalAlignment::Bot);
-
     SetAsChild(fpsTextGo);
 
     Camera *cam = AddComponent<Camera>();

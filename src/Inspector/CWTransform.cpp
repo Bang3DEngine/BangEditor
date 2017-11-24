@@ -34,14 +34,15 @@ CWTransform::CWTransform(Transform *transform)
     p_rotIV->Set(transform->GetLocalRotation().GetEulerAngles());
     p_scaleIV->Set(transform->GetLocalScale());
 
-    p_posIV->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_rotIV->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_scaleIV->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    UIInputVector* inputVectors[] = {p_posIV, p_rotIV, p_scaleIV};
+    for (UIInputVector *inputVector : inputVectors)
+    {
+        inputVector->SetPreferredWidth(50);
+        inputVector->EventEmitter<IValueChangedListener>::RegisterListener(this);
+        vlGo->SetAsChild(inputVector);
+    }
 
     GetContainer()->SetAsChild(vlGo);
-    vlGo->SetAsChild(p_posIV);
-    vlGo->SetAsChild(p_rotIV);
-    vlGo->SetAsChild(p_scaleIV);
 
     p_relatedTransform = transform;
 }

@@ -108,6 +108,12 @@ Vector4 UIInputVector::GetVector4() const
     return Vector4(Get(0), Get(1), Get(2), Get(3));
 }
 
+void UIInputVector::SetPreferredWidth(int width)
+{
+    p_label->GetGameObject()->GetComponent<UILayoutElement>()->
+                                        SetPreferredWidth(width);
+}
+
 void UIInputVector::OnValueChanged(Object *object)
 {
     PROPAGATE(IValueChangedListener, OnValueChanged, object);
