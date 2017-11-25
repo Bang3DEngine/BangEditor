@@ -16,12 +16,13 @@ void UIContextMenu::OnUpdate()
 {
     Component::OnUpdate();
 
+    /*
     List<GameObject*> parts = m_parts;
     parts.PushBack(GetGameObject());
 
     for (GameObject *part : m_parts)
     {
-        RectTransform *rt = part->GetComponent<RectTransform>();
+        RectTransform *rt = part->GetRectTransform();
         if (Input::GetMouseButton(MouseButton::Right) && rt->IsMouseOver())
         {
             Menu *menu = GameObject::Create<Menu>();
@@ -30,6 +31,7 @@ void UIContextMenu::OnUpdate()
             break;
         }
     }
+    */
 }
 
 void UIContextMenu::AddButtonPart(GameObject *part)
@@ -48,7 +50,7 @@ Menu::Menu()
     csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
     csf->SetVerticalSizeType(LayoutSizeType::Preferred);
 
-    RectTransform *rt = GetComponent<RectTransform>();
+    RectTransform *rt = GetRectTransform();
     rt->SetAnchors( Input::GetMouseCoordsNDC() );
     rt->SetPivotPosition( Vector2(-1, 1) );
 
@@ -62,7 +64,7 @@ void Menu::Update()
     if (Input::GetMouseButton(MouseButton::Right) ||
         Input::GetMouseButton(MouseButton::Left))
     {
-        RectTransform *rt = GetComponent<RectTransform>();
+        RectTransform *rt = GetRectTransform();
         if (!rt->IsMouseOver(true)) { GameObject::Destroy(this); }
     }
 }

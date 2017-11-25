@@ -61,8 +61,7 @@ Explorer::Explorer() : EditorUITab("Explorer")
 
     // Items Container
     p_itemsContainer = GameObjectFactory::CreateUIGameObject();
-    p_itemsContainer->GetComponent<RectTransform>()->
-                        SetPivotPosition(Vector2(-1,1));
+    p_itemsContainer->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
 
     UIContentSizeFitter *csf = p_itemsContainer->AddComponent<UIContentSizeFitter>();
     csf->SetHorizontalSizeType(LayoutSizeType::None);

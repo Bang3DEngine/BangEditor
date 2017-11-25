@@ -29,7 +29,7 @@ ExplorerItem::ExplorerItem()
     p_bg = bgGo->AddComponent<UIImageRenderer>();
 
     GameObject *iconGo = GameObjectFactory::CreateUIGameObject();
-    RectTransform *iconRT = iconGo->GetComponent<RectTransform>();
+    RectTransform *iconRT = iconGo->GetRectTransform();
     iconRT->SetAnchorX( Vector2(-1,  1) );
     iconRT->SetAnchorY( Vector2(-1,  1) );
     iconRT->SetMarginBot(textPixels + spacing);
@@ -38,7 +38,7 @@ ExplorerItem::ExplorerItem()
 
     p_label = GameObjectFactory::CreateUILabel();
     GameObject *labelGo = p_label->GetGameObject();
-    RectTransform *labelRT = labelGo->GetComponent<RectTransform>();
+    RectTransform *labelRT = labelGo->GetRectTransform();
     labelRT->SetAnchorX( Vector2(-1,  1) );
     labelRT->SetAnchorY( Vector2(-1, -1) );
     labelRT->SetMarginTop(-textPixels);
@@ -72,7 +72,7 @@ void ExplorerItem::Update()
     {
         if (Input::GetMouseButtonUp(MouseButton::Left))
         {
-            RectTransform *rt = GetComponent<RectTransform>();
+            RectTransform *rt = GetRectTransform();
             if (!rt->IsMouseOver()) { SetSelected(false); }
         }
     }

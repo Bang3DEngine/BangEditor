@@ -39,8 +39,7 @@ UISceneContainer::~UISceneContainer()
 
 Rect UISceneContainer::GetImageRect() const
 {
-    return p_sceneImg->GetGameObject()->GetComponent<RectTransform>()->
-           GetScreenSpaceRectNDC();
+    return p_sceneImg->GetGameObject()->GetRectTransform()->GetScreenSpaceRectNDC();
 }
 
 void UISceneContainer::SetSceneImageTexture(Texture2D *texture)

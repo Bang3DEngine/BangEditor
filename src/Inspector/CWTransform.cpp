@@ -56,6 +56,5 @@ void CWTransform::OnValueChanged(Object *object)
     p_relatedTransform->SetLocalPosition(p_posIV->GetVector3());
     p_relatedTransform->SetLocalEuler(p_rotIV->GetVector3());
     p_relatedTransform->SetLocalScale(p_scaleIV->GetVector3());
-
 }
 

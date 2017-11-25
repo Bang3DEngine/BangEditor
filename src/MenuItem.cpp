@@ -49,7 +49,7 @@ MenuItem::MenuItem(bool topItem)
     csf->SetVerticalSizeType(LayoutSizeType::Preferred);
     csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
 
-    RectTransform *contRT = m_childrenContainer->GetComponent<RectTransform>();
+    RectTransform *contRT = m_childrenContainer->GetRectTransform();
     m_childrenContainerVL = m_childrenContainer->AddComponent<UIVerticalLayout>();
     m_childrenContainerVL->SetChildrenVerticalAlignment(VerticalAlignment::Bot);
     m_childrenContainerVL->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);

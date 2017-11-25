@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 2.8)
 project(BangEditor C CXX)
 
 set(CMAKE_BINARY_DIR bin)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -Wl,-O0 -g")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Wl,-O3")
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 set(PLEASE_SET_PATH_MSG "Please, set the correct Bang root path using \"scripts/set-bang-path.sh\"")
@@ -25,6 +27,11 @@ message("Compiling Bang using ${BANG_COMPILE_SCRIPT}")
 add_custom_target(CompileBang ALL "${BANG_COMPILE_SCRIPT}" "${CMAKE_BUILD_TYPE}")
 
 set(SRC_DIR "src")
+
+if (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    add_definitions(-DGPROF)
+    link_libraries("profiler") # gperftools
+endif()
 
 set(INCLUDE_ROOT "${CMAKE_SOURCE_DIR}/include")
 include_directories("${INCLUDE_ROOT}")

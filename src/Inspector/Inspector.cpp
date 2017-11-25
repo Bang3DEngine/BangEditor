@@ -47,7 +47,7 @@ Inspector::Inspector() : EditorUITab("Inspector")
                                               Vector2i(0, 30)); (void)topSpacer;
 
     GameObject *mainVLGo = GameObjectFactory::CreateUIGameObjectNamed("MainVL");
-    mainVLGo->GetComponent<RectTransform>()->SetPivotPosition( Vector2(-1, 1) );
+    mainVLGo->GetRectTransform()->SetPivotPosition( Vector2(-1, 1) );
 
     UILabel *goNameLabel = GameObjectFactory::CreateUILabel();
     GameObject *goNameLabelGo = goNameLabel->GetGameObject();
