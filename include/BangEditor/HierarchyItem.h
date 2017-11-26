@@ -44,8 +44,8 @@ private:
     bool m_isSelected = false;
     GameObject *p_refGameObject = nullptr;
 
-    UILabel *p_label = nullptr;
     UIImageRenderer *p_bg = nullptr;
+    UITextRenderer *p_textRenderer = nullptr;
 
     void SetText(const String &text);
 };

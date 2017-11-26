@@ -31,7 +31,7 @@ void EditorWindow::Render()
 {
     EditorScene *edScene = EditorSceneManager::GetEditorScene();
     ENSURE(edScene);
-    // edScene->RenderAndBlitToScreen();
+    edScene->RenderAndBlitToScreen();
 }
 
 SceneManager *EditorWindow::CreateSceneManager() const

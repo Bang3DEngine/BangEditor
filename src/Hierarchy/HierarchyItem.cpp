@@ -27,13 +27,13 @@ HierarchyItem::HierarchyItem()
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
     hl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
 
-    p_label = GameObjectFactory::CreateUILabel();
-    p_label->GetText()->SetTextSize(10);
-    p_label->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
-    p_label->SetSelectable(false);
+    GameObject *textGo = GameObjectFactory::CreateUIGameObjectNamed("HierarchyItemText");
+    p_textRenderer = textGo->AddComponent<UITextRenderer>();
+    p_textRenderer->SetTextSize(10);
+    p_textRenderer->SetHorizontalAlign(HorizontalAlignment::Left);
     SetText("HierarchyItem");
 
-    SetAsChild(p_label->GetGameObject());
+    SetAsChild(textGo);
 }
 
 HierarchyItem::~HierarchyItem()
@@ -75,8 +75,11 @@ void HierarchyItem::OnSetContextMenu(Menu *menu)
 
 void HierarchyItem::SetText(const String &text)
 {
-    m_text = text;
-    p_label->GetText()->SetContent(text);;
+    if (text != m_text)
+    {
+        m_text = text;
+        p_textRenderer->SetContent(text);
+    }
 }
 
 void HierarchyItem::OnSelectionCallback(UIList::Action action)
