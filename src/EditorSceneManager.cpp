@@ -31,7 +31,7 @@ Scene *EditorSceneManager::_GetOpenScene() const
 EditorScene *EditorSceneManager::_GetEditorScene() const
 {
     Scene *edScene = _GetActiveScene();
-    return edScene ? SCAST<EditorScene*>(edScene) : nullptr;
+    return edScene ? Cast<EditorScene*>(edScene) : nullptr;
 }
 
 void EditorSceneManager::_LoadScene(Scene *scene)
@@ -55,5 +55,5 @@ void EditorSceneManager::SetActiveScene(Scene *activeScene)
 
 EditorSceneManager *EditorSceneManager::GetInstance()
 {
-    return DCAST<EditorSceneManager*>(SceneManager::GetInstance());
+    return Cast<EditorSceneManager*>(SceneManager::GetInstance());
 }

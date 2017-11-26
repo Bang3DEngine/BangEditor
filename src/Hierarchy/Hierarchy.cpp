@@ -87,7 +87,7 @@ void Hierarchy::OnDestroyed(Object *object)
 }
 void Hierarchy::OnCreatedDestroyed(Object *object, bool created)
 {
-    GameObject *go = DCAST<GameObject*>(object);
+    GameObject *go = Cast<GameObject*>(object);
     if (go)
     {
         Scene *goScene = go->GetScene();
@@ -139,7 +139,7 @@ Hierarchy *Hierarchy::GetInstance()
 
 void Hierarchy::TreeSelectionCallback(GOItem *item, UIList::Action action)
 {
-    HierarchyItem *hItem = SCAST<HierarchyItem*>(item);
+    HierarchyItem *hItem = Cast<HierarchyItem*>(item);
     hItem->OnSelectionCallback(action);
 }
 
@@ -177,7 +177,7 @@ HierarchyItem* Hierarchy::GetItemFromGameObject(GameObject *go) const
 GameObject *Hierarchy::GetGameObjectFromItem(GOItem *item) const
 {
     if (!item) { return nullptr; }
-    HierarchyItem *hItem = SCAST<HierarchyItem*>(item);
+    HierarchyItem *hItem = Cast<HierarchyItem*>(item);
     return hItem->GetReferencedGameObject();
 }
 

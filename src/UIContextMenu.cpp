@@ -26,7 +26,8 @@ void UIContextMenu::OnUpdate()
         if (Input::GetMouseButton(MouseButton::Right) && rt->IsMouseOver())
         {
             Menu *menu = GameObject::Create<Menu>();
-            PROPAGATE(IUIContextMenuable, OnSetContextMenu, menu);
+            EventEmitter<IUIContextMenuable>::
+                PropagateToListeners(&IUIContextMenuable::OnSetContextMenu, menu);
             menu->SetParent( EditorSceneManager::GetEditorScene() );
             break;
         }

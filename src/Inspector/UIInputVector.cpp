@@ -116,6 +116,7 @@ void UIInputVector::SetPreferredWidth(int width)
 
 void UIInputVector::OnValueChanged(Object *object)
 {
-    PROPAGATE(IValueChangedListener, OnValueChanged, object);
+    EventEmitter<IValueChangedListener>::
+        PropagateToListeners(&IValueChangedListener::OnValueChanged, object);
 }
 

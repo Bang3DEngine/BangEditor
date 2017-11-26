@@ -236,7 +236,7 @@ void EditorScene::RenderAndBlitToScreen()
 
 EditorScene *EditorScene::GetInstance()
 {
-    return SCAST<EditorScene*>( EditorSceneManager::GetEditorScene() );
+    return Cast<EditorScene*>( EditorSceneManager::GetEditorScene() );
 }
 
 Console *EditorScene::GetConsole() const { return m_console; }

@@ -132,7 +132,7 @@ void Explorer::AddItem(const Path &itemPath)
 
 void Explorer::OnButton_Clicked(UIButtoneable *btn)
 {
-    if (btn == SCAST<UIButtoneable*>(p_backButton->GetButton()) )
+    if (btn == Cast<UIButtoneable*>(p_backButton->GetButton()) )
     {
         SetCurrentPath( GetCurrentPath().GetDirectory() );
     }
