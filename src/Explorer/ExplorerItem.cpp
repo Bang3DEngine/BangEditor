@@ -1,6 +1,8 @@
 #include "BangEditor/ExplorerItem.h"
 
 #include "Bang/UILabel.h"
+#include "Bang/UICanvas.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/UIButtoneable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
@@ -24,6 +26,8 @@ ExplorerItem::ExplorerItem()
 
     constexpr int textPixels = 30;
     constexpr int spacing = 5;
+
+    AddComponent<UIFocusable>();
 
     GameObject *bgGo = GameObjectFactory::CreateUIGameObject();
     p_bg = bgGo->AddComponent<UIImageRenderer>();
@@ -68,14 +72,7 @@ void ExplorerItem::Update()
 {
     GameObject::Update();
 
-    if (IsSelected())
-    {
-        if (Input::GetMouseButtonUp(MouseButton::Left))
-        {
-            RectTransform *rt = GetRectTransform();
-            if (!rt->IsMouseOver()) { SetSelected(false); }
-        }
-    }
+    SetSelected( UICanvas::HasFocus(this) );
 }
 
 void ExplorerItem::SetFilepath(const Path &path)

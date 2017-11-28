@@ -5,6 +5,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/UITabbingGroup.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIVerticalLayout.h"
@@ -26,9 +27,15 @@ CWTransform::CWTransform(Transform *transform)
     UIVerticalLayout *vl = vlGo->AddComponent<UIVerticalLayout>();
     vl->SetSpacing(2);
 
+    // UITabbingGroup *tabbingGroup = AddComponent<UITabbingGroup>();
+
     p_posIV   = GameObject::Create<UIInputVector>("Position", 3);
     p_rotIV   = GameObject::Create<UIInputVector>("Rotation", 3);
     p_scaleIV = GameObject::Create<UIInputVector>("Scale   ", 3);
+
+    // tabbingGroup->AddTabbingFocusable(p_posIV);
+    // tabbingGroup->AddTabbingFocusable(p_rotIV);
+    // tabbingGroup->AddTabbingFocusable(p_scaleIV);
 
     p_posIV->Set(transform->GetLocalPosition());
     p_rotIV->Set(transform->GetLocalRotation().GetEulerAngles());
