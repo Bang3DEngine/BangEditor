@@ -27,8 +27,6 @@ ExplorerItem::ExplorerItem()
     constexpr int textPixels = 30;
     constexpr int spacing = 5;
 
-    AddComponent<UIFocusable>();
-
     GameObject *bgGo = GameObjectFactory::CreateUIGameObject();
     p_bg = bgGo->AddComponent<UIImageRenderer>();
 
@@ -72,7 +70,13 @@ void ExplorerItem::Update()
 {
     GameObject::Update();
 
-    SetSelected( UICanvas::HasFocus(this) );
+    if (IsSelected())
+    {
+        if (Input::GetMouseButtonUp(MouseButton::Left))
+        {
+            if (!UICanvas::IsMouseOver(this)) { SetSelected(false); }
+        }
+    }
 }
 
 void ExplorerItem::SetFilepath(const Path &path)

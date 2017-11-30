@@ -2,12 +2,12 @@
 
 #include "Bang/Paths.h"
 #include "Bang/UILabel.h"
+#include "Bang/UIButton.h"
 #include "Bang/UIGridLayout.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIButtoneable.h"
 #include "Bang/UIScrollPanel.h"
-#include "Bang/UIButton.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"

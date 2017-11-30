@@ -6,7 +6,6 @@
 #include "Bang/UILabel.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UIInputNumber.h"
-#include "Bang/UITabbingGroup.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
@@ -20,7 +19,6 @@ UIInputVector::UIInputVector()
     SetName("UIInputVector");
 
     GameObjectFactory::CreateUIGameObjectInto(this);
-    UITabbingGroup *tabbingGroup = AddComponent<UITabbingGroup>();
 
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
     hl->SetSpacing(5);
@@ -31,6 +29,7 @@ UIInputVector::UIInputVector()
     p_label->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
     UILayoutElement *labelLE =
                   p_label->GetGameObject()->GetComponent<UILayoutElement>();
+    p_label->SetSelectable(false);
     labelLE->SetFlexibleWidth(0);
 
     m_inputNumbers.PushBack( GameObjectFactory::CreateUIInputNumber() );
@@ -41,7 +40,6 @@ UIInputVector::UIInputVector()
     for (int i = 0; i < 4; ++i)
     {
         m_inputNumbers[i]->EventEmitter<IValueChangedListener>::RegisterListener(this);
-        tabbingGroup->AddTabbingFocusable(m_inputNumbers[i]->GetGameObject());
     }
 
     SetAsChild(p_label->GetGameObject());
