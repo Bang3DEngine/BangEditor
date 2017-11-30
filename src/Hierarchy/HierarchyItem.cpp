@@ -1,6 +1,7 @@
 #include "BangEditor/HierarchyItem.h"
 
 #include "Bang/UILabel.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -17,6 +18,7 @@ USING_NAMESPACE_BANG_EDITOR
 HierarchyItem::HierarchyItem()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
+    AddComponent<UIFocusable>();
 
     UIContextMenu *ctxMenu = AddComponent<UIContextMenu>();
     ctxMenu->EventEmitter<IUIContextMenuable>::RegisterListener(this);
@@ -27,7 +29,8 @@ HierarchyItem::HierarchyItem()
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
     hl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
 
-    GameObject *textGo = GameObjectFactory::CreateUIGameObjectNamed("HierarchyItemText");
+    GameObject *textGo = GameObjectFactory::CreateUIGameObject();
+    textGo->SetName("HierarchyItemText");
     p_textRenderer = textGo->AddComponent<UITextRenderer>();
     p_textRenderer->SetTextSize(10);
     p_textRenderer->SetHorizontalAlign(HorizontalAlignment::Left);
@@ -67,6 +70,7 @@ GameObject *HierarchyItem::GetReferencedGameObject() const
 
 void HierarchyItem::OnSetContextMenu(Menu *menu)
 {
+    Debug_Log("OnSetContextMenu " << menu);
     MenuItem *hola = menu->AddItem("Hola");
     hola->AddItem("Holita");
     hola->AddItem("Hehe");

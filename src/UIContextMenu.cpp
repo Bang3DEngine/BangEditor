@@ -1,5 +1,6 @@
 #include "BangEditor/UIContextMenu.h"
 
+#include "Bang/UICanvas.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UILayoutIgnorer.h"
 #include "Bang/UIVerticalLayout.h"
@@ -16,23 +17,24 @@ void UIContextMenu::OnUpdate()
 {
     Component::OnUpdate();
 
-    /*
-    List<GameObject*> parts = m_parts;
-    parts.PushBack(GetGameObject());
-
-    for (GameObject *part : m_parts)
+    if (Input::GetMouseButtonDown(MouseButton::Right))
     {
-        RectTransform *rt = part->GetRectTransform();
-        if (Input::GetMouseButton(MouseButton::Right) && rt->IsMouseOver())
+        List<GameObject*> parts = m_parts;
+        parts.PushBack(GetGameObject());
+
+        for (GameObject *part : m_parts)
         {
-            Menu *menu = GameObject::Create<Menu>();
-            EventEmitter<IUIContextMenuable>::
-                PropagateToListeners(&IUIContextMenuable::OnSetContextMenu, menu);
-            menu->SetParent( EditorSceneManager::GetEditorScene() );
-            break;
+            if (UICanvas::IsMouseOver(part, true))
+            {
+                Menu *menu = GameObject::Create<Menu>();
+                EventEmitter<IUIContextMenuable>::
+                    PropagateToListeners(&IUIContextMenuable::OnSetContextMenu,
+                                         menu);
+                menu->SetParent( EditorSceneManager::GetEditorScene() );
+                break;
+            }
         }
     }
-    */
 }
 
 void UIContextMenu::AddButtonPart(GameObject *part)

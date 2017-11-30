@@ -66,7 +66,6 @@ void Hierarchy::OnStart()
     Editor::RegisterListener<IEditorSelectionListener>(this);
 }
 
-#include "Bang/XMLNode.h"
 void Hierarchy::Update()
 {
     EditorUITab::Update();
