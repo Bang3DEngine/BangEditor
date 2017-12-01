@@ -1,5 +1,6 @@
 #include "BangEditor/UIContextMenu.h"
 
+#include "Bang/Input.h"
 #include "Bang/UICanvas.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UILayoutIgnorer.h"

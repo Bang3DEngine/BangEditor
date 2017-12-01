@@ -7,6 +7,7 @@
 #include "Bang/Project.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ProjectManager.h"
+#include "Bang/ImportFilesManager.h"
 
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorWindow.h"
@@ -22,6 +23,8 @@ EditorApplication::EditorApplication(int argc, char **argv,
     GetPaths()->InitEditorPath( Paths::ExecutablePath().GetDirectory()
                                                        .GetDirectory()
                                                        .GetDirectory());
+    ImportFilesManager::AddAssetPath( Paths::EditorResources() );
+    ImportFilesManager::CreateMissingImportFiles();
 }
 
 EditorApplication::~EditorApplication()

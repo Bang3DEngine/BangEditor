@@ -3,7 +3,7 @@
 
 #include "Bang/Path.h"
 #include "Bang/GameObject.h"
-#include "Bang/UIButtoneable.h"
+#include "Bang/IFocusListener.h"
 
 #include "BangEditor/BangEditor.h"
 
@@ -11,14 +11,15 @@ USING_NAMESPACE_BANG
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UILabel;
-FORWARD class UIButtoneable;
+FORWARD class IFocusable;
+FORWARD class UIFocusable;
 FORWARD class UIImageRenderer;
 FORWARD NAMESPACE_BANG_END
 
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class ExplorerItem : public GameObject,
-                     public IUIButtonListener
+                     public IFocusListener
 {
     GAMEOBJECT_EDITOR(ExplorerItem)
 
@@ -40,15 +41,13 @@ private:
     Path m_filepath = Path::Empty;
 
     UILabel *p_label = nullptr;
-    UIButtoneable *p_button = nullptr;
+    UIFocusable *p_button = nullptr;
     UIImageRenderer *p_bg = nullptr;
     UIImageRenderer *p_icon = nullptr;
 
-    // IUIButtonListener
-    virtual void OnButton_MouseEnter(UIButtoneable *btn) override;
-    virtual void OnButton_MouseExit(UIButtoneable *btn) override;
-    virtual void OnButton_Clicked(UIButtoneable *btn) override;
-    virtual void OnButton_DoubleClicked(UIButtoneable *btn) override;
+    // IFocusListener
+    virtual void OnMouseEnter(IFocusable*) override;
+    virtual void OnMouseExit(IFocusable*) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

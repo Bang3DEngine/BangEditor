@@ -2,6 +2,7 @@
 
 #include <functional>
 
+#include "Bang/Input.h"
 #include "Bang/Timer.h"
 #include "Bang/Scene.h"
 #include "Bang/UIList.h"

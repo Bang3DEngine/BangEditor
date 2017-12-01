@@ -1,10 +1,13 @@
 #include "BangEditor/MenuBar.h"
 
+#include "Bang/Input.h"
 #include "Bang/Scene.h"
 #include "Bang/Dialog.h"
 #include "Bang/Random.h"
 #include "Bang/Extensions.h"
+#include "Bang/IFocusable.h"
 #include "Bang/MeshFactory.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UILayoutElement.h"
@@ -68,7 +71,6 @@ MenuBar::~MenuBar()
 {
 }
 
-#include "Bang/UILayoutManager.h"
 void MenuBar::Update()
 {
     GameObject::Update();
@@ -109,19 +111,19 @@ MenuItem* MenuBar::GetItem(int i)
     return m_items[i];
 }
 
-void MenuBar::OnOpenProject(UIButtoneable*)
+void MenuBar::OnOpenProject(IFocusable*)
 {
     Dialog::GetFilePath("Open Project...");
 }
 
-void MenuBar::OnNewScene(UIButtoneable*)
+void MenuBar::OnNewScene(IFocusable*)
 {
     EditorScene *edScene = EditorScene::GetInstance();
     Scene *defaultScene = GameObjectFactory::CreateDefaultScene();
     edScene->SetOpenScene(defaultScene);
 }
 
-void MenuBar::OnSaveScene(UIButtoneable*)
+void MenuBar::OnSaveScene(IFocusable*)
 {
     EditorScene *edScene = EditorScene::GetInstance();
     Scene *openScene = edScene->GetOpenScene();
@@ -137,7 +139,7 @@ void MenuBar::OnSaveScene(UIButtoneable*)
     }
 }
 
-void MenuBar::OnOpenScene(UIButtoneable*)
+void MenuBar::OnOpenScene(IFocusable*)
 {
     Path openScenePath = Dialog::GetFilePath("Open Scene...",
                                              { Extensions::GetSceneExtension() });

@@ -1,5 +1,6 @@
 #include "BangEditor/MenuItem.h"
 
+#include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -60,10 +61,7 @@ MenuItem::MenuItem(bool topItem)
     m_childrenContainer->SetEnabled(false);
     m_childrenContainer->SetParent(this);
 
-    m_button = AddComponent<UIButtoneable>();
-    m_button->SetMode(UIButtoneableMode::RectTransform);
-    m_button->RegisterButtonPart(this);
-    m_button->RegisterButtonPart(m_childrenContainer);
+    m_button = AddComponent<UIFocusable>();
 
     SetName("MenuItem");
 }
@@ -111,14 +109,14 @@ UITextRenderer *MenuItem::GetText() const
     return m_text;
 }
 
-UIButtoneable *MenuItem::GetButton() const
+UIFocusable *MenuItem::GetButton() const
 {
     return m_button;
 }
 
 bool MenuItem::MustDisplayChildren() const
 {
-    if (GetButton()->IsMouseOverSomePart()) { return true; }
+    if (GetButton()->IsMouseOver()) { return true; }
     for (MenuItem *childItem : m_childrenItems)
     {
         if (childItem->MustDisplayChildren()) { return true; }

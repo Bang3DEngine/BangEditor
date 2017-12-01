@@ -6,7 +6,6 @@
 #include "Bang/UIGridLayout.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UIButtoneable.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -46,7 +45,8 @@ Explorer::Explorer() : EditorUITab("Explorer")
     p_backButton = GameObjectFactory::CreateUIButton("", nullptr);
     p_backButton->SetIcon(EditorIconManager::GetBackArrowIcon(), Vector2i(15), 0);
     p_backButton->GetText()->SetContent("");
-    p_backButton->GetButton()->EventEmitter<IUIButtonListener>::RegisterListener(this);
+    p_backButton->GetButton()->AddClickedCallback( [this](IFocusable*)
+    { GoDirectoryUp(); });
 
     UILayoutElement *toolBarLE = toolBar->AddComponent<UILayoutElement>();
     toolBarLE->SetMinHeight(15);
@@ -130,12 +130,9 @@ void Explorer::AddItem(const Path &itemPath)
     p_items.PushBack(explorerItem);
 }
 
-void Explorer::OnButton_Clicked(UIButtoneable *btn)
+void Explorer::GoDirectoryUp()
 {
-    if (btn == Cast<UIButtoneable*>(p_backButton->GetButton()) )
-    {
-        SetCurrentPath( GetCurrentPath().GetDirectory() );
-    }
+    SetCurrentPath( GetCurrentPath().GetDirectory() );
 }
 
 Explorer *Explorer::GetInstance()

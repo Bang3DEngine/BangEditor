@@ -1,9 +1,9 @@
 #include "BangEditor/ExplorerItem.h"
 
+#include "Bang/Input.h"
 #include "Bang/UILabel.h"
 #include "Bang/UICanvas.h"
 #include "Bang/UIFocusable.h"
-#include "Bang/UIButtoneable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -50,10 +50,8 @@ ExplorerItem::ExplorerItem()
     p_label->GetText()->SetVerticalAlign(VerticalAlignment::Center);
     p_label->SetSelectable(false);
 
-    p_button = AddComponent<UIButtoneable>();
-    p_button->RegisterButtonPart(this);
-    p_button->SetMode(UIButtoneableMode::RectTransform);
-    p_button->EventEmitter<IUIButtonListener>::RegisterListener(this);
+    p_button = AddComponent<UIFocusable>();
+    p_button->EventEmitter<IFocusListener>::RegisterListener(this);
 
     SetAsChild(bgGo);
     SetAsChild(iconGo);
@@ -70,11 +68,27 @@ void ExplorerItem::Update()
 {
     GameObject::Update();
 
+    if (p_button->IsMouseOver())
+    {
+        if (Input::GetMouseButtonDown(MouseButton::Left))
+        {
+            SetSelected(true);
+        }
+
+        if (Input::GetMouseButtonDoubleClick(MouseButton::Left))
+        {
+            if (GetFilepath().IsDir())
+            {
+                Explorer::GetInstance()->SetCurrentPath(GetFilepath());
+            }
+        }
+    }
+
     if (IsSelected())
     {
         if (Input::GetMouseButtonUp(MouseButton::Left))
         {
-            if (!UICanvas::IsMouseOver(this)) { SetSelected(false); }
+            if (!p_button->IsMouseOver()) { SetSelected(false); }
         }
     }
 }
@@ -105,7 +119,7 @@ const Path &ExplorerItem::GetFilepath() const
     return m_filepath;
 }
 
-void ExplorerItem::OnButton_MouseEnter(UIButtoneable *btn)
+void ExplorerItem::OnMouseEnter(IFocusable*)
 {
     if (!IsSelected())
     {
@@ -113,7 +127,7 @@ void ExplorerItem::OnButton_MouseEnter(UIButtoneable *btn)
     }
 }
 
-void ExplorerItem::OnButton_MouseExit(UIButtoneable *btn)
+void ExplorerItem::OnMouseExit(IFocusable*)
 {
     if (!IsSelected())
     {
@@ -121,16 +135,4 @@ void ExplorerItem::OnButton_MouseExit(UIButtoneable *btn)
     }
 }
 
-void ExplorerItem::OnButton_Clicked(UIButtoneable *btn)
-{
-    SetSelected(true);
-}
-
-void ExplorerItem::OnButton_DoubleClicked(UIButtoneable*)
-{
-    if (GetFilepath().IsDir())
-    {
-        Explorer::GetInstance()->SetCurrentPath(GetFilepath());
-    }
-}
 

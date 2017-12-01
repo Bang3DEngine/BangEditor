@@ -14,6 +14,7 @@ Texture2D *EditorIconManager::GetIcon(const Path &path)
     {
         if (Extensions::Has(path, Extensions::GetImageExtensions()))
         {
+            Debug_Log("Load " << path);
             return Resources::Load<Texture2D>(path);
         }
     }

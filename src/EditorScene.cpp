@@ -1,5 +1,6 @@
 #include "BangEditor/EditorScene.h"
 
+#include "Bang/Input.h"
 #include "Bang/UIMask.h"
 #include "Bang/Camera.h"
 #include "Bang/Window.h"

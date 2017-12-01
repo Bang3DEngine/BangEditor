@@ -3,7 +3,6 @@
 
 #include "Bang/Component.h"
 #include "Bang/GameObject.h"
-#include "Bang/UIButtoneable.h"
 #include "Bang/IEventEmitter.h"
 #include "Bang/IEventListener.h"
 

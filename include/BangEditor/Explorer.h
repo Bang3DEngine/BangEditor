@@ -2,7 +2,6 @@
 #define EXPLORER_H
 
 #include "Bang/Path.h"
-#include "Bang/UIButtoneable.h"
 #include "Bang/UIButton.h"
 
 #include "BangEditor/EditorUITab.h"
@@ -17,8 +16,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class ExplorerItem;
 
-class Explorer : public EditorUITab,
-                 public IUIButtonListener
+class Explorer : public EditorUITab
 {
     GAMEOBJECT_EDITOR(Explorer)
 
@@ -43,8 +41,7 @@ private:
     GameObject *p_itemsContainer = nullptr;
 
     void AddItem(const Path &itemPath);
-
-    virtual void OnButton_Clicked(UIButtoneable *btn) override;
+    void GoDirectoryUp();
 };
 
 NAMESPACE_BANG_EDITOR_END
