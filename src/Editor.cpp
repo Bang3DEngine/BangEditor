@@ -8,7 +8,7 @@ USING_NAMESPACE_BANG_EDITOR
 void Editor::SelectGameObject(GameObject *selectedGameObject)
 {
     Editor *ed = Editor::GetInstance();
-    if (ed->p_selectedGameObject != selectedGameObject)
+    if (ed && ed->p_selectedGameObject != selectedGameObject)
     {
         ed->p_selectedGameObject = selectedGameObject;
         ed->_EmitGameObjectSelected(selectedGameObject);
@@ -24,6 +24,7 @@ void Editor::_EmitGameObjectSelected(GameObject *selectedGameObject)
 
 Editor *Editor::GetInstance()
 {
-    return EditorScene::GetInstance()->GetEditor();
+    EditorScene *edScene = EditorScene::GetInstance();
+    return edScene ? edScene->GetEditor() : nullptr;
 }
 

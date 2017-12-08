@@ -90,9 +90,10 @@ void Hierarchy::OnCreatedDestroyed(Object *object, bool created)
     GameObject *go = Cast<GameObject*>(object);
     if (go)
     {
+        bool isScene = (DCAST<Scene*>(go));
         Scene *goScene = go->GetScene();
-        Scene *openScene = EditorSceneManager::GetOpenScene();
-        if (goScene && goScene == openScene && go != openScene)
+        Scene *editorScene = SceneManager::GetActiveScene();
+        if (!isScene && goScene && goScene != editorScene && go != editorScene)
         {
             if (created) { AddGameObject(go); }
             else { RemoveGameObject(go); }
@@ -169,7 +170,7 @@ HierarchyItem* Hierarchy::GetItemFromGameObject(GameObject *go) const
 {
     if (m_gameObjectToItem.ContainsKey(go))
     {
-        return m_gameObjectToItem.At(go);
+        return m_gameObjectToItem.Get(go);
     }
     return nullptr;
 }

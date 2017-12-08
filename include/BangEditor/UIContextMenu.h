@@ -19,13 +19,13 @@ FORWARD class Menu;
 class IUIContextMenuable : public IEventListener
 {
 public:
-    virtual void OnSetContextMenu(Menu *menu) = 0;
+    virtual void OnSetContextMenu(MenuItem *menuRootItem) = 0;
 };
 
 class UIContextMenu : public Component,
                       public EventEmitter<IUIContextMenuable>
 {
-    COMPONENT(UIContextMenu);
+    COMPONENT(UIContextMenu)
 
 public:
     UIContextMenu() = default;
@@ -44,18 +44,24 @@ private:
 // Menu
 class Menu : public GameObject
 {
-    GAMEOBJECT_EDITOR(Menu);
+    GAMEOBJECT_EDITOR(Menu)
 
 public:
 
     // GameObject
     void Update() override;
 
-    MenuItem* AddItem(const String &text = "MenuItem");
+    MenuItem *GetRootItem() const;
+    // void AddSeparator();
+    // MenuItem* AddItem(const String &text = "MenuItem");
+
+    // void SetFontSize(int fontSize);
 
 private:
     Menu();
     virtual ~Menu() = default;
+
+    MenuItem *p_rootItem = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

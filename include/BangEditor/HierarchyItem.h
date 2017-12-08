@@ -16,7 +16,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 class HierarchyItem : public GameObject,
                       public IUIContextMenuable
 {
-    GAMEOBJECT_EDITOR(HierarchyItem);
+    GAMEOBJECT_EDITOR(HierarchyItem)
 
 public:
     HierarchyItem();
@@ -32,7 +32,7 @@ public:
     GameObject *GetReferencedGameObject() const;
 
     // IUIContextMenuable
-    void OnSetContextMenu(Menu *menu) override;
+    void OnSetContextMenu(MenuItem *menuRootItem) override;
 
     // UIList Item
     void OnSelectionCallback(UIList::Action action);

@@ -30,7 +30,7 @@ void UIContextMenu::OnUpdate()
                 Menu *menu = GameObject::Create<Menu>();
                 EventEmitter<IUIContextMenuable>::
                     PropagateToListeners(&IUIContextMenuable::OnSetContextMenu,
-                                         menu);
+                                         menu->GetRootItem());
                 menu->SetParent( EditorSceneManager::GetEditorScene() );
                 break;
             }
@@ -48,16 +48,18 @@ Menu::Menu()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
-    AddComponent<UILayoutIgnorer>();
-
-    UIContentSizeFitter *csf = AddComponent<UIContentSizeFitter>();
-    csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
-    csf->SetVerticalSizeType(LayoutSizeType::Preferred);
+    p_rootItem = GameObject::Create<MenuItem>( MenuItem::MenuItemType::Root );
+    SetAsChild(p_rootItem);
 
     RectTransform *rt = GetRectTransform();
     rt->SetAnchors( Input::GetMouseCoordsNDC() );
     rt->SetPivotPosition( Vector2(-1, 1) );
 
+    UIContentSizeFitter *csf = AddComponent<UIContentSizeFitter>();
+    csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
+    csf->SetVerticalSizeType(LayoutSizeType::Preferred);
+
+    AddComponent<UILayoutIgnorer>();
     AddComponent<UIVerticalLayout>();
 }
 
@@ -73,10 +75,24 @@ void Menu::Update()
     }
 }
 
+MenuItem *Menu::GetRootItem() const
+{
+    return p_rootItem;
+}
+/*
+void Menu::AddSeparator()
+{
+    GameObject *sep =
+            GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Preferred, 5);
+    SetAsChild(sep);
+}
+
 MenuItem *Menu::AddItem(const String &text)
 {
     MenuItem *item = GameObject::Create<MenuItem>(false);
     item->GetText()->SetContent(text);
+    item->GetText()->SetTextSize(m_fontSize);
     SetAsChild(item);
     return item;
 }
+*/

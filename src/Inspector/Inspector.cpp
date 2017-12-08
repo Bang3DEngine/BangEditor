@@ -42,9 +42,8 @@ Inspector::Inspector() : EditorUITab("Inspector")
     scrollLE->SetPreferredSize( Vector2i(100, 100) );
     scrollLE->SetFlexibleSize( Vector2(1) );
 
-    GameObject *topSpacer =
-            GameObjectFactory::CreateUISpacer(LayoutSizeType::Min,
-                                              Vector2i(0, 30)); (void)topSpacer;
+    // GameObject *topSpacer = GameObjectFactory::CreateUISpacer(LayoutSizeType::Min,
+    //                                                           Vector2i(0, 30));
 
     GameObject *mainVLGo = GameObjectFactory::CreateUIGameObjectNamed("MainVL");
     mainVLGo->GetRectTransform()->SetPivotPosition( Vector2(-1, 1) );

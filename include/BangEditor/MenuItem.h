@@ -21,6 +21,8 @@ class MenuItem : public GameObject
     GAMEOBJECT(MenuItem)
 
 public:
+    enum class MenuItemType { Root, Top, Normal };
+
     // GameObject
     void Update() override;
 
@@ -32,13 +34,16 @@ public:
     UIFocusable *GetButton() const;
 
     bool MustDisplayChildren() const;
+    void SetFontSize(uint fontSize);
 
 protected:
-    MenuItem() = default;
-    MenuItem(bool topItem);
+    MenuItem(MenuItemType itemType = MenuItemType::Normal);
     virtual ~MenuItem();
 
 private:
+    MenuItemType m_itemType = Undef<MenuItemType>();
+    uint m_fontSize = Undef<uint>();
+
     UIFocusable *m_button = nullptr;
     UITextRenderer *m_text = nullptr;
 

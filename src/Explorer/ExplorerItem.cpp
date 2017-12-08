@@ -98,7 +98,8 @@ void ExplorerItem::SetFilepath(const Path &path)
     if (GetFilepath() != path)
     {
         m_filepath = path;
-        p_icon->SetImageTexture( EditorIconManager::GetIcon(GetFilepath()) );
+        RH<Texture2D> iconTex = EditorIconManager::GetIcon(GetFilepath());
+        p_icon->SetImageTexture(iconTex.Get());
         p_label->GetText()->SetContent(GetFilepath().GetNameExt());
     }
 }

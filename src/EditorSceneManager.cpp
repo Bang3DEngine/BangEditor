@@ -12,6 +12,20 @@ void EditorSceneManager::_Update()
     SceneManager::UpdateScene( GetActiveScene() );
 }
 
+EditorSceneManager::~EditorSceneManager()
+{
+    // Dont delete active scene because ~SceneManager does it
+    if (GetOpenScene() && GetOpenScene() != GetActiveScene())
+    {
+        GameObject::Destroy( GetOpenScene() );
+    }
+
+    if (GetEditorScene() && GetEditorScene() != GetActiveScene())
+    {
+        GameObject::Destroy( GetEditorScene() );
+    }
+}
+
 Scene *EditorSceneManager::GetOpenScene()
 {
     return EditorSceneManager::GetInstance()->_GetOpenScene();
@@ -19,7 +33,8 @@ Scene *EditorSceneManager::GetOpenScene()
 
 EditorScene *EditorSceneManager::GetEditorScene()
 {
-    return EditorSceneManager::GetInstance()->_GetEditorScene();
+    EditorSceneManager *esm = EditorSceneManager::GetInstance();
+    return esm ? esm->_GetEditorScene() : nullptr;
 }
 
 Scene *EditorSceneManager::_GetOpenScene() const
@@ -55,5 +70,6 @@ void EditorSceneManager::SetActiveScene(Scene *activeScene)
 
 EditorSceneManager *EditorSceneManager::GetInstance()
 {
-    return Cast<EditorSceneManager*>(SceneManager::GetInstance());
+    SceneManager *sm = SceneManager::GetInstance();
+    return sm ? Cast<EditorSceneManager*>(sm) : nullptr;
 }

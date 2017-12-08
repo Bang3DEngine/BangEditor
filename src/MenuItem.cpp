@@ -12,16 +12,25 @@
 
 USING_NAMESPACE_BANG_EDITOR
 
-MenuItem::MenuItem(bool topItem)
+MenuItem::MenuItem(MenuItemType itemType)
 {
+    m_itemType = itemType;
+
     GameObjectFactory::CreateUIGameObjectInto(this);
+
+    SetFontSize(11);
 
     UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
     vl->SetChildrenVerticalStretch(Stretch::None);
     vl->SetChildrenHorizontalStretch(Stretch::None);
     vl->SetChildrenVerticalAlignment(VerticalAlignment::Bot);
     vl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
-    vl->SetPaddings(3);
+    if (m_itemType != MenuItemType::Root) { vl->SetPaddings(3); }
+    else
+    {
+        // TODO: Why if I remove this it does not work?
+        vl->SetPaddings(1, 1, 0, 0);
+    }
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinSize( Vector2i(-1) );
@@ -32,17 +41,20 @@ MenuItem::MenuItem(bool topItem)
     UIImageRenderer *bg = AddComponent<UIImageRenderer>();
     bg->SetTint(BgColor);
 
-    GameObject *textGo = GameObjectFactory::CreateUIGameObject();
-    m_text = textGo->AddComponent<UITextRenderer>();
-    GetText()->SetContent("MenuItem");
-    GetText()->SetTextColor(Color::Black);
-    GetText()->SetTextSize(12);
-    GetText()->SetVerticalAlign(VerticalAlignment::Center);
-    GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
-    textGo->SetParent(this);
+    if (m_itemType != MenuItemType::Root)
+    {
+        GameObject *textGo = GameObjectFactory::CreateUIGameObject();
+        m_text = textGo->AddComponent<UITextRenderer>();
+        GetText()->SetContent("MenuItem");
+        GetText()->SetTextColor(Color::Black);
+        GetText()->SetTextSize(12);
+        GetText()->SetVerticalAlign(VerticalAlignment::Center);
+        GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
+        textGo->SetParent(this);
+    }
 
-    m_childrenContainer =
-            GameObjectFactory::CreateUIGameObjectNamed("m_childrenContainer");
+    m_childrenContainer = GameObjectFactory::CreateUIGameObject();
+    m_childrenContainer->SetName("m_childrenContainer");
     auto childrenContBg = m_childrenContainer->AddComponent<UIImageRenderer>();
     childrenContBg->SetTint(BgColor);
 
@@ -54,7 +66,8 @@ MenuItem::MenuItem(bool topItem)
     m_childrenContainerVL = m_childrenContainer->AddComponent<UIVerticalLayout>();
     m_childrenContainerVL->SetChildrenVerticalAlignment(VerticalAlignment::Bot);
     m_childrenContainerVL->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
-    contRT->SetAnchors(topItem ? Vector2(-1, -1) : Vector2(1, 1));
+    contRT->SetAnchors( (itemType == MenuItemType::Top) ? Vector2(-1, -1) :
+                                                          Vector2(1, 1));
     contRT->SetPivotPosition(Vector2(-1, 1));
 
     m_childrenContainer->AddComponent<UILayoutIgnorer>(true);
@@ -82,6 +95,19 @@ void MenuItem::Update()
                                                                    Color::LightGray);
 }
 
+void MenuItem::SetFontSize(uint fontSize)
+{
+    if (fontSize != m_fontSize)
+    {
+        m_fontSize = fontSize;
+        List<UITextRenderer*> texts = GetComponentsInChildren<UITextRenderer>();
+        for (UITextRenderer *text : texts)
+        {
+            text->SetTextSize(m_fontSize);
+        }
+    }
+}
+
 void MenuItem::AddSeparator()
 {
     GameObject *sep =
@@ -97,8 +123,11 @@ void MenuItem::AddItem(MenuItem *childItem)
 
 MenuItem *MenuItem::AddItem(const String &text)
 {
-    MenuItem *newItem = GameObject::Create<MenuItem>(false);
+    MenuItemType childItemType = m_itemType == MenuItemType::Root ?
+                                    MenuItemType::Top : MenuItemType::Normal;
+    MenuItem *newItem = GameObject::Create<MenuItem>(childItemType);
     newItem->GetText()->SetContent(text);
+    newItem->GetText()->SetTextSize(m_fontSize);
     newItem->SetName(text);
     AddItem(newItem);
     return newItem;
@@ -116,6 +145,8 @@ UIFocusable *MenuItem::GetButton() const
 
 bool MenuItem::MustDisplayChildren() const
 {
+    if (m_itemType == MenuItemType::Root) { return true; }
+
     if (GetButton()->IsMouseOver()) { return true; }
     for (MenuItem *childItem : m_childrenItems)
     {

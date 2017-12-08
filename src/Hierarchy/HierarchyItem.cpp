@@ -17,6 +17,8 @@ USING_NAMESPACE_BANG_EDITOR
 
 HierarchyItem::HierarchyItem()
 {
+    SetName("HierarchyItem");
+
     GameObjectFactory::CreateUIGameObjectInto(this);
     AddComponent<UIFocusable>();
 
@@ -68,13 +70,19 @@ GameObject *HierarchyItem::GetReferencedGameObject() const
     return p_refGameObject;
 }
 
-void HierarchyItem::OnSetContextMenu(Menu *menu)
+void HierarchyItem::OnSetContextMenu(MenuItem *menuRootItem)
 {
-    Debug_Log("OnSetContextMenu " << menu);
-    MenuItem *hola = menu->AddItem("Hola");
-    hola->AddItem("Holita");
-    hola->AddItem("Hehe");
-    menu->AddItem("Adios");
+    menuRootItem->SetFontSize(10);
+    MenuItem *createEmpty = menuRootItem->AddItem("Create Empty");
+    MenuItem *duplicate = menuRootItem->AddItem("Duplicate");
+    menuRootItem->AddSeparator();
+    MenuItem *remove = menuRootItem->AddItem("Remove");
+
+    createEmpty->GetButton()->AddClickedCallback([this](IFocusable*)
+    {
+        GameObject *empty = GameObjectFactory::CreateGameObjectNamed("Empty");
+        GetReferencedGameObject()->SetAsChild(empty);
+    });
 }
 
 void HierarchyItem::SetText(const String &text)

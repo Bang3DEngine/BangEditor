@@ -7,21 +7,20 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-Texture2D *EditorIconManager::GetIcon(const Path &path)
+RH<Texture2D> EditorIconManager::GetIcon(const Path &path)
 {
-    if (path.IsDir()) { return GetIconTexture("Folder"); }
-    else
+    if (!path.IsDir())
     {
         if (Extensions::Has(path, Extensions::GetImageExtensions()))
         {
-            Debug_Log("Load " << path);
             return Resources::Load<Texture2D>(path);
         }
+        else { return GetIcon(path.GetExtension()); }
     }
-    return GetIcon(path.GetExtension());
+    return GetIconTexture("Folder");
 }
 
-Texture2D *EditorIconManager::GetIcon(const String &ext)
+RH<Texture2D> EditorIconManager::GetIcon(const String &ext)
 {
     if (ext == Extensions::GetFontExtension() ||
         Extensions::Equals(ext, Extensions::GetTTFExtensions()) )
@@ -52,22 +51,22 @@ Texture2D *EditorIconManager::GetIcon(const String &ext)
     {
         return GetIconTexture("Image");
     }
-
-    return GetIconTexture("File");
+    else
+    {
+        return GetIconTexture("File");
+    }
 }
 
-Texture2D *EditorIconManager::GetBackArrowIcon() { return GetIconTexture("BackArrow"); }
+RH<Texture2D> EditorIconManager::GetBackArrowIcon()
+{ return GetIconTexture("BackArrow"); }
 
-Texture2D *EditorIconManager::GetIconTexture(const String &filename)
+RH<Texture2D> EditorIconManager::GetIconTexture(const String &filename)
 {
-    Texture2D *iconTex =
-            Resources::Load<Texture2D>(Paths::EditorResources().
-                                       Append("Icons").
-                                       Append(filename).
-                                       AppendExtension("png"));
-    iconTex->SetFilterMode(GL::FilterMode::Linear);
-    iconTex->SetWrapMode(GL::WrapMode::ClampToEdge);
-
+    RH<Texture2D> iconTex =
+        Resources::Load<Texture2D>(Paths::EditorResources().Append("Icons").
+                                   Append(filename).AppendExtension("png"));
+    iconTex.Get()->SetFilterMode(GL::FilterMode::Linear);
+    iconTex.Get()->SetWrapMode(GL::WrapMode::ClampToEdge);
     return iconTex;
 }
 

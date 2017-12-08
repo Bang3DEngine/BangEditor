@@ -100,7 +100,7 @@ void MenuBar::Update()
 
 MenuItem* MenuBar::AddItem()
 {
-    MenuItem *item = GameObject::Create<MenuItem>(true);
+    MenuItem *item = GameObject::Create<MenuItem>( MenuItem::MenuItemType::Top );
     item->SetParent(this);
     m_items.PushBack(item);
     return item;

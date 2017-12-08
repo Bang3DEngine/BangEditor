@@ -18,7 +18,7 @@ class EditorSceneManager : public SceneManager
 {
 public:
     EditorSceneManager() = default;
-    virtual ~EditorSceneManager() = default;
+    virtual ~EditorSceneManager();
 
     static Scene *GetOpenScene();
     static EditorScene *GetEditorScene();
