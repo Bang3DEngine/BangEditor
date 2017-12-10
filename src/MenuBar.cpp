@@ -119,8 +119,11 @@ void MenuBar::OnOpenProject(IFocusable*)
 void MenuBar::OnNewScene(IFocusable*)
 {
     EditorScene *edScene = EditorScene::GetInstance();
-    Scene *defaultScene = GameObjectFactory::CreateDefaultScene();
+
+    Scene *defaultScene = GameObjectFactory::CreateScene();
     edScene->SetOpenScene(defaultScene);
+
+    GameObjectFactory::CreateDefaultSceneInto(defaultScene);
 }
 
 void MenuBar::OnSaveScene(IFocusable*)

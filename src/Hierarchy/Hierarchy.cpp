@@ -21,7 +21,6 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-#include "Bang/Material.h"
 Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
 {
     UILayoutElement *le = GetComponent<UILayoutElement>();
@@ -45,21 +44,10 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
     SetAsChild(treeGo);
 
     ObjectManager::RegisterCreateListener(this);
-    ObjectManager::RegisterDestroyListener(this);
 }
 
 Hierarchy::~Hierarchy()
 {
-}
-
-void Hierarchy::ToggleItemCollapsed(HierarchyItem *item)
-{
-    SetItemCollapsed(item, !p_tree->IsItemCollapsed(item));
-}
-
-void Hierarchy::SetItemCollapsed(HierarchyItem *item, bool collapsed)
-{
-    p_tree->SetItemCollapsed(item, collapsed);
 }
 
 void Hierarchy::OnStart()
@@ -79,25 +67,29 @@ void Hierarchy::Update()
 
 void Hierarchy::OnCreated(Object *object)
 {
-    OnCreatedDestroyed(object, true);
-}
-void Hierarchy::OnDestroyed(Object *object)
-{
-    OnCreatedDestroyed(object, false);
-}
-void Hierarchy::OnCreatedDestroyed(Object *object, bool created)
-{
     GameObject *go = Cast<GameObject*>(object);
-    if (go)
+    if (go) { go->EventEmitter<IChildrenListener>::RegisterListener(this); }
+}
+
+void Hierarchy::OnChildAdded(GameObject *addedChild, GameObject *parent)
+{
+    bool isScene = (DCAST<Scene*>(addedChild));
+    Scene *goScene = addedChild->GetScene();
+    Scene *openScene = EditorSceneManager::GetOpenScene();
+    if (!isScene && goScene && goScene == openScene)
     {
-        bool isScene = (DCAST<Scene*>(go));
-        Scene *goScene = go->GetScene();
-        Scene *editorScene = SceneManager::GetActiveScene();
-        if (!isScene && goScene && goScene != editorScene && go != editorScene)
-        {
-            if (created) { AddGameObject(go); }
-            else { RemoveGameObject(go); }
-        }
+        AddGameObject(addedChild);
+    }
+}
+
+void Hierarchy::OnChildRemoved(GameObject *removedChild, GameObject *parent)
+{
+    bool isScene = (DCAST<Scene*>(removedChild));
+    Scene *goScene = removedChild->GetScene();
+    Scene *openScene = EditorSceneManager::GetOpenScene();
+    if (!isScene && goScene && goScene == openScene)
+    {
+        RemoveGameObject(removedChild);
     }
 }
 
@@ -152,8 +144,15 @@ void Hierarchy::AddGameObject(GameObject *go)
     goItem->SetReferencedGameObject( go );
 
     HierarchyItem *parentItem = GetItemFromGameObject(go->GetParent());
-    GetUITree()->AddItem(goItem, topItem ? nullptr : parentItem);
+    int indexInsideParent = go->GetParent()->GetChildren().IndexOf(go);
+    GetUITree()->AddItem(goItem, topItem ? nullptr : parentItem,
+                         indexInsideParent);
     m_gameObjectToItem.Add(go, goItem);
+
+    for (GameObject *child : go->GetChildren()) // Add children too
+    {
+        AddGameObject(child);
+    }
 }
 
 void Hierarchy::RemoveGameObject(GameObject *go)

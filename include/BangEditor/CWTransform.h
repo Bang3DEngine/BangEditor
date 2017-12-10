@@ -21,6 +21,8 @@ public:
     CWTransform(Transform *transform);
 	virtual ~CWTransform();
 
+    void Update() override;
+
 private:
     Transform *p_relatedTransform = nullptr;
 

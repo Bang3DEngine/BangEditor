@@ -35,9 +35,9 @@ EditorScene::EditorScene()
 {
     m_editor = new Editor();
 
-    SetName("EditorScene");
     GameObjectFactory::CreateUIGameObjectInto(this);
     GameObjectFactory::CreateUICanvasInto(this);
+    SetName("EditorScene");
 
     m_mainEditorVL = GameObjectFactory::CreateUIGameObjectNamed("MainEditorVL");
     m_mainEditorVL->AddComponent<UIVerticalLayout>();

@@ -36,6 +36,7 @@ public:
     Vector3 GetVector3() const;
     Vector4 GetVector4() const;
 
+    bool HasFocus() const;
     void SetPreferredWidth(int width);
 
     void OnValueChanged(Object *object) override;

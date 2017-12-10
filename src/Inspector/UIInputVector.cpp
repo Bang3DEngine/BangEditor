@@ -4,6 +4,7 @@
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
 #include "Bang/UILabel.h"
+#include "Bang/UICanvas.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UITextRenderer.h"
@@ -107,6 +108,12 @@ Vector3 UIInputVector::GetVector3() const
 Vector4 UIInputVector::GetVector4() const
 {
     return Vector4(Get(0), Get(1), Get(2), Get(3));
+}
+
+bool UIInputVector::HasFocus() const
+{
+    return m_inputNumbers[0]->HasFocus() || m_inputNumbers[1]->HasFocus() ||
+           m_inputNumbers[2]->HasFocus() || m_inputNumbers[3]->HasFocus();
 }
 
 void UIInputVector::SetPreferredWidth(int width)

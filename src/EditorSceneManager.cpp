@@ -28,7 +28,8 @@ EditorSceneManager::~EditorSceneManager()
 
 Scene *EditorSceneManager::GetOpenScene()
 {
-    return EditorSceneManager::GetInstance()->_GetOpenScene();
+    EditorSceneManager *esm = EditorSceneManager::GetInstance();
+    return esm ? esm->_GetOpenScene() : nullptr;
 }
 
 EditorScene *EditorSceneManager::GetEditorScene()

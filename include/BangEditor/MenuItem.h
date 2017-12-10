@@ -33,8 +33,10 @@ public:
     UITextRenderer *GetText() const;
     UIFocusable *GetButton() const;
 
+    void CloseRecursiveUp();
     bool MustDisplayChildren() const;
     void SetFontSize(uint fontSize);
+    void SetDestroyOnClose(bool destroyOnClose);
 
 protected:
     MenuItem(MenuItemType itemType = MenuItemType::Normal);
@@ -44,12 +46,17 @@ private:
     MenuItemType m_itemType = Undef<MenuItemType>();
     uint m_fontSize = Undef<uint>();
 
-    UIFocusable *m_button = nullptr;
-    UITextRenderer *m_text = nullptr;
+    bool m_destroyOnClose = false;
 
-    List<MenuItem*> m_childrenItems;
-    GameObject *m_childrenContainer = nullptr;
-    UIVerticalLayout *m_childrenContainerVL = nullptr;
+    UIFocusable *p_button = nullptr;
+    UITextRenderer *p_text = nullptr;
+
+    List<MenuItem*> p_childrenItems;
+    MenuItem* p_parentItem = nullptr;
+    GameObject *p_childrenContainer = nullptr;
+    UIVerticalLayout *p_childrenContainerVL = nullptr;
+
+    bool m_canDisplayChildrenThisFrame = true;
 
     friend class Bang::ObjectManager;
 };

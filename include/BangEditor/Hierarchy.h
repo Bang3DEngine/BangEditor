@@ -4,13 +4,14 @@
 #include "Bang/Map.h"
 #include "Bang/UIList.h"
 #include "Bang/ICreateListener.h"
+#include "Bang/IChildrenListener.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorUITab.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
+NAMESPACE_BANG_BEGIN
 FORWARD class UITree;
-FORWARD NAMESPACE_BANG_END
+NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -19,7 +20,6 @@ FORWARD class HierarchyItem;
 
 class Hierarchy : public EditorUITab,
                   public ICreateListener,
-                  public IDestroyListener,
                   public IEditorSelectionListener
 {
     GAMEOBJECT_EDITOR(Hierarchy)
@@ -28,9 +28,9 @@ public:
     Hierarchy();
     virtual ~Hierarchy();
 
-    void ToggleItemCollapsed(HierarchyItem *item);
-    void SetItemCollapsed(HierarchyItem *item, bool collapsed);
     void Clear();
+
+    bool IsItemCollapsed(HierarchyItem *item) const;
 
     // Object
     void OnStart() override;
@@ -39,8 +39,9 @@ public:
     // ICreateListener
     void OnCreated(Object *object) override;
 
-    // IDestroyListener
-    void OnDestroyed(Object *object) override;
+    // IChildrenListener
+    void OnChildAdded(GameObject *parent, GameObject *addedChild) override;
+    void OnChildRemoved(GameObject *parent, GameObject *removedChild) override;
 
     // IEditorSelectionListener
     void OnGameObjectSelected(GameObject *selectedGameObject) override;

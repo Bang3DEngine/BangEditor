@@ -7,6 +7,7 @@
 #include "BangEditor/UIContextMenu.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UITree;
 FORWARD class UILabel;
 FORWARD NAMESPACE_BANG_END
 
@@ -14,6 +15,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class HierarchyItem : public GameObject,
+                      public INameListener,
                       public IUIContextMenuable
 {
     GAMEOBJECT_EDITOR(HierarchyItem)
@@ -27,9 +29,11 @@ public:
     void Update() override;
 
     void SetReferencedGameObject(GameObject *referencedGameObject);
-
-    bool IsCollapsed() const;
     GameObject *GetReferencedGameObject() const;
+
+    // INameListener
+    void OnNameChanged(GameObject *go, const String &oldName,
+                       const String &newName) override;
 
     // IUIContextMenuable
     void OnSetContextMenu(MenuItem *menuRootItem) override;

@@ -1,6 +1,7 @@
 #include "BangEditor/CWTransform.h"
 
 #include "Bang/UILabel.h"
+#include "Bang/UICanvas.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/UIInputNumber.h"
@@ -51,10 +52,30 @@ CWTransform::~CWTransform()
 {
 }
 
+void CWTransform::Update()
+{
+    ComponentWidget::Update();
+
+    if (!p_posIV->HasFocus())
+    {
+        p_posIV->Set(p_relatedTransform->GetLocalPosition());
+    }
+
+    if (!p_rotIV->HasFocus())
+    {
+        p_rotIV->Set(p_relatedTransform->GetLocalEuler().ToDegrees());
+    }
+
+    if (!p_scaleIV->HasFocus())
+    {
+        p_scaleIV->Set(p_relatedTransform->GetLocalScale());
+    }
+}
+
 void CWTransform::OnValueChanged(Object *object)
 {
     p_relatedTransform->SetLocalPosition(p_posIV->GetVector3());
-    p_relatedTransform->SetLocalEuler(p_rotIV->GetVector3());
+    p_relatedTransform->SetLocalEuler(p_rotIV->GetVector3().ToRadians());
     p_relatedTransform->SetLocalScale(p_scaleIV->GetVector3());
 }
 

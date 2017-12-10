@@ -52,10 +52,6 @@ public:
     void Update() override;
 
     MenuItem *GetRootItem() const;
-    // void AddSeparator();
-    // MenuItem* AddItem(const String &text = "MenuItem");
-
-    // void SetFontSize(int fontSize);
 
 private:
     Menu();

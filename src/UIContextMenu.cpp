@@ -49,6 +49,7 @@ Menu::Menu()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     p_rootItem = GameObject::Create<MenuItem>( MenuItem::MenuItemType::Root );
+    p_rootItem->SetDestroyOnClose(true);
     SetAsChild(p_rootItem);
 
     RectTransform *rt = GetRectTransform();
@@ -79,20 +80,3 @@ MenuItem *Menu::GetRootItem() const
 {
     return p_rootItem;
 }
-/*
-void Menu::AddSeparator()
-{
-    GameObject *sep =
-            GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Preferred, 5);
-    SetAsChild(sep);
-}
-
-MenuItem *Menu::AddItem(const String &text)
-{
-    MenuItem *item = GameObject::Create<MenuItem>(false);
-    item->GetText()->SetContent(text);
-    item->GetText()->SetTextSize(m_fontSize);
-    SetAsChild(item);
-    return item;
-}
-*/
