@@ -84,10 +84,7 @@ void Hierarchy::OnChildAdded(GameObject *addedChild, GameObject *parent)
 
 void Hierarchy::OnChildRemoved(GameObject *removedChild, GameObject *parent)
 {
-    bool isScene = (DCAST<Scene*>(removedChild));
-    Scene *goScene = removedChild->GetScene();
-    Scene *openScene = EditorSceneManager::GetOpenScene();
-    if (!isScene && goScene && goScene == openScene)
+    if (m_gameObjectToItem.ContainsKey(removedChild))
     {
         RemoveGameObject(removedChild);
     }
@@ -156,6 +153,7 @@ void Hierarchy::AddGameObject(GameObject *go)
 }
 
 void Hierarchy::RemoveGameObject(GameObject *go)
+
 {
     HierarchyItem *goItem = GetItemFromGameObject(go);
     if (goItem)

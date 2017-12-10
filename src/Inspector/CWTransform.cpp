@@ -63,7 +63,7 @@ void CWTransform::Update()
 
     if (!p_rotIV->HasFocus())
     {
-        p_rotIV->Set(p_relatedTransform->GetLocalEuler().ToDegrees());
+        p_rotIV->Set(p_relatedTransform->GetLocalEuler());
     }
 
     if (!p_scaleIV->HasFocus())
@@ -75,7 +75,7 @@ void CWTransform::Update()
 void CWTransform::OnValueChanged(Object *object)
 {
     p_relatedTransform->SetLocalPosition(p_posIV->GetVector3());
-    p_relatedTransform->SetLocalEuler(p_rotIV->GetVector3().ToRadians());
+    p_relatedTransform->SetLocalEuler(p_rotIV->GetVector3());
     p_relatedTransform->SetLocalScale(p_scaleIV->GetVector3());
 }
 

@@ -15,6 +15,7 @@
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG_EDITOR
 
@@ -120,10 +121,14 @@ void MenuBar::OnNewScene(IFocusable*)
 {
     EditorScene *edScene = EditorScene::GetInstance();
 
+    Scene *previousOpenScene = EditorSceneManager::GetOpenScene();
+    if (previousOpenScene) { GameObject::Destroy(previousOpenScene); }
+
     Scene *defaultScene = GameObjectFactory::CreateScene();
     edScene->SetOpenScene(defaultScene);
 
     GameObjectFactory::CreateDefaultSceneInto(defaultScene);
+    defaultScene->SetFirstFoundCamera();
 }
 
 void MenuBar::OnSaveScene(IFocusable*)

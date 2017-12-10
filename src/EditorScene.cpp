@@ -189,7 +189,7 @@ void EditorScene::SetOpenScene(Scene *openScene)
     p_openScene = openScene;
     if (p_openScene)
     {
-        p_openScene->SetFirstFoundCameraOrDefaultOne();
+        p_openScene->SetFirstFoundCamera();
         p_openScene->InvalidateCanvas();
     }
 }
