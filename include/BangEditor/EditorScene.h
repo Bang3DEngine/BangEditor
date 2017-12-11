@@ -28,7 +28,7 @@ FORWARD class EditorApplication;
 
 class EditorScene : public Scene
 {
-    GAMEOBJECT_EDITOR(EditorScene)
+    GAMEOBJECT_EDITOR(EditorScene);
 
 public:
     void Update() override;

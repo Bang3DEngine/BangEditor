@@ -13,7 +13,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class MenuBar : public GameObject
 {
-    GAMEOBJECT(MenuBar)
+    GAMEOBJECT(MenuBar);
 
 public:
     void Update() override;

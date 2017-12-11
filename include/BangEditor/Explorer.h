@@ -18,7 +18,7 @@ FORWARD class ExplorerItem;
 
 class Explorer : public EditorUITab
 {
-    GAMEOBJECT_EDITOR(Explorer)
+    GAMEOBJECT_EDITOR(Explorer);
 
 public:
     Explorer();

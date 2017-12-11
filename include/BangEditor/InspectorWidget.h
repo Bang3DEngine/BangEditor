@@ -14,7 +14,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class InspectorWidget : public GameObject
 {
-    GAMEOBJECT_EDITOR(InspectorWidget)
+    GAMEOBJECT_EDITOR(InspectorWidget);
 
 public:
     void SetBackgroundColor(const Color &bgColor);

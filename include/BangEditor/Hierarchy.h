@@ -22,7 +22,7 @@ class Hierarchy : public EditorUITab,
                   public ICreateListener,
                   public IEditorSelectionListener
 {
-    GAMEOBJECT_EDITOR(Hierarchy)
+    GAMEOBJECT_EDITOR(Hierarchy);
 
 public:
     Hierarchy();

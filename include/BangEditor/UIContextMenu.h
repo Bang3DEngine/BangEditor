@@ -44,7 +44,7 @@ private:
 // Menu
 class Menu : public GameObject
 {
-    GAMEOBJECT_EDITOR(Menu)
+    GAMEOBJECT_EDITOR(Menu);
 
 public:
 

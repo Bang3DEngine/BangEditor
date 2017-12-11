@@ -12,6 +12,8 @@
 #include "Bang/Transform.h"
 #include "Bang/SceneManager.h"
 
+#include "BangEditor/HideInHierarchy.h"
+
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
@@ -23,6 +25,7 @@ EditorCamera::EditorCamera()
 {
     SetName("EditorCamera");
     AddComponent<Transform>();
+    AddComponent<HideInHierarchy>();
 
     p_camContainer = GameObjectFactory::CreateGameObject();
     p_camContainer->SetName("CameraContainer");

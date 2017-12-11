@@ -20,7 +20,7 @@ class UIInputVector : public GameObject,
                       public IValueChangedListener,
                       public EventEmitter<IValueChangedListener>
 {
-    GAMEOBJECT_EDITOR(UIInputVector)
+    GAMEOBJECT_EDITOR(UIInputVector);
 
 public:
     void SetLabelText(const String &text);

@@ -25,7 +25,7 @@ void UIContextMenu::OnUpdate()
 
         for (GameObject *part : m_parts)
         {
-            if (UICanvas::IsMouseOver(part, true))
+            if (UICanvas::GetActive(this)->IsMouseOver(part, true))
             {
                 Menu *menu = GameObject::Create<Menu>();
                 EventEmitter<IUIContextMenuable>::

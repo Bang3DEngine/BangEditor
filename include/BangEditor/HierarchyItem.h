@@ -18,7 +18,7 @@ class HierarchyItem : public GameObject,
                       public INameListener,
                       public IUIContextMenuable
 {
-    GAMEOBJECT_EDITOR(HierarchyItem)
+    GAMEOBJECT_EDITOR(HierarchyItem);
 
 public:
     HierarchyItem();

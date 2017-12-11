@@ -13,7 +13,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class EditorUITab : public GameObject
 {
-    GAMEOBJECT_EDITOR(EditorUITab)
+    GAMEOBJECT_EDITOR(EditorUITab);
 
 public:
     UITextRenderer *GetTitleText() const;

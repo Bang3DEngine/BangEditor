@@ -21,7 +21,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 class ExplorerItem : public GameObject,
                      public IFocusListener
 {
-    GAMEOBJECT_EDITOR(ExplorerItem)
+    GAMEOBJECT_EDITOR(ExplorerItem);
 
 public:
     void Update() override;

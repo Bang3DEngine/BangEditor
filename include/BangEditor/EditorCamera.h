@@ -18,7 +18,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class EditorCamera : public GameObject
 {
-    GAMEOBJECT_EDITOR(EditorCamera)
+    GAMEOBJECT_EDITOR(EditorCamera);
 
 public:
     // GameObject

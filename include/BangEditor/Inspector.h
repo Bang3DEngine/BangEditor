@@ -20,7 +20,7 @@ class Inspector : public EditorUITab,
                   public IDestroyListener,
                   public IEditorSelectionListener
 {
-    GAMEOBJECT_EDITOR(Inspector)
+    GAMEOBJECT_EDITOR(Inspector);
 
 public:
     Inspector();

@@ -8,7 +8,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class Console : public EditorUITab
 {
-    GAMEOBJECT_EDITOR(Console)
+    GAMEOBJECT_EDITOR(Console);
 
 private:
     Console();

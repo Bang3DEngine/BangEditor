@@ -17,7 +17,7 @@ public:
 };
 
 
-
+FORWARD class TransformGizmo;
 
 class Editor : public EventEmitter<IEditorSelectionListener>
 {
@@ -35,7 +35,9 @@ private:
     virtual ~Editor() = default;
 
     GameObject *p_selectedGameObject = nullptr;
-    void _EmitGameObjectSelected(GameObject *selectedGameObject);
+    TransformGizmo *p_currentTransformGizmo = nullptr;
+
+    void _SelectGameObject(GameObject *selectedGameObject);
 
     static Editor* GetInstance();
 

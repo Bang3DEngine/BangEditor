@@ -192,7 +192,7 @@ bool MenuItem::MustDisplayChildren() const
 
     for (GameObject *child : p_childrenContainer->GetChildren())
     {
-        if (UICanvas::IsMouseOver(child)) { return true; }
+        if (UICanvas::GetActive(this)->IsMouseOver(child)) { return true; }
     }
 
     return false;

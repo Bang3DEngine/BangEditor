@@ -18,7 +18,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class MenuItem : public GameObject
 {
-    GAMEOBJECT(MenuItem)
+    GAMEOBJECT(MenuItem);
 
 public:
     enum class MenuItemType { Root, Top, Normal };

@@ -7,8 +7,8 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -Wl,-O0 -g")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pedantic")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=undefined")
-# set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
-# set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=leak")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=leak")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2 -Wl,-O2")
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
@@ -82,6 +82,10 @@ ${SRC_DIR}/EditorSceneManager.cpp
 ${SRC_DIR}/EditorScene.cpp
 ${SRC_DIR}/EditorUITab.cpp
 ${SRC_DIR}/EditorWindow.cpp
+${SRC_DIR}/SelectionGizmo.cpp
+${SRC_DIR}/TransformGizmo.cpp
+${SRC_DIR}/TranslateGizmo.cpp
+${SRC_DIR}/TranslateGizmoAxis.cpp
 ${SRC_DIR}/Explorer/Explorer.cpp
 ${SRC_DIR}/Explorer/ExplorerItem.cpp
 ${SRC_DIR}/Hierarchy/Hierarchy.cpp

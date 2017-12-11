@@ -14,7 +14,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class UISceneContainer : public GameObject
 {
-    GAMEOBJECT_EDITOR(UISceneContainer)
+    GAMEOBJECT_EDITOR(UISceneContainer);
 
 public:
     Rect GetImageRect() const;

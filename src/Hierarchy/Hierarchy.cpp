@@ -16,6 +16,7 @@
 
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/HierarchyItem.h"
+#include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
@@ -135,20 +136,30 @@ void Hierarchy::TreeSelectionCallback(GOItem *item, UIList::Action action)
 
 void Hierarchy::AddGameObject(GameObject *go)
 {
-    bool topItem = (go->GetScene() == go->GetParent());
-
-    HierarchyItem *goItem = GameObject::Create<HierarchyItem>();
-    goItem->SetReferencedGameObject( go );
-
-    HierarchyItem *parentItem = GetItemFromGameObject(go->GetParent());
-    int indexInsideParent = go->GetParent()->GetChildren().IndexOf(go);
-    GetUITree()->AddItem(goItem, topItem ? nullptr : parentItem,
-                         indexInsideParent);
-    m_gameObjectToItem.Add(go, goItem);
-
-    for (GameObject *child : go->GetChildren()) // Add children too
+    if (!go->HasComponent<HideInHierarchy>() &&
+        !go->GetComponentInParent<HideInHierarchy>())
     {
-        AddGameObject(child);
+        bool topItem = (go->GetScene() == go->GetParent());
+
+        HierarchyItem *goItem = GameObject::Create<HierarchyItem>();
+        goItem->SetReferencedGameObject( go );
+
+        // Get index inside parent, without counting hidden ones
+        HierarchyItem *parentItem = GetItemFromGameObject(go->GetParent());
+        int indexInsideParent = go->GetParent()->GetChildren().IndexOf(go);
+        for (GameObject *child : go->GetParent()->GetChildren())
+        {
+            if (child->HasComponent<HideInHierarchy>()) { --indexInsideParent; }
+        }
+
+        GetUITree()->AddItem(goItem, topItem ? nullptr : parentItem,
+                             indexInsideParent);
+        m_gameObjectToItem.Add(go, goItem);
+
+        for (GameObject *child : go->GetChildren()) // Add children too
+        {
+            AddGameObject(child);
+        }
     }
 }
 
