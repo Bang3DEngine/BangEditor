@@ -53,7 +53,7 @@ Menu::Menu()
     SetAsChild(p_rootItem);
 
     RectTransform *rt = GetRectTransform();
-    rt->SetAnchors( Input::GetMouseCoordsNDC() );
+    rt->SetAnchors( Input::GetMousePositionNDC() );
     rt->SetPivotPosition( Vector2(-1, 1) );
 
     UIContentSizeFitter *csf = AddComponent<UIContentSizeFitter>();

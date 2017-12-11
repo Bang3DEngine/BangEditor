@@ -4,5 +4,4 @@
 #define NAMESPACE_BANG_EDITOR_END    }
 
 #define GAMEOBJECT_EDITOR(Class) \
-    GAMEOBJECT(Class) \
-    friend class Bang::ObjectManager;
+    GAMEOBJECT(Class)

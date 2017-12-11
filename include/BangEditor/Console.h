@@ -10,7 +10,7 @@ class Console : public EditorUITab
 {
     GAMEOBJECT_EDITOR(Console)
 
-public:
+private:
     Console();
     virtual ~Console();
 };

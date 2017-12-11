@@ -24,10 +24,11 @@ FORWARD class Explorer;
 FORWARD class Inspector;
 FORWARD class Hierarchy;
 FORWARD class UISceneContainer;
+FORWARD class EditorApplication;
 
 class EditorScene : public Scene
 {
-    GAMEOBJECT(EditorScene)
+    GAMEOBJECT_EDITOR(EditorScene)
 
 public:
     void Update() override;
@@ -73,8 +74,7 @@ private:
     void SaveGLViewport();
     void LoadGLViewport();
 
-    friend class EditorApplication;
-    friend class Bang::ObjectManager;
+    friend class BangEditor::EditorApplication;
 };
 
 NAMESPACE_BANG_EDITOR_END

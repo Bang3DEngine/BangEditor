@@ -25,6 +25,7 @@
 #include "BangEditor/Explorer.h"
 #include "BangEditor/Hierarchy.h"
 #include "BangEditor/Inspector.h"
+#include "BangEditor/EditorCamera.h"
 #include "BangEditor/UISceneContainer.h"
 #include "BangEditor/EditorSceneManager.h"
 
@@ -110,7 +111,7 @@ void EditorScene::Update()
     if (Input::GetMouseButtonDown(MouseButton::Left))
     {
         Rect ndcRect = EditorScene::GetInstance()->GetOpenSceneRectNDC();
-        if ( ndcRect.Contains( Input::GetMouseCoordsNDC() ) )
+        if ( ndcRect.Contains( Input::GetMousePositionNDC() ) )
         {
             GameObject *selectedGameObject = Selection::GetOveredGameObject(openScene);
             if (selectedGameObject)
@@ -189,6 +190,9 @@ void EditorScene::SetOpenScene(Scene *openScene)
     p_openScene = openScene;
     if (p_openScene)
     {
+        EditorCamera *edCamera = GameObject::Create<EditorCamera>();
+        edCamera->SetParent(openScene, 0);
+
         p_openScene->SetFirstFoundCamera();
         p_openScene->InvalidateCanvas();
     }

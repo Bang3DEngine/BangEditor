@@ -126,8 +126,11 @@ void Inspector::SetGameObject(GameObject *go)
     p_nameSeparator->SetEnabled(true);
     p_goNameText->SetContent(go->GetName());
     GetCurrentObject()->EventEmitter<IDestroyListener>::RegisterListener(this);
-    CWTransform *cwTransform = GameObject::Create<CWTransform>(go->GetTransform());
-    AddWidget(cwTransform);
+    if (go->GetTransform())
+    {
+        CWTransform *cwTransform = GameObject::Create<CWTransform>(go->GetTransform());
+        AddWidget(cwTransform);
+    }
 }
 
 void Inspector::AddWidget(InspectorWidget *widget)

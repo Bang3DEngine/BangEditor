@@ -75,8 +75,9 @@ link_libraries("${BANG_LIBS_DIR}/${BANG_LIB_NAME}")
 
 add_executable(BangEditor
 ${SRC_DIR}/Console.cpp
-${SRC_DIR}/EditorApplication.cpp
 ${SRC_DIR}/Editor.cpp
+${SRC_DIR}/EditorApplication.cpp
+${SRC_DIR}/EditorCamera.cpp
 ${SRC_DIR}/EditorSceneManager.cpp
 ${SRC_DIR}/EditorScene.cpp
 ${SRC_DIR}/EditorUITab.cpp
