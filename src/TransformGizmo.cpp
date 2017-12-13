@@ -4,8 +4,10 @@
 #include "Bang/Vector3.h"
 #include "Bang/Transform.h"
 
-#include "BangEditor/HideInHierarchy.h"
+#include "BangEditor/ScaleGizmo.h"
+#include "BangEditor/RotateGizmo.h"
 #include "BangEditor/TranslateGizmo.h"
+#include "BangEditor/HideInHierarchy.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -16,7 +18,12 @@ TransformGizmo::TransformGizmo()
     AddComponent<HideInHierarchy>();
 
     p_translateGizmo = GameObject::Create<TranslateGizmo>();
+    p_rotateGizmo    = GameObject::Create<RotateGizmo>();
+    p_scaleGizmo     = GameObject::Create<ScaleGizmo>();
+
     p_translateGizmo->SetParent(this);
+    p_rotateGizmo->SetParent(this);
+    p_scaleGizmo->SetParent(this);
 }
 
 TransformGizmo::~TransformGizmo()
@@ -39,14 +46,20 @@ void TransformGizmo::Update()
     {
         case TransformMode::Translate:
             p_translateGizmo->SetEnabled(true);
+            p_rotateGizmo->SetEnabled(false);
+            p_scaleGizmo->SetEnabled(false);
             break;
 
         case TransformMode::Rotate:
             p_translateGizmo->SetEnabled(false);
+            p_rotateGizmo->SetEnabled(false);
+            p_scaleGizmo->SetEnabled(true);
             break;
 
         case TransformMode::Scale:
             p_translateGizmo->SetEnabled(false);
+            p_rotateGizmo->SetEnabled(false);
+            p_scaleGizmo->SetEnabled(true);
             break;
     }
 }

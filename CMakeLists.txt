@@ -82,8 +82,13 @@ ${SRC_DIR}/EditorSceneManager.cpp
 ${SRC_DIR}/EditorScene.cpp
 ${SRC_DIR}/EditorUITab.cpp
 ${SRC_DIR}/EditorWindow.cpp
+${SRC_DIR}/RotateGizmo.cpp
+${SRC_DIR}/RotateGizmoAxis.cpp
+${SRC_DIR}/ScaleGizmo.cpp
+${SRC_DIR}/ScaleGizmoAxis.cpp
 ${SRC_DIR}/SelectionGizmo.cpp
 ${SRC_DIR}/TransformGizmo.cpp
+${SRC_DIR}/TransformGizmoAxis.cpp
 ${SRC_DIR}/TranslateGizmo.cpp
 ${SRC_DIR}/TranslateGizmoAxis.cpp
 ${SRC_DIR}/Explorer/Explorer.cpp
