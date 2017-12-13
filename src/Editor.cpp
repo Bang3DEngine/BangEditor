@@ -15,7 +15,11 @@ void Editor::SelectGameObject(GameObject *selectedGameObject)
 
 void Editor::_SelectGameObject(GameObject *selectedGameObject)
 {
-    if (p_selectedGameObject != selectedGameObject)
+    bool isValid = selectedGameObject &&
+            (!p_currentTransformGizmo ||
+             !selectedGameObject->IsChildOf(p_currentTransformGizmo));
+
+    if (p_selectedGameObject != selectedGameObject && isValid)
     {
         p_selectedGameObject = selectedGameObject;
 
@@ -24,13 +28,14 @@ void Editor::_SelectGameObject(GameObject *selectedGameObject)
             PropagateToListeners(&IEditorSelectionListener::OnGameObjectSelected,
                                  selectedGameObject);
 
+        // Destroy previous transform gizmo
         if (p_currentTransformGizmo)
         {
             GameObject::Destroy(p_currentTransformGizmo);
             p_currentTransformGizmo = nullptr;
         }
 
-        // Create transform gizmo
+        // Create new transform gizmo
         if (p_selectedGameObject)
         {
             TransformGizmo *tg = GameObject::Create<TransformGizmo>();
@@ -45,7 +50,7 @@ void Editor::_SelectGameObject(GameObject *selectedGameObject)
 
 Editor *Editor::GetInstance()
 {
-    EditorScene *edScene = EditorScene::GetInstance();
+    EditorScene *edScene = EditorSceneManager::GetEditorScene();
     return edScene ? edScene->GetEditor() : nullptr;
 }
 

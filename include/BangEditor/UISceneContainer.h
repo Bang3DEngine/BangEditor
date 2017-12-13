@@ -17,7 +17,7 @@ class UISceneContainer : public GameObject
     GAMEOBJECT_EDITOR(UISceneContainer);
 
 public:
-    Rect GetImageRect() const;
+    Rect GetImageScreenRectNDC() const;
     void SetSceneImageTexture(Texture2D *texture);
 
 protected:

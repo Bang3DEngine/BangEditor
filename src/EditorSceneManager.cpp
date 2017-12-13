@@ -1,16 +1,13 @@
 #include "BangEditor/EditorSceneManager.h"
 
 #include "Bang/Time.h"
+#include "Bang/Scene.h"
 #include "Bang/UILayoutManager.h"
+
 #include "BangEditor/EditorScene.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
-
-void EditorSceneManager::_Update()
-{
-    SceneManager::UpdateScene( GetActiveScene() );
-}
 
 EditorSceneManager::~EditorSceneManager()
 {
@@ -46,13 +43,12 @@ Scene *EditorSceneManager::_GetOpenScene() const
 
 EditorScene *EditorSceneManager::_GetEditorScene() const
 {
-    Scene *edScene = _GetActiveScene();
-    return edScene ? Cast<EditorScene*>(edScene) : nullptr;
+    return p_editorScene;
 }
 
 void EditorSceneManager::_LoadScene(Scene *scene)
 {
-    EditorScene *edScene = GetEditorScene();
+    EditorScene *edScene = _GetEditorScene();
     if (edScene)
     {
         ENSURE(edScene->GetOpenScene() != scene);
@@ -60,6 +56,7 @@ void EditorSceneManager::_LoadScene(Scene *scene)
     }
     else // Load editor scene
     {
+        p_editorScene = SCAST<EditorScene*>(scene);
         SceneManager::_LoadScene(scene);
     }
 }

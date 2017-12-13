@@ -24,10 +24,11 @@ public:
     static EditorScene *GetEditorScene();
 
 protected:
+    EditorScene *p_editorScene = nullptr;
+
     Scene *_GetOpenScene() const;
     EditorScene *_GetEditorScene() const;
 
-    void _Update() override;
     void _LoadScene(Scene *scene) override;
 
     static void SetActiveScene(Scene *activeScene);

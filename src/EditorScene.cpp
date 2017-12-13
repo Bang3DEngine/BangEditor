@@ -18,6 +18,7 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/SelectionFramebuffer.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/Console.h"
@@ -103,23 +104,23 @@ void EditorScene::Update()
     Scene *openScene = GetOpenScene();
     if (openScene)
     {
-        EditorSceneManager::SetActiveScene(openScene);
+        BindOpenScene();
         openScene->Update();
-        EditorSceneManager::SetActiveScene(this);
-    }
 
-    if (Input::GetMouseButtonDown(MouseButton::Left))
-    {
-        Rect ndcRect = EditorScene::GetInstance()->GetOpenSceneRectNDC();
-        if ( ndcRect.Contains( Input::GetMousePositionNDC() ) )
+        if (Input::GetMouseButtonDown(MouseButton::Left))
         {
-            GameObject *selectedGameObject = Selection::GetOveredGameObject(openScene);
-            if (selectedGameObject)
+            Rect ndcRect = GetOpenSceneScreenRectNDC();
+            if ( ndcRect.Contains( Input::GetMousePositionScreenNDC() ) )
             {
-                Editor::SelectGameObject(selectedGameObject);
+                GameObject *selectedGameObject = Selection::GetOveredGameObject(openScene);
+                if (selectedGameObject)
+                {
+                    Editor::SelectGameObject(selectedGameObject);
+                }
+                else { Editor::SelectGameObject(nullptr); }
             }
-            else { Editor::SelectGameObject(nullptr); }
         }
+        UnBindOpenScene();
     }
 
     static Array<float> lastDeltas = {99,99,99,99};
@@ -141,12 +142,9 @@ void EditorScene::OnResize(int newWidth, int newHeight)
     Scene *openScene = GetOpenScene();
     if (openScene)
     {
-        EditorSceneManager::SetActiveScene(openScene);
-        SaveGLViewport();
-        SetViewportForOpenScene();
+        BindOpenScene();
         openScene->InvalidateCanvas();
-        LoadGLViewport();
-        EditorSceneManager::SetActiveScene(this);
+        UnBindOpenScene();
     }
 }
 
@@ -155,12 +153,9 @@ void EditorScene::RenderOpenScene()
     Scene *openScene = GetOpenScene();
     if (openScene)
     {
-        EditorSceneManager::SetActiveScene(openScene);
-        SaveGLViewport();
-        SetViewportForOpenScene();
+        BindOpenScene();
         GEngine::GetActive()->Render(openScene);
-        LoadGLViewport();
-        EditorSceneManager::SetActiveScene(this);
+        UnBindOpenScene();
     }
 }
 
@@ -172,7 +167,7 @@ void EditorScene::SetViewportForOpenScene()
         Camera *openSceneCam = openScene->GetCamera();
         if (openSceneCam)
         {
-            Rect ndcRect = GetOpenSceneRectNDC();
+            Rect ndcRect = GetOpenSceneScreenRectNDC();
             Rect ndcRectNorm = ndcRect * 0.5f + 0.5f;
             Recti vpRectPx(
                Vector2i(ndcRectNorm.GetMin() * Vector2(GL::GetViewportSize())),
@@ -185,16 +180,16 @@ void EditorScene::SetViewportForOpenScene()
 
 void EditorScene::SetOpenScene(Scene *openScene)
 {
-    if (p_openScene) { GameObject::Destroy(p_openScene); }
+    if (GetOpenScene()) { GameObject::Destroy(GetOpenScene()); }
 
     p_openScene = openScene;
-    if (p_openScene)
+    if (GetOpenScene())
     {
         EditorCamera *edCamera = GameObject::Create<EditorCamera>();
         edCamera->SetParent(openScene, 0);
 
-        p_openScene->SetFirstFoundCamera();
-        p_openScene->InvalidateCanvas();
+        GetOpenScene()->SetFirstFoundCamera();
+        GetOpenScene()->InvalidateCanvas();
     }
 }
 
@@ -203,9 +198,9 @@ Scene *EditorScene::GetOpenScene() const
     return p_openScene;
 }
 
-Rect EditorScene::GetOpenSceneRectNDC() const
+Rect EditorScene::GetOpenSceneScreenRectNDC() const
 {
-    return m_sceneContainer->GetImageRect();
+    return m_sceneContainer->GetImageScreenRectNDC();
 }
 
 void EditorScene::RenderAndBlitToScreen()
@@ -214,21 +209,21 @@ void EditorScene::RenderAndBlitToScreen()
     window->Clear();
 
     Scene *openScene = GetOpenScene();
-    if (openScene)
-    {
-        SaveGLViewport();
-        SetViewportForOpenScene();
-        LoadGLViewport();
-    }
-
     Texture2D *openSceneTex = nullptr;
     if (openScene)
     {
-        Camera *cam = openScene->GetCamera();
-        if (cam)
+        Camera *openSceneCam = openScene->GetCamera();
+        if (openSceneCam)
         {
-            GBuffer *gbuffer =  cam->GetGBuffer();
+            GBuffer *gbuffer =  openSceneCam->GetGBuffer();
             openSceneTex = gbuffer->GetAttachmentTexture(GBuffer::AttColor);
+            if (Input::GetKey(Key::Z))
+            {
+                openSceneTex = openSceneCam->GetSelectionFramebuffer()->
+                    GetAttachmentTexture(SelectionFramebuffer::AttColor);
+            }
+            /*
+            */
         }
     }
     m_sceneContainer->SetSceneImageTexture(openSceneTex);
@@ -239,10 +234,25 @@ void EditorScene::RenderAndBlitToScreen()
     window->BlitToScreen(GetCamera());
 }
 
-EditorScene *EditorScene::GetInstance()
+void EditorScene::BindOpenScene()
 {
-    Scene *scene = EditorSceneManager::GetEditorScene();
-    return scene ? Cast<EditorScene*>(scene) : nullptr;
+    Scene *openScene = GetOpenScene();
+    if (openScene)
+    {
+        EditorSceneManager::SetActiveScene(openScene);
+        PushGLViewport();
+        SetViewportForOpenScene();
+    }
+}
+
+void EditorScene::UnBindOpenScene()
+{
+    Scene *openScene = GetOpenScene();
+    if (openScene)
+    {
+        PopGLViewport();
+    }
+    EditorSceneManager::SetActiveScene(this);
 }
 
 Console *EditorScene::GetConsole() const { return m_console; }
@@ -255,12 +265,12 @@ Editor *EditorScene::GetEditor() const
     return m_editor;
 }
 
-void EditorScene::SaveGLViewport()
+void EditorScene::PushGLViewport()
 {
     m_prevGLViewport = GL::GetViewportRect();
 }
 
-void EditorScene::LoadGLViewport()
+void EditorScene::PopGLViewport()
 {
     GL::SetViewport(m_prevGLViewport);
 }

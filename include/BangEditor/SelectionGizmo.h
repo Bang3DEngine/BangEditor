@@ -16,6 +16,9 @@ public:
     virtual void SetReferencedGameObject(GameObject *referencedGameObject);
     GameObject *GetReferencedGameObject() const;
 
+protected:
+    enum SelectionState { Idle, Over, Grabbed };
+
 private:
     GameObject *p_referencedGameObject = nullptr;
 };

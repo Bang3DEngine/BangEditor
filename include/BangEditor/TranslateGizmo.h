@@ -16,13 +16,14 @@ class TranslateGizmo : public GameObject,
 {
     GAMEOBJECT_EDITOR(TranslateGizmo);
 
+public:
+    // SelectionGizmo
+    void SetReferencedGameObject(GameObject *referencedGameObject) override;
+
 private:
     TranslateGizmoAxis *p_axisX = nullptr;
     TranslateGizmoAxis *p_axisY = nullptr;
     TranslateGizmoAxis *p_axisZ = nullptr;
-
-    // SelectionGizmo
-    void SetReferencedGameObject(GameObject *referencedGameObject) override;
 
     TranslateGizmo();
     virtual ~TranslateGizmo();

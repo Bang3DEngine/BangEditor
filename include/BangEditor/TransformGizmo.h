@@ -19,7 +19,13 @@ public:
     // GameObject
     void Update() override;
 
+    // SelectionGizmo
+    void SetReferencedGameObject(GameObject *referencedGameObject) override;
+
 private:
+    enum class TransformMode { Translate, Rotate, Scale };
+    TransformMode m_transformMode = TransformMode::Translate;
+
     TranslateGizmo *p_translateGizmo = nullptr;
 
 	TransformGizmo();

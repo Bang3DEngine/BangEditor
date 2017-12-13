@@ -15,8 +15,10 @@
 #include "Bang/UIContentSizeFitter.h"
 
 #include "BangEditor/EditorScene.h"
-#include "BangEditor/EditorIconManager.h"
 #include "BangEditor/ExplorerItem.h"
+#include "BangEditor/EditorIconManager.h"
+#include "BangEditor/EditorSceneManager.h"
+
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -138,5 +140,5 @@ void Explorer::GoDirectoryUp()
 
 Explorer *Explorer::GetInstance()
 {
-    return EditorScene::GetInstance()->GetExplorer();
+    return EditorSceneManager::GetEditorScene()->GetExplorer();
 }

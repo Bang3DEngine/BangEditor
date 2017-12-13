@@ -40,10 +40,9 @@ public:
     void SetOpenScene(Scene *openScene);
     Scene *GetOpenScene() const;
 
-    Rect GetOpenSceneRectNDC() const;
+    Rect GetOpenSceneScreenRectNDC() const;
 
     void RenderAndBlitToScreen();
-    static EditorScene *GetInstance();
 
     Editor *GetEditor() const;
     Console *GetConsole() const;
@@ -71,8 +70,10 @@ private:
 
     Recti m_prevGLViewport = Recti::Zero;
 
-    void SaveGLViewport();
-    void LoadGLViewport();
+    void BindOpenScene();
+    void UnBindOpenScene();
+    void PushGLViewport();
+    void PopGLViewport();
 
     friend class BangEditor::EditorApplication;
 };

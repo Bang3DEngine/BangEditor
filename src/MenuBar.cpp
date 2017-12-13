@@ -24,8 +24,8 @@ MenuBar::MenuBar()
     SetName("MenuBar");
     GameObjectFactory::CreateUIGameObjectInto(this);
 
-    UIImageRenderer *bg = AddComponent<UIImageRenderer>();
-    bg->SetTint(Color::LightGray);
+    // UIImageRenderer *bg = AddComponent<UIImageRenderer>();
+    // bg->SetTint(Color::Gray);
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinHeight(15);
@@ -75,10 +75,10 @@ MenuBar::~MenuBar()
 void MenuBar::Update()
 {
     GameObject::Update();
-    EditorScene *edScene = EditorScene::GetInstance();
-    if (Input::GetKeyDown(Key::E))
+    EditorScene *edScene = EditorSceneManager::GetEditorScene();
+    if (Input::GetKeyDown(Key::Q))
     {
-        Debug_Log("New Scene! E");
+        Debug_Log("New Scene! Q");
         MenuBar::OnNewScene(nullptr);
     }
     else if (Input::GetKeyDown(Key::O))
@@ -119,7 +119,7 @@ void MenuBar::OnOpenProject(IFocusable*)
 
 void MenuBar::OnNewScene(IFocusable*)
 {
-    EditorScene *edScene = EditorScene::GetInstance();
+    EditorScene *edScene = EditorSceneManager::GetEditorScene();
 
     Scene *previousOpenScene = EditorSceneManager::GetOpenScene();
     if (previousOpenScene) { GameObject::Destroy(previousOpenScene); }
@@ -133,7 +133,7 @@ void MenuBar::OnNewScene(IFocusable*)
 
 void MenuBar::OnSaveScene(IFocusable*)
 {
-    EditorScene *edScene = EditorScene::GetInstance();
+    EditorScene *edScene = EditorSceneManager::GetEditorScene();
     Scene *openScene = edScene->GetOpenScene();
     if (openScene)
     {
@@ -153,7 +153,7 @@ void MenuBar::OnOpenScene(IFocusable*)
                                              { Extensions::GetSceneExtension() });
     if (openScenePath.IsFile())
     {
-        EditorScene *edScene = EditorScene::GetInstance();
+        EditorScene *edScene = EditorSceneManager::GetEditorScene();
         Scene *scene = GameObjectFactory::CreateScene();
         scene->ImportXMLFromFile(openScenePath);
         edScene->SetOpenScene(scene);

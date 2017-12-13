@@ -101,8 +101,8 @@ bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
 {
     if (Input::GetMouseButton(MouseButton::Right))
     {
-        Vector2 delta = -Vector2(Input::GetMouseDelta()) *
-                         m_mouseRotDegreesPerPixel;
+        Vector2 delta = Vector2(Input::GetMouseDelta()) * Vector2(-1, 1) *
+                        m_mouseRotDegreesPerPixel;
 
         m_mouseRotDegreesAccum += delta;
 
@@ -128,7 +128,6 @@ void EditorCamera::HandleMousePanning(bool *hasMoved, bool *unwrapMouse)
     if (Input::GetMouseButton(MouseButton::Middle))
     {
         Vector2 delta = -Vector2(Input::GetMouseDelta()) * m_mousePanPerPixel;
-        delta.y *= -1.0f;
 
         GetTransform()->Translate(p_camt->GetRight() * delta.x + p_camt->GetUp() * delta.y);
 
