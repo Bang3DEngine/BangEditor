@@ -52,8 +52,8 @@ void TransformGizmo::Update()
 
         case TransformMode::Rotate:
             p_translateGizmo->SetEnabled(false);
-            p_rotateGizmo->SetEnabled(false);
-            p_scaleGizmo->SetEnabled(true);
+            p_rotateGizmo->SetEnabled(true);
+            p_scaleGizmo->SetEnabled(false);
             break;
 
         case TransformMode::Scale:
@@ -69,4 +69,6 @@ void TransformGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
     SelectionGizmo::SetReferencedGameObject(referencedGameObject);
 
     p_translateGizmo->SetReferencedGameObject(referencedGameObject);
+    p_rotateGizmo->SetReferencedGameObject(referencedGameObject);
+    p_scaleGizmo->SetReferencedGameObject(referencedGameObject);
 }

@@ -14,6 +14,7 @@ ScaleGizmoAxis::~ScaleGizmoAxis()
 
 void ScaleGizmoAxis::Update()
 {
+    TransformGizmoAxis::Update();
 }
 
 void ScaleGizmoAxis::SetAxis(Axis3D axis)

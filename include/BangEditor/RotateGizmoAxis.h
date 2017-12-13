@@ -4,6 +4,7 @@
 #include "BangEditor/TransformGizmoAxis.h"
 
 NAMESPACE_BANG_BEGIN
+FORWARD class LineRenderer;
 NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -22,8 +23,12 @@ public:
 private:
     using SelectionState = SelectionGizmo::SelectionState;
 
+    LineRenderer *p_circleRenderer = nullptr;
+
     RotateGizmoAxis();
     virtual ~RotateGizmoAxis();
+
+    void UpdateCirclePoints();
 
     void SetColor(const Color &color) override;
 
