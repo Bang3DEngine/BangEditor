@@ -1,6 +1,7 @@
 #include "BangEditor/TransformGizmo.h"
 
 #include "Bang/Input.h"
+#include "Bang/Camera.h"
 #include "Bang/Vector3.h"
 #include "Bang/Transform.h"
 
@@ -33,6 +34,10 @@ TransformGizmo::~TransformGizmo()
 void TransformGizmo::Update()
 {
     GameObject::Update();
+
+    // Transform *camT = Camera::GetActive()->GetGameObject()->GetTransform();
+    // float camDist = camT->GetPosition();
+    // GetTransform()->SetScale();
 
     GameObject *refGo = GetReferencedGameObject();
     GetTransform()->SetPosition( refGo->GetTransform()->GetPosition() );

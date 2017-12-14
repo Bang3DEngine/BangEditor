@@ -1,9 +1,12 @@
 #ifndef ROTATEGIZMOAXIS_H
 #define ROTATEGIZMOAXIS_H
 
+#include "Bang/ResourceHandle.h"
+
 #include "BangEditor/TransformGizmoAxis.h"
 
 NAMESPACE_BANG_BEGIN
+FORWARD class MeshRenderer;
 FORWARD class LineRenderer;
 NAMESPACE_BANG_END
 
@@ -17,11 +20,16 @@ class RotateGizmoAxis : public TransformGizmoAxis
 public:
     // GameObject
     void Update() override;
+    void Render(RenderPass renderPass, bool renderChildren) override;
 
     void SetAxis(Axis3D axis) override;
 
 private:
     using SelectionState = SelectionGizmo::SelectionState;
+
+    RH<Mesh> m_selectionMesh;
+    GameObject *p_selectionGo = nullptr;
+    MeshRenderer *p_selectionRenderer = nullptr;
 
     LineRenderer *p_circleRenderer = nullptr;
 

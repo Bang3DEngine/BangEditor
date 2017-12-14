@@ -18,6 +18,7 @@ class TranslateGizmoAxis : public TransformGizmoAxis
 public:
     // GameObject
     void Update() override;
+    void Render(RenderPass renderPass, bool renderChildren) override;
 
     void SetAxis(Axis3D axis) override;
 
@@ -27,8 +28,10 @@ private:
     Vector3 m_grabOffset = Vector3::Zero;
 
     GameObject *p_arrowCap = nullptr;
+    GameObject *p_selectionGo = nullptr;
     LineRenderer *p_lineRenderer = nullptr;
     MeshRenderer *p_meshRenderer = nullptr;
+    MeshRenderer *p_selectionRenderer = nullptr;
 
     void SetColor(const Color &color) override;
 
