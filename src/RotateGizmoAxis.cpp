@@ -50,10 +50,23 @@ Vector3 GetProjectedPointIntoSphere(const Vector3 &point,
     return sphereCenter - closestRayPointToSphereDir * sphereRadius;
 }
 
+Vector3 GetAxisedSpherePoint(const Vector3 &spherePoint,
+                             const Vector3 &axisWorld,
+                             const Vector3 &sphereCenter,
+                             float sphereRadius)
+{
+    // Returns the point in the sphere over the specified axis (i.e., on the
+    // plane with normal axisWorld)
+
+    Vector3 axisedSpherePoint = spherePoint.ProjectedOnPlane(axisWorld,
+                                                             sphereCenter);
+    return sphereCenter + (axisedSpherePoint - sphereCenter).Normalized() *
+                           sphereRadius;
+}
+
 void RotateGizmoAxis::Update()
 {
     TransformGizmoAxis::Update();
-    UpdateCirclePoints();
 
     if ( IsBeingGrabbed())
     {
@@ -61,8 +74,8 @@ void RotateGizmoAxis::Update()
         Transform *refGoT = refGo->GetTransform();
         Vector3 sphereCenter = refGoT->GetPosition();
 
-        Ray mouseRay = Camera::GetActive()->
-                       FromViewportPointNDCToRay( Input::GetMousePositionNDC() );
+        Camera *cam = Camera::GetActive();
+        Ray mouseRay = cam->FromViewportPointNDCToRay( Input::GetMousePositionNDC() );
 
         bool intersected;
         Vector3 spherePoint;
@@ -75,86 +88,35 @@ void RotateGizmoAxis::Update()
             Vector3 closestRayPointToSphere = mouseRay.GetClosestPointToPoint(sphereCenter);
             spherePoint = GetProjectedPointIntoSphere(closestRayPointToSphere,
                                                       sphereCenter, SphereRadius);
-
-            /*
-            Ray closestRayPointToSphereRay;
-            closestRayPointToSphereRay.SetOrigin( closestRayPointToSphere );
-            closestRayPointToSphereRay.SetDirection( closestRayPointToSphereV );
-
-            bool intersected2;
-            closestRayPointToSphereRay.
-                    GetIntersectionWithSphere(sphereCenter, SphereRadius,
-                                              &intersected2, &spherePoint);
-            ASSERT(intersected2);
-            DebugRenderer::RenderLine(sphereCenter, -closestRayPointToSphereV,
-                                       Color::Green, 0.5f, 1.0f, true);
-            */
         }
 
-        // DebugRenderer::RenderPoint(spherePoint, Color::Red, 0.5f, 10.0f, true);
-
-        // Create the plane P normal to the axis (the rotation plane)
-        Vector3 rotationPlaneNormal = GetAxisVectorWorld();
-        Vector3 rotationPlanePoint  = sphereCenter;
-
-        Vector3 axisedSpherePoint =
-                spherePoint.ProjectedOnPlane(rotationPlaneNormal,
-                                             rotationPlanePoint);
-        axisedSpherePoint = sphereCenter +
-                           (axisedSpherePoint - sphereCenter).Normalized() *
-                            SphereRadius;
         if (GrabHasJustChanged())
         {
+            // Get the sphere point but constrained on the axis (over rotation plane)
+            Vector3 axisedSpherePoint = GetAxisedSpherePoint(spherePoint,
+                                                             GetAxisVectorWorld(),
+                                                             sphereCenter,
+                                                             SphereRadius);
+
             // Obtain the sphere tangent vector T on spherePoint coplanar to P,
             // which will determine the direction that will drive user movement...
             // If he moves mouse in direction T,  rotation speed will be max.
             // If he moves it perpendicular to T, rotation speed will be 0.
             Vector3 rotationTangentDirection =
                     Vector3::Cross(sphereCenter - axisedSpherePoint,
-                                   rotationPlaneNormal);
+                                   GetAxisVectorWorld());
             rotationTangentDirection.Normalize();
 
             m_startingGrabMousePosNDC = Input::GetMousePositionNDC();
             m_startingGrabSphereTangentDir = rotationTangentDirection;
             m_startingGrabAxisedSpherePoint = axisedSpherePoint;
         }
-/*
-        DebugRenderer::RenderPoint(axisedSpherePoint,
-                                   Color::Black, 0.5f, 3.0f, false);
-        DebugRenderer::RenderLine(sphereCenter,
-                                  axisedSpherePoint,
-                                  Color::Green, 0.5f, 1.0f, false);
-        DebugRenderer::RenderLine(axisedSpherePoint,
-                                  axisedSpherePoint + rotationPlaneNormal,
-                                  Color::Red, 0.5f, 1.0f, false);
-        DebugRenderer::RenderLine(m_startingGrabAxisedSpherePoint - m_startingGrabSphereTangentDir * 99.9f,
-                                  m_startingGrabAxisedSpherePoint + m_startingGrabSphereTangentDir * 99.9f,
-                                  Color::Pink, 0.5f, 1.0f, true);
-*/
 
-        // Get the sphere tangent reference direction in screen NDC space
-        Camera *cam = Camera::GetActive();
-        /*
-        Vector2 p1NDC = cam->FromWorldPointToViewportPointNDC(spherePoint);
-        Vector2 p2NDC = cam->FromWorldPointToViewportPointNDC(spherePoint +
-                                                              m_startingGrabSphereTangentDir);
-        Vector2 worldZeroScreenNDC =
-                cam->FromWorldPointToViewportPointNDC(Vector3::Zero);
-        Vector2 rotationTangentPointScreenNDC =
-                cam->FromWorldPointToViewportPointNDC(rotationTangentDirection);
-        Vector2 rotationTangentDirScreenNDC =
-                p2NDC - p1NDC;
-                // cam->FromWorldPointToViewportPointNDC(rotationTangentDirection);
-                // rotationTangentPointScreenNDC - worldZeroScreenNDC;
-        // rotationTangentDirScreenNDC.Normalize();
-        // Debug_Peek(rotationTangentDirScreenNDC);
-        */
 
-        // Get mouseAxis
+        // Get mouseAxis, and displace from the starting grab mouse pos. With
+        // this displaced mouse position, get the new point in the sphere
         Vector2 mouseAxis = Input::GetMouseAxis();
         Vector2 displacedMousePosition = m_startingGrabMousePosNDC + mouseAxis;
-        Debug_Peek(m_startingGrabMousePosNDC);
-        Debug_Peek(displacedMousePosition);
         Ray displacedMouseRay = cam->FromViewportPointNDCToRay(displacedMousePosition);
         Vector3 displacedMouseRayClosestPointInTangentLine;
         displacedMouseRay.GetClosestPointToLine(
@@ -164,65 +126,23 @@ void RotateGizmoAxis::Update()
 
         const Vector3 &dmrcpitl = displacedMouseRayClosestPointInTangentLine;
         Vector3 displacedAxisedSpherePoint =
-            GetProjectedPointIntoSphere(dmrcpitl, sphereCenter, SphereRadius);
+           GetProjectedPointIntoSphere(dmrcpitl, sphereCenter, SphereRadius);
 
+        // Now that we have the two points (starting and new displaced), get
+        // the 2 vectors from the center outwards, and just apply the rotation
+        // using a Quaternion From starting To new_displaced_sphere_position
         Vector3 sphereCenterToStartAxisedSpherePoint =
                 (m_startingGrabAxisedSpherePoint - sphereCenter);
         Vector3 sphereCenterToCurrentAxisedSpherePoint =
                 (displacedAxisedSpherePoint - sphereCenter);
 
-        DebugRenderer::RenderPoint(m_startingGrabAxisedSpherePoint,
-                                   Color::Red, 0.5f, 4.0f, false);
-        DebugRenderer::RenderPoint(displacedAxisedSpherePoint,
-                                   Color::Green, 0.5f, 4.0f, false);
-
-        float dot = Vector3::Dot(sphereCenterToStartAxisedSpherePoint.Normalized(),
-                                 sphereCenterToCurrentAxisedSpherePoint.Normalized());
-        float angle = Math::ACos(dot);
-        float angleDegrees = Math::Rad2Deg(angle);
-        if (angleDegrees > 2) // Avoid precision issues
+        // Finally, apply the rotation
+        Quaternion rotQ = Quaternion::FromTo(sphereCenterToStartAxisedSpherePoint,
+                                             sphereCenterToCurrentAxisedSpherePoint);
+        if ( rotQ.GetEulerAngles().ToDegrees().Length() > 2) // Avoid precision issues
         {
-            refGoT->Rotate( Quaternion::FromTo(sphereCenterToStartAxisedSpherePoint,
-                                               sphereCenterToCurrentAxisedSpherePoint) );
-            Debug_Log("Angle: " << angleDegrees );
+            refGoT->Rotate(rotQ);
         }
-        // GetAxisVectorWorld() * angle );
-
-        // float dot = Vector2::Dot(mouseAxis.Normalized(),
-        //                          rotationTangentDirScreenNDC);
-
-        /*Debug_Peek(displacedMouseRayClosestAxisedPoint);
-        DebugRenderer::RenderPoint(displacedMouseRayClosestAxisedPoint,
-                                   Color::Green, 0.5f, 3.0f, true);
-        */
-
-        /*
-        Debug_Peek(Input::GetMouseAxis());
-        Debug_Peek(Input::GetMouseAxisX());
-        Debug_Peek(Input::GetMouseAxisY());
-        Debug_Peek(Input::GetMouseDelta());
-        if (mouseAxis.Length() > 0)
-        {
-            Debug_Peek(mouseAxis);
-            Debug_Log(Vector2::Dot(mouseAxis.Normalized(),
-                                   rotationTangentDirScreenNDC));
-        }
-        Vector3 mouseAxisInRotationPlaneSpace =
-                mouseAxis.x * ;
-        bool intersectedWithRotPlane;
-        Vector3 mouseAxisInRotationPlaneSpace;
-        mouseRay.GetIntersectionWithPlane(rotationPlanePoint,
-                                          rotationPlaneNormal,
-                                          &intersectedWithRotPlane,
-                                          &mouseAxisInRotationPlaneSpace);
-        if (intersectedWithRotPlane)
-        {
-            Debug_Log(Vector3::Dot(mouseAxisInRotationPlaneSpace.Normalized(),
-                                   rotationTangentDirection));
-            // Now, we want to know how aligned was the user movement to that
-            // of
-        }
-                                          */
     }
 }
 
@@ -230,6 +150,9 @@ void RotateGizmoAxis::Render(RenderPass renderPass, bool renderChildren)
 {
     bool selection = GL::IsBound( GEngine::GetActiveSelectionFramebuffer() );
     p_selectionGo->SetEnabled(selection);
+
+    UpdateCirclePoints();
+
     TransformGizmoAxis::Render(renderPass, renderChildren);
 }
 

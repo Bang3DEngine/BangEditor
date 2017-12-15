@@ -6,6 +6,10 @@
 
 #include "BangEditor/SelectionGizmo.h"
 
+NAMESPACE_BANG_BEGIN
+FORWARD class LineRenderer;
+NAMESPACE_BANG_END
+
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
@@ -17,6 +21,10 @@ class RotateGizmo : public GameObject,
     GAMEOBJECT_EDITOR(RotateGizmo);
 
 public:
+    // GameObject
+    void Update() override;
+    void Render(RenderPass rp, bool renderChildren) override;
+
     // SelectionGizmo
     void SetReferencedGameObject(GameObject *referencedGameObject) override;
 
@@ -25,8 +33,15 @@ private:
     RotateGizmoAxis *p_axisY = nullptr;
     RotateGizmoAxis *p_axisZ = nullptr;
 
-	RotateGizmo();
+    GameObject *p_sphereGo = nullptr;
+    LineRenderer *p_sphereBoundsRenderer = nullptr;
+
+    RotateGizmo();
 	virtual ~RotateGizmo();
+
+    void CreateSphereBoundsPoints();
+
+    friend class RotateGizmoAxis;
 };
 
 NAMESPACE_BANG_EDITOR_END
