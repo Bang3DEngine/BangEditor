@@ -27,6 +27,10 @@ public:
 private:
     using SelectionState = SelectionGizmo::SelectionState;
 
+    Vector2 m_startingGrabMousePosNDC;
+    Vector3 m_startingGrabSphereTangentDir;
+    Vector3 m_startingGrabAxisedSpherePoint;
+
     RH<Mesh> m_selectionMesh;
     GameObject *p_selectionGo = nullptr;
     MeshRenderer *p_selectionRenderer = nullptr;

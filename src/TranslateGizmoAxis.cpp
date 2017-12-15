@@ -61,27 +61,34 @@ void TranslateGizmoAxis::Update()
         // camera the most.
         Camera *cam = Camera::GetActive();
         Transform *camT = cam->GetGameObject()->GetTransform();
-        Vector3 planeNormal = Vector3::Cross( GetAxisVectorLocal(),
+        Vector3 planeNormal = Vector3::Cross( GetAxisVectorWorld(),
                                 Vector3::Cross(camT->GetForward(),
-                                                GetAxisVectorLocal())).Normalized();
-        Vector3 refPos = GetReferencedGameObject()->GetTransform()->GetPosition();
+                                               GetAxisVectorWorld())).Normalized();
+        Vector3 refGoCenter = GetReferencedGameObject()->GetTransform()->GetPosition();
 
         // Then cast a ray through the mouse position, and see where it intersects
         // with this plane.
-        Ray ray = Camera::GetActive()->
-                  FromViewportPointNDCToRay( Input::GetMousePositionNDC() );
-        Vector3 inters = ray.GetIntersectionWithPlane(planeNormal, refPos);
+        Ray mouseRay = Camera::GetActive()->
+                       FromViewportPointNDCToRay( Input::GetMousePositionNDC() );
+
+        bool intersected;
+        Vector3 intersection;
+        mouseRay.GetIntersectionWithPlane(refGoCenter, planeNormal,
+                                          &intersected, &intersection);
 
         // Then, move the object to the intersection
-        GameObject *refGo = GetReferencedGameObject();
-        Transform *refGoT = refGo->GetTransform();
+        if (intersected)
+        {
+            GameObject *refGo = GetReferencedGameObject();
+            Transform *refGoT = refGo->GetTransform();
 
-        Vector3 displacement = (inters - refGoT->GetPosition());
-        displacement *= Vector3::Abs( GetAxisVectorWorld() );
-        if (GrabHasJustChanged()) { m_grabOffset = displacement; }
+            Vector3 displacement = (intersection - refGoCenter);
+            displacement = displacement.ProjectedOnVector(GetAxisVectorWorld());
+            if (GrabHasJustChanged()) { m_grabOffset = displacement; }
 
-        refGoT->Translate(displacement);
-        refGoT->Translate(-m_grabOffset);
+            refGoT->Translate(displacement);
+            refGoT->Translate(-m_grabOffset);
+        }
     }
 }
 

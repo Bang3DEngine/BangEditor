@@ -29,7 +29,8 @@ void TransformGizmoAxis::Update()
     bool isMouseOver = false;
     SelectionState selectionState = SelectionState::Idle;
     GameObject *overedGameObject = Selection::GetOveredGameObject();
-    if (overedGameObject)
+    if (IsBeingGrabbed()) { selectionState = SelectionState::Grabbed; }
+    else if (overedGameObject)
     {
         isMouseOver = overedGameObject == this ||
                       overedGameObject->IsChildOf(this);
@@ -72,7 +73,7 @@ Vector3 TransformGizmoAxis::GetAxisVectorLocal() const
 Vector3 TransformGizmoAxis::GetAxisVectorWorld() const
 {
     Transform *refGoT = GetReferencedGameObject()->GetTransform();
-    return refGoT->FromLocalToWorldDirection( GetAxisVectorLocal() );
+    return refGoT->FromLocalToWorldDirection( GetAxisVectorLocal() ).Normalized();
 }
 
 bool TransformGizmoAxis::IsBeingGrabbed() const

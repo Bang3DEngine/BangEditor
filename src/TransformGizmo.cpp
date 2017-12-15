@@ -35,13 +35,11 @@ void TransformGizmo::Update()
 {
     GameObject::Update();
 
-    // Transform *camT = Camera::GetActive()->GetGameObject()->GetTransform();
-    // float camDist = camT->GetPosition();
-    // GetTransform()->SetScale();
-
     GameObject *refGo = GetReferencedGameObject();
     GetTransform()->SetPosition( refGo->GetTransform()->GetPosition() );
     GetTransform()->SetRotation( refGo->GetTransform()->GetRotation() );
+
+    GetTransform()->SetScale( GetScaleFactor() );
 
     if      (Input::GetKeyDown(Key::W)) { m_transformMode = TransformMode::Translate; }
     else if (Input::GetKeyDown(Key::E)) { m_transformMode = TransformMode::Rotate; }
@@ -76,4 +74,14 @@ void TransformGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
     p_translateGizmo->SetReferencedGameObject(referencedGameObject);
     p_rotateGizmo->SetReferencedGameObject(referencedGameObject);
     p_scaleGizmo->SetReferencedGameObject(referencedGameObject);
+}
+
+float TransformGizmo::GetScaleFactor() const
+{
+    GameObject *refGo = GetReferencedGameObject();
+    Transform *camT = Camera::GetActive()->GetGameObject()->GetTransform();
+    float camDist = Vector3::Distance(refGo->GetTransform()->GetPosition(),
+                                      camT->GetPosition());
+    return 0.1f * camDist;
+    GetTransform()->SetScale( 0.1f * camDist );
 }

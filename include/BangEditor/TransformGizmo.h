@@ -24,6 +24,8 @@ public:
     // SelectionGizmo
     void SetReferencedGameObject(GameObject *referencedGameObject) override;
 
+    float GetScaleFactor() const;
+
 private:
     enum class TransformMode { Translate, Rotate, Scale };
     TransformMode m_transformMode = TransformMode::Translate;
