@@ -14,6 +14,7 @@
 #include "Bang/LineRenderer.h"
 #include "Bang/AxisFunctions.h"
 #include "Bang/DebugRenderer.h"
+#include "Bang/RendererFactory.h"
 #include "Bang/SelectionFramebuffer.h"
 
 #include "BangEditor/TransformGizmo.h"
@@ -28,13 +29,13 @@ ScaleGizmoAxis::ScaleGizmoAxis()
     SetName("ScaleGizmoAxis");
 
     p_lineRenderer = AddComponent<LineRenderer>();
-    p_lineRenderer->SetRenderPass(RenderPass::Gizmos);
+    RendererFactory::ConvertToGizmoRenderer(p_lineRenderer);
 
     p_arrowCap = GameObjectFactory::CreateGameObject(true);
     p_arrowCap->SetName("ArrowCap");
 
     p_meshRenderer = p_arrowCap->AddComponent<MeshRenderer>();
-    p_meshRenderer->SetRenderPass(RenderPass::Gizmos);
+    RendererFactory::ConvertToGizmoRenderer(p_meshRenderer);
     p_meshRenderer->GetMaterial()->SetReceivesLighting(false);
     p_meshRenderer->SetMesh( MeshFactory::GetCube().Get() );
     p_arrowCap->GetTransform()->SetLocalScale( Vector3( ArrowCapScale ) );
@@ -43,7 +44,7 @@ ScaleGizmoAxis::ScaleGizmoAxis()
     p_selectionGo->SetName("AxisSelection");
 
     p_selectionRenderer = p_selectionGo->AddComponent<MeshRenderer>();
-    p_selectionRenderer->SetRenderPass(RenderPass::Gizmos);
+    RendererFactory::ConvertToGizmoRenderer(p_selectionRenderer);
     p_selectionRenderer->SetMesh( MeshFactory::GetCube().Get() );
 
     p_arrowCap->SetParent(this);

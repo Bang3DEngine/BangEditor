@@ -8,6 +8,7 @@
 
 NAMESPACE_BANG_BEGIN
 FORWARD class LineRenderer;
+FORWARD class MeshRenderer;
 NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -34,6 +35,8 @@ private:
     RotateGizmoAxis *p_axisZ = nullptr;
 
     GameObject *p_sphereGo = nullptr;
+    GameObject *p_sphereBoundsGo = nullptr;
+    MeshRenderer *p_sphereRenderer = nullptr;
     LineRenderer *p_sphereBoundsRenderer = nullptr;
 
     RotateGizmo();

@@ -13,6 +13,7 @@
 #include "Bang/MeshRenderer.h"
 #include "Bang/AxisFunctions.h"
 #include "Bang/DebugRenderer.h"
+#include "Bang/RendererFactory.h"
 #include "Bang/SelectionFramebuffer.h"
 
 #include "BangEditor/TransformGizmo.h"
@@ -25,12 +26,12 @@ RotateGizmoAxis::RotateGizmoAxis()
     SetName("RotateGizmoAxis");
 
     p_circleRenderer = AddComponent<LineRenderer>();
-    p_circleRenderer->SetRenderPass(RenderPass::Gizmos);
+    RendererFactory::ConvertToGizmoRenderer(p_circleRenderer);
     p_circleRenderer->SetLineWidth(2.0f);
 
     p_selectionGo = GameObjectFactory::CreateGameObject(true);
     p_selectionRenderer = p_selectionGo->AddComponent<MeshRenderer>();
-    p_selectionRenderer->SetRenderPass(RenderPass::Gizmos);
+    RendererFactory::ConvertToGizmoRenderer(p_selectionRenderer);
     p_selectionRenderer->SetCulling(false);
 
     m_selectionMesh = Resources::Create<Mesh>();

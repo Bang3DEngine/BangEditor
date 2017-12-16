@@ -1,9 +1,13 @@
 #include "BangEditor/RotateGizmo.h"
 
+#include "Bang/Mesh.h"
 #include "Bang/Camera.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
+#include "Bang/MeshFactory.h"
+#include "Bang/MeshRenderer.h"
 #include "Bang/LineRenderer.h"
+#include "Bang/RendererFactory.h"
 
 #include "BangEditor/RotateGizmoAxis.h"
 
@@ -17,12 +21,22 @@ RotateGizmo::RotateGizmo()
     p_sphereGo = GameObjectFactory::CreateGameObject();
     p_sphereGo->SetName("Sphere");
 
-    p_sphereBoundsRenderer = p_sphereGo->AddComponent<LineRenderer>();
+    p_sphereRenderer = p_sphereGo->AddComponent<MeshRenderer>();
+    RendererFactory::ConvertToGizmoRenderer(p_sphereRenderer);
+    p_sphereRenderer->SetMesh( MeshFactory::GetSphere().Get() );
+    p_sphereRenderer->GetMaterial()->SetDiffuseColor( Color(1, 1, 1, 0.25f) );
+    p_sphereGo->GetTransform()->SetLocalScale(0.97f);
+
+    p_sphereBoundsGo = GameObjectFactory::CreateGameObject();
+    p_sphereBoundsGo->SetName("SphereBounds");
+
+    p_sphereBoundsRenderer = p_sphereBoundsGo->AddComponent<LineRenderer>();
+    RendererFactory::ConvertToGizmoRenderer(p_sphereBoundsRenderer);
     p_sphereBoundsRenderer->GetMaterial()->SetDiffuseColor(Color::Black);
-    p_sphereBoundsRenderer->SetRenderPass(RenderPass::Gizmos);
     CreateSphereBoundsPoints();
 
     p_sphereGo->SetParent(this);
+    p_sphereBoundsGo->SetParent(this);
 
     p_axisX = GameObject::Create<RotateGizmoAxis>();
     p_axisY = GameObject::Create<RotateGizmoAxis>();
@@ -52,7 +66,7 @@ void RotateGizmo::Render(RenderPass rp, bool renderChildren)
     Camera *cam = Camera::GetActive();
     Transform *camT = cam->GetGameObject()->GetTransform();
     Vector3 camCenterDir = (GetTransform()->GetPosition() - camT->GetPosition());
-    p_sphereGo->GetTransform()->SetRotation(
+    p_sphereBoundsGo->GetTransform()->SetRotation(
                                     Quaternion::LookDirection(camCenterDir) );
 
     GameObject::Render(rp, renderChildren); // Do Render
