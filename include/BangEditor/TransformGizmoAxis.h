@@ -43,6 +43,9 @@ private:
     bool m_isBeingGrabbed = false;
 
     void SetColor(SelectionState state);
+
+    // IEnabledListener
+    void OnDisabled() override;
 };
 
 NAMESPACE_BANG_EDITOR_END

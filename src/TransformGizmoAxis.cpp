@@ -93,10 +93,7 @@ void TransformGizmoAxis::SetColor(SelectionState state)
     switch (state)
     {
         case SelectionState::Idle:
-            {
-                Color axisColor = GetAxisColor( GetAxis() );
-                SetColor(axisColor);
-            }
+            SetColor( GetAxisColor( GetAxis() ) );
             break;
 
         case SelectionState::Over:
@@ -107,4 +104,11 @@ void TransformGizmoAxis::SetColor(SelectionState state)
             SetColor(Color::Yellow);
             break;
     }
+}
+
+void TransformGizmoAxis::OnDisabled()
+{
+    GameObject::OnDisabled();
+    m_isBeingGrabbed = m_grabHasJustChanged = false;
+    SetColor(SelectionState::Idle);
 }

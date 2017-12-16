@@ -16,8 +16,12 @@
 #include "Bang/DebugRenderer.h"
 #include "Bang/SelectionFramebuffer.h"
 
+#include "BangEditor/TransformGizmo.h"
+
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
+
+float ScaleGizmoAxis::ArrowCapScale = 0.3f;
 
 ScaleGizmoAxis::ScaleGizmoAxis()
 {
@@ -33,7 +37,7 @@ ScaleGizmoAxis::ScaleGizmoAxis()
     p_meshRenderer->SetRenderPass(RenderPass::Gizmos);
     p_meshRenderer->GetMaterial()->SetReceivesLighting(false);
     p_meshRenderer->SetMesh( MeshFactory::GetCube().Get() );
-    p_arrowCap->GetTransform()->SetLocalScale( Vector3(0.3f) );
+    p_arrowCap->GetTransform()->SetLocalScale( Vector3( ArrowCapScale ) );
 
     p_selectionGo = GameObjectFactory::CreateGameObject(true);
     p_selectionGo->SetName("AxisSelection");
@@ -86,27 +90,32 @@ void ScaleGizmoAxis::Update()
             Vector3 centerToMousePointProjV =
                 centerToMousePointV.ProjectedOnVector(GetAxisVectorWorld());
 
+            Vector3 centerToMousePointProjLocalV =
+                    refGoT->FromWorldToLocalDirection(centerToMousePointProjV);
+
             if (GrabHasJustChanged())
             {
                 m_startGrabLocalScale = refGoT->GetLocalScale();
-                m_startGrabCenterToMousePointProjV = centerToMousePointProjV;
+                m_startGrabCenterToMousePointProjLocalV = centerToMousePointProjLocalV;
             }
             else
             {
-                Vector3 displacementV = centerToMousePointProjV -
-                                        m_startGrabCenterToMousePointProjV;
-
-                const int i = GetAxisIndex(GetAxis());
-                float displacement = displacementV[i];
-                float scaleFactor = (displacement / GetAxisWorldLength()) * 0.5f;
-                if (GetAxis() == Axis3D::Z) { scaleFactor *= -1; }
+                Vector3 displacementLocalV = centerToMousePointProjLocalV -
+                                        m_startGrabCenterToMousePointProjLocalV;
+                displacementLocalV *= Vector3(1, 1,-1);
+                Vector3 scaleFactor = Vector3::Abs(GetAxisVectorLocal()) *
+                                       displacementLocalV * 0.5f;
                 scaleFactor += 1.0f;
 
-                Vector3 newScale = m_startGrabLocalScale;
-                newScale[i] *= (scaleFactor);
+                Vector3 newScale = m_startGrabLocalScale * scaleFactor;
                 refGoT->SetLocalScale(newScale);
 
-                UpdatePoints(scaleFactor); // Update gizmo length
+                // Update gizmo length
+                const int i = GetAxisIndex(GetAxis());
+                Vector3 centerToMousePointProjLocalGizmoV =
+                   GetTransform()->FromWorldToLocalVector(centerToMousePointProjV);
+                centerToMousePointProjLocalGizmoV *= Vector3(1, 1,-1);
+                UpdatePoints( centerToMousePointProjLocalGizmoV[i] );
             }
         }
     }
@@ -130,9 +139,11 @@ void ScaleGizmoAxis::SetAxis(Axis3D axis)
     UpdatePoints(1.0f);
 }
 
-void ScaleGizmoAxis::UpdatePoints(float length)
+void ScaleGizmoAxis::UpdatePoints(float localAxisLength)
 {
-    Vector3 axisFwd = GetAxisVectorLocal() * length;
+    if (!GetParent()) { return; }
+
+    Vector3 axisFwd = GetAxisVectorLocal() * localAxisLength;
     p_lineRenderer->SetPoints( {Vector3::Zero, axisFwd} );
     p_arrowCap->GetTransform()->SetLocalPosition(axisFwd);
 
@@ -147,11 +158,4 @@ void ScaleGizmoAxis::SetColor(const Color &color)
 {
     p_lineRenderer->GetMaterial()->SetDiffuseColor(color);
     p_meshRenderer->GetMaterial()->SetDiffuseColor(color);
-}
-
-float ScaleGizmoAxis::GetAxisWorldLength() const
-{
-    return GetTransform()->
-           FromLocalToWorldDirection( GetAxisVectorLocal() ).
-           Length();
 }

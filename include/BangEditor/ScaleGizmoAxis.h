@@ -24,8 +24,10 @@ public:
 private:
     using SelectionState = SelectionGizmo::SelectionState;
 
+    static float ArrowCapScale;
+
     Vector3 m_startGrabLocalScale = Vector3::Zero;
-    Vector3 m_startGrabCenterToMousePointProjV = Vector3::Zero;
+    Vector3 m_startGrabCenterToMousePointProjLocalV = Vector3::Zero;
 
     GameObject *p_arrowCap = nullptr;
     GameObject *p_selectionGo = nullptr;
@@ -36,10 +38,8 @@ private:
     ScaleGizmoAxis();
     virtual ~ScaleGizmoAxis();
 
-    void UpdatePoints(float length);
+    void UpdatePoints(float localAxisLength);
     void SetColor(const Color &color) override;
-
-    float GetAxisWorldLength() const;
 };
 
 NAMESPACE_BANG_EDITOR_END
