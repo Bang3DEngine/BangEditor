@@ -82,23 +82,23 @@ void TranslateGizmoAxis::Update()
             GameObject *refGo = GetReferencedGameObject();
             Transform *refGoT = refGo->GetTransform();
 
-            Vector3 displacement = (intersection - refGoCenter);
-            displacement = displacement.ProjectedOnVector(GetAxisVectorWorld());
+            Vector3 mousePoint = (intersection - refGoCenter);
+            mousePoint = mousePoint.ProjectedOnVector(GetAxisVectorWorld());
 
-            if (GrabHasJustChanged()) { m_grabOffset = displacement; }
+            if (GrabHasJustChanged()) { m_startGrabPoint = mousePoint; }
             else
             {
-                displacement -= m_grabOffset;
+                mousePoint -= m_startGrabPoint;
 
                 if (Input::GetKey(Key::LShift))
                 {
                     constexpr float SnappingDist = 1.0f;
-                    float dl = displacement.Length();
+                    float dl = mousePoint.Length();
                     float snapDL = Math::Round(dl / SnappingDist) * SnappingDist;
-                    displacement = displacement.NormalizedSafe() * snapDL;
+                    mousePoint = mousePoint.NormalizedSafe() * snapDL;
                 }
 
-                refGoT->Translate(displacement);
+                refGoT->Translate(mousePoint);
             }
         }
     }

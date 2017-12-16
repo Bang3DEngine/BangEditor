@@ -25,7 +25,7 @@ public:
 private:
     using SelectionState = SelectionGizmo::SelectionState;
 
-    Vector3 m_grabOffset = Vector3::Zero;
+    Vector3 m_startGrabPoint = Vector3::Zero;
 
     GameObject *p_arrowCap = nullptr;
     GameObject *p_selectionGo = nullptr;
