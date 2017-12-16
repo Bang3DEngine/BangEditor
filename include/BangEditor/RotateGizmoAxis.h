@@ -28,7 +28,6 @@ private:
     using SelectionState = SelectionGizmo::SelectionState;
 
     Vector2 m_startingGrabMousePosNDC;
-    Vector3 m_startingGrabSphereTangentDir;
     Vector3 m_startingGrabAxisedSpherePoint;
 
     RH<Mesh> m_selectionMesh;
@@ -41,6 +40,7 @@ private:
     virtual ~RotateGizmoAxis();
 
     void UpdateCirclePoints();
+    static Quaternion GetQuaternionAxised(const Quaternion &q, Axis3D axis);
 
     void SetColor(const Color &color) override;
 

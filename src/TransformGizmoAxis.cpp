@@ -48,7 +48,9 @@ void TransformGizmoAxis::Update()
     }
     else
     {
-        if (Input::GetMouseButtonUp(MouseButton::Left))
+        if (Input::GetMouseButtonUp(MouseButton::Left) ||
+            Input::GetMouseButtonDown(MouseButton::Right)
+           )
         {
             m_isBeingGrabbed = false;
         }
@@ -67,7 +69,7 @@ void TransformGizmoAxis::SetAxis(Axis3D axis)
 Axis3D TransformGizmoAxis::GetAxis() const { return m_axis; }
 Vector3 TransformGizmoAxis::GetAxisVectorLocal() const
 {
-    return GetVectorFromAxis( GetAxis() );
+    return GetAxisVector( GetAxis() );
 }
 
 Vector3 TransformGizmoAxis::GetAxisVectorWorld() const
@@ -92,7 +94,7 @@ void TransformGizmoAxis::SetColor(SelectionState state)
     {
         case SelectionState::Idle:
             {
-                Color axisColor = GetColorFromAxis( GetAxis() );
+                Color axisColor = GetAxisColor( GetAxis() );
                 SetColor(axisColor);
             }
             break;

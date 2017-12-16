@@ -82,6 +82,5 @@ float TransformGizmo::GetScaleFactor() const
     Transform *camT = Camera::GetActive()->GetGameObject()->GetTransform();
     float camDist = Vector3::Distance(refGo->GetTransform()->GetPosition(),
                                       camT->GetPosition());
-    return 0.1f * camDist;
-    GetTransform()->SetScale( 0.1f * camDist );
+    return 0.15f * camDist;
 }

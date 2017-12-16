@@ -61,7 +61,7 @@ void EditorCamera::AdjustSpeeds()
             Vector3 focusPoint = ft->GetPosition();
             float d = Vector3::Distance(focusPoint, GetTransform()->GetPosition());
             float ar = GL::GetViewportAspectRatio();
-            float halfFov = Math::Deg2Rad(p_cam->GetFovDegrees()/2.0f);
+            float halfFov = Math::DegToRad(p_cam->GetFovDegrees()/2.0f);
             float halfHeightInWorldSpace = Math::Tan(halfFov) * d;
             m_mousePanPerPixel.y = (halfHeightInWorldSpace * 2) / wHeight;
             m_mousePanPerPixel.x = m_mousePanPerPixel.y * wHeight * ar / wWidth;
@@ -107,11 +107,11 @@ bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
         m_mouseRotDegreesAccum += delta;
 
         GetTransform()->SetLocalRotation(m_startingRotation);
-        Quaternion rotX = Quaternion::AngleAxis(Math::Deg2Rad(m_mouseRotDegreesAccum.x),
+        Quaternion rotX = Quaternion::AngleAxis(Math::DegToRad(m_mouseRotDegreesAccum.x),
                                                 Vector3::Up);
         GetTransform()->Rotate(rotX);
 
-        Quaternion rotY = Quaternion::AngleAxis(Math::Deg2Rad(m_mouseRotDegreesAccum.y),
+        Quaternion rotY = Quaternion::AngleAxis(Math::DegToRad(m_mouseRotDegreesAccum.y),
                                                 p_camt->GetRight());
         GetTransform()->Rotate(rotY);
 
@@ -188,7 +188,7 @@ void EditorCamera::HandleLookAtFocus()
     float radius = focusBSphere.GetRadius();
     if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
     {
-        float fov = Math::Deg2Rad(cam->GetFovDegrees() / 2.0f);
+        float fov = Math::DegToRad(cam->GetFovDegrees() / 2.0f);
         stopDist = radius / std::tan(fov) * 1.5f;
     }
     stopDist = std::max(stopDist, 1.0f); //In case boundingBox is empty

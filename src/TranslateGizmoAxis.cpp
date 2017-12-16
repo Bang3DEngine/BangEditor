@@ -84,10 +84,22 @@ void TranslateGizmoAxis::Update()
 
             Vector3 displacement = (intersection - refGoCenter);
             displacement = displacement.ProjectedOnVector(GetAxisVectorWorld());
-            if (GrabHasJustChanged()) { m_grabOffset = displacement; }
 
-            refGoT->Translate(displacement);
-            refGoT->Translate(-m_grabOffset);
+            if (GrabHasJustChanged()) { m_grabOffset = displacement; }
+            else
+            {
+                displacement -= m_grabOffset;
+
+                if (Input::GetKey(Key::LShift))
+                {
+                    constexpr float SnappingDist = 1.0f;
+                    float dl = displacement.Length();
+                    float snapDL = Math::Round(dl / SnappingDist) * SnappingDist;
+                    displacement = displacement.NormalizedSafe() * snapDL;
+                }
+
+                refGoT->Translate(displacement);
+            }
         }
     }
 }

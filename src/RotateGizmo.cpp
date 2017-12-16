@@ -51,7 +51,9 @@ void RotateGizmo::Render(RenderPass rp, bool renderChildren)
     // Update sphere so that it faces camera
     Camera *cam = Camera::GetActive();
     Transform *camT = cam->GetGameObject()->GetTransform();
-    p_sphereGo->GetTransform()->SetRotation( camT->GetRotation() );
+    Vector3 camCenterDir = (GetTransform()->GetPosition() - camT->GetPosition());
+    p_sphereGo->GetTransform()->SetRotation(
+                                    Quaternion::LookDirection(camCenterDir) );
 
     GameObject::Render(rp, renderChildren); // Do Render
 }

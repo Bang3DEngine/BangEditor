@@ -26,7 +26,7 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
 {
     UILayoutElement *le = GetComponent<UILayoutElement>();
     le->SetMinSize( Vector2i(100) );
-    le->SetPreferredSize( Vector2i(200) );
+    le->SetPreferredSize( Vector2i(150, 200) );
 
     p_tree = GameObjectFactory::CreateUITree();
     UIScrollPanel *scrollPanel = GetUITree()->GetUIList()->GetScrollPanel();
