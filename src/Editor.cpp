@@ -1,12 +1,23 @@
 #include "BangEditor/Editor.h"
 
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorSettings.h"
 #include "BangEditor/TransformGizmo.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/NotSelectableInEditor.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
+
+Editor::Editor()
+{
+    m_editorSettings = new EditorSettings();
+}
+
+Editor::~Editor()
+{
+    delete m_editorSettings;
+}
 
 void Editor::SelectGameObject(GameObject *selectedGameObject)
 {
@@ -68,6 +79,11 @@ void Editor::_SelectGameObject(GameObject *selectedGameObject)
             p_currentTransformGizmo->SetParent(openScene);
         }
     }
+}
+
+EditorSettings *Editor::GetEditorSettings() const
+{
+    return m_editorSettings;
 }
 
 Editor *Editor::GetInstance()

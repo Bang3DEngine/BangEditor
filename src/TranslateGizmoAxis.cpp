@@ -40,7 +40,7 @@ TranslateGizmoAxis::TranslateGizmoAxis()
     p_selectionGo->SetName("AxisSelection");
 
     p_selectionRenderer = p_selectionGo->AddComponent<MeshRenderer>();
-    RendererFactory::ConvertToGizmoRenderer(p_meshRenderer);
+    RendererFactory::ConvertToGizmoRenderer(p_selectionRenderer);
     p_selectionRenderer->SetMesh( MeshFactory::GetCube().Get() );
 
     p_arrowCap->SetParent(this);

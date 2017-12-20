@@ -17,6 +17,7 @@ NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class EditorSettings;
 FORWARD class TransformGizmo;
 
 class IEditorSelectionListener : public virtual IEventListener
@@ -38,20 +39,23 @@ public:
     static void UnRegisterListener(ListenerClass *selectionListener);
 
 private:
-    Editor() = default;
-    virtual ~Editor() = default;
+    Editor();
+    virtual ~Editor();
 
-    GameObject *p_selectedGameObject;
-    TransformGizmo *p_currentTransformGizmo;
+    GameObject *p_selectedGameObject = nullptr;
+    EditorSettings *m_editorSettings = nullptr;
+    TransformGizmo *p_currentTransformGizmo = nullptr;
 
     // IDestroyListener
     virtual void OnDestroyed(Object *object) override;
 
     void _SelectGameObject(GameObject *selectedGameObject);
 
+    EditorSettings* GetEditorSettings() const;
     static Editor* GetInstance();
 
     friend class EditorScene;
+    friend class EditorSettings;
 };
 
 template <class ListenerClass>

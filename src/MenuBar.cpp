@@ -77,7 +77,6 @@ void MenuBar::Update()
     EditorScene *edScene = EditorSceneManager::GetEditorScene();
     if (Input::GetKeyDown(Key::Q))
     {
-        Debug_Log("New Scene! Q");
         MenuBar::OnNewScene(nullptr);
     }
     else if (Input::GetKeyDown(Key::O))
@@ -114,7 +113,13 @@ MenuItem* MenuBar::GetItem(int i)
 void MenuBar::OnNewProject(IFocusable*)
 {
     Path newProjectDirectory = Dialog::OpenDirectory("Create New Project...");
-    Debug_Peek(newProjectDirectory);
+    if (newProjectDirectory.IsDir())
+    {
+        String projectName = Dialog::GetString("Choose Project Name",
+                                               "Please, choose your project name:",
+                                               "ProjectName");
+        Debug_Log("Create new project " << projectName << " in dir " << newProjectDirectory);
+    }
 }
 
 void MenuBar::OnOpenProject(IFocusable*)

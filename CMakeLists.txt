@@ -84,6 +84,7 @@ ${SRC_DIR}/EditorApplication.cpp
 ${SRC_DIR}/EditorCamera.cpp
 ${SRC_DIR}/EditorSceneManager.cpp
 ${SRC_DIR}/EditorScene.cpp
+${SRC_DIR}/EditorSettings.cpp
 ${SRC_DIR}/EditorUITab.cpp
 ${SRC_DIR}/EditorWindow.cpp
 ${SRC_DIR}/RotateGizmo.cpp
