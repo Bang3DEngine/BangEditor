@@ -3,6 +3,7 @@
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/TransformGizmo.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/NotSelectableInEditor.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -13,15 +14,33 @@ void Editor::SelectGameObject(GameObject *selectedGameObject)
     if (ed) { ed->_SelectGameObject(selectedGameObject); }
 }
 
+void Editor::OnDestroyed(Object *object)
+{
+    if (p_selectedGameObject == object)
+    {
+        _SelectGameObject(nullptr);
+    }
+
+    if (p_currentTransformGizmo == object)
+    {
+        p_currentTransformGizmo = nullptr;
+    }
+}
+
 void Editor::_SelectGameObject(GameObject *selectedGameObject)
 {
-    bool isValid = selectedGameObject &&
-            (!p_currentTransformGizmo ||
-             !selectedGameObject->IsChildOf(p_currentTransformGizmo));
+    bool isSelectable = !selectedGameObject ||
+         (!selectedGameObject->GetComponent<NotSelectableInEditor>() &&
+          !selectedGameObject->GetComponentInParent<NotSelectableInEditor>());
 
-    if (p_selectedGameObject != selectedGameObject && isValid)
+    if (p_selectedGameObject != selectedGameObject && isSelectable)
     {
         p_selectedGameObject = selectedGameObject;
+        if (p_selectedGameObject)
+        {
+            p_selectedGameObject->
+                    EventEmitter<IDestroyListener>::RegisterListener(this);
+        }
 
         // Propagate event
         EventEmitter<IEditorSelectionListener>::
@@ -38,9 +57,12 @@ void Editor::_SelectGameObject(GameObject *selectedGameObject)
         // Create new transform gizmo
         if (p_selectedGameObject)
         {
+            ASSERT(!p_currentTransformGizmo);
             TransformGizmo *tg = GameObject::Create<TransformGizmo>();
             tg->SetReferencedGameObject(p_selectedGameObject);
             p_currentTransformGizmo = tg;
+            p_currentTransformGizmo->
+                    EventEmitter<IDestroyListener>::RegisterListener(this);
 
             Scene *openScene = EditorSceneManager::GetOpenScene();
             p_currentTransformGizmo->SetParent(openScene);

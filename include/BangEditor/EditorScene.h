@@ -5,6 +5,7 @@
 #include "Bang/Scene.h"
 
 #include "BangEditor/BangEditor.h"
+#include "BangEditor/IEditorOpenSceneListener.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
@@ -26,7 +27,8 @@ FORWARD class Hierarchy;
 FORWARD class UISceneContainer;
 FORWARD class EditorApplication;
 
-class EditorScene : public Scene
+class EditorScene : public Scene,
+                    public EventEmitter<IEditorOpenSceneListener>
 {
     GAMEOBJECT_EDITOR(EditorScene);
 

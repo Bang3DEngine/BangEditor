@@ -1,13 +1,14 @@
 #ifndef SELECTIONGIZMO_H
 #define SELECTIONGIZMO_H
 
-#include "Bang/Bang.h"
+#include "Bang/IDestroyListener.h"
+
 #include "BangEditor/BangEditor.h"
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class SelectionGizmo
+class SelectionGizmo : public IDestroyListener
 {
 public:
     SelectionGizmo() = default;
@@ -15,6 +16,9 @@ public:
 
     virtual void SetReferencedGameObject(GameObject *referencedGameObject);
     GameObject *GetReferencedGameObject() const;
+
+    // IDestroyListener
+    virtual void OnDestroyed(Object *object) override;
 
 protected:
     enum SelectionState { Idle, Over, Grabbed };

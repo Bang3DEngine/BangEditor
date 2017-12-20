@@ -2,13 +2,22 @@
 #define EDITOR_H
 
 #include "Bang/Bang.h"
+#include "Bang/Object.h"
+#include "Bang/GameObject.h"
 #include "Bang/IEventEmitter.h"
 #include "Bang/IEventListener.h"
+#include "Bang/IDestroyListener.h"
 
 #include "BangEditor/BangEditor.h"
 
+NAMESPACE_BANG_BEGIN
+FORWARD class Scene;
+NAMESPACE_BANG_END
+
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
+
+FORWARD class TransformGizmo;
 
 class IEditorSelectionListener : public virtual IEventListener
 {
@@ -16,10 +25,8 @@ public:
     virtual void OnGameObjectSelected(GameObject *selectedGameObject) = 0;
 };
 
-
-FORWARD class TransformGizmo;
-
-class Editor : public EventEmitter<IEditorSelectionListener>
+class Editor : public EventEmitter<IEditorSelectionListener>,
+               public IDestroyListener
 {
 public:
     static void SelectGameObject(GameObject *selectedGameObject);
@@ -34,8 +41,11 @@ private:
     Editor() = default;
     virtual ~Editor() = default;
 
-    GameObject *p_selectedGameObject = nullptr;
-    TransformGizmo *p_currentTransformGizmo = nullptr;
+    GameObject *p_selectedGameObject;
+    TransformGizmo *p_currentTransformGizmo;
+
+    // IDestroyListener
+    virtual void OnDestroyed(Object *object) override;
 
     void _SelectGameObject(GameObject *selectedGameObject);
 

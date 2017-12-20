@@ -99,6 +99,8 @@ void RotateGizmoAxis::Update()
 {
     TransformGizmoAxis::Update();
 
+    if (!GetReferencedGameObject()->GetTransform()) { return; }
+
     if ( IsBeingGrabbed() )
     {
         GameObject *refGo = GetReferencedGameObject();
@@ -206,7 +208,8 @@ void RotateGizmoAxis::SetAxis(Axis3D axis)
 
 void RotateGizmoAxis::UpdateCirclePoints()
 {
-    if (!GetReferencedGameObject()) { return; }
+    if (!GetReferencedGameObject() ||
+        !GetReferencedGameObject()->GetTransform()) { return; }
 
     Camera *cam = Camera::GetActive();
     Transform *camT = cam->GetGameObject()->GetTransform();

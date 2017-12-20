@@ -37,6 +37,7 @@ private:
     Array<MenuItem*> m_items;
     UIHorizontalLayout *m_horizontalLayout = nullptr;
 
+    static void OnNewProject  (IFocusable *btn);
     static void OnOpenProject (IFocusable *btn);
     static void OnNewScene    (IFocusable *btn);
     static void OnSaveScene   (IFocusable *btn);

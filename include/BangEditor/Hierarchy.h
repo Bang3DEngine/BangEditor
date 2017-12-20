@@ -8,6 +8,7 @@
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorUITab.h"
+#include "BangEditor/IEditorOpenSceneListener.h"
 
 NAMESPACE_BANG_BEGIN
 FORWARD class UITree;
@@ -20,7 +21,8 @@ FORWARD class HierarchyItem;
 
 class Hierarchy : public EditorUITab,
                   public ICreateListener,
-                  public IEditorSelectionListener
+                  public IEditorSelectionListener,
+                  public IEditorOpenSceneListener
 {
     GAMEOBJECT_EDITOR(Hierarchy);
 
@@ -45,6 +47,9 @@ public:
 
     // IEditorSelectionListener
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
+
+    // IEditorOpenSceneListener
+    virtual void OnOpenScene(Scene *scene) override;
 
     static Hierarchy *GetInstance();
 

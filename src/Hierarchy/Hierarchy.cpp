@@ -54,6 +54,8 @@ Hierarchy::~Hierarchy()
 void Hierarchy::OnStart()
 {
     Editor::RegisterListener<IEditorSelectionListener>(this);
+    EditorSceneManager::GetEditorScene()->
+            EventEmitter<IEditorOpenSceneListener>::RegisterListener(this);
 }
 
 void Hierarchy::Update()
@@ -117,6 +119,19 @@ void Hierarchy::OnGameObjectSelected(GameObject *selectedGameObject)
     }
 }
 
+void Hierarchy::OnOpenScene(Scene *scene)
+{
+    Clear();
+    if (scene)
+    {
+        const List<GameObject*> &sceneGos = scene->GetChildren();
+        for (GameObject *go : sceneGos)
+        {
+            AddGameObject(go);
+        }
+    }
+}
+
 void Hierarchy::Clear()
 {
     GetUITree()->Clear();
@@ -136,7 +151,7 @@ void Hierarchy::TreeSelectionCallback(GOItem *item, UIList::Action action)
 
 void Hierarchy::AddGameObject(GameObject *go)
 {
-    if (!go->HasComponent<HideInHierarchy>() &&
+    if (!go->GetComponent<HideInHierarchy>() &&
         !go->GetComponentInParent<HideInHierarchy>())
     {
         bool topItem = (go->GetScene() == go->GetParent());
@@ -152,19 +167,21 @@ void Hierarchy::AddGameObject(GameObject *go)
             if (child->HasComponent<HideInHierarchy>()) { --indexInsideParent; }
         }
 
-        GetUITree()->AddItem(goItem, topItem ? nullptr : parentItem,
-                             indexInsideParent);
-        m_gameObjectToItem.Add(go, goItem);
-
-        for (GameObject *child : go->GetChildren()) // Add children too
+        if (indexInsideParent >= 0)
         {
-            AddGameObject(child);
+            GetUITree()->AddItem(goItem, topItem ? nullptr : parentItem,
+                                 indexInsideParent);
+            m_gameObjectToItem.Add(go, goItem);
+
+            for (GameObject *child : go->GetChildren()) // Add children too
+            {
+                AddGameObject(child);
+            }
         }
     }
 }
 
 void Hierarchy::RemoveGameObject(GameObject *go)
-
 {
     HierarchyItem *goItem = GetItemFromGameObject(go);
     if (goItem)

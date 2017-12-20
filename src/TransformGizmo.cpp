@@ -9,6 +9,7 @@
 #include "BangEditor/RotateGizmo.h"
 #include "BangEditor/TranslateGizmo.h"
 #include "BangEditor/HideInHierarchy.h"
+#include "BangEditor/NotSelectableInEditor.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -17,6 +18,8 @@ TransformGizmo::TransformGizmo()
 {
     AddComponent<Transform>();
     AddComponent<HideInHierarchy>();
+    AddComponent<NotSelectableInEditor>();
+    GetHideFlags().SetOn(HideFlag::DontSerialize);
 
     p_translateGizmo = GameObject::Create<TranslateGizmo>();
     p_rotateGizmo    = GameObject::Create<RotateGizmo>();
@@ -36,6 +39,8 @@ void TransformGizmo::Update()
     GameObject::Update();
 
     GameObject *refGo = GetReferencedGameObject();
+    if (!refGo || !refGo->GetTransform()) { return; }
+
     GetTransform()->SetPosition( refGo->GetTransform()->GetPosition() );
     GetTransform()->SetRotation( refGo->GetTransform()->GetRotation() );
 

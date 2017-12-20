@@ -10,7 +10,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class HideInHierarchy : public Component
 {
-    COMPONENT(Component)
+    COMPONENT(HideInHierarchy)
 
 private:
     HideInHierarchy() = default;

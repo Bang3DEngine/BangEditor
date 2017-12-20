@@ -52,8 +52,6 @@ MenuBar::MenuBar()
         openRecentProject->AddItem("Wololo/hoho.bproject");
         openRecentProject->AddItem("Wololo/bangbangbang.bproject");
 
-    MenuItem *saveProject = m_fileItem->AddItem("Save Project");
-    MenuItem *saveProjectAs = m_fileItem->AddItem("Save Project As...");
     m_fileItem->AddSeparator();
     MenuItem *newScene = m_fileItem->AddItem("New Scene");
     MenuItem *openScene = m_fileItem->AddItem("Open Scene");
@@ -62,6 +60,7 @@ MenuBar::MenuBar()
 
     MenuItem *copyChild = m_editItem->AddItem("Copy");
 
+    newProject->GetButton()->AddClickedCallback(MenuBar::OnNewProject);
     openProject->GetButton()->AddClickedCallback(MenuBar::OnOpenProject);
     newScene->GetButton()->AddClickedCallback(MenuBar::OnNewScene);
     saveScene->GetButton()->AddClickedCallback(MenuBar::OnSaveScene);
@@ -83,7 +82,7 @@ void MenuBar::Update()
     }
     else if (Input::GetKeyDown(Key::O))
     {
-        MenuBar::OnOpenProject(nullptr);
+        MenuBar::OnOpenScene(nullptr);
     }
 
     Scene *openScene = edScene->GetOpenScene();
@@ -112,9 +111,15 @@ MenuItem* MenuBar::GetItem(int i)
     return m_items[i];
 }
 
+void MenuBar::OnNewProject(IFocusable*)
+{
+    Path newProjectDirectory = Dialog::OpenDirectory("Create New Project...");
+    Debug_Peek(newProjectDirectory);
+}
+
 void MenuBar::OnOpenProject(IFocusable*)
 {
-    Dialog::GetFilePath("Open Project...");
+    Dialog::OpenFilePath("Open Project...");
 }
 
 void MenuBar::OnNewScene(IFocusable*)
@@ -137,10 +142,9 @@ void MenuBar::OnSaveScene(IFocusable*)
     Scene *openScene = edScene->GetOpenScene();
     if (openScene)
     {
-        Path saveScenePath =
-                Dialog::GetFilePath("Save Scene...",
-                                    { Extensions::GetSceneExtension() });
-        if (saveScenePath.IsFile())
+        Path saveScenePath = Dialog::SaveFilePath("Save Scene...",
+                                       { Extensions::GetSceneExtension() });
+        // if (saveScenePath.IsFile())
         {
             openScene->ExportXMLToFile( Path(saveScenePath) );
         }
@@ -149,13 +153,14 @@ void MenuBar::OnSaveScene(IFocusable*)
 
 void MenuBar::OnOpenScene(IFocusable*)
 {
-    Path openScenePath = Dialog::GetFilePath("Open Scene...",
-                                             { Extensions::GetSceneExtension() });
+    Path openScenePath = Path("/home/sephirot47/Bang/res/EngineAssets/AAAAAA.bscene");
+            // Dialog::OpenFilePath("Open Scene...", { Extensions::GetSceneExtension() });
     if (openScenePath.IsFile())
     {
         EditorScene *edScene = EditorSceneManager::GetEditorScene();
-        Scene *scene = GameObjectFactory::CreateScene();
+        Scene *scene = GameObjectFactory::CreateScene(false);
         scene->ImportXMLFromFile(openScenePath);
+        Debug_Log("SetOpenScene " << scene);
         edScene->SetOpenScene(scene);
     }
 }

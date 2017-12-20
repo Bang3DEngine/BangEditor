@@ -58,6 +58,7 @@ ScaleGizmoAxis::~ScaleGizmoAxis()
 void ScaleGizmoAxis::Update()
 {
     TransformGizmoAxis::Update();
+    if (!GetReferencedGameObject()->GetTransform()) { return; }
 
     if (IsBeingGrabbed())
     {

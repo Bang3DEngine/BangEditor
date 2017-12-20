@@ -13,6 +13,7 @@
 #include "Bang/SceneManager.h"
 
 #include "BangEditor/HideInHierarchy.h"
+#include "BangEditor/NotSelectableInEditor.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -26,6 +27,8 @@ EditorCamera::EditorCamera()
     SetName("EditorCamera");
     AddComponent<Transform>();
     AddComponent<HideInHierarchy>();
+    AddComponent<NotSelectableInEditor>();
+    GetHideFlags().SetOn(HideFlag::DontSerialize);
 
     p_camContainer = GameObjectFactory::CreateGameObject();
     p_camContainer->SetName("CameraContainer");
