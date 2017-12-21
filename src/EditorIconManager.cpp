@@ -4,6 +4,8 @@
 #include "Bang/Resources.h"
 #include "Bang/Extensions.h"
 
+#include "BangEditor/EditorPaths.h"
+
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
@@ -63,7 +65,7 @@ RH<Texture2D> EditorIconManager::GetBackArrowIcon()
 RH<Texture2D> EditorIconManager::GetIconTexture(const String &filename)
 {
     RH<Texture2D> iconTex =
-        Resources::Load<Texture2D>(Paths::EditorResources().Append("Icons").
+        Resources::Load<Texture2D>(EditorPaths::EditorResources().Append("Icons").
                                    Append(filename).AppendExtension("png"));
     iconTex.Get()->SetFilterMode(GL::FilterMode::Linear);
     iconTex.Get()->SetWrapMode(GL::WrapMode::ClampToEdge);

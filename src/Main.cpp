@@ -2,9 +2,10 @@
 
 #include "Bang/Scene.h"
 #include "Bang/Window.h"
-#include "Bang/Project.h"
-#include "Bang/ProjectManager.h"
+
+#include "BangEditor/Project.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/ProjectManager.h"
 
 #ifndef BANG_PROJECT_ROOT
     #define BANG_PROJECT_ROOT
@@ -15,7 +16,8 @@ using namespace BangEditor;
 
 int main(int argc, char **argv)
 {
-    EditorApplication edApp(argc, argv, Path("" BANG_PROJECT_ROOT));
+    EditorApplication edApp;
+    edApp.Init( Path("" BANG_PROJECT_ROOT) );
 
     Path projectToOpenPath;
     if (argc >= 2)

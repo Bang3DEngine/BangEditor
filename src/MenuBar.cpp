@@ -14,7 +14,9 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
+#include "BangEditor/Project.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/ProjectManager.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG_EDITOR
@@ -112,13 +114,17 @@ MenuItem* MenuBar::GetItem(int i)
 
 void MenuBar::OnNewProject(IFocusable*)
 {
-    Path newProjectDirectory = Dialog::OpenDirectory("Create New Project...");
-    if (newProjectDirectory.IsDir())
+    Path newProjectDirPath = Dialog::OpenDirectory("Create New Project...");
+    if (newProjectDirPath.IsDir())
     {
         String projectName = Dialog::GetString("Choose Project Name",
                                                "Please, choose your project name:",
                                                "ProjectName");
-        Debug_Log("Create new project " << projectName << " in dir " << newProjectDirectory);
+        if (!projectName.IsEmpty())
+        {
+            Project *proj = ProjectManager::CreateNewProject(newProjectDirPath,
+                                                             projectName);
+        }
     }
 }
 

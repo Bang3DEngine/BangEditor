@@ -4,31 +4,41 @@
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Window.h"
-#include "Bang/Project.h"
 #include "Bang/SceneManager.h"
-#include "Bang/ProjectManager.h"
 #include "Bang/ImportFilesManager.h"
 
+#include "BangEditor/Project.h"
+#include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorWindow.h"
+#include "BangEditor/ProjectManager.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-EditorApplication::EditorApplication(int argc, char **argv,
-                                     const Path &engineRootPath)
-    : Application(argc, argv, engineRootPath)
+EditorApplication::EditorApplication() : Application()
 {
-    GetPaths()->InitEditorPath( Paths::ExecutablePath().GetDirectory()
-                                                       .GetDirectory()
-                                                       .GetDirectory());
-    ImportFilesManager::AddAssetPath( Paths::EditorResources() );
-    ImportFilesManager::CreateMissingImportFiles();
 }
 
 EditorApplication::~EditorApplication()
 {
+}
+
+void EditorApplication::Init(const Path &engineRootPath)
+{
+    Application::Init(engineRootPath);
+
+    GetEditorPaths()->InitEditorPath( Paths::ExecutablePath().GetDirectory()
+                                                             .GetDirectory()
+                                                             .GetDirectory());
+    ImportFilesManager::AddAssetPath( EditorPaths::EditorResources() );
+    ImportFilesManager::CreateMissingImportFiles();
+}
+
+EditorPaths *EditorApplication::GetEditorPaths() const
+{
+    return SCAST<EditorPaths*>(GetPaths());
 }
 
 void EditorApplication::OpenEditorScene(Window *containingWindow)
@@ -44,9 +54,19 @@ void EditorApplication::SetupWindow(Window *window)
     Application::SetupWindow(window);
 }
 
+EditorApplication *EditorApplication::GetInstance()
+{
+    return SCAST<EditorApplication*>( Application::GetInstance() );
+}
+
 EditorScene *EditorApplication::GetEditorScene() const
 {
     return m_editorScene;
+}
+
+Paths *EditorApplication::CreatePaths()
+{
+    return new EditorPaths();
 }
 
 Window *EditorApplication::_CreateWindow()

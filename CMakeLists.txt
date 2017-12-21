@@ -78,15 +78,23 @@ set(BANG_LIB_NAME "libBang.so")
 link_libraries("${BANG_LIBS_DIR}/${BANG_LIB_NAME}")
 
 add_executable(BangEditor
+${SRC_DIR}/Behaviour.cpp
+${SRC_DIR}/BehaviourManager.cpp
 ${SRC_DIR}/Console.cpp
 ${SRC_DIR}/Editor.cpp
 ${SRC_DIR}/EditorApplication.cpp
 ${SRC_DIR}/EditorCamera.cpp
+${SRC_DIR}/EditorPaths.cpp
 ${SRC_DIR}/EditorSceneManager.cpp
 ${SRC_DIR}/EditorScene.cpp
 ${SRC_DIR}/EditorSettings.cpp
 ${SRC_DIR}/EditorUITab.cpp
 ${SRC_DIR}/EditorWindow.cpp
+${SRC_DIR}/EditorPaths.cpp
+${SRC_DIR}/GameBuilder.cpp
+${SRC_DIR}/Project/Project.cpp
+${SRC_DIR}/Project/ProjectManager.cpp
+${SRC_DIR}/Project/QtProjectManager.cpp
 ${SRC_DIR}/RotateGizmo.cpp
 ${SRC_DIR}/RotateGizmoAxis.cpp
 ${SRC_DIR}/ScaleGizmo.cpp
