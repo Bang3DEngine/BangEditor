@@ -14,6 +14,7 @@
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIContentSizeFitter.h"
 
+#include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/EditorIconManager.h"
@@ -87,6 +88,9 @@ Explorer::Explorer() : EditorUITab("Explorer")
     p_scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
     p_scrollPanel->SetVerticalScrollBarSide(HorizontalSide::Right);
     p_scrollPanel->SetHorizontalScrollEnabled(false);
+
+    ProjectManager::GetInstance()->
+            EventEmitter<ProjectManagerListener>::RegisterListener(this);
 }
 
 Explorer::~Explorer()
@@ -122,6 +126,18 @@ void Explorer::Clear()
         GameObject::Destroy(explorerItem);
     }
     p_items.Clear();
+}
+
+void Explorer::OnProjectOpen(const Project *project)
+{
+    ProjectManagerListener::OnProjectOpen(project);
+    SetCurrentPath(EditorPaths::ProjectAssets());
+}
+
+void Explorer::OnProjectClosed(const Project *project)
+{
+    ProjectManagerListener::OnProjectClosed(project);
+    SetCurrentPath(Paths::EngineAssets());
 }
 
 void Explorer::AddItem(const Path &itemPath)

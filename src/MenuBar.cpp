@@ -58,7 +58,8 @@ MenuBar::MenuBar()
     MenuItem *newScene = m_fileItem->AddItem("New Scene");
     MenuItem *openScene = m_fileItem->AddItem("Open Scene");
     MenuItem *saveScene = m_fileItem->AddItem("Save Scene");
-    MenuItem *saveSceneAs= m_fileItem->AddItem("Save Scene As...");
+    MenuItem *saveSceneAs = m_fileItem->AddItem("Save Scene As...");
+    MenuItem *closeScene = m_fileItem->AddItem("Close Scene");
 
     MenuItem *copyChild = m_editItem->AddItem("Copy");
 
@@ -119,22 +120,37 @@ void MenuBar::OnNewProject(IFocusable*)
     {
         String projectName = Dialog::GetString("Choose Project Name",
                                                "Please, choose your project name:",
-                                               "ProjectName");
+                                               "NewProject");
         if (!projectName.IsEmpty())
         {
             Project *proj = ProjectManager::CreateNewProject(newProjectDirPath,
                                                              projectName);
+            MenuBar::OpenProject(proj->GetProjectFileFilepath());
         }
     }
 }
 
 void MenuBar::OnOpenProject(IFocusable*)
 {
-    Dialog::OpenFilePath("Open Project...");
+    Path projectFileFilepath = Dialog::OpenFilePath("Open Project...",
+                                                    {Extensions::GetProjectExtension()});
+    OpenProject(projectFileFilepath);
+}
+void MenuBar::OpenProject(const Path &projectFileFilepath)
+{
+    if (projectFileFilepath.IsFile())
+    {
+        Project *proj = ProjectManager::OpenProject(projectFileFilepath);
+
+        bool sceneOpen = proj->OpenFirstFoundScene();
+        if (!sceneOpen) { MenuBar::OnNewScene(nullptr); }
+    }
 }
 
 void MenuBar::OnNewScene(IFocusable*)
 {
+    MenuBar::CloseScene();
+
     EditorScene *edScene = EditorSceneManager::GetEditorScene();
 
     Scene *previousOpenScene = EditorSceneManager::GetOpenScene();
@@ -164,6 +180,8 @@ void MenuBar::OnSaveScene(IFocusable*)
 
 void MenuBar::OnOpenScene(IFocusable*)
 {
+    MenuBar::CloseScene();
+
     Path openScenePath = Path("/home/sephirot47/Bang/res/EngineAssets/AAAAAA.bscene");
             // Dialog::OpenFilePath("Open Scene...", { Extensions::GetSceneExtension() });
     if (openScenePath.IsFile())
@@ -174,4 +192,13 @@ void MenuBar::OnOpenScene(IFocusable*)
         Debug_Log("SetOpenScene " << scene);
         edScene->SetOpenScene(scene);
     }
+}
+
+void MenuBar::OnCloseScene(IFocusable*)
+{
+    MenuBar::CloseScene();
+}
+void MenuBar::CloseScene()
+{
+    EditorSceneManager::GetEditorScene()->SetOpenScene(nullptr);
 }

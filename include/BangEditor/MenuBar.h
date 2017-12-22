@@ -42,6 +42,10 @@ private:
     static void OnNewScene    (IFocusable *btn);
     static void OnSaveScene   (IFocusable *btn);
     static void OnOpenScene   (IFocusable *btn);
+    static void OnCloseScene  (IFocusable *btn);
+
+    static void OpenProject(const Path& projectFileFilepath);
+    static void CloseScene();
 
     friend class Bang::ObjectManager;
 };

@@ -19,6 +19,10 @@ int main(int argc, char **argv)
     EditorApplication edApp;
     edApp.Init( Path("" BANG_PROJECT_ROOT) );
 
+    Window *mainWindow = edApp.CreateWindow();
+    mainWindow->SetTitle("Bang Editor");
+    edApp.OpenEditorScene(mainWindow);
+
     Path projectToOpenPath;
     if (argc >= 2)
     {
@@ -32,10 +36,6 @@ int main(int argc, char **argv)
             Debug_Error("Can't find project '" << projectToOpenPath << "'.");
         }
     }
-
-    Window *mainWindow = edApp.CreateWindow();
-    mainWindow->SetTitle("Bang Editor");
-    edApp.OpenEditorScene(mainWindow);
 
     return edApp.MainLoop();
 }

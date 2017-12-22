@@ -24,6 +24,7 @@ FORWARD class MenuBar;
 FORWARD class Explorer;
 FORWARD class Inspector;
 FORWARD class Hierarchy;
+FORWARD class ProjectManager;
 FORWARD class UISceneContainer;
 FORWARD class EditorApplication;
 
@@ -51,17 +52,20 @@ public:
     Explorer *GetExplorer() const;
     Inspector *GetInspector() const;
     Hierarchy *GetHierarchy() const;
+    ProjectManager *GetProjectManager() const;
 
 protected:
     EditorScene();
     virtual ~EditorScene();
 
 private:
+    Editor *m_editor = nullptr;
+    ProjectManager *m_projectManager = nullptr;
+
     Console *m_console     = nullptr;
     Explorer *m_explorer   = nullptr;
     Inspector *m_inspector = nullptr;
     Hierarchy *m_hierarchy = nullptr;
-    Editor *m_editor = nullptr;
 
     Scene *p_openScene = nullptr;
     UISceneContainer *m_sceneContainer = nullptr;
@@ -71,6 +75,8 @@ private:
     GameObject *m_mainEditorVL = nullptr;
 
     Recti m_prevGLViewport = Recti::Zero;
+
+    void Init();
 
     void BindOpenScene();
     void UnBindOpenScene();

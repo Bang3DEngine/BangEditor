@@ -30,8 +30,10 @@ void EditorWindow::Update()
 void EditorWindow::Render()
 {
     EditorScene *edScene = EditorSceneManager::GetEditorScene();
-    ENSURE(edScene);
-    edScene->RenderAndBlitToScreen();
+    if (edScene)
+    {
+        edScene->RenderAndBlitToScreen();
+    }
 }
 
 SceneManager *EditorWindow::CreateSceneManager() const

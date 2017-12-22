@@ -27,6 +27,7 @@
 #include "BangEditor/Hierarchy.h"
 #include "BangEditor/Inspector.h"
 #include "BangEditor/EditorCamera.h"
+#include "BangEditor/ProjectManager.h"
 #include "BangEditor/UISceneContainer.h"
 #include "BangEditor/EditorSceneManager.h"
 
@@ -35,7 +36,12 @@ USING_NAMESPACE_BANG_EDITOR
 
 EditorScene::EditorScene()
 {
+}
+
+void EditorScene::Init()
+{
     m_editor = new Editor();
+    m_projectManager = new ProjectManager();
 
     GameObjectFactory::CreateUIGameObjectInto(this);
     GameObjectFactory::CreateUICanvasInto(this);
@@ -91,9 +97,11 @@ EditorScene::EditorScene()
     GetCamera()->SetClearColor(Color::LightGray);
 }
 
+
 EditorScene::~EditorScene()
 {
     delete m_editor;
+    delete m_projectManager;
 }
 
 void EditorScene::Update()
@@ -263,6 +271,11 @@ Console *EditorScene::GetConsole() const { return m_console; }
 Explorer *EditorScene::GetExplorer() const { return m_explorer; }
 Inspector *EditorScene::GetInspector() const { return m_inspector; }
 Hierarchy *EditorScene::GetHierarchy() const { return m_hierarchy; }
+
+ProjectManager *EditorScene::GetProjectManager() const
+{
+    return m_projectManager;
+}
 
 Editor *EditorScene::GetEditor() const
 {

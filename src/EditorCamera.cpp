@@ -239,20 +239,23 @@ void EditorCamera::Update()
         bool hasMoved = false;
         Vector3 moveStep = Vector3::Zero;
 
-        HandleKeyMovement(&moveStep, &hasMoved); //WASD
-        if (!HandleMouseRotation(&hasMoved, &unwrapMouse)) //Mouse rot with right click
+        if ( GL::GetViewportRect().Contains( Input::GetMousePositionScreen() ))
         {
-            HandleMousePanning(&hasMoved, &unwrapMouse); //Mouse move with mid click
+            HandleKeyMovement(&moveStep, &hasMoved); //WASD
+            if (!HandleMouseRotation(&hasMoved, &unwrapMouse)) //Mouse rot with right click
+            {
+                HandleMousePanning(&hasMoved, &unwrapMouse); //Mouse move with mid click
+            }
+
+            HandleWheelZoom(&moveStep, &hasMoved);
+
+            if (!hasMoved)
+            {
+                m_keysCurrentMoveSpeed = 0.0f; //reset speed
+            }
+
+            GetTransform()->Translate(moveStep);
         }
-
-        HandleWheelZoom(&moveStep, &hasMoved);
-
-        if (!hasMoved)
-        {
-            m_keysCurrentMoveSpeed = 0.0f; //reset speed
-        }
-
-        GetTransform()->Translate(moveStep);
     }
     else
     {

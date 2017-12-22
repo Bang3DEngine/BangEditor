@@ -11,6 +11,8 @@
 
 #include "BangEditor/Project.h"
 #include "BangEditor/EditorPaths.h"
+#include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -34,6 +36,12 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
 
     ImportFilesManager::CreateMissingImportFiles();
     ImportFilesManager::LoadImportFilepathGUIDs();
+
+    Debug_Log(EditorSceneManager::GetEditorScene());
+    Debug_Log(ProjectManager::GetInstance());
+    ProjectManager::GetInstance()->
+        EventEmitter<ProjectManagerListener>::PropagateToListeners(
+               &ProjectManagerListener::OnProjectOpen, s_currentProject);
 
     return currentProject;
 }
@@ -102,6 +110,10 @@ void ProjectManager::CloseCurrentProject()
 {
     if (ProjectManager::s_currentProject)
     {
+        ProjectManager::GetInstance()->
+            EventEmitter<ProjectManagerListener>::PropagateToListeners(
+                   &ProjectManagerListener::OnProjectClosed, s_currentProject);
+
         delete s_currentProject;
         ProjectManager::s_currentProject = nullptr;
     }
@@ -111,4 +123,10 @@ void ProjectManager::CloseCurrentProject()
 Project *ProjectManager::GetCurrentProject()
 {
     return ProjectManager::s_currentProject;
+}
+
+ProjectManager *ProjectManager::GetInstance()
+{
+    EditorScene *edScene = EditorSceneManager::GetEditorScene();
+    return edScene ? edScene->GetProjectManager() : nullptr;
 }

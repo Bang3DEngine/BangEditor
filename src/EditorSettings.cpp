@@ -15,6 +15,7 @@ EditorSettings::~EditorSettings()
 
 EditorSettings *EditorSettings::GetInstance()
 {
-    Editor::GetInstance()->GetEditorSettings();
+    Editor *ed = Editor::GetInstance();
+    return ed ? ed->GetEditorSettings() : nullptr;
 }
 

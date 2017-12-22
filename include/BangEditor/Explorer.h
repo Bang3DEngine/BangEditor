@@ -5,6 +5,7 @@
 #include "Bang/UIButton.h"
 
 #include "BangEditor/EditorUITab.h"
+#include "BangEditor/ProjectManager.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UILabel;
@@ -16,7 +17,8 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class ExplorerItem;
 
-class Explorer : public EditorUITab
+class Explorer : public EditorUITab,
+                 public ProjectManagerListener
 {
     GAMEOBJECT_EDITOR(Explorer);
 
@@ -28,6 +30,10 @@ public:
     const Path &GetCurrentPath() const;
 
     void Clear();
+
+    // ProjectManagerListener
+    void OnProjectOpen(const Project *project) override;
+    void OnProjectClosed(const Project *project) override;
 
     static Explorer *GetInstance();
 
