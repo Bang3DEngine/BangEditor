@@ -41,11 +41,10 @@ EditorPaths *EditorApplication::GetEditorPaths() const
     return SCAST<EditorPaths*>(GetPaths());
 }
 
-void EditorApplication::OpenEditorScene(Window *containingWindow)
+void EditorApplication::OpenEditorScene()
 {
-    SetActiveWindow(containingWindow);
     m_editorScene = GameObject::Create<EditorScene>();
-    containingWindow->GetSceneManager()->LoadScene(m_editorScene);
+    EditorSceneManager::LoadSceneInstantly(m_editorScene);
     m_editorScene->Init();
 }
 

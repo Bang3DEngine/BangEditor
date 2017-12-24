@@ -16,6 +16,7 @@
 
 #include "BangEditor/Project.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorSettings.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/EditorSceneManager.h"
 
@@ -132,6 +133,7 @@ void MenuBar::OnNewProject(IFocusable*)
 
 void MenuBar::OnOpenProject(IFocusable*)
 {
+    Debug_Peek(Extensions::GetProjectExtension());
     Path projectFileFilepath = Dialog::OpenFilePath("Open Project...",
                                                     {Extensions::GetProjectExtension()});
     OpenProject(projectFileFilepath);
@@ -140,10 +142,7 @@ void MenuBar::OpenProject(const Path &projectFileFilepath)
 {
     if (projectFileFilepath.IsFile())
     {
-        Project *proj = ProjectManager::OpenProject(projectFileFilepath);
-
-        bool sceneOpen = proj->OpenFirstFoundScene();
-        if (!sceneOpen) { MenuBar::OnNewScene(nullptr); }
+        ProjectManager::OpenProject(projectFileFilepath);
     }
 }
 
@@ -182,14 +181,13 @@ void MenuBar::OnOpenScene(IFocusable*)
 {
     MenuBar::CloseScene();
 
-    Path openScenePath = Path("/home/sephirot47/Bang/res/EngineAssets/AAAAAA.bscene");
-            // Dialog::OpenFilePath("Open Scene...", { Extensions::GetSceneExtension() });
+    Path openScenePath = Dialog::OpenFilePath("Open Scene...",
+                                             { Extensions::GetSceneExtension() });
     if (openScenePath.IsFile())
     {
         EditorScene *edScene = EditorSceneManager::GetEditorScene();
         Scene *scene = GameObjectFactory::CreateScene(false);
         scene->ImportXMLFromFile(openScenePath);
-        Debug_Log("SetOpenScene " << scene);
         edScene->SetOpenScene(scene);
     }
 }

@@ -45,17 +45,13 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
     SetAsChild(treeGo);
 
     ObjectManager::RegisterCreateListener(this);
+    Editor::RegisterListener<IEditorSelectionListener>(this);
+    EditorSceneManager::GetEditorScene()->
+            EventEmitter<IEditorOpenSceneListener>::RegisterListener(this);
 }
 
 Hierarchy::~Hierarchy()
 {
-}
-
-void Hierarchy::OnStart()
-{
-    Editor::RegisterListener<IEditorSelectionListener>(this);
-    EditorSceneManager::GetEditorScene()->
-            EventEmitter<IEditorOpenSceneListener>::RegisterListener(this);
 }
 
 void Hierarchy::Update()

@@ -39,20 +39,21 @@ public:
     static void UnRegisterListener(ListenerClass *selectionListener);
 
 private:
-    Editor();
-    virtual ~Editor();
-
     GameObject *p_selectedGameObject = nullptr;
     EditorSettings *m_editorSettings = nullptr;
     TransformGizmo *p_currentTransformGizmo = nullptr;
 
-    // IDestroyListener
-    virtual void OnDestroyed(Object *object) override;
+    Editor();
+    virtual ~Editor();
 
+    void Init();
     void _SelectGameObject(GameObject *selectedGameObject);
 
     EditorSettings* GetEditorSettings() const;
     static Editor* GetInstance();
+
+    // IDestroyListener
+    virtual void OnDestroyed(Object *object) override;
 
     friend class EditorScene;
     friend class EditorSettings;

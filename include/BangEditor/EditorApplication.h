@@ -25,9 +25,9 @@ public:
     virtual ~EditorApplication();
 
     void Init(const Path &engineRootPath) override;
+    void OpenEditorScene();
 
     EditorPaths *GetEditorPaths() const;
-    void OpenEditorScene(Window *containingWindow);
     EditorScene *GetEditorScene() const;
 
 private:

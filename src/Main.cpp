@@ -5,6 +5,7 @@
 
 #include "BangEditor/Project.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorSettings.h"
 #include "BangEditor/ProjectManager.h"
 
 #ifndef BANG_PROJECT_ROOT
@@ -20,21 +21,24 @@ int main(int argc, char **argv)
     edApp.Init( Path("" BANG_PROJECT_ROOT) );
 
     Window *mainWindow = edApp.CreateWindow();
+    Window::SetActive(mainWindow);
     mainWindow->SetTitle("Bang Editor");
-    edApp.OpenEditorScene(mainWindow);
+    edApp.OpenEditorScene();
 
-    Path projectToOpenPath;
+    // Open project (arg or latest one)
+    Path projectToOpenPath = EditorSettings::GetLatestProjectFilePathOpen();
     if (argc >= 2)
     {
         projectToOpenPath = Path(argv[1]);
-        if (projectToOpenPath.IsFile())
-        {
-            ProjectManager::OpenProject(projectToOpenPath);
-        }
-        else
+        if (!projectToOpenPath.IsFile())
         {
             Debug_Error("Can't find project '" << projectToOpenPath << "'.");
         }
+    }
+
+    if (projectToOpenPath.IsFile())
+    {
+        ProjectManager::OpenProject(projectToOpenPath);
     }
 
     return edApp.MainLoop();

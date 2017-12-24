@@ -47,6 +47,7 @@ private:
     static void OpenProject(const Path& projectFileFilepath);
     static void CloseScene();
 
+    friend class ProjectManager;
     friend class Bang::ObjectManager;
 };
 

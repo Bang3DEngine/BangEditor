@@ -11,12 +11,17 @@ USING_NAMESPACE_BANG_EDITOR
 
 Editor::Editor()
 {
-    m_editorSettings = new EditorSettings();
 }
 
 Editor::~Editor()
 {
     delete m_editorSettings;
+}
+
+void Editor::Init()
+{
+    m_editorSettings = new EditorSettings();
+    GetEditorSettings()->Init();
 }
 
 void Editor::SelectGameObject(GameObject *selectedGameObject)

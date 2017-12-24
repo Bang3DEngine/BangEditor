@@ -29,7 +29,7 @@ protected:
     Scene *_GetOpenScene() const;
     EditorScene *_GetEditorScene() const;
 
-    void _LoadScene(Scene *scene) override;
+    void _LoadSceneInstantly(Scene *scene) override;
 
     static void SetActiveScene(Scene *activeScene);
 

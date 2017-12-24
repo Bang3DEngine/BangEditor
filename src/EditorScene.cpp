@@ -41,6 +41,8 @@ EditorScene::EditorScene()
 void EditorScene::Init()
 {
     m_editor = new Editor();
+    m_editor->Init();
+
     m_projectManager = new ProjectManager();
 
     GameObjectFactory::CreateUIGameObjectInto(this);
@@ -96,7 +98,6 @@ void EditorScene::Init()
     SetCamera(cam);
     GetCamera()->SetClearColor(Color::LightGray);
 }
-
 
 EditorScene::~EditorScene()
 {

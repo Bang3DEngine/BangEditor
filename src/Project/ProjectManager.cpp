@@ -10,8 +10,10 @@
 #include "Bang/ImportFilesManager.h"
 
 #include "BangEditor/Project.h"
+#include "BangEditor/MenuBar.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorSettings.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
@@ -37,11 +39,15 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
     ImportFilesManager::CreateMissingImportFiles();
     ImportFilesManager::LoadImportFilepathGUIDs();
 
-    Debug_Log(EditorSceneManager::GetEditorScene());
-    Debug_Log(ProjectManager::GetInstance());
     ProjectManager::GetInstance()->
         EventEmitter<ProjectManagerListener>::PropagateToListeners(
                &ProjectManagerListener::OnProjectOpen, s_currentProject);
+
+    EditorSettings::SetLatestProjectFilePathOpen(
+                            currentProject->GetProjectFileFilepath() );
+
+    bool sceneOpen = currentProject->OpenFirstFoundScene();
+    if (!sceneOpen) { MenuBar::OnNewScene(nullptr); }
 
     return currentProject;
 }

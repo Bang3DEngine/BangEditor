@@ -46,7 +46,7 @@ EditorScene *EditorSceneManager::_GetEditorScene() const
     return p_editorScene;
 }
 
-void EditorSceneManager::_LoadScene(Scene *scene)
+void EditorSceneManager::_LoadSceneInstantly(Scene *scene)
 {
     EditorScene *edScene = _GetEditorScene();
     if (edScene)
@@ -57,7 +57,7 @@ void EditorSceneManager::_LoadScene(Scene *scene)
     else // Load editor scene
     {
         p_editorScene = SCAST<EditorScene*>(scene);
-        SceneManager::_LoadScene(scene);
+        SceneManager::_LoadSceneInstantly(scene);
     }
 }
 

@@ -35,7 +35,6 @@ public:
     bool IsItemCollapsed(HierarchyItem *item) const;
 
     // Object
-    void OnStart() override;
     void Update() override;
 
     // ICreateListener
