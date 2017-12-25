@@ -15,6 +15,7 @@
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/Project.h"
+#include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSettings.h"
 #include "BangEditor/ProjectManager.h"
@@ -26,6 +27,8 @@ MenuBar::MenuBar()
 {
     SetName("MenuBar");
     GameObjectFactory::CreateUIGameObjectInto(this);
+
+    m_sceneOpenerSaver = new SceneOpenerSaver();
 
     // UIImageRenderer *bg = AddComponent<UIImageRenderer>();
     // bg->SetTint(Color::Gray);
@@ -42,6 +45,7 @@ MenuBar::MenuBar()
     m_componentsItem  = AddItem();
     m_gameObjectsItem = AddItem();
 
+
     m_fileItem->GetText()->SetContent("File");
     m_editItem->GetText()->SetContent("Edit");
     m_assetsItem->GetText()->SetContent("Assets");
@@ -50,29 +54,24 @@ MenuBar::MenuBar()
 
     MenuItem *newProject = m_fileItem->AddItem("New Project...");
     MenuItem *openProject = m_fileItem->AddItem("Open Project...");
-    MenuItem *openRecentProject = m_fileItem->AddItem("Open Recent Project");
-        openRecentProject->AddItem("Wololo/hehe.bproject");
-        openRecentProject->AddItem("Wololo/hoho.bproject");
-        openRecentProject->AddItem("Wololo/bangbangbang.bproject");
 
     m_fileItem->AddSeparator();
     MenuItem *newScene = m_fileItem->AddItem("New Scene");
     MenuItem *openScene = m_fileItem->AddItem("Open Scene");
     MenuItem *saveScene = m_fileItem->AddItem("Save Scene");
     MenuItem *saveSceneAs = m_fileItem->AddItem("Save Scene As...");
-    MenuItem *closeScene = m_fileItem->AddItem("Close Scene");
-
-    MenuItem *copyChild = m_editItem->AddItem("Copy");
 
     newProject->GetButton()->AddClickedCallback(MenuBar::OnNewProject);
     openProject->GetButton()->AddClickedCallback(MenuBar::OnOpenProject);
     newScene->GetButton()->AddClickedCallback(MenuBar::OnNewScene);
     saveScene->GetButton()->AddClickedCallback(MenuBar::OnSaveScene);
+    saveSceneAs->GetButton()->AddClickedCallback(MenuBar::OnSaveSceneAs);
     openScene->GetButton()->AddClickedCallback(MenuBar::OnOpenScene);
 }
 
 MenuBar::~MenuBar()
 {
+    delete m_sceneOpenerSaver;
 }
 
 void MenuBar::Update()
@@ -116,7 +115,8 @@ MenuItem* MenuBar::GetItem(int i)
 
 void MenuBar::OnNewProject(IFocusable*)
 {
-    Path newProjectDirPath = Dialog::OpenDirectory("Create New Project...");
+    Path newProjectDirPath = Dialog::OpenDirectory("Create New Project...",
+                                                   EditorPaths::Home());
     if (newProjectDirPath.IsDir())
     {
         String projectName = Dialog::GetString("Choose Project Name",
@@ -130,12 +130,11 @@ void MenuBar::OnNewProject(IFocusable*)
         }
     }
 }
-
 void MenuBar::OnOpenProject(IFocusable*)
 {
-    Debug_Peek(Extensions::GetProjectExtension());
     Path projectFileFilepath = Dialog::OpenFilePath("Open Project...",
-                                                    {Extensions::GetProjectExtension()});
+                                                    {Extensions::GetProjectExtension()},
+                                                     EditorPaths::Home());
     OpenProject(projectFileFilepath);
 }
 void MenuBar::OpenProject(const Path &projectFileFilepath)
@@ -146,57 +145,31 @@ void MenuBar::OpenProject(const Path &projectFileFilepath)
     }
 }
 
+MenuBar *MenuBar::GetInstance()
+{
+    return EditorSceneManager::GetEditorScene()->GetMenuBar();
+}
+
 void MenuBar::OnNewScene(IFocusable*)
 {
-    MenuBar::CloseScene();
-
-    EditorScene *edScene = EditorSceneManager::GetEditorScene();
-
-    Scene *previousOpenScene = EditorSceneManager::GetOpenScene();
-    if (previousOpenScene) { GameObject::Destroy(previousOpenScene); }
-
-    Scene *defaultScene = GameObjectFactory::CreateScene();
-    edScene->SetOpenScene(defaultScene);
-
-    GameObjectFactory::CreateDefaultSceneInto(defaultScene);
-    defaultScene->SetFirstFoundCamera();
+    MenuBar *mb = MenuBar::GetInstance();
+    mb->m_sceneOpenerSaver->OnNewScene();
 }
 
 void MenuBar::OnSaveScene(IFocusable*)
 {
-    EditorScene *edScene = EditorSceneManager::GetEditorScene();
-    Scene *openScene = edScene->GetOpenScene();
-    if (openScene)
-    {
-        Path saveScenePath = Dialog::SaveFilePath("Save Scene...",
-                                       { Extensions::GetSceneExtension() });
-        // if (saveScenePath.IsFile())
-        {
-            openScene->ExportXMLToFile( Path(saveScenePath) );
-        }
-    }
+    MenuBar *mb = MenuBar::GetInstance();
+    mb->m_sceneOpenerSaver->OnSaveScene();
+}
+
+void MenuBar::OnSaveSceneAs(IFocusable*)
+{
+    MenuBar *mb = MenuBar::GetInstance();
+    mb->m_sceneOpenerSaver->OnSaveSceneAs();
 }
 
 void MenuBar::OnOpenScene(IFocusable*)
 {
-    MenuBar::CloseScene();
-
-    Path openScenePath = Dialog::OpenFilePath("Open Scene...",
-                                             { Extensions::GetSceneExtension() });
-    if (openScenePath.IsFile())
-    {
-        EditorScene *edScene = EditorSceneManager::GetEditorScene();
-        Scene *scene = GameObjectFactory::CreateScene(false);
-        scene->ImportXMLFromFile(openScenePath);
-        edScene->SetOpenScene(scene);
-    }
-}
-
-void MenuBar::OnCloseScene(IFocusable*)
-{
-    MenuBar::CloseScene();
-}
-void MenuBar::CloseScene()
-{
-    EditorSceneManager::GetEditorScene()->SetOpenScene(nullptr);
+    MenuBar *mb = MenuBar::GetInstance();
+    mb->m_sceneOpenerSaver->OnOpenScene();
 }

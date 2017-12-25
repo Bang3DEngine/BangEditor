@@ -268,20 +268,13 @@ void EditorScene::UnBindOpenScene()
     EditorSceneManager::SetActiveScene(this);
 }
 
+MenuBar *EditorScene::GetMenuBar() const { return m_menuBar; }
 Console *EditorScene::GetConsole() const { return m_console; }
 Explorer *EditorScene::GetExplorer() const { return m_explorer; }
 Inspector *EditorScene::GetInspector() const { return m_inspector; }
 Hierarchy *EditorScene::GetHierarchy() const { return m_hierarchy; }
-
-ProjectManager *EditorScene::GetProjectManager() const
-{
-    return m_projectManager;
-}
-
-Editor *EditorScene::GetEditor() const
-{
-    return m_editor;
-}
+ProjectManager *EditorScene::GetProjectManager() const { return m_projectManager; }
+Editor *EditorScene::GetEditor() const { return m_editor; }
 
 void EditorScene::PushGLViewport()
 {

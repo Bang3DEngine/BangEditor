@@ -48,11 +48,6 @@ void EditorApplication::OpenEditorScene()
     m_editorScene->Init();
 }
 
-void EditorApplication::SetupWindow(Window *window)
-{
-    Application::SetupWindow(window);
-}
-
 EditorApplication *EditorApplication::GetInstance()
 {
     return SCAST<EditorApplication*>( Application::GetInstance() );

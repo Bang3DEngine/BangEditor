@@ -8,6 +8,8 @@
 #include "BangEditor/MenuItem.h"
 #include "Bang/UIHorizontalLayout.h"
 
+#include "BangEditor/SceneOpenerSaver.h"
+
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
@@ -37,15 +39,18 @@ private:
     Array<MenuItem*> m_items;
     UIHorizontalLayout *m_horizontalLayout = nullptr;
 
+    SceneOpenerSaver *m_sceneOpenerSaver = nullptr;
+
     static void OnNewProject  (IFocusable *btn);
     static void OnOpenProject (IFocusable *btn);
     static void OnNewScene    (IFocusable *btn);
     static void OnSaveScene   (IFocusable *btn);
+    static void OnSaveSceneAs (IFocusable *btn);
     static void OnOpenScene   (IFocusable *btn);
-    static void OnCloseScene  (IFocusable *btn);
 
     static void OpenProject(const Path& projectFileFilepath);
-    static void CloseScene();
+
+    static MenuBar* GetInstance();
 
     friend class ProjectManager;
     friend class Bang::ObjectManager;

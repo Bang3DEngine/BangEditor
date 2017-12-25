@@ -47,6 +47,7 @@ public:
 
     void RenderAndBlitToScreen();
 
+    MenuBar *GetMenuBar() const;
     Editor *GetEditor() const;
     Console *GetConsole() const;
     Explorer *GetExplorer() const;
