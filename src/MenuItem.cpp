@@ -183,6 +183,10 @@ bool MenuItem::MustDisplayChildren() const
 {
     if (m_itemType == MenuItemType::Root) { return true; }
 
+    if (p_childrenContainer->IsEnabled(true) &&
+        p_childrenContainer->GetRectTransform()->IsMouseOver(false))
+    { return true; }
+
     if (GetButton()->IsMouseOver()) { return true; }
 
     for (MenuItem *childItem : p_childrenItems)
