@@ -43,11 +43,11 @@ UIInputVector::UIInputVector()
         m_inputNumbers[i]->EventEmitter<IValueChangedListener>::RegisterListener(this);
     }
 
-    SetAsChild(p_label->GetGameObject());
-    SetAsChild(m_inputNumbers[0]->GetGameObject());
-    SetAsChild(m_inputNumbers[1]->GetGameObject());
-    SetAsChild(m_inputNumbers[2]->GetGameObject());
-    SetAsChild(m_inputNumbers[3]->GetGameObject());
+    p_label->GetGameObject()->SetParent(this);
+    m_inputNumbers[0]->GetGameObject()->SetParent(this);
+    m_inputNumbers[1]->GetGameObject()->SetParent(this);
+    m_inputNumbers[2]->GetGameObject()->SetParent(this);
+    m_inputNumbers[3]->GetGameObject()->SetParent(this);
 }
 
 UIInputVector::UIInputVector(const String &labelText, int size) : UIInputVector()

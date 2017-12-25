@@ -95,7 +95,7 @@ void MenuBar::Update()
             GameObject *sphere = MeshFactory::GetSphereGameObject();
             sphere->GetTransform()->SetPosition( Random::GetInsideUnitSphere() );
             sphere->GetTransform()->SetScale( Vector3(Random::GetRange(0.3f, 1.0f)) );
-            openScene->SetAsChild(sphere);
+            sphere->SetParent(openScene);
         }
     }
 }

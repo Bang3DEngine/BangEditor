@@ -50,7 +50,7 @@ Menu::Menu()
 
     p_rootItem = GameObject::Create<MenuItem>( MenuItem::MenuItemType::Root );
     p_rootItem->SetDestroyOnClose(true);
-    SetAsChild(p_rootItem);
+    p_rootItem->SetParent(this);
 
     RectTransform *rt = GetRectTransform();
     rt->SetAnchors( Input::GetMousePositionNDC() );

@@ -77,12 +77,12 @@ Explorer::Explorer() : EditorUITab("Explorer")
 
     SetCurrentPath( Paths::EngineAssets() );
 
-    SetAsChild(toolBar);
-    toolBar->SetAsChild(p_backButton->GetGameObject());
-    toolBar->SetAsChild(dirBar);
-    SetAsChild(GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5));
+    toolBar->SetParent(this);
+    p_backButton->GetGameObject()->SetParent(toolBar);
+    dirBar->SetParent(toolBar);
+    GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5)->SetParent(this);
 
-    SetAsChild(p_scrollPanel->GetGameObject());
+    p_scrollPanel->GetGameObject()->SetParent(this);
 
     p_scrollPanel->GetScrollArea()->SetContainedGameObject(p_itemsContainer);
     p_scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
@@ -164,7 +164,7 @@ void Explorer::AddItem(const Path &itemPath)
 {
     ExplorerItem *explorerItem = GameObject::Create<ExplorerItem>();
     explorerItem->SetFilepath(itemPath);
-    p_itemsContainer->SetAsChild(explorerItem);
+    explorerItem->SetParent(p_itemsContainer);
 
     p_items.PushBack(explorerItem);
 }

@@ -42,7 +42,7 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
     GetUITree()->SetSelectionCallback(
                           [this](GOItem *item, UIList::Action action)
                           { this->TreeSelectionCallback(item, action); } );
-    SetAsChild(treeGo);
+    treeGo->SetParent(this);
 
     ObjectManager::RegisterCreateListener(this);
     Editor::RegisterListener<IEditorSelectionListener>(this);

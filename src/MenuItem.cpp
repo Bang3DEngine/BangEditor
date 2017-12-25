@@ -129,12 +129,12 @@ void MenuItem::AddSeparator()
     GameObject *sep =
             GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Preferred, 5);
     sep->AddComponent<UIFocusable>();
-    p_childrenContainer->SetAsChild(sep);
+    sep->SetParent(p_childrenContainer);
 }
 
 void MenuItem::AddItem(MenuItem *childItem)
 {
-    p_childrenContainer->SetAsChild(childItem);
+    childItem->SetParent(p_childrenContainer);
     p_childrenItems.PushBack(childItem);
 }
 

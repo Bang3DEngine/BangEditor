@@ -53,9 +53,9 @@ ExplorerItem::ExplorerItem()
     p_button = AddComponent<UIFocusable>();
     p_button->EventEmitter<IFocusListener>::RegisterListener(this);
 
-    SetAsChild(bgGo);
-    SetAsChild(iconGo);
-    SetAsChild(labelGo);
+    bgGo->SetParent(this);
+    iconGo->SetParent(this);
+    labelGo->SetParent(this);
 
     SetSelected(false);
 }

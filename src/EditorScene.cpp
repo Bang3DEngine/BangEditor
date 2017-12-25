@@ -63,8 +63,8 @@ void EditorScene::Init()
     hlLe->SetFlexibleSize(Vector2(1));
     hlGo->SetParent(m_mainEditorVL);
 
-    m_mainEditorVL->SetAsChild(
-              GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10));
+    GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10)->
+            SetParent(m_mainEditorVL);
 
     m_sceneContainer = GameObject::Create<UISceneContainer>();
     m_sceneContainer->SetParent(hlGo);
@@ -92,7 +92,7 @@ void EditorScene::Init()
     m_fpsText = fpsTextGo->AddComponent<UITextRenderer>();
     m_fpsText->SetHorizontalAlign(HorizontalAlignment::Right);
     m_fpsText->SetVerticalAlign(VerticalAlignment::Bot);
-    SetAsChild(fpsTextGo);
+    fpsTextGo->SetParent(this);
 
     Camera *cam = AddComponent<Camera>();
     SetCamera(cam);

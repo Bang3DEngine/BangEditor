@@ -36,11 +36,11 @@ InspectorWidget::InspectorWidget()
     p_container = container;
     p_title = text;
 
-    SetAsChild(titleGo);
-    SetAsChild(topSeparator);
-    SetAsChild(container);
-    SetAsChild(botSeparator);
-    SetAsChild(bot2Separator);
+    titleGo->SetParent(this);
+    topSeparator->SetParent(this);
+    container->SetParent(this);
+    botSeparator->SetParent(this);
+    bot2Separator->SetParent(this);
 }
 
 InspectorWidget::~InspectorWidget()

@@ -42,7 +42,7 @@ HierarchyItem::HierarchyItem()
     p_textRenderer->SetHorizontalAlign(HorizontalAlignment::Left);
     SetText("HierarchyItem");
 
-    SetAsChild(textGo);
+    textGo->SetParent(this);
 }
 
 HierarchyItem::~HierarchyItem()
@@ -99,7 +99,7 @@ void HierarchyItem::OnSetContextMenu(MenuItem *menuRootItem)
     createEmpty->GetButton()->AddClickedCallback([this](IFocusable*)
     {
         GameObject *empty = GameObjectFactory::CreateGameObjectNamed("Empty");
-        GetReferencedGameObject()->SetAsChild(empty);
+        empty->SetParent( GetReferencedGameObject() );
     });
 
     MenuItem *duplicate = menuRootItem->AddItem("Duplicate");

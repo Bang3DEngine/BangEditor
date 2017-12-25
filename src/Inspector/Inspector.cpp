@@ -74,9 +74,9 @@ Inspector::Inspector() : EditorUITab("Inspector")
                                                 GetMainVL()->GetGameObject() );
     GetScrollPanel()->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
 
-    SetAsChild(goNameLabel->GetGameObject());
-    SetAsChild(p_nameSeparator);
-    SetAsChild(scrollPanel->GetGameObject());
+    goNameLabel->GetGameObject()->SetParent(this);
+    p_nameSeparator->SetParent(this);
+    scrollPanel->GetGameObject()->SetParent(this);
 }
 
 Inspector::~Inspector()
@@ -137,7 +137,7 @@ void Inspector::SetGameObject(GameObject *go)
 void Inspector::AddWidget(InspectorWidget *widget)
 {
     m_widgets.PushBack(widget);
-    GetContainer()->SetAsChild(widget);
+    widget->SetParent( GetContainer() );
 }
 
 void Inspector::RemoveWidget(InspectorWidget *widget)
