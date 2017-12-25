@@ -12,6 +12,8 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class UIInputFile;
+
 class CWMeshRenderer : public ComponentWidget,
                        public IValueChangedListener
 {
@@ -24,7 +26,7 @@ public:
 private:
     MeshRenderer *p_relatedMeshRenderer = nullptr;
 
-    UIInputText *p_meshInputFile = nullptr;
+    UIInputFile *p_meshInputFile = nullptr;
 
     void OnValueChanged(Object *object) override;
     void SetComponent(Component *comp) override;

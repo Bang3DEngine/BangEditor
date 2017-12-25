@@ -61,13 +61,17 @@ RH<Texture2D> EditorIconManager::GetIcon(const String &ext)
 
 RH<Texture2D> EditorIconManager::GetBackArrowIcon()
 { return GetIconTexture("BackArrow"); }
+RH<Texture2D> EditorIconManager::GetLensIcon()
+{ return GetIconTexture("Lens"); }
+RH<Texture2D> EditorIconManager::GetLensLittleIcon()
+{ return GetIconTexture("LensLittle"); }
 
 RH<Texture2D> EditorIconManager::GetIconTexture(const String &filename)
 {
     RH<Texture2D> iconTex =
         Resources::Load<Texture2D>(EditorPaths::EditorResources().Append("Icons").
                                    Append(filename).AppendExtension("png"));
-    iconTex.Get()->SetFilterMode(GL::FilterMode::Linear);
+    iconTex.Get()->SetFilterMode(GL::FilterMode::Bilinear);
     iconTex.Get()->SetWrapMode(GL::WrapMode::ClampToEdge);
     return iconTex;
 }

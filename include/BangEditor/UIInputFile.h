@@ -1,0 +1,45 @@
+#ifndef UIINPUTFILE_H
+#define UIINPUTFILE_H
+
+#include "Bang/Array.h"
+#include "Bang/GameObject.h"
+#include "Bang/IEventEmitter.h"
+#include "Bang/IValueChangedListener.h"
+
+#include "BangEditor/BangEditor.h"
+
+NAMESPACE_BANG_BEGIN
+FORWARD class UILabel;
+FORWARD class UIButton;
+FORWARD class UIInputText;
+FORWARD class UIInputNumber;
+NAMESPACE_BANG_END
+
+USING_NAMESPACE_BANG
+NAMESPACE_BANG_EDITOR_BEGIN
+
+class UIInputFile : public GameObject,
+                    public EventEmitter<IValueChangedListener>
+{
+    GAMEOBJECT_EDITOR(UIInputFile);
+
+public:
+    UILabel *GetLabel() const;
+    UIInputText *GetInputText() const;
+
+protected:
+	UIInputFile();
+    virtual ~UIInputFile();
+
+private:
+    UILabel *p_label = nullptr;
+    UIButton *p_searchButton = nullptr;
+    UIInputText *p_pathInputText = nullptr;
+
+    Path OpenFileDialog() const;
+};
+
+NAMESPACE_BANG_EDITOR_END
+
+#endif // UIINPUTFILE_H
+
