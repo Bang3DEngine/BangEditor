@@ -28,6 +28,10 @@ TransformGizmo::TransformGizmo()
     p_translateGizmo->SetParent(this);
     p_rotateGizmo->SetParent(this);
     p_scaleGizmo->SetParent(this);
+
+    p_translateGizmo->SetEnabled(false);
+    p_rotateGizmo->SetEnabled(false);
+    p_scaleGizmo->SetEnabled(false);
 }
 
 TransformGizmo::~TransformGizmo()

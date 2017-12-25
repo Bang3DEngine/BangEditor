@@ -26,7 +26,10 @@ public:
     Explorer();
     virtual ~Explorer();
 
+    void SetRootPath(const Path &rootPath);
     void SetCurrentPath(const Path &path);
+
+    const Path &GetRootPath() const;
     const Path &GetCurrentPath() const;
 
     void Clear();
@@ -38,6 +41,7 @@ public:
     static Explorer *GetInstance();
 
 private:
+    Path m_rootPath = Path::Empty;
     Path m_currentPath = Path::Empty;
     List<ExplorerItem*> p_items;
 
@@ -48,6 +52,8 @@ private:
 
     void AddItem(const Path &itemPath);
     void GoDirectoryUp();
+
+    bool IsInsideRootPath(const Path &path) const;
 };
 
 NAMESPACE_BANG_EDITOR_END

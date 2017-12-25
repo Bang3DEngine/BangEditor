@@ -18,7 +18,7 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-CWTransform::CWTransform(Transform *transform)
+CWTransform::CWTransform()
 {
     SetName("CWTransform");
     SetTitle("Transform");
@@ -31,21 +31,15 @@ CWTransform::CWTransform(Transform *transform)
     p_rotIV   = GameObject::Create<UIInputVector>("Rotation", 3);
     p_scaleIV = GameObject::Create<UIInputVector>("Scale   ", 3);
 
-    p_posIV->Set(transform->GetLocalPosition());
-    p_rotIV->Set(transform->GetLocalRotation().GetEulerAngles());
-    p_scaleIV->Set(transform->GetLocalScale());
-
     UIInputVector* inputVectors[] = {p_posIV, p_rotIV, p_scaleIV};
     for (UIInputVector *inputVector : inputVectors)
     {
         inputVector->SetPreferredWidth(50);
         inputVector->EventEmitter<IValueChangedListener>::RegisterListener(this);
-        vlGo->SetAsChild(inputVector);
+        inputVector->SetParent(vlGo);
     }
 
-    GetContainer()->SetAsChild(vlGo);
-
-    p_relatedTransform = transform;
+    vlGo->SetParent(GetContainer());
 }
 
 CWTransform::~CWTransform()
@@ -77,5 +71,17 @@ void CWTransform::OnValueChanged(Object *object)
     p_relatedTransform->SetLocalPosition(p_posIV->GetVector3());
     p_relatedTransform->SetLocalEuler(p_rotIV->GetVector3());
     p_relatedTransform->SetLocalScale(p_scaleIV->GetVector3());
+}
+
+void CWTransform::SetComponent(Component *comp)
+{
+    Transform *transform = DCAST<Transform*>(comp);
+    ASSERT(transform);
+
+    p_relatedTransform = transform;
+
+    p_posIV->Set(transform->GetLocalPosition());
+    p_rotIV->Set(transform->GetLocalRotation().GetEulerAngles());
+    p_scaleIV->Set(transform->GetLocalScale());
 }
 

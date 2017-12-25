@@ -27,6 +27,8 @@ InspectorWidget::InspectorWidget()
             GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5, 1.0f);
     GameObject *botSeparator =
             GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5, 1.0f);
+    GameObject *bot2Separator =
+            GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10, 1.1f);
 
     GameObject *container = GameObjectFactory::CreateUIGameObjectNamed("Container");
     container->AddComponent<UIVerticalLayout>();
@@ -38,6 +40,7 @@ InspectorWidget::InspectorWidget()
     SetAsChild(topSeparator);
     SetAsChild(container);
     SetAsChild(botSeparator);
+    SetAsChild(bot2Separator);
 }
 
 InspectorWidget::~InspectorWidget()

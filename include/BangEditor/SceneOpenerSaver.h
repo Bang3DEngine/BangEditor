@@ -23,6 +23,8 @@ public:
     // SceneManagerListener
     void OnSceneOpen(Scene *scene, const Path &sceneFilepath) override;
 
+    static SceneOpenerSaver* GetInstance();
+
 private:
     Path m_currentOpenScenePath = Path::Empty;
 

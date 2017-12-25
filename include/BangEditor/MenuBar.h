@@ -53,6 +53,7 @@ private:
     static MenuBar* GetInstance();
 
     friend class ProjectManager;
+    friend class SceneOpenerSaver;
     friend class Bang::ObjectManager;
 };
 

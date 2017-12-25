@@ -22,6 +22,7 @@
 #include "BangEditor/CWTransform.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/InspectorWidget.h"
+#include "BangEditor/ComponentWidgetFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -119,17 +120,17 @@ UIScrollPanel* Inspector::GetScrollPanel() const { return p_scrollPanel; }
 void Inspector::SetGameObject(GameObject *go)
 {
     Clear();
-    ENSURE(go && !go->IsWaitingToBeDestroyed());
+    if(!go || go->IsWaitingToBeDestroyed()) { return; }
 
     p_currentObject = go;
-
     p_nameSeparator->SetEnabled(true);
     p_goNameText->SetContent(go->GetName());
     GetCurrentObject()->EventEmitter<IDestroyListener>::RegisterListener(this);
-    if (go->GetTransform())
+
+    for (Component *comp : go->GetComponents())
     {
-        CWTransform *cwTransform = GameObject::Create<CWTransform>(go->GetTransform());
-        AddWidget(cwTransform);
+        ComponentWidget *compWidget = ComponentWidgetFactory::Create(comp);
+        if (compWidget) { AddWidget(compWidget); }
     }
 }
 
@@ -147,15 +148,18 @@ void Inspector::RemoveWidget(InspectorWidget *widget)
 
 void Inspector::Clear()
 {
-    while (!m_widgets.IsEmpty() && GetCurrentObject())
+    if (GetCurrentObject())
     {
-        InspectorWidget *widget = m_widgets.Front();
         p_goNameText->SetContent("");
         p_nameSeparator->SetEnabled(false);
-        RemoveWidget(widget);
-
         GetCurrentObject()->EventEmitter<IDestroyListener>::
                     UnRegisterListener(this);
+
+        while (!m_widgets.IsEmpty())
+        {
+            InspectorWidget *widget = m_widgets.Front();
+            RemoveWidget(widget);
+        }
 
         p_currentObject = nullptr;
     }

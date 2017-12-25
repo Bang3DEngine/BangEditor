@@ -97,12 +97,26 @@ Explorer::~Explorer()
 {
 }
 
+void Explorer::SetRootPath(const Path &rootPath)
+{
+    if (rootPath != GetRootPath())
+    {
+        m_rootPath = rootPath;
+        if (!IsInsideRootPath( GetCurrentPath() ))
+        {
+            SetCurrentPath( GetRootPath() );
+        }
+    }
+}
+
 void Explorer::SetCurrentPath(const Path &path)
 {
-    if (GetCurrentPath() != path)
+    if (GetCurrentPath() != path && IsInsideRootPath(path))
     {
         m_currentPath = path;
         p_directionLabel->GetText()->SetContent(m_currentPath.GetAbsolute());
+
+        p_backButton->SetBlocked( GetCurrentPath() == GetRootPath() );
 
         Clear();
         List<Path> subPaths = m_currentPath.FindSubPaths(Path::FindFlag::Simple);
@@ -112,6 +126,11 @@ void Explorer::SetCurrentPath(const Path &path)
         }
         p_scrollPanel->SetScrolling(Vector2i::Zero);
     }
+}
+
+const Path &Explorer::GetRootPath() const
+{
+    return m_rootPath;
 }
 
 const Path &Explorer::GetCurrentPath() const
@@ -131,6 +150,7 @@ void Explorer::Clear()
 void Explorer::OnProjectOpen(const Project *project)
 {
     ProjectManagerListener::OnProjectOpen(project);
+    SetRootPath(EditorPaths::ProjectAssets());
     SetCurrentPath(EditorPaths::ProjectAssets());
 }
 
@@ -152,6 +172,11 @@ void Explorer::AddItem(const Path &itemPath)
 void Explorer::GoDirectoryUp()
 {
     SetCurrentPath( GetCurrentPath().GetDirectory() );
+}
+
+bool Explorer::IsInsideRootPath(const Path &path) const
+{
+    return path.GetAbsolute().BeginsWith( GetRootPath().GetAbsolute() );
 }
 
 Explorer *Explorer::GetInstance()

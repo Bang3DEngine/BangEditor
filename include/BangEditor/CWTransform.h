@@ -18,7 +18,7 @@ class CWTransform : public ComponentWidget,
                     public IValueChangedListener
 {
 public:
-    CWTransform(Transform *transform);
+    CWTransform();
 	virtual ~CWTransform();
 
     void Update() override;
@@ -31,6 +31,7 @@ private:
     UIInputVector *p_scaleIV = nullptr;
 
     void OnValueChanged(Object *object) override;
+    void SetComponent(Component *comp) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

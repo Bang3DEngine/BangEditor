@@ -69,6 +69,11 @@ void SceneOpenerSaver::OnSceneOpen(Scene*, const Path &sceneFilepath)
     m_currentOpenScenePath = sceneFilepath;
 }
 
+SceneOpenerSaver *SceneOpenerSaver::GetInstance()
+{
+    return MenuBar::GetInstance()->m_sceneOpenerSaver;
+}
+
 bool SceneOpenerSaver::OnSaveScene(bool saveAs)
 {
     EditorScene *edScene = EditorSceneManager::GetEditorScene();

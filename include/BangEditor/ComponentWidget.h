@@ -13,6 +13,11 @@ class ComponentWidget : public InspectorWidget
 public:
 	ComponentWidget();
 	virtual ~ComponentWidget();
+
+protected:
+    virtual void SetComponent(Component *comp) = 0;
+
+    friend class ComponentWidgetFactory;
 };
 
 NAMESPACE_BANG_EDITOR_END
