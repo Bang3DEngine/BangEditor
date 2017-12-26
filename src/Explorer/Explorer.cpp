@@ -57,11 +57,11 @@ Explorer::Explorer() : EditorUITab("Explorer")
     toolBarLE->SetFlexibleHeight(0);
 
     // Direction label
-    p_directionLabel = GameObjectFactory::CreateUILabel();
-    p_directionLabel->GetText()->SetTextSize(9);
-    p_directionLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::Right);
+    p_currentPathLabel = GameObjectFactory::CreateUILabel();
+    p_currentPathLabel->GetText()->SetTextSize(9);
+    p_currentPathLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::Right);
 
-    GameObject *dirBar = p_directionLabel->GetGameObject();
+    GameObject *dirBar = p_currentPathLabel->GetGameObject();
 
     // Items Container
     p_itemsContainer = GameObjectFactory::CreateUIGameObject();
@@ -114,7 +114,7 @@ void Explorer::SetCurrentPath(const Path &path)
     if (GetCurrentPath() != path && IsInsideRootPath(path))
     {
         m_currentPath = path;
-        p_directionLabel->GetText()->SetContent(m_currentPath.GetAbsolute());
+        p_currentPathLabel->GetText()->SetContent(m_currentPath.GetAbsolute());
 
         p_backButton->SetBlocked( GetCurrentPath() == GetRootPath() );
 
@@ -166,12 +166,26 @@ void Explorer::AddItem(const Path &itemPath)
     explorerItem->SetFilepath(itemPath);
     explorerItem->SetParent(p_itemsContainer);
 
+    explorerItem->GetButton()->AddDoubleClickedCallback(&Explorer::OnItemDoubleClicked);
+
     p_items.PushBack(explorerItem);
 }
 
 void Explorer::GoDirectoryUp()
 {
     SetCurrentPath( GetCurrentPath().GetDirectory() );
+}
+
+void Explorer::OnItemDoubleClicked(IFocusable *itemFocusable)
+{
+    GameObject *itemGo = Cast<UIFocusable*>(itemFocusable)->GetGameObject();
+    ExplorerItem *expItem = Cast<ExplorerItem*>(itemGo);
+    ASSERT(expItem);
+
+    if (expItem->GetFilepath().IsDir())
+    {
+        Explorer::GetInstance()->SetCurrentPath(expItem->GetFilepath());
+    }
 }
 
 bool Explorer::IsInsideRootPath(const Path &path) const

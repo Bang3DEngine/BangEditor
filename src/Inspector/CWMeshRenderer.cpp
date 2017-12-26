@@ -2,6 +2,8 @@
 
 #include "Bang/Mesh.h"
 #include "Bang/UILabel.h"
+#include "Bang/Resources.h"
+#include "Bang/Extensions.h"
 #include "Bang/UIInputText.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/UITextRenderer.h"
@@ -18,6 +20,8 @@ CWMeshRenderer::CWMeshRenderer()
 
     p_meshInputFile = GameObject::Create<UIInputFile>();
     p_meshInputFile->GetLabel()->GetText()->SetContent("Mesh");
+    p_meshInputFile->SetExtensions( Extensions::GetModelExtensions().To<Array>() );
+    p_meshInputFile->EventEmitter<IValueChangedListener>::RegisterListener(this);
     p_meshInputFile->SetParent( GetContainer() );
 }
 
@@ -29,17 +33,23 @@ void CWMeshRenderer::Update()
 {
     ComponentWidget::Update();
 
-    if (!p_meshInputFile->GetInputText()->GetLabel()->HasFocus())
-    {
-        Mesh *mesh = p_relatedMeshRenderer->GetSharedMesh();
-        Path meshPath = mesh ? mesh->GetResourceFilepath() : Path::Empty;
-        p_meshInputFile->GetInputText()->GetText()->SetContent(meshPath.GetNameExt());
-    }
+    Mesh *mesh = GetMeshRenderer()->GetSharedMesh();
+    Path meshPath = mesh ? mesh->GetResourceFilepath() : Path::Empty;
+    p_meshInputFile->SetPath(meshPath);
 }
 
 void CWMeshRenderer::OnValueChanged(Object *object)
 {
+    if (object == p_meshInputFile)
+    {
+        RH<Mesh> mesh = Resources::Load<Mesh>(p_meshInputFile->GetPath());
+        GetMeshRenderer()->SetMesh(mesh.Get());
+    }
+}
 
+MeshRenderer *CWMeshRenderer::GetMeshRenderer() const
+{
+    return p_relatedMeshRenderer;
 }
 
 void CWMeshRenderer::SetComponent(Component *comp)

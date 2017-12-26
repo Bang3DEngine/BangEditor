@@ -23,7 +23,6 @@ public:
                          const Array<String> &extensions);
 
 private:
-    static bool s_okPressed;
     static Path s_assetPathResult;
 
     static Scene* CreateGetAssetSceneInto(Scene *scene,

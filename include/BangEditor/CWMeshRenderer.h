@@ -28,6 +28,7 @@ private:
 
     UIInputFile *p_meshInputFile = nullptr;
 
+    MeshRenderer *GetMeshRenderer() const;
     void OnValueChanged(Object *object) override;
     void SetComponent(Component *comp) override;
 };

@@ -40,10 +40,10 @@ UIInputFile::UIInputFile()
     p_searchButton->GetText()->SetContent("");
     p_searchButton->SetIcon( EditorIconManager::GetLensLittleIcon().Get(),
                              Vector2i(16) );
-
     p_searchButton->GetButton()->AddClickedCallback([this](IFocusable*)
     {
-        OpenFileDialog();
+        Path openPath = OpenFileDialog();
+        if (openPath.IsFile()) { SetPath(openPath); }
     });
 
     p_label->GetGameObject()->SetParent(this);
@@ -57,7 +57,28 @@ UIInputFile::~UIInputFile()
 
 Path UIInputFile::OpenFileDialog() const
 {
-    return EditorDialog::GetAsset("Get Asset...", {"bmesh"});
+    return EditorDialog::GetAsset("Get Asset...", GetExtensions());
+}
+
+void UIInputFile::SetPath(const Path &path)
+{
+    if (path != GetPath())
+    {
+        m_path = path;
+        GetInputText()->GetText()->SetContent( GetPath().GetNameExt() );
+        EventEmitter<IValueChangedListener>::PropagateToListeners(
+                &IValueChangedListener::OnValueChanged, this);
+    }
+}
+
+void UIInputFile::SetExtensions(const Array<String> &extensions)
+{
+    m_extensions = extensions;
+}
+
+Path UIInputFile::GetPath() const
+{
+    return m_path;
 }
 
 UILabel *UIInputFile::GetLabel() const
@@ -68,6 +89,11 @@ UILabel *UIInputFile::GetLabel() const
 UIInputText *UIInputFile::GetInputText() const
 {
     return p_pathInputText;
+}
+
+const Array<String> &UIInputFile::GetExtensions() const
+{
+    return m_extensions;
 }
 
 

@@ -45,13 +45,15 @@ private:
     Path m_currentPath = Path::Empty;
     List<ExplorerItem*> p_items;
 
-    UILabel *p_directionLabel = nullptr;
+    UILabel *p_currentPathLabel = nullptr;
     UIButton *p_backButton = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
     GameObject *p_itemsContainer = nullptr;
 
     void AddItem(const Path &itemPath);
     void GoDirectoryUp();
+
+    static void OnItemDoubleClicked(IFocusable*);
 
     bool IsInsideRootPath(const Path &path) const;
 };

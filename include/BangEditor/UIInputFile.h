@@ -1,6 +1,7 @@
 #ifndef UIINPUTFILE_H
 #define UIINPUTFILE_H
 
+#include "Bang/Path.h"
 #include "Bang/Array.h"
 #include "Bang/GameObject.h"
 #include "Bang/IEventEmitter.h"
@@ -24,14 +25,22 @@ class UIInputFile : public GameObject,
     GAMEOBJECT_EDITOR(UIInputFile);
 
 public:
+    void SetPath(const Path &path);
+    void SetExtensions(const Array<String> &extensions);
+
+    Path GetPath() const;
     UILabel *GetLabel() const;
     UIInputText *GetInputText() const;
+    const Array<String>& GetExtensions() const;
 
 protected:
 	UIInputFile();
     virtual ~UIInputFile();
 
 private:
+    Path m_path = Path::Empty;
+    Array<String> m_extensions;
+
     UILabel *p_label = nullptr;
     UIButton *p_searchButton = nullptr;
     UIInputText *p_pathInputText = nullptr;

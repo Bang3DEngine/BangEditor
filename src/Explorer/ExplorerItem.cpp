@@ -74,14 +74,6 @@ void ExplorerItem::Update()
         {
             SetSelected(true);
         }
-
-        if (Input::GetMouseButtonDoubleClick(MouseButton::Left))
-        {
-            if (GetFilepath().IsDir())
-            {
-                Explorer::GetInstance()->SetCurrentPath(GetFilepath());
-            }
-        }
     }
 
     if (IsSelected())
@@ -113,6 +105,16 @@ void ExplorerItem::SetSelected(bool selected)
 bool ExplorerItem::IsSelected() const
 {
     return m_selected;
+}
+
+UILabel *ExplorerItem::GetLabel() const
+{
+    return p_label;
+}
+
+UIFocusable *ExplorerItem::GetButton() const
+{
+    return p_button;
 }
 
 const Path &ExplorerItem::GetFilepath() const

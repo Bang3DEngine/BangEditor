@@ -30,6 +30,8 @@ public:
     void SetSelected(bool selected);
 
     bool IsSelected() const;
+    UILabel *GetLabel() const;
+    UIFocusable* GetButton() const;
     const Path& GetFilepath() const;
 
 protected:
