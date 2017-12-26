@@ -1,9 +1,7 @@
 #ifndef CWMESHRENDERER_H
 #define CWMESHRENDERER_H
 
-#include "Bang/IValueChangedListener.h"
-
-#include "BangEditor/ComponentWidget.h"
+#include "BangEditor/CWRenderer.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class MeshRenderer;
@@ -13,23 +11,30 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UIInputFile;
+FORWARD class UIInputColor;
 
-class CWMeshRenderer : public ComponentWidget,
-                       public IValueChangedListener
+class CWMeshRenderer : public CWRenderer
 {
-public:
-    CWMeshRenderer();
-	virtual ~CWMeshRenderer();
+    GAMEOBJECT_EDITOR(CWMeshRenderer);
 
+public:
     void Update() override;
 
 private:
     MeshRenderer *p_relatedMeshRenderer = nullptr;
 
     UIInputFile *p_meshInputFile = nullptr;
+    UIInputColor *p_diffColorInput = nullptr;
 
     MeshRenderer *GetMeshRenderer() const;
+
+    CWMeshRenderer();
+    virtual ~CWMeshRenderer();
+
+    // IValueChangedListener
     void OnValueChanged(Object *object) override;
+
+    // ComponentWidget
     void SetComponent(Component *comp) override;
 };
 

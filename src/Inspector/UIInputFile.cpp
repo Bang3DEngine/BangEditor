@@ -27,11 +27,13 @@ UIInputFile::UIInputFile()
 
     p_label = GameObjectFactory::CreateUILabel();
     p_label->GetText()->SetContent("File:");
+    p_label->GetText()->SetTextSize(11);
     p_label->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
     p_label->GetGameObject()->GetComponent<UILayoutElement>()->SetFlexibleWidth(0.0f);
 
     p_pathInputText = GameObjectFactory::CreateUIInputText();
     p_pathInputText->SetBlocked(true);
+    p_pathInputText->GetText()->SetTextSize(11);
     UILayoutElement *pathInputTextLE = p_pathInputText->GetGameObject()->
                                        AddComponent<UILayoutElement>();
     pathInputTextLE->SetFlexibleWidth(1.0f);

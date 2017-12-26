@@ -9,6 +9,7 @@
 #include "Bang/UITextRenderer.h"
 
 #include "BangEditor/UIInputFile.h"
+#include "BangEditor/UIInputColor.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -22,7 +23,12 @@ CWMeshRenderer::CWMeshRenderer()
     p_meshInputFile->GetLabel()->GetText()->SetContent("Mesh");
     p_meshInputFile->SetExtensions( Extensions::GetModelExtensions().To<Array>() );
     p_meshInputFile->EventEmitter<IValueChangedListener>::RegisterListener(this);
+
+    p_diffColorInput = GameObject::Create<UIInputColor>();
+    p_diffColorInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+
     p_meshInputFile->SetParent( GetContainer() );
+    p_diffColorInput->SetParent( GetContainer() );
 }
 
 CWMeshRenderer::~CWMeshRenderer()
@@ -31,7 +37,7 @@ CWMeshRenderer::~CWMeshRenderer()
 
 void CWMeshRenderer::Update()
 {
-    ComponentWidget::Update();
+    CWRenderer::Update();
 
     Mesh *mesh = GetMeshRenderer()->GetSharedMesh();
     Path meshPath = mesh ? mesh->GetResourceFilepath() : Path::Empty;
@@ -40,6 +46,8 @@ void CWMeshRenderer::Update()
 
 void CWMeshRenderer::OnValueChanged(Object *object)
 {
+    CWRenderer::OnValueChanged(object);
+
     if (object == p_meshInputFile)
     {
         RH<Mesh> mesh = Resources::Load<Mesh>(p_meshInputFile->GetPath());
@@ -54,6 +62,8 @@ MeshRenderer *CWMeshRenderer::GetMeshRenderer() const
 
 void CWMeshRenderer::SetComponent(Component *comp)
 {
+    CWRenderer::SetComponent(comp);
+
     MeshRenderer *meshRenderer = DCAST<MeshRenderer*>(comp);
     ASSERT(meshRenderer);
 

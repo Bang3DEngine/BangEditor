@@ -17,10 +17,9 @@ FORWARD class UIInputVector;
 class CWTransform : public ComponentWidget,
                     public IValueChangedListener
 {
-public:
-    CWTransform();
-	virtual ~CWTransform();
+    GAMEOBJECT_EDITOR(CWTransform);
 
+public:
     void Update() override;
 
 private:
@@ -30,7 +29,13 @@ private:
     UIInputVector *p_rotIV   = nullptr;
     UIInputVector *p_scaleIV = nullptr;
 
+    CWTransform();
+    virtual ~CWTransform();
+
+    // IValueChangedListener
     void OnValueChanged(Object *object) override;
+
+    // ComponentWidget
     void SetComponent(Component *comp) override;
 };
 

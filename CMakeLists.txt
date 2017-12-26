@@ -101,7 +101,9 @@ ${SRC_DIR}/Inspector/InspectorWidget.cpp
 ${SRC_DIR}/Inspector/ComponentWidget.cpp
 ${SRC_DIR}/Inspector/ComponentWidgetFactory.cpp
 ${SRC_DIR}/Inspector/CWMeshRenderer.cpp
+${SRC_DIR}/Inspector/CWRenderer.cpp
 ${SRC_DIR}/Inspector/CWTransform.cpp
+${SRC_DIR}/Inspector/UIInputColor.cpp
 ${SRC_DIR}/Inspector/UIInputFile.cpp
 ${SRC_DIR}/Inspector/UIInputVector.cpp
 ${SRC_DIR}/GameBuilder.cpp
