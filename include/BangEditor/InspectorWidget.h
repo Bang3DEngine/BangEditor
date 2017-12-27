@@ -24,11 +24,18 @@ protected:
     virtual ~InspectorWidget();
 
     void SetTitle(const String &title);
-    GameObject *GetContainer() const;
+    void AddWidget(const String &labelContent,
+                   GameObject *widget,
+                   int height = 15);
+    void SetWidgetEnabled(GameObject *widget, bool enabled);
+
+    GameObject *GetLabelsContainer() const;
+    GameObject *GetWidgetsContainer() const;
 
 private:
     UITextRenderer *p_title = nullptr;
-    GameObject *p_container = nullptr;
+    GameObject *p_labelsContainer = nullptr;
+    GameObject *p_widgetsContainer = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

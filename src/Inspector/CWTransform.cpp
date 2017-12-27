@@ -23,23 +23,19 @@ CWTransform::CWTransform()
     SetName("CWTransform");
     SetTitle("Transform");
 
-    GameObject *vlGo = GameObjectFactory::CreateUIGameObjectNamed("VLGo");
-    UIVerticalLayout *vl = vlGo->AddComponent<UIVerticalLayout>();
-    vl->SetSpacing(2);
-
-    p_posIV   = GameObject::Create<UIInputVector>("Position", 3);
-    p_rotIV   = GameObject::Create<UIInputVector>("Rotation", 3);
-    p_scaleIV = GameObject::Create<UIInputVector>("Scale   ", 3);
+    p_posIV   = GameObject::Create<UIInputVector>(3);
+    p_rotIV   = GameObject::Create<UIInputVector>(3);
+    p_scaleIV = GameObject::Create<UIInputVector>(3);
 
     UIInputVector* inputVectors[] = {p_posIV, p_rotIV, p_scaleIV};
     for (UIInputVector *inputVector : inputVectors)
     {
-        inputVector->SetPreferredWidth(50);
         inputVector->EventEmitter<IValueChangedListener>::RegisterListener(this);
-        inputVector->SetParent(vlGo);
     }
 
-    vlGo->SetParent(GetContainer());
+    AddWidget("Position", p_posIV);
+    AddWidget("Rotation", p_rotIV);
+    AddWidget("Scale",    p_scaleIV);
 }
 
 CWTransform::~CWTransform()

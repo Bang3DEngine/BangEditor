@@ -20,35 +20,31 @@ UIInputFile::UIInputFile()
     SetName("UIInputFile");
     GameObjectFactory::CreateUIGameObjectInto(this);
 
+    UILayoutElement *le = AddComponent<UILayoutElement>();
+    le->SetFlexibleWidth( 1.0f );
+
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
     hl->SetChildrenVerticalStretch(Stretch::Full);
-    hl->SetChildrenHorizontalStretch(Stretch::Full);
     hl->SetSpacing(5);
-
-    p_label = GameObjectFactory::CreateUILabel();
-    p_label->GetText()->SetContent("File:");
-    p_label->GetText()->SetTextSize(11);
-    p_label->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
-    p_label->GetGameObject()->GetComponent<UILayoutElement>()->SetFlexibleWidth(0.0f);
 
     p_pathInputText = GameObjectFactory::CreateUIInputText();
     p_pathInputText->SetBlocked(true);
     p_pathInputText->GetText()->SetTextSize(11);
     UILayoutElement *pathInputTextLE = p_pathInputText->GetGameObject()->
                                        AddComponent<UILayoutElement>();
-    pathInputTextLE->SetFlexibleWidth(1.0f);
+    pathInputTextLE->SetFlexibleSize( Vector2(9999.9f) );
+    pathInputTextLE->SetLayoutPriority(1);
 
     p_searchButton = GameObjectFactory::CreateUIButton();
     p_searchButton->GetText()->SetContent("");
     p_searchButton->SetIcon( EditorIconManager::GetLensLittleIcon().Get(),
-                             Vector2i(16) );
+                             Vector2i(14) );
     p_searchButton->GetButton()->AddClickedCallback([this](IFocusable*)
     {
         Path openPath = OpenFileDialog();
         if (openPath.IsFile()) { SetPath(openPath); }
     });
 
-    p_label->GetGameObject()->SetParent(this);
     p_pathInputText->GetGameObject()->SetParent(this);
     p_searchButton->GetGameObject()->SetParent(this);
 }
@@ -81,11 +77,6 @@ void UIInputFile::SetExtensions(const Array<String> &extensions)
 Path UIInputFile::GetPath() const
 {
     return m_path;
-}
-
-UILabel *UIInputFile::GetLabel() const
-{
-    return p_label;
 }
 
 UIInputText *UIInputFile::GetInputText() const

@@ -32,8 +32,8 @@ protected:
     void SetComponent(Component *comp) override;
 
 private:
-    UICheckBox *p_visibleCheckBox = nullptr;
     Renderer *p_relatedRenderer = nullptr;
+    UICheckBox *p_visibleCheckBox = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

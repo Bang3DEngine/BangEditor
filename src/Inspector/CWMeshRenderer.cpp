@@ -9,7 +9,6 @@
 #include "Bang/UITextRenderer.h"
 
 #include "BangEditor/UIInputFile.h"
-#include "BangEditor/UIInputColor.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -20,15 +19,10 @@ CWMeshRenderer::CWMeshRenderer()
     SetTitle("Mesh Renderer");
 
     p_meshInputFile = GameObject::Create<UIInputFile>();
-    p_meshInputFile->GetLabel()->GetText()->SetContent("Mesh");
     p_meshInputFile->SetExtensions( Extensions::GetModelExtensions().To<Array>() );
     p_meshInputFile->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
-    p_diffColorInput = GameObject::Create<UIInputColor>();
-    p_diffColorInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
-
-    p_meshInputFile->SetParent( GetContainer() );
-    p_diffColorInput->SetParent( GetContainer() );
+    AddWidget("Mesh", p_meshInputFile);
 }
 
 CWMeshRenderer::~CWMeshRenderer()

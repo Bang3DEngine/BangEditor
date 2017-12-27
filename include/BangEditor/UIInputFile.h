@@ -1,4 +1,3 @@
-
 #ifndef UIINPUTFILE_H
 #define UIINPUTFILE_H
 
@@ -11,7 +10,6 @@
 #include "BangEditor/BangEditor.h"
 
 NAMESPACE_BANG_BEGIN
-FORWARD class UILabel;
 FORWARD class UIButton;
 FORWARD class UIInputText;
 FORWARD class UIInputNumber;
@@ -30,7 +28,6 @@ public:
     void SetExtensions(const Array<String> &extensions);
 
     Path GetPath() const;
-    UILabel *GetLabel() const;
     UIInputText *GetInputText() const;
     const Array<String>& GetExtensions() const;
 
@@ -42,7 +39,6 @@ private:
     Path m_path = Path::Empty;
     Array<String> m_extensions;
 
-    UILabel *p_label = nullptr;
     UIButton *p_searchButton = nullptr;
     UIInputText *p_pathInputText = nullptr;
 

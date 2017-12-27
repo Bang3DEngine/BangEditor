@@ -23,7 +23,6 @@ class UIInputVector : public GameObject,
     GAMEOBJECT_EDITOR(UIInputVector);
 
 public:
-    void SetLabelText(const String &text);
     void SetSize(int size);
 
     void Set(const Vector2 &v);
@@ -37,20 +36,16 @@ public:
     Vector4 GetVector4() const;
 
     bool HasFocus() const;
-    void SetPreferredWidth(int width);
 
     void OnValueChanged(Object *object) override;
 
 protected:
     UIInputVector();
-    UIInputVector(const String &labelText, int size);
+    UIInputVector(int size);
     virtual ~UIInputVector();
 
 private:
     Array<UIInputNumber*> m_inputNumbers;
-
-    UILabel *p_label = nullptr;
-
 };
 
 NAMESPACE_BANG_EDITOR_END

@@ -1,7 +1,9 @@
 #include "BangEditor/CWRenderer.h"
 
+#include "Bang/UILabel.h"
 #include "Bang/Renderer.h"
 #include "Bang/UICheckBox.h"
+#include "Bang/UITextRenderer.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -12,8 +14,8 @@ CWRenderer::CWRenderer()
     SetTitle("Renderer");
 
     p_visibleCheckBox = GameObjectFactory::CreateUICheckBox();
-    p_visibleCheckBox->GetGameObject()->SetParent( GetContainer() );
     p_visibleCheckBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    AddWidget("Visible", p_visibleCheckBox->GetGameObject());
 }
 
 CWRenderer::~CWRenderer()

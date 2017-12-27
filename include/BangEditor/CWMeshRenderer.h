@@ -11,7 +11,6 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UIInputFile;
-FORWARD class UIInputColor;
 
 class CWMeshRenderer : public CWRenderer
 {
@@ -24,7 +23,6 @@ private:
     MeshRenderer *p_relatedMeshRenderer = nullptr;
 
     UIInputFile *p_meshInputFile = nullptr;
-    UIInputColor *p_diffColorInput = nullptr;
 
     MeshRenderer *GetMeshRenderer() const;
 
