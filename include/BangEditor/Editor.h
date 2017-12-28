@@ -23,7 +23,8 @@ FORWARD class TransformGizmo;
 class IEditorSelectionListener : public virtual IEventListener
 {
 public:
-    virtual void OnGameObjectSelected(GameObject *selectedGameObject) = 0;
+    virtual void OnGameObjectSelected(GameObject *selectedGameObject) { }
+    virtual void OnExplorerPathSelected(const Path &selectedPath) { }
 };
 
 class Editor : public EventEmitter<IEditorSelectionListener>,
@@ -49,12 +50,15 @@ private:
     void Init();
     void _SelectGameObject(GameObject *selectedGameObject);
 
+    static void OnPathSelected(const Path &path);
+
     EditorSettings* GetEditorSettings() const;
     static Editor* GetInstance();
 
     // IDestroyListener
     virtual void OnDestroyed(Object *object) override;
 
+    friend class Explorer;
     friend class EditorScene;
     friend class EditorSettings;
 };

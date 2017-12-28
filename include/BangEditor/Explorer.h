@@ -53,6 +53,7 @@ private:
     void AddItem(const Path &itemPath);
     void GoDirectoryUp();
 
+    static void OnItemSelected(IFocusable*);
     static void OnItemDoubleClicked(IFocusable*);
 
     bool IsInsideRootPath(const Path &path) const;

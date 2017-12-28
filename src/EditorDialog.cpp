@@ -128,7 +128,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
         expItem->SetFilepath(assetPath);
         expItem->GetButton()->AddClickedCallback([expItem](IFocusable*)
         {
-            EditorDialog::s_assetPathResult = expItem->GetFilepath();
+            EditorDialog::s_assetPathResult = expItem->GetPath();
         });
         expItem->GetButton()->AddDoubleClickedCallback([](IFocusable*)
         {

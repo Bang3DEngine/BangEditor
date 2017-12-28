@@ -87,12 +87,12 @@ void ExplorerItem::Update()
 
 void ExplorerItem::SetFilepath(const Path &path)
 {
-    if (GetFilepath() != path)
+    if (GetPath() != path)
     {
-        m_filepath = path;
-        RH<Texture2D> iconTex = EditorIconManager::GetIcon(GetFilepath());
+        m_path = path;
+        RH<Texture2D> iconTex = EditorIconManager::GetIcon(GetPath());
         p_icon->SetImageTexture(iconTex.Get());
-        p_label->GetText()->SetContent(GetFilepath().GetNameExt());
+        p_label->GetText()->SetContent(GetPath().GetNameExt());
     }
 }
 
@@ -117,9 +117,9 @@ UIFocusable *ExplorerItem::GetButton() const
     return p_button;
 }
 
-const Path &ExplorerItem::GetFilepath() const
+const Path &ExplorerItem::GetPath() const
 {
-    return m_filepath;
+    return m_path;
 }
 
 void ExplorerItem::OnMouseEnter(IFocusable*)

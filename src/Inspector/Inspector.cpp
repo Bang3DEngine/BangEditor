@@ -19,10 +19,11 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIContentSizeFitter.h"
 
-#include "BangEditor/CWTransform.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/InspectorWidget.h"
-#include "BangEditor/ComponentWidgetFactory.h"
+#include "BangEditor/ComponentInspectorWidget.h"
+#include "BangEditor/FileInspectorWidgetFactory.h"
+#include "BangEditor/ComponentInspectorWidgetFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -53,11 +54,11 @@ Inspector::Inspector() : EditorUITab("Inspector")
     GameObject *goNameLabelGo = goNameLabel->GetGameObject();
     UILayoutElement *goNameLE = goNameLabelGo->GetComponent<UILayoutElement>();
     goNameLE->SetFlexibleHeight(0.0f);
-    p_goNameText = goNameLabel->GetText();
-    p_goNameText->SetHorizontalAlign(HorizontalAlignment::Left);
+    p_titleText = goNameLabel->GetText();
+    p_titleText->SetHorizontalAlign(HorizontalAlignment::Left);
 
-    p_nameSeparator = GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5);
-    p_nameSeparator->SetEnabled(false);
+    p_titleSeparator = GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5);
+    p_titleSeparator->SetEnabled(false);
 
     UIVerticalLayout *mainVL = mainVLGo->AddComponent<UIVerticalLayout>();
     mainVL->SetSpacing(5);
@@ -75,8 +76,10 @@ Inspector::Inspector() : EditorUITab("Inspector")
     GetScrollPanel()->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
 
     goNameLabel->GetGameObject()->SetParent(this);
-    p_nameSeparator->SetParent(this);
+    p_titleSeparator->SetParent(this);
     scrollPanel->GetGameObject()->SetParent(this);
+
+    Editor::RegisterListener<IEditorSelectionListener>(this);
 }
 
 Inspector::~Inspector()
@@ -86,8 +89,7 @@ Inspector::~Inspector()
 
 void Inspector::OnStart()
 {
-    Object::OnStart();
-    Editor::RegisterListener<IEditorSelectionListener>(this);
+    EditorUITab::OnStart();
 }
 
 void Inspector::Update()
@@ -103,6 +105,18 @@ Object *Inspector::GetCurrentObject() const
 void Inspector::OnDestroyed(Object *destroyedObject)
 {
     Clear();
+}
+
+void Inspector::OnExplorerPathSelected(const Path &path)
+{
+    InspectorWidget *fiw = FileInspectorWidgetFactory::Create(path);
+    if (fiw)
+    {
+        Clear();
+        p_titleSeparator->SetEnabled(true);
+        p_titleText->SetContent(path.GetNameExt());
+        AddWidget(fiw);
+    }
 }
 
 void Inspector::OnGameObjectSelected(GameObject *selectedGameObject)
@@ -123,14 +137,18 @@ void Inspector::SetGameObject(GameObject *go)
     if(!go || go->IsWaitingToBeDestroyed()) { return; }
 
     p_currentObject = go;
-    p_nameSeparator->SetEnabled(true);
-    p_goNameText->SetContent(go->GetName());
+    p_titleSeparator->SetEnabled(true);
+    p_titleText->SetContent(go->GetName());
     GetCurrentObject()->EventEmitter<IDestroyListener>::RegisterListener(this);
 
     for (Component *comp : go->GetComponents())
     {
-        ComponentWidget *compWidget = ComponentWidgetFactory::Create(comp);
-        if (compWidget) { AddWidget(compWidget); }
+        ComponentInspectorWidget *compWidget =
+                ComponentInspectorWidgetFactory::Create(comp);
+        if (compWidget)
+        {
+            AddWidget(compWidget);
+        }
     }
 }
 
@@ -150,8 +168,8 @@ void Inspector::Clear()
 {
     if (GetCurrentObject())
     {
-        p_goNameText->SetContent("");
-        p_nameSeparator->SetEnabled(false);
+        p_titleText->SetContent("");
+        p_titleSeparator->SetEnabled(false);
         GetCurrentObject()->EventEmitter<IDestroyListener>::
                     UnRegisterListener(this);
 

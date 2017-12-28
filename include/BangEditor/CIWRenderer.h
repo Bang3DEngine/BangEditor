@@ -1,9 +1,9 @@
-#ifndef CWRENDERER_H
-#define CWRENDERER_H
+#ifndef CIWRENDERER_H
+#define CIWRENDERER_H
 
 #include "Bang/IValueChangedListener.h"
 
-#include "BangEditor/ComponentWidget.h"
+#include "BangEditor/ComponentInspectorWidget.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Renderer;
@@ -13,15 +13,17 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class CWRenderer : public ComponentWidget,
-                   public IValueChangedListener
+FORWARD class UIInputFile;
+
+class CIWRenderer : public ComponentInspectorWidget,
+                    public IValueChangedListener
 {
 public:
     void Update() override;
 
 protected:
-    CWRenderer();
-    virtual ~CWRenderer();
+    CIWRenderer();
+    virtual ~CIWRenderer();
 
     Renderer *GetRenderer() const;
 
@@ -33,10 +35,12 @@ protected:
 
 private:
     Renderer *p_relatedRenderer = nullptr;
+
     UICheckBox *p_visibleCheckBox = nullptr;
+    UIInputFile *p_materialInputFile = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // CWRENDERER_H
+#endif // CIWRENDERER_H
 

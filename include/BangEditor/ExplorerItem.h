@@ -31,8 +31,8 @@ public:
 
     bool IsSelected() const;
     UILabel *GetLabel() const;
+    const Path& GetPath() const;
     UIFocusable* GetButton() const;
-    const Path& GetFilepath() const;
 
 protected:
     ExplorerItem();
@@ -40,7 +40,7 @@ protected:
 
 private:
     bool m_selected = false;
-    Path m_filepath = Path::Empty;
+    Path m_path = Path::Empty;
 
     UILabel *p_label = nullptr;
     UIFocusable *p_button = nullptr;

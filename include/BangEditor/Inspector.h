@@ -36,6 +36,7 @@ public:
     void OnDestroyed(Object *destroyedObject) override;
 
     // IEditorSelectionListener
+    void OnExplorerPathSelected(const Path &path) override;
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
 
 private:
@@ -44,8 +45,8 @@ private:
     Object *p_currentObject = nullptr;
     UIVerticalLayout *p_mainVL   = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
-    UITextRenderer *p_goNameText = nullptr;
-    GameObject *p_nameSeparator = nullptr;
+    UITextRenderer *p_titleText = nullptr;
+    GameObject *p_titleSeparator = nullptr;
 
     GameObject* GetContainer() const;
     UIVerticalLayout *GetMainVL() const;

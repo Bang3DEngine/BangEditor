@@ -1,9 +1,9 @@
-#ifndef CWTRANSFORM_H
-#define CWTRANSFORM_H
+#ifndef CIWTRANSFORM_H
+#define CIWTRANSFORM_H
 
 #include "Bang/IValueChangedListener.h"
 
-#include "BangEditor/ComponentWidget.h"
+#include "BangEditor/ComponentInspectorWidget.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Transform;
@@ -14,10 +14,10 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UIInputVector;
 
-class CWTransform : public ComponentWidget,
-                    public IValueChangedListener
+class CIWTransform : public ComponentInspectorWidget,
+                     public IValueChangedListener
 {
-    GAMEOBJECT_EDITOR(CWTransform);
+    GAMEOBJECT_EDITOR(CIWTransform);
 
 public:
     void Update() override;
@@ -29,8 +29,8 @@ private:
     UIInputVector *p_rotIV   = nullptr;
     UIInputVector *p_scaleIV = nullptr;
 
-    CWTransform();
-    virtual ~CWTransform();
+    CIWTransform();
+    virtual ~CIWTransform();
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;
@@ -41,5 +41,5 @@ private:
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // CWTRANSFORM_H
+#endif // CIWTRANSFORM_H
 

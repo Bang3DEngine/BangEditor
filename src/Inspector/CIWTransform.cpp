@@ -1,4 +1,4 @@
-#include "BangEditor/CWTransform.h"
+#include "BangEditor/CIWTransform.h"
 
 #include "Bang/UILabel.h"
 #include "Bang/UICanvas.h"
@@ -18,7 +18,7 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-CWTransform::CWTransform()
+CIWTransform::CIWTransform()
 {
     SetName("CWTransform");
     SetTitle("Transform");
@@ -40,13 +40,13 @@ CWTransform::CWTransform()
     SetLabelsWidth(60);
 }
 
-CWTransform::~CWTransform()
+CIWTransform::~CIWTransform()
 {
 }
 
-void CWTransform::Update()
+void CIWTransform::Update()
 {
-    ComponentWidget::Update();
+    ComponentInspectorWidget::Update();
 
     if (!p_posIV->HasFocus())
     {
@@ -64,14 +64,14 @@ void CWTransform::Update()
     }
 }
 
-void CWTransform::OnValueChanged(Object *object)
+void CIWTransform::OnValueChanged(Object *object)
 {
     p_relatedTransform->SetLocalPosition(p_posIV->GetVector3());
     p_relatedTransform->SetLocalEuler(p_rotIV->GetVector3());
     p_relatedTransform->SetLocalScale(p_scaleIV->GetVector3());
 }
 
-void CWTransform::SetComponent(Component *comp)
+void CIWTransform::SetComponent(Component *comp)
 {
     Transform *transform = DCAST<Transform*>(comp);
     ASSERT(transform);

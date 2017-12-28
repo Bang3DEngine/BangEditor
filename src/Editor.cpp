@@ -86,6 +86,15 @@ void Editor::_SelectGameObject(GameObject *selectedGameObject)
     }
 }
 
+void Editor::OnPathSelected(const Path &path)
+{
+    Editor *ed = Editor::GetInstance();
+    ASSERT(ed);
+
+    ed->EventEmitter<IEditorSelectionListener>::PropagateToListeners(
+            &IEditorSelectionListener::OnExplorerPathSelected, path);
+}
+
 EditorSettings *Editor::GetEditorSettings() const
 {
     return m_editorSettings;

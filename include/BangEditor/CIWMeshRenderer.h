@@ -1,7 +1,7 @@
-#ifndef CWMESHRENDERER_H
-#define CWMESHRENDERER_H
+#ifndef CIWMESHRENDERER_H
+#define CIWMESHRENDERER_H
 
-#include "BangEditor/CWRenderer.h"
+#include "BangEditor/CIWRenderer.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class MeshRenderer;
@@ -12,9 +12,9 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UIInputFile;
 
-class CWMeshRenderer : public CWRenderer
+class CIWMeshRenderer : public CIWRenderer
 {
-    GAMEOBJECT_EDITOR(CWMeshRenderer);
+    GAMEOBJECT_EDITOR(CIWMeshRenderer);
 
 public:
     void Update() override;
@@ -26,8 +26,8 @@ private:
 
     MeshRenderer *GetMeshRenderer() const;
 
-    CWMeshRenderer();
-    virtual ~CWMeshRenderer();
+    CIWMeshRenderer();
+    virtual ~CIWMeshRenderer();
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;
@@ -38,5 +38,5 @@ private:
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // CWMESHRENDERER_H
+#endif // CIWMESHRENDERER_H
 

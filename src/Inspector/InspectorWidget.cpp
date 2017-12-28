@@ -18,7 +18,7 @@ InspectorWidget::InspectorWidget()
 
     UIVerticalLayout *mainVL = AddComponent<UIVerticalLayout>();
     mainVL->SetPaddings(0);
-    mainVL->SetSpacing(0);
+    mainVL->SetSpacing(1);
 
     GameObject *titleGo = GameObjectFactory::CreateUIGameObject();
     UITextRenderer *titleText = titleGo->AddComponent<UITextRenderer>();

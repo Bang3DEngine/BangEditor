@@ -1,4 +1,4 @@
-#include "BangEditor/CWMeshRenderer.h"
+#include "BangEditor/CIWMeshRenderer.h"
 
 #include "Bang/Mesh.h"
 #include "Bang/UILabel.h"
@@ -13,7 +13,7 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-CWMeshRenderer::CWMeshRenderer()
+CIWMeshRenderer::CIWMeshRenderer()
 {
     SetName("CWMeshRenderer");
     SetTitle("Mesh Renderer");
@@ -25,22 +25,22 @@ CWMeshRenderer::CWMeshRenderer()
     AddWidget("Mesh", p_meshInputFile);
 }
 
-CWMeshRenderer::~CWMeshRenderer()
+CIWMeshRenderer::~CIWMeshRenderer()
 {
 }
 
-void CWMeshRenderer::Update()
+void CIWMeshRenderer::Update()
 {
-    CWRenderer::Update();
+    CIWRenderer::Update();
 
     Mesh *mesh = GetMeshRenderer()->GetSharedMesh();
     Path meshPath = mesh ? mesh->GetResourceFilepath() : Path::Empty;
     p_meshInputFile->SetPath(meshPath);
 }
 
-void CWMeshRenderer::OnValueChanged(Object *object)
+void CIWMeshRenderer::OnValueChanged(Object *object)
 {
-    CWRenderer::OnValueChanged(object);
+    CIWRenderer::OnValueChanged(object);
 
     if (object == p_meshInputFile)
     {
@@ -49,14 +49,14 @@ void CWMeshRenderer::OnValueChanged(Object *object)
     }
 }
 
-MeshRenderer *CWMeshRenderer::GetMeshRenderer() const
+MeshRenderer *CIWMeshRenderer::GetMeshRenderer() const
 {
     return p_relatedMeshRenderer;
 }
 
-void CWMeshRenderer::SetComponent(Component *comp)
+void CIWMeshRenderer::SetComponent(Component *comp)
 {
-    CWRenderer::SetComponent(comp);
+    CIWRenderer::SetComponent(comp);
 
     MeshRenderer *meshRenderer = DCAST<MeshRenderer*>(comp);
     ASSERT(meshRenderer);

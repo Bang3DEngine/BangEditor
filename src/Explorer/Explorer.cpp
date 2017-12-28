@@ -14,6 +14,7 @@
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIContentSizeFitter.h"
 
+#include "BangEditor/Editor.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/ExplorerItem.h"
@@ -166,6 +167,7 @@ void Explorer::AddItem(const Path &itemPath)
     explorerItem->SetFilepath(itemPath);
     explorerItem->SetParent(p_itemsContainer);
 
+    explorerItem->GetButton()->AddClickedCallback(&Explorer::OnItemSelected);
     explorerItem->GetButton()->AddDoubleClickedCallback(&Explorer::OnItemDoubleClicked);
 
     p_items.PushBack(explorerItem);
@@ -176,15 +178,23 @@ void Explorer::GoDirectoryUp()
     SetCurrentPath( GetCurrentPath().GetDirectory() );
 }
 
+void Explorer::OnItemSelected(IFocusable *itemFocusable)
+{
+    GameObject *itemGo = Cast<UIFocusable*>(itemFocusable)->GetGameObject();
+    ExplorerItem *expItem = Cast<ExplorerItem*>(itemGo);
+
+    Editor::OnPathSelected(expItem->GetPath());
+}
+
 void Explorer::OnItemDoubleClicked(IFocusable *itemFocusable)
 {
     GameObject *itemGo = Cast<UIFocusable*>(itemFocusable)->GetGameObject();
     ExplorerItem *expItem = Cast<ExplorerItem*>(itemGo);
     ASSERT(expItem);
 
-    if (expItem->GetFilepath().IsDir())
+    if (expItem->GetPath().IsDir())
     {
-        Explorer::GetInstance()->SetCurrentPath(expItem->GetFilepath());
+        Explorer::GetInstance()->SetCurrentPath(expItem->GetPath());
     }
 }
 
