@@ -7,6 +7,7 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UITextRenderer;
+FORWARD class UILayoutElement;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -24,18 +25,27 @@ protected:
     virtual ~InspectorWidget();
 
     void SetTitle(const String &title);
-    void AddWidget(const String &labelContent,
-                   GameObject *widget,
-                   int height = 15);
+    void SetLabelsWidth(int labelsWidth);
+    void AddWidget(GameObject *widget, int height = 15);
+    void AddWidget(const String &labelContent, GameObject *widget, int height = 15);
     void SetWidgetEnabled(GameObject *widget, bool enabled);
 
-    GameObject *GetLabelsContainer() const;
+    int GetLabelsWidth() const;
     GameObject *GetWidgetsContainer() const;
 
 private:
+    int m_labelsWidth = -1;
+    List<GameObject*> p_widgets;
+    Map<GameObject*, UILabel*> m_widgetToLabel;
+    Map<UILabel*, UILayoutElement*> m_labelToLabelLE;
+
     UITextRenderer *p_title = nullptr;
-    GameObject *p_labelsContainer = nullptr;
     GameObject *p_widgetsContainer = nullptr;
+
+    void AddWidgetInternal(const String &labelContent,
+                           GameObject *widget,
+                           int height,
+                           bool addLabel);
 };
 
 NAMESPACE_BANG_EDITOR_END

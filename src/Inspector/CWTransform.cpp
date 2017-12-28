@@ -36,6 +36,8 @@ CWTransform::CWTransform()
     AddWidget("Position", p_posIV);
     AddWidget("Rotation", p_rotIV);
     AddWidget("Scale",    p_scaleIV);
+
+    SetLabelsWidth(60);
 }
 
 CWTransform::~CWTransform()

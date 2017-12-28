@@ -29,23 +29,6 @@ InspectorWidget::InspectorWidget()
     GameObject *topSeparator =
             GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5, 1.0f);
 
-    GameObject *hlGo = GameObjectFactory::CreateUIGameObject();
-    UILayoutElement *hlLE = hlGo->AddComponent<UILayoutElement>();
-    hlLE->SetFlexibleSize( Vector2::One );
-    UIHorizontalLayout *hl = hlGo->AddComponent<UIHorizontalLayout>();
-    hl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
-    hl->SetChildrenHorizontalAlignment(HorizontalAlignment::Center);
-    hl->SetPaddings(4);
-    hl->SetSpacing(3);
-
-    GameObject *labelsGo = GameObjectFactory::CreateUIGameObject();
-    UIVerticalLayout *labelsVL = labelsGo->AddComponent<UIVerticalLayout>();
-    labelsVL->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
-    labelsVL->SetPaddings(4);
-    labelsVL->SetSpacing(3);
-    UILayoutElement *labelsLE = labelsGo->AddComponent<UILayoutElement>();
-    labelsLE->SetFlexibleSize( Vector2::Zero );
-
     GameObject *widgetsGo = GameObjectFactory::CreateUIGameObject();
     UIVerticalLayout *widgetsVL = widgetsGo->AddComponent<UIVerticalLayout>();
     widgetsVL->SetChildrenHorizontalStretch(Stretch::Full);
@@ -59,15 +42,14 @@ InspectorWidget::InspectorWidget()
     GameObject *bot2Separator =
             GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10, 1.1f);
 
-    p_labelsContainer = labelsGo;
     p_widgetsContainer = widgetsGo;
     p_title = titleText;
 
+    SetLabelsWidth(50);
+
     titleGo->SetParent(this);
     topSeparator->SetParent(this);
-    hlGo->SetParent(this);
-    labelsGo->SetParent(hlGo);
-    widgetsGo->SetParent(hlGo);
+    widgetsGo->SetParent(this);
     botSeparator->SetParent(this);
     bot2Separator->SetParent(this);
 }
@@ -86,54 +68,89 @@ void InspectorWidget::SetTitle(const String &title)
     p_title->SetContent(title);
 }
 
+void InspectorWidget::SetLabelsWidth(int labelsWidth)
+{
+    if (GetLabelsWidth() != labelsWidth)
+    {
+        m_labelsWidth = labelsWidth;
+
+        for (GameObject *widget : p_widgets)
+        {
+            ASSERT(m_widgetToLabel.ContainsKey(widget))
+            UILabel *label = m_widgetToLabel[widget];
+            if (label)
+            {
+                ASSERT(m_labelToLabelLE.ContainsKey(label));
+                UILayoutElement *labelLE = m_labelToLabelLE[label];
+                labelLE->SetPreferredWidth( GetLabelsWidth() );
+            }
+        }
+    }
+}
+
+void InspectorWidget::AddWidget(GameObject *widget, int height)
+{
+    AddWidgetInternal("", widget, height, false);
+}
+
 void InspectorWidget::AddWidget(const String &labelContent,
                                 GameObject *widget,
                                 int height)
 {
-    UILabel *label = GameObjectFactory::CreateUILabel();
-    label->GetText()->SetContent(labelContent);
-    label->GetText()->SetTextSize(11);
-    label->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
-    label->SetSelectable(false);
-    UILayoutElement *labelLE =
-                  label->GetGameObject()->AddComponent<UILayoutElement>();
-    labelLE->SetPreferredHeight(height);
-    labelLE->SetFlexibleWidth(0);
+    AddWidgetInternal(labelContent, widget, height, true);
+}
 
+void InspectorWidget::AddWidgetInternal(const String &labelContent,
+                                        GameObject *widget,
+                                        int height,
+                                        bool addLabel)
+{
     GameObject *widgetContainer = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *widgetContHL = widgetContainer->AddComponent<UIHorizontalLayout>();
     widgetContHL->SetChildrenVerticalStretch(Stretch::Full);
+
+    UILabel *label = nullptr;
+    if (addLabel)
+    {
+        label = GameObjectFactory::CreateUILabel();
+        label->GetText()->SetContent(labelContent);
+        label->GetText()->SetTextSize(11);
+        label->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
+        label->SetSelectable(false);
+
+        UILayoutElement *labelLE =
+                      label->GetGameObject()->GetComponent<UILayoutElement>();
+        labelLE->SetPreferredWidth( GetLabelsWidth() );
+        labelLE->SetPreferredHeight( height );
+        labelLE->SetFlexibleWidth(0);
+
+        m_labelToLabelLE.Add(label, labelLE);
+    }
 
     UILayoutElement *widgetContLE = widgetContainer->AddComponent<UILayoutElement>();
     widgetContLE->SetPreferredHeight( height );
     widgetContLE->SetFlexibleSize( Vector2::One );
     widgetContLE->SetLayoutPriority(1);
 
-    label->GetGameObject()->SetParent( GetLabelsContainer() );
     widgetContainer->SetParent( GetWidgetsContainer() );
+    if (addLabel) { label->GetGameObject()->SetParent( widgetContainer ); }
     GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Flexible, 0.0001f)
                        ->SetParent( widgetContainer );
     widget->SetParent( widgetContainer );
+
+    m_widgetToLabel.Add(widget, label);
+    p_widgets.PushBack(widget);
 }
+
 
 void InspectorWidget::SetWidgetEnabled(GameObject *widget, bool enabled)
 {
-    int i = 0;
-    for (GameObject *w : GetWidgetsContainer()->GetChildren())
-    {
-        if (w == widget) { break; }
-        ++i;
-    }
-
-    GameObject *widgetLabelGo = GetLabelsContainer()->GetChild(i);
-
-    widget->SetEnabled(enabled);
-    widgetLabelGo->SetEnabled(enabled);
+    widget->GetParent()->SetEnabled( enabled );
 }
 
-GameObject *InspectorWidget::GetLabelsContainer() const
+int InspectorWidget::GetLabelsWidth() const
 {
-    return p_labelsContainer;
+    return m_labelsWidth;
 }
 
 GameObject *InspectorWidget::GetWidgetsContainer() const
