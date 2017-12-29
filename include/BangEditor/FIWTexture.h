@@ -25,6 +25,7 @@ private:
 
     UIComboBox *p_filterModeComboBox = nullptr;
     UIComboBox *p_wrapModeComboBox = nullptr;
+    UIInputNumber *p_alphaCutoffInput = nullptr;
     UIImageRenderer *p_textureImageRend = nullptr;
 
 	FIWTexture();

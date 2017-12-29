@@ -55,6 +55,12 @@ ScaleGizmoAxis::~ScaleGizmoAxis()
 {
 }
 
+void ScaleGizmoAxis::SetReferencedGameObject(GameObject *referencedGameObject)
+{
+    TransformGizmoAxis::SetReferencedGameObject(referencedGameObject);
+    UpdatePoints(1.0f);
+}
+
 void ScaleGizmoAxis::Update()
 {
     TransformGizmoAxis::Update();

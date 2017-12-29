@@ -4,6 +4,7 @@
 #include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UIComboBox.h"
+#include "Bang/UIInputNumber.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
@@ -31,15 +32,19 @@ FIWTexture::FIWTexture()
     p_wrapModeComboBox->AddItem("Clamp", int(GL::WrapMode::ClampToEdge));
     p_wrapModeComboBox->AddItem("Repeat", int(GL::WrapMode::Repeat));
 
+    p_alphaCutoffInput = GameObjectFactory::CreateUIInputNumber();
+    p_alphaCutoffInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+
     p_textureImageRend = GameObjectFactory::CreateUIImage();
 
     AddWidget("Filter Mode", p_filterModeComboBox->GetGameObject());
     AddWidget("Wrap Mode", p_wrapModeComboBox->GetGameObject());
+    AddWidget("Alpha Cutoff", p_alphaCutoffInput->GetGameObject());
 
     AddLabel("Texture");
     AddWidget(p_textureImageRend->GetGameObject(), 100);
 
-    SetLabelsWidth(70);
+    SetLabelsWidth(100);
 }
 
 FIWTexture::~FIWTexture()
@@ -61,6 +66,7 @@ void FIWTexture::UpdateFromTextureFile()
 
     p_filterModeComboBox->SetSelectionByValue( int(GetTexture()->GetFilterMode()) );
     p_wrapModeComboBox->SetSelectionByValue( int(GetTexture()->GetWrapMode()) );
+    p_alphaCutoffInput->SetNumber( GetTexture()->GetAlphaCutoff() );
 
     IValueChangedListener::SetReceiveEvents(true);
 }
@@ -86,9 +92,10 @@ void FIWTexture::OnValueChanged(Object *object)
         int wrapMode = p_wrapModeComboBox->GetSelectedValue();
         GetTexture()->SetWrapMode( SCAST<GL::WrapMode>(wrapMode) );
 
+        GetTexture()->SetAlphaCutoff( p_alphaCutoffInput->GetNumber() );
+
         Path texImportPath = ImportFilesManager::GetImportFilePath(
                                         GetTexture()->GetResourceFilepath() );
-        Debug_Peek(texImportPath);
         if (texImportPath.IsFile())
         {
             GetTexture()->ExportXMLToFile(texImportPath);

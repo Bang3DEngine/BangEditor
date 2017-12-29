@@ -21,6 +21,9 @@ public:
 
     void SetAxis(Axis3D axis) override;
 
+    // SelectionGizmo
+    void SetReferencedGameObject(GameObject *referencedGameObject) override;
+
 private:
     using SelectionState = SelectionGizmo::SelectionState;
 
