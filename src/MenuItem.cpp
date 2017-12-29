@@ -53,21 +53,22 @@ MenuItem::MenuItem(MenuItemType itemType)
     }
 
     p_childrenList = GameObjectFactory::CreateUIList(false);
-    p_childrenList->GetGameObject()->SetName("ChildrenList");
-    p_childrenList->GetGameObject()->SetParent(this);
+    GameObject *childrenListGo = p_childrenList->GetGameObject();
+    childrenListGo->SetName("ChildrenList");
+    childrenListGo->SetParent(this);
 
-    RectTransform *contRT = p_childrenList->GetGameObject()->GetRectTransform();
+    RectTransform *contRT = childrenListGo->GetRectTransform();
     constexpr float OverlapEpsilon = 0.005f;
     const bool isTop = (itemType == MenuItemType::Top);
     contRT->SetAnchors(isTop ? Vector2(-1 + OverlapEpsilon, -1 + OverlapEpsilon) :
                                Vector2( 1 - OverlapEpsilon,  1 - OverlapEpsilon));
     contRT->SetPivotPosition(Vector2(-1, 1));
 
-    UIContentSizeFitter *csf = p_childrenList->GetGameObject()->AddComponent<UIContentSizeFitter>();
+    UIContentSizeFitter *csf = childrenListGo->AddComponent<UIContentSizeFitter>();
     csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
     csf->SetVerticalSizeType(LayoutSizeType::Preferred);
 
-    p_childrenList->GetGameObject()->AddComponent<UILayoutIgnorer>(true);
+    childrenListGo->AddComponent<UILayoutIgnorer>(true);
     p_childrenList->SetSelectionCallback(&MenuItem::OnListSelectionCallback);
     p_childrenList->SetSelectedColor( p_childrenList->GetOverColor() );
     p_childrenList->SetOverColor( Color::Zero );

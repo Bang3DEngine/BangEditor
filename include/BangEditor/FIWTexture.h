@@ -24,6 +24,7 @@ private:
     RH<Texture2D> p_texture;
 
     UIComboBox *p_filterModeComboBox = nullptr;
+    UIComboBox *p_wrapModeComboBox = nullptr;
     UIImageRenderer *p_textureImageRend = nullptr;
 
 	FIWTexture();
