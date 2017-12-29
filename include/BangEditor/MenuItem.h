@@ -54,12 +54,12 @@ private:
     List<MenuItem*> p_childrenItems;
     MenuItem* p_parentItem = nullptr;
     UIList *p_childrenList = nullptr;
-    bool m_itemOverInList  = false;
 
     UIImageRenderer *p_topBg = nullptr;
 
     bool m_canDisplayChildrenThisFrame = true;
 
+    bool IsSelectedInList() const;
     static void OnListSelectionCallback(GameObject *item, UIList::Action action);
 
     friend class Bang::ObjectManager;

@@ -59,8 +59,10 @@ MenuItem::MenuItem(MenuItemType itemType)
     p_childrenList->GetGameObject()->SetParent(this);
 
     RectTransform *contRT = p_childrenList->GetGameObject()->GetRectTransform();
+    constexpr float OverlapEpsilon = 0.005f;
     const bool isTop = (itemType == MenuItemType::Top);
-    contRT->SetAnchors(isTop ? Vector2(-1, -1) : Vector2(1, 1));
+    contRT->SetAnchors(isTop ? Vector2(-1 + OverlapEpsilon, -1 + OverlapEpsilon) :
+                               Vector2( 1 - OverlapEpsilon,  1 - OverlapEpsilon));
     contRT->SetPivotPosition(Vector2(-1, 1));
 
     UIContentSizeFitter *csf = p_childrenList->GetGameObject()->AddComponent<UIContentSizeFitter>();
@@ -69,7 +71,8 @@ MenuItem::MenuItem(MenuItemType itemType)
 
     p_childrenList->GetGameObject()->AddComponent<UILayoutIgnorer>(true);
     p_childrenList->SetSelectionCallback(&MenuItem::OnListSelectionCallback);
-    p_childrenList->SetUseSelectedColor(false);
+    p_childrenList->SetSelectedColor( p_childrenList->GetOverColor() );
+    p_childrenList->SetOverColor( Color::Zero );
 }
 
 MenuItem::~MenuItem()
@@ -77,35 +80,17 @@ MenuItem::~MenuItem()
 
 }
 
-void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
+bool MenuItem::IsSelectedInList() const
 {
-    MenuItem *menuItem = DCAST<MenuItem*>(item);
-    switch (action)
-    {
-        case UIList::Action::ClickedLeft:
-        case UIList::Action::ClickedRight:
-        case UIList::Action::Pressed:
-        {
-            if (menuItem) { menuItem->GetFocusable()->Click(false); }
-        }
-        break;
-
-        case UIList::Action::MouseOver:
-            if (menuItem) { menuItem->m_itemOverInList = true; }
-        break;
-
-        case UIList::Action::MouseOut:
-            if (menuItem)  { menuItem->m_itemOverInList = false; }
-        break;
-
-        default: break;
-    };
-
+    return p_parentItem ? (p_parentItem->p_childrenList->GetSelectedItem() == this) :
+                          false;
 }
 
 void MenuItem::Update()
 {
     GameObject::Update();
+
+    if (p_text->GetContent() == "Test") { Debug_Peek(IsSelectedInList()); }
 
     bool mustDisplayChildren = MustDisplayChildren() &&
                                m_canDisplayChildrenThisFrame;
@@ -118,6 +103,33 @@ void MenuItem::Update()
     }
 
     m_canDisplayChildrenThisFrame = true; // Reset
+}
+
+void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
+{
+    MenuItem *menuItem = DCAST<MenuItem*>(item);
+    MenuItem *parentItem = menuItem ? menuItem->p_parentItem : nullptr;
+    switch (action)
+    {
+        case UIList::Action::ClickedLeft:
+        case UIList::Action::ClickedRight:
+        case UIList::Action::Pressed:
+        {
+            if (menuItem) { menuItem->GetFocusable()->Click(false); }
+        }
+        break;
+
+        case UIList::Action::MouseOver:
+            if (parentItem) { parentItem->p_childrenList->SetSelection(menuItem); }
+        break;
+
+        case UIList::Action::MouseOut:
+            if (parentItem) { parentItem->p_childrenList->SetSelection(nullptr); }
+        break;
+
+        default: break;
+    };
+
 }
 
 void MenuItem::SetFontSize(uint fontSize)
@@ -192,7 +204,7 @@ void MenuItem::CloseRecursiveUp()
 bool MenuItem::MustDisplayChildren() const
 {
     if (m_itemType == MenuItemType::Root) { return true; }
-    if (m_itemOverInList) { return true; }
+    if ( IsSelectedInList() ) { return true; }
 
     if (p_childrenList->IsEnabled(true) &&
         p_childrenList->GetGameObject()->GetRectTransform()->IsMouseOver(false))
@@ -209,6 +221,11 @@ bool MenuItem::MustDisplayChildren() const
     }
 
     if (GetFocusable()->IsMouseOver())
+    {
+        return true;
+    }
+
+    if (p_childrenList->GetGameObject()->GetComponent<UIFocusable>()->IsMouseOver())
     {
         return true;
     }
