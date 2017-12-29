@@ -45,10 +45,8 @@ public:
 
 private:
     String m_text = "";
-    bool m_isSelected = false;
     GameObject *p_refGameObject = nullptr;
 
-    UIImageRenderer *p_bg = nullptr;
     UITextRenderer *p_textRenderer = nullptr;
 
     void SetText(const String &text);

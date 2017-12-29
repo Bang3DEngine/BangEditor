@@ -1,5 +1,6 @@
 #include "BangEditor/MenuItem.h"
 
+#include "Bang/UIList.h"
 #include "Bang/UICanvas.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
@@ -15,32 +16,26 @@ USING_NAMESPACE_BANG_EDITOR
 
 MenuItem::MenuItem(MenuItemType itemType)
 {
+    SetName("MenuItem");
     m_itemType = itemType;
+    SetFontSize(11);
 
     GameObjectFactory::CreateUIGameObjectInto(this);
 
-    SetFontSize(11);
-
-    UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
-    vl->SetChildrenVerticalStretch(Stretch::None);
-    vl->SetChildrenHorizontalStretch(Stretch::None);
-    vl->SetChildrenVerticalAlignment(VerticalAlignment::Bot);
-    vl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
-    if (m_itemType != MenuItemType::Root) { vl->SetPaddings(3); }
+    UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
+    hl->SetChildrenHorizontalStretch(Stretch::None);
+    hl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
+    if (m_itemType != MenuItemType::Root) { hl->SetPaddings(3); }
     else
     {
         // TODO: Why if I remove this it does not work?
-        vl->SetPaddings(1, 1, 0, 0);
+        hl->SetPaddings(1, 1, 0, 0);
     }
 
-    UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetMinSize( Vector2i(-1) );
-    le->SetPreferredSize( Vector2i(-1) );
-    le->SetFlexibleSize( Vector2(0) );
-
-    const Color BgColor = Color::LightGray;
-    UIImageRenderer *bg = AddComponent<UIImageRenderer>();
-    bg->SetTint(BgColor);
+    if (m_itemType == MenuItemType::Top)
+    {
+        p_topBg = AddComponent<UIImageRenderer>();
+    }
 
     if (m_itemType != MenuItemType::Root)
     {
@@ -48,48 +43,63 @@ MenuItem::MenuItem(MenuItemType itemType)
         p_text = textGo->AddComponent<UITextRenderer>();
         GetText()->SetContent("MenuItem");
         GetText()->SetTextColor(Color::Black);
-        GetText()->SetTextSize(12);
+        GetText()->SetTextSize( m_fontSize );
         GetText()->SetVerticalAlign(VerticalAlignment::Center);
         GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
+
+        p_focusable = textGo->AddComponent<UIFocusable>();
+        GetFocusable()->AddClickedCallback([this](IFocusable*)
+        { if (m_itemType == MenuItemType::Normal) { CloseRecursiveUp(); } });
+
         textGo->SetParent(this);
     }
 
-    p_childrenContainer = GameObjectFactory::CreateUIGameObject();
-    p_childrenContainer->SetName("m_childrenContainer");
-    auto childrenContBg = p_childrenContainer->AddComponent<UIImageRenderer>();
-    childrenContBg->SetTint(BgColor);
+    p_childrenList = GameObjectFactory::CreateUIList(false);
+    p_childrenList->GetGameObject()->SetName("ChildrenList");
+    p_childrenList->GetGameObject()->SetParent(this);
 
-    auto csf = p_childrenContainer->AddComponent<UIContentSizeFitter>();
-    csf->SetVerticalSizeType(LayoutSizeType::Preferred);
-    csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
-
-    RectTransform *contRT = p_childrenContainer->GetRectTransform();
-    p_childrenContainerVL = p_childrenContainer->AddComponent<UIVerticalLayout>();
-    p_childrenContainerVL->SetChildrenVerticalAlignment(VerticalAlignment::Bot);
-    p_childrenContainerVL->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
-    contRT->SetAnchors( (itemType == MenuItemType::Top) ? Vector2(-1, -1) :
-                                                          Vector2(1, 1));
+    RectTransform *contRT = p_childrenList->GetGameObject()->GetRectTransform();
+    const bool isTop = (itemType == MenuItemType::Top);
+    contRT->SetAnchors(isTop ? Vector2(-1, -1) : Vector2(1, 1));
     contRT->SetPivotPosition(Vector2(-1, 1));
 
-    p_childrenContainer->AddComponent<UILayoutIgnorer>(true);
-    p_childrenContainer->SetEnabled(false);
-    p_childrenContainer->SetParent(this);
+    UIContentSizeFitter *csf = p_childrenList->GetGameObject()->AddComponent<UIContentSizeFitter>();
+    csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
+    csf->SetVerticalSizeType(LayoutSizeType::Preferred);
 
-    p_button = AddComponent<UIFocusable>();
-
-    GetButton()->AddClickedCallback([this](IFocusable*)
-    {
-        if (m_itemType == MenuItemType::Normal)
-        {
-            CloseRecursiveUp();
-        }
-    });
-
-    SetName("MenuItem");
+    p_childrenList->GetGameObject()->AddComponent<UILayoutIgnorer>(true);
+    p_childrenList->SetSelectionCallback(&MenuItem::OnListSelectionCallback);
+    p_childrenList->SetUseSelectedColor(false);
 }
 
 MenuItem::~MenuItem()
 {
+
+}
+
+void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
+{
+    MenuItem *menuItem = DCAST<MenuItem*>(item);
+    switch (action)
+    {
+        case UIList::Action::ClickedLeft:
+        case UIList::Action::ClickedRight:
+        case UIList::Action::Pressed:
+        {
+            if (menuItem) { menuItem->GetFocusable()->Click(false); }
+        }
+        break;
+
+        case UIList::Action::MouseOver:
+            if (menuItem) { menuItem->m_itemOverInList = true; }
+        break;
+
+        case UIList::Action::MouseOut:
+            if (menuItem)  { menuItem->m_itemOverInList = false; }
+        break;
+
+        default: break;
+    };
 
 }
 
@@ -99,10 +109,14 @@ void MenuItem::Update()
 
     bool mustDisplayChildren = MustDisplayChildren() &&
                                m_canDisplayChildrenThisFrame;
-    p_childrenContainer->SetEnabled(mustDisplayChildren);
+    p_childrenList->GetGameObject()->SetEnabled(mustDisplayChildren);
 
-    GetComponent<UIImageRenderer>()->SetTint(mustDisplayChildren ? Color::White :
-                                                                   Color::LightGray);
+    if (m_itemType == MenuItemType::Top)
+    {
+        p_topBg->SetTint( mustDisplayChildren ? Color::VeryLightBlue :
+                                                Color::Zero );
+    }
+
     m_canDisplayChildrenThisFrame = true; // Reset
 }
 
@@ -112,10 +126,7 @@ void MenuItem::SetFontSize(uint fontSize)
     {
         m_fontSize = fontSize;
         List<UITextRenderer*> texts = GetComponentsInChildren<UITextRenderer>();
-        for (UITextRenderer *text : texts)
-        {
-            text->SetTextSize(m_fontSize);
-        }
+        for (UITextRenderer *text : texts) { text->SetTextSize(m_fontSize); }
     }
 }
 
@@ -128,13 +139,12 @@ void MenuItem::AddSeparator()
 {
     GameObject *sep =
             GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Preferred, 5);
-    sep->AddComponent<UIFocusable>();
-    sep->SetParent(p_childrenContainer);
+    p_childrenList->AddItem(sep);
 }
 
 void MenuItem::AddItem(MenuItem *childItem)
 {
-    childItem->SetParent(p_childrenContainer);
+    p_childrenList->AddItem(childItem);
     p_childrenItems.PushBack(childItem);
 }
 
@@ -154,9 +164,9 @@ UITextRenderer *MenuItem::GetText() const
     return p_text;
 }
 
-UIFocusable *MenuItem::GetButton() const
+UIFocusable *MenuItem::GetFocusable() const
 {
-    return p_button;
+    return p_focusable;
 }
 
 void MenuItem::CloseRecursiveUp()
@@ -169,7 +179,7 @@ void MenuItem::CloseRecursiveUp()
         }
         else
         {
-            p_childrenContainer->SetEnabled(false);
+            p_childrenList->GetGameObject()->SetEnabled(false);
             m_canDisplayChildrenThisFrame = false;
         }
     }
@@ -182,19 +192,33 @@ void MenuItem::CloseRecursiveUp()
 bool MenuItem::MustDisplayChildren() const
 {
     if (m_itemType == MenuItemType::Root) { return true; }
+    if (m_itemOverInList) { return true; }
 
-    if (p_childrenContainer->IsEnabled(true) &&
-        p_childrenContainer->GetRectTransform()->IsMouseOver(false))
-    { return true; }
+    if (p_childrenList->IsEnabled(true) &&
+        p_childrenList->GetGameObject()->GetRectTransform()->IsMouseOver(false))
+    {
+        return true;
+    }
 
-    if (GetButton()->IsMouseOver()) { return true; }
+    if (m_itemType == MenuItemType::Top)
+    {
+        if (GetRectTransform()->IsMouseOver(false))
+        {
+            return true;
+        }
+    }
+
+    if (GetFocusable()->IsMouseOver())
+    {
+        return true;
+    }
 
     for (MenuItem *childItem : p_childrenItems)
     {
         if (childItem->MustDisplayChildren()) { return true; }
     }
 
-    for (GameObject *child : p_childrenContainer->GetChildren())
+    for (GameObject *child : p_childrenList->GetItems())
     {
         if (UICanvas::GetActive(this)->IsMouseOver(child)) { return true; }
     }

@@ -73,7 +73,7 @@ void EditorScene::Init()
     m_inspector->SetParent(hlGo);
 
     m_hierarchy = GameObject::Create<Hierarchy>();
-    m_hierarchy->SetParent(hlGo, 0);
+    // m_hierarchy->SetParent(hlGo, 0);
 
     GameObject *botHLGo = GameObjectFactory::CreateUIGameObjectNamed("BotHL");
     botHLGo->AddComponent<UIHorizontalLayout>();

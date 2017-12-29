@@ -29,9 +29,6 @@ HierarchyItem::HierarchyItem()
     UIContextMenu *ctxMenu = AddComponent<UIContextMenu>();
     ctxMenu->EventEmitter<IUIContextMenuable>::RegisterListener(this);
 
-    p_bg = AddComponent<UIImageRenderer>();
-    p_bg->SetTint(Color::Zero);
-
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
     hl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
 
@@ -96,14 +93,14 @@ void HierarchyItem::OnSetContextMenu(MenuItem *menuRootItem)
     menuRootItem->SetFontSize(10);
 
     MenuItem *createEmpty = menuRootItem->AddItem("Create Empty");
-    createEmpty->GetButton()->AddClickedCallback([this](IFocusable*)
+    createEmpty->GetFocusable()->AddClickedCallback([this](IFocusable*)
     {
         GameObject *empty = GameObjectFactory::CreateGameObjectNamed("Empty");
         empty->SetParent( GetReferencedGameObject() );
     });
 
     MenuItem *duplicate = menuRootItem->AddItem("Duplicate");
-    duplicate->GetButton()->AddClickedCallback([this](IFocusable*)
+    duplicate->GetFocusable()->AddClickedCallback([this](IFocusable*)
     {
         GameObject *original = GetReferencedGameObject();
         GameObject *parent = original->GetParent();
@@ -125,7 +122,7 @@ void HierarchyItem::OnSetContextMenu(MenuItem *menuRootItem)
     menuRootItem->AddSeparator();
 
     MenuItem *remove = menuRootItem->AddItem("Remove");
-    remove->GetButton()->AddClickedCallback([this](IFocusable*)
+    remove->GetFocusable()->AddClickedCallback([this](IFocusable*)
     {
         GameObject::Destroy( GetReferencedGameObject() );
     });
@@ -146,23 +143,8 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
     GameObject *refGo = GetReferencedGameObject();
     switch (action)
     {
-        case UIList::Action::MouseOver:
-            if (!m_isSelected) { p_bg->SetTint(Color::VeryLightBlue); }
-        break;
-
-        case UIList::Action::MouseOut:
-            if (!m_isSelected) { p_bg->SetTint(Color::Zero); }
-        break;
-
         case UIList::Action::SelectionIn:
-            m_isSelected = true;
-            p_bg->SetTint(Color::LightBlue);
             Editor::SelectGameObject(refGo);
-        break;
-
-        case UIList::Action::SelectionOut:
-            m_isSelected = false;
-            p_bg->SetTint(Color::Zero);
         break;
 
         case UIList::Action::DoubleClickedLeft:

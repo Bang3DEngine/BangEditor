@@ -3,14 +3,14 @@
 
 #include "BangEditor/BangEditor.h"
 
-#include "Bang/List.h"
+#include "Bang/UIList.h"
 #include "Bang/GameObject.h"
 #include "Bang/UITextRenderer.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UIList;
 FORWARD class IFocusable;
 FORWARD class UIFocusable;
-FORWARD class UIVerticalLayout;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -31,7 +31,7 @@ public:
     MenuItem* AddItem(const String &text);
 
     UITextRenderer *GetText() const;
-    UIFocusable *GetButton() const;
+    UIFocusable *GetFocusable() const;
 
     void CloseRecursiveUp();
     bool MustDisplayChildren() const;
@@ -48,15 +48,19 @@ private:
 
     bool m_destroyOnClose = false;
 
-    UIFocusable *p_button = nullptr;
+    UIFocusable *p_focusable = nullptr;
     UITextRenderer *p_text = nullptr;
 
     List<MenuItem*> p_childrenItems;
     MenuItem* p_parentItem = nullptr;
-    GameObject *p_childrenContainer = nullptr;
-    UIVerticalLayout *p_childrenContainerVL = nullptr;
+    UIList *p_childrenList = nullptr;
+    bool m_itemOverInList  = false;
+
+    UIImageRenderer *p_topBg = nullptr;
 
     bool m_canDisplayChildrenThisFrame = true;
+
+    static void OnListSelectionCallback(GameObject *item, UIList::Action action);
 
     friend class Bang::ObjectManager;
 };
