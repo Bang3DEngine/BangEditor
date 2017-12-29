@@ -104,6 +104,7 @@ ${SRC_DIR}/Inspector/CIWTransform.cpp
 ${SRC_DIR}/Inspector/FileInspectorWidget.cpp
 ${SRC_DIR}/Inspector/FileInspectorWidgetFactory.cpp
 ${SRC_DIR}/Inspector/FIWMaterial.cpp
+${SRC_DIR}/Inspector/FIWTexture.cpp
 ${SRC_DIR}/Inspector/Inspector.cpp
 ${SRC_DIR}/Inspector/InspectorWidget.cpp
 ${SRC_DIR}/Inspector/UIInputColor.cpp

@@ -17,7 +17,9 @@ public:
 
     virtual void Update() override;
     virtual void Render() override;
+    void OnClosed() override;
 
+    void Create(uint flags) override;
     virtual SceneManager* CreateSceneManager() const override;
 };
 

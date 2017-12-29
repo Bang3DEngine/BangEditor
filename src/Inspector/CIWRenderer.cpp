@@ -26,6 +26,8 @@ CIWRenderer::CIWRenderer()
     p_materialInputFile->SetExtensions({Extensions::GetMaterialExtension()});
     p_materialInputFile->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Material", p_materialInputFile);
+
+    SetLabelsWidth(60);
 }
 
 CIWRenderer::~CIWRenderer()
@@ -36,9 +38,15 @@ void CIWRenderer::Update()
 {
     ComponentInspectorWidget::Update();
 
+    IValueChangedListener::SetReceiveEvents(false);
+
     p_visibleCheckBox->SetChecked( GetRenderer()->IsVisible() );
-    p_materialInputFile->SetPath( GetRenderer()->GetSharedMaterial()
-                                  ->GetResourceFilepath());
+
+    Material *mat = GetRenderer()->GetSharedMaterial();
+    Path matPath = mat ? mat->GetResourceFilepath() : Path::Empty;
+    p_materialInputFile->SetPath(matPath);
+
+    IValueChangedListener::SetReceiveEvents(true);
 }
 
 Renderer *CIWRenderer::GetRenderer() const

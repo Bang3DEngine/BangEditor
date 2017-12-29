@@ -11,19 +11,31 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class UIInputVector;
+
 class UIInputColor : public GameObject,
+                     public IValueChangedListener,
                      public EventEmitter<IValueChangedListener>
 {
     GAMEOBJECT_EDITOR(UIInputColor);
 
+public:
+    void SetColor(const Color &color);
+    const Color& GetColor() const;
+
 protected:
 	UIInputColor();
-	virtual ~UIInputColor();
+    virtual ~UIInputColor();
+
+    // IValueChangedListener
+    void OnValueChanged(Object *object) override;
 
 private:
-    UILabel *p_label = nullptr;
+    Color m_color = Color::Zero;
+
     UIImageRenderer *p_colorImage = nullptr;
     UIButton *p_searchColorButton = nullptr;
+    UIInputVector *p_colorInputVector = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

@@ -1,13 +1,14 @@
 #include "BangEditor/UIInputColor.h"
 
-#include "Bang/UILabel.h"
 #include "Bang/UIButton.h"
-#include "Bang/UIImageRenderer.h"
+#include "Bang/Material.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIHorizontalLayout.h"
 
 #include "BangEditor/EditorDialog.h"
+#include "BangEditor/UIInputVector.h"
 #include "BangEditor/EditorIconManager.h"
 
 USING_NAMESPACE_BANG
@@ -20,19 +21,12 @@ UIInputColor::UIInputColor()
 
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
     hl->SetChildrenVerticalStretch(Stretch::Full);
-    hl->SetChildrenHorizontalStretch(Stretch::Full);
     hl->SetSpacing(5);
 
-    p_label = GameObjectFactory::CreateUILabel();
-    p_label->GetText()->SetContent("File:");
-    p_label->GetText()->SetTextSize(11);
-    p_label->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
-    p_label->GetGameObject()->GetComponent<UILayoutElement>()->SetFlexibleWidth(0.0f);
-
     p_colorImage = GameObjectFactory::CreateUIImage(Color::Black);
-    UILayoutElement *pathInputTextLE = p_colorImage->GetGameObject()->
+    UILayoutElement *colorImgLE = p_colorImage->GetGameObject()->
                                        AddComponent<UILayoutElement>();
-    pathInputTextLE->SetFlexibleWidth(1.0f);
+    colorImgLE->SetPreferredWidth(12);
 
     p_searchColorButton = GameObjectFactory::CreateUIButton();
     p_searchColorButton->GetText()->SetContent("");
@@ -43,12 +37,43 @@ UIInputColor::UIInputColor()
         // Color color = EditorDialog::GetAsset("Pick Color...", {}});
     });
 
-    p_label->GetGameObject()->SetParent(this);
+    p_colorInputVector = GameObject::Create<UIInputVector>();
+    p_colorInputVector->SetSize(4);
+    p_colorInputVector->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    UILayoutElement *inputVectorLE = p_colorInputVector->AddComponent<UILayoutElement>();
+    inputVectorLE->SetFlexibleWidth(1.0f);
+
+    p_colorInputVector->SetParent(this);
     p_colorImage->GetGameObject()->SetParent(this);
     p_searchColorButton->GetGameObject()->SetParent(this);
 }
 
 UIInputColor::~UIInputColor()
 {
+}
+
+void UIInputColor::OnValueChanged(Object *object)
+{
+    SetColor( Color::FromVector4(p_colorInputVector->GetVector4()) );
+}
+
+void UIInputColor::SetColor(const Color &color)
+{
+    if (color != GetColor())
+    {
+        m_color = color;
+
+        p_colorImage->GetMaterial()->SetDiffuseColor( GetColor() );
+        p_colorInputVector->Set( GetColor().ToVector4() );
+
+        EventEmitter<IValueChangedListener>::PropagateToListeners(
+                     &IValueChangedListener::OnValueChanged, this);
+    }
+
+}
+
+const Color &UIInputColor::GetColor() const
+{
+    return m_color;
 }
 

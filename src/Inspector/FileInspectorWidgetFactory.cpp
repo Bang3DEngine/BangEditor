@@ -4,6 +4,7 @@
 #include "Bang/String.h"
 #include "Bang/Extensions.h"
 
+#include "BangEditor/FIWTexture.h"
 #include "BangEditor/FIWMaterial.h"
 #include "BangEditor/FileInspectorWidget.h"
 
@@ -16,6 +17,10 @@ InspectorWidget *FileInspectorWidgetFactory::Create(const Path &path)
     if (Extensions::Has(path, {Extensions::GetMaterialExtension()}))
     {
         fiw = GameObject::Create<FIWMaterial>();
+    }
+    else if (Extensions::Has(path, {Extensions::GetImageExtensions()}))
+    {
+        fiw = GameObject::Create<FIWTexture>();
     }
 
     if (fiw)

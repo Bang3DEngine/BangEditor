@@ -23,6 +23,8 @@ CIWMeshRenderer::CIWMeshRenderer()
     p_meshInputFile->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     AddWidget("Mesh", p_meshInputFile);
+
+    SetLabelsWidth(60);
 }
 
 CIWMeshRenderer::~CIWMeshRenderer()
@@ -33,9 +35,13 @@ void CIWMeshRenderer::Update()
 {
     CIWRenderer::Update();
 
+    IValueChangedListener::SetReceiveEvents(false);
+
     Mesh *mesh = GetMeshRenderer()->GetSharedMesh();
     Path meshPath = mesh ? mesh->GetResourceFilepath() : Path::Empty;
     p_meshInputFile->SetPath(meshPath);
+
+    IValueChangedListener::SetReceiveEvents(true);
 }
 
 void CIWMeshRenderer::OnValueChanged(Object *object)

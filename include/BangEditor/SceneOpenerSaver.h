@@ -19,6 +19,7 @@ public:
     bool OnOpenScene();
     bool OnSaveScene();
     bool OnSaveSceneAs();
+    bool CloseScene();
 
     // SceneManagerListener
     void OnSceneOpen(Scene *scene, const Path &sceneFilepath) override;
@@ -31,7 +32,6 @@ private:
     bool OnSaveScene(bool saveAs);
     Dialog::YesNoCancel Overwrite(const Path &path);
 
-    bool CloseScene();
     Path GetDialogStartPath() const;
     bool IsCurrentSceneSaved() const;
 };

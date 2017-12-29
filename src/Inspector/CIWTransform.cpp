@@ -27,11 +27,9 @@ CIWTransform::CIWTransform()
     p_rotIV   = GameObject::Create<UIInputVector>(3);
     p_scaleIV = GameObject::Create<UIInputVector>(3);
 
-    UIInputVector* inputVectors[] = {p_posIV, p_rotIV, p_scaleIV};
-    for (UIInputVector *inputVector : inputVectors)
-    {
-        inputVector->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    }
+    p_posIV->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_rotIV->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_scaleIV->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     AddWidget("Position", p_posIV);
     AddWidget("Rotation", p_rotIV);
@@ -48,6 +46,8 @@ void CIWTransform::Update()
 {
     ComponentInspectorWidget::Update();
 
+    IValueChangedListener::SetReceiveEvents(false);
+
     if (!p_posIV->HasFocus())
     {
         p_posIV->Set(p_relatedTransform->GetLocalPosition());
@@ -62,6 +62,8 @@ void CIWTransform::Update()
     {
         p_scaleIV->Set(p_relatedTransform->GetLocalScale());
     }
+
+    IValueChangedListener::SetReceiveEvents(true);
 }
 
 void CIWTransform::OnValueChanged(Object *object)

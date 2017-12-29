@@ -109,13 +109,16 @@ void Inspector::OnDestroyed(Object *destroyedObject)
 
 void Inspector::OnExplorerPathSelected(const Path &path)
 {
-    InspectorWidget *fiw = FileInspectorWidgetFactory::Create(path);
-    if (fiw)
+    if (path.IsFile())
     {
-        Clear();
-        p_titleSeparator->SetEnabled(true);
-        p_titleText->SetContent(path.GetNameExt());
-        AddWidget(fiw);
+        InspectorWidget *fiw = FileInspectorWidgetFactory::Create(path);
+        if (fiw)
+        {
+            Clear();
+            p_titleSeparator->SetEnabled(true);
+            p_titleText->SetContent(path.GetNameExt());
+            AddWidget(fiw);
+        }
     }
 }
 
@@ -166,19 +169,18 @@ void Inspector::RemoveWidget(InspectorWidget *widget)
 
 void Inspector::Clear()
 {
+    p_titleText->SetContent("");
+    p_titleSeparator->SetEnabled(false);
+
+    while (!m_widgets.IsEmpty())
+    {
+        InspectorWidget *widget = m_widgets.Front();
+        RemoveWidget(widget);
+    }
+
     if (GetCurrentObject())
     {
-        p_titleText->SetContent("");
-        p_titleSeparator->SetEnabled(false);
-        GetCurrentObject()->EventEmitter<IDestroyListener>::
-                    UnRegisterListener(this);
-
-        while (!m_widgets.IsEmpty())
-        {
-            InspectorWidget *widget = m_widgets.Front();
-            RemoveWidget(widget);
-        }
-
+        GetCurrentObject()->EventEmitter<IDestroyListener>::UnRegisterListener(this);
         p_currentObject = nullptr;
     }
 }

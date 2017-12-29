@@ -10,6 +10,7 @@
 #include "Bang/UILayoutManager.h"
 
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG_EDITOR
@@ -34,6 +35,19 @@ void EditorWindow::Render()
     {
         edScene->RenderAndBlitToScreen();
     }
+}
+
+void EditorWindow::OnClosed()
+{
+    Debug_Log("OnClosed Begin() " << this);
+    SceneOpenerSaver::GetInstance()->CloseScene();
+    Debug_Log("OnClosed End() " << this);
+}
+
+void EditorWindow::Create(uint flags)
+{
+    Window::Create(flags);
+    Maximize();
 }
 
 SceneManager *EditorWindow::CreateSceneManager() const

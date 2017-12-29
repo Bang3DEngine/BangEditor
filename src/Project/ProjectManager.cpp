@@ -36,8 +36,9 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
 
     EditorPaths::SetProjectRoot(currentProject->GetProjectDirPath());
 
-    ImportFilesManager::CreateMissingImportFiles();
-    ImportFilesManager::LoadImportFilepathGUIDs();
+    Path assetsDir = currentProject->GetProjectAssetsRootFilepath();
+    ImportFilesManager::CreateMissingImportFiles(assetsDir);
+    ImportFilesManager::LoadImportFilepathGUIDs(assetsDir);
 
     ProjectManager::GetInstance()->
         EventEmitter<ProjectManagerListener>::PropagateToListeners(
