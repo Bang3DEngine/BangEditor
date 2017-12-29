@@ -39,9 +39,7 @@ void EditorWindow::Render()
 
 void EditorWindow::OnClosed()
 {
-    Debug_Log("OnClosed Begin() " << this);
     SceneOpenerSaver::GetInstance()->CloseScene();
-    Debug_Log("OnClosed End() " << this);
 }
 
 void EditorWindow::Create(uint flags)

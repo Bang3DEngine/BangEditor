@@ -54,17 +54,6 @@ MenuBar::MenuBar()
     MenuItem *newProject = m_fileItem->AddItem("New Project...");
     MenuItem *openProject = m_fileItem->AddItem("Open Project...");
 
-    MenuItem *test = m_fileItem->AddItem("Test");
-    MenuItem *test1 = test->AddItem("Test1");
-    MenuItem *test2 = test->AddItem("Test2");
-    MenuItem *test3 = test->AddItem("Test3");
-    MenuItem *test2_1 = test2->AddItem("Test2_1");
-    MenuItem *test2_2 = test2->AddItem("Test2_2");
-    MenuItem *test2_2_1 = test2_2->AddItem("Test2_2_1");
-    MenuItem *test2_2_2 = test2_2->AddItem("Test2_2_2");
-    /*
-    */
-
     m_fileItem->AddSeparator();
     MenuItem *newScene = m_fileItem->AddItem("New Scene");
     MenuItem *openScene = m_fileItem->AddItem("Open Scene");

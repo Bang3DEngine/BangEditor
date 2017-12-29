@@ -21,13 +21,22 @@ public:
     void SetBackgroundColor(const Color &bgColor);
 
 protected:
+    static constexpr int DefaultLabelWidth  = 50;
+    static constexpr int DefaultWidgetHeight = 15;
+
     InspectorWidget();
     virtual ~InspectorWidget();
 
     void SetTitle(const String &title);
     void SetLabelsWidth(int labelsWidth);
-    void AddWidget(GameObject *widget, int height = 15);
-    void AddWidget(const String &labelContent, GameObject *widget, int height = 15);
+
+    void AddLabel(const String &content, int height = -1, int width = -1);
+    void AddWidget(GameObject *widget,
+                   int height = DefaultWidgetHeight);
+    void AddWidget(const String &labelContent,
+                   GameObject *widget,
+                   int height = DefaultWidgetHeight);
+
     void SetWidgetEnabled(GameObject *widget, bool enabled);
 
     int GetLabelsWidth() const;
@@ -41,6 +50,8 @@ private:
 
     UITextRenderer *p_title = nullptr;
     GameObject *p_widgetsContainer = nullptr;
+
+    UILabel *CreateWidgetLabel(const String &content, int height, int width);
 
     void AddWidgetInternal(const String &labelContent,
                            GameObject *widget,

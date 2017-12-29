@@ -33,7 +33,6 @@ public:
     UITextRenderer *GetText() const;
     UIFocusable *GetFocusable() const;
 
-    void CloseRecursiveUp();
     bool MustDisplayChildren() const;
     void SetFontSize(uint fontSize);
     void SetDestroyOnClose(bool destroyOnClose);

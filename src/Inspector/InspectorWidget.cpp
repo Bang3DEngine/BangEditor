@@ -45,7 +45,7 @@ InspectorWidget::InspectorWidget()
     p_widgetsContainer = widgetsGo;
     p_title = titleText;
 
-    SetLabelsWidth(50);
+    SetLabelsWidth( DefaultLabelWidth );
 
     titleGo->SetParent(this);
     topSeparator->SetParent(this);
@@ -88,6 +88,12 @@ void InspectorWidget::SetLabelsWidth(int labelsWidth)
     }
 }
 
+void InspectorWidget::AddLabel(const String &content, int height, int width)
+{
+    UILabel *label = InspectorWidget::CreateWidgetLabel(content, height, width);
+    label->GetGameObject()->SetParent( GetWidgetsContainer() );
+}
+
 void InspectorWidget::AddWidget(GameObject *widget, int height)
 {
     AddWidgetInternal("", widget, height, false);
@@ -112,19 +118,8 @@ void InspectorWidget::AddWidgetInternal(const String &labelContent,
     UILabel *label = nullptr;
     if (addLabel)
     {
-        label = GameObjectFactory::CreateUILabel();
-        label->GetText()->SetContent(labelContent);
-        label->GetText()->SetTextSize(11);
-        label->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
-        label->SetSelectable(false);
-
-        UILayoutElement *labelLE =
-                      label->GetGameObject()->GetComponent<UILayoutElement>();
-        labelLE->SetPreferredWidth( GetLabelsWidth() );
-        labelLE->SetPreferredHeight( height );
-        labelLE->SetFlexibleWidth(0);
-
-        m_labelToLabelLE.Add(label, labelLE);
+        label = InspectorWidget::CreateWidgetLabel(labelContent, height,
+                                                   GetLabelsWidth());
     }
 
     UILayoutElement *widgetContLE = widgetContainer->AddComponent<UILayoutElement>();
@@ -133,7 +128,7 @@ void InspectorWidget::AddWidgetInternal(const String &labelContent,
     widgetContLE->SetLayoutPriority(1);
 
     widgetContainer->SetParent( GetWidgetsContainer() );
-    if (addLabel) { label->GetGameObject()->SetParent( widgetContainer ); }
+    if (label) { label->GetGameObject()->SetParent( widgetContainer ); }
     GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Flexible, 0.0001f)
                        ->SetParent( widgetContainer );
     widget->SetParent( widgetContainer );
@@ -146,6 +141,30 @@ void InspectorWidget::AddWidgetInternal(const String &labelContent,
 void InspectorWidget::SetWidgetEnabled(GameObject *widget, bool enabled)
 {
     widget->GetParent()->SetEnabled( enabled );
+}
+
+UILabel *InspectorWidget::CreateWidgetLabel(const String &content,
+                                            int _height,
+                                            int _width)
+{
+    int height = _height >= 0 ? _height : DefaultWidgetHeight;
+    int width  = _width >= 0 ? _width : GetLabelsWidth();
+
+    UILabel *label = GameObjectFactory::CreateUILabel();
+    label->GetText()->SetContent(content);
+    label->GetText()->SetTextSize(11);
+    label->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
+    label->SetSelectable(false);
+
+    UILayoutElement *labelLE =
+                  label->GetGameObject()->GetComponent<UILayoutElement>();
+    labelLE->SetPreferredWidth( width );
+    labelLE->SetPreferredHeight( height );
+    labelLE->SetFlexibleWidth(0);
+
+    m_labelToLabelLE.Add(label, labelLE);
+
+    return label;
 }
 
 int InspectorWidget::GetLabelsWidth() const

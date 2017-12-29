@@ -9,6 +9,7 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIComboBox;
+FORWARD class UIImageRenderer;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -23,6 +24,7 @@ private:
     RH<Texture2D> p_texture;
 
     UIComboBox *p_filterModeComboBox = nullptr;
+    UIImageRenderer *p_textureImageRend = nullptr;
 
 	FIWTexture();
 	virtual ~FIWTexture();

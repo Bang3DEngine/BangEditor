@@ -48,8 +48,6 @@ MenuItem::MenuItem(MenuItemType itemType)
         GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
 
         p_focusable = textGo->AddComponent<UIFocusable>();
-        GetFocusable()->AddClickedCallback([this](IFocusable*)
-        { if (m_itemType == MenuItemType::Normal) { CloseRecursiveUp(); } });
 
         textGo->SetParent(this);
     }
@@ -89,8 +87,6 @@ bool MenuItem::IsSelectedInList() const
 void MenuItem::Update()
 {
     GameObject::Update();
-
-    if (p_text->GetContent() == "Test") { Debug_Peek(IsSelectedInList()); }
 
     bool mustDisplayChildren = MustDisplayChildren() &&
                                m_canDisplayChildrenThisFrame;
@@ -179,26 +175,6 @@ UITextRenderer *MenuItem::GetText() const
 UIFocusable *MenuItem::GetFocusable() const
 {
     return p_focusable;
-}
-
-void MenuItem::CloseRecursiveUp()
-{
-    if (!m_destroyOnClose)
-    {
-        if (p_parentItem)
-        {
-            p_parentItem->CloseRecursiveUp();
-        }
-        else
-        {
-            p_childrenList->GetGameObject()->SetEnabled(false);
-            m_canDisplayChildrenThisFrame = false;
-        }
-    }
-    else
-    {
-        GameObject::Destroy(this);
-    }
 }
 
 bool MenuItem::MustDisplayChildren() const
