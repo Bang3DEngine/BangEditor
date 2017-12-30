@@ -8,6 +8,7 @@
 #include "BangEditor/FileInspectorWidget.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UISlider;
 FORWARD class UIComboBox;
 FORWARD class UIImageRenderer;
 FORWARD NAMESPACE_BANG_END
@@ -25,7 +26,7 @@ private:
 
     UIComboBox *p_filterModeComboBox = nullptr;
     UIComboBox *p_wrapModeComboBox = nullptr;
-    UIInputNumber *p_alphaCutoffInput = nullptr;
+    UISlider *p_alphaCutoffInput = nullptr;
     UIImageRenderer *p_textureImageRend = nullptr;
 
 	FIWTexture();

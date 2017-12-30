@@ -1,6 +1,7 @@
 #include "BangEditor/FIWMaterial.h"
 
 #include "Bang/Material.h"
+#include "Bang/UISlider.h"
 #include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Extensions.h"
@@ -37,16 +38,17 @@ FIWMaterial::FIWMaterial()
     p_receivesLightingCheckBox = GameObjectFactory::CreateUICheckBox();
     p_receivesLightingCheckBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
-    p_shininessInputNumber = GameObjectFactory::CreateUIInputNumber();
-    p_shininessInputNumber->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_shininessSlider = GameObjectFactory::CreateUISlider();
+    p_shininessSlider->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_shininessSlider->SetMinMaxValues(0.0f, 60.0f);
 
     AddWidget("Diff Color",  p_diffuseColorInput);
     AddWidget("Rec. light",  p_receivesLightingCheckBox->GetGameObject());
-    AddWidget("Shininess",   p_shininessInputNumber->GetGameObject());
-    AddWidget("Texture", p_texturePathInput);
-    AddWidget("Uv Multiply",     p_uvMultiplyInput);
+    AddWidget("Shininess",   p_shininessSlider->GetGameObject());
+    AddWidget("Texture",     p_texturePathInput);
+    AddWidget("Uv Multiply", p_uvMultiplyInput);
 
-    SetLabelsWidth(60);
+    SetLabelsWidth(75);
 }
 
 FIWMaterial::~FIWMaterial()
@@ -65,7 +67,7 @@ void FIWMaterial::UpdateFromMaterialFile()
     p_uvMultiplyInput->Set( GetMaterial()->GetUvMultiply() );
     p_diffuseColorInput->SetColor( GetMaterial()->GetDiffuseColor() );
     p_receivesLightingCheckBox->SetChecked( GetMaterial()->GetReceivesLighting() );
-    p_shininessInputNumber->SetNumber( GetMaterial()->GetShininess() );
+    p_shininessSlider->SetValue( GetMaterial()->GetShininess() );
 
     IValueChangedListener::SetReceiveEvents(true);
 }
@@ -94,7 +96,7 @@ void FIWMaterial::OnValueChanged(Object *object)
     GetMaterial()->SetUvMultiply( p_uvMultiplyInput->GetVector2() );
     GetMaterial()->SetDiffuseColor(p_diffuseColorInput->GetColor());
     GetMaterial()->SetReceivesLighting(p_receivesLightingCheckBox->IsChecked());
-    GetMaterial()->SetShininess(p_shininessInputNumber->GetNumber());
+    GetMaterial()->SetShininess(p_shininessSlider->GetValue());
 
     Path matPath = GetMaterial()->GetResourceFilepath();
     if (matPath.IsFile())

@@ -32,8 +32,7 @@ HierarchyItem::HierarchyItem()
         OnCreateContextMenu(menuRootItem);
     });
 
-    UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
-    hl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
+    AddComponent<UIHorizontalLayout>();
 
     GameObject *textGo = GameObjectFactory::CreateUIGameObject();
     textGo->SetName("HierarchyItemText");

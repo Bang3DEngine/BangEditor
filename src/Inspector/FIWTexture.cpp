@@ -1,6 +1,7 @@
 #include "BangEditor/FIWTexture.h"
 
 #include "Bang/UILabel.h"
+#include "Bang/UISlider.h"
 #include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UIComboBox.h"
@@ -32,8 +33,9 @@ FIWTexture::FIWTexture()
     p_wrapModeComboBox->AddItem("Clamp", int(GL::WrapMode::ClampToEdge));
     p_wrapModeComboBox->AddItem("Repeat", int(GL::WrapMode::Repeat));
 
-    p_alphaCutoffInput = GameObjectFactory::CreateUIInputNumber();
+    p_alphaCutoffInput = GameObjectFactory::CreateUISlider();
     p_alphaCutoffInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_alphaCutoffInput->SetMinMaxValues(0.0f, 1.0f);
 
     p_textureImageRend = GameObjectFactory::CreateUIImage();
 
@@ -64,9 +66,12 @@ void FIWTexture::UpdateFromTextureFile()
 
     IValueChangedListener::SetReceiveEvents(false);
 
+    p_textureImageRend->SetImageTexture(p_texture.Get());
+    p_textureImageRend->SetTint( p_texture.Get() ? Color::White : Color::Black );
+
     p_filterModeComboBox->SetSelectionByValue( int(GetTexture()->GetFilterMode()) );
     p_wrapModeComboBox->SetSelectionByValue( int(GetTexture()->GetWrapMode()) );
-    p_alphaCutoffInput->SetNumber( GetTexture()->GetAlphaCutoff() );
+    p_alphaCutoffInput->SetValue( GetTexture()->GetAlphaCutoff() );
 
     IValueChangedListener::SetReceiveEvents(true);
 }
@@ -76,8 +81,6 @@ void FIWTexture::OnPathChanged(const Path &path)
     if (path.IsFile())
     {
         p_texture = Resources::Load<Texture2D>(path);
-        p_textureImageRend->SetImageTexture(p_texture.Get());
-        p_textureImageRend->SetTint( p_texture.Get() ? Color::White : Color::Black );
         UpdateFromTextureFile();
     }
 }
@@ -92,7 +95,7 @@ void FIWTexture::OnValueChanged(Object *object)
         int wrapMode = p_wrapModeComboBox->GetSelectedValue();
         GetTexture()->SetWrapMode( SCAST<GL::WrapMode>(wrapMode) );
 
-        GetTexture()->SetAlphaCutoff( p_alphaCutoffInput->GetNumber() );
+        GetTexture()->SetAlphaCutoff( p_alphaCutoffInput->GetValue() );
 
         Path texImportPath = ImportFilesManager::GetImportFilePath(
                                         GetTexture()->GetResourceFilepath() );

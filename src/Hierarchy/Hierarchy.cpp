@@ -29,6 +29,8 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
     le->SetPreferredSize( Vector2i(150, 200) );
 
     p_tree = GameObjectFactory::CreateUITree();
+    p_tree->GetUIList()->GetScrollPanel()->SetForceHorizontalFit(true);
+
     UIScrollPanel *scrollPanel = GetUITree()->GetUIList()->GetScrollPanel();
     scrollPanel->SetVerticalScrollBarSide(HorizontalSide::Left);
     scrollPanel->GetScrollArea()->GetBackground()->SetTint(Color::Zero);

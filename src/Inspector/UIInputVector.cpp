@@ -75,12 +75,12 @@ void UIInputVector::Set(const Vector4 &v)
 }
 void UIInputVector::Set(int i, float v)
 {
-    m_inputNumbers[i]->SetNumber(v);
+    m_inputNumbers[i]->SetValue(v);
 }
 
 float UIInputVector::Get(int i) const
 {
-    return m_inputNumbers[i]->GetNumber();
+    return m_inputNumbers[i]->GetValue();
 }
 
 Vector2 UIInputVector::GetVector2() const

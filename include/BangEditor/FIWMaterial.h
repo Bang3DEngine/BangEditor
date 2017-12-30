@@ -8,8 +8,8 @@
 #include "BangEditor/FileInspectorWidget.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UISlider;
 FORWARD class UICheckBox;
-FORWARD class UIInputNumber;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -31,7 +31,7 @@ private:
     UIInputVector *p_uvMultiplyInput = nullptr;
     UIInputColor *p_diffuseColorInput = nullptr;
     UICheckBox *p_receivesLightingCheckBox = nullptr;
-    UIInputNumber *p_shininessInputNumber = nullptr;
+    UISlider *p_shininessSlider = nullptr;
 
 	FIWMaterial();
     virtual ~FIWMaterial();
