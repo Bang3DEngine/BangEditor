@@ -16,14 +16,8 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class Menu;
 
-class IUIContextMenuable : public IEventListener
-{
-public:
-    virtual void OnSetContextMenu(MenuItem *menuRootItem) = 0;
-};
-
 class UIContextMenu : public Component,
-                      public EventEmitter<IUIContextMenuable>
+                      public IDestroyListener
 {
     COMPONENT(UIContextMenu)
 
@@ -34,10 +28,21 @@ public:
     // Component
     void OnUpdate() override;
 
+    void ShowMenu();
+    bool IsMenuBeingShown() const;
     void AddButtonPart(GameObject *part);
+
+    using CreateContextMenuCallback = std::function<void(MenuItem *menuRootItem)>;
+    void SetCreateContextMenuCallback(CreateContextMenuCallback createCallback);
 
 private:
     List<GameObject*> m_parts;
+    Menu *p_menu = nullptr;
+
+    CreateContextMenuCallback m_createContextMenuCallback;
+
+    // IDestroyListener
+    void OnDestroyed(Object *object) override;
 };
 
 
@@ -54,10 +59,11 @@ public:
     MenuItem *GetRootItem() const;
 
 private:
+    MenuItem *p_rootItem = nullptr;
+    bool m_justCreated = false;
+
     Menu();
     virtual ~Menu() = default;
-
-    MenuItem *p_rootItem = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

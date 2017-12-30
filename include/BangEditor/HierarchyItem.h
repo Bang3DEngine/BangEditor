@@ -15,8 +15,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class HierarchyItem : public GameObject,
-                      public INameListener,
-                      public IUIContextMenuable
+                      public INameListener
 {
     GAMEOBJECT_EDITOR(HierarchyItem);
 
@@ -35,8 +34,8 @@ public:
     void OnNameChanged(GameObject *go, const String &oldName,
                        const String &newName) override;
 
-    // IUIContextMenuable
-    void OnSetContextMenu(MenuItem *menuRootItem) override;
+    // UIContextMenu callback
+    void OnCreateContextMenu(MenuItem *menuRootItem);
 
     // UIList Item
     void OnSelectionCallback(UIList::Action action);
@@ -46,7 +45,7 @@ public:
 private:
     String m_text = "";
     GameObject *p_refGameObject = nullptr;
-
+    UIContextMenu *p_contextMenu = nullptr;
     UITextRenderer *p_textRenderer = nullptr;
 
     void SetText(const String &text);

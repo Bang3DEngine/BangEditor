@@ -26,8 +26,11 @@ HierarchyItem::HierarchyItem()
     GameObjectFactory::CreateUIGameObjectInto(this);
     AddComponent<UIFocusable>();
 
-    UIContextMenu *ctxMenu = AddComponent<UIContextMenu>();
-    ctxMenu->EventEmitter<IUIContextMenuable>::RegisterListener(this);
+    p_contextMenu = AddComponent<UIContextMenu>();
+    p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
+    {
+        OnCreateContextMenu(menuRootItem);
+    });
 
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
     hl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
@@ -88,19 +91,19 @@ void HierarchyItem::OnNameChanged(GameObject *go, const String &,
     SetText( newName );
 }
 
-void HierarchyItem::OnSetContextMenu(MenuItem *menuRootItem)
+void HierarchyItem::OnCreateContextMenu(MenuItem *menuRootItem)
 {
     menuRootItem->SetFontSize(10);
 
     MenuItem *createEmpty = menuRootItem->AddItem("Create Empty");
-    createEmpty->GetFocusable()->AddClickedCallback([this](IFocusable*)
+    createEmpty->SetSelectedCallback([this](MenuItem*)
     {
         GameObject *empty = GameObjectFactory::CreateGameObjectNamed("Empty");
         empty->SetParent( GetReferencedGameObject() );
     });
 
     MenuItem *duplicate = menuRootItem->AddItem("Duplicate");
-    duplicate->GetFocusable()->AddClickedCallback([this](IFocusable*)
+    duplicate->SetSelectedCallback([this](MenuItem*)
     {
         GameObject *original = GetReferencedGameObject();
         GameObject *parent = original->GetParent();
@@ -122,7 +125,7 @@ void HierarchyItem::OnSetContextMenu(MenuItem *menuRootItem)
     menuRootItem->AddSeparator();
 
     MenuItem *remove = menuRootItem->AddItem("Remove");
-    remove->GetFocusable()->AddClickedCallback([this](IFocusable*)
+    remove->SetSelectedCallback([this](MenuItem*)
     {
         GameObject::Destroy( GetReferencedGameObject() );
     });
@@ -145,6 +148,10 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
     {
         case UIList::Action::SelectionIn:
             Editor::SelectGameObject(refGo);
+        break;
+
+        case UIList::Action::ClickedRight:
+            p_contextMenu->ShowMenu();
         break;
 
         case UIList::Action::DoubleClickedLeft:

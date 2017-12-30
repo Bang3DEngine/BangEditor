@@ -1,12 +1,17 @@
 #include "BangEditor/UIContextMenu.h"
 
 #include "Bang/Input.h"
+#include "Bang/UIList.h"
 #include "Bang/UICanvas.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UIImageRenderer.h"
+#include "Bang/UILayoutElement.h"
 #include "Bang/UILayoutIgnorer.h"
 #include "Bang/UIVerticalLayout.h"
+#include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIContentSizeFitter.h"
 
+#include "BangEditor/MenuItem.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
 
@@ -27,20 +32,47 @@ void UIContextMenu::OnUpdate()
         {
             if (UICanvas::GetActive(this)->IsMouseOver(part, true))
             {
-                Menu *menu = GameObject::Create<Menu>();
-                EventEmitter<IUIContextMenuable>::
-                    PropagateToListeners(&IUIContextMenuable::OnSetContextMenu,
-                                         menu->GetRootItem());
-                menu->SetParent( EditorSceneManager::GetEditorScene() );
+                ShowMenu();
                 break;
             }
         }
     }
 }
 
+void UIContextMenu::ShowMenu()
+{
+    if (!IsMenuBeingShown())
+    {
+        p_menu = GameObject::Create<Menu>();
+        if (m_createContextMenuCallback)
+        {
+            m_createContextMenuCallback(p_menu->GetRootItem());
+        }
+        p_menu->EventEmitter<IDestroyListener>::RegisterListener(this);
+        p_menu->SetParent( EditorSceneManager::GetEditorScene() );
+    }
+}
+
+bool UIContextMenu::IsMenuBeingShown() const
+{
+    return p_menu != nullptr;
+}
+
 void UIContextMenu::AddButtonPart(GameObject *part)
 {
     m_parts.PushBack(part);
+}
+
+void UIContextMenu::SetCreateContextMenuCallback(
+        UIContextMenu::CreateContextMenuCallback createCallback)
+{
+    m_createContextMenuCallback = createCallback;
+}
+
+void UIContextMenu::OnDestroyed(Object *object)
+{
+    ASSERT(p_menu && object == p_menu);
+    p_menu = nullptr;
 }
 
 // Menu
@@ -49,19 +81,22 @@ Menu::Menu()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     p_rootItem = GameObject::Create<MenuItem>( MenuItem::MenuItemType::Root );
+    p_rootItem->GetChildrenList()->SetIdleColor( Color::LightGray );
     p_rootItem->SetDestroyOnClose(true);
-    p_rootItem->SetParent(this);
 
-    RectTransform *rt = GetRectTransform();
+    RectTransform *rt = p_rootItem->GetRectTransform();
     rt->SetAnchors( Input::GetMousePositionNDC() );
     rt->SetPivotPosition( Vector2(-1, 1) );
+    rt->TranslateLocal( Vector3(0, 0, -0.001f) );
 
-    UIContentSizeFitter *csf = AddComponent<UIContentSizeFitter>();
+    UIContentSizeFitter *csf = p_rootItem->AddComponent<UIContentSizeFitter>();
     csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
     csf->SetVerticalSizeType(LayoutSizeType::Preferred);
 
-    AddComponent<UILayoutIgnorer>();
-    AddComponent<UIVerticalLayout>();
+    p_rootItem->AddComponent<UILayoutIgnorer>();
+    p_rootItem->SetParent(this);
+
+    m_justCreated = true;
 }
 
 void Menu::Update()
@@ -71,9 +106,13 @@ void Menu::Update()
     if (Input::GetMouseButton(MouseButton::Right) ||
         Input::GetMouseButton(MouseButton::Left))
     {
-        RectTransform *rt = GetRectTransform();
-        if (!rt->IsMouseOver(true)) { GameObject::Destroy(this); }
+        if (!m_justCreated &&
+            !GetRootItem()->GetRectTransform()->IsMouseOver(true))
+        {
+            GameObject::Destroy(this);
+        }
     }
+    m_justCreated = false;
 }
 
 MenuItem *Menu::GetRootItem() const

@@ -41,12 +41,12 @@ private:
 
     SceneOpenerSaver *m_sceneOpenerSaver = nullptr;
 
-    static void OnNewProject  (IFocusable *btn);
-    static void OnOpenProject (IFocusable *btn);
-    static void OnNewScene    (IFocusable *btn);
-    static void OnSaveScene   (IFocusable *btn);
-    static void OnSaveSceneAs (IFocusable *btn);
-    static void OnOpenScene   (IFocusable *btn);
+    static void OnNewProject  (MenuItem *item);
+    static void OnOpenProject (MenuItem *item);
+    static void OnNewScene    (MenuItem *item);
+    static void OnSaveScene   (MenuItem *item);
+    static void OnSaveSceneAs (MenuItem *item);
+    static void OnOpenScene   (MenuItem *item);
 
     static void OpenProject(const Path& projectFileFilepath);
 

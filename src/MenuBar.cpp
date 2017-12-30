@@ -60,12 +60,12 @@ MenuBar::MenuBar()
     MenuItem *saveScene = m_fileItem->AddItem("Save Scene");
     MenuItem *saveSceneAs = m_fileItem->AddItem("Save Scene As...");
 
-    newProject->GetFocusable()->AddClickedCallback(MenuBar::OnNewProject);
-    openProject->GetFocusable()->AddClickedCallback(MenuBar::OnOpenProject);
-    newScene->GetFocusable()->AddClickedCallback(MenuBar::OnNewScene);
-    saveScene->GetFocusable()->AddClickedCallback(MenuBar::OnSaveScene);
-    saveSceneAs->GetFocusable()->AddClickedCallback(MenuBar::OnSaveSceneAs);
-    openScene->GetFocusable()->AddClickedCallback(MenuBar::OnOpenScene);
+    newProject->SetSelectedCallback(MenuBar::OnNewProject);
+    openProject->SetSelectedCallback(MenuBar::OnOpenProject);
+    newScene->SetSelectedCallback(MenuBar::OnNewScene);
+    saveScene->SetSelectedCallback(MenuBar::OnSaveScene);
+    saveSceneAs->SetSelectedCallback(MenuBar::OnSaveSceneAs);
+    openScene->SetSelectedCallback(MenuBar::OnOpenScene);
 }
 
 MenuBar::~MenuBar()
@@ -112,7 +112,7 @@ MenuItem* MenuBar::GetItem(int i)
     return m_items[i];
 }
 
-void MenuBar::OnNewProject(IFocusable*)
+void MenuBar::OnNewProject(MenuItem*)
 {
     Path newProjectDirPath = Dialog::OpenDirectory("Create New Project...",
                                                    EditorPaths::Home());
@@ -129,7 +129,7 @@ void MenuBar::OnNewProject(IFocusable*)
         }
     }
 }
-void MenuBar::OnOpenProject(IFocusable*)
+void MenuBar::OnOpenProject(MenuItem*)
 {
     Path projectFileFilepath = Dialog::OpenFilePath("Open Project...",
                                                     {Extensions::GetProjectExtension()},
@@ -149,25 +149,25 @@ MenuBar *MenuBar::GetInstance()
     return EditorSceneManager::GetEditorScene()->GetMenuBar();
 }
 
-void MenuBar::OnNewScene(IFocusable*)
+void MenuBar::OnNewScene(MenuItem*)
 {
     MenuBar *mb = MenuBar::GetInstance();
     mb->m_sceneOpenerSaver->OnNewScene();
 }
 
-void MenuBar::OnSaveScene(IFocusable*)
+void MenuBar::OnSaveScene(MenuItem*)
 {
     MenuBar *mb = MenuBar::GetInstance();
     mb->m_sceneOpenerSaver->OnSaveScene();
 }
 
-void MenuBar::OnSaveSceneAs(IFocusable*)
+void MenuBar::OnSaveSceneAs(MenuItem*)
 {
     MenuBar *mb = MenuBar::GetInstance();
     mb->m_sceneOpenerSaver->OnSaveSceneAs();
 }
 
-void MenuBar::OnOpenScene(IFocusable*)
+void MenuBar::OnOpenScene(MenuItem*)
 {
     MenuBar *mb = MenuBar::GetInstance();
     mb->m_sceneOpenerSaver->OnOpenScene();

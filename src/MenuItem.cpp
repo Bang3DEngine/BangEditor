@@ -28,8 +28,7 @@ MenuItem::MenuItem(MenuItemType itemType)
     if (m_itemType != MenuItemType::Root) { hl->SetPaddings(3); }
     else
     {
-        // TODO: Why if I remove this it does not work?
-        hl->SetPaddings(1, 1, 0, 0);
+        hl->SetPaddings(1, 1, 0, 0); // TODO: Why if I remove this it does not work?
     }
 
     if (m_itemType == MenuItemType::Top)
@@ -53,7 +52,7 @@ MenuItem::MenuItem(MenuItemType itemType)
     }
 
     p_childrenList = GameObjectFactory::CreateUIList(false);
-    GameObject *childrenListGo = p_childrenList->GetGameObject();
+    GameObject *childrenListGo = GetChildrenList()->GetGameObject();
     childrenListGo->SetName("ChildrenList");
     childrenListGo->SetParent(this);
 
@@ -68,10 +67,11 @@ MenuItem::MenuItem(MenuItemType itemType)
     csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
     csf->SetVerticalSizeType(LayoutSizeType::Preferred);
 
-    childrenListGo->AddComponent<UILayoutIgnorer>(true);
-    p_childrenList->SetSelectionCallback(&MenuItem::OnListSelectionCallback);
-    p_childrenList->SetSelectedColor( p_childrenList->GetOverColor() );
-    p_childrenList->SetOverColor( Color::Zero );
+    childrenListGo->AddComponent<UILayoutIgnorer>();
+    GetChildrenList()->SetSelectionCallback(&MenuItem::OnListSelectionCallback);
+    GetChildrenList()->SetSelectedColor( GetChildrenList()->GetOverColor() );
+    GetChildrenList()->SetOverColor( Color::LightGray );
+    GetChildrenList()->SetIdleColor( GetChildrenList()->GetOverColor() );
 }
 
 MenuItem::~MenuItem()
@@ -81,7 +81,7 @@ MenuItem::~MenuItem()
 
 bool MenuItem::IsSelectedInList() const
 {
-    return p_parentItem ? (p_parentItem->p_childrenList->GetSelectedItem() == this) :
+    return p_parentItem ? (p_parentItem->GetChildrenList()->GetSelectedItem() == this) :
                           false;
 }
 
@@ -89,17 +89,14 @@ void MenuItem::Update()
 {
     GameObject::Update();
 
-    bool mustDisplayChildren = MustDisplayChildren() &&
-                               m_canDisplayChildrenThisFrame;
-    p_childrenList->GetGameObject()->SetEnabled(mustDisplayChildren);
+    const bool mustDisplayChildren = MustDisplayChildren();
+    GetChildrenList()->GetGameObject()->SetEnabled(mustDisplayChildren);
 
     if (m_itemType == MenuItemType::Top)
     {
         p_topBg->SetTint( mustDisplayChildren ? Color::VeryLightBlue :
-                                                Color::Zero );
+                                                Color::Zero);
     }
-
-    m_canDisplayChildrenThisFrame = true; // Reset
 }
 
 void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
@@ -112,16 +109,20 @@ void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
         case UIList::Action::ClickedRight:
         case UIList::Action::Pressed:
         {
-            if (menuItem) { menuItem->GetFocusable()->Click(false); }
+            if (menuItem && menuItem->m_selectedCallback)
+            {
+                menuItem->m_selectedCallback(menuItem);
+                menuItem->CloseRecursiveUp();
+            }
         }
         break;
 
         case UIList::Action::MouseOver:
-            if (parentItem) { parentItem->p_childrenList->SetSelection(menuItem); }
+            if (parentItem) { parentItem->GetChildrenList()->SetSelection(menuItem); }
         break;
 
         case UIList::Action::MouseOut:
-            if (parentItem) { parentItem->p_childrenList->SetSelection(nullptr); }
+            if (parentItem) { parentItem->GetChildrenList()->SetSelection(nullptr); }
         break;
 
         default: break;
@@ -139,21 +140,41 @@ void MenuItem::SetFontSize(uint fontSize)
     }
 }
 
-void MenuItem::SetDestroyOnClose(bool destroyOnClose)
+void MenuItem::CloseRecursiveUp()
 {
-    m_destroyOnClose = destroyOnClose;
+    if (!p_parentItem)
+    {
+        if (!m_destroyOnClose)
+        {
+            GetChildrenList()->GetGameObject()->SetEnabled(false);
+        }
+        else { GameObject::Destroy(this); }
+    }
+    else
+    {
+        p_parentItem->CloseRecursiveUp();
+    }
+}
+void MenuItem::SetDestroyOnClose(bool destroyOnSelect)
+{
+    m_destroyOnClose = destroyOnSelect;
+}
+
+void MenuItem::SetSelectedCallback(MenuItem::ItemSelectedCallback selectedCallback)
+{
+    m_selectedCallback = selectedCallback;
 }
 
 void MenuItem::AddSeparator()
 {
     GameObject *sep =
             GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Preferred, 5);
-    p_childrenList->AddItem(sep);
+    GetChildrenList()->AddItem(sep);
 }
 
 void MenuItem::AddItem(MenuItem *childItem)
 {
-    p_childrenList->AddItem(childItem);
+    GetChildrenList()->AddItem(childItem);
     p_childrenItems.PushBack(childItem);
 }
 
@@ -166,6 +187,11 @@ MenuItem *MenuItem::AddItem(const String &text)
     newItem->p_parentItem = this;
     AddItem(newItem);
     return newItem;
+}
+
+UIList *MenuItem::GetChildrenList() const
+{
+    return p_childrenList;
 }
 
 UITextRenderer *MenuItem::GetText() const
@@ -183,8 +209,8 @@ bool MenuItem::MustDisplayChildren() const
     if (m_itemType == MenuItemType::Root) { return true; }
     if ( IsSelectedInList() ) { return true; }
 
-    if (p_childrenList->IsEnabled(true) &&
-        p_childrenList->GetGameObject()->GetRectTransform()->IsMouseOver(false))
+    if (GetChildrenList()->IsEnabled(true) &&
+        GetChildrenList()->GetGameObject()->GetRectTransform()->IsMouseOver(false))
     {
         return true;
     }
@@ -202,7 +228,7 @@ bool MenuItem::MustDisplayChildren() const
         return true;
     }
 
-    if (p_childrenList->GetGameObject()->GetComponent<UIFocusable>()->IsMouseOver())
+    if (GetChildrenList()->GetGameObject()->GetComponent<UIFocusable>()->IsMouseOver())
     {
         return true;
     }
@@ -212,7 +238,7 @@ bool MenuItem::MustDisplayChildren() const
         if (childItem->MustDisplayChildren()) { return true; }
     }
 
-    for (GameObject *child : p_childrenList->GetItems())
+    for (GameObject *child : GetChildrenList()->GetItems())
     {
         if (UICanvas::GetActive(this)->IsMouseOver(child)) { return true; }
     }
