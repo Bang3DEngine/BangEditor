@@ -2,6 +2,7 @@
 
 #include "Bang/UIList.h"
 #include "Bang/UICanvas.h"
+#include "Bang/IconManager.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
@@ -23,8 +24,8 @@ MenuItem::MenuItem(MenuItemType itemType)
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
-    hl->SetChildrenHorizontalStretch(Stretch::None);
-    hl->SetChildrenHorizontalAlignment(HorizontalAlignment::Left);
+    hl->SetChildrenVerticalStretch(Stretch::None);
+    hl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
     if (m_itemType != MenuItemType::Root) { hl->SetPaddings(3); }
     else
     {
@@ -46,9 +47,24 @@ MenuItem::MenuItem(MenuItemType itemType)
         GetText()->SetVerticalAlign(VerticalAlignment::Center);
         GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
 
-        p_focusable = textGo->AddComponent<UIFocusable>();
+        UILayoutElement *textLE = textGo->AddComponent<UILayoutElement>();
+        textLE->SetFlexibleWidth(9999.9f);
 
         textGo->SetParent(this);
+
+        p_focusable = textGo->AddComponent<UIFocusable>();
+
+        if (m_itemType != MenuItemType::Top)
+        {
+            p_rightArrow = GameObjectFactory::CreateUIImage();
+            p_rightArrow->SetImageTexture( IconManager::GetRightArrowIcon().Get() );
+
+            UILayoutElement *rightArrowLE = p_rightArrow->GetGameObject()
+                                            ->AddComponent<UILayoutElement>();
+            rightArrowLE->SetPreferredSize( Vector2i(7, 14) );
+
+            p_rightArrow->GetGameObject()->SetParent(this);
+        }
     }
 
     p_childrenList = GameObjectFactory::CreateUIList(false);
@@ -92,11 +108,12 @@ void MenuItem::Update()
     const bool mustDisplayChildren = MustDisplayChildren();
     GetChildrenList()->GetGameObject()->SetEnabled(mustDisplayChildren);
 
-    if (m_itemType == MenuItemType::Top)
+    if (p_topBg)
     {
         p_topBg->SetTint( mustDisplayChildren ? Color::VeryLightBlue :
                                                 Color::Zero);
     }
+    if (p_rightArrow) { p_rightArrow->SetEnabled( !p_childrenItems.IsEmpty() ); }
 }
 
 void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)

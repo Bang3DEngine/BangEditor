@@ -1,5 +1,7 @@
 #include "BangEditor/EditorScene.h"
 
+#include <array>
+
 #include "Bang/Input.h"
 #include "Bang/UIMask.h"
 #include "Bang/Camera.h"
@@ -132,15 +134,15 @@ void EditorScene::Update()
         UnBindOpenScene();
     }
 
-    static Array<float> lastDeltas = {99,99,99,99};
-    for (int i = 1; i < lastDeltas.Size(); ++i) { lastDeltas[i] = lastDeltas[i-1]; }
+    static std::array<float, 30> lastDeltas;
+    for (int i = 1; i < lastDeltas.size(); ++i) { lastDeltas[i] = lastDeltas[i-1]; }
     lastDeltas[0] = Time::GetDeltaTime();
     float meanDeltas = 0.0f;
-    for (int i = 0; i < lastDeltas.Size(); ++i) { meanDeltas += lastDeltas[i]; }
-    meanDeltas /= lastDeltas.Size();
+    for (int i = 0; i < lastDeltas.size(); ++i) { meanDeltas += lastDeltas[i]; }
+    meanDeltas /= lastDeltas.size();
     float meanFPS = (1.0f / Math::Max(0.001f, meanDeltas));
     m_fpsText->SetContent( String(meanFPS) + " fps" );
-    // Debug_Peek(meanFPS);
+    Debug_Peek(meanFPS);
 }
 
 void EditorScene::OnResize(int newWidth, int newHeight)
@@ -235,8 +237,6 @@ void EditorScene::RenderAndBlitToScreen()
                 openSceneTex = openSceneCam->GetSelectionFramebuffer()->
                     GetAttachmentTexture(SelectionFramebuffer::AttColor);
             }
-            /*
-            */
         }
     }
     m_sceneContainer->SetSceneImageTexture(openSceneTex);
@@ -245,6 +245,8 @@ void EditorScene::RenderAndBlitToScreen()
     RenderOpenScene();
     gEngine->Render(this);
     window->BlitToScreen(GetCamera());
+    /*
+    */
 }
 
 void EditorScene::BindOpenScene()

@@ -48,6 +48,11 @@ private:
     static void OnSaveSceneAs (MenuItem *item);
     static void OnOpenScene   (MenuItem *item);
 
+    static void OnCreateCone   (MenuItem *item);
+    static void OnCreateCube   (MenuItem *item);
+    static void OnCreatePlane  (MenuItem *item);
+    static void OnCreateSphere (MenuItem *item);
+
     static void OpenProject(const Path& projectFileFilepath);
 
     static MenuBar* GetInstance();

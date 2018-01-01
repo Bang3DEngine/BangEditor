@@ -6,7 +6,6 @@
 #include "Bang/Random.h"
 #include "Bang/Extensions.h"
 #include "Bang/IFocusable.h"
-#include "Bang/MeshFactory.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
@@ -66,6 +65,17 @@ MenuBar::MenuBar()
     saveScene->SetSelectedCallback(MenuBar::OnSaveScene);
     saveSceneAs->SetSelectedCallback(MenuBar::OnSaveSceneAs);
     openScene->SetSelectedCallback(MenuBar::OnOpenScene);
+
+    MenuItem *createGameObjectItem = m_gameObjectsItem->AddItem("Create");
+    MenuItem *createCone   = createGameObjectItem->AddItem("Cone");
+    MenuItem *createCube   = createGameObjectItem->AddItem("Cube");
+    MenuItem *createSphere = createGameObjectItem->AddItem("Sphere");
+    MenuItem *createPlane  = createGameObjectItem->AddItem("Plane");
+
+    createCone->SetSelectedCallback(MenuBar::OnCreateCone);
+    createCube->SetSelectedCallback(MenuBar::OnCreateCube);
+    createPlane->SetSelectedCallback(MenuBar::OnCreatePlane);
+    createSphere->SetSelectedCallback(MenuBar::OnCreateSphere);
 }
 
 MenuBar::~MenuBar()
@@ -84,18 +94,6 @@ void MenuBar::Update()
     else if (Input::GetKeyDown(Key::O))
     {
         MenuBar::OnOpenScene(nullptr);
-    }
-
-    Scene *openScene = edScene->GetOpenScene();
-    if (openScene)
-    {
-        if (Input::GetKeyDownRepeat(Key::C))
-        {
-            GameObject *sphere = MeshFactory::GetSphereGameObject();
-            sphere->GetTransform()->SetPosition( Random::GetInsideUnitSphere() );
-            sphere->GetTransform()->SetScale( Vector3(Random::GetRange(0.3f, 1.0f)) );
-            sphere->SetParent(openScene);
-        }
     }
 }
 
@@ -171,4 +169,32 @@ void MenuBar::OnOpenScene(MenuItem*)
 {
     MenuBar *mb = MenuBar::GetInstance();
     mb->m_sceneOpenerSaver->OnOpenScene();
+}
+
+void MenuBar::OnCreateCone(MenuItem*)
+{
+    GameObject *cone = GameObjectFactory::CreateConeGameObject();
+    Scene *openScene = EditorSceneManager::GetOpenScene();
+    if (openScene) { cone->SetParent(openScene); }
+}
+
+void MenuBar::OnCreateCube(MenuItem*)
+{
+    GameObject *cube = GameObjectFactory::CreateCubeGameObject();
+    Scene *openScene = EditorSceneManager::GetOpenScene();
+    if (openScene) { cube->SetParent(openScene); }
+}
+
+void MenuBar::OnCreateSphere(MenuItem*)
+{
+    GameObject *sphere = GameObjectFactory::CreateSphereGameObject();
+    Scene *openScene = EditorSceneManager::GetOpenScene();
+    if (openScene) { sphere->SetParent(openScene); }
+}
+
+void MenuBar::OnCreatePlane(MenuItem*)
+{
+    GameObject *plane = GameObjectFactory::CreatePlaneGameObject();
+    Scene *openScene = EditorSceneManager::GetOpenScene();
+    if (openScene) { plane->SetParent(openScene); }
 }

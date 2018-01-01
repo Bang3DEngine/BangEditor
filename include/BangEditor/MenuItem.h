@@ -59,6 +59,7 @@ private:
     MenuItem* p_parentItem = nullptr;
     UIList *p_childrenList = nullptr;
     UIImageRenderer *p_topBg = nullptr;
+    UIImageRenderer *p_rightArrow = nullptr;
 
     void CloseRecursiveUp();
     bool IsSelectedInList() const;
