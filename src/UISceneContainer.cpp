@@ -45,6 +45,6 @@ Rect UISceneContainer::GetImageScreenRectNDC() const
 void UISceneContainer::SetSceneImageTexture(Texture2D *texture)
 {
     p_sceneImg->SetImageTexture(texture);
-    if (texture) { texture->SetWrapMode(GL::WrapMode::Repeat); }
+    if (texture) { texture->SetWrapMode(GL_WrapMode::Repeat); }
     p_sceneImg->SetTint(texture ? Color::White : Color::Black);
 }
