@@ -10,9 +10,9 @@
 #include "BangEditor/EditorUITab.h"
 #include "BangEditor/IEditorOpenSceneListener.h"
 
-NAMESPACE_BANG_BEGIN
+FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UITree;
-NAMESPACE_BANG_END
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -71,6 +71,7 @@ private:
 
     friend class HierarchyItem;
 };
+
 NAMESPACE_BANG_EDITOR_END
 
 #endif // HIERARCHY_H

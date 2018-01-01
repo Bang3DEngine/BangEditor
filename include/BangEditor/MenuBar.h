@@ -1,21 +1,24 @@
 #ifndef MENUBAR_H
 #define MENUBAR_H
 
-#include "BangEditor/BangEditor.h"
-
 #include "Bang/Array.h"
 #include "Bang/GameObject.h"
-#include "BangEditor/MenuItem.h"
-#include "Bang/UIHorizontalLayout.h"
 
-#include "BangEditor/SceneOpenerSaver.h"
+#include "BangEditor/BangEditor.h"
+
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UIHorizontalLayout;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class MenuItem;
+FORWARD class SceneOpenerSaver;
+
 class MenuBar : public GameObject
 {
-    GAMEOBJECT(MenuBar);
+    GAMEOBJECT_EDITOR(MenuBar);
 
 public:
     void Update() override;

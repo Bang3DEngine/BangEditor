@@ -9,15 +9,19 @@
 #include "Bang/UIFocusable.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UITextRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/UIHorizontalLayout.h"
 
 #include "BangEditor/Project.h"
+#include "BangEditor/MenuItem.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSettings.h"
 #include "BangEditor/ProjectManager.h"
+#include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG_EDITOR

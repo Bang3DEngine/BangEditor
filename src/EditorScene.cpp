@@ -20,6 +20,7 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/UIHorizontalLayout.h"
 #include "Bang/SelectionFramebuffer.h"
 
 #include "BangEditor/Editor.h"

@@ -5,6 +5,7 @@
 #include "Bang/IconManager.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UILayoutIgnorer.h"

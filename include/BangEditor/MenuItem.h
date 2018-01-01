@@ -5,12 +5,12 @@
 
 #include "Bang/UIList.h"
 #include "Bang/GameObject.h"
-#include "Bang/UITextRenderer.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIList;
 FORWARD class IFocusable;
 FORWARD class UIFocusable;
+FORWARD class UITextRenderer;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
