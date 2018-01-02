@@ -48,12 +48,14 @@ MenuBar::MenuBar()
     m_componentsItem  = AddItem();
     m_gameObjectsItem = AddItem();
 
+    // Top items
     m_fileItem->GetText()->SetContent("File");
     m_editItem->GetText()->SetContent("Edit");
     m_assetsItem->GetText()->SetContent("Assets");
     m_componentsItem->GetText()->SetContent("Components");
     m_gameObjectsItem->GetText()->SetContent("GameObjects");
 
+    // File
     MenuItem *newProject = m_fileItem->AddItem("New Project...");
     MenuItem *openProject = m_fileItem->AddItem("Open Project...");
 
@@ -70,11 +72,30 @@ MenuBar::MenuBar()
     saveSceneAs->SetSelectedCallback(MenuBar::OnSaveSceneAs);
     openScene->SetSelectedCallback(MenuBar::OnOpenScene);
 
-    MenuItem *createGameObjectItem = m_gameObjectsItem->AddItem("Create");
-    MenuItem *createCone   = createGameObjectItem->AddItem("Cone");
-    MenuItem *createCube   = createGameObjectItem->AddItem("Cube");
-    MenuItem *createSphere = createGameObjectItem->AddItem("Sphere");
-    MenuItem *createPlane  = createGameObjectItem->AddItem("Plane");
+    // Components
+    MenuItem *addAudio = m_componentsItem->AddItem("Audio");
+    MenuItem *addAudioListener = addAudio->AddItem("Audio Listener");
+    MenuItem *addAudioSource = addAudio->AddItem("Audio Source");
+    MenuItem *addCamera = m_componentsItem->AddItem("Camera");
+    MenuItem *addLight = m_componentsItem->AddItem("Light");
+    MenuItem *addPointLight = addLight->AddItem("Point Light");
+    MenuItem *addDirectionalLight = addLight->AddItem("Directional Light");
+    MenuItem *addRenderer = m_componentsItem->AddItem("Renderer");
+    MenuItem *addLineRenderer = addRenderer->AddItem("LineRenderer");
+    MenuItem *addMeshRenderer = addRenderer->AddItem("MeshRenderer");
+    MenuItem *addTransforms = m_componentsItem->AddItem("Transform");
+    MenuItem *addTransform = addTransforms->AddItem("Transform");
+    MenuItem *addRectTransform = addTransforms->AddItem("RectTransform");
+
+    // GameObject
+    MenuItem *primitiveGameObjectItem = m_gameObjectsItem->AddItem("Primitives");
+    MenuItem *createCone   = primitiveGameObjectItem->AddItem("Cone");
+    MenuItem *createCube   = primitiveGameObjectItem->AddItem("Cube");
+    MenuItem *createSphere = primitiveGameObjectItem->AddItem("Sphere");
+    MenuItem *createPlane  = primitiveGameObjectItem->AddItem("Plane");
+
+    MenuItem *uiGameObjectItem = m_gameObjectsItem->AddItem("UI");
+    MenuItem *createMeh   = uiGameObjectItem->AddItem("Meh");
 
     createCone->SetSelectedCallback(MenuBar::OnCreateCone);
     createCube->SetSelectedCallback(MenuBar::OnCreateCube);

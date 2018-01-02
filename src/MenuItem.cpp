@@ -27,6 +27,7 @@ MenuItem::MenuItem(MenuItemType itemType)
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
     hl->SetChildrenVerticalStretch(Stretch::None);
     hl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
+    hl->SetSpacing(5);
     if (m_itemType != MenuItemType::Root) { hl->SetPaddings(3); }
     else
     {
@@ -115,6 +116,7 @@ void MenuItem::Update()
                                                 Color::Zero);
     }
     if (p_rightArrow) { p_rightArrow->SetEnabled( !p_childrenItems.IsEmpty() ); }
+    if (m_justClosed > 0) { --m_justClosed; }
 }
 
 void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
@@ -131,6 +133,7 @@ void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
             {
                 menuItem->m_selectedCallback(menuItem);
                 menuItem->CloseRecursiveUp();
+                menuItem->m_justClosed = 5;
             }
         }
         break;
@@ -171,6 +174,7 @@ void MenuItem::CloseRecursiveUp()
     else
     {
         p_parentItem->CloseRecursiveUp();
+        p_parentItem->GetChildrenList()->SetSelection(nullptr);
     }
 }
 void MenuItem::SetDestroyOnClose(bool destroyOnSelect)
@@ -224,6 +228,8 @@ UIFocusable *MenuItem::GetFocusable() const
 
 bool MenuItem::MustDisplayChildren() const
 {
+    if (m_justClosed > 0) { return false; }
+
     if (m_itemType == MenuItemType::Root) { return true; }
     if ( IsSelectedInList() ) { return true; }
 
@@ -241,24 +247,9 @@ bool MenuItem::MustDisplayChildren() const
         }
     }
 
-    if (GetFocusable()->IsMouseOver())
-    {
-        return true;
-    }
-
-    if (GetChildrenList()->GetGameObject()->GetComponent<UIFocusable>()->IsMouseOver())
-    {
-        return true;
-    }
-
     for (MenuItem *childItem : p_childrenItems)
     {
         if (childItem->MustDisplayChildren()) { return true; }
-    }
-
-    for (GameObject *child : GetChildrenList()->GetItems())
-    {
-        if (UICanvas::GetActive(this)->IsMouseOver(child)) { return true; }
     }
 
     return false;

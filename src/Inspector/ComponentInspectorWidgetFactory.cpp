@@ -21,6 +21,10 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(Component *com
     {
         ciw = GameObject::Create<CIWMeshRenderer>();
     }
+    else
+    {
+        ciw = GameObject::Create<ComponentInspectorWidget>();
+    }
 
     if (ciw)
     {

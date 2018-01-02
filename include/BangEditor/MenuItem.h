@@ -51,6 +51,7 @@ private:
 
     MenuItemType m_itemType = Undef<MenuItemType>();
     uint m_fontSize = Undef<uint>();
+    int m_justClosed = 0;
 
     UIFocusable *p_focusable = nullptr;
     UITextRenderer *p_text = nullptr;

@@ -10,11 +10,13 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class ComponentInspectorWidget : public InspectorWidget
 {
+    GAMEOBJECT_EDITOR(InspectorWidget);
+
 protected:
     ComponentInspectorWidget();
     virtual ~ComponentInspectorWidget();
 
-    virtual void SetComponent(Component *comp) = 0;
+    virtual void SetComponent(Component *comp);
 
     friend class ComponentInspectorWidgetFactory;
 };
