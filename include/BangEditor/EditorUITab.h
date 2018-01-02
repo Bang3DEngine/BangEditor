@@ -6,6 +6,7 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UITextRenderer;
+FORWARD class UILayoutElement;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -23,8 +24,13 @@ protected:
     EditorUITab(const String &title);
     virtual ~EditorUITab();
 
+    GameObject *GetTabContainer() const;
+    UILayoutElement* GetLayoutElement() const;
+
 private:
+    GameObject *p_container = nullptr;
     UITextRenderer *p_titleText = nullptr;
+    UILayoutElement *p_layoutElement = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

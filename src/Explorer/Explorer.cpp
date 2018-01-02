@@ -27,7 +27,7 @@ USING_NAMESPACE_BANG_EDITOR
 
 Explorer::Explorer() : EditorUITab("Explorer")
 {
-    UILayoutElement *le = GetComponent<UILayoutElement>();
+    UILayoutElement *le = GetLayoutElement();
     le->SetMinSize( Vector2i(100) );
     le->SetPreferredWidth(250);
 
@@ -78,12 +78,12 @@ Explorer::Explorer() : EditorUITab("Explorer")
 
     SetCurrentPath( Paths::EngineAssets() );
 
-    toolBar->SetParent(this);
+    toolBar->SetParent(GetTabContainer());
     p_backButton->GetGameObject()->SetParent(toolBar);
     dirBar->SetParent(toolBar);
-    GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5)->SetParent(this);
+    GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5)->SetParent(GetTabContainer());
 
-    p_scrollPanel->GetGameObject()->SetParent(this);
+    p_scrollPanel->GetGameObject()->SetParent(GetTabContainer());
 
     p_scrollPanel->GetScrollArea()->SetContainedGameObject(p_itemsContainer);
     p_scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);

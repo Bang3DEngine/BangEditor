@@ -20,6 +20,9 @@ InspectorWidget::InspectorWidget()
     mainVL->SetPaddings(0);
     mainVL->SetSpacing(1);
 
+    UILayoutElement *vlLE = AddComponent<UILayoutElement>();
+    vlLE->SetFlexibleSize( Vector2(1) );
+
     GameObject *titleGo = GameObjectFactory::CreateUIGameObject();
     UITextRenderer *titleText = titleGo->AddComponent<UITextRenderer>();
     titleText->SetHorizontalAlign(HorizontalAlignment::Left);

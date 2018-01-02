@@ -30,7 +30,7 @@ USING_NAMESPACE_BANG_EDITOR
 
 Inspector::Inspector() : EditorUITab("Inspector")
 {
-    UILayoutElement *le = GetComponent<UILayoutElement>();
+    UILayoutElement *le = GetLayoutElement();
     le->SetMinSize( Vector2i(100) );
     le->SetPreferredSize( Vector2i(200) );
     le->SetFlexibleSize( Vector2(1) );
@@ -75,9 +75,9 @@ Inspector::Inspector() : EditorUITab("Inspector")
                                                 GetMainVL()->GetGameObject() );
     GetScrollPanel()->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
 
-    goNameLabel->GetGameObject()->SetParent(this);
-    p_titleSeparator->SetParent(this);
-    scrollPanel->GetGameObject()->SetParent(this);
+    goNameLabel->GetGameObject()->SetParent(GetTabContainer());
+    p_titleSeparator->SetParent(GetTabContainer());
+    scrollPanel->GetGameObject()->SetParent(GetTabContainer());
 
     Editor::RegisterListener<IEditorSelectionListener>(this);
 }

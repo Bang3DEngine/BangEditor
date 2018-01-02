@@ -24,7 +24,7 @@ USING_NAMESPACE_BANG_EDITOR
 
 Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
 {
-    UILayoutElement *le = GetComponent<UILayoutElement>();
+    UILayoutElement *le = GetLayoutElement();
     le->SetMinSize( Vector2i(100) );
     le->SetPreferredSize( Vector2i(150, 200) );
 
@@ -44,7 +44,7 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
     GetUITree()->SetSelectionCallback(
                           [this](GOItem *item, UIList::Action action)
                           { this->TreeSelectionCallback(item, action); } );
-    treeGo->SetParent(this);
+    treeGo->SetParent(GetTabContainer());
 
     ObjectManager::RegisterCreateListener(this);
     Editor::RegisterListener<IEditorSelectionListener>(this);

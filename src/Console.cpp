@@ -7,7 +7,7 @@ USING_NAMESPACE_BANG_EDITOR
 
 Console::Console() : EditorUITab("Console")
 {
-    UILayoutElement *le = GetComponent<UILayoutElement>();
+    UILayoutElement *le = GetLayoutElement();
     le->SetMinSize( Vector2i(100, 100) );
     le->SetPreferredWidth(250);
 }

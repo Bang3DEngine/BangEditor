@@ -63,7 +63,7 @@ void UIInputColor::SetColor(const Color &color)
     {
         m_color = color;
 
-        p_colorImage->GetMaterial()->SetDiffuseColor( GetColor() );
+        p_colorImage->SetTint( GetColor() );
         p_colorInputVector->Set( GetColor().ToVector4() );
 
         EventEmitter<IValueChangedListener>::PropagateToListeners(
