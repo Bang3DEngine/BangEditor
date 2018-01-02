@@ -28,6 +28,7 @@ include(CMakeConfig.txt REQUIRED)
 # Compile Bang, if BANG_PROJECT_ROOT is set
 if (NOT "${BANG_PROJECT_ROOT}" STREQUAL "")
 	set(BANG_COMPILE_SCRIPT "${BANG_PROJECT_ROOT}/scripts/compile.sh")
+        set(BANG_CLEAN_SCRIPT "${BANG_PROJECT_ROOT}/scripts/clean.sh")
 	if (NOT EXISTS "${BANG_COMPILE_SCRIPT}")
 	   message(FATAL_ERROR "Can't find ${BANG_COMPILE_SCRIPT} to compile Bang. ${PLEASE_SET_PATH_MSG}")
 	endif ()
@@ -133,4 +134,6 @@ ${SRC_DIR}/Main.cpp
 
 ${OTHER_FILES}
 )
+
+add_dependencies(BangEditor CompileBang)
 

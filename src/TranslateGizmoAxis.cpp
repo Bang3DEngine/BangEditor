@@ -1,5 +1,6 @@
 #include "BangEditor/TranslateGizmoAxis.h"
 
+#include "Bang/GL.h"
 #include "Bang/Ray.h"
 #include "Bang/Mesh.h"
 #include "Bang/Input.h"

@@ -2,6 +2,7 @@
 
 #include <array>
 
+#include "Bang/GL.h"
 #include "Bang/Input.h"
 #include "Bang/UIMask.h"
 #include "Bang/Camera.h"

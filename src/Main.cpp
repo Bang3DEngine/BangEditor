@@ -1,5 +1,6 @@
 #include "BangEditor/EditorApplication.h"
 
+#include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Window.h"
 
