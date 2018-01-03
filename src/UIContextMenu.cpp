@@ -35,12 +35,7 @@ void UIContextMenu::OnUpdate()
         GameObject *compGoFMO = compFMO ? compFMO->GetGameObject() : nullptr;
         for (GameObject *part : m_parts)
         {
-            if (goFMO == part ||
-                compGoFMO == part ||
-                (goFMO && goFMO->IsChildOf(part, true))  ||
-                (compGoFMO && compGoFMO->IsChildOf(part, true)) ||
-                (compFMO && part->GetComponents().Contains(compFMO)) ||
-                UICanvas::GetActive(this)->IsMouseOver(part, true))
+            if (UICanvas::GetActive(this)->IsMouseOver(part, true))
             {
                 ShowMenu();
                 break;
@@ -51,7 +46,13 @@ void UIContextMenu::OnUpdate()
 
 void UIContextMenu::ShowMenu()
 {
-    if (!IsMenuBeingShown())
+    if (p_menu)
+    {
+        GameObject::Destroy(p_menu);
+        p_menu = nullptr;
+    }
+
+    // if (!IsMenuBeingShown())
     {
         p_menu = GameObject::Create<Menu>();
         if (m_createContextMenuCallback)
@@ -91,7 +92,6 @@ Menu::Menu()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     p_rootItem = GameObject::Create<MenuItem>( MenuItem::MenuItemType::Root );
-    p_rootItem->GetChildrenList()->SetIdleColor( Color::LightGray );
     p_rootItem->SetDestroyOnClose(true);
 
     RectTransform *rt = p_rootItem->GetRectTransform();

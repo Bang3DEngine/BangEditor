@@ -42,8 +42,8 @@ MenuBar::MenuBar()
 
     m_sceneOpenerSaver = new SceneOpenerSaver();
 
-    // UIImageRenderer *bg = AddComponent<UIImageRenderer>();
-    // bg->SetTint(Color::Gray);
+    UIImageRenderer *bg = AddComponent<UIImageRenderer>();
+    bg->SetTint( Color::LightGray.WithValue(0.9f) );
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinHeight(15);

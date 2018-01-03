@@ -75,6 +75,8 @@ void CIWTransform::OnValueChanged(Object *object)
 
 void CIWTransform::SetComponent(Component *comp)
 {
+    ComponentInspectorWidget::SetComponent(comp);
+
     Transform *transform = DCAST<Transform*>(comp);
     ASSERT(transform);
 

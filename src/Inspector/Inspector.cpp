@@ -133,13 +133,16 @@ void Inspector::OnComponentAdded(Component *addedComponent, int index)
             ComponentInspectorWidgetFactory::Create(addedComponent);
     if (compWidget)
     {
-        AddWidget(compWidget);
+        m_objToWidget.Add(addedComponent, compWidget);
+        AddWidget(compWidget, index);
     }
 }
 
 void Inspector::OnComponentRemoved(Component *removedComponent)
 {
-
+    ASSERT (m_objToWidget.ContainsKey(removedComponent))
+    RemoveWidget(m_objToWidget.Get(removedComponent));
+    m_objToWidget.Remove(removedComponent);
 }
 
 GameObject *Inspector::GetContainer() const
@@ -180,6 +183,7 @@ void Inspector::AddWidget(InspectorWidget *widget, int _index)
 void Inspector::RemoveWidget(InspectorWidget *widget)
 {
     m_widgets.Remove(widget);
+    widget->SetParent(nullptr);
     GameObject::Destroy(widget);
 }
 

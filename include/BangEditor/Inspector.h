@@ -49,6 +49,7 @@ public:
 
 private:
     List<InspectorWidget*> m_widgets;
+    Map<Object*, InspectorWidget*> m_objToWidget;
 
     GameObject *p_currentGameObject = nullptr;
     UIVerticalLayout *p_mainVL   = nullptr;

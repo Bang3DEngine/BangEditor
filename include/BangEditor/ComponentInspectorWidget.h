@@ -19,10 +19,15 @@ protected:
 
     virtual void SetComponent(Component *comp);
 
+protected:
+    Component *GetComponent() const;
+
 private:
+    Component *p_component = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
 
     virtual void OnCreateContextMenu(MenuItem *menuRootItem);
+    void MoveComponent(Component *comp, int offset);
 
     friend class ComponentInspectorWidgetFactory;
 };

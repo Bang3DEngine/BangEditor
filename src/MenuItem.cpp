@@ -27,7 +27,6 @@ MenuItem::MenuItem(MenuItemType itemType)
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
     hl->SetChildrenVerticalStretch(Stretch::None);
     hl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
-    hl->SetSpacing(5);
     if (m_itemType != MenuItemType::Root) { hl->SetPaddings(3); }
     else
     {
@@ -41,6 +40,8 @@ MenuItem::MenuItem(MenuItemType itemType)
 
     if (m_itemType != MenuItemType::Root)
     {
+        hl->SetSpacing(5);
+
         GameObject *textGo = GameObjectFactory::CreateUIGameObject();
         p_text = textGo->AddComponent<UITextRenderer>();
         GetText()->SetContent("MenuItem");
@@ -88,7 +89,7 @@ MenuItem::MenuItem(MenuItemType itemType)
     childrenListGo->AddComponent<UILayoutIgnorer>();
     GetChildrenList()->SetSelectionCallback(&MenuItem::OnListSelectionCallback);
     GetChildrenList()->SetSelectedColor( GetChildrenList()->GetOverColor() );
-    GetChildrenList()->SetOverColor( Color::LightGray );
+    GetChildrenList()->SetOverColor( Color::LightGray.WithValue(0.9f) );
     GetChildrenList()->SetIdleColor( GetChildrenList()->GetOverColor() );
 }
 
@@ -126,7 +127,6 @@ void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
     switch (action)
     {
         case UIList::Action::ClickedLeft:
-        case UIList::Action::ClickedRight:
         case UIList::Action::Pressed:
         {
             if (menuItem && menuItem->m_selectedCallback)

@@ -69,6 +69,8 @@ void CIWRenderer::OnValueChanged(Object *object)
 
 void CIWRenderer::SetComponent(Component *comp)
 {
+    ComponentInspectorWidget::SetComponent(comp);
+
     p_relatedRenderer = Cast<Renderer*>(comp);
     ASSERT(p_relatedRenderer);
 }
