@@ -61,7 +61,7 @@ Inspector::Inspector() : EditorUITab("Inspector")
     p_titleSeparator->SetEnabled(false);
 
     UIVerticalLayout *mainVL = mainVLGo->AddComponent<UIVerticalLayout>();
-    mainVL->SetSpacing(5);
+    mainVL->SetSpacing(2);
 
     UIContentSizeFitter *vlCSF = mainVLGo->AddComponent<UIContentSizeFitter>();
     vlCSF->SetVerticalSizeType(LayoutSizeType::Preferred);
@@ -140,7 +140,7 @@ void Inspector::OnComponentAdded(Component *addedComponent, int index)
 
 void Inspector::OnComponentRemoved(Component *removedComponent)
 {
-    ASSERT (m_objToWidget.ContainsKey(removedComponent))
+    ASSERT (m_objToWidget.ContainsKey(removedComponent));
     RemoveWidget(m_objToWidget.Get(removedComponent));
     m_objToWidget.Remove(removedComponent);
 }
@@ -177,6 +177,8 @@ void Inspector::AddWidget(InspectorWidget *widget, int _index)
     int index = _index >= 0 ? _index : m_widgets.Size();
 
     m_widgets.Insert(index, widget);
+    Color bgColor = Color::LightGray * (m_widgets.Size() % 2 == 0 ? 0.9f : 0.8f);
+    widget->SetBackgroundColor(bgColor);
     widget->SetParent( GetContainer(), index );
 }
 
@@ -208,7 +210,7 @@ void Inspector::Clear()
     if (GetCurrentGameObject())
     {
         GetCurrentGameObject()->EventEmitter<IDestroyListener>::UnRegisterListener(this);
-        GetCurrentGameObject()->EventEmitter<IComponentListener>::RegisterListener(this);
+        GetCurrentGameObject()->EventEmitter<IComponentListener>::UnRegisterListener(this);
         p_currentGameObject = nullptr;
     }
 }

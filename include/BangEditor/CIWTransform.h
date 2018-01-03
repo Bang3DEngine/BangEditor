@@ -14,12 +14,15 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UIInputVector;
 
-class CIWTransform : public ComponentInspectorWidget,
-                     public IValueChangedListener
+class CIWTransform : public ComponentInspectorWidget
 {
     GAMEOBJECT_EDITOR(CIWTransform);
 
 public:
+
+    // InspectorWidget
+    void Init() override;
+
     void Update() override;
 
 private:
@@ -32,11 +35,13 @@ private:
     CIWTransform();
     virtual ~CIWTransform();
 
+
     // IValueChangedListener
     void OnValueChanged(Object *object) override;
 
     // ComponentWidget
     void SetComponent(Component *comp) override;
+    bool MustShowEnabledCheckbox() const override;
 };
 
 NAMESPACE_BANG_EDITOR_END

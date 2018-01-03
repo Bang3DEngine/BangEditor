@@ -24,6 +24,10 @@ class FIWMaterial : public FileInspectorWidget,
 {
     GAMEOBJECT_EDITOR(FIWMaterial);
 
+public:
+    // InspectorWidget
+    void Init() override;
+
 private:
     RH<Material> p_material;
 

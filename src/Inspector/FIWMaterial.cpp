@@ -19,6 +19,16 @@ USING_NAMESPACE_BANG_EDITOR
 
 FIWMaterial::FIWMaterial()
 {
+}
+
+FIWMaterial::~FIWMaterial()
+{
+}
+
+void FIWMaterial::Init()
+{
+    FileInspectorWidget::Init();
+
     SetName("FIWMaterial");
     SetTitle("Material");
 
@@ -49,10 +59,6 @@ FIWMaterial::FIWMaterial()
     AddWidget("Uv Multiply", p_uvMultiplyInput);
 
     SetLabelsWidth(75);
-}
-
-FIWMaterial::~FIWMaterial()
-{
 }
 
 void FIWMaterial::UpdateFromMaterialFile()

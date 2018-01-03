@@ -28,6 +28,7 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(Component *com
 
     if (ciw)
     {
+        ciw->Init();
         ciw->SetComponent(component);
     }
     return ciw;

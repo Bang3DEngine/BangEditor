@@ -15,10 +15,12 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UIInputFile;
 
-class CIWRenderer : public ComponentInspectorWidget,
-                    public IValueChangedListener
+class CIWRenderer : public ComponentInspectorWidget
 {
 public:
+    // InspectorWidget
+    virtual void Init() override;
+
     void Update() override;
 
 protected:

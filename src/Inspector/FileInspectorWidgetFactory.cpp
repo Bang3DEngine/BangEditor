@@ -25,6 +25,7 @@ InspectorWidget *FileInspectorWidgetFactory::Create(const Path &path)
 
     if (fiw)
     {
+        fiw->Init();
         fiw->SetPath(path);
     }
 

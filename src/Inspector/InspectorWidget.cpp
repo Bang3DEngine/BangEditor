@@ -14,20 +14,27 @@ USING_NAMESPACE_BANG_EDITOR
 InspectorWidget::InspectorWidget()
 {
     SetName("InspectorWidget");
+}
+
+InspectorWidget::~InspectorWidget()
+{
+}
+
+void InspectorWidget::Init()
+{
     GameObjectFactory::CreateUIGameObjectInto(this);
 
+    p_bgRenderer = AddComponent<UIImageRenderer>();
+    p_bgRenderer->SetTint(Color::Zero);
+
     UIVerticalLayout *mainVL = AddComponent<UIVerticalLayout>();
-    mainVL->SetPaddings(0);
+    mainVL->SetPaddings(5);
     mainVL->SetSpacing(1);
 
     UILayoutElement *vlLE = AddComponent<UILayoutElement>();
     vlLE->SetFlexibleSize( Vector2(1) );
 
-    GameObject *titleGo = GameObjectFactory::CreateUIGameObject();
-    UITextRenderer *titleText = titleGo->AddComponent<UITextRenderer>();
-    titleText->SetHorizontalAlign(HorizontalAlignment::Left);
-    titleText->SetContent("InspectorWidget");
-    titleText->SetTextSize(10);
+    GameObject *titleGo = CreateTitleGameObject();
 
     GameObject *topSeparator =
             GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5, 1.0f);
@@ -42,11 +49,8 @@ InspectorWidget::InspectorWidget()
 
     GameObject *botSeparator =
             GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5, 1.0f);
-    GameObject *bot2Separator =
-            GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10, 1.1f);
 
     p_widgetsContainer = widgetsGo;
-    p_title = titleText;
 
     SetLabelsWidth( DefaultLabelWidth );
 
@@ -54,21 +58,16 @@ InspectorWidget::InspectorWidget()
     topSeparator->SetParent(this);
     widgetsGo->SetParent(this);
     botSeparator->SetParent(this);
-    bot2Separator->SetParent(this);
-}
-
-InspectorWidget::~InspectorWidget()
-{
 }
 
 void InspectorWidget::SetBackgroundColor(const Color &bgColor)
 {
-    GetComponent<UIImageRenderer>()->SetTint(bgColor);
+    p_bgRenderer->SetTint(bgColor);
 }
 
 void InspectorWidget::SetTitle(const String &title)
 {
-    p_title->SetContent(title);
+    p_titleText->SetContent(title);
 }
 
 void InspectorWidget::SetLabelsWidth(int labelsWidth)
@@ -178,4 +177,16 @@ int InspectorWidget::GetLabelsWidth() const
 GameObject *InspectorWidget::GetWidgetsContainer() const
 {
     return p_widgetsContainer;
+}
+
+GameObject *InspectorWidget::CreateTitleGameObject()
+{
+    GameObject *titleGo = GameObjectFactory::CreateUIGameObject();
+    UITextRenderer *titleText = titleGo->AddComponent<UITextRenderer>();
+    titleText->SetHorizontalAlign(HorizontalAlignment::Left);
+    titleText->SetContent("InspectorWidget");
+    titleText->SetTextSize(10);
+    p_titleText = titleText;
+
+    return titleGo;
 }

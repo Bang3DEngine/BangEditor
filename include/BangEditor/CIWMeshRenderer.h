@@ -17,6 +17,11 @@ class CIWMeshRenderer : public CIWRenderer
     GAMEOBJECT_EDITOR(CIWMeshRenderer);
 
 public:
+
+    // InspectorWidget
+    void Init() override;
+
+    // GameObject
     void Update() override;
 
 private:

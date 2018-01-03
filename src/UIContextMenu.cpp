@@ -29,10 +29,6 @@ void UIContextMenu::OnUpdate()
         List<GameObject*> parts = m_parts;
         parts.PushBack(GetGameObject());
 
-        IFocusable *fmo = UICanvas::GetActive(this)->GetCurrentFocusMouseOver();
-        GameObject *goFMO = DCAST<GameObject*>(fmo);
-        Component *compFMO = DCAST<Component*>(fmo);
-        GameObject *compGoFMO = compFMO ? compFMO->GetGameObject() : nullptr;
         for (GameObject *part : m_parts)
         {
             if (UICanvas::GetActive(this)->IsMouseOver(part, true))

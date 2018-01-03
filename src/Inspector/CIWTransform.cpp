@@ -20,6 +20,16 @@ USING_NAMESPACE_BANG_EDITOR
 
 CIWTransform::CIWTransform()
 {
+}
+
+CIWTransform::~CIWTransform()
+{
+}
+
+void CIWTransform::Init()
+{
+    ComponentInspectorWidget::Init();
+
     SetName("CWTransform");
     SetTitle("Transform");
 
@@ -36,10 +46,6 @@ CIWTransform::CIWTransform()
     AddWidget("Scale",    p_scaleIV);
 
     SetLabelsWidth(60);
-}
-
-CIWTransform::~CIWTransform()
-{
 }
 
 void CIWTransform::Update()
@@ -68,6 +74,8 @@ void CIWTransform::Update()
 
 void CIWTransform::OnValueChanged(Object *object)
 {
+    ComponentInspectorWidget::OnValueChanged(object);
+
     p_relatedTransform->SetLocalPosition(p_posIV->GetVector3());
     p_relatedTransform->SetLocalEuler(p_rotIV->GetVector3());
     p_relatedTransform->SetLocalScale(p_scaleIV->GetVector3());
@@ -86,4 +94,10 @@ void CIWTransform::SetComponent(Component *comp)
     p_rotIV->Set(transform->GetLocalRotation().GetEulerAngles());
     p_scaleIV->Set(transform->GetLocalScale());
 }
+
+bool CIWTransform::MustShowEnabledCheckbox() const
+{
+    return false;
+}
+
 

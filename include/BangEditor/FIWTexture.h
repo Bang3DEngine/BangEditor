@@ -21,6 +21,10 @@ class FIWTexture : public FileInspectorWidget,
 {
     GAMEOBJECT_EDITOR(FIWTexture);
 
+public:
+    // InspectorWidget
+    void Init() override;
+
 private:
     RH<Texture2D> p_texture;
 

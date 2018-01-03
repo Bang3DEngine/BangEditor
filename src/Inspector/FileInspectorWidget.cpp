@@ -3,6 +3,11 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
+void FileInspectorWidget::Init()
+{
+    InspectorWidget::Init();
+}
+
 void FileInspectorWidget::SetPath(const Path &path)
 {
     if (path != GetPath())

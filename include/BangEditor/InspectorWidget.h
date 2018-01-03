@@ -27,7 +27,8 @@ protected:
     InspectorWidget();
     virtual ~InspectorWidget();
 
-    void SetTitle(const String &title);
+    virtual void Init();
+    virtual void SetTitle(const String &title);
     void SetLabelsWidth(int labelsWidth);
 
     void AddLabel(const String &content, int height = -1, int width = -1);
@@ -42,13 +43,17 @@ protected:
     int GetLabelsWidth() const;
     GameObject *GetWidgetsContainer() const;
 
+protected:
+    virtual GameObject* CreateTitleGameObject();
+
 private:
     int m_labelsWidth = -1;
     List<GameObject*> p_widgets;
     Map<GameObject*, UILabel*> m_widgetToLabel;
     Map<UILabel*, UILayoutElement*> m_labelToLabelLE;
 
-    UITextRenderer *p_title = nullptr;
+    UITextRenderer *p_titleText = nullptr;
+    UIImageRenderer *p_bgRenderer = nullptr;
     GameObject *p_widgetsContainer = nullptr;
 
     UILabel *CreateWidgetLabel(const String &content, int height, int width);

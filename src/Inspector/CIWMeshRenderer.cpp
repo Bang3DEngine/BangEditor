@@ -15,6 +15,17 @@ USING_NAMESPACE_BANG_EDITOR
 
 CIWMeshRenderer::CIWMeshRenderer()
 {
+
+}
+
+CIWMeshRenderer::~CIWMeshRenderer()
+{
+}
+
+void CIWMeshRenderer::Init()
+{
+    CIWRenderer::Init();
+
     SetName("CWMeshRenderer");
     SetTitle("Mesh Renderer");
 
@@ -25,10 +36,6 @@ CIWMeshRenderer::CIWMeshRenderer()
     AddWidget("Mesh", p_meshInputFile);
 
     SetLabelsWidth(60);
-}
-
-CIWMeshRenderer::~CIWMeshRenderer()
-{
 }
 
 void CIWMeshRenderer::Update()

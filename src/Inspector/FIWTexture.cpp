@@ -15,23 +15,33 @@ USING_NAMESPACE_BANG_EDITOR
 
 FIWTexture::FIWTexture()
 {
+}
+
+FIWTexture::~FIWTexture()
+{
+}
+
+void FIWTexture::Init()
+{
+    FileInspectorWidget::Init();
+
     SetTitle("Texture");
     SetName("FIWTexture");
     SetLabelsWidth(60);
 
     p_filterModeComboBox = GameObjectFactory::CreateUIComboBox();
     p_filterModeComboBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_filterModeComboBox->AddItem("Nearest",      int(GL_FilterMode::Nearest));
-    p_filterModeComboBox->AddItem("Bilinear",     int(GL_FilterMode::Bilinear));
-    p_filterModeComboBox->AddItem("Trilinear_NN", int(GL_FilterMode::Trilinear_NN));
-    p_filterModeComboBox->AddItem("Trilinear_NL", int(GL_FilterMode::Trilinear_NL));
-    p_filterModeComboBox->AddItem("Trilinear_LN", int(GL_FilterMode::Trilinear_LN));
-    p_filterModeComboBox->AddItem("Trilinear_LL", int(GL_FilterMode::Trilinear_LL));
+    p_filterModeComboBox->AddItem("Nearest",      int(GL::FilterMode::Nearest));
+    p_filterModeComboBox->AddItem("Bilinear",     int(GL::FilterMode::Bilinear));
+    p_filterModeComboBox->AddItem("Trilinear_NN", int(GL::FilterMode::Trilinear_NN));
+    p_filterModeComboBox->AddItem("Trilinear_NL", int(GL::FilterMode::Trilinear_NL));
+    p_filterModeComboBox->AddItem("Trilinear_LN", int(GL::FilterMode::Trilinear_LN));
+    p_filterModeComboBox->AddItem("Trilinear_LL", int(GL::FilterMode::Trilinear_LL));
 
     p_wrapModeComboBox = GameObjectFactory::CreateUIComboBox();
     p_wrapModeComboBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_wrapModeComboBox->AddItem("Clamp", int(GL_WrapMode::ClampToEdge));
-    p_wrapModeComboBox->AddItem("Repeat", int(GL_WrapMode::Repeat));
+    p_wrapModeComboBox->AddItem("Clamp", int(GL::WrapMode::ClampToEdge));
+    p_wrapModeComboBox->AddItem("Repeat", int(GL::WrapMode::Repeat));
 
     p_alphaCutoffInput = GameObjectFactory::CreateUISlider();
     p_alphaCutoffInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
@@ -47,10 +57,6 @@ FIWTexture::FIWTexture()
     AddWidget(p_textureImageRend->GetGameObject(), 100);
 
     SetLabelsWidth(100);
-}
-
-FIWTexture::~FIWTexture()
-{
 }
 
 Texture2D *FIWTexture::GetTexture() const
@@ -90,10 +96,10 @@ void FIWTexture::OnValueChanged(Object *object)
     if (GetTexture())
     {
         int filterMode = p_filterModeComboBox->GetSelectedValue();
-        GetTexture()->SetFilterMode( SCAST<GL_FilterMode>(filterMode) );
+        GetTexture()->SetFilterMode( SCAST<GL::FilterMode>(filterMode) );
 
         int wrapMode = p_wrapModeComboBox->GetSelectedValue();
-        GetTexture()->SetWrapMode( SCAST<GL_WrapMode>(wrapMode) );
+        GetTexture()->SetWrapMode( SCAST<GL::WrapMode>(wrapMode) );
 
         GetTexture()->SetAlphaCutoff( p_alphaCutoffInput->GetValue() );
 

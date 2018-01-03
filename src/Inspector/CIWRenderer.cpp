@@ -15,6 +15,17 @@ USING_NAMESPACE_BANG_EDITOR
 
 CIWRenderer::CIWRenderer()
 {
+
+}
+
+CIWRenderer::~CIWRenderer()
+{
+}
+
+void CIWRenderer::Init()
+{
+    ComponentInspectorWidget::Init();
+
     SetName("CWRenderer");
     SetTitle("Renderer");
 
@@ -28,10 +39,6 @@ CIWRenderer::CIWRenderer()
     AddWidget("Material", p_materialInputFile);
 
     SetLabelsWidth(60);
-}
-
-CIWRenderer::~CIWRenderer()
-{
 }
 
 void CIWRenderer::Update()
@@ -56,6 +63,8 @@ Renderer *CIWRenderer::GetRenderer() const
 
 void CIWRenderer::OnValueChanged(Object *object)
 {
+    ComponentInspectorWidget::OnValueChanged(object);
+
     if (object == p_visibleCheckBox)
     {
         GetRenderer()->SetVisible(p_visibleCheckBox->IsChecked());

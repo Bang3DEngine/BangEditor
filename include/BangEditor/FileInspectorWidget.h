@@ -14,6 +14,9 @@ protected:
     FileInspectorWidget() = default;
     virtual ~FileInspectorWidget() = default;
 
+    // InspectorWidget
+    virtual void Init() override;
+
     void SetPath(const Path &path);
     Path GetPath() const;
 
