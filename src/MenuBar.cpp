@@ -2,19 +2,28 @@
 
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
+#include "Bang/Camera.h"
 #include "Bang/Dialog.h"
 #include "Bang/Random.h"
+#include "Bang/Transform.h"
 #include "Bang/Extensions.h"
 #include "Bang/IFocusable.h"
+#include "Bang/PointLight.h"
+#include "Bang/AudioSource.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/SceneManager.h"
+#include "Bang/LineRenderer.h"
+#include "Bang/MeshRenderer.h"
+#include "Bang/AudioListener.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/DirectionalLight.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 
+#include "BangEditor/Editor.h"
 #include "BangEditor/Project.h"
 #include "BangEditor/MenuItem.h"
 #include "BangEditor/EditorPaths.h"
@@ -86,6 +95,16 @@ MenuBar::MenuBar()
     MenuItem *addTransforms = m_componentsItem->AddItem("Transform");
     MenuItem *addTransform = addTransforms->AddItem("Transform");
     MenuItem *addRectTransform = addTransforms->AddItem("RectTransform");
+
+    addAudioListener->SetSelectedCallback(MenuBar::OnAddAudioListener);
+    addAudioSource->SetSelectedCallback(MenuBar::OnAddAudioSource);
+    addCamera->SetSelectedCallback(MenuBar::OnAddCamera);
+    addPointLight->SetSelectedCallback(MenuBar::OnAddPointLight);
+    addDirectionalLight->SetSelectedCallback(MenuBar::OnAddDirectionalLight);
+    addLineRenderer->SetSelectedCallback(MenuBar::OnAddLineRenderer);
+    addMeshRenderer->SetSelectedCallback(MenuBar::OnAddMeshRenderer);
+    addTransform->SetSelectedCallback(MenuBar::OnAddTransform);
+    addRectTransform->SetSelectedCallback(MenuBar::OnAddRectTransform);
 
     // GameObject
     MenuItem *primitiveGameObjectItem = m_gameObjectsItem->AddItem("Primitives");
@@ -194,6 +213,61 @@ void MenuBar::OnOpenScene(MenuItem*)
 {
     MenuBar *mb = MenuBar::GetInstance();
     mb->m_sceneOpenerSaver->OnOpenScene();
+}
+
+template <class T>
+void OnAddComponent()
+{
+    GameObject *selectedGameObject = Editor::GetSelectedGameObject();
+    if (selectedGameObject)
+    {
+        selectedGameObject->AddComponent<T>();
+    }
+}
+
+void MenuBar::OnAddAudioListener(MenuItem*)
+{
+    OnAddComponent<AudioListener>();
+}
+
+void MenuBar::OnAddAudioSource(MenuItem*)
+{
+    OnAddComponent<AudioSource>();
+}
+
+void MenuBar::OnAddCamera(MenuItem*)
+{
+    OnAddComponent<Camera>();
+}
+
+void MenuBar::OnAddPointLight(MenuItem*)
+{
+    OnAddComponent<PointLight>();
+}
+
+void MenuBar::OnAddDirectionalLight(MenuItem*)
+{
+    OnAddComponent<DirectionalLight>();
+}
+
+void MenuBar::OnAddLineRenderer(MenuItem*)
+{
+    OnAddComponent<LineRenderer>();
+}
+
+void MenuBar::OnAddMeshRenderer(MenuItem*)
+{
+    OnAddComponent<MeshRenderer>();
+}
+
+void MenuBar::OnAddTransform(MenuItem*)
+{
+    OnAddComponent<Transform>();
+}
+
+void MenuBar::OnAddRectTransform(MenuItem*)
+{
+    OnAddComponent<RectTransform>();
 }
 
 void MenuBar::OnCreateCone(MenuItem*)

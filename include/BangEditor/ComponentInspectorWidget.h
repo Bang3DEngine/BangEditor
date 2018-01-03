@@ -3,6 +3,7 @@
 
 #include "Bang/Bang.h"
 
+#include "BangEditor/UIContextMenu.h"
 #include "BangEditor/InspectorWidget.h"
 
 USING_NAMESPACE_BANG
@@ -17,6 +18,11 @@ protected:
     virtual ~ComponentInspectorWidget();
 
     virtual void SetComponent(Component *comp);
+
+private:
+    UIContextMenu *p_contextMenu = nullptr;
+
+    virtual void OnCreateContextMenu(MenuItem *menuRootItem);
 
     friend class ComponentInspectorWidgetFactory;
 };

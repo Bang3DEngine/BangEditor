@@ -128,7 +128,6 @@ void HierarchyItem::OnCreateContextMenu(MenuItem *menuRootItem)
     {
         GameObject::Destroy( GetReferencedGameObject() );
     });
-
 }
 
 void HierarchyItem::SetText(const String &text)

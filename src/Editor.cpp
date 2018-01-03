@@ -24,6 +24,12 @@ void Editor::Init()
     GetEditorSettings()->Init();
 }
 
+GameObject *Editor::GetSelectedGameObject()
+{
+    Editor *ed = Editor::GetInstance();
+    return ed ? ed->p_selectedGameObject : nullptr;
+}
+
 void Editor::SelectGameObject(GameObject *selectedGameObject)
 {
     Editor *ed = Editor::GetInstance();
@@ -32,7 +38,7 @@ void Editor::SelectGameObject(GameObject *selectedGameObject)
 
 void Editor::OnDestroyed(Object *object)
 {
-    if (p_selectedGameObject == object)
+    if (GetSelectedGameObject() == object)
     {
         _SelectGameObject(nullptr);
     }
@@ -49,12 +55,12 @@ void Editor::_SelectGameObject(GameObject *selectedGameObject)
          (!selectedGameObject->GetComponent<NotSelectableInEditor>() &&
           !selectedGameObject->GetComponentInParent<NotSelectableInEditor>());
 
-    if (p_selectedGameObject != selectedGameObject && isSelectable)
+    if (selectedGameObject != GetSelectedGameObject() && isSelectable)
     {
         p_selectedGameObject = selectedGameObject;
-        if (p_selectedGameObject)
+        if (GetSelectedGameObject())
         {
-            p_selectedGameObject->
+            GetSelectedGameObject()->
                     EventEmitter<IDestroyListener>::RegisterListener(this);
         }
 
@@ -71,11 +77,11 @@ void Editor::_SelectGameObject(GameObject *selectedGameObject)
         }
 
         // Create new transform gizmo
-        if (p_selectedGameObject)
+        if (GetSelectedGameObject())
         {
             ASSERT(!p_currentTransformGizmo);
             TransformGizmo *tg = GameObject::Create<TransformGizmo>();
-            tg->SetReferencedGameObject(p_selectedGameObject);
+            tg->SetReferencedGameObject(GetSelectedGameObject());
             p_currentTransformGizmo = tg;
             p_currentTransformGizmo->
                     EventEmitter<IDestroyListener>::RegisterListener(this);

@@ -1,6 +1,9 @@
 ﻿#ifndef INSPECTOR_H
 #define INSPECTOR_H
 
+#include "Bang/IDestroyListener.h"
+#include "Bang/IComponentListener.h"
+
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorUITab.h"
 
@@ -18,6 +21,7 @@ FORWARD class InspectorWidget;
 
 class Inspector : public EditorUITab,
                   public IDestroyListener,
+                  public IComponentListener,
                   public IEditorSelectionListener
 {
     GAMEOBJECT_EDITOR(Inspector);
@@ -30,7 +34,7 @@ public:
     void OnStart() override;
     void Update() override;
 
-    Object *GetCurrentObject() const;
+    GameObject *GetCurrentGameObject() const;
 
     // IDestroyListener
     void OnDestroyed(Object *destroyedObject) override;
@@ -39,10 +43,14 @@ public:
     void OnExplorerPathSelected(const Path &path) override;
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
 
+    // IComponentListener
+    virtual void OnComponentAdded(Component *addedComponent, int index);
+    virtual void OnComponentRemoved(Component *removedComponent);
+
 private:
     List<InspectorWidget*> m_widgets;
 
-    Object *p_currentObject = nullptr;
+    GameObject *p_currentGameObject = nullptr;
     UIVerticalLayout *p_mainVL   = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
     UITextRenderer *p_titleText = nullptr;
@@ -53,8 +61,9 @@ private:
     UIScrollPanel* GetScrollPanel() const;
 
     void SetGameObject(GameObject *go);
-    void AddWidget(InspectorWidget *widget);
+    void AddWidget(InspectorWidget *widget, int index = -1);
     void RemoveWidget(InspectorWidget *widget);
+    void RemoveWidget(int index);
     void Clear();
 };
 

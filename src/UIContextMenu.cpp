@@ -3,6 +3,7 @@
 #include "Bang/Input.h"
 #include "Bang/UIList.h"
 #include "Bang/UICanvas.h"
+#include "Bang/IFocusable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -28,9 +29,18 @@ void UIContextMenu::OnUpdate()
         List<GameObject*> parts = m_parts;
         parts.PushBack(GetGameObject());
 
+        IFocusable *fmo = UICanvas::GetActive(this)->GetCurrentFocusMouseOver();
+        GameObject *goFMO = DCAST<GameObject*>(fmo);
+        Component *compFMO = DCAST<Component*>(fmo);
+        GameObject *compGoFMO = compFMO ? compFMO->GetGameObject() : nullptr;
         for (GameObject *part : m_parts)
         {
-            if (UICanvas::GetActive(this)->IsMouseOver(part, true))
+            if (goFMO == part ||
+                compGoFMO == part ||
+                (goFMO && goFMO->IsChildOf(part, true))  ||
+                (compGoFMO && compGoFMO->IsChildOf(part, true)) ||
+                (compFMO && part->GetComponents().Contains(compFMO)) ||
+                UICanvas::GetActive(this)->IsMouseOver(part, true))
             {
                 ShowMenu();
                 break;

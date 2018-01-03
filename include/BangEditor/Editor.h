@@ -31,6 +31,7 @@ class Editor : public EventEmitter<IEditorSelectionListener>,
                public IDestroyListener
 {
 public:
+    static GameObject *GetSelectedGameObject();
     static void SelectGameObject(GameObject *selectedGameObject);
 
     template <class ListenerClass>

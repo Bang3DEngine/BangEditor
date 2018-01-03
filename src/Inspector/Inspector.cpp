@@ -97,9 +97,9 @@ void Inspector::Update()
     EditorUITab::Update();
 }
 
-Object *Inspector::GetCurrentObject() const
+GameObject *Inspector::GetCurrentGameObject() const
 {
-    return p_currentObject;
+    return p_currentGameObject;
 }
 
 void Inspector::OnDestroyed(Object *destroyedObject)
@@ -127,6 +127,21 @@ void Inspector::OnGameObjectSelected(GameObject *selectedGameObject)
     SetGameObject(selectedGameObject);
 }
 
+void Inspector::OnComponentAdded(Component *addedComponent, int index)
+{
+    ComponentInspectorWidget *compWidget =
+            ComponentInspectorWidgetFactory::Create(addedComponent);
+    if (compWidget)
+    {
+        AddWidget(compWidget);
+    }
+}
+
+void Inspector::OnComponentRemoved(Component *removedComponent)
+{
+
+}
+
 GameObject *Inspector::GetContainer() const
 {
     return GetScrollPanel()->GetScrollArea()->GetContainedGameObject();
@@ -139,32 +154,40 @@ void Inspector::SetGameObject(GameObject *go)
     Clear();
     if(!go || go->IsWaitingToBeDestroyed()) { return; }
 
-    p_currentObject = go;
+    p_currentGameObject = go;
+    GetCurrentGameObject()->EventEmitter<IComponentListener>::RegisterListener(this);
+
     p_titleSeparator->SetEnabled(true);
     p_titleText->SetContent(go->GetName());
-    GetCurrentObject()->EventEmitter<IDestroyListener>::RegisterListener(this);
+    GetCurrentGameObject()->EventEmitter<IDestroyListener>::RegisterListener(this);
 
+    int i = 0;
     for (Component *comp : go->GetComponents())
     {
-        ComponentInspectorWidget *compWidget =
-                ComponentInspectorWidgetFactory::Create(comp);
-        if (compWidget)
-        {
-            AddWidget(compWidget);
-        }
+        OnComponentAdded(comp, i);
+        ++i;
     }
 }
 
-void Inspector::AddWidget(InspectorWidget *widget)
+void Inspector::AddWidget(InspectorWidget *widget, int _index)
 {
-    m_widgets.PushBack(widget);
-    widget->SetParent( GetContainer() );
+    int index = _index >= 0 ? _index : m_widgets.Size();
+
+    m_widgets.Insert(index, widget);
+    widget->SetParent( GetContainer(), index );
 }
 
 void Inspector::RemoveWidget(InspectorWidget *widget)
 {
     m_widgets.Remove(widget);
     GameObject::Destroy(widget);
+}
+
+void Inspector::RemoveWidget(int index)
+{
+    auto it = m_widgets.Begin();
+    std::advance(it, index);
+    RemoveWidget( *it );
 }
 
 void Inspector::Clear()
@@ -178,9 +201,10 @@ void Inspector::Clear()
         RemoveWidget(widget);
     }
 
-    if (GetCurrentObject())
+    if (GetCurrentGameObject())
     {
-        GetCurrentObject()->EventEmitter<IDestroyListener>::UnRegisterListener(this);
-        p_currentObject = nullptr;
+        GetCurrentGameObject()->EventEmitter<IDestroyListener>::UnRegisterListener(this);
+        GetCurrentGameObject()->EventEmitter<IComponentListener>::RegisterListener(this);
+        p_currentGameObject = nullptr;
     }
 }
