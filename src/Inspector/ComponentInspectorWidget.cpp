@@ -124,7 +124,6 @@ void ComponentInspectorWidget::MoveComponent(Component *comp, int offset)
     int prevIndex = go->GetComponents().IndexOf(comp);
     const int numComps = go->GetComponents().Size();
     int newIndex = (prevIndex + offset + numComps) % numComps;
-    Debug_Log("Moving to " << newIndex);
     go->RemoveComponent(comp);
     go->AddComponent(comp, newIndex);
 }

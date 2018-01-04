@@ -169,7 +169,10 @@ void MenuItem::CloseRecursiveUp()
         {
             GetChildrenList()->GetGameObject()->SetEnabled(false);
         }
-        else { GameObject::Destroy(this); }
+        else
+        {
+            GameObject::Destroy(this);
+        }
     }
     else
     {

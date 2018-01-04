@@ -177,7 +177,7 @@ void Inspector::AddWidget(InspectorWidget *widget, int _index)
     int index = _index >= 0 ? _index : m_widgets.Size();
 
     m_widgets.Insert(index, widget);
-    Color bgColor = Color::LightGray * (m_widgets.Size() % 2 == 0 ? 0.9f : 0.8f);
+    Color bgColor = Color::LightGray.WithValue(0.9f);
     widget->SetBackgroundColor(bgColor);
     widget->SetParent( GetContainer(), index );
 }

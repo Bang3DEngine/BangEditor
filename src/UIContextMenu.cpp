@@ -109,11 +109,10 @@ void Menu::Update()
 {
     GameObject::Update();
 
-    if (Input::GetMouseButton(MouseButton::Right) ||
-        Input::GetMouseButton(MouseButton::Left))
+    if (Input::GetMouseButtonDown(MouseButton::Right) ||
+        Input::GetMouseButtonDown(MouseButton::Left))
     {
-        if (!m_justCreated &&
-            !GetRootItem()->GetRectTransform()->IsMouseOver(true))
+        if (!m_justCreated && !GetRootItem()->GetRectTransform()->IsMouseOver(true))
         {
             GameObject::Destroy(this);
         }
