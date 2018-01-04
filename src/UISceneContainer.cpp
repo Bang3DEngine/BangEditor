@@ -1,6 +1,7 @@
 #include "BangEditor/UISceneContainer.h"
 
 #include "Bang/Rect.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -18,6 +19,8 @@ UISceneContainer::UISceneContainer()
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinSize( Vector2i(100) );
     le->SetFlexibleSize( Vector2(6, 1) );
+
+    AddComponent<UIFocusable>();
 
     UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
     vl->SetPaddings(10);

@@ -272,28 +272,31 @@ void MenuBar::OnAddRectTransform(MenuItem*)
 
 void MenuBar::OnCreateCone(MenuItem*)
 {
-    GameObject *cone = GameObjectFactory::CreateConeGameObject();
-    Scene *openScene = EditorSceneManager::GetOpenScene();
-    if (openScene) { cone->SetParent(openScene); }
+    MenuBar::OnCreatePrimitive( GameObjectFactory::CreateConeGameObject() );
 }
 
 void MenuBar::OnCreateCube(MenuItem*)
 {
-    GameObject *cube = GameObjectFactory::CreateCubeGameObject();
-    Scene *openScene = EditorSceneManager::GetOpenScene();
-    if (openScene) { cube->SetParent(openScene); }
+    MenuBar::OnCreatePrimitive( GameObjectFactory::CreateCubeGameObject() );
 }
 
 void MenuBar::OnCreateSphere(MenuItem*)
 {
-    GameObject *sphere = GameObjectFactory::CreateSphereGameObject();
-    Scene *openScene = EditorSceneManager::GetOpenScene();
-    if (openScene) { sphere->SetParent(openScene); }
+    MenuBar::OnCreatePrimitive( GameObjectFactory::CreateSphereGameObject() );
 }
 
 void MenuBar::OnCreatePlane(MenuItem*)
 {
-    GameObject *plane = GameObjectFactory::CreatePlaneGameObject();
-    Scene *openScene = EditorSceneManager::GetOpenScene();
-    if (openScene) { plane->SetParent(openScene); }
+    MenuBar::OnCreatePrimitive( GameObjectFactory::CreatePlaneGameObject() );
 }
+
+void MenuBar::OnCreatePrimitive(GameObject *primitive)
+{
+    Scene *openScene = EditorSceneManager::GetOpenScene();
+    if (openScene)
+    {
+        primitive->SetParent(openScene);
+        Editor::SelectGameObject(primitive);
+    }
+}
+

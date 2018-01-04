@@ -122,8 +122,9 @@ void EditorScene::Update()
 
         if (Input::GetMouseButtonDown(MouseButton::Left))
         {
-            Rect ndcRect = GetOpenSceneScreenRectNDC();
-            if ( ndcRect.Contains( Input::GetMousePositionScreenNDC() ) )
+            UICanvas *canvas = UICanvas::GetActive(m_sceneContainer);
+            bool isOverSceneCont = canvas->IsMouseOver(m_sceneContainer, true);
+            if (isOverSceneCont)
             {
                 GameObject *selectedGameObject = Selection::GetOveredGameObject(openScene);
                 if (selectedGameObject)
