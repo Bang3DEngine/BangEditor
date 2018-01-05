@@ -18,20 +18,42 @@ BehaviourManager::BehaviourManager()
 {
 }
 
-Library *BehaviourManager::CompileBehaviourLib(const Path &behaviourFilepath)
+bool BehaviourManager::IsCompiled(const Path &behaviourFilepath)
 {
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+    if (bm)
+    {
+        return bm->m_compiledBehaviours.ContainsKey(behaviourFilepath) &&
+               bm->m_compiledBehaviours.Get(behaviourFilepath);
+    }
+    return false;
+}
+
+Library *BehaviourManager::GetBehaviourLib(const Path &behaviourFilepath)
+{
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+    if (bm && BehaviourManager::IsCompiled(behaviourFilepath))
+    {
+        return bm->m_cachedBehaviourLibraries.Get(behaviourFilepath);
+    }
+
     Path outputLibPath = EditorPaths::ProjectLibrariesDir().
                                       Append(behaviourFilepath.GetName()).
                                       AppendExtension("so").
                                       AppendExtension( String(Time::GetNow_Nanos()) );
 
+    BehaviourManager::RemoveBehaviourLibrariesOf( behaviourFilepath.GetName() );
     BehaviourManager::CompileBehaviourLib(behaviourFilepath,
-                                             outputLibPath,
-                                             BinType::Debug);
-
+                                          outputLibPath,
+                                          BinType::Debug);
     if (!outputLibPath.IsFile()) { return nullptr; }
 
     Library *behaviourLibrary = new Library(outputLibPath);
+    if (bm)
+    {
+        bm->m_cachedBehaviourLibraries.Add(behaviourFilepath, behaviourLibrary);
+    }
+
     return behaviourLibrary;
 }
 
@@ -40,6 +62,8 @@ Compiler::Result BehaviourManager::CompileBehaviourLib(
                                         const Path &outputObjectFilepath,
                                         BinType binaryType)
 {
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+
     File::Remove(outputObjectFilepath);
     File::CreateDirectory(outputObjectFilepath.GetDirectory());
 
@@ -51,7 +75,14 @@ Compiler::Result BehaviourManager::CompileBehaviourLib(
     job.inputFiles.PushBack(behaviourFilepath);
     job.outputFile = outputObjectFilepath;
 
-    return Compiler::Compile(job);
+    Compiler::Result compileResult = Compiler::Compile(job);
+
+    if (bm)
+    {
+        bm->m_compiledBehaviours.Add(behaviourFilepath, true);
+    }
+
+    return compileResult;
 }
 
 void BehaviourManager::RemoveBehaviourLibrariesOf(const String& behaviourName)

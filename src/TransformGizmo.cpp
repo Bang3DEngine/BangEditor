@@ -20,6 +20,7 @@ TransformGizmo::TransformGizmo()
     AddComponent<HideInHierarchy>();
     AddComponent<NotSelectableInEditor>();
     GetHideFlags().SetOn(HideFlag::DontSerialize);
+    GetHideFlags().SetOn(HideFlag::DontClone);
 
     p_translateGizmo = GameObject::Create<TranslateGizmo>();
     p_rotateGizmo    = GameObject::Create<RotateGizmo>();

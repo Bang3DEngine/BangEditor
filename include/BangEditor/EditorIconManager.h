@@ -22,6 +22,7 @@ public:
     static RH<Texture2D> GetBackArrowIcon();
     static RH<Texture2D> GetLensIcon();
     static RH<Texture2D> GetLensLittleIcon();
+    static RH<Texture2D> GetSquareIcon();
 
 private:
     EditorIconManager() = default;

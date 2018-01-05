@@ -17,42 +17,13 @@ BehaviourContainer::~BehaviourContainer()
 {
 }
 
-void BehaviourContainer::ReCompileBehaviourLib()
-{
-    if (GetSourceFilepath().IsFile())
-    {
-        BehaviourManager::RemoveBehaviourLibrariesOf( GetBehaviourName() );
-
-        // Create new Behaviour, and replace in the parent gameObject this old
-        // behaviour with the new one created dynamically
-        p_behaviourLibraryBeingUsed =
-                BehaviourManager::CompileBehaviourLib(GetSourceFilepath());
-
-        if (GetBehaviourLibrary())
-        {
-            GetBehaviourLibrary()->Load();
-
-            Behaviour *oldBehaviour = nullptr;
-            for (Component *comp : GetGameObject()->GetComponents())
-            {
-                if (comp->GetClassName() == GetBehaviourName())
-                {
-                    oldBehaviour = DCAST<Behaviour*>(comp);
-                }
-            }
-            if (oldBehaviour) { Component::Destroy(oldBehaviour); }
-
-            Behaviour *behaviour = CreateBehaviourInstance();
-            GetGameObject()->AddComponent(behaviour);
-        }
-    }
-}
-
 Behaviour *BehaviourContainer::CreateBehaviour(const String &behaviourName,
                                                Library *openLibrary)
 {
     Library *lib = openLibrary;
     if (!lib) { return nullptr; }
+
+    if (!lib->IsLoaded()) { lib->Load(); }
 
     String errorString = "";
     if (lib->IsLoaded())
@@ -110,10 +81,11 @@ void BehaviourContainer::SetSourceFilepath(const Path &sourceFilepath)
 
 Behaviour *BehaviourContainer::CreateBehaviourInstance() const
 {
+    Library *behaviourLibrary = GetBehaviourLibrary();
     if (IsLoaded())
     {
         return BehaviourContainer::CreateBehaviour(GetBehaviourName(),
-                                                   GetBehaviourLibrary());
+                                                   behaviourLibrary);
     }
     return nullptr;
 }
@@ -125,7 +97,8 @@ String BehaviourContainer::GetBehaviourName() const
 
 Library *BehaviourContainer::GetBehaviourLibrary() const
 {
-    return p_behaviourLibraryBeingUsed;
+    Library *lib = BehaviourManager::GetBehaviourLib( GetSourceFilepath() );
+    return lib;
 }
 
 const Path &BehaviourContainer::GetSourceFilepath() const
@@ -134,9 +107,7 @@ const Path &BehaviourContainer::GetSourceFilepath() const
 }
 bool BehaviourContainer::IsLoaded() const
 {
-    return GetSourceFilepath().Exists() &&
-           GetBehaviourLibrary() &&
-           GetBehaviourLibrary()->GetLibraryPath().IsFile();
+    return BehaviourManager::IsCompiled( GetSourceFilepath() );
 }
 
 void BehaviourContainer::CloneInto(ICloneable *clone) const
@@ -144,7 +115,6 @@ void BehaviourContainer::CloneInto(ICloneable *clone) const
     Component::CloneInto(clone);
     BehaviourContainer *bc = Cast<BehaviourContainer*>(clone);
     bc->SetSourceFilepath( GetSourceFilepath() );
-    bc->p_behaviourLibraryBeingUsed = GetBehaviourLibrary();
 }
 
 void BehaviourContainer::ImportXML(const XMLNode &xmlInfo)

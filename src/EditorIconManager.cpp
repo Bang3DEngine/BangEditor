@@ -65,6 +65,8 @@ RH<Texture2D> EditorIconManager::GetLensIcon()
 { return GetIconTexture("Lens"); }
 RH<Texture2D> EditorIconManager::GetLensLittleIcon()
 { return GetIconTexture("LensLittle"); }
+RH<Texture2D> EditorIconManager::GetSquareIcon()
+{ return GetIconTexture("Square"); }
 
 RH<Texture2D> EditorIconManager::GetIconTexture(const String &filename)
 {

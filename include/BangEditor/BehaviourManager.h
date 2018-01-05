@@ -1,6 +1,7 @@
 #ifndef BEHAVIOURMANAGER_H
 #define BEHAVIOURMANAGER_H
 
+#include "Bang/Map.h"
 #include "Bang/Path.h"
 #include "Bang/BinType.h"
 #include "Bang/Compiler.h"
@@ -21,18 +22,25 @@ class BehaviourManager
 public:
     BehaviourManager();
 
-    static Library* CompileBehaviourLib(const Path& behaviourFilepath);
+    static bool IsCompiled(const Path& behaviourFilepath);
+    static Library* GetBehaviourLib(const Path& behaviourFilepath);
+
+    static void RemoveBehaviourLibrariesOf(const String& behaviourName);
+
+private:
+    Map<Path, bool> m_compiledBehaviours;
+    Map<Path, Library*> m_cachedBehaviourLibraries;
+
     static Compiler::Result CompileBehaviourLib(
                                        const Path& behaviourFilepath,
                                        const Path& outputObjectFilepath,
                                        BinType binaryType);
 
-    static void RemoveBehaviourLibrariesOf(const String& behaviourName);
-
-private:
     static Compiler::Job CreateBaseJob(BinType binaryType);
 
     static BehaviourManager* GetInstance();
+
+    friend class GameBuilder;
 };
 
 NAMESPACE_BANG_EDITOR_END

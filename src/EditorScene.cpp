@@ -28,11 +28,12 @@
 #include "BangEditor/Console.h"
 #include "BangEditor/MenuBar.h"
 #include "BangEditor/Explorer.h"
+#include "BangEditor/SceneTab.h"
 #include "BangEditor/Hierarchy.h"
 #include "BangEditor/Inspector.h"
+#include "BangEditor/ScenePlayer.h"
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/ProjectManager.h"
-#include "BangEditor/UISceneContainer.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
@@ -48,6 +49,7 @@ void EditorScene::Init()
     m_editor->Init();
 
     m_projectManager = new ProjectManager();
+    m_scenePlayer = new ScenePlayer();
 
     GameObjectFactory::CreateUIGameObjectInto(this);
     GameObjectFactory::CreateUICanvasInto(this);
@@ -70,14 +72,14 @@ void EditorScene::Init()
     GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10)->
             SetParent(m_mainEditorVL);
 
-    m_sceneContainer = GameObject::Create<UISceneContainer>();
-    m_sceneContainer->SetParent(hlGo);
+    p_hierarchy = GameObject::Create<Hierarchy>();
+    p_hierarchy->SetParent(hlGo);
 
-    m_inspector = GameObject::Create<Inspector>();
-    m_inspector->SetParent(hlGo);
+    p_sceneTab = GameObject::Create<SceneTab>();
+    p_sceneTab->SetParent(hlGo);
 
-    m_hierarchy = GameObject::Create<Hierarchy>();
-    m_hierarchy->SetParent(hlGo, 0);
+    p_inspector = GameObject::Create<Inspector>();
+    p_inspector->SetParent(hlGo);
 
     GameObject *botHLGo = GameObjectFactory::CreateUIGameObjectNamed("BotHL");
     botHLGo->AddComponent<UIHorizontalLayout>();
@@ -86,26 +88,29 @@ void EditorScene::Init()
     botHLLe->SetFlexibleSize( Vector2(1) );
     botHLGo->SetParent(m_mainEditorVL);
 
-    m_console = GameObject::Create<Console>();
-    m_console->SetParent(botHLGo);
+    p_console = GameObject::Create<Console>();
+    p_console->SetParent(botHLGo);
 
-    m_explorer = GameObject::Create<Explorer>();
-    m_explorer->SetParent(botHLGo);
+    p_explorer = GameObject::Create<Explorer>();
+    p_explorer->SetParent(botHLGo);
 
     GameObject *fpsTextGo = GameObjectFactory::CreateUIGameObject();
-    m_fpsText = fpsTextGo->AddComponent<UITextRenderer>();
-    m_fpsText->SetHorizontalAlign(HorizontalAlignment::Right);
-    m_fpsText->SetVerticalAlign(VerticalAlignment::Bot);
+    p_fpsText = fpsTextGo->AddComponent<UITextRenderer>();
+    p_fpsText->SetHorizontalAlign(HorizontalAlignment::Right);
+    p_fpsText->SetVerticalAlign(VerticalAlignment::Bot);
     fpsTextGo->SetParent(this);
 
     Camera *cam = AddComponent<Camera>();
     SetCamera(cam);
     GetCamera()->SetClearColor(Color::LightGray);
+
+    ScenePlayer::StopScene();
 }
 
 EditorScene::~EditorScene()
 {
     delete m_editor;
+    delete m_scenePlayer;
     delete m_projectManager;
 }
 
@@ -122,8 +127,8 @@ void EditorScene::Update()
 
         if (Input::GetMouseButtonDown(MouseButton::Left))
         {
-            UICanvas *canvas = UICanvas::GetActive(m_sceneContainer);
-            bool isOverSceneCont = canvas->IsMouseOver(m_sceneContainer, true);
+            UICanvas *canvas = UICanvas::GetActive(p_sceneTab);
+            bool isOverSceneCont = canvas->IsMouseOver(p_sceneTab, true);
             if (isOverSceneCont)
             {
                 GameObject *selectedGameObject = Selection::GetOveredGameObject(openScene);
@@ -144,7 +149,7 @@ void EditorScene::Update()
     for (int i = 0; i < lastDeltas.size(); ++i) { meanDeltas += lastDeltas[i]; }
     meanDeltas /= lastDeltas.size();
     float meanFPS = (1.0f / Math::Max(0.001f, meanDeltas));
-    m_fpsText->SetContent( String(meanFPS) + " fps" );
+    p_fpsText->SetContent( String(meanFPS) + " fps" );
     // Debug_Peek(meanFPS);
 }
 
@@ -192,9 +197,12 @@ void EditorScene::SetViewportForOpenScene()
     }
 }
 
-void EditorScene::SetOpenScene(Scene *openScene)
+void EditorScene::SetOpenScene(Scene *openScene, bool destroyPreviousScene)
 {
-    if (GetOpenScene()) { GameObject::Destroy(GetOpenScene()); }
+    if (destroyPreviousScene && GetOpenScene())
+    {
+        GameObject::Destroy(GetOpenScene());
+    }
 
     p_openScene = openScene;
     if (GetOpenScene())
@@ -218,7 +226,7 @@ Scene *EditorScene::GetOpenScene() const
 
 Rect EditorScene::GetOpenSceneScreenRectNDC() const
 {
-    return m_sceneContainer->GetImageScreenRectNDC();
+    return p_sceneTab->GetSceneImageRectNDC();
 }
 
 void EditorScene::RenderAndBlitToScreen()
@@ -242,7 +250,7 @@ void EditorScene::RenderAndBlitToScreen()
             }
         }
     }
-    m_sceneContainer->SetSceneImageTexture(openSceneTex);
+    p_sceneTab->SetSceneImageTexture(openSceneTex);
 
     GEngine *gEngine = GEngine::GetActive();
     RenderOpenScene();
@@ -274,10 +282,12 @@ void EditorScene::UnBindOpenScene()
 }
 
 MenuBar *EditorScene::GetMenuBar() const { return m_menuBar; }
-Console *EditorScene::GetConsole() const { return m_console; }
-Explorer *EditorScene::GetExplorer() const { return m_explorer; }
-Inspector *EditorScene::GetInspector() const { return m_inspector; }
-Hierarchy *EditorScene::GetHierarchy() const { return m_hierarchy; }
+Console *EditorScene::GetConsole() const { return p_console; }
+Explorer *EditorScene::GetExplorer() const { return p_explorer; }
+Inspector *EditorScene::GetInspector() const { return p_inspector; }
+Hierarchy *EditorScene::GetHierarchy() const { return p_hierarchy; }
+
+ScenePlayer *EditorScene::GetScenePlayer() const { return m_scenePlayer; }
 ProjectManager *EditorScene::GetProjectManager() const { return m_projectManager; }
 Editor *EditorScene::GetEditor() const { return m_editor; }
 

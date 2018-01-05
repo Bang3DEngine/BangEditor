@@ -21,7 +21,6 @@ class BehaviourContainer : public Component
     COMPONENT(BehaviourContainer)
 
 public:
-    void ReCompileBehaviourLib();
     void SetSourceFilepath(const Path &sourceFilepath);
     Behaviour* CreateBehaviourInstance() const;
 
@@ -38,7 +37,6 @@ public:
 private:
     Path m_sourceFilepath;
     Behaviour *p_behaviour = nullptr;
-    Library *p_behaviourLibraryBeingUsed = nullptr;
 
     BehaviourContainer();
     virtual ~BehaviourContainer();

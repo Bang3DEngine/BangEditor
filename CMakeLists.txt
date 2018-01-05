@@ -123,7 +123,9 @@ ${SRC_DIR}/RotateGizmo.cpp
 ${SRC_DIR}/RotateGizmoAxis.cpp
 ${SRC_DIR}/ScaleGizmo.cpp
 ${SRC_DIR}/ScaleGizmoAxis.cpp
+${SRC_DIR}/ScenePlayer.cpp
 ${SRC_DIR}/SceneOpenerSaver.cpp
+${SRC_DIR}/SceneTab.cpp
 ${SRC_DIR}/SelectionGizmo.cpp
 ${SRC_DIR}/TransformGizmo.cpp
 ${SRC_DIR}/TransformGizmoAxis.cpp

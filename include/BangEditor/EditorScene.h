@@ -22,10 +22,11 @@ FORWARD class Editor;
 FORWARD class Console;
 FORWARD class MenuBar;
 FORWARD class Explorer;
+FORWARD class SceneTab;
 FORWARD class Inspector;
 FORWARD class Hierarchy;
+FORWARD class ScenePlayer;
 FORWARD class ProjectManager;
-FORWARD class UISceneContainer;
 FORWARD class EditorApplication;
 
 class EditorScene : public Scene,
@@ -40,7 +41,7 @@ public:
     void RenderOpenScene();
     void SetViewportForOpenScene();
 
-    void SetOpenScene(Scene *openScene);
+    void SetOpenScene(Scene *openScene, bool destroyPreviousScene = true);
     Scene *GetOpenScene() const;
 
     Rect GetOpenSceneScreenRectNDC() const;
@@ -53,6 +54,7 @@ public:
     Explorer *GetExplorer() const;
     Inspector *GetInspector() const;
     Hierarchy *GetHierarchy() const;
+    ScenePlayer *GetScenePlayer() const;
     ProjectManager *GetProjectManager() const;
 
 protected:
@@ -61,16 +63,17 @@ protected:
 
 private:
     Editor *m_editor = nullptr;
+    ScenePlayer *m_scenePlayer = nullptr;
     ProjectManager *m_projectManager = nullptr;
 
-    Console *m_console     = nullptr;
-    Explorer *m_explorer   = nullptr;
-    Inspector *m_inspector = nullptr;
-    Hierarchy *m_hierarchy = nullptr;
+    Console *p_console     = nullptr;
+    Explorer *p_explorer   = nullptr;
+    Inspector *p_inspector = nullptr;
+    Hierarchy *p_hierarchy = nullptr;
 
     Scene *p_openScene = nullptr;
-    UISceneContainer *m_sceneContainer = nullptr;
-    UITextRenderer *m_fpsText = nullptr;
+    SceneTab *p_sceneTab = nullptr;
+    UITextRenderer *p_fpsText = nullptr;
 
     MenuBar *m_menuBar = nullptr;
     GameObject *m_mainEditorVL = nullptr;

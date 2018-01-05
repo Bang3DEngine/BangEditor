@@ -20,11 +20,19 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class EditorSettings;
 FORWARD class TransformGizmo;
 
+enum class EditorPlayState
+{
+    Playing,
+    Editing
+};
+
 class IEditorSelectionListener : public virtual IEventListener
 {
 public:
     virtual void OnGameObjectSelected(GameObject *selectedGameObject) { }
     virtual void OnExplorerPathSelected(const Path &selectedPath) { }
+    virtual void OnPlayStateChanged(EditorPlayState previousPlayState,
+                                    EditorPlayState newPlayState) { }
 };
 
 class Editor : public EventEmitter<IEditorSelectionListener>,
@@ -40,7 +48,13 @@ public:
     template <class ListenerClass>
     static void UnRegisterListener(ListenerClass *selectionListener);
 
+    static void SetEditorPlayState(EditorPlayState playState);
+    static EditorPlayState GetEditorPlayState();
+    static bool IsPlaying();
+
 private:
+    EditorPlayState m_currentPlayState = Undef<EditorPlayState>();
+
     GameObject *p_selectedGameObject = nullptr;
     EditorSettings *m_editorSettings = nullptr;
     TransformGizmo *p_currentTransformGizmo = nullptr;

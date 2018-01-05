@@ -23,7 +23,6 @@ UISceneContainer::UISceneContainer()
     AddComponent<UIFocusable>();
 
     UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
-    vl->SetPaddings(10);
 
     GameObject *sceneImgGo = GameObjectFactory::CreateUIGameObject();
     p_sceneImg  = sceneImgGo->AddComponent<UIImageRenderer>();

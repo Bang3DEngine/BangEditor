@@ -29,6 +29,7 @@ EditorCamera::EditorCamera()
     AddComponent<HideInHierarchy>();
     AddComponent<NotSelectableInEditor>();
     GetHideFlags().SetOn(HideFlag::DontSerialize);
+    GetHideFlags().SetOn(HideFlag::DontClone);
 
     p_camContainer = GameObjectFactory::CreateGameObject();
     p_camContainer->SetName("CameraContainer");
