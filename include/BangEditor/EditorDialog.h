@@ -19,10 +19,13 @@ public:
 	EditorDialog();
 	virtual ~EditorDialog();
 
-    static Path GetAsset(const String &title,
-                         const Array<String> &extensions);
+    static void GetAsset(const String &title,
+                         const Array<String> &extensions,
+                         Path *resultPath,
+                         bool *accepted);
 
 private:
+    static bool s_accepted;
     static Path s_assetPathResult;
 
     static Scene* CreateGetAssetSceneInto(Scene *scene,

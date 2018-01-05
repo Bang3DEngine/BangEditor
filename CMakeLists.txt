@@ -80,11 +80,14 @@ link_libraries("${BANG_LIBS_DIR}/${BANG_LIB_NAME}")
 
 add_executable(BangEditor
 ${SRC_DIR}/Behaviour.cpp
+${SRC_DIR}/BehaviourCreator.cpp
+${SRC_DIR}/BehaviourContainer.cpp
 ${SRC_DIR}/BehaviourManager.cpp
 ${SRC_DIR}/Console.cpp
 ${SRC_DIR}/Editor.cpp
 ${SRC_DIR}/EditorApplication.cpp
 ${SRC_DIR}/EditorCamera.cpp
+${SRC_DIR}/EditorComponentFactory.cpp
 ${SRC_DIR}/EditorDialog.cpp
 ${SRC_DIR}/EditorIconManager.cpp
 ${SRC_DIR}/EditorPaths.cpp
@@ -99,6 +102,7 @@ ${SRC_DIR}/Hierarchy/Hierarchy.cpp
 ${SRC_DIR}/Hierarchy/HierarchyItem.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidget.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgetFactory.cpp
+${SRC_DIR}/Inspector/CIWBehaviourContainer.cpp
 ${SRC_DIR}/Inspector/CIWMeshRenderer.cpp
 ${SRC_DIR}/Inspector/CIWRenderer.cpp
 ${SRC_DIR}/Inspector/CIWTransform.cpp

@@ -41,8 +41,6 @@ private:
 
     UIButton *p_searchButton = nullptr;
     UIInputText *p_pathInputText = nullptr;
-
-    Path OpenFileDialog() const;
 };
 
 NAMESPACE_BANG_EDITOR_END

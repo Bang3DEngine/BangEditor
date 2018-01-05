@@ -34,7 +34,7 @@ void FIWMaterial::Init()
 
     p_texturePathInput = GameObject::Create<UIInputFile>();
     p_texturePathInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_texturePathInput->SetExtensions( Extensions::GetImageExtensions().To<Array>() );
+    p_texturePathInput->SetExtensions( Extensions::GetImageExtensions() );
 
     p_uvMultiplyInput = GameObject::Create<UIInputVector>();
     p_uvMultiplyInput->EventEmitter<IValueChangedListener>::RegisterListener(this);

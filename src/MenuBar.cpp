@@ -28,9 +28,12 @@
 #include "BangEditor/MenuItem.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorDialog.h"
 #include "BangEditor/EditorSettings.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/SceneOpenerSaver.h"
+#include "BangEditor/BehaviourCreator.h"
+#include "BangEditor/BehaviourContainer.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG_EDITOR
@@ -85,6 +88,10 @@ MenuBar::MenuBar()
     MenuItem *addAudio = m_componentsItem->AddItem("Audio");
     MenuItem *addAudioListener = addAudio->AddItem("Audio Listener");
     MenuItem *addAudioSource = addAudio->AddItem("Audio Source");
+    MenuItem *addBehaviours = m_componentsItem->AddItem("Behaviour");
+    MenuItem *addNewBehaviour = addBehaviours->AddItem("New Behaviour...");
+    MenuItem *addExistingBehaviour = addBehaviours->AddItem("Existing Behaviour...");
+    MenuItem *addEmptyBehaviour = addBehaviours->AddItem("Empty Behaviour");
     MenuItem *addCamera = m_componentsItem->AddItem("Camera");
     MenuItem *addLight = m_componentsItem->AddItem("Light");
     MenuItem *addPointLight = addLight->AddItem("Point Light");
@@ -98,6 +105,9 @@ MenuBar::MenuBar()
 
     addAudioListener->SetSelectedCallback(MenuBar::OnAddAudioListener);
     addAudioSource->SetSelectedCallback(MenuBar::OnAddAudioSource);
+    addNewBehaviour->SetSelectedCallback(MenuBar::OnAddNewBehaviour);
+    addExistingBehaviour->SetSelectedCallback(MenuBar::OnAddExistingBehaviour);
+    addEmptyBehaviour->SetSelectedCallback(MenuBar::OnAddEmptyBehaviour);
     addCamera->SetSelectedCallback(MenuBar::OnAddCamera);
     addPointLight->SetSelectedCallback(MenuBar::OnAddPointLight);
     addDirectionalLight->SetSelectedCallback(MenuBar::OnAddDirectionalLight);
@@ -216,13 +226,14 @@ void MenuBar::OnOpenScene(MenuItem*)
 }
 
 template <class T>
-void OnAddComponent()
+T* OnAddComponent()
 {
     GameObject *selectedGameObject = Editor::GetSelectedGameObject();
     if (selectedGameObject)
     {
-        selectedGameObject->AddComponent<T>();
+        return selectedGameObject->AddComponent<T>();
     }
+    return nullptr;
 }
 
 void MenuBar::OnAddAudioListener(MenuItem*)
@@ -233,6 +244,52 @@ void MenuBar::OnAddAudioListener(MenuItem*)
 void MenuBar::OnAddAudioSource(MenuItem*)
 {
     OnAddComponent<AudioSource>();
+}
+
+void MenuBar::OnAddNewBehaviour(MenuItem *item)
+{
+    Path behaviourDir = EditorPaths::ProjectAssets();
+    String behaviourName = "";
+    do
+    {
+        behaviourName = Dialog::GetString("Specify Behaviour name...",
+                              "Please, the name of the new Behaviour: ",
+                              "NewBehaviour");
+
+        if (behaviourName == "") { return; }
+    }
+    while (!BehaviourCreator::CanCreateNewBehaviour(behaviourDir, behaviourName));
+
+    Path behaviourHeaderPath;
+    Path behaviourSourcePath;
+    BehaviourCreator::CreateNewBehaviour(behaviourDir,
+                                         behaviourName,
+                                        &behaviourHeaderPath,
+                                        &behaviourSourcePath);
+
+    BehaviourContainer *behaviourContainer = OnAddComponent<BehaviourContainer>();
+    behaviourContainer->SetSourceFilepath(behaviourSourcePath);
+}
+
+void MenuBar::OnAddEmptyBehaviour(MenuItem*)
+{
+    BehaviourContainer *behaviourContainer = OnAddComponent<BehaviourContainer>();
+    (void) behaviourContainer;
+}
+
+void MenuBar::OnAddExistingBehaviour(MenuItem*)
+{
+    bool accepted;
+    Path behaviourPath;
+    EditorDialog::GetAsset("Select an existing Behaviour...",
+                           Extensions::GetSourceFileExtensions(),
+                           &behaviourPath,
+                           &accepted);
+
+    if (!accepted) { return; }
+
+    BehaviourContainer *behaviourContainer = OnAddComponent<BehaviourContainer>();
+    behaviourContainer->SetSourceFilepath(behaviourPath);
 }
 
 void MenuBar::OnAddCamera(MenuItem*)

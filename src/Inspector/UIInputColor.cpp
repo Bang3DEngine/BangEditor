@@ -32,7 +32,7 @@ UIInputColor::UIInputColor()
     p_searchColorButton->GetText()->SetContent("");
     p_searchColorButton->SetIcon( EditorIconManager::GetLensLittleIcon().Get(),
                                   Vector2i(16) );
-    p_searchColorButton->GetButton()->AddClickedCallback([this](IFocusable*)
+    p_searchColorButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
     {
         // Color color = EditorDialog::GetAsset("Pick Color...", {}});
     });

@@ -51,15 +51,18 @@ private:
     static void OnSaveSceneAs (MenuItem *item);
     static void OnOpenScene   (MenuItem *item);
 
-    static void OnAddAudioListener    (MenuItem *item);
-    static void OnAddAudioSource      (MenuItem *item);
-    static void OnAddCamera           (MenuItem *item);
-    static void OnAddPointLight       (MenuItem *item);
-    static void OnAddDirectionalLight (MenuItem *item);
-    static void OnAddLineRenderer     (MenuItem *item);
-    static void OnAddMeshRenderer     (MenuItem *item);
-    static void OnAddTransform        (MenuItem *item);
-    static void OnAddRectTransform    (MenuItem *item);
+    static void OnAddAudioListener     (MenuItem *item);
+    static void OnAddAudioSource       (MenuItem *item);
+    static void OnAddNewBehaviour      (MenuItem *item);
+    static void OnAddExistingBehaviour (MenuItem *item);
+    static void OnAddEmptyBehaviour    (MenuItem *item);
+    static void OnAddCamera            (MenuItem *item);
+    static void OnAddPointLight        (MenuItem *item);
+    static void OnAddDirectionalLight  (MenuItem *item);
+    static void OnAddLineRenderer      (MenuItem *item);
+    static void OnAddMeshRenderer      (MenuItem *item);
+    static void OnAddTransform         (MenuItem *item);
+    static void OnAddRectTransform     (MenuItem *item);
 
     static void OnCreateCone   (MenuItem *item);
     static void OnCreateCube   (MenuItem *item);

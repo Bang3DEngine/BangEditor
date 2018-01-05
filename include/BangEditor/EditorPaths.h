@@ -24,6 +24,7 @@ public:
     static Path EditorResources();
 
     static List<Path> GetAllProjectSubDirs();
+    static List<Path> GetEditorIncludeDirs();
     static List<Path> GetProjectIncludeDirs();
 
     static Path MakeEditorPath(const String &path);

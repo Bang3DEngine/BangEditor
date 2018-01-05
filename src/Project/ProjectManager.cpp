@@ -82,6 +82,7 @@ Project* ProjectManager::CreateNewProject(const Path &projectDirPath,
     ProjectManager::s_currentProject->SetProjectRootFilepath(projectDir);
 
     File::CreateDirectory(projectDir.Append("Assets"));
+    File::CreateDirectory(projectDir.Append("Libraries"));
 
     return ProjectManager::s_currentProject;
 }

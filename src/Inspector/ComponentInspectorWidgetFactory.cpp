@@ -4,6 +4,7 @@
 
 #include "BangEditor/CIWTransform.h"
 #include "BangEditor/CIWMeshRenderer.h"
+#include "BangEditor/CIWBehaviourContainer.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
 USING_NAMESPACE_BANG
@@ -20,6 +21,10 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(Component *com
     else if (cName == "MeshRenderer")
     {
         ciw = GameObject::Create<CIWMeshRenderer>();
+    }
+    else if (cName == "BehaviourContainer")
+    {
+        ciw = GameObject::Create<CIWBehaviourContainer>();
     }
     else
     {

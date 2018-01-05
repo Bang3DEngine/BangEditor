@@ -26,11 +26,19 @@ List<Path> EditorPaths::GetAllProjectSubDirs()
     return subdirs;
 }
 
+List<Path> EditorPaths::GetEditorIncludeDirs()
+{
+    List<Path> incDirs;
+    incDirs.PushBack( EditorPaths::Editor().Append("include") );
+    return incDirs;
+}
+
 List<Path> EditorPaths::GetProjectIncludeDirs()
 {
-    List<Path> subdirs = EditorPaths::ProjectAssets()
+    List<Path> incDirs = EditorPaths::ProjectAssets()
                         .FindSubDirectories(Path::FindFlag::Recursive);
-    return subdirs;
+    incDirs.PushBack( EditorPaths::ProjectAssets() );
+    return incDirs;
 }
 
 const Path &EditorPaths::Project()

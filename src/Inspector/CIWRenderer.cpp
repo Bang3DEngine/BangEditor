@@ -26,7 +26,7 @@ void CIWRenderer::Init()
 {
     ComponentInspectorWidget::Init();
 
-    SetName("CWRenderer");
+    SetName("CIWRenderer");
     SetTitle("Renderer");
 
     p_visibleCheckBox = GameObjectFactory::CreateUICheckBox();

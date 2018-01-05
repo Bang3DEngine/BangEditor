@@ -1,0 +1,15 @@
+#include "Bang/BEHAVIOUR_NAME.h"
+
+void BEHAVIOUR_NAME::OnStart()
+{
+    Behaviour::OnStart();
+
+    // This code is executed once when the Behaviour is started
+}
+
+void BEHAVIOUR_NAME::OnUpdate()
+{
+    Behaviour::OnUpdate();
+
+    // This code is executed every frame
+}

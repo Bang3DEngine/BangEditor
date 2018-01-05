@@ -1,0 +1,16 @@
+#include "Bang/Behaviour.h"
+
+class BEHAVIOUR_NAME
+{
+    COMPONENT(BEHAVIOUR_NAME);
+
+public:
+    BEHAVIOUR_NAME() = default;
+    virtual ~BEHAVIOUR_NAME() = default;
+
+    void OnStart() override;
+    void OnUpdate() override;
+};
+
+BANG_BEHAVIOUR_CLASS(BEHAVIOUR_NAME);
+BANG_BEHAVIOUR_CLASS_IMPL(BEHAVIOUR_NAME);

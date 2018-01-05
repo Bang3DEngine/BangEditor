@@ -25,6 +25,7 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
+bool EditorDialog::s_accepted = false;
 Path EditorDialog::s_assetPathResult = Path::Empty;
 
 EditorDialog::EditorDialog()
@@ -35,16 +36,26 @@ EditorDialog::~EditorDialog()
 {
 }
 
-Path EditorDialog::GetAsset(const String &title, const Array<String> &extensions)
+void EditorDialog::GetAsset(const String &title,
+                            const Array<String> &extensions,
+                            Path *resultPath,
+                            bool *accepted)
 {
+    ASSERT(resultPath);
+    ASSERT(accepted);
+
     DialogWindow *dialog = Dialog::BeginCreateDialog(title, 500, 400, true);
+
+    EditorDialog::s_accepted = false;
+    EditorDialog::s_assetPathResult = Path::Empty;
 
     Scene *scene = GameObjectFactory::CreateScene(false);
     EditorDialog::CreateGetAssetSceneInto(scene, extensions);
     SceneManager::LoadSceneInstantly(scene);
 
     Dialog::EndCreateDialog(dialog);
-    return EditorDialog::s_assetPathResult;
+    *resultPath = EditorDialog::s_assetPathResult;
+    *accepted = EditorDialog::s_accepted;
 }
 
 
@@ -84,8 +95,9 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
 
     UIButton *cancelButton = GameObjectFactory::CreateUIButton();
     cancelButton->GetText()->SetContent("Cancel");
-    cancelButton->GetButton()->AddClickedCallback([](IFocusable*)
+    cancelButton->GetFocusable()->AddClickedCallback([](IFocusable*)
     {
+        EditorDialog::s_accepted = false;
         EditorDialog::s_assetPathResult = Path::Empty;
         Dialog::EndCurrentDialog();
     });
@@ -93,8 +105,9 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
 
     UIButton *openButton = GameObjectFactory::CreateUIButton();
     openButton->GetText()->SetContent("Open");
-    openButton->GetButton()->AddClickedCallback([](IFocusable*)
+    openButton->GetFocusable()->AddClickedCallback([](IFocusable*)
     {
+        EditorDialog::s_accepted = true;
         Dialog::EndCurrentDialog();
     });
 
@@ -114,24 +127,32 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
     List<Path> foundAssetPaths;
     List<Path> engineAssetPaths =
             Paths::EngineAssets().FindFiles(Path::FindFlag::Recursive,
-                                            extensions.To<List>());
+                                            extensions);
     List<Path> projectAssetPaths =
             EditorPaths::ProjectAssets().FindFiles(Path::FindFlag::Recursive,
-                                                   extensions.To<List>());
+                                                   extensions);
     foundAssetPaths.PushBack(engineAssetPaths);
     foundAssetPaths.PushBack(projectAssetPaths);
+    foundAssetPaths.PushFront(Path::Empty);
 
     for (const Path &assetPath : foundAssetPaths)
     {
         ExplorerItem *expItem = GameObject::Create<ExplorerItem>();
         expItem->GetLabel()->GetText()->SetTextColor(Color::White);
         expItem->SetFilepath(assetPath);
-        expItem->GetButton()->AddClickedCallback([expItem](IFocusable*)
+
+        if (assetPath.IsEmpty())
+        {
+            expItem->GetLabel()->GetText()->SetContent("None");
+        }
+
+        expItem->GetFocusable()->AddClickedCallback([expItem](IFocusable*)
         {
             EditorDialog::s_assetPathResult = expItem->GetPath();
         });
-        expItem->GetButton()->AddDoubleClickedCallback([](IFocusable*)
+        expItem->GetFocusable()->AddDoubleClickedCallback([](IFocusable*)
         {
+            EditorDialog::s_accepted = true;
             Dialog::EndCurrentDialog();
         });
         expItem->SetParent(gridLayoutGo);

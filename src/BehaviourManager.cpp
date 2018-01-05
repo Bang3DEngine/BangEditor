@@ -8,6 +8,8 @@
 
 #include "BangEditor/Project.h"
 #include "BangEditor/Behaviour.h"
+#include "BangEditor/EditorPaths.h"
+#include "BangEditor/EditorApplication.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -16,7 +18,24 @@ BehaviourManager::BehaviourManager()
 {
 }
 
-Compiler::Result BehaviourManager::CompileBehaviourObject(
+Library *BehaviourManager::CompileBehaviourLib(const Path &behaviourFilepath)
+{
+    Path outputLibPath = EditorPaths::ProjectLibrariesDir().
+                                      Append(behaviourFilepath.GetName()).
+                                      AppendExtension("so").
+                                      AppendExtension( String(Time::GetNow_Nanos()) );
+
+    BehaviourManager::CompileBehaviourLib(behaviourFilepath,
+                                             outputLibPath,
+                                             BinType::Debug);
+
+    if (!outputLibPath.IsFile()) { return nullptr; }
+
+    Library *behaviourLibrary = new Library(outputLibPath);
+    return behaviourLibrary;
+}
+
+Compiler::Result BehaviourManager::CompileBehaviourLib(
                                         const Path &behaviourFilepath,
                                         const Path &outputObjectFilepath,
                                         BinType binaryType)
@@ -25,56 +44,26 @@ Compiler::Result BehaviourManager::CompileBehaviourObject(
     File::CreateDirectory(outputObjectFilepath.GetDirectory());
 
     Compiler::Job job = BehaviourManager::CreateBaseJob(binaryType);
-    job.outputMode = Compiler::OutputType::Object;
+    job.outputMode = Compiler::OutputType::SharedLib;
     job.includePaths.PushBack( Paths::GetEngineIncludeDirs() );
-    // job.includePaths.PushBack( Paths::GetProjectIncludeDirs() );
+    job.includePaths.PushBack( EditorPaths::GetEditorIncludeDirs() );
+    job.includePaths.PushBack( EditorPaths::GetProjectIncludeDirs() );
     job.inputFiles.PushBack(behaviourFilepath);
     job.outputFile = outputObjectFilepath;
 
     return Compiler::Compile(job);
 }
 
-Compiler::Result BehaviourManager::MergeBehaviourObjects(
-                                    const Path &outputLibFilepath,
-                                    const List<Path> &behaviourObjectFilepaths,
-                                    BinType binaryType)
+void BehaviourManager::RemoveBehaviourLibrariesOf(const String& behaviourName)
 {
-    File::CreateDirectory(outputLibFilepath.GetDirectory());
+    if (behaviourName.IsEmpty()) { return; }
 
-    Compiler::Job job = BehaviourManager::CreateBaseJob(binaryType);
-    job.outputMode = Compiler::OutputType::SharedLib;
-    job.inputFiles.PushBack(behaviourObjectFilepaths);
-    job.outputFile = outputLibFilepath;;
-
-    return Compiler::Compile(job);
-}
-
-Library *BehaviourManager::GetBehavioursLibrary()
-{
-    return BehaviourManager::GetInstance()->m_behavioursLibrary;
-}
-
-void BehaviourManager::LoadBehavioursLibrary(const Path &behavioursLibrary)
-{
-    Library *behLib = new Library(behavioursLibrary);
-
-    bool success = behLib->Load();
-    BehaviourManager *bm = BehaviourManager::GetInstance();
-    bm->m_behavioursLibrary = success ? behLib : nullptr;
-    if (!success)
-    {
-        Debug_Error("There was an error when loading the library '" <<
-                     behavioursLibrary << "': " << behLib->GetErrorString());
-    }
-}
-
-void BehaviourManager::RemoveOldBehaviourLibraries(const Path &librariesDir)
-{
-    // Remove old library filepaths
-    List<Path> libFilepaths = librariesDir.FindFiles(Path::FindFlag::Recursive);
+    List<Path> libFilepaths = EditorPaths::ProjectLibrariesDir().
+                                           FindFiles(Path::FindFlag::Simple);
     for (const Path &libFilepath : libFilepaths)
     {
-        if (libFilepath.GetAbsolute().Contains(".so."))
+        if (libFilepath.GetAbsolute().Contains(".so.") &&
+            libFilepath.GetName() == behaviourName)
         {
             File::Remove(libFilepath);
         }
@@ -102,5 +91,5 @@ Compiler::Job BehaviourManager::CreateBaseJob(BinType binaryType)
 
 BehaviourManager *BehaviourManager::GetInstance()
 {
-    return nullptr; // EditorApplication::GetInstance()->GetBehaviourManager();
+    return EditorApplication::GetInstance()->GetBehaviourManager();
 }

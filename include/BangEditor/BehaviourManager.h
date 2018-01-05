@@ -21,24 +21,15 @@ class BehaviourManager
 public:
     BehaviourManager();
 
-    static Compiler::Result CompileBehaviourObject(
+    static Library* CompileBehaviourLib(const Path& behaviourFilepath);
+    static Compiler::Result CompileBehaviourLib(
                                        const Path& behaviourFilepath,
                                        const Path& outputObjectFilepath,
                                        BinType binaryType);
 
-    static Compiler::Result MergeBehaviourObjects(
-                                    const Path& outputLibFilepath,
-                                    const List<Path> &behaviourObjectFilepaths,
-                                    BinType binaryType);
-
-    static Library *GetBehavioursLibrary();
-    static void LoadBehavioursLibrary(const Path &behavioursLibrary);
-
-    static void RemoveOldBehaviourLibraries(const Path& librariesDir);
+    static void RemoveBehaviourLibrariesOf(const String& behaviourName);
 
 private:
-    Library *m_behavioursLibrary = nullptr;
-
     static Compiler::Job CreateBaseJob(BinType binaryType);
 
     static BehaviourManager* GetInstance();

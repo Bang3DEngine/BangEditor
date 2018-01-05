@@ -165,7 +165,7 @@ bool GameBuilder::CompileBehaviours(const Path &executableDir,
         Debug_Log("Compiling '" << behaviourSourcePath << "' into '" <<
                   outputObjPath << "'...");
         Compiler::Result res =
-                BehaviourManager::CompileBehaviourObject(behaviourSourcePath,
+                BehaviourManager::CompileBehaviourLib(behaviourSourcePath,
                                                          outputObjPath,
                                                          binType);
 
@@ -182,11 +182,13 @@ bool GameBuilder::CompileBehaviours(const Path &executableDir,
                        .AppendExtension( String::ToString(Time::GetNow_Millis()) );
     Debug_Log("Merging behaviour objects into '" << outputLibPath << "'...");
 
+    /*
     Compiler::Result res =
             BehaviourManager::MergeBehaviourObjects(outputLibPath,
                                                     behaviourObjectsPaths,
                                                     binType);
     if (!res.success) { Debug_Error(res.output); return false; }
+    */
     //
 
     return true;

@@ -26,11 +26,11 @@ void CIWMeshRenderer::Init()
 {
     CIWRenderer::Init();
 
-    SetName("CWMeshRenderer");
+    SetName("CIWMeshRenderer");
     SetTitle("Mesh Renderer");
 
     p_meshInputFile = GameObject::Create<UIInputFile>();
-    p_meshInputFile->SetExtensions( Extensions::GetModelExtensions().To<Array>() );
+    p_meshInputFile->SetExtensions( Extensions::GetModelExtensions() );
     p_meshInputFile->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     AddWidget("Mesh", p_meshInputFile);

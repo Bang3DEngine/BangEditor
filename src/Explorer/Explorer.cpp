@@ -50,7 +50,7 @@ Explorer::Explorer() : EditorUITab("Explorer")
     RH<Texture2D> backButtonTex = EditorIconManager::GetBackArrowIcon();
     p_backButton->SetIcon(backButtonTex.Get(), Vector2i(15), 0);
     p_backButton->GetText()->SetContent("");
-    p_backButton->GetButton()->AddClickedCallback( [this](IFocusable*)
+    p_backButton->GetFocusable()->AddClickedCallback( [this](IFocusable*)
     { GoDirectoryUp(); });
 
     UILayoutElement *toolBarLE = toolBar->AddComponent<UILayoutElement>();
@@ -167,8 +167,8 @@ void Explorer::AddItem(const Path &itemPath)
     explorerItem->SetFilepath(itemPath);
     explorerItem->SetParent(p_itemsContainer);
 
-    explorerItem->GetButton()->AddClickedCallback(&Explorer::OnItemSelected);
-    explorerItem->GetButton()->AddDoubleClickedCallback(&Explorer::OnItemDoubleClicked);
+    explorerItem->GetFocusable()->AddClickedCallback(&Explorer::OnItemSelected);
+    explorerItem->GetFocusable()->AddDoubleClickedCallback(&Explorer::OnItemDoubleClicked);
 
     p_items.PushBack(explorerItem);
 }

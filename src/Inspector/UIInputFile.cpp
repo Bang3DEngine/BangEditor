@@ -39,10 +39,15 @@ UIInputFile::UIInputFile()
     p_searchButton->GetText()->SetContent("");
     p_searchButton->SetIcon( EditorIconManager::GetLensLittleIcon().Get(),
                              Vector2i(14) );
-    p_searchButton->GetButton()->AddClickedCallback([this](IFocusable*)
+    p_searchButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
     {
-        Path openPath = OpenFileDialog();
-        if (openPath.IsFile()) { SetPath(openPath); }
+        Path openPath;
+        bool accepted;
+        EditorDialog::GetAsset("Get Asset...",
+                               GetExtensions(),
+                               &openPath,
+                               &accepted);
+        if (accepted) { SetPath(openPath); }
     });
 
     p_pathInputText->GetGameObject()->SetParent(this);
@@ -51,11 +56,6 @@ UIInputFile::UIInputFile()
 
 UIInputFile::~UIInputFile()
 {
-}
-
-Path UIInputFile::OpenFileDialog() const
-{
-    return EditorDialog::GetAsset("Get Asset...", GetExtensions());
 }
 
 void UIInputFile::SetPath(const Path &path)

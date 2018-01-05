@@ -32,7 +32,7 @@ public:
     bool IsSelected() const;
     UILabel *GetLabel() const;
     const Path& GetPath() const;
-    UIFocusable* GetButton() const;
+    UIFocusable* GetFocusable() const;
 
 protected:
     ExplorerItem();

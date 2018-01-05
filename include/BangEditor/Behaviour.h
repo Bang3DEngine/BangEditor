@@ -35,33 +35,6 @@ class Behaviour : public Component
 public:
     Behaviour();
     virtual ~Behaviour();
-
-    void RefreshBehaviourLib(const XMLNode *xmlInfoForNewBehaviour = nullptr);
-    static Behaviour* CreateDynamicBehaviour(const String &behaviourName,
-                                             Library *openLibrary);
-    static bool DeleteDynamicBehaviour(const String &behaviourName,
-                                       Behaviour *behaviour,
-                                       Library *openLibrary);
-
-    void SetSourceFilepath(const Path &sourceFilepath);
-
-    const Path& GetSourceFilepath() const;
-    bool IsLoaded() const;
-
-    // Component
-    virtual void OnStart () override;
-    virtual void OnUpdate() override;
-
-    // ICloneable
-    virtual void CloneInto(ICloneable *clone) const override;
-
-    // Serializable
-    virtual void ImportXML(const XMLNode &xmlInfo) override;
-    virtual void ExportXML(XMLNode *xmlInfo) const override;
-
-private:
-    Path m_sourceFilepath;
-    Library *p_behavioursLibraryBeingUsed = nullptr;
 };
 
 // DEFINES
@@ -78,7 +51,7 @@ extern "C" Behaviour *CreateDynamically_##CLASS_NAME(\
     /* This line links the Application in the main binary \
         to the Application in the behaviour loaded library. */ \
     Application::SetApplicationSingleton(mainBinaryApplication); \
-    return new CLASS_NAME(); \
+    return ComponentFactory::Create<CLASS_NAME>(); \
 } \
 \
 extern "C" void DeleteDynamically_##CLASS_NAME(Behaviour *b) \

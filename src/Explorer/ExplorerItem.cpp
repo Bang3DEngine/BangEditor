@@ -37,6 +37,7 @@ ExplorerItem::ExplorerItem()
     iconRT->SetMarginBot(textPixels + spacing);
     p_icon = iconGo->AddComponent<UIImageRenderer>();
     p_icon->SetAspectRatioMode(AspectRatioMode::Keep);
+    p_icon->SetTint(Color::Zero);
 
     p_label = GameObjectFactory::CreateUILabel();
     GameObject *labelGo = p_label->GetGameObject();
@@ -92,6 +93,7 @@ void ExplorerItem::SetFilepath(const Path &path)
         m_path = path;
         RH<Texture2D> iconTex = EditorIconManager::GetIcon(GetPath());
         p_icon->SetImageTexture(iconTex.Get());
+        p_icon->SetTint(Color::White);
         p_label->GetText()->SetContent(GetPath().GetNameExt());
     }
 }
@@ -112,7 +114,7 @@ UILabel *ExplorerItem::GetLabel() const
     return p_label;
 }
 
-UIFocusable *ExplorerItem::GetButton() const
+UIFocusable *ExplorerItem::GetFocusable() const
 {
     return p_button;
 }
