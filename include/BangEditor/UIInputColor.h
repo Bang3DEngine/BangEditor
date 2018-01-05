@@ -21,7 +21,9 @@ class UIInputColor : public GameObject,
 
 public:
     void SetColor(const Color &color);
+
     const Color& GetColor() const;
+    bool HasFocus() const;
 
 protected:
 	UIInputColor();

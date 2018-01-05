@@ -18,19 +18,11 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-CIWTransform::CIWTransform()
-{
-}
-
-CIWTransform::~CIWTransform()
-{
-}
-
 void CIWTransform::Init()
 {
     ComponentInspectorWidget::Init();
 
-    SetName("CWTransform");
+    SetName("CIWTransform");
     SetTitle("Transform");
 
     p_posIV   = GameObject::Create<UIInputVector>(3);
@@ -48,51 +40,38 @@ void CIWTransform::Init()
     SetLabelsWidth(60);
 }
 
-void CIWTransform::Update()
+void CIWTransform::UpdateValuesFromComponent()
 {
-    ComponentInspectorWidget::Update();
-
-    IValueChangedListener::SetReceiveEvents(false);
+    ComponentInspectorWidget::UpdateValuesFromComponent();
 
     if (!p_posIV->HasFocus())
     {
-        p_posIV->Set(p_relatedTransform->GetLocalPosition());
+        p_posIV->Set(GetTransform()->GetLocalPosition());
     }
 
     if (!p_rotIV->HasFocus())
     {
-        p_rotIV->Set(p_relatedTransform->GetLocalEuler());
+        p_rotIV->Set(GetTransform()->GetLocalEuler());
     }
 
     if (!p_scaleIV->HasFocus())
     {
-        p_scaleIV->Set(p_relatedTransform->GetLocalScale());
+        p_scaleIV->Set(GetTransform()->GetLocalScale());
     }
+}
 
-    IValueChangedListener::SetReceiveEvents(true);
+Transform *CIWTransform::GetTransform() const
+{
+    return SCAST<Transform*>( GetComponent() );
 }
 
 void CIWTransform::OnValueChanged(Object *object)
 {
     ComponentInspectorWidget::OnValueChanged(object);
 
-    p_relatedTransform->SetLocalPosition(p_posIV->GetVector3());
-    p_relatedTransform->SetLocalEuler(p_rotIV->GetVector3());
-    p_relatedTransform->SetLocalScale(p_scaleIV->GetVector3());
-}
-
-void CIWTransform::SetComponent(Component *comp)
-{
-    ComponentInspectorWidget::SetComponent(comp);
-
-    Transform *transform = DCAST<Transform*>(comp);
-    ASSERT(transform);
-
-    p_relatedTransform = transform;
-
-    p_posIV->Set(transform->GetLocalPosition());
-    p_rotIV->Set(transform->GetLocalRotation().GetEulerAngles());
-    p_scaleIV->Set(transform->GetLocalScale());
+    GetTransform()->SetLocalPosition(p_posIV->GetVector3());
+    GetTransform()->SetLocalEuler(p_rotIV->GetVector3());
+    GetTransform()->SetLocalScale(p_scaleIV->GetVector3());
 }
 
 bool CIWTransform::MustShowEnabledCheckbox() const

@@ -21,7 +21,8 @@ public:
     // InspectorWidget
     virtual void Init() override;
 
-    void Update() override;
+    // ComponentInspectorWidget
+    virtual void UpdateValuesFromComponent() override;
 
 protected:
     CIWRenderer();
@@ -32,12 +33,7 @@ protected:
     // IValueChangedListener
     void OnValueChanged(Object *object) override;
 
-    // ComponentWidget
-    void SetComponent(Component *comp) override;
-
 private:
-    Renderer *p_relatedRenderer = nullptr;
-
     UICheckBox *p_visibleCheckBox = nullptr;
     UIInputFile *p_materialInputFile = nullptr;
 };

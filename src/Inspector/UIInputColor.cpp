@@ -23,6 +23,9 @@ UIInputColor::UIInputColor()
     hl->SetChildrenVerticalStretch(Stretch::Full);
     hl->SetSpacing(5);
 
+    UILayoutElement *le = AddComponent<UILayoutElement>();
+    le->SetFlexibleWidth(1.0f);
+
     p_colorImage = GameObjectFactory::CreateUIImage(Color::Black);
     UILayoutElement *colorImgLE = p_colorImage->GetGameObject()->
                                        AddComponent<UILayoutElement>();
@@ -75,5 +78,10 @@ void UIInputColor::SetColor(const Color &color)
 const Color &UIInputColor::GetColor() const
 {
     return m_color;
+}
+
+bool UIInputColor::HasFocus() const
+{
+    return p_colorInputVector->HasFocus();
 }
 

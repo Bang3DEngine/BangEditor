@@ -3,7 +3,9 @@
 #include "Bang/Component.h"
 
 #include "BangEditor/CIWTransform.h"
+#include "BangEditor/CIWPointLight.h"
 #include "BangEditor/CIWMeshRenderer.h"
+#include "BangEditor/CIWDirectionalLight.h"
 #include "BangEditor/CIWBehaviourContainer.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
@@ -25,6 +27,14 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(Component *com
     else if (cName == "BehaviourContainer")
     {
         ciw = GameObject::Create<CIWBehaviourContainer>();
+    }
+    else if (cName == "DirectionalLight")
+    {
+        ciw = GameObject::Create<CIWDirectionalLight>();
+    }
+    else if (cName == "PointLight")
+    {
+        ciw = GameObject::Create<CIWPointLight>();
     }
     else
     {

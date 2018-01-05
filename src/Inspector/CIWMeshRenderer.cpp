@@ -13,15 +13,6 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-CIWMeshRenderer::CIWMeshRenderer()
-{
-
-}
-
-CIWMeshRenderer::~CIWMeshRenderer()
-{
-}
-
 void CIWMeshRenderer::Init()
 {
     CIWRenderer::Init();
@@ -38,17 +29,13 @@ void CIWMeshRenderer::Init()
     SetLabelsWidth(60);
 }
 
-void CIWMeshRenderer::Update()
+void CIWMeshRenderer::UpdateValuesFromComponent()
 {
-    CIWRenderer::Update();
-
-    IValueChangedListener::SetReceiveEvents(false);
+    CIWRenderer::UpdateValuesFromComponent();
 
     Mesh *mesh = GetMeshRenderer()->GetSharedMesh();
     Path meshPath = mesh ? mesh->GetResourceFilepath() : Path::Empty;
     p_meshInputFile->SetPath(meshPath);
-
-    IValueChangedListener::SetReceiveEvents(true);
 }
 
 void CIWMeshRenderer::OnValueChanged(Object *object)
@@ -64,16 +51,5 @@ void CIWMeshRenderer::OnValueChanged(Object *object)
 
 MeshRenderer *CIWMeshRenderer::GetMeshRenderer() const
 {
-    return p_relatedMeshRenderer;
+    return SCAST<MeshRenderer*>( GetRenderer() );
 }
-
-void CIWMeshRenderer::SetComponent(Component *comp)
-{
-    CIWRenderer::SetComponent(comp);
-
-    MeshRenderer *meshRenderer = DCAST<MeshRenderer*>(comp);
-    ASSERT(meshRenderer);
-
-    p_relatedMeshRenderer = meshRenderer;
-}
-

@@ -30,9 +30,9 @@ void CIWBehaviourContainer::Init()
     SetLabelsWidth(60);
 }
 
-void CIWBehaviourContainer::Update()
+void CIWBehaviourContainer::UpdateValuesFromComponent()
 {
-    ComponentInspectorWidget::Update();
+    ComponentInspectorWidget::UpdateValuesFromComponent();
 
     p_sourceInputFile->SetPath( GetBehaviourContainer()->GetSourceFilepath() );
 }
@@ -42,17 +42,7 @@ void CIWBehaviourContainer::OnValueChanged(Object*)
     GetBehaviourContainer()->SetSourceFilepath( p_sourceInputFile->GetPath() );
 }
 
-void CIWBehaviourContainer::SetComponent(Component *comp)
-{
-    ComponentInspectorWidget::SetComponent(comp);
-
-    BehaviourContainer *behaviourContainer = DCAST<BehaviourContainer*>(comp);
-    ASSERT(behaviourContainer);
-
-    p_relatedBehaviourContainer = behaviourContainer;
-}
-
 BehaviourContainer *CIWBehaviourContainer::GetBehaviourContainer() const
 {
-    return p_relatedBehaviourContainer;
+    return SCAST<BehaviourContainer*>( GetComponent() );
 }

@@ -103,7 +103,10 @@ ${SRC_DIR}/Hierarchy/HierarchyItem.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidget.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgetFactory.cpp
 ${SRC_DIR}/Inspector/CIWBehaviourContainer.cpp
+${SRC_DIR}/Inspector/CIWDirectionalLight.cpp
+${SRC_DIR}/Inspector/CIWLight.cpp
 ${SRC_DIR}/Inspector/CIWMeshRenderer.cpp
+${SRC_DIR}/Inspector/CIWPointLight.cpp
 ${SRC_DIR}/Inspector/CIWRenderer.cpp
 ${SRC_DIR}/Inspector/CIWTransform.cpp
 ${SRC_DIR}/Inspector/FileInspectorWidget.cpp

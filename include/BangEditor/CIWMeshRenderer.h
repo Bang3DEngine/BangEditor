@@ -21,24 +21,19 @@ public:
     // InspectorWidget
     void Init() override;
 
-    // GameObject
-    void Update() override;
+    // ComponentInspectorWidget
+    void UpdateValuesFromComponent() override;
 
 private:
-    MeshRenderer *p_relatedMeshRenderer = nullptr;
-
     UIInputFile *p_meshInputFile = nullptr;
 
     MeshRenderer *GetMeshRenderer() const;
 
-    CIWMeshRenderer();
-    virtual ~CIWMeshRenderer();
+    CIWMeshRenderer() = default;
+    virtual ~CIWMeshRenderer() = default;
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;
-
-    // ComponentWidget
-    void SetComponent(Component *comp) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

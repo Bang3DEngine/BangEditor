@@ -33,11 +33,26 @@ void ComponentInspectorWidget::Init()
     p_contextMenu->AddButtonPart( GetWidgetsContainer() );
 }
 
+void ComponentInspectorWidget::Update()
+{
+    GameObject::Update();
+
+    IEventListener::SetReceiveEvents(false);
+    UpdateValuesFromComponent();
+    IEventListener::SetReceiveEvents(true);
+}
+
+void ComponentInspectorWidget::UpdateValuesFromComponent()
+{
+    p_enabledCheckBox->SetChecked( GetComponent()->IsEnabled() );
+}
+
 void ComponentInspectorWidget::SetComponent(Component *comp)
 {
     ASSERT(!GetComponent());
-    SetTitle(comp->GetClassName());
+
     p_component = comp;
+    SetTitle(GetComponent()->GetClassName());
 }
 
 Component *ComponentInspectorWidget::GetComponent() const

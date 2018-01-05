@@ -19,29 +19,27 @@ class CIWTransform : public ComponentInspectorWidget
     GAMEOBJECT_EDITOR(CIWTransform);
 
 public:
-
     // InspectorWidget
     void Init() override;
 
-    void Update() override;
+    // ComponentInspectorWidget
+    void UpdateValuesFromComponent() override;
 
 private:
-    Transform *p_relatedTransform = nullptr;
-
     UIInputVector *p_posIV   = nullptr;
     UIInputVector *p_rotIV   = nullptr;
     UIInputVector *p_scaleIV = nullptr;
 
-    CIWTransform();
-    virtual ~CIWTransform();
-
+    Transform *GetTransform() const;
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;
 
     // ComponentWidget
-    void SetComponent(Component *comp) override;
     bool MustShowEnabledCheckbox() const override;
+
+    CIWTransform() = default;
+    virtual ~CIWTransform() = default;
 };
 
 NAMESPACE_BANG_EDITOR_END

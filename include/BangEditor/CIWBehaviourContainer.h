@@ -23,13 +23,12 @@ public:
     // InspectorWidget
     virtual void Init() override;
 
-    void Update() override;
+    // ComponentInspectorWidget
+    void UpdateValuesFromComponent() override;
 
     BehaviourContainer *GetBehaviourContainer() const;
 
 private:
-    BehaviourContainer *p_relatedBehaviourContainer = nullptr;
-
     UIInputFile *p_sourceInputFile = nullptr;
 
     CIWBehaviourContainer();
@@ -37,9 +36,6 @@ private:
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;
-
-    // ComponentWidget
-    void SetComponent(Component *comp) override;
 
     friend class ComponentInspectorWidgetFactory;
 };

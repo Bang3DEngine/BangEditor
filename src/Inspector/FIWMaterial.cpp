@@ -42,8 +42,6 @@ void FIWMaterial::Init()
 
     p_diffuseColorInput = GameObject::Create<UIInputColor>();
     p_diffuseColorInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    UILayoutElement *diffColorLE = p_diffuseColorInput->AddComponent<UILayoutElement>();
-    diffColorLE->SetFlexibleWidth(1.0f);
 
     p_receivesLightingCheckBox = GameObjectFactory::CreateUICheckBox();
     p_receivesLightingCheckBox->EventEmitter<IValueChangedListener>::RegisterListener(this);

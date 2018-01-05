@@ -22,6 +22,9 @@ protected:
     // InspectorWidget
     virtual void Init() override;
 
+    virtual void Update() override;
+    virtual void UpdateValuesFromComponent();
+
     virtual void SetComponent(Component *comp);
 
 protected:

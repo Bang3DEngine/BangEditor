@@ -41,9 +41,9 @@ void CIWRenderer::Init()
     SetLabelsWidth(60);
 }
 
-void CIWRenderer::Update()
+void CIWRenderer::UpdateValuesFromComponent()
 {
-    ComponentInspectorWidget::Update();
+    ComponentInspectorWidget::UpdateValuesFromComponent();
 
     IValueChangedListener::SetReceiveEvents(false);
 
@@ -58,7 +58,7 @@ void CIWRenderer::Update()
 
 Renderer *CIWRenderer::GetRenderer() const
 {
-    return p_relatedRenderer;
+    return SCAST<Renderer*>( GetComponent() );
 }
 
 void CIWRenderer::OnValueChanged(Object *object)
@@ -75,12 +75,3 @@ void CIWRenderer::OnValueChanged(Object *object)
         GetRenderer()->SetMaterial(mat.Get());
     }
 }
-
-void CIWRenderer::SetComponent(Component *comp)
-{
-    ComponentInspectorWidget::SetComponent(comp);
-
-    p_relatedRenderer = Cast<Renderer*>(comp);
-    ASSERT(p_relatedRenderer);
-}
-
