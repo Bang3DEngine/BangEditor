@@ -27,14 +27,6 @@ void CIWBehaviourContainer::Init()
     p_sourceInputFile->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Source", p_sourceInputFile);
 
-    p_compileButton = GameObjectFactory::CreateUIButton();
-    p_compileButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
-    {
-        // GetBehaviourContainer()->ReCompileBehaviourLib();
-    });
-    p_compileButton->GetText()->SetContent("Compile");
-    AddWidget("", p_compileButton->GetGameObject());
-
     SetLabelsWidth(60);
 }
 

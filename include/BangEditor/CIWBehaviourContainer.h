@@ -31,7 +31,6 @@ private:
     BehaviourContainer *p_relatedBehaviourContainer = nullptr;
 
     UIInputFile *p_sourceInputFile = nullptr;
-    UIButton *p_compileButton = nullptr;
 
     CIWBehaviourContainer();
     virtual ~CIWBehaviourContainer();

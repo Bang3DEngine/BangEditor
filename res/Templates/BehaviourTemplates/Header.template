@@ -1,6 +1,9 @@
-#include "Bang/Behaviour.h"
+#include "BangEditor/Behaviour.h"
 
-class BEHAVIOUR_NAME
+USING_NAMESPACE_BANG
+USING_NAMESPACE_BANG_EDITOR
+
+class BEHAVIOUR_NAME : public Behaviour
 {
     COMPONENT(BEHAVIOUR_NAME);
 
@@ -13,4 +16,3 @@ public:
 };
 
 BANG_BEHAVIOUR_CLASS(BEHAVIOUR_NAME);
-BANG_BEHAVIOUR_CLASS_IMPL(BEHAVIOUR_NAME);

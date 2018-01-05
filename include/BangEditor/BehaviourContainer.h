@@ -25,15 +25,9 @@ public:
     Behaviour* CreateBehaviourInstance() const;
 
     String GetBehaviourName() const;
-    Library *GetBehaviourLibrary() const;
     const Path& GetSourceFilepath() const;
     bool IsLoaded() const;
 
-    static Behaviour* CreateBehaviour(const String &behaviourName,
-                                      Library *openLibrary);
-    static bool DeleteBehaviour(const String &behaviourName,
-                                Behaviour *behaviour,
-                                Library *openLibrary);
 private:
     Path m_sourceFilepath;
     Behaviour *p_behaviour = nullptr;

@@ -21,20 +21,33 @@ class BehaviourManager
 {
 public:
     BehaviourManager();
+    virtual ~BehaviourManager();
 
     static bool IsCompiled(const Path& behaviourFilepath);
-    static Library* GetBehaviourLib(const Path& behaviourFilepath);
+    static Library* GetBehavioursLibrary();
 
-    static void RemoveBehaviourLibrariesOf(const String& behaviourName);
+    static Behaviour* CreateBehaviourInstance(const String &behaviourName);
+    static bool DeleteBehaviourInstance(const String &behaviourName,
+                                        Behaviour *behaviour);
 
 private:
+    Library *m_behavioursLibrary = nullptr;
     Map<Path, bool> m_compiledBehaviours;
     Map<Path, Library*> m_cachedBehaviourLibraries;
 
-    static Compiler::Result CompileBehaviourLib(
+    static void RemoveBehaviourLibrariesOf(const String& behaviourName);
+
+    static void CompileBehaviourObject(const Path &behaviourPath);
+    static Compiler::Result CompileBehaviourObject(
                                        const Path& behaviourFilepath,
                                        const Path& outputObjectFilepath,
                                        BinType binaryType);
+
+    static void CompileAllProjectBehaviours();
+
+    static Compiler::Result MergeBehaviourObjects(const Path &outputLibFilepath,
+                                                  const List<Path> &behaviourObjectPaths,
+                                                  BinType binaryType);
 
     static Compiler::Job CreateBaseJob(BinType binaryType);
 

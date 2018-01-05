@@ -165,7 +165,7 @@ bool GameBuilder::CompileBehaviours(const Path &executableDir,
         Debug_Log("Compiling '" << behaviourSourcePath << "' into '" <<
                   outputObjPath << "'...");
         Compiler::Result res =
-                BehaviourManager::CompileBehaviourLib(behaviourSourcePath,
+                BehaviourManager::CompileBehaviourObject(behaviourSourcePath,
                                                          outputObjPath,
                                                          binType);
 

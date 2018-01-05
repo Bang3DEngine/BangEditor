@@ -64,7 +64,6 @@ void ScenePlayer::InstantiatePlayingSceneBehaviours()
 
     List<BehaviourContainer*> sceneBehaviourContainers =
             p_playingScene->GetComponentsInChildren<BehaviourContainer>(true);
-    Debug_Peek(sceneBehaviourContainers);
     for (BehaviourContainer* behaviourContainer : sceneBehaviourContainers)
     {
         if (behaviourContainer->GetSourceFilepath().IsFile())

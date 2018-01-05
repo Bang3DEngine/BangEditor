@@ -1,4 +1,4 @@
-#include "Bang/BEHAVIOUR_NAME.h"
+#include "BEHAVIOUR_NAME.h"
 
 void BEHAVIOUR_NAME::OnStart()
 {
@@ -13,3 +13,5 @@ void BEHAVIOUR_NAME::OnUpdate()
 
     // This code is executed every frame
 }
+
+BANG_BEHAVIOUR_CLASS_IMPL(BEHAVIOUR_NAME);
