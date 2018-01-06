@@ -50,6 +50,8 @@ private:
     static void OnSaveScene   (MenuItem *item);
     static void OnSaveSceneAs (MenuItem *item);
     static void OnOpenScene   (MenuItem *item);
+    static void OnBuild       (MenuItem *item);
+    static void OnBuildAndRun (MenuItem *item);
 
     static void OnAddAudioListener     (MenuItem *item);
     static void OnAddAudioSource       (MenuItem *item);

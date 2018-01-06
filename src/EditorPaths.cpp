@@ -41,6 +41,17 @@ List<Path> EditorPaths::GetProjectIncludeDirs()
     return incDirs;
 }
 
+Path EditorPaths::EditorBinaryDir(BinType binaryType)
+{
+    String binTypeStr = ( binaryType == BinType::Debug ? "Debug" : "Release" );
+    return Editor().Append("build" + binTypeStr).Append("bin");
+}
+
+Path EditorPaths::GameExecutableOutputFile(BinType binaryType)
+{
+    return EditorPaths::EditorBinaryDir(binaryType).Append("Game");
+}
+
 const Path &EditorPaths::Project()
 {
     return EditorPaths::GetInstance()->c_projectRoot;

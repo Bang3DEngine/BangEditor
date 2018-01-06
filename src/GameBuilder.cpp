@@ -10,19 +10,40 @@
 #include "Bang/BangPreprocessor.h"
 
 #include "BangEditor/Project.h"
+#include "BangEditor/EditorPaths.h"
 #include "BangEditor/ProjectManager.h"
-#include "BangEditor/BehaviourManager.h"
+#include "BangEditor/EditorBehaviourManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-void GameBuilder::BuildGame(const Project *project,
-                            const Path &outputExecutableFilepath,
+
+Path GameBuilder::GetExecutablePath()
+{
+    Project *project = ProjectManager::GetCurrentProject();
+    Path outputExecutableFilepath = EditorPaths::Project().
+                                         Append(project->GetProjectName() + "_Game").
+                                         Append(project->GetProjectName()).
+                                         AppendExtension("exe");
+    return outputExecutableFilepath;
+}
+
+void GameBuilder::BuildGame()
+{
+    Path gameExecPath = GameBuilder::GetExecutablePath();
+    File::CreateDirectory(gameExecPath.GetDirectory());
+
+    GameBuilder::BuildGame(gameExecPath.GetName(),
+                           gameExecPath.GetDirectory(),
+                           BinType::Debug,
+                           true);
+}
+
+void GameBuilder::BuildGame(const String &gameName,
+                            const Path &gameDir,
                             BinType binaryType,
                             bool compileBehaviours)
 {
-    Path executableDir = outputExecutableFilepath.GetDirectory();
-
     Debug_Log("Compiling the game executable...");
     if (!GameBuilder::CompileGameExecutable(binaryType))
     {
@@ -31,14 +52,14 @@ void GameBuilder::BuildGame(const Project *project,
     }
 
     Debug_Log("Copying assets into data directory...");
-    if (!GameBuilder::CreateDataDirectory(executableDir))
+    if (!GameBuilder::CreateDataDirectory(gameDir))
     {
         Debug_Error("Could not create data directory");
         return;
     }
 
     Debug_Log("Creating Game project file...");
-    Project *gameProject = GameBuilder::CreateGameProject(executableDir);
+    Project *gameProject = GameBuilder::CreateGameProject(gameDir);
     if (!gameProject)
     {
         Debug_Error("Could not create game project file");
@@ -48,22 +69,24 @@ void GameBuilder::BuildGame(const Project *project,
     if (compileBehaviours)
     {
         Debug_Log("Compiling behaviours...");
-        if (!GameBuilder::CompileBehaviours(executableDir, binaryType))
+        if (!GameBuilder::CreateBehavioursLibrary(gameDir, binaryType))
         {
             Debug_Error("Could not compile the behaviours");
             return;
         }
     }
 
-    Debug_Log("Moving the executable to '" << outputExecutableFilepath  << "'...");
-    const Path c_initialOutputDir = Paths::GameExecutableOutputFile(binaryType);
-    File::Remove(outputExecutableFilepath);
-    File::Rename(c_initialOutputDir, outputExecutableFilepath);
+    Path gameExecutablePath = gameDir.Append(gameName).AppendExtension("exe");
+    Debug_Log("Moving the executable to '" << gameExecutablePath  << "'...");
+    const Path originalGameOutputDir = EditorPaths::GameExecutableOutputFile(binaryType);
+
+    File::Remove(gameExecutablePath); // Remove old game, if any
+    File::Rename(originalGameOutputDir, gameExecutablePath);
 }
 
 bool GameBuilder::CompileGameExecutable(BinType binaryType)
 {
-    List<Path> sceneFiles = Paths::EngineAssets()
+    List<Path> sceneFiles = EditorPaths::ProjectAssets()
                                     .FindFiles(Path::FindFlag::Recursive,
                                                {Extensions::GetSceneExtension()});
     if (sceneFiles.IsEmpty())
@@ -73,13 +96,16 @@ bool GameBuilder::CompileGameExecutable(BinType binaryType)
         return false;
     }
 
-    const Path gameOutputFilepath = Paths::GameExecutableOutputFile(binaryType);
+    const Path gameOutputFilepath = EditorPaths::GameExecutableOutputFile(binaryType);
     File::Remove(gameOutputFilepath);
 
     String debugRelease = (binaryType == BinType::Debug) ? "Debug" : "Release";
-    String cmd = Paths::Engine().GetAbsolute() +
-                 "/scripts/compileExecutables.sh " +
-                 debugRelease;
+    String cmd = EditorPaths::Editor().GetAbsolute() +
+                 "/scripts/compileTargets.sh " +
+                 debugRelease +
+                 " Game";
+
+    Debug_Log("Compiling game executable with: " << cmd);
 
     SystemProcess process;
     process.Start(cmd);
@@ -100,30 +126,39 @@ bool GameBuilder::CompileGameExecutable(BinType binaryType)
            process.ReadStandardError();
     process.Close();
 
-    if (!process.FinishedOk()) {
-        Debug_Error(out); return false;
+    Debug_Peek(gameOutputFilepath);
+    if (!gameOutputFilepath.IsFile())
+    {
+        Debug_Error(out);
+        return false;
     }
     return true;
 }
 
 bool GameBuilder::CreateDataDirectory(const Path &executableDir)
 {
-    Path dataDir = executableDir.Append("GameData");
+    Path dataDir = executableDir.Append("Data");
     File::Remove(dataDir);
     if (!File::CreateDirectory(dataDir)) { return false; }
 
-    // Copy the Engine Assets in the GameData directory
-    Path dataResDir = dataDir.Append("res");
-    if (!File::CreateDirectory(dataResDir)) { return false; }
-    if (!File::DuplicateDir(Paths::EngineAssets(),
-                            dataResDir.Append("EngineAssets")))
+    // Copy the Engine Assets in the Data directory
+    Path gameDataResDir = dataDir.Append("res");
+    Path gameDataEngineAssetsDir = gameDataResDir.Append("EngineAssets");
+    if (!File::CreateDirectory(gameDataResDir)) { return false; }
+    if (!File::DuplicateDir(Paths::EngineAssets(), gameDataEngineAssetsDir))
     {
+        Debug_Error("Could not duplicate engine assets directory '" <<
+                    Paths::EngineAssets() << "' into '" << gameDataEngineAssetsDir << "'");
         return false;
     }
 
-    // Copy the Project Assets in the GameData directory
-    if (!File::DuplicateDir(Paths::EngineAssets(), dataDir.Append("Assets")))
+    // Copy the Project Assets in the Data directory
+    Path gameDataAssetsDir = gameDataResDir.Append("Assets");
+    if (!File::DuplicateDir(EditorPaths::ProjectAssets(), gameDataAssetsDir))
     {
+        Debug_Error("Could not duplicate assets directory '" <<
+                    EditorPaths::ProjectAssets() << "' into '" <<
+                    gameDataAssetsDir << "'");
         return false;
     }
 
@@ -132,24 +167,24 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
 
 Project *GameBuilder::CreateGameProject(const Path &executableDir)
 {
-    String projectFile = executableDir + "/GameData/Game.bproject";
+    String projectFile = executableDir + "/Data/Game.bproject";
     ProjectManager pm;
     return pm.CreateNewProjectFileOnly( Path(projectFile ) );
 }
 
-bool GameBuilder::CompileBehaviours(const Path &executableDir,
+bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
                                     BinType binType)
 {
     // Create Libraries directory
-    Path libsDir = Path(executableDir).Append("GameData").Append("Libraries");
-    File::CreateDirectory(libsDir);
+    Path dataLibsDir = Path(executableDir).Append("Data").Append("Libraries");
+    File::CreateDirectory(dataLibsDir);
 
     // Compile every behaviour into its .o
-    List<Path> behavioursSourceFiles = Paths::EngineAssets()
-                                  .FindFiles(Path::FindFlag::Recursive,
-                                             Extensions::GetSourceFileExtensions());
+    List<Path> behavioursSourceFiles = EditorPaths::ProjectAssets()
+                                        .FindFiles(Path::FindFlag::Recursive,
+                                         Extensions::GetSourceFileExtensions());
 
-    // Preprocess behaviours before
+    // Preprocess behaviours
     for (const Path &behaviourSourcePath : behavioursSourceFiles)
     {
         Path behaviourHeader = behaviourSourcePath.WithExtension("h");
@@ -159,36 +194,35 @@ bool GameBuilder::CompileBehaviours(const Path &executableDir,
     // Compile
     for (const Path &behaviourSourcePath : behavioursSourceFiles)
     {
-        Path outputObjPath = libsDir.Append(behaviourSourcePath.GetName())
-                                    .AppendExtension("o");
+        Path outputObjPath = dataLibsDir.Append(behaviourSourcePath.GetName())
+                                        .AppendExtension("o");
 
         Debug_Log("Compiling '" << behaviourSourcePath << "' into '" <<
                   outputObjPath << "'...");
         Compiler::Result res =
-                BehaviourManager::CompileBehaviourObject(behaviourSourcePath,
-                                                         outputObjPath,
-                                                         binType);
+           EditorBehaviourManager::CompileBehaviourObject(behaviourSourcePath,
+                                                          outputObjPath,
+                                                          binType);
 
-        if (!res.success) { Debug_Error(res.output); return false; }
+        if (!outputObjPath.IsFile()) { Debug_Error(res.output); return false; }
     }
     //
 
     // Merge into .so
-    List<Path> behaviourObjectsPaths = libsDir.FindFiles(Path::FindFlag::Simple,
+    List<Path> behaviourObjectsPaths = dataLibsDir.FindFiles(Path::FindFlag::Simple,
                                                          {"o"});
     Path outputLibPath =
-                libsDir.Append("Behaviours")
+                dataLibsDir.Append("Behaviours")
                        .AppendExtension("so")
                        .AppendExtension( String::ToString(Time::GetNow_Millis()) );
-    Debug_Log("Merging behaviour objects into '" << outputLibPath << "'...");
+    Debug_Log("Merging behaviour objects " << behaviourObjectsPaths <<
+              " into '" << outputLibPath << "'...");
 
-    /*
     Compiler::Result res =
-            BehaviourManager::MergeBehaviourObjects(outputLibPath,
-                                                    behaviourObjectsPaths,
+      EditorBehaviourManager::MergeBehaviourObjects(behaviourObjectsPaths,
+                                                    outputLibPath,
                                                     binType);
-    if (!res.success) { Debug_Error(res.output); return false; }
-    */
+    if (!outputLibPath.IsFile()) { Debug_Error(res.output); return false; }
     //
 
     return true;

@@ -1,27 +1,27 @@
-#ifndef BEHAVIOURMANAGER_H
-#define BEHAVIOURMANAGER_H
+#ifndef EDITORBEHAVIOURMANAGER_H
+#define EDITORBEHAVIOURMANAGER_H
 
 #include "Bang/Map.h"
 #include "Bang/Path.h"
 #include "Bang/BinType.h"
 #include "Bang/Compiler.h"
+#include "Bang/BehaviourManager.h"
 
 #include "BangEditor/BangEditor.h"
 
 NAMESPACE_BANG_BEGIN
 FORWARD class Library;
+FORWARD class Behaviour;
 NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class Behaviour;
-
-class BehaviourManager
+class EditorBehaviourManager : public BehaviourManager
 {
 public:
-    BehaviourManager();
-    virtual ~BehaviourManager();
+    EditorBehaviourManager();
+    virtual ~EditorBehaviourManager();
 
     static bool IsCompiled(const Path& behaviourFilepath);
     static Library* GetBehavioursLibrary();
@@ -45,17 +45,17 @@ private:
 
     static void CompileAllProjectBehaviours();
 
-    static Compiler::Result MergeBehaviourObjects(const Path &outputLibFilepath,
-                                                  const List<Path> &behaviourObjectPaths,
+    static Compiler::Result MergeBehaviourObjects(const List<Path> &behaviourObjectPaths,
+                                                  const Path &outputLibFilepath,
                                                   BinType binaryType);
 
     static Compiler::Job CreateBaseJob(BinType binaryType);
 
-    static BehaviourManager* GetInstance();
+    static EditorBehaviourManager* GetInstance();
 
     friend class GameBuilder;
 };
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // BEHAVIOURMANAGER_H
+#endif // EDITORBEHAVIOURMANAGER_H

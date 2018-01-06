@@ -17,7 +17,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class EditorScene;
 FORWARD class EditorPaths;
-FORWARD class BehaviourManager;
+FORWARD class EditorBehaviourManager;
 
 class EditorApplication : public Application
 {
@@ -29,10 +29,10 @@ public:
     void OpenEditorScene();
 
     EditorPaths* GetEditorPaths() const;
-    BehaviourManager* GetBehaviourManager() const;
+    EditorBehaviourManager* GetBehaviourManager() const;
 
 private:
-    BehaviourManager *m_behaviourManager = nullptr;
+    EditorBehaviourManager *m_behaviourManager = nullptr;
 
     Paths* CreatePaths() override;
     Window* _CreateWindow() override;
@@ -41,7 +41,7 @@ private:
     static EditorApplication* GetInstance();
 
     friend class EditorPaths;
-    friend class BehaviourManager;
+    friend class EditorBehaviourManager;
 };
 
 NAMESPACE_BANG_EDITOR_END

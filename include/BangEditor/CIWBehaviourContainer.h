@@ -7,13 +7,13 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIInputFile;
+FORWARD class BehaviourContainer;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UIInputFile;
-FORWARD class BehaviourContainer;
 
 class CIWBehaviourContainer : public ComponentInspectorWidget
 {

@@ -79,13 +79,11 @@ set(BANG_LIB_NAME "libBang.so")
 link_libraries("${BANG_LIBS_DIR}/${BANG_LIB_NAME}")
 
 add_executable(BangEditor
-${SRC_DIR}/Behaviour.cpp
 ${SRC_DIR}/BehaviourCreator.cpp
-${SRC_DIR}/BehaviourContainer.cpp
-${SRC_DIR}/BehaviourManager.cpp
 ${SRC_DIR}/Console.cpp
 ${SRC_DIR}/Editor.cpp
 ${SRC_DIR}/EditorApplication.cpp
+${SRC_DIR}/EditorBehaviourManager.cpp
 ${SRC_DIR}/EditorCamera.cpp
 ${SRC_DIR}/EditorComponentFactory.cpp
 ${SRC_DIR}/EditorDialog.cpp
@@ -143,6 +141,8 @@ ${SRC_DIR}/Main.cpp
 
 ${OTHER_FILES}
 )
-
 add_dependencies(BangEditor CompileBang)
+
+add_executable(Game ${SRC_DIR}/MainGame.cpp)
+add_dependencies(Game CompileBang)
 

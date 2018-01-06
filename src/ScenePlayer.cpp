@@ -1,12 +1,13 @@
 #include "BangEditor/ScenePlayer.h"
 
 #include "Bang/Scene.h"
+#include "Bang/Behaviour.h"
+#include "Bang/BehaviourContainer.h"
 
 #include "BangEditor/Editor.h"
-#include "BangEditor/Behaviour.h"
 #include "BangEditor/EditorScene.h"
-#include "BangEditor/BehaviourContainer.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/EditorBehaviourManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -62,17 +63,13 @@ void ScenePlayer::InstantiatePlayingSceneBehaviours()
 {
     ASSERT(p_playingScene);
 
+    Library *behavioursLib = EditorBehaviourManager::GetBehavioursLibrary();
+
     List<BehaviourContainer*> sceneBehaviourContainers =
             p_playingScene->GetComponentsInChildren<BehaviourContainer>(true);
     for (BehaviourContainer* behaviourContainer : sceneBehaviourContainers)
     {
-        if (behaviourContainer->GetSourceFilepath().IsFile())
-        {
-            GameObject *go = behaviourContainer->GetGameObject();
-            Behaviour *behaviour = behaviourContainer->CreateBehaviourInstance();
-            go->AddComponent(behaviour);
-            go->RemoveComponent(behaviourContainer);
-        }
+        behaviourContainer->SubstituteByBehaviourInstance(behavioursLib);
     }
 }
 

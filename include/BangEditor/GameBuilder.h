@@ -14,10 +14,13 @@ FORWARD class Project;
 class GameBuilder
 {
 public:
-    static void BuildGame(const Project *project,
-                          const Path &outputExecutableFilepath,
+    static void BuildGame();
+    static void BuildGame(const String &gameName,
+                          const Path &gameDir,
                           BinType binType,
                           bool compileBehaviours = true);
+
+    static Path GetExecutablePath();
 
     GameBuilder() = delete;
 
@@ -25,7 +28,7 @@ private:
     static bool     CompileGameExecutable(BinType binType);
     static bool     CreateDataDirectory(const Path &executableDir);
     static Project* CreateGameProject(const Path &executableDir);
-    static bool     CompileBehaviours(const Path &executableDir,
+    static bool     CreateBehavioursLibrary(const Path &executableDir,
                                       BinType binType);
 };
 

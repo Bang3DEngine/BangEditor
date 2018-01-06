@@ -12,8 +12,8 @@
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorWindow.h"
 #include "BangEditor/ProjectManager.h"
-#include "BangEditor/BehaviourManager.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/EditorBehaviourManager.h"
 #include "BangEditor/EditorComponentFactory.h"
 
 USING_NAMESPACE_BANG
@@ -38,7 +38,7 @@ void EditorApplication::Init(const Path &engineRootPath)
     ImportFilesManager::CreateMissingImportFiles( EditorPaths::EditorResources() );
     ImportFilesManager::LoadImportFilepathGUIDs( EditorPaths::EditorResources() );
 
-    m_behaviourManager = new BehaviourManager();
+    m_behaviourManager = new EditorBehaviourManager();
 }
 
 EditorPaths *EditorApplication::GetEditorPaths() const
@@ -58,7 +58,7 @@ EditorApplication *EditorApplication::GetInstance()
     return SCAST<EditorApplication*>( Application::GetInstance() );
 }
 
-BehaviourManager *EditorApplication::GetBehaviourManager() const
+EditorBehaviourManager *EditorApplication::GetBehaviourManager() const
 {
     return m_behaviourManager;
 }

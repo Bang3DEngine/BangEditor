@@ -13,8 +13,8 @@
     #define BANG_PROJECT_ROOT
 #endif
 
-using namespace Bang;
-using namespace BangEditor;
+USING_NAMESPACE_BANG
+USING_NAMESPACE_BANG_EDITOR
 
 int main(int argc, char **argv)
 {

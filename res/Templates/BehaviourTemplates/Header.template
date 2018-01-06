@@ -1,7 +1,6 @@
-#include "BangEditor/Behaviour.h"
+#include "Bang/Behaviour.h"
 
 USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
 
 class BEHAVIOUR_NAME : public Behaviour
 {

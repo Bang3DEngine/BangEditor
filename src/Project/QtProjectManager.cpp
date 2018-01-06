@@ -99,7 +99,7 @@ void QtProjectManager::OpenBehaviourInQtCreator(const Path &behFilepath)
         args.PushBack(qtProjFilepath.GetAbsolute());
     }
     args.PushBack(behFilepath.GetAbsolute());
-    SystemUtils::SystemBackground("qtcreator", args);
+    SystemUtils::System("qtcreator", args);
 }
 
 QtProjectManager::QtProjectManager()

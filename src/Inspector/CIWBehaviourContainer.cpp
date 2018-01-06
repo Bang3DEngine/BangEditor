@@ -3,11 +3,11 @@
 #include "Bang/UIButton.h"
 #include "Bang/Extensions.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/BehaviourContainer.h"
 
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/UIInputFile.h"
-#include "BangEditor/BehaviourManager.h"
-#include "BangEditor/BehaviourContainer.h"
+#include "BangEditor/EditorBehaviourManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -34,11 +34,18 @@ void CIWBehaviourContainer::UpdateValuesFromComponent()
 {
     ComponentInspectorWidget::UpdateValuesFromComponent();
 
-    p_sourceInputFile->SetPath( GetBehaviourContainer()->GetSourceFilepath() );
+    const Path &srcPath = GetBehaviourContainer()->GetSourceFilepath();
+    if (srcPath.IsFile())
+    {
+        SetTitle(srcPath.GetName());
+        p_sourceInputFile->SetPath(srcPath);
+    }
 }
 
-void CIWBehaviourContainer::OnValueChanged(Object*)
+void CIWBehaviourContainer::OnValueChanged(Object *object)
 {
+    ComponentInspectorWidget::OnValueChanged(object);
+
     GetBehaviourContainer()->SetSourceFilepath( p_sourceInputFile->GetPath() );
 }
 

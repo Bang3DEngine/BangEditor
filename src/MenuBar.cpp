@@ -2,6 +2,7 @@
 
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
+#include "Bang/Thread.h"
 #include "Bang/Camera.h"
 #include "Bang/Dialog.h"
 #include "Bang/Random.h"
@@ -9,6 +10,7 @@
 #include "Bang/Extensions.h"
 #include "Bang/IFocusable.h"
 #include "Bang/PointLight.h"
+#include "Bang/SystemUtils.h"
 #include "Bang/AudioSource.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/SceneManager.h"
@@ -21,6 +23,7 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/BehaviourContainer.h"
 #include "Bang/UIHorizontalLayout.h"
 
 #include "BangEditor/Editor.h"
@@ -28,12 +31,12 @@
 #include "BangEditor/MenuItem.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/GameBuilder.h"
 #include "BangEditor/EditorDialog.h"
 #include "BangEditor/EditorSettings.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/BehaviourCreator.h"
-#include "BangEditor/BehaviourContainer.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG_EDITOR
@@ -77,12 +80,19 @@ MenuBar::MenuBar()
     MenuItem *saveScene = m_fileItem->AddItem("Save Scene");
     MenuItem *saveSceneAs = m_fileItem->AddItem("Save Scene As...");
 
+    m_fileItem->AddSeparator();
+    MenuItem *build = m_fileItem->AddItem("Build");
+    MenuItem *buildAndRun = m_fileItem->AddItem("Build and run");
+
     newProject->SetSelectedCallback(MenuBar::OnNewProject);
     openProject->SetSelectedCallback(MenuBar::OnOpenProject);
     newScene->SetSelectedCallback(MenuBar::OnNewScene);
     saveScene->SetSelectedCallback(MenuBar::OnSaveScene);
     saveSceneAs->SetSelectedCallback(MenuBar::OnSaveSceneAs);
     openScene->SetSelectedCallback(MenuBar::OnOpenScene);
+    build->SetSelectedCallback(MenuBar::OnBuild);
+    buildAndRun->SetSelectedCallback(MenuBar::OnBuildAndRun);
+
 
     // Components
     MenuItem *addAudio = m_componentsItem->AddItem("Audio");
@@ -223,6 +233,30 @@ void MenuBar::OnOpenScene(MenuItem*)
 {
     MenuBar *mb = MenuBar::GetInstance();
     mb->m_sceneOpenerSaver->OnOpenScene();
+}
+
+void MenuBar::OnBuild(MenuItem*)
+{
+    GameBuilder::BuildGame();
+}
+
+void MenuBar::OnBuildAndRun(MenuItem*)
+{
+    GameBuilder::BuildGame();
+
+    class Runnable : public ThreadRunnable
+    {
+    public:
+        String cmd = "";
+        void Run() override { SystemUtils::System(cmd); }
+    };
+
+    Runnable *runnable = new Runnable();
+    runnable->cmd = GameBuilder::GetExecutablePath().GetAbsolute();
+
+    Thread *thread = new Thread();
+    thread->SetRunnable(runnable);
+    thread->Start();
 }
 
 template <class T>

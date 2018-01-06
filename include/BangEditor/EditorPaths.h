@@ -26,6 +26,8 @@ public:
     static List<Path> GetAllProjectSubDirs();
     static List<Path> GetEditorIncludeDirs();
     static List<Path> GetProjectIncludeDirs();
+    static Path EditorBinaryDir(BinType binaryType);
+    static Path GameExecutableOutputFile(BinType binaryType);
 
     static Path MakeEditorPath(const String &path);
     static Path MakeProjectPath(const String &path);

@@ -1,32 +1,32 @@
-#include "BangEditor/BehaviourManager.h"
+#include "BangEditor/EditorBehaviourManager.h"
 
 #include "Bang/File.h"
 #include "Bang/Paths.h"
 #include "Bang/Debug.h"
 #include "Bang/Library.h"
+#include "Bang/Behaviour.h"
 #include "Bang/Extensions.h"
 #include "Bang/Application.h"
 
 #include "BangEditor/Project.h"
-#include "BangEditor/Behaviour.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorApplication.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-BehaviourManager::BehaviourManager()
+EditorBehaviourManager::EditorBehaviourManager()
 {
 }
 
-BehaviourManager::~BehaviourManager()
+EditorBehaviourManager::~EditorBehaviourManager()
 {
     if (m_behavioursLibrary) { delete m_behavioursLibrary; }
 }
 
-bool BehaviourManager::IsCompiled(const Path &behaviourFilepath)
+bool EditorBehaviourManager::IsCompiled(const Path &behaviourFilepath)
 {
-    BehaviourManager *bm = BehaviourManager::GetInstance();
+    EditorBehaviourManager *bm = EditorBehaviourManager::GetInstance();
     if (bm)
     {
         return bm->m_compiledBehaviours.ContainsKey(behaviourFilepath) &&
@@ -35,27 +35,27 @@ bool BehaviourManager::IsCompiled(const Path &behaviourFilepath)
     return false;
 }
 
-Library *BehaviourManager::GetBehavioursLibrary()
+Library *EditorBehaviourManager::GetBehavioursLibrary()
 {
-    BehaviourManager *bm = BehaviourManager::GetInstance();
+    EditorBehaviourManager *bm = EditorBehaviourManager::GetInstance();
     if (bm && bm->m_behavioursLibrary) { return bm->m_behavioursLibrary; }
 
-    BehaviourManager::CompileAllProjectBehaviours();
+    EditorBehaviourManager::CompileAllProjectBehaviours();
 
     Path outputLibPath = EditorPaths::ProjectLibrariesDir().
                                       Append("Behaviours").
                                       AppendExtension("so").
                                       AppendExtension( String(Time::GetNow_Nanos()) );
 
-    BehaviourManager::RemoveBehaviourLibrariesOf( "Behaviours" );
+    EditorBehaviourManager::RemoveBehaviourLibrariesOf( "Behaviours" );
 
     List<Path> behaviourObjs = EditorPaths::ProjectLibrariesDir().
                                FindFiles(Path::FindFlag::Simple, {"o"});
 
     Compiler::Result mergeResult =
-            BehaviourManager::MergeBehaviourObjects(outputLibPath,
-                                                    behaviourObjs,
-                                                    BinType::Debug);
+            EditorBehaviourManager::MergeBehaviourObjects(behaviourObjs,
+                                                          outputLibPath,
+                                                          BinType::Debug);
     if (!outputLibPath.IsFile())
     {
         Debug_Error("Merge Behaviours library error: " << mergeResult.output);
@@ -72,16 +72,31 @@ Library *BehaviourManager::GetBehavioursLibrary()
     return behavioursLibrary;
 }
 
-Compiler::Result BehaviourManager::CompileBehaviourObject(
+Behaviour *EditorBehaviourManager::CreateBehaviourInstance(const String &behaviourName)
+{
+    Library *behavioursLib = EditorBehaviourManager::GetBehavioursLibrary();
+    return BehaviourManager::CreateBehaviourInstance(behaviourName, behavioursLib);
+}
+
+bool EditorBehaviourManager::DeleteBehaviourInstance(const String &behaviourName,
+                                                     Behaviour *behaviour)
+{
+    Library *behavioursLib = EditorBehaviourManager::GetBehavioursLibrary();
+    return BehaviourManager::DeleteBehaviourInstance(behaviourName,
+                                                     behaviour,
+                                                     behavioursLib);
+}
+
+Compiler::Result EditorBehaviourManager::CompileBehaviourObject(
                                         const Path &behaviourFilepath,
                                         const Path &outputObjectFilepath,
                                         BinType binaryType)
 {
-    BehaviourManager *bm = BehaviourManager::GetInstance();
+    EditorBehaviourManager *bm = EditorBehaviourManager::GetInstance();
 
     File::CreateDirectory(outputObjectFilepath.GetDirectory());
 
-    Compiler::Job job = BehaviourManager::CreateBaseJob(binaryType);
+    Compiler::Job job = EditorBehaviourManager::CreateBaseJob(binaryType);
     job.outputMode = Compiler::OutputType::Object;
     job.includePaths.PushBack( Paths::GetEngineIncludeDirs() );
     job.includePaths.PushBack( EditorPaths::GetEditorIncludeDirs() );
@@ -89,7 +104,7 @@ Compiler::Result BehaviourManager::CompileBehaviourObject(
     job.inputFiles.PushBack(behaviourFilepath);
     job.outputFile = outputObjectFilepath;
 
-    BehaviourManager::RemoveBehaviourLibrariesOf(behaviourFilepath.GetName());
+    EditorBehaviourManager::RemoveBehaviourLibrariesOf(behaviourFilepath.GetName());
     Compiler::Result compileResult = Compiler::Compile(job);
 
     if (!outputObjectFilepath.IsFile())
@@ -107,7 +122,7 @@ Compiler::Result BehaviourManager::CompileBehaviourObject(
     return compileResult;
 }
 
-void BehaviourManager::RemoveBehaviourLibrariesOf(const String& behaviourName)
+void EditorBehaviourManager::RemoveBehaviourLibrariesOf(const String& behaviourName)
 {
     if (behaviourName.IsEmpty()) { return; }
 
@@ -122,37 +137,37 @@ void BehaviourManager::RemoveBehaviourLibrariesOf(const String& behaviourName)
     }
 }
 
-void BehaviourManager::CompileBehaviourObject(const Path &behaviourPath)
+void EditorBehaviourManager::CompileBehaviourObject(const Path &behaviourPath)
 {
     Path outputObjPath = EditorPaths::ProjectLibrariesDir().
                                       Append(behaviourPath.GetName()).
                                       AppendExtension("o").
                                       AppendExtension( String(Time::GetNow_Nanos()) );
 
-    BehaviourManager::CompileBehaviourObject(behaviourPath,
+    EditorBehaviourManager::CompileBehaviourObject(behaviourPath,
                                              outputObjPath,
                                              BinType::Debug);
 }
 
-void BehaviourManager::CompileAllProjectBehaviours()
+void EditorBehaviourManager::CompileAllProjectBehaviours()
 {
     List<Path> behaviourSources = EditorPaths::ProjectAssets().
                                   FindFiles(Path::FindFlag::Recursive,
                                             Extensions::GetSourceFileExtensions());
     for (const Path &behaviourSourcePath : behaviourSources)
     {
-        BehaviourManager::CompileBehaviourObject(behaviourSourcePath);
+        EditorBehaviourManager::CompileBehaviourObject(behaviourSourcePath);
     }
 }
 
-Compiler::Result BehaviourManager::MergeBehaviourObjects(
-                                    const Path &outputLibFilepath,
+Compiler::Result EditorBehaviourManager::MergeBehaviourObjects(
                                     const List<Path> &behaviourObjectFilepaths,
+                                    const Path &outputLibFilepath,
                                     BinType binaryType)
 {
     File::CreateDirectory(outputLibFilepath.GetDirectory());
 
-    Compiler::Job job = BehaviourManager::CreateBaseJob(binaryType);
+    Compiler::Job job = EditorBehaviourManager::CreateBaseJob(binaryType);
     job.outputMode = Compiler::OutputType::SharedLib;
     job.inputFiles.PushBack(behaviourObjectFilepaths);
     job.outputFile = outputLibFilepath;
@@ -160,7 +175,7 @@ Compiler::Result BehaviourManager::MergeBehaviourObjects(
     return Compiler::Compile(job);
 }
 
-Compiler::Job BehaviourManager::CreateBaseJob(BinType binaryType)
+Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType)
 {
     Compiler::Job job;
     job.libDirs.PushBack(Paths::EngineLibrariesDir(binaryType));
@@ -179,65 +194,7 @@ Compiler::Job BehaviourManager::CreateBaseJob(BinType binaryType)
     return job;
 }
 
-
-Behaviour *BehaviourManager::CreateBehaviourInstance(const String &behaviourName)
-{
-    Library *behavioursLib = BehaviourManager::GetBehavioursLibrary();
-    if (!behavioursLib) { return nullptr; }
-
-    if (!behavioursLib->IsLoaded()) { behavioursLib->Load(); }
-
-    String errorString = "";
-    if (behavioursLib->IsLoaded())
-    {
-        // Get the pointer to the CreateDynamically function
-        String funcName = "CreateDynamically_" + behaviourName;
-        Behaviour* (*createFunction)(Application*) =
-            behavioursLib->Get< Behaviour*(*)(Application*) >(funcName.ToCString());
-
-        if (createFunction)
-        {
-            // Call it and get the pointer to the created Behaviour
-            // Create the Behaviour, passing to it the Application
-            // of this main binary, so it can link it.
-            return createFunction(Application::GetInstance());
-        }
-        else { errorString = behavioursLib->GetErrorString(); }
-    }
-    else { errorString = behavioursLib->GetErrorString(); }
-
-    Debug_Error(errorString);
-    return nullptr;
-}
-
-bool BehaviourManager::DeleteBehaviourInstance(const String &behaviourName,
-                                               Behaviour *behaviour)
-{
-    Library *behavioursLibrary = BehaviourManager::GetBehavioursLibrary();
-    if (!behavioursLibrary)
-    {
-        delete behaviour;
-        return false;
-    }
-
-    if (!behavioursLibrary) { return false; }
-
-    // Get the pointer to the DeleteDynamically function
-    String funcName = "DeleteDinamically_" + behaviourName;
-    void (*deleteFunction)(Behaviour*) =
-            (behavioursLibrary->Get<void (*)(Behaviour*)>(funcName.ToCString()));
-
-    if (deleteFunction)
-    {
-        deleteFunction(behaviour);
-        return true;
-    }
-
-    Debug_Error(behavioursLibrary->GetErrorString());
-    return false;
-}
-
-BehaviourManager *BehaviourManager::GetInstance()
+EditorBehaviourManager *EditorBehaviourManager::GetInstance()
 {
     return EditorApplication::GetInstance()->GetBehaviourManager();
 }
