@@ -5,8 +5,8 @@
 
 #include "BangEditor/BangEditor.h"
 
-#define EDPATH(path) Paths::MakeEditorPath(path)  // Engine assets path
-#define PPATH(path)  Paths::MakeProjectPath(path) // Project assets path
+#define EDPATH(path) Paths::CreateEditorPath(path)  // Engine assets path
+#define PPATH(path)  Paths::CreateProjectPath(path) // Project assets path
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -16,23 +16,22 @@ class EditorPaths : public Paths
 public:
     void InitEditorPath(const Path &editorRootPath);
 
-    static const Path& Project();
-    static Path ProjectAssets();
-    static Path ProjectLibrariesDir();
+    static const Path& GetProjectDir();
+    static Path GetProjectAssetsDir();
+    static Path GetProjectLibrariesDir();
 
-    static const Path& Editor();
-    static Path EditorResources();
+    static const Path& GetEditorDir();
+    static Path GetEditorResourcesDir();
 
     static List<Path> GetAllProjectSubDirs();
     static List<Path> GetEditorIncludeDirs();
     static List<Path> GetProjectIncludeDirs();
-    static Path EditorBinaryDir(BinType binaryType);
-    static Path GameExecutableOutputFile(BinType binaryType);
+    static Path GetEditorBinaryDir(BinType binaryType);
+    static Path GetGameExecutableOutputFile(BinType binaryType);
 
-    static Path MakeEditorPath(const String &path);
-    static Path MakeProjectPath(const String &path);
+    static Path CreateEditorPath(const String &path);
+    static Path CreateProjectPath(const String &path);
 
-    static void SetEditorRoot(const Path &editorRootDir);
     static void SetProjectRoot(const Path &projectRootDir);
 
 private:

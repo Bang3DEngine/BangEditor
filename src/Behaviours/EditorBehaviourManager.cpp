@@ -42,14 +42,14 @@ Library *EditorBehaviourManager::GetBehavioursLibrary()
 
     EditorBehaviourManager::CompileAllProjectBehaviours();
 
-    Path outputLibPath = EditorPaths::ProjectLibrariesDir().
+    Path outputLibPath = EditorPaths::GetProjectLibrariesDir().
                                       Append("Behaviours").
                                       AppendExtension("so").
                                       AppendExtension( String(Time::GetNow_Nanos()) );
 
     EditorBehaviourManager::RemoveBehaviourLibrariesOf( "Behaviours" );
 
-    List<Path> behaviourObjs = EditorPaths::ProjectLibrariesDir().
+    List<Path> behaviourObjs = EditorPaths::GetProjectLibrariesDir().
                                FindFiles(Path::FindFlag::Simple, {"o"});
 
     Compiler::Result mergeResult =
@@ -126,7 +126,7 @@ void EditorBehaviourManager::RemoveBehaviourLibrariesOf(const String& behaviourN
 {
     if (behaviourName.IsEmpty()) { return; }
 
-    List<Path> libFilepaths = EditorPaths::ProjectLibrariesDir().
+    List<Path> libFilepaths = EditorPaths::GetProjectLibrariesDir().
                                            FindFiles(Path::FindFlag::Simple);
     for (const Path &libFilepath : libFilepaths)
     {
@@ -139,7 +139,7 @@ void EditorBehaviourManager::RemoveBehaviourLibrariesOf(const String& behaviourN
 
 void EditorBehaviourManager::CompileBehaviourObject(const Path &behaviourPath)
 {
-    Path outputObjPath = EditorPaths::ProjectLibrariesDir().
+    Path outputObjPath = EditorPaths::GetProjectLibrariesDir().
                                       Append(behaviourPath.GetName()).
                                       AppendExtension("o").
                                       AppendExtension( String(Time::GetNow_Nanos()) );
@@ -151,7 +151,7 @@ void EditorBehaviourManager::CompileBehaviourObject(const Path &behaviourPath)
 
 void EditorBehaviourManager::CompileAllProjectBehaviours()
 {
-    List<Path> behaviourSources = EditorPaths::ProjectAssets().
+    List<Path> behaviourSources = EditorPaths::GetProjectAssetsDir().
                                   FindFiles(Path::FindFlag::Recursive,
                                             Extensions::GetSourceFileExtensions());
     for (const Path &behaviourSourcePath : behaviourSources)
@@ -178,7 +178,7 @@ Compiler::Result EditorBehaviourManager::MergeBehaviourObjects(
 Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType)
 {
     Compiler::Job job;
-    job.libDirs.PushBack(Paths::EngineLibrariesDir(binaryType));
+    job.libDirs.PushBack(Paths::GetEngineLibrariesDir(binaryType));
     job.libraries.PushBack( List<String>({"Bang"}) );
 
     job.flags =  {"-fPIC", "--std=c++11"};

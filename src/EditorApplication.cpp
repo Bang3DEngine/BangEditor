@@ -32,11 +32,11 @@ void EditorApplication::Init(const Path &engineRootPath)
 {
     Application::Init(engineRootPath);
 
-    GetEditorPaths()->InitEditorPath( Paths::ExecutablePath().GetDirectory()
+    GetEditorPaths()->InitEditorPath( Paths::GetExecutablePath().GetDirectory()
                                                              .GetDirectory()
                                                              .GetDirectory());
-    ImportFilesManager::CreateMissingImportFiles( EditorPaths::EditorResources() );
-    ImportFilesManager::LoadImportFilepathGUIDs( EditorPaths::EditorResources() );
+    ImportFilesManager::CreateMissingImportFiles( EditorPaths::GetEditorResourcesDir() );
+    ImportFilesManager::LoadImportFilepathGUIDs( EditorPaths::GetEditorResourcesDir() );
 
     m_behaviourManager = new EditorBehaviourManager();
 }

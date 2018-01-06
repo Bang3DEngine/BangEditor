@@ -1,6 +1,7 @@
 #ifndef UISCENECONTAINER_H
 #define UISCENECONTAINER_H
 
+#include "Bang/GL.h"
 #include "Bang/GameObject.h"
 #include "BangEditor/BangEditor.h"
 
@@ -17,6 +18,9 @@ class UISceneContainer : public GameObject
     GAMEOBJECT_EDITOR(UISceneContainer);
 
 public:
+    void BeforeChildrenRender(RenderPass renderPass) override;
+    void AfterChildrenRender(RenderPass renderPass) override;
+
     Rect GetImageScreenRectNDC() const;
     void SetSceneImageTexture(Texture2D *texture);
 
@@ -25,6 +29,10 @@ protected:
     virtual ~UISceneContainer();
 
 private:
+    GL::BlendFactor m_prevBlendFactorColorSrc, m_prevBlendFactorColorDst;
+    GL::BlendFactor m_prevBlendFactorAlphaSrc, m_prevBlendFactorAlphaDst;
+    bool m_wasBlendingEnabled = false;
+
     UIImageRenderer *p_sceneImg = nullptr;
 };
 

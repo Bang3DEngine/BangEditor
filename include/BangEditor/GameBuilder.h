@@ -9,8 +9,6 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class Project;
-
 class GameBuilder
 {
 public:
@@ -27,7 +25,6 @@ public:
 private:
     static bool     CompileGameExecutable(BinType binType);
     static bool     CreateDataDirectory(const Path &executableDir);
-    static Project* CreateGameProject(const Path &executableDir);
     static bool     CreateBehavioursLibrary(const Path &executableDir,
                                       BinType binType);
 };

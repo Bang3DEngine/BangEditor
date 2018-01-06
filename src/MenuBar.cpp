@@ -177,7 +177,7 @@ MenuItem* MenuBar::GetItem(int i)
 void MenuBar::OnNewProject(MenuItem*)
 {
     Path newProjectDirPath = Dialog::OpenDirectory("Create New Project...",
-                                                   EditorPaths::Home());
+                                                   EditorPaths::GetHome());
     if (newProjectDirPath.IsDir())
     {
         String projectName = Dialog::GetString("Choose Project Name",
@@ -195,7 +195,7 @@ void MenuBar::OnOpenProject(MenuItem*)
 {
     Path projectFileFilepath = Dialog::OpenFilePath("Open Project...",
                                                     {Extensions::GetProjectExtension()},
-                                                     EditorPaths::Home());
+                                                     EditorPaths::GetHome());
     OpenProject(projectFileFilepath);
 }
 void MenuBar::OpenProject(const Path &projectFileFilepath)
@@ -282,7 +282,7 @@ void MenuBar::OnAddAudioSource(MenuItem*)
 
 void MenuBar::OnAddNewBehaviour(MenuItem *item)
 {
-    Path behaviourDir = EditorPaths::ProjectAssets();
+    Path behaviourDir = EditorPaths::GetProjectAssetsDir();
     String behaviourName = "";
     do
     {

@@ -71,7 +71,7 @@ RH<Texture2D> EditorIconManager::GetSquareIcon()
 RH<Texture2D> EditorIconManager::GetIconTexture(const String &filename)
 {
     RH<Texture2D> iconTex =
-        Resources::Load<Texture2D>(EditorPaths::EditorResources().Append("Icons").
+        Resources::Load<Texture2D>(EditorPaths::GetEditorResourcesDir().Append("Icons").
                                    Append(filename).AppendExtension("png"));
     iconTex.Get()->SetFilterMode(GL::FilterMode::Bilinear);
     iconTex.Get()->SetWrapMode(GL::WrapMode::ClampToEdge);

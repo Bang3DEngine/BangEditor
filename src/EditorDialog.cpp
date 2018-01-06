@@ -126,10 +126,10 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
     // Find asset paths with extensions, and add them to grid layout
     List<Path> foundAssetPaths;
     List<Path> engineAssetPaths =
-            Paths::EngineAssets().FindFiles(Path::FindFlag::Recursive,
+            Paths::GetEngineAssetsDir().FindFiles(Path::FindFlag::Recursive,
                                             extensions);
     List<Path> projectAssetPaths =
-            EditorPaths::ProjectAssets().FindFiles(Path::FindFlag::Recursive,
+            EditorPaths::GetProjectAssetsDir().FindFiles(Path::FindFlag::Recursive,
                                                    extensions);
     foundAssetPaths.PushBack(engineAssetPaths);
     foundAssetPaths.PushBack(projectAssetPaths);

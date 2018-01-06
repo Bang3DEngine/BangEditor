@@ -76,7 +76,7 @@ Explorer::Explorer() : EditorUITab("Explorer")
     gridLayout->SetCellSize( Vector2i(80) );
     gridLayout->SetSpacing(10);
 
-    SetCurrentPath( Paths::EngineAssets() );
+    SetCurrentPath( Paths::GetEngineAssetsDir() );
 
     toolBar->SetParent(GetTabContainer());
     p_backButton->GetGameObject()->SetParent(toolBar);
@@ -151,14 +151,14 @@ void Explorer::Clear()
 void Explorer::OnProjectOpen(const Project *project)
 {
     ProjectManagerListener::OnProjectOpen(project);
-    SetRootPath(EditorPaths::ProjectAssets());
-    SetCurrentPath(EditorPaths::ProjectAssets());
+    SetRootPath(EditorPaths::GetProjectAssetsDir());
+    SetCurrentPath(EditorPaths::GetProjectAssetsDir());
 }
 
 void Explorer::OnProjectClosed(const Project *project)
 {
     ProjectManagerListener::OnProjectClosed(project);
-    SetCurrentPath(Paths::EngineAssets());
+    SetCurrentPath(Paths::GetEngineAssetsDir());
 }
 
 void Explorer::AddItem(const Path &itemPath)

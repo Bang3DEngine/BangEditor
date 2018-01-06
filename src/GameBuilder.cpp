@@ -17,11 +17,10 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-
 Path GameBuilder::GetExecutablePath()
 {
     Project *project = ProjectManager::GetCurrentProject();
-    Path outputExecutableFilepath = EditorPaths::Project().
+    Path outputExecutableFilepath = EditorPaths::GetProjectDir().
                                          Append(project->GetProjectName() + "_Game").
                                          Append(project->GetProjectName()).
                                          AppendExtension("exe");
@@ -58,14 +57,6 @@ void GameBuilder::BuildGame(const String &gameName,
         return;
     }
 
-    Debug_Log("Creating Game project file...");
-    Project *gameProject = GameBuilder::CreateGameProject(gameDir);
-    if (!gameProject)
-    {
-        Debug_Error("Could not create game project file");
-        return;
-    }
-
     if (compileBehaviours)
     {
         Debug_Log("Compiling behaviours...");
@@ -78,7 +69,7 @@ void GameBuilder::BuildGame(const String &gameName,
 
     Path gameExecutablePath = gameDir.Append(gameName).AppendExtension("exe");
     Debug_Log("Moving the executable to '" << gameExecutablePath  << "'...");
-    const Path originalGameOutputDir = EditorPaths::GameExecutableOutputFile(binaryType);
+    const Path originalGameOutputDir = EditorPaths::GetGameExecutableOutputFile(binaryType);
 
     File::Remove(gameExecutablePath); // Remove old game, if any
     File::Rename(originalGameOutputDir, gameExecutablePath);
@@ -86,7 +77,7 @@ void GameBuilder::BuildGame(const String &gameName,
 
 bool GameBuilder::CompileGameExecutable(BinType binaryType)
 {
-    List<Path> sceneFiles = EditorPaths::ProjectAssets()
+    List<Path> sceneFiles = EditorPaths::GetProjectAssetsDir()
                                     .FindFiles(Path::FindFlag::Recursive,
                                                {Extensions::GetSceneExtension()});
     if (sceneFiles.IsEmpty())
@@ -96,11 +87,11 @@ bool GameBuilder::CompileGameExecutable(BinType binaryType)
         return false;
     }
 
-    const Path gameOutputFilepath = EditorPaths::GameExecutableOutputFile(binaryType);
+    const Path gameOutputFilepath = EditorPaths::GetGameExecutableOutputFile(binaryType);
     File::Remove(gameOutputFilepath);
 
     String debugRelease = (binaryType == BinType::Debug) ? "Debug" : "Release";
-    String cmd = EditorPaths::Editor().GetAbsolute() +
+    String cmd = EditorPaths::GetEditorDir().GetAbsolute() +
                  "/scripts/compileTargets.sh " +
                  debugRelease +
                  " Game";
@@ -145,31 +136,24 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
     Path gameDataResDir = dataDir.Append("res");
     Path gameDataEngineAssetsDir = gameDataResDir.Append("EngineAssets");
     if (!File::CreateDirectory(gameDataResDir)) { return false; }
-    if (!File::DuplicateDir(Paths::EngineAssets(), gameDataEngineAssetsDir))
+    if (!File::DuplicateDir(Paths::GetEngineAssetsDir(), gameDataEngineAssetsDir))
     {
         Debug_Error("Could not duplicate engine assets directory '" <<
-                    Paths::EngineAssets() << "' into '" << gameDataEngineAssetsDir << "'");
+                    Paths::GetEngineAssetsDir() << "' into '" << gameDataEngineAssetsDir << "'");
         return false;
     }
 
     // Copy the Project Assets in the Data directory
     Path gameDataAssetsDir = gameDataResDir.Append("Assets");
-    if (!File::DuplicateDir(EditorPaths::ProjectAssets(), gameDataAssetsDir))
+    if (!File::DuplicateDir(EditorPaths::GetProjectAssetsDir(), gameDataAssetsDir))
     {
         Debug_Error("Could not duplicate assets directory '" <<
-                    EditorPaths::ProjectAssets() << "' into '" <<
+                    EditorPaths::GetProjectAssetsDir() << "' into '" <<
                     gameDataAssetsDir << "'");
         return false;
     }
 
     return true;
-}
-
-Project *GameBuilder::CreateGameProject(const Path &executableDir)
-{
-    String projectFile = executableDir + "/Data/Game.bproject";
-    ProjectManager pm;
-    return pm.CreateNewProjectFileOnly( Path(projectFile ) );
 }
 
 bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
@@ -180,7 +164,7 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
     File::CreateDirectory(dataLibsDir);
 
     // Compile every behaviour into its .o
-    List<Path> behavioursSourceFiles = EditorPaths::ProjectAssets()
+    List<Path> behavioursSourceFiles = EditorPaths::GetProjectAssetsDir()
                                         .FindFiles(Path::FindFlag::Recursive,
                                          Extensions::GetSourceFileExtensions());
 

@@ -33,7 +33,7 @@ public:
 int main(int, char **)
 {
     // Get path and directories, and check for their existence.
-    Path execPath     = Paths::ExecutablePath();
+    Path execPath     = Paths::GetExecutablePath();
     Path execDir      = execPath.GetDirectory();
     Path dataDir      = execDir.Append("Data");
     if (!dataDir.IsDir())
