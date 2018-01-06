@@ -45,8 +45,8 @@ void Editor::SetEditorPlayState(EditorPlayState playState)
         Editor *ed = Editor::GetInstance();
         ed->m_currentPlayState = playState;
 
-        ed->EventEmitter<IEditorSelectionListener>::PropagateToListeners(
-                    &IEditorSelectionListener::OnPlayStateChanged,
+        ed->EventEmitter<IEditorListener>::PropagateToListeners(
+                    &IEditorListener::OnPlayStateChanged,
                     previousPlayState,
                     ed->m_currentPlayState);
     }
@@ -92,8 +92,8 @@ void Editor::_SelectGameObject(GameObject *selectedGameObject)
         }
 
         // Propagate event
-        EventEmitter<IEditorSelectionListener>::
-            PropagateToListeners(&IEditorSelectionListener::OnGameObjectSelected,
+        EventEmitter<IEditorListener>::
+            PropagateToListeners(&IEditorListener::OnGameObjectSelected,
                                  selectedGameObject);
 
         // Destroy previous transform gizmo
@@ -124,8 +124,8 @@ void Editor::OnPathSelected(const Path &path)
     Editor *ed = Editor::GetInstance();
     ASSERT(ed);
 
-    ed->EventEmitter<IEditorSelectionListener>::PropagateToListeners(
-            &IEditorSelectionListener::OnExplorerPathSelected, path);
+    ed->EventEmitter<IEditorListener>::PropagateToListeners(
+            &IEditorListener::OnExplorerPathSelected, path);
 }
 
 EditorSettings *Editor::GetEditorSettings() const

@@ -21,7 +21,7 @@ FORWARD class HierarchyItem;
 
 class Hierarchy : public EditorUITab,
                   public ICreateListener,
-                  public IEditorSelectionListener,
+                  public IEditorListener,
                   public IEditorOpenSceneListener
 {
     GAMEOBJECT_EDITOR(Hierarchy);
@@ -44,7 +44,7 @@ public:
     void OnChildAdded(GameObject *parent, GameObject *addedChild) override;
     void OnChildRemoved(GameObject *parent, GameObject *removedChild) override;
 
-    // IEditorSelectionListener
+    // IEditorListener
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
 
     // IEditorOpenSceneListener

@@ -15,7 +15,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class UISceneContainer;
 
 class SceneTab : public GameObject,
-                 public IEditorSelectionListener
+                 public IEditorListener
 {
     GAMEOBJECT_EDITOR(SceneTab);
 
@@ -29,7 +29,7 @@ public:
     void SetSceneImageTexture(Texture2D *sceneTexture);
     Rect GetSceneImageRectNDC() const;
 
-    // IEditorSelectionListener;
+    // IEditorListener;
     void OnPlayStateChanged(EditorPlayState previousPlayState,
                             EditorPlayState newPlayState) override;
 

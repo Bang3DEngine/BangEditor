@@ -47,7 +47,7 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
     treeGo->SetParent(GetTabContainer());
 
     ObjectManager::RegisterCreateListener(this);
-    Editor::RegisterListener<IEditorSelectionListener>(this);
+    Editor::RegisterListener<IEditorListener>(this);
     EditorSceneManager::GetEditorScene()->
             EventEmitter<IEditorOpenSceneListener>::RegisterListener(this);
 }

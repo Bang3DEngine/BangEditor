@@ -22,7 +22,7 @@ FORWARD class InspectorWidget;
 class Inspector : public EditorUITab,
                   public IDestroyListener,
                   public IComponentListener,
-                  public IEditorSelectionListener
+                  public IEditorListener
 {
     GAMEOBJECT_EDITOR(Inspector);
 
@@ -39,7 +39,7 @@ public:
     // IDestroyListener
     void OnDestroyed(Object *destroyedObject) override;
 
-    // IEditorSelectionListener
+    // IEditorListener
     void OnExplorerPathSelected(const Path &path) override;
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
 

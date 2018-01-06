@@ -26,7 +26,7 @@ enum class EditorPlayState
     Editing
 };
 
-class IEditorSelectionListener : public virtual IEventListener
+class IEditorListener : public virtual IEventListener
 {
 public:
     virtual void OnGameObjectSelected(GameObject *selectedGameObject) { }
@@ -35,7 +35,7 @@ public:
                                     EditorPlayState newPlayState) { }
 };
 
-class Editor : public EventEmitter<IEditorSelectionListener>,
+class Editor : public EventEmitter<IEditorListener>,
                public IDestroyListener
 {
 public:

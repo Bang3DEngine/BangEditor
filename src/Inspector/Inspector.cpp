@@ -79,7 +79,7 @@ Inspector::Inspector() : EditorUITab("Inspector")
     p_titleSeparator->SetParent(GetTabContainer());
     scrollPanel->GetGameObject()->SetParent(GetTabContainer());
 
-    Editor::RegisterListener<IEditorSelectionListener>(this);
+    Editor::RegisterListener<IEditorListener>(this);
 }
 
 Inspector::~Inspector()

@@ -37,6 +37,7 @@ EditorCamera::EditorCamera()
 
     p_cam = p_camContainer->AddComponent<Camera>();
     p_cam->SetProjectionMode(Camera::ProjectionMode::Perspective);
+    p_cam->AddRenderPass(RenderPass::Gizmos);
 
     p_camt = p_camContainer->GetTransform();
     p_cam->SetZNear(EditorCamera::InitialZNear);
