@@ -99,6 +99,7 @@ ${SRC_DIR}/Hierarchy/HierarchyItem.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/ComponentInspectorWidget.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/ComponentInspectorWidgetFactory.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWBehaviourContainer.cpp
+${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWCamera.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWDirectionalLight.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWLight.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWMeshRenderer.cpp

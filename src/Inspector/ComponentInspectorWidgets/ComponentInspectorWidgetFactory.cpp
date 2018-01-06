@@ -2,6 +2,7 @@
 
 #include "Bang/Component.h"
 
+#include "BangEditor/CIWCamera.h"
 #include "BangEditor/CIWTransform.h"
 #include "BangEditor/CIWPointLight.h"
 #include "BangEditor/CIWMeshRenderer.h"
@@ -35,6 +36,10 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(Component *com
     else if (cName == "PointLight")
     {
         ciw = GameObject::Create<CIWPointLight>();
+    }
+    else if (cName == "Camera")
+    {
+        ciw = GameObject::Create<CIWCamera>();
     }
     else
     {
