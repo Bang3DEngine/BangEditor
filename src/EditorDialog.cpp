@@ -139,7 +139,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
     {
         ExplorerItem *expItem = GameObject::Create<ExplorerItem>();
         expItem->GetLabel()->GetText()->SetTextColor(Color::White);
-        expItem->SetFilepath(assetPath);
+        expItem->SetPath(assetPath);
 
         if (assetPath.IsEmpty())
         {

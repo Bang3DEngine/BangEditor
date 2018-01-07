@@ -142,13 +142,16 @@ void HierarchyItem::SetText(const String &text)
 void HierarchyItem::OnSelectionCallback(UIList::Action action)
 {
     GameObject *refGo = GetReferencedGameObject();
+
+    bool selectGameObject = false;
     switch (action)
     {
         case UIList::Action::SelectionIn:
-            Editor::SelectGameObject(refGo);
+            selectGameObject = true;
         break;
 
         case UIList::Action::ClickedRight:
+            selectGameObject = true;
             p_contextMenu->ShowMenu();
         break;
 
@@ -161,6 +164,11 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
         break;
 
         default: break;
+    }
+
+    if (selectGameObject)
+    {
+        Editor::SelectGameObject(refGo);
     }
 }
 

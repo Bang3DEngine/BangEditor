@@ -1,6 +1,8 @@
 #include "BangEditor/ExplorerItem.h"
 
+#include "Bang/File.h"
 #include "Bang/Input.h"
+#include "Bang/Dialog.h"
 #include "Bang/UILabel.h"
 #include "Bang/UICanvas.h"
 #include "Bang/UIFocusable.h"
@@ -54,6 +56,14 @@ ExplorerItem::ExplorerItem()
     p_button = AddComponent<UIFocusable>();
     p_button->EventEmitter<IFocusListener>::RegisterListener(this);
 
+    p_contextMenu = AddComponent<UIContextMenu>();
+    p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
+    {
+        OnCreateContextMenu(menuRootItem);
+    });
+    p_contextMenu->AddButtonPart(this);
+    p_contextMenu->AddButtonPart(bgGo);
+
     bgGo->SetParent(this);
     iconGo->SetParent(this);
     labelGo->SetParent(this);
@@ -68,25 +78,9 @@ ExplorerItem::~ExplorerItem()
 void ExplorerItem::Update()
 {
     GameObject::Update();
-
-    if (p_button->IsMouseOver())
-    {
-        if (Input::GetMouseButtonDown(MouseButton::Left))
-        {
-            SetSelected(true);
-        }
-    }
-
-    if (IsSelected())
-    {
-        if (Input::GetMouseButtonUp(MouseButton::Left))
-        {
-            if (!p_button->IsMouseOver()) { SetSelected(false); }
-        }
-    }
 }
 
-void ExplorerItem::SetFilepath(const Path &path)
+void ExplorerItem::SetPath(const Path &path)
 {
     if (GetPath() != path)
     {
@@ -117,6 +111,52 @@ UILabel *ExplorerItem::GetLabel() const
 UIFocusable *ExplorerItem::GetFocusable() const
 {
     return p_button;
+}
+
+void ExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
+{
+    menuRootItem->SetFontSize(10);
+
+    MenuItem *rename = menuRootItem->AddItem("Rename");
+    rename->SetSelectedCallback([this](MenuItem*)
+    {
+        String newName = Dialog::GetString("Rename", "Introduce the new name:",
+                                           GetPath().GetName());
+        String oldExtensions = String::Join(GetPath().GetExtensions(), ".");
+
+        if (!newName.IsEmpty())
+        {
+            Path newPath = GetPath().GetDirectory().Append(newName);
+
+            String newExtension = newPath.GetExtension();
+            if (newExtension.IsEmpty())
+            {
+                newPath = newPath.AppendExtension(oldExtensions);
+            }
+
+            if (newPath != GetPath())
+            {
+                if (newPath.Exists())
+                {
+                    Dialog::Error("Can't rename",
+                                  "The path '" + newPath.GetAbsolute() +
+                                  "' already exists.");
+                }
+                else
+                {
+                    File::Rename(GetPath(), newPath);
+                    SetPath(newPath);
+                }
+            }
+        }
+    });
+
+    MenuItem *remove = menuRootItem->AddItem("Remove");
+    remove->SetSelectedCallback([this](MenuItem*)
+    {
+        File::Remove( GetPath() );
+        GameObject::Destroy(this);
+    });
 }
 
 const Path &ExplorerItem::GetPath() const

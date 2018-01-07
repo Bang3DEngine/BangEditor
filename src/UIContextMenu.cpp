@@ -50,7 +50,7 @@ void UIContextMenu::ShowMenu()
 
     // if (!IsMenuBeingShown())
     {
-        p_menu = GameObject::Create<Menu>();
+        p_menu = GameObject::Create<ContextMenu>();
         if (m_createContextMenuCallback)
         {
             m_createContextMenuCallback(p_menu->GetRootItem());
@@ -82,8 +82,8 @@ void UIContextMenu::OnDestroyed(Object *object)
     p_menu = nullptr;
 }
 
-// Menu
-Menu::Menu()
+// ContextMenu
+ContextMenu::ContextMenu()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
@@ -100,19 +100,22 @@ Menu::Menu()
     csf->SetVerticalSizeType(LayoutSizeType::Preferred);
 
     p_rootItem->AddComponent<UILayoutIgnorer>();
+    p_rootItem->EventEmitter<IDestroyListener>::RegisterListener(this);
+    p_rootItem->SetDestroyOnClose(true);
     p_rootItem->SetParent(this);
 
     m_justCreated = true;
 }
 
-void Menu::Update()
+void ContextMenu::Update()
 {
     GameObject::Update();
 
     if (Input::GetMouseButtonDown(MouseButton::Right) ||
         Input::GetMouseButtonDown(MouseButton::Left))
     {
-        if (!m_justCreated && !GetRootItem()->GetRectTransform()->IsMouseOver(true))
+        if (!m_justCreated &&
+            !GetRootItem()->GetRectTransform()->IsMouseOver(true))
         {
             GameObject::Destroy(this);
         }
@@ -120,7 +123,13 @@ void Menu::Update()
     m_justCreated = false;
 }
 
-MenuItem *Menu::GetRootItem() const
+MenuItem *ContextMenu::GetRootItem() const
 {
     return p_rootItem;
+}
+
+void ContextMenu::OnDestroyed(Object *object)
+{
+    ASSERT(object == p_rootItem);
+    GameObject::Destroy(this);
 }

@@ -14,7 +14,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class Menu;
+FORWARD class ContextMenu;
 
 class UIContextMenu : public Component,
                       public IDestroyListener
@@ -37,7 +37,7 @@ public:
 
 private:
     List<GameObject*> m_parts;
-    Menu *p_menu = nullptr;
+    ContextMenu *p_menu = nullptr;
 
     CreateContextMenuCallback m_createContextMenuCallback;
 
@@ -46,10 +46,11 @@ private:
 };
 
 
-// Menu
-class Menu : public GameObject
+// ContextMenu
+class ContextMenu : public GameObject,
+             public IDestroyListener
 {
-    GAMEOBJECT_EDITOR(Menu);
+    GAMEOBJECT_EDITOR(ContextMenu);
 
 public:
 
@@ -58,12 +59,14 @@ public:
 
     MenuItem *GetRootItem() const;
 
+    void OnDestroyed(Object *object) override;
+
 private:
     MenuItem *p_rootItem = nullptr;
     bool m_justCreated = false;
 
-    Menu();
-    virtual ~Menu() = default;
+    ContextMenu();
+    virtual ~ContextMenu() = default;
 };
 
 NAMESPACE_BANG_EDITOR_END

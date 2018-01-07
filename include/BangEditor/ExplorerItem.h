@@ -5,7 +5,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/IFocusListener.h"
 
-#include "BangEditor/BangEditor.h"
+#include "BangEditor/UIContextMenu.h"
 
 USING_NAMESPACE_BANG
 
@@ -26,13 +26,16 @@ class ExplorerItem : public GameObject,
 public:
     void Update() override;
 
-    void SetFilepath(const Path &path);
+    void SetPath(const Path &path);
     void SetSelected(bool selected);
 
     bool IsSelected() const;
     UILabel *GetLabel() const;
     const Path& GetPath() const;
     UIFocusable* GetFocusable() const;
+
+    // UIContextMenu callback
+    void OnCreateContextMenu(MenuItem *menuRootItem);
 
 protected:
     ExplorerItem();
@@ -46,6 +49,7 @@ private:
     UIFocusable *p_button = nullptr;
     UIImageRenderer *p_bg = nullptr;
     UIImageRenderer *p_icon = nullptr;
+    UIContextMenu *p_contextMenu = nullptr;
 
     // IFocusListener
     virtual void OnMouseEnter(IFocusable*) override;

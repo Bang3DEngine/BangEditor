@@ -31,6 +31,7 @@ public:
 
     void Update() override;
 
+    void SelectPath(const Path &path);
     void SetRootPath(const Path &rootPath);
     void SetCurrentPath(const Path &path);
 
@@ -67,7 +68,6 @@ private:
 
     ExplorerItem *GetItemFromPath(const Path &path) const;
 
-    static void OnItemSelected(IFocusable*);
     static void OnItemDoubleClicked(IFocusable*);
 
     bool IsInsideRootPath(const Path &path) const;
