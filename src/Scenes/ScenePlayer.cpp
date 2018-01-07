@@ -6,6 +6,7 @@
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorCamera.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorBehaviourManager.h"
 

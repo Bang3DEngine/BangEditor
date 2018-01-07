@@ -210,8 +210,11 @@ void EditorScene::SetOpenScene(Scene *openScene, bool destroyPreviousScene)
         EventEmitter<IEditorOpenSceneListener>::PropagateToListeners(
                     &IEditorOpenSceneListener::OnOpenScene, GetOpenScene());
 
-        EditorCamera *edCamera = GameObject::Create<EditorCamera>();
-        edCamera->SetParent(openScene, 0);
+        if (!Editor::IsPlaying())
+        {
+            EditorCamera *edCamera = GameObject::Create<EditorCamera>();
+            edCamera->SetParent(openScene, 0);
+        }
 
         GetOpenScene()->SetFirstFoundCamera();
         GetOpenScene()->InvalidateCanvas();

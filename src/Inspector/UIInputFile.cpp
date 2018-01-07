@@ -63,7 +63,10 @@ void UIInputFile::SetPath(const Path &path)
     if (path != GetPath())
     {
         m_path = path;
-        GetInputText()->GetText()->SetContent( GetPath().GetNameExt() );
+
+        String textContent = GetPath().IsFile() ? GetPath().GetNameExt() : "None";
+        GetInputText()->GetText()->SetContent(textContent);
+
         EventEmitter<IValueChangedListener>::PropagateToListeners(
                 &IValueChangedListener::OnValueChanged, this);
     }
