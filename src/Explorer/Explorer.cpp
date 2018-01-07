@@ -3,6 +3,7 @@
 #include "Bang/Paths.h"
 #include "Bang/UILabel.h"
 #include "Bang/UIButton.h"
+#include "Bang/FileTracker.h"
 #include "Bang/UIGridLayout.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
@@ -27,6 +28,10 @@ USING_NAMESPACE_BANG_EDITOR
 
 Explorer::Explorer() : EditorUITab("Explorer")
 {
+    m_fileTracker = new FileTracker();
+    m_fileTracker->SetCheckFrequencySeconds(1.0f);
+    m_fileTracker->RegisterListener(this);
+
     UILayoutElement *le = GetLayoutElement();
     le->SetMinSize( Vector2i(100) );
     le->SetPreferredWidth(250);
@@ -96,6 +101,14 @@ Explorer::Explorer() : EditorUITab("Explorer")
 
 Explorer::~Explorer()
 {
+    delete m_fileTracker;
+}
+
+void Explorer::Update()
+{
+    EditorUITab::Update();
+
+    m_fileTracker->Update();
 }
 
 void Explorer::SetRootPath(const Path &rootPath)
@@ -116,6 +129,9 @@ void Explorer::SetCurrentPath(const Path &path)
     {
         m_currentPath = path;
         p_currentPathLabel->GetText()->SetContent(m_currentPath.GetAbsolute());
+
+        m_fileTracker->Clear();
+        m_fileTracker->AddPath(GetCurrentPath());
 
         p_backButton->SetBlocked( GetCurrentPath() == GetRootPath() );
 
@@ -145,6 +161,7 @@ void Explorer::Clear()
     {
         GameObject::Destroy(explorerItem);
     }
+    m_pathsToItem.Clear();
     p_items.Clear();
 }
 
@@ -161,8 +178,28 @@ void Explorer::OnProjectClosed(const Project *project)
     SetCurrentPath(Paths::GetEngineAssetsDir());
 }
 
+void Explorer::OnPathAdded(const Path &addedPath)
+{
+    if ( addedPath.GetDirectory() == GetRootPath() &&
+        !addedPath.IsHiddenFile())
+    {
+        AddItem(addedPath);
+    }
+}
+
+void Explorer::OnPathModified(const Path &modifiedPath)
+{
+}
+
+void Explorer::OnPathRemoved(const Path &removedPath)
+{
+    RemoveItem(removedPath);
+}
+
 void Explorer::AddItem(const Path &itemPath)
 {
+    if ( GetItemFromPath(itemPath) ) { return; }
+
     ExplorerItem *explorerItem = GameObject::Create<ExplorerItem>();
     explorerItem->SetFilepath(itemPath);
     explorerItem->SetParent(p_itemsContainer);
@@ -171,11 +208,28 @@ void Explorer::AddItem(const Path &itemPath)
     explorerItem->GetFocusable()->AddDoubleClickedCallback(&Explorer::OnItemDoubleClicked);
 
     p_items.PushBack(explorerItem);
+    m_pathsToItem.Add(itemPath, explorerItem);
+}
+
+void Explorer::RemoveItem(const Path &itemPath)
+{
+    ExplorerItem *item = GetItemFromPath(itemPath);
+    if (item)
+    {
+        p_items.Remove(item);
+        m_pathsToItem.Remove(itemPath);
+        GameObject::Destroy(item);
+    }
 }
 
 void Explorer::GoDirectoryUp()
 {
     SetCurrentPath( GetCurrentPath().GetDirectory() );
+}
+
+ExplorerItem *Explorer::GetItemFromPath(const Path &path) const
+{
+    return m_pathsToItem.ContainsKey(path) ? m_pathsToItem.Get(path) : nullptr;
 }
 
 void Explorer::OnItemSelected(IFocusable *itemFocusable)
