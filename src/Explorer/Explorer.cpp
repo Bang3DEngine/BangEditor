@@ -171,7 +171,7 @@ void Explorer::SetCurrentPath(const Path &path)
         p_backButton->SetBlocked( GetCurrentPath() == GetRootPath() );
 
         Clear();
-        List<Path> subPaths = m_currentPath.FindSubPaths(Path::FindFlag::Simple);
+        List<Path> subPaths = m_currentPath.GetSubPaths(Path::FindFlag::Simple);
         for (const Path &subPath : subPaths)
         {
             AddItem(subPath);

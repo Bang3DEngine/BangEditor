@@ -7,7 +7,7 @@
 #include "Bang/Compiler.h"
 #include "Bang/BehaviourManager.h"
 
-#include "BangEditor/BangEditor.h"
+#include "BangEditor/BehaviourTracker.h"
 
 NAMESPACE_BANG_BEGIN
 FORWARD class Library;
@@ -23,6 +23,8 @@ public:
     EditorBehaviourManager();
     virtual ~EditorBehaviourManager();
 
+    void Update();
+
     static bool IsCompiled(const Path& behaviourFilepath);
     static Library* GetBehavioursLibrary();
 
@@ -31,9 +33,10 @@ public:
                                         Behaviour *behaviour);
 
 private:
+    BehaviourTracker m_behaviourTracker;
     Library *m_behavioursLibrary = nullptr;
-    Map<Path, bool> m_compiledBehaviours;
-    Map<Path, Library*> m_cachedBehaviourLibraries;
+
+    Set<Path> m_compiledBehaviours;
 
     static void RemoveBehaviourLibrariesOf(const String& behaviourName);
 
@@ -49,7 +52,13 @@ private:
                                                   const Path &outputLibFilepath,
                                                   BinType binaryType);
 
+    static List<Path> GetBehaviourSourcesPaths();
     static Compiler::Job CreateBaseJob(BinType binaryType);
+
+    void UpdateCompiledPathsSet();
+    BehaviourTracker *GetBehaviourTracker();
+
+    const BehaviourTracker *GetBehaviourTracker() const;
 
     static EditorBehaviourManager* GetInstance();
 

@@ -21,7 +21,7 @@ void EditorPaths::InitEditorPath(const Path &editorRootPath)
 List<Path> EditorPaths::GetAllProjectSubDirs()
 {
     List<Path> subdirs = EditorPaths::GetProjectDir()
-                         .FindSubDirectories(Path::FindFlag::Recursive);
+                         .GetSubDirectories(Path::FindFlag::Recursive);
     subdirs.PushFront(EditorPaths::GetProjectDir());
     return subdirs;
 }
@@ -36,7 +36,7 @@ List<Path> EditorPaths::GetEditorIncludeDirs()
 List<Path> EditorPaths::GetProjectIncludeDirs()
 {
     List<Path> incDirs = EditorPaths::GetProjectAssetsDir()
-                        .FindSubDirectories(Path::FindFlag::Recursive);
+                        .GetSubDirectories(Path::FindFlag::Recursive);
     incDirs.PushBack( EditorPaths::GetProjectAssetsDir() );
     return incDirs;
 }

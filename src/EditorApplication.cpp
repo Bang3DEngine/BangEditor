@@ -25,7 +25,6 @@ EditorApplication::EditorApplication() : Application()
 
 EditorApplication::~EditorApplication()
 {
-    delete m_behaviourManager;
 }
 
 void EditorApplication::Init(const Path &engineRootPath)
@@ -33,12 +32,10 @@ void EditorApplication::Init(const Path &engineRootPath)
     Application::Init(engineRootPath);
 
     GetEditorPaths()->InitEditorPath( Paths::GetExecutablePath().GetDirectory()
-                                                             .GetDirectory()
-                                                             .GetDirectory());
+                                                                .GetDirectory()
+                                                                .GetDirectory());
     ImportFilesManager::CreateMissingImportFiles( EditorPaths::GetEditorResourcesDir() );
     ImportFilesManager::LoadImportFilepathGUIDs( EditorPaths::GetEditorResourcesDir() );
-
-    m_behaviourManager = new EditorBehaviourManager();
 }
 
 EditorPaths *EditorApplication::GetEditorPaths() const
@@ -56,11 +53,6 @@ void EditorApplication::OpenEditorScene()
 EditorApplication *EditorApplication::GetInstance()
 {
     return SCAST<EditorApplication*>( Application::GetInstance() );
-}
-
-EditorBehaviourManager *EditorApplication::GetBehaviourManager() const
-{
-    return m_behaviourManager;
 }
 
 Paths *EditorApplication::CreatePaths()

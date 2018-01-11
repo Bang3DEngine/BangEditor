@@ -35,6 +35,7 @@
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/EditorBehaviourManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -50,6 +51,7 @@ void EditorScene::Init()
 
     m_projectManager = new ProjectManager();
     m_scenePlayer = new ScenePlayer();
+    m_behaviourManager = new EditorBehaviourManager();
 
     GameObjectFactory::CreateUIGameObjectInto(this);
     GameObjectFactory::CreateUICanvasInto(this);
@@ -112,10 +114,13 @@ EditorScene::~EditorScene()
     delete m_editor;
     delete m_scenePlayer;
     delete m_projectManager;
+    delete m_behaviourManager;
 }
 
 void EditorScene::Update()
 {
+    GetBehaviourManager()->Update();
+
     EditorSceneManager::SetActiveScene(this);
     Scene::Update();
 
@@ -289,9 +294,16 @@ Console *EditorScene::GetConsole() const { return p_console; }
 Explorer *EditorScene::GetExplorer() const { return p_explorer; }
 Inspector *EditorScene::GetInspector() const { return p_inspector; }
 Hierarchy *EditorScene::GetHierarchy() const { return p_hierarchy; }
-
 ScenePlayer *EditorScene::GetScenePlayer() const { return m_scenePlayer; }
-ProjectManager *EditorScene::GetProjectManager() const { return m_projectManager; }
+ProjectManager *EditorScene::GetProjectManager() const
+{
+    return m_projectManager;
+}
+EditorBehaviourManager *EditorScene::GetBehaviourManager() const
+{
+    return m_behaviourManager;
+}
+
 Editor *EditorScene::GetEditor() const { return m_editor; }
 
 void EditorScene::PushGLViewport()

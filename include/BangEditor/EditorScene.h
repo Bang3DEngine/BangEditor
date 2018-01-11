@@ -28,6 +28,7 @@ FORWARD class Hierarchy;
 FORWARD class ScenePlayer;
 FORWARD class ProjectManager;
 FORWARD class EditorApplication;
+FORWARD class EditorBehaviourManager;
 
 class EditorScene : public Scene,
                     public EventEmitter<IEditorOpenSceneListener>
@@ -36,7 +37,7 @@ class EditorScene : public Scene,
 
 public:
     void Update() override;
-    virtual void OnResize(int newWidth, int newHeight);
+    void OnResize(int newWidth, int newHeight) override;
 
     void RenderOpenScene();
     void SetViewportForOpenScene();
@@ -56,6 +57,7 @@ public:
     Hierarchy *GetHierarchy() const;
     ScenePlayer *GetScenePlayer() const;
     ProjectManager *GetProjectManager() const;
+    EditorBehaviourManager *GetBehaviourManager() const;
 
 protected:
     EditorScene();
@@ -65,6 +67,7 @@ private:
     Editor *m_editor = nullptr;
     ScenePlayer *m_scenePlayer = nullptr;
     ProjectManager *m_projectManager = nullptr;
+    EditorBehaviourManager *m_behaviourManager = nullptr;
 
     Console *p_console     = nullptr;
     Explorer *p_explorer   = nullptr;

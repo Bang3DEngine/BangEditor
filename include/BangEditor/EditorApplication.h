@@ -17,7 +17,6 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class EditorScene;
 FORWARD class EditorPaths;
-FORWARD class EditorBehaviourManager;
 
 class EditorApplication : public Application
 {
@@ -29,10 +28,8 @@ public:
     void OpenEditorScene();
 
     EditorPaths* GetEditorPaths() const;
-    EditorBehaviourManager* GetBehaviourManager() const;
 
 private:
-    EditorBehaviourManager *m_behaviourManager = nullptr;
 
     Paths* CreatePaths() override;
     Window* _CreateWindow() override;

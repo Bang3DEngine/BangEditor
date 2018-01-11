@@ -80,6 +80,7 @@ link_libraries("${BANG_LIBS_DIR}/${BANG_LIB_NAME}")
 
 add_executable(BangEditor
 ${SRC_DIR}/Behaviours/BehaviourCreator.cpp
+${SRC_DIR}/Behaviours/BehaviourTracker.cpp
 ${SRC_DIR}/Behaviours/EditorBehaviourManager.cpp
 ${SRC_DIR}/Console/Console.cpp
 ${SRC_DIR}/Editor.cpp

@@ -78,7 +78,7 @@ void GameBuilder::BuildGame(const String &gameName,
 bool GameBuilder::CompileGameExecutable(BinType binaryType)
 {
     List<Path> sceneFiles = EditorPaths::GetProjectAssetsDir()
-                                    .FindFiles(Path::FindFlag::Recursive,
+                                    .GetFiles(Path::FindFlag::Recursive,
                                                {Extensions::GetSceneExtension()});
     if (sceneFiles.IsEmpty())
     {
@@ -165,7 +165,7 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
 
     // Compile every behaviour into its .o
     List<Path> behavioursSourceFiles = EditorPaths::GetProjectAssetsDir()
-                                        .FindFiles(Path::FindFlag::Recursive,
+                                        .GetFiles(Path::FindFlag::Recursive,
                                          Extensions::GetSourceFileExtensions());
 
     // Preprocess behaviours
@@ -193,7 +193,7 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
     //
 
     // Merge into .so
-    List<Path> behaviourObjectsPaths = dataLibsDir.FindFiles(Path::FindFlag::Simple,
+    List<Path> behaviourObjectsPaths = dataLibsDir.GetFiles(Path::FindFlag::Simple,
                                                          {"o"});
     Path outputLibPath =
                 dataLibsDir.Append("Behaviours")

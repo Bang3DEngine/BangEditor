@@ -39,6 +39,7 @@ void ScenePlayer::PlayScene()
             edScene->SetOpenScene(sp->p_playingScene, false);
 
             sp->InstantiatePlayingSceneBehaviours();
+            Time::EstablishDeltaTimeReferenceToNow();
         }
     }
 }

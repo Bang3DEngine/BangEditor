@@ -10,7 +10,8 @@
 
 #include "BangEditor/Project.h"
 #include "BangEditor/EditorPaths.h"
-#include "BangEditor/EditorApplication.h"
+#include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -24,13 +25,18 @@ EditorBehaviourManager::~EditorBehaviourManager()
     if (m_behavioursLibrary) { delete m_behavioursLibrary; }
 }
 
+void EditorBehaviourManager::Update()
+{
+    GetBehaviourTracker()->Update();
+    UpdateCompiledPathsSet();
+}
+
 bool EditorBehaviourManager::IsCompiled(const Path &behaviourFilepath)
 {
     EditorBehaviourManager *bm = EditorBehaviourManager::GetInstance();
     if (bm)
     {
-        return bm->m_compiledBehaviours.ContainsKey(behaviourFilepath) &&
-               bm->m_compiledBehaviours.Get(behaviourFilepath);
+        return bm->m_compiledBehaviours.Contains(behaviourFilepath);
     }
     return false;
 }
@@ -38,7 +44,20 @@ bool EditorBehaviourManager::IsCompiled(const Path &behaviourFilepath)
 Library *EditorBehaviourManager::GetBehavioursLibrary()
 {
     EditorBehaviourManager *bm = EditorBehaviourManager::GetInstance();
-    if (bm && bm->m_behavioursLibrary) { return bm->m_behavioursLibrary; }
+    if (bm && bm->m_behavioursLibrary)
+    {
+        bool allBehavioursCompiled = true;
+        List<Path> behaviourSourcePaths = EditorBehaviourManager::GetBehaviourSourcesPaths();
+        for (const Path &behaviourSourcePath : behaviourSourcePaths)
+        {
+            if (!EditorBehaviourManager::IsCompiled(behaviourSourcePath))
+            {
+                allBehavioursCompiled = false;
+                break;
+            }
+        }
+        if (allBehavioursCompiled) { return bm->m_behavioursLibrary; }
+    }
 
     EditorBehaviourManager::CompileAllProjectBehaviours();
 
@@ -50,7 +69,7 @@ Library *EditorBehaviourManager::GetBehavioursLibrary()
     EditorBehaviourManager::RemoveBehaviourLibrariesOf( "Behaviours" );
 
     List<Path> behaviourObjs = EditorPaths::GetProjectLibrariesDir().
-                               FindFiles(Path::FindFlag::Simple, {"o"});
+                               GetFiles(Path::FindFlag::Simple, {"o"});
 
     Compiler::Result mergeResult =
             EditorBehaviourManager::MergeBehaviourObjects(behaviourObjs,
@@ -116,7 +135,7 @@ Compiler::Result EditorBehaviourManager::CompileBehaviourObject(
 
     if (bm)
     {
-        bm->m_compiledBehaviours.Add(behaviourFilepath, true);
+        bm->m_compiledBehaviours.Add(behaviourFilepath);
     }
 
     return compileResult;
@@ -127,7 +146,7 @@ void EditorBehaviourManager::RemoveBehaviourLibrariesOf(const String& behaviourN
     if (behaviourName.IsEmpty()) { return; }
 
     List<Path> libFilepaths = EditorPaths::GetProjectLibrariesDir().
-                                           FindFiles(Path::FindFlag::Simple);
+                                           GetFiles(Path::FindFlag::Simple);
     for (const Path &libFilepath : libFilepaths)
     {
         if (libFilepath.GetName() == behaviourName)
@@ -151,9 +170,10 @@ void EditorBehaviourManager::CompileBehaviourObject(const Path &behaviourPath)
 
 void EditorBehaviourManager::CompileAllProjectBehaviours()
 {
-    List<Path> behaviourSources = EditorPaths::GetProjectAssetsDir().
-                                  FindFiles(Path::FindFlag::Recursive,
-                                            Extensions::GetSourceFileExtensions());
+    EditorBehaviourManager *bm = EditorBehaviourManager::GetInstance();
+    bm->UpdateCompiledPathsSet();
+
+    List<Path> behaviourSources = EditorBehaviourManager::GetBehaviourSourcesPaths();
     for (const Path &behaviourSourcePath : behaviourSources)
     {
         EditorBehaviourManager::CompileBehaviourObject(behaviourSourcePath);
@@ -175,6 +195,14 @@ Compiler::Result EditorBehaviourManager::MergeBehaviourObjects(
     return Compiler::Compile(job);
 }
 
+List<Path> EditorBehaviourManager::GetBehaviourSourcesPaths()
+{
+    List<Path> behaviourSources = EditorPaths::GetProjectAssetsDir().
+                                  GetFiles(Path::FindFlag::Recursive,
+                                           Extensions::GetSourceFileExtensions());
+    return behaviourSources;
+}
+
 Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType)
 {
     Compiler::Job job;
@@ -194,7 +222,23 @@ Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType)
     return job;
 }
 
+void EditorBehaviourManager::UpdateCompiledPathsSet()
+{
+    for (const Path &compiledBehaviour : m_compiledBehaviours)
+    {
+        if (GetBehaviourTracker()->HasBeenModified(compiledBehaviour))
+        {
+            m_compiledBehaviours.Remove(compiledBehaviour);
+        }
+    }
+}
+
+BehaviourTracker *EditorBehaviourManager::GetBehaviourTracker()
+{ return &m_behaviourTracker; }
+const BehaviourTracker *EditorBehaviourManager::GetBehaviourTracker() const
+{ return &m_behaviourTracker; }
+
 EditorBehaviourManager *EditorBehaviourManager::GetInstance()
 {
-    return EditorApplication::GetInstance()->GetBehaviourManager();
+    return EditorSceneManager::GetEditorScene()->GetBehaviourManager();
 }
