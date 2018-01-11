@@ -12,6 +12,7 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/ImportFilesManager.h"
 
 #include "BangEditor/Explorer.h"
 #include "BangEditor/EditorIconManager.h"
@@ -145,6 +146,7 @@ void ExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
                 else
                 {
                     File::Rename(GetPath(), newPath);
+                    ImportFilesManager::OnFilepathRenamed(GetPath(), newPath);
                     SetPath(newPath);
                 }
             }

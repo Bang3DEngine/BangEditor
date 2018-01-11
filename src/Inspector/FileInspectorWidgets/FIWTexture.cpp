@@ -66,7 +66,7 @@ Texture2D *FIWTexture::GetTexture() const
 
 void FIWTexture::UpdateFromTextureFile()
 {
-    Path texImportPath = ImportFilesManager::GetImportFilePath(
+    Path texImportPath = ImportFilesManager::GetImportFilepath(
                                     GetTexture()->GetResourceFilepath() );
     GetTexture()->ImportXMLFromFile(texImportPath);
 
@@ -103,7 +103,7 @@ void FIWTexture::OnValueChanged(Object *object)
 
         GetTexture()->SetAlphaCutoff( p_alphaCutoffInput->GetValue() );
 
-        Path texImportPath = ImportFilesManager::GetImportFilePath(
+        Path texImportPath = ImportFilesManager::GetImportFilepath(
                                         GetTexture()->GetResourceFilepath() );
         if (texImportPath.IsFile())
         {
