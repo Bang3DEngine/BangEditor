@@ -29,6 +29,7 @@ public:
 
     void Update();
 
+    void WaitForAsyncCompileJobs();
     bool PrepareBehavioursLibrary();
     bool IsCompiled(const Path& behaviourFilepath) const;
     bool IsCompiledWithError(const Path& behaviourFilepath) const;

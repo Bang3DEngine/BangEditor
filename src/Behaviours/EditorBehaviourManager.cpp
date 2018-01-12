@@ -46,10 +46,14 @@ void EditorBehaviourManager::Update()
     }
 }
 
+void EditorBehaviourManager::WaitForAsyncCompileJobs()
+{
+    while (IsSomeBehaviourBeingCompiled()) { Thread::SleepCurrentThread(0.2f); }
+}
+
 bool EditorBehaviourManager::PrepareBehavioursLibrary()
 {
-    // Wait for async compilations to finish...
-    while (IsSomeBehaviourBeingCompiled()) { Thread::SleepCurrentThread(0.5f); }
+    WaitForAsyncCompileJobs();
 
     // Compile
     GetBehaviourTracker()->CheckForChanges();

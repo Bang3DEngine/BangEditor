@@ -176,6 +176,8 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
     }
 
     EditorBehaviourManager *behaviourMgr = EditorBehaviourManager::GetInstance();
+    behaviourMgr->WaitForAsyncCompileJobs();
+
     // Compile
     for (const Path &behaviourSourcePath : behavioursSourceFiles)
     {
@@ -190,7 +192,6 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
 
         if (!outputObjPath.IsFile()) { Debug_Error(res.output); return false; }
     }
-    //
 
     // Merge into .so
     List<Path> behaviourObjectsPaths = dataLibsDir.GetFiles(Path::FindFlag::Simple,
@@ -206,7 +207,6 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
                                                                outputLibPath,
                                                                binType);
     if (!outputLibPath.IsFile()) { Debug_Error(res.output); return false; }
-    //
 
     return true;
 }
