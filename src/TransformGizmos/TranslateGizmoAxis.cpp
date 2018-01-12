@@ -114,7 +114,7 @@ void TranslateGizmoAxis::Render(RenderPass renderPass, bool renderChildren)
     TransformGizmoAxis::Render(renderPass, renderChildren);
 }
 
-void TranslateGizmoAxis::SetAxis(Axis3D axis)
+void TranslateGizmoAxis::SetAxis(Axis3DExt axis)
 {
     TransformGizmoAxis::SetAxis(axis);
 
@@ -122,7 +122,7 @@ void TranslateGizmoAxis::SetAxis(Axis3D axis)
     p_lineRenderer->SetPoints( {Vector3::Zero, axisFwd} );
 
     p_arrowCap->GetTransform()->SetLocalPosition(axisFwd);
-    Vector3 axisUp = (axis != Axis3D::Y) ? Vector3::Up : Vector3::Right;
+    Vector3 axisUp = (axis != Axis3DExt::Y) ? Vector3::Up : Vector3::Right;
     p_arrowCap->GetTransform()->SetLocalRotation(
            Quaternion::LookDirection(axisFwd, axisUp) );
 

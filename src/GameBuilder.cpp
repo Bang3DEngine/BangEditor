@@ -175,6 +175,7 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
         BangPreprocessor::Preprocess(behaviourHeader);
     }
 
+    EditorBehaviourManager *behaviourMgr = EditorBehaviourManager::GetInstance();
     // Compile
     for (const Path &behaviourSourcePath : behavioursSourceFiles)
     {
@@ -183,10 +184,9 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
 
         Debug_Log("Compiling '" << behaviourSourcePath << "' into '" <<
                   outputObjPath << "'...");
-        Compiler::Result res =
-           EditorBehaviourManager::CompileBehaviourObject(behaviourSourcePath,
-                                                          outputObjPath,
-                                                          binType);
+        Compiler::Result res = behaviourMgr->CompileBehaviourObject(behaviourSourcePath,
+                                                                    outputObjPath,
+                                                                    binType);
 
         if (!outputObjPath.IsFile()) { Debug_Error(res.output); return false; }
     }
@@ -202,10 +202,9 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
     Debug_Log("Merging behaviour objects " << behaviourObjectsPaths <<
               " into '" << outputLibPath << "'...");
 
-    Compiler::Result res =
-      EditorBehaviourManager::MergeBehaviourObjects(behaviourObjectsPaths,
-                                                    outputLibPath,
-                                                    binType);
+    Compiler::Result res = behaviourMgr->MergeBehaviourObjects(behaviourObjectsPaths,
+                                                               outputLibPath,
+                                                               binType);
     if (!outputLibPath.IsFile()) { Debug_Error(res.output); return false; }
     //
 

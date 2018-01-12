@@ -191,16 +191,19 @@ void RotateGizmoAxis::Render(RenderPass renderPass, bool renderChildren)
     TransformGizmoAxis::Render(renderPass, renderChildren);
 }
 
-Quaternion RotateGizmoAxis::GetQuaternionAxised(const Quaternion &q, Axis3D axis)
+Quaternion RotateGizmoAxis::GetQuaternionAxised(const Quaternion &q,
+                                                Axis3DExt axis)
 {
+    ASSERT(axis == Axis3DExt::X || axis == Axis3DExt::Y || axis == Axis3DExt::Z);
+
     Vector3 qAngleAxis = q.GetAngleAxis();
-    auto other = GetOtherAxisIndex( axis );
+    auto other = GetOtherAxisIndex( SCAST<Axis3D>(axis) );
     qAngleAxis[other.first] = qAngleAxis[other.second] = 0.0f;
     return Quaternion::AngleAxis(qAngleAxis.Length(),
                                  qAngleAxis.NormalizedSafe());
 }
 
-void RotateGizmoAxis::SetAxis(Axis3D axis)
+void RotateGizmoAxis::SetAxis(Axis3DExt axis)
 {
     TransformGizmoAxis::SetAxis(axis);
     UpdateCirclePoints();
@@ -227,9 +230,10 @@ void RotateGizmoAxis::UpdateCirclePoints()
         float cos = Math::Cos(angle);
         switch ( GetAxis() )
         {
-            case Axis3D::X: newPoint.y = sin; newPoint.z = cos; break;
-            case Axis3D::Y: newPoint.x = sin; newPoint.z = cos; break;
-            case Axis3D::Z: newPoint.x = sin; newPoint.y = cos; break;
+            case Axis3DExt::X: newPoint.y = sin; newPoint.z = cos; break;
+            case Axis3DExt::Y: newPoint.x = sin; newPoint.z = cos; break;
+            case Axis3DExt::Z: newPoint.x = sin; newPoint.y = cos; break;
+            default: ASSERT(false);
         }
 
         // Cull non-facing to camera

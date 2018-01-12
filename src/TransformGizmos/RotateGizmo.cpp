@@ -42,9 +42,9 @@ RotateGizmo::RotateGizmo()
     p_axisY = GameObject::Create<RotateGizmoAxis>();
     p_axisZ = GameObject::Create<RotateGizmoAxis>();
 
-    p_axisX->SetAxis(Axis3D::X);
-    p_axisY->SetAxis(Axis3D::Y);
-    p_axisZ->SetAxis(Axis3D::Z);
+    p_axisX->SetAxis(Axis3DExt::X);
+    p_axisY->SetAxis(Axis3DExt::Y);
+    p_axisZ->SetAxis(Axis3DExt::Z);
 
     p_axisX->SetParent(this);
     p_axisY->SetParent(this);

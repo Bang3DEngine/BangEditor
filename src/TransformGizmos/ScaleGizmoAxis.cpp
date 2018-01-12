@@ -142,7 +142,7 @@ void ScaleGizmoAxis::Render(RenderPass renderPass, bool renderChildren)
     TransformGizmoAxis::Render(renderPass, renderChildren);
 }
 
-void ScaleGizmoAxis::SetAxis(Axis3D axis)
+void ScaleGizmoAxis::SetAxis(Axis3DExt axis)
 {
     TransformGizmoAxis::SetAxis(axis);
     UpdatePoints(1.0f);

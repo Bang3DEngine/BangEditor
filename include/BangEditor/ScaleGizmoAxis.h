@@ -19,7 +19,7 @@ public:
     void Update() override;
     void Render(RenderPass renderPass, bool renderChildren) override;
 
-    void SetAxis(Axis3D axis) override;
+    void SetAxis(Axis3DExt axis) override;
 
     // SelectionGizmo
     void SetReferencedGameObject(GameObject *referencedGameObject) override;

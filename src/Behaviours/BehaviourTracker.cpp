@@ -26,6 +26,11 @@ void BehaviourTracker::Update()
     m_fileTracker.Update();
 }
 
+void BehaviourTracker::CheckForChanges()
+{
+    m_fileTracker.CheckForChanges();
+}
+
 bool BehaviourTracker::HasBeenModified(const Path &sourcePath) const
 {
     List<Path> includePaths =

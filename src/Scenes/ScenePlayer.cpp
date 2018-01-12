@@ -65,13 +65,18 @@ void ScenePlayer::InstantiatePlayingSceneBehaviours()
 {
     ASSERT(p_playingScene);
 
-    Library *behavioursLib = EditorBehaviourManager::GetBehavioursLibrary();
+    EditorBehaviourManager *behaviourMgr = EditorBehaviourManager::GetInstance();
 
-    List<BehaviourContainer*> sceneBehaviourContainers =
-            p_playingScene->GetComponentsInChildren<BehaviourContainer>(true);
-    for (BehaviourContainer* behaviourContainer : sceneBehaviourContainers)
+    behaviourMgr->PrepareBehavioursLibrary();
+    Library *behavioursLib = behaviourMgr->GetBehavioursLibrary();
+    if (behavioursLib)
     {
-        behaviourContainer->SubstituteByBehaviourInstance(behavioursLib);
+        List<BehaviourContainer*> sceneBehaviourContainers =
+                p_playingScene->GetComponentsInChildren<BehaviourContainer>(true);
+        for (BehaviourContainer* behaviourContainer : sceneBehaviourContainers)
+        {
+            behaviourContainer->SubstituteByBehaviourInstance(behavioursLib);
+        }
     }
 }
 

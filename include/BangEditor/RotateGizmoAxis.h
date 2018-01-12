@@ -22,7 +22,7 @@ public:
     void Update() override;
     void Render(RenderPass renderPass, bool renderChildren) override;
 
-    void SetAxis(Axis3D axis) override;
+    void SetAxis(Axis3DExt axis) override;
 
 private:
     using SelectionState = SelectionGizmo::SelectionState;
@@ -40,7 +40,8 @@ private:
     virtual ~RotateGizmoAxis();
 
     void UpdateCirclePoints();
-    static Quaternion GetQuaternionAxised(const Quaternion &q, Axis3D axis);
+    static Quaternion GetQuaternionAxised(const Quaternion &q,
+                                          Axis3DExt axis);
 
     void SetColor(const Color &color) override;
 

@@ -58,7 +58,7 @@ void TransformGizmoAxis::Update()
     m_grabHasJustChanged = (IsBeingGrabbed() != prevGrab);
 }
 
-void TransformGizmoAxis::SetAxis(Axis3D axis)
+void TransformGizmoAxis::SetAxis(Axis3DExt axis)
 {
     if (axis != GetAxis())
     {
@@ -66,7 +66,7 @@ void TransformGizmoAxis::SetAxis(Axis3D axis)
         SetColor(SelectionState::Idle);
     }
 }
-Axis3D TransformGizmoAxis::GetAxis() const { return m_axis; }
+Axis3DExt TransformGizmoAxis::GetAxis() const { return m_axis; }
 Vector3 TransformGizmoAxis::GetAxisVectorLocal() const
 {
     return GetAxisVector( GetAxis() );

@@ -21,10 +21,10 @@ public:
     // GameObject
     void Update() override;
 
-    virtual void SetAxis(Axis3D axis);
+    virtual void SetAxis(Axis3DExt axis);
     virtual void SetColor(const Color &color) = 0;
 
-    Axis3D GetAxis() const;
+    Axis3DExt GetAxis() const;
     Vector3 GetAxisVectorLocal() const;
     Vector3 GetAxisVectorWorld() const;
 
@@ -38,7 +38,7 @@ protected:
 private:
     using SelectionState = SelectionGizmo::SelectionState;
 
-    Axis3D m_axis = Undef<Axis3D>();
+    Axis3DExt m_axis = Undef<Axis3DExt>();
     bool m_grabHasJustChanged = false;
     bool m_isBeingGrabbed = false;
 
