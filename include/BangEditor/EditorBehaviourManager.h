@@ -29,13 +29,17 @@ public:
 
     void Update();
 
-    void PrepareBehavioursLibrary();
+    bool PrepareBehavioursLibrary();
     bool IsCompiled(const Path& behaviourFilepath) const;
+    bool IsCompiledWithError(const Path& behaviourFilepath) const;
+    bool IsCompiledSuccessfully(const Path& behaviourFilepath) const;
     bool IsBeingCompiled(const Path& behaviourFilepath) const;
-    bool AreAllBehavioursReady() const;
+    bool AreAllBehavioursCompiled() const;
+    bool IsSomeBehaviourBeingCompiled() const;
+    bool AreAllBehavioursCompiledSuccessfully() const;
     bool IsBehavioursLibraryReady() const;
 
-    Library* GetBehavioursLibrary();
+    Library* GetBehavioursLibrary() const;
 
     static EditorBehaviourManager* GetInstance();
     static Behaviour* CreateBehaviourInstance(const String &behaviourName);
@@ -48,16 +52,13 @@ private:
     Library *m_behavioursLibrary = nullptr;
 
     Set<Path> m_compiledBehaviours;
-    Set<Path> m_behavioursBeingCompiledAsync;
-    bool m_behavioursLibraryReady = false;
+    Set<Path> m_behavioursBeingCompiled;
+    Set<Path> m_successfullyCompiledBehaviours;
 
     mutable Mutex m_mutex;
     std::queue<Compiler::Result> m_compileResults;
 
-
     void UpdateCompileInformations();
-    void ProcessEnqueuedCompileResults();
-    void EnqueueCompileResult(const Compiler::Result &compileResult);
 
     Compiler::Result CompileBehaviourObject(const Path &behaviourPath);
     Compiler::Result CompileBehaviourObject(const Path& behaviourFilepath,

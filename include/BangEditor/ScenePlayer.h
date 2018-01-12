@@ -21,7 +21,7 @@ private:
     Scene *p_editingScene = nullptr;
     Scene *p_playingScene = nullptr;
 
-    void InstantiatePlayingSceneBehaviours();
+    bool InstantiatePlayingSceneBehaviours();
 
     ScenePlayer();
     virtual ~ScenePlayer();

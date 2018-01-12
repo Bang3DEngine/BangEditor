@@ -22,7 +22,7 @@ public:
     void CheckForChanges();
 
     bool HasBeenModified(const Path &sourcePath) const;
-    List<Path> GetIncludePaths() const;
+    List<Path> GetIncludeDirs() const;
 
     const FileTracker& GetFileTracker() const;
 

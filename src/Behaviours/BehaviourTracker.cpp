@@ -34,7 +34,7 @@ void BehaviourTracker::CheckForChanges()
 bool BehaviourTracker::HasBeenModified(const Path &sourcePath) const
 {
     List<Path> includePaths =
-        CodePreprocessor::GetSourceIncludePaths(sourcePath, GetIncludePaths());
+        CodePreprocessor::GetSourceIncludePaths(sourcePath, GetIncludeDirs());
     for (const Path &includePath : includePaths)
     {
         if (HasBeenModified(includePath)) { return true; }
@@ -42,7 +42,7 @@ bool BehaviourTracker::HasBeenModified(const Path &sourcePath) const
     return m_modifiedPathsFromLastUpdate.Contains(sourcePath);
 }
 
-List<Path> BehaviourTracker::GetIncludePaths() const
+List<Path> BehaviourTracker::GetIncludeDirs() const
 {
     List<Path> includePaths;
     includePaths.PushBack( EditorPaths::GetProjectIncludeDirs() );

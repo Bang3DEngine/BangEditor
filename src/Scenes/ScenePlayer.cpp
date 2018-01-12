@@ -26,20 +26,24 @@ void ScenePlayer::PlayScene()
 {
     if (Editor::GetEditorPlayState() != EditorPlayState::Playing)
     {
-        Editor::SetEditorPlayState(EditorPlayState::Playing);
-
-        ScenePlayer *sp = ScenePlayer::GetInstance();
-
-        sp->p_editingScene = EditorSceneManager::GetOpenScene();
-        if (sp->p_editingScene)
+        EditorBehaviourManager *behaviourMgr = EditorBehaviourManager::GetInstance();
+        bool behavioursReady = behaviourMgr->PrepareBehavioursLibrary();
+        if (behavioursReady)
         {
-            sp->p_playingScene = sp->p_editingScene->Clone();
+            Editor::SetEditorPlayState(EditorPlayState::Playing);
 
-            EditorScene *edScene = EditorSceneManager::GetEditorScene();
-            edScene->SetOpenScene(sp->p_playingScene, false);
+            ScenePlayer *sp = ScenePlayer::GetInstance();
+            sp->p_editingScene = EditorSceneManager::GetOpenScene();
+            if (sp->p_editingScene)
+            {
+                sp->p_playingScene = sp->p_editingScene->Clone();
 
-            sp->InstantiatePlayingSceneBehaviours();
-            Time::EstablishDeltaTimeReferenceToNow();
+                EditorScene *edScene = EditorSceneManager::GetEditorScene();
+                edScene->SetOpenScene(sp->p_playingScene, false);
+
+                sp->InstantiatePlayingSceneBehaviours();
+                Time::EstablishDeltaTimeReferenceToNow();
+            }
         }
     }
 }
@@ -61,13 +65,14 @@ void ScenePlayer::StopScene()
     }
 }
 
-void ScenePlayer::InstantiatePlayingSceneBehaviours()
+bool ScenePlayer::InstantiatePlayingSceneBehaviours()
 {
     ASSERT(p_playingScene);
 
     EditorBehaviourManager *behaviourMgr = EditorBehaviourManager::GetInstance();
 
-    behaviourMgr->PrepareBehavioursLibrary();
+    if (!behaviourMgr->PrepareBehavioursLibrary()) { return false; }
+
     Library *behavioursLib = behaviourMgr->GetBehavioursLibrary();
     if (behavioursLib)
     {
@@ -78,6 +83,8 @@ void ScenePlayer::InstantiatePlayingSceneBehaviours()
             behaviourContainer->SubstituteByBehaviourInstance(behavioursLib);
         }
     }
+
+    return (behavioursLib != nullptr);
 }
 
 ScenePlayer *ScenePlayer::GetInstance()
