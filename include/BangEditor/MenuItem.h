@@ -30,12 +30,24 @@ public:
     void AddItem(MenuItem *childItem);
     MenuItem* AddItem(const String &text);
 
-    void SetMenuEnabled(bool enabled);
+    void Close(bool recursiveUp);
+    void SetForceShow(bool forceShow);
+    void SetOverAndActionEnabled(bool enabled);
+    void SetOverAndActionEnabledRecursively(bool enabled);
+    void SetDropDownEnabled(bool enabled);
+    void SetDropDownEnabledRecursively(bool enabled);
 
-    bool IsMenuEnabled() const;
+    bool IsOverAndActionEnabled() const;
+    bool IsDropDownEnabled() const;
     UIList *GetChildrenList() const;
     UITextRenderer *GetText() const;
     UIFocusable *GetFocusable() const;
+    MenuItemType GetItemType() const;
+    bool GetDestroyOnClose() const;
+    float GetFontSize() const;
+    bool IsForcedShow() const;
+    MenuItem *GetParentItem() const;
+    const List<MenuItem*>& GetChildrenItems() const;
 
     bool MustDisplayChildren() const;
     void SetFontSize(uint fontSize);
@@ -51,11 +63,13 @@ protected:
 private:
     ItemSelectedCallback m_selectedCallback;
     bool m_destroyOnClose = false;
-    bool m_menuEnabled = true;
+    bool m_forcedShow = false;
+
+    bool m_overAndActionEnabled = true;
+    bool m_dropDownEnabled = true;
 
     MenuItemType m_itemType = Undef<MenuItemType>();
     uint m_fontSize = Undef<uint>();
-    int m_justClosed = 0;
 
     UIFocusable *p_focusable = nullptr;
     UITextRenderer *p_text = nullptr;
@@ -66,8 +80,7 @@ private:
     UIImageRenderer *p_topBg = nullptr;
     UIImageRenderer *p_rightArrow = nullptr;
 
-    void CloseRecursiveUp();
-    bool IsSelectedInList() const;
+    bool IsSelected() const;
     static void OnListSelectionCallback(GameObject *item, UIList::Action action);
 
     friend class Bang::ObjectManager;

@@ -19,26 +19,26 @@ USING_NAMESPACE_BANG_EDITOR
 MenuItem::MenuItem(MenuItemType itemType)
 {
     SetName("MenuItem");
-    m_itemType = itemType;
     SetFontSize(11);
+    m_itemType = itemType;
 
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
     hl->SetChildrenVerticalStretch(Stretch::None);
     hl->SetChildrenVerticalAlignment(VerticalAlignment::Center);
-    if (m_itemType != MenuItemType::Root) { hl->SetPaddings(3); }
+    if (GetItemType() != MenuItemType::Root) { hl->SetPaddings(3); }
     else
     {
         hl->SetPaddings(1, 1, 0, 0); // TODO: Why if I remove this it does not work?
     }
 
-    if (m_itemType == MenuItemType::Top)
+    if (GetItemType() == MenuItemType::Top)
     {
         p_topBg = AddComponent<UIImageRenderer>();
     }
 
-    if (m_itemType != MenuItemType::Root)
+    if (GetItemType() != MenuItemType::Root)
     {
         hl->SetSpacing(5);
 
@@ -46,7 +46,7 @@ MenuItem::MenuItem(MenuItemType itemType)
         p_text = textGo->AddComponent<UITextRenderer>();
         GetText()->SetContent("MenuItem");
         GetText()->SetTextColor(Color::Black);
-        GetText()->SetTextSize( m_fontSize );
+        GetText()->SetTextSize( GetFontSize() );
         GetText()->SetVerticalAlign(VerticalAlignment::Center);
         GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
 
@@ -57,7 +57,7 @@ MenuItem::MenuItem(MenuItemType itemType)
 
         p_focusable = textGo->AddComponent<UIFocusable>();
 
-        if (m_itemType != MenuItemType::Top)
+        if (GetItemType() != MenuItemType::Top)
         {
             p_rightArrow = GameObjectFactory::CreateUIImage();
             p_rightArrow->SetImageTexture( IconManager::GetRightArrowIcon().Get() );
@@ -98,62 +98,76 @@ MenuItem::~MenuItem()
 
 }
 
-bool MenuItem::IsSelectedInList() const
+bool MenuItem::IsSelected() const
 {
-    return p_parentItem ? (p_parentItem->GetChildrenList()->GetSelectedItem() == this) :
-                          false;
+    switch (GetItemType())
+    {
+        case MenuItemType::Root: return true;
+        case MenuItemType::Top: return IsForcedShow();
+        case MenuItemType::Normal:
+        {
+            MenuItem *parentItem = GetParentItem();
+            if (!parentItem) { return false; }
+            return parentItem->GetChildrenList()->GetSelectedItem() == this;;
+        }
+    }
+    return true;
 }
 
 void MenuItem::Update()
 {
     GameObject::Update();
 
-    Color textColor = Color::Black;
-    UICanvas *canvas = UICanvas::GetActive(this);
-    if (!IsMenuEnabled() &&
-        m_itemType == MenuItemType::Top &&
-        canvas->IsMouseOver(this, true))
-    {
-        textColor = Color::White;
-    }
-    GetText()->SetTextColor(textColor);
-
     const bool mustDisplayChildren = MustDisplayChildren();
     GetChildrenList()->GetGameObject()->SetEnabled(mustDisplayChildren);
 
+    if (GetItemType() == MenuItemType::Top)
+    {
+        UICanvas *canvas = UICanvas::GetActive(this);
+        bool mouseOver = canvas->IsMouseOver(this, true);
+        bool tintWhite = mouseOver && !IsForcedShow();
+        GetText()->SetTextColor((tintWhite && mouseOver) ? Color::White :
+                                                           Color::Black);
+    }
+
     if (p_topBg)
     {
-        p_topBg->SetTint( mustDisplayChildren ? Color::VeryLightBlue :
-                                                Color::Zero);
+        Color topBgColor = mustDisplayChildren ? Color::VeryLightBlue : Color::Zero;
+        p_topBg->SetTint(topBgColor);
     }
-    if (p_rightArrow) { p_rightArrow->SetEnabled( !p_childrenItems.IsEmpty() ); }
-    if (m_justClosed > 0) { --m_justClosed; }
+    if (p_rightArrow) { p_rightArrow->SetEnabled( !GetChildrenItems().IsEmpty() ); }
 }
 
 void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
 {
     MenuItem *menuItem = DCAST<MenuItem*>(item);
-    MenuItem *parentItem = menuItem ? menuItem->p_parentItem : nullptr;
+    MenuItem *parentItem = menuItem ? menuItem->GetParentItem() : nullptr;
     switch (action)
     {
         case UIList::Action::ClickedLeft:
         case UIList::Action::Pressed:
         {
-            if (menuItem && menuItem->m_selectedCallback)
+            if (menuItem && menuItem->IsOverAndActionEnabled() &&
+                menuItem->m_selectedCallback)
             {
                 menuItem->m_selectedCallback(menuItem);
-                menuItem->CloseRecursiveUp();
-                menuItem->m_justClosed = 5;
+                menuItem->Close(true);
             }
         }
         break;
 
         case UIList::Action::MouseOver:
-            if (parentItem) { parentItem->GetChildrenList()->SetSelection(menuItem); }
+            if (parentItem)
+            {
+                parentItem->GetChildrenList()->SetSelection(menuItem);
+            }
         break;
 
         case UIList::Action::MouseOut:
-            if (parentItem) { parentItem->GetChildrenList()->SetSelection(nullptr); }
+            if (parentItem && menuItem->GetChildrenItems().IsEmpty() )
+            {
+                parentItem->GetChildrenList()->SetSelection(nullptr);
+            }
         break;
 
         default: break;
@@ -163,21 +177,23 @@ void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
 
 void MenuItem::SetFontSize(uint fontSize)
 {
-    if (fontSize != m_fontSize)
+    if (fontSize != GetFontSize())
     {
         m_fontSize = fontSize;
         List<UITextRenderer*> texts = GetComponentsInChildren<UITextRenderer>();
-        for (UITextRenderer *text : texts) { text->SetTextSize(m_fontSize); }
+        for (UITextRenderer *text : texts) { text->SetTextSize(GetFontSize()); }
     }
 }
 
-void MenuItem::CloseRecursiveUp()
+void MenuItem::Close(bool recursiveUp)
 {
-    if (!p_parentItem)
+    if (!GetParentItem() || !recursiveUp)
     {
-        if (!m_destroyOnClose)
+        if (!GetDestroyOnClose())
         {
             GetChildrenList()->GetGameObject()->SetEnabled(false);
+            GetChildrenList()->SetSelection(nullptr);
+            for (MenuItem *childItem : GetChildrenItems()) { childItem->Close(false); }
         }
         else
         {
@@ -186,8 +202,8 @@ void MenuItem::CloseRecursiveUp()
     }
     else
     {
-        p_parentItem->CloseRecursiveUp();
-        p_parentItem->GetChildrenList()->SetSelection(nullptr);
+        GetParentItem()->Close(true);
+        GetParentItem()->GetChildrenList()->SetSelection(nullptr);
     }
 }
 void MenuItem::SetDestroyOnClose(bool destroyOnSelect)
@@ -217,67 +233,84 @@ MenuItem *MenuItem::AddItem(const String &text)
 {
     MenuItem *newItem = GameObject::Create<MenuItem>(MenuItemType::Normal);
     newItem->GetText()->SetContent(text);
-    newItem->GetText()->SetTextSize(m_fontSize);
+    newItem->GetText()->SetTextSize(GetFontSize());
     newItem->SetName(text);
     newItem->p_parentItem = this;
     AddItem(newItem);
     return newItem;
 }
 
-void MenuItem::SetMenuEnabled(bool enabled)
+void MenuItem::SetForceShow(bool forceShow)
 {
-    if (enabled != IsMenuEnabled())
+    if (forceShow != IsForcedShow())
     {
-        m_menuEnabled = enabled;
+        m_forcedShow = forceShow;
+        if (GetItemType() == MenuItemType::Top)
+        {
+            if (IsForcedShow()) { GetText()->SetTextColor(Color::Black); }
+            if (!IsForcedShow()) { p_topBg->SetTint(Color::Zero); }
+        }
     }
 }
 
-bool MenuItem::IsMenuEnabled() const
+void MenuItem::SetOverAndActionEnabled(bool enabled)
 {
-    return m_menuEnabled;
+    if (enabled != IsOverAndActionEnabled())
+    {
+        m_overAndActionEnabled = enabled;
+        if (GetItemType() == MenuItemType::Normal)
+        {
+            GetText()->SetTextColor(IsOverAndActionEnabled() ? Color::Black :
+                                                               Color::DarkGray);
+        }
+    }
 }
 
-UIList *MenuItem::GetChildrenList() const
+void MenuItem::SetOverAndActionEnabledRecursively(bool enabled)
 {
-    return p_childrenList;
+    SetOverAndActionEnabled(enabled);
+    for (MenuItem *childItem : GetChildrenItems())
+    {
+        childItem->SetOverAndActionEnabledRecursively(enabled);
+    }
 }
 
-UITextRenderer *MenuItem::GetText() const
+void MenuItem::SetDropDownEnabled(bool enabled)
 {
-    return p_text;
+    if (enabled != IsDropDownEnabled())
+    {
+        m_dropDownEnabled = true;
+    }
 }
 
-UIFocusable *MenuItem::GetFocusable() const
+void MenuItem::SetDropDownEnabledRecursively(bool enabled)
 {
-    return p_focusable;
+    SetDropDownEnabled(enabled);
+    for (MenuItem *childItem : GetChildrenItems())
+    {
+        childItem->SetDropDownEnabledRecursively(enabled);
+    }
 }
 
 bool MenuItem::MustDisplayChildren() const
 {
-    if (m_justClosed > 0) { return false; }
-    if (!IsMenuEnabled()) { return false; }
+    if (!IsDropDownEnabled()) { return false; }
 
-    if (m_itemType == MenuItemType::Root) { return true; }
-    if ( IsSelectedInList() ) { return true; }
-
-    if (GetChildrenList()->IsEnabled(true) &&
-        GetChildrenList()->GetGameObject()->GetRectTransform()->IsMouseOver(false))
-    {
-        return true;
-    }
-
-    if (m_itemType == MenuItemType::Top)
-    {
-        if (GetRectTransform()->IsMouseOver(false))
-        {
-            return true;
-        }
-    }
-
-    for (MenuItem *childItem : p_childrenItems)
-    {
-        if (childItem->MustDisplayChildren()) { return true; }
-    }
+    if ( GetItemType() == MenuItemType::Root ) { return true; }
+    if ( IsForcedShow() ) { return true; }
+    if ( IsSelected() ) { return true; }
 
     return false;
 }
+
+bool MenuItem::IsOverAndActionEnabled() const { return m_overAndActionEnabled; }
+bool MenuItem::IsDropDownEnabled() const { return m_dropDownEnabled; }
+UIList *MenuItem::GetChildrenList() const { return p_childrenList; }
+UITextRenderer *MenuItem::GetText() const { return p_text; }
+UIFocusable *MenuItem::GetFocusable() const { return p_focusable; }
+MenuItem::MenuItemType MenuItem::GetItemType() const { return m_itemType; }
+bool MenuItem::GetDestroyOnClose() const { return m_destroyOnClose; }
+float MenuItem::GetFontSize() const { return m_fontSize; }
+bool MenuItem::IsForcedShow() const { return m_forcedShow; }
+MenuItem *MenuItem::GetParentItem() const { return p_parentItem; }
+const List<MenuItem *> &MenuItem::GetChildrenItems() const { return p_childrenItems; }

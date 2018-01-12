@@ -42,6 +42,7 @@ private:
 
     Array<MenuItem*> m_items;
     UIFocusable *p_focusable = nullptr;
+    MenuItem *p_currentTopItemBeingShown = nullptr;
     UIHorizontalLayout *m_horizontalLayout = nullptr;
 
     SceneOpenerSaver *m_sceneOpenerSaver = nullptr;

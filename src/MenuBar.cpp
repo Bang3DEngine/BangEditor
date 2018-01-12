@@ -153,12 +153,39 @@ void MenuBar::Update()
 {
     GameObject::Update();
 
+    bool componentsEnabled = Editor::GetSelectedGameObject() != nullptr;
+    m_componentsItem->SetOverAndActionEnabledRecursively(componentsEnabled);
+    m_componentsItem->SetOverAndActionEnabled(true);
+
     UICanvas *canvas = UICanvas::GetActive(this);
     bool hasFocusRecursive = canvas->HasFocus(this, true);
     for (MenuItem *item : m_items)
     {
-        item->SetMenuEnabled(hasFocusRecursive);
+        // Drop down enabled if we have focus. Can't otherwise.
+        item->SetDropDownEnabled(hasFocusRecursive);
+
+        // Force show on top item if mouse over and menu bar has focus
+        bool forceShow = (hasFocusRecursive && canvas->IsMouseOver(item, true));
+        if (forceShow && item != p_currentTopItemBeingShown)
+        {
+            if (p_currentTopItemBeingShown) // Unforce show on the other
+            {
+                p_currentTopItemBeingShown->SetForceShow(false);
+                p_currentTopItemBeingShown->Close(true);
+            }
+
+            item->SetForceShow(true); // Force show on item under mouse
+            p_currentTopItemBeingShown = item;
+        }
+        if (p_currentTopItemBeingShown != item) { item->Close(true); }
+
+        if (!hasFocusRecursive)
+        {
+            item->SetForceShow(false);
+            item->Close(true);
+        }
     }
+    if (!hasFocusRecursive) { p_currentTopItemBeingShown = nullptr; }
 }
 
 MenuItem* MenuBar::AddItem()
