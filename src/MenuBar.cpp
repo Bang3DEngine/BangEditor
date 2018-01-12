@@ -6,6 +6,7 @@
 #include "Bang/Camera.h"
 #include "Bang/Dialog.h"
 #include "Bang/Random.h"
+#include "Bang/UICanvas.h"
 #include "Bang/Transform.h"
 #include "Bang/Extensions.h"
 #include "Bang/IFocusable.h"
@@ -47,6 +48,8 @@ MenuBar::MenuBar()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     m_sceneOpenerSaver = new SceneOpenerSaver();
+
+    p_focusable = AddComponent<UIFocusable>();
 
     UIImageRenderer *bg = AddComponent<UIImageRenderer>();
     bg->SetTint( Color::LightGray.WithValue(0.9f) );
@@ -92,7 +95,6 @@ MenuBar::MenuBar()
     openScene->SetSelectedCallback(MenuBar::OnOpenScene);
     build->SetSelectedCallback(MenuBar::OnBuild);
     buildAndRun->SetSelectedCallback(MenuBar::OnBuildAndRun);
-
 
     // Components
     MenuItem *addAudio = m_componentsItem->AddItem("Audio");
@@ -150,14 +152,12 @@ MenuBar::~MenuBar()
 void MenuBar::Update()
 {
     GameObject::Update();
-    EditorScene *edScene = EditorSceneManager::GetEditorScene();
-    if (Input::GetKeyDown(Key::Q))
+
+    UICanvas *canvas = UICanvas::GetActive(this);
+    bool hasFocusRecursive = canvas->HasFocus(this, true);
+    for (MenuItem *item : m_items)
     {
-        MenuBar::OnNewScene(nullptr);
-    }
-    else if (Input::GetKeyDown(Key::O))
-    {
-        MenuBar::OnOpenScene(nullptr);
+        item->SetMenuEnabled(hasFocusRecursive);
     }
 }
 

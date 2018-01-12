@@ -7,6 +7,7 @@
 #include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UIFocusable;
 FORWARD class UIHorizontalLayout;
 FORWARD NAMESPACE_BANG_END
 
@@ -40,6 +41,7 @@ private:
     MenuItem *m_gameObjectsItem = nullptr;
 
     Array<MenuItem*> m_items;
+    UIFocusable *p_focusable = nullptr;
     UIHorizontalLayout *m_horizontalLayout = nullptr;
 
     SceneOpenerSaver *m_sceneOpenerSaver = nullptr;

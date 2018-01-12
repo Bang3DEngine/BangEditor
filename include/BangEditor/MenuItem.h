@@ -30,6 +30,9 @@ public:
     void AddItem(MenuItem *childItem);
     MenuItem* AddItem(const String &text);
 
+    void SetMenuEnabled(bool enabled);
+
+    bool IsMenuEnabled() const;
     UIList *GetChildrenList() const;
     UITextRenderer *GetText() const;
     UIFocusable *GetFocusable() const;
@@ -48,6 +51,7 @@ protected:
 private:
     ItemSelectedCallback m_selectedCallback;
     bool m_destroyOnClose = false;
+    bool m_menuEnabled = true;
 
     MenuItemType m_itemType = Undef<MenuItemType>();
     uint m_fontSize = Undef<uint>();

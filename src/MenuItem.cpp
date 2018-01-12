@@ -108,6 +108,16 @@ void MenuItem::Update()
 {
     GameObject::Update();
 
+    Color textColor = Color::Black;
+    UICanvas *canvas = UICanvas::GetActive(this);
+    if (!IsMenuEnabled() &&
+        m_itemType == MenuItemType::Top &&
+        canvas->IsMouseOver(this, true))
+    {
+        textColor = Color::White;
+    }
+    GetText()->SetTextColor(textColor);
+
     const bool mustDisplayChildren = MustDisplayChildren();
     GetChildrenList()->GetGameObject()->SetEnabled(mustDisplayChildren);
 
@@ -214,6 +224,19 @@ MenuItem *MenuItem::AddItem(const String &text)
     return newItem;
 }
 
+void MenuItem::SetMenuEnabled(bool enabled)
+{
+    if (enabled != IsMenuEnabled())
+    {
+        m_menuEnabled = enabled;
+    }
+}
+
+bool MenuItem::IsMenuEnabled() const
+{
+    return m_menuEnabled;
+}
+
 UIList *MenuItem::GetChildrenList() const
 {
     return p_childrenList;
@@ -232,6 +255,7 @@ UIFocusable *MenuItem::GetFocusable() const
 bool MenuItem::MustDisplayChildren() const
 {
     if (m_justClosed > 0) { return false; }
+    if (!IsMenuEnabled()) { return false; }
 
     if (m_itemType == MenuItemType::Root) { return true; }
     if ( IsSelectedInList() ) { return true; }
