@@ -30,7 +30,6 @@ EditorBehaviourManager::~EditorBehaviourManager()
 
 void EditorBehaviourManager::Update()
 {
-    GetBehaviourTracker()->Update();
     UpdateCompileInformations();
 
     if (!Editor::IsPlaying())
@@ -348,22 +347,29 @@ Compiler::Job EditorBehaviourManager::CreateCompileBehaviourJob(
 
 void EditorBehaviourManager::UpdateCompileInformations()
 {
-    MutexLocker ml( GetMutex() ); (void)ml;
+    GetBehaviourTracker()->Update();
 
+    GetMutex()->Lock();
     List<Path> modifiedBehaviours;
     for (const Path &compiledBehaviour : m_compiledBehaviours)
     {
-        if (GetBehaviourTracker()->HasBeenModified(compiledBehaviour))
+        if ( GetBehaviourTracker()->HasBeenModified(compiledBehaviour) )
         {
+            Debug_Log("Modified " << compiledBehaviour);
             SetBehavioursLibrary(nullptr);
             modifiedBehaviours.PushBack(compiledBehaviour);
         }
     }
+    GetMutex()->UnLock();
 
     for (const Path &modifiedBehaviour : modifiedBehaviours)
     {
-        m_compiledBehaviours.Remove(modifiedBehaviour);
-        m_successfullyCompiledBehaviours.Remove(modifiedBehaviour);
+        if ( !IsBeingCompiled(modifiedBehaviour) )
+        {
+            MutexLocker ml(GetMutex()); (void)ml;
+            m_compiledBehaviours.Remove(modifiedBehaviour);
+            m_successfullyCompiledBehaviours.Remove(modifiedBehaviour);
+        }
     }
 }
 

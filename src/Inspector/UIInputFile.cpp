@@ -34,6 +34,7 @@ UIInputFile::UIInputFile()
                                        AddComponent<UILayoutElement>();
     pathInputTextLE->SetFlexibleSize( Vector2(9999.9f) );
     pathInputTextLE->SetLayoutPriority(1);
+    SetPath(Path::Empty);
 
     p_searchButton = GameObjectFactory::CreateUIButton();
     p_searchButton->GetText()->SetContent("");

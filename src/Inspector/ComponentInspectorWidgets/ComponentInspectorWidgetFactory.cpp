@@ -5,7 +5,9 @@
 #include "BangEditor/CIWCamera.h"
 #include "BangEditor/CIWTransform.h"
 #include "BangEditor/CIWPointLight.h"
+#include "BangEditor/CIWAudioSource.h"
 #include "BangEditor/CIWMeshRenderer.h"
+#include "BangEditor/CIWAudioListener.h"
 #include "BangEditor/CIWDirectionalLight.h"
 #include "BangEditor/CIWBehaviourContainer.h"
 #include "BangEditor/ComponentInspectorWidget.h"
@@ -40,6 +42,14 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(Component *com
     else if (cName == "Camera")
     {
         ciw = GameObject::Create<CIWCamera>();
+    }
+    else if (cName == "AudioListener")
+    {
+        ciw = GameObject::Create<CIWAudioListener>();
+    }
+    else if (cName == "AudioSource")
+    {
+        ciw = GameObject::Create<CIWAudioSource>();
     }
     else
     {

@@ -37,7 +37,7 @@ public:
 
 private:
     FileTracker m_fileTracker;
-    Set<Path> m_modifiedPathsFromLastUpdate;
+    Set<Path> m_changedPathsFromLastUpdate;
 };
 
 NAMESPACE_BANG_EDITOR_END

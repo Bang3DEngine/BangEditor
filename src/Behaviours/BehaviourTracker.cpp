@@ -22,7 +22,7 @@ BehaviourTracker::~BehaviourTracker()
 
 void BehaviourTracker::Update()
 {
-    m_modifiedPathsFromLastUpdate.Clear();
+    m_changedPathsFromLastUpdate.Clear();
     m_fileTracker.Update();
 }
 
@@ -34,12 +34,13 @@ void BehaviourTracker::CheckForChanges()
 bool BehaviourTracker::HasBeenModified(const Path &sourcePath) const
 {
     List<Path> includePaths =
-        CodePreprocessor::GetSourceIncludePaths(sourcePath, GetIncludeDirs());
+        CodePreprocessor::GetSourceIncludePaths(sourcePath, GetIncludeDirs(),
+                                                true);
     for (const Path &includePath : includePaths)
     {
         if (HasBeenModified(includePath)) { return true; }
     }
-    return m_modifiedPathsFromLastUpdate.Contains(sourcePath);
+    return m_changedPathsFromLastUpdate.Contains(sourcePath);
 }
 
 List<Path> BehaviourTracker::GetIncludeDirs() const
@@ -56,26 +57,26 @@ const FileTracker &BehaviourTracker::GetFileTracker() const
 
 void BehaviourTracker::OnProjectClosed(const Project *project)
 {
-    m_fileTracker.RemovePath( EditorPaths::GetProjectAssetsDir() );
+    m_fileTracker.UnTrackPath( EditorPaths::GetProjectAssetsDir() );
 }
 
 void BehaviourTracker::OnProjectOpen(const Project *project)
 {
-    m_fileTracker.AddPath( EditorPaths::GetProjectAssetsDir() );
+    m_fileTracker.TrackPath( EditorPaths::GetProjectAssetsDir() );
 }
 
 void BehaviourTracker::OnPathAdded(const Path &addedPath)
 {
-    m_modifiedPathsFromLastUpdate.Add(addedPath);
+    m_changedPathsFromLastUpdate.Add(addedPath);
 }
 
 void BehaviourTracker::OnPathModified(const Path &modifiedPath)
 {
-    m_modifiedPathsFromLastUpdate.Add(modifiedPath);
+    m_changedPathsFromLastUpdate.Add(modifiedPath);
 }
 
 void BehaviourTracker::OnPathRemoved(const Path &removedPath)
 {
-    m_modifiedPathsFromLastUpdate.Add(removedPath);
+    m_changedPathsFromLastUpdate.Add(removedPath);
 }
 

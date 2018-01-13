@@ -13,7 +13,7 @@ RH<Texture2D> EditorIconManager::GetIcon(const Path &path)
 {
     if (!path.IsDir())
     {
-        if (Extensions::Has(path, Extensions::GetImageExtensions()))
+        if ( Extensions::Has(path, Extensions::GetImageExtensions()) )
         {
             return Resources::Load<Texture2D>(path);
         }
@@ -24,32 +24,31 @@ RH<Texture2D> EditorIconManager::GetIcon(const Path &path)
 
 RH<Texture2D> EditorIconManager::GetIcon(const String &ext)
 {
-    if (ext == Extensions::GetFontExtension() ||
-        Extensions::Equals(ext, Extensions::GetTTFExtensions()) )
+    if ( Extensions::Equals(ext, Extensions::GetTTFExtensions()) )
     {
         return GetIconTexture("Letter");
     }
-    else if (ext == Extensions::GetAudioClipExtension())
+    else if ( Extensions::Equals(ext, Extensions::GetAudioClipExtensions()) )
     {
         return GetIconTexture("Audio");
     }
-    else if (ext == Extensions::GetSceneExtension())
+    else if ( Extensions::Equals(ext, Extensions::GetSceneExtension()) )
     {
         return GetIconTexture("Scene");
     }
-    else if (ext == Extensions::GetPrefabExtension())
+    else if ( Extensions::Equals(ext, Extensions::GetPrefabExtension()) )
     {
         return GetIconTexture("Pill");
     }
-    else if (Extensions::Equals(ext, Extensions::GetModelExtensions()))
+    else if ( Extensions::Equals(ext, Extensions::GetModelExtensions()) )
     {
         return GetIconTexture("Cube");
     }
-    else if (Extensions::Equals(ext, Extensions::GetBehaviourExtensions()))
+    else if ( Extensions::Equals(ext, Extensions::GetBehaviourExtensions()) )
     {
         return GetIconTexture("Brackets");
     }
-    else if (Extensions::Equals(ext, Extensions::GetImageExtensions()))
+    else if ( Extensions::Equals(ext, Extensions::GetImageExtensions()) )
     {
         return GetIconTexture("Image");
     }

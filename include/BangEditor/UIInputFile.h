@@ -36,7 +36,7 @@ protected:
     virtual ~UIInputFile();
 
 private:
-    Path m_path = Path::Empty;
+    Path m_path = Path("undef"); // Set to empty in constructor
     Array<String> m_extensions;
 
     UIButton *p_searchButton = nullptr;

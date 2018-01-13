@@ -166,7 +166,7 @@ void Explorer::SetCurrentPath(const Path &path)
         p_currentPathLabel->GetText()->SetContent(m_currentPath.GetAbsolute());
 
         m_fileTracker->Clear();
-        m_fileTracker->AddPath(GetCurrentPath());
+        m_fileTracker->TrackPath(GetCurrentPath());
 
         p_backButton->SetBlocked( GetCurrentPath() == GetRootPath() );
 
@@ -216,7 +216,8 @@ void Explorer::OnProjectClosed(const Project *project)
 void Explorer::OnPathAdded(const Path &addedPath)
 {
     if ( addedPath.GetDirectory() == GetRootPath() &&
-        !addedPath.IsHiddenFile())
+        !addedPath.IsHiddenFile() &&
+         addedPath.IsFile())
     {
         AddItem(addedPath);
     }
@@ -228,7 +229,10 @@ void Explorer::OnPathModified(const Path &modifiedPath)
 
 void Explorer::OnPathRemoved(const Path &removedPath)
 {
-    RemoveItem(removedPath);
+    if (!removedPath.IsFile())
+    {
+        RemoveItem(removedPath);
+    }
 }
 
 void Explorer::AddItem(const Path &itemPath)

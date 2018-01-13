@@ -151,6 +151,7 @@ void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
                 menuItem->m_selectedCallback)
             {
                 menuItem->m_selectedCallback(menuItem);
+                UICanvas::GetActive(menuItem)->SetFocus(nullptr);
                 menuItem->Close(true);
             }
         }
