@@ -55,7 +55,7 @@ void Editor::SetEditorPlayState(EditorPlayState playState)
 EditorPlayState Editor::GetEditorPlayState()
 {
     Editor *ed = Editor::GetInstance();
-    return ed->m_currentPlayState;
+    return ed ? ed->m_currentPlayState : Undef<EditorPlayState>();
 }
 
 bool Editor::IsPlaying()

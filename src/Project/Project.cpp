@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "Bang/Paths.h"
 #include "Bang/Time.h"
+#include "Bang/Paths.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Extensions.h"
 #include "Bang/SceneManager.h"

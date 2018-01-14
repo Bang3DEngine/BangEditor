@@ -2,8 +2,10 @@
 
 #include "Bang/Time.h"
 #include "Bang/Scene.h"
+#include "Bang/AudioManager.h"
 #include "Bang/UILayoutManager.h"
 
+#include "BangEditor/Editor.h"
 #include "BangEditor/EditorScene.h"
 
 USING_NAMESPACE_BANG
@@ -44,6 +46,14 @@ Scene *EditorSceneManager::_GetOpenScene() const
 EditorScene *EditorSceneManager::_GetEditorScene() const
 {
     return p_editorScene;
+}
+
+void EditorSceneManager::_StartScene(Scene *scene)
+{
+    bool blockSounds = !Editor::IsPlaying();
+    AudioManager::SetSoundsBlocked(blockSounds); // Avoid play on start sounds
+    SceneManager::_StartScene(scene);
+    AudioManager::SetSoundsBlocked(false);
 }
 
 void EditorSceneManager::_LoadSceneInstantly(Scene *scene)
