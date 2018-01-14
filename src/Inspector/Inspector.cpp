@@ -102,7 +102,7 @@ GameObject *Inspector::GetCurrentGameObject() const
     return p_currentGameObject;
 }
 
-void Inspector::OnDestroyed(Object *destroyedObject)
+void Inspector::OnDestroyed(EventEmitter<IDestroyListener> *destroyedObject)
 {
     Clear();
 }

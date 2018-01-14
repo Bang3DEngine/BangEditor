@@ -18,7 +18,7 @@ public:
     GameObject *GetReferencedGameObject() const;
 
     // IDestroyListener
-    virtual void OnDestroyed(Object *object) override;
+    virtual void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 
 protected:
     enum SelectionState { Idle, Over, Grabbed };

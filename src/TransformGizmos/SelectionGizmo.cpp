@@ -27,7 +27,7 @@ GameObject *SelectionGizmo::GetReferencedGameObject() const
     return p_referencedGameObject;
 }
 
-void SelectionGizmo::OnDestroyed(Object *object)
+void SelectionGizmo::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
     ASSERT( !GetReferencedGameObject() || object == GetReferencedGameObject() );
     SetReferencedGameObject(nullptr);

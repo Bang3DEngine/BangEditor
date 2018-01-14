@@ -71,7 +71,7 @@ private:
     static Editor* GetInstance();
 
     // IDestroyListener
-    virtual void OnDestroyed(Object *object) override;
+    virtual void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 
     friend class Explorer;
     friend class EditorScene;

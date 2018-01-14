@@ -1,5 +1,7 @@
 #include "BangEditor/Editor.h"
 
+#include "Bang/AudioManager.h"
+
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSettings.h"
 #include "BangEditor/TransformGizmo.h"
@@ -49,6 +51,8 @@ void Editor::SetEditorPlayState(EditorPlayState playState)
                     &IEditorListener::OnPlayStateChanged,
                     previousPlayState,
                     ed->m_currentPlayState);
+
+        AudioManager::SetPlayOnStartBlocked( !Editor::IsPlaying() );
     }
 }
 
@@ -63,7 +67,7 @@ bool Editor::IsPlaying()
     return Editor::GetEditorPlayState() == EditorPlayState::Playing;
 }
 
-void Editor::OnDestroyed(Object *object)
+void Editor::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
     if (GetSelectedGameObject() == object)
     {

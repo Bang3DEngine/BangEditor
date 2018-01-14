@@ -76,7 +76,7 @@ void UIContextMenu::SetCreateContextMenuCallback(
     m_createContextMenuCallback = createCallback;
 }
 
-void UIContextMenu::OnDestroyed(Object *object)
+void UIContextMenu::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
     ASSERT(p_menu && object == p_menu);
     p_menu = nullptr;
@@ -128,7 +128,7 @@ MenuItem *ContextMenu::GetRootItem() const
     return p_rootItem;
 }
 
-void ContextMenu::OnDestroyed(Object *object)
+void ContextMenu::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
     ASSERT(object == p_rootItem);
     GameObject::Destroy(this);

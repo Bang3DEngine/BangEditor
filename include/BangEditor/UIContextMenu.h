@@ -42,7 +42,7 @@ private:
     CreateContextMenuCallback m_createContextMenuCallback;
 
     // IDestroyListener
-    void OnDestroyed(Object *object) override;
+    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 };
 
 
@@ -59,7 +59,7 @@ public:
 
     MenuItem *GetRootItem() const;
 
-    void OnDestroyed(Object *object) override;
+    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 
 private:
     MenuItem *p_rootItem = nullptr;

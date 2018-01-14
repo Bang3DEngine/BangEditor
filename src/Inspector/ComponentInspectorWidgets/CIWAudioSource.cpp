@@ -73,7 +73,7 @@ void CIWAudioSource::UpdateValuesFromComponent()
     p_volumeSlider->SetValue( as->GetVolume() );
     p_pitchSlider->SetValue( as->GetPitch() );
     p_loopingCheckbox->SetChecked( as->GetLooping() );
-    p_playOnStartCheckbox->SetChecked( as->IsPlayOnStart() );
+    p_playOnStartCheckbox->SetChecked( as->GetPlayOnStart() );
 
     p_playStopButton->SetBlocked(!ac || !ac->IsLoaded());
     p_playStopButton->GetText()->SetContent(as->IsPlaying() ? "Stop" : "Play");

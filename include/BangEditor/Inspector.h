@@ -37,7 +37,7 @@ public:
     GameObject *GetCurrentGameObject() const;
 
     // IDestroyListener
-    void OnDestroyed(Object *destroyedObject) override;
+    void OnDestroyed(EventEmitter<IDestroyListener> *destroyedObject) override;
 
     // IEditorListener
     void OnExplorerPathSelected(const Path &path) override;

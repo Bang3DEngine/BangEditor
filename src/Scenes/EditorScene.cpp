@@ -13,6 +13,7 @@
 #include "Bang/Texture2D.h"
 #include "Bang/Selection.h"
 #include "Bang/GameObject.h"
+#include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
@@ -204,9 +205,10 @@ void EditorScene::SetViewportForOpenScene()
 
 void EditorScene::SetOpenScene(Scene *openScene, bool destroyPreviousScene)
 {
-    if (destroyPreviousScene && GetOpenScene())
+    if (GetOpenScene())
     {
-        GameObject::Destroy(GetOpenScene());
+        if (destroyPreviousScene) { GameObject::Destroy(GetOpenScene()); }
+        AudioManager::StopAllSounds();
     }
 
     p_openScene = openScene;

@@ -48,14 +48,6 @@ EditorScene *EditorSceneManager::_GetEditorScene() const
     return p_editorScene;
 }
 
-void EditorSceneManager::_StartScene(Scene *scene)
-{
-    bool blockSounds = !Editor::IsPlaying();
-    AudioManager::SetSoundsBlocked(blockSounds); // Avoid play on start sounds
-    SceneManager::_StartScene(scene);
-    AudioManager::SetSoundsBlocked(false);
-}
-
 void EditorSceneManager::_LoadSceneInstantly(Scene *scene)
 {
     EditorScene *edScene = _GetEditorScene();
