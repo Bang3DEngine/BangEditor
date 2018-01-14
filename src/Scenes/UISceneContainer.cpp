@@ -1,3 +1,5 @@
+
+
 #include "BangEditor/UISceneContainer.h"
 
 #include "Bang/Rect.h"
@@ -47,7 +49,7 @@ UISceneContainer::UISceneContainer()
     sceneImgGo->SetParent(this);
     cameraPreviewGo->SetParent(this);
 
-    Editor::RegisterListener<IEditorListener>(this);
+    Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
 }
 
 UISceneContainer::~UISceneContainer()

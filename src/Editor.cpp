@@ -4,9 +4,9 @@
 
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSettings.h"
-#include "BangEditor/TransformGizmo.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/NotSelectableInEditor.h"
+#include "BangEditor/SelectionGizmosManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -18,11 +18,13 @@ Editor::Editor()
 Editor::~Editor()
 {
     delete m_editorSettings;
+    delete p_selectionGizmosManager;
 }
 
 void Editor::Init()
 {
     m_editorSettings = new EditorSettings();
+    p_selectionGizmosManager = new SelectionGizmosManager();
     GetEditorSettings()->Init();
 }
 
@@ -73,11 +75,6 @@ void Editor::OnDestroyed(EventEmitter<IDestroyListener> *object)
     {
         _SelectGameObject(nullptr);
     }
-
-    if (p_currentTransformGizmo == object)
-    {
-        p_currentTransformGizmo = nullptr;
-    }
 }
 
 void Editor::_SelectGameObject(GameObject *selectedGameObject)
@@ -99,27 +96,6 @@ void Editor::_SelectGameObject(GameObject *selectedGameObject)
         EventEmitter<IEditorListener>::
             PropagateToListeners(&IEditorListener::OnGameObjectSelected,
                                  selectedGameObject);
-
-        // Destroy previous transform gizmo
-        if (p_currentTransformGizmo)
-        {
-            GameObject::Destroy(p_currentTransformGizmo);
-            p_currentTransformGizmo = nullptr;
-        }
-
-        // Create new transform gizmo
-        if (GetSelectedGameObject())
-        {
-            ASSERT(!p_currentTransformGizmo);
-            TransformGizmo *tg = GameObject::Create<TransformGizmo>();
-            tg->SetReferencedGameObject(GetSelectedGameObject());
-            p_currentTransformGizmo = tg;
-            p_currentTransformGizmo->
-                    EventEmitter<IDestroyListener>::RegisterListener(this);
-
-            Scene *openScene = EditorSceneManager::GetOpenScene();
-            p_currentTransformGizmo->SetParent(openScene);
-        }
     }
 }
 
@@ -129,7 +105,12 @@ void Editor::OnPathSelected(const Path &path)
     ASSERT(ed);
 
     ed->EventEmitter<IEditorListener>::PropagateToListeners(
-            &IEditorListener::OnExplorerPathSelected, path);
+                &IEditorListener::OnExplorerPathSelected, path);
+}
+
+SelectionGizmosManager *Editor::GetSelectionGizmosManager() const
+{
+    return p_selectionGizmosManager;
 }
 
 EditorSettings *Editor::GetEditorSettings() const

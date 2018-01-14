@@ -18,7 +18,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class EditorSettings;
-FORWARD class TransformGizmo;
+FORWARD class SelectionGizmosManager;
 
 enum class EditorPlayState
 {
@@ -42,22 +42,18 @@ public:
     static GameObject *GetSelectedGameObject();
     static void SelectGameObject(GameObject *selectedGameObject);
 
-    template <class ListenerClass>
-    static void RegisterListener(ListenerClass *selectionListener);
-
-    template <class ListenerClass>
-    static void UnRegisterListener(ListenerClass *selectionListener);
-
     static void SetEditorPlayState(EditorPlayState playState);
     static EditorPlayState GetEditorPlayState();
     static bool IsPlaying();
+
+    static Editor* GetInstance();
 
 private:
     EditorPlayState m_currentPlayState = Undef<EditorPlayState>();
 
     GameObject *p_selectedGameObject = nullptr;
     EditorSettings *m_editorSettings = nullptr;
-    TransformGizmo *p_currentTransformGizmo = nullptr;
+    SelectionGizmosManager *p_selectionGizmosManager = nullptr;
 
     Editor();
     virtual ~Editor();
@@ -67,8 +63,8 @@ private:
 
     static void OnPathSelected(const Path &path);
 
+    SelectionGizmosManager *GetSelectionGizmosManager() const;
     EditorSettings* GetEditorSettings() const;
-    static Editor* GetInstance();
 
     // IDestroyListener
     virtual void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
@@ -77,18 +73,6 @@ private:
     friend class EditorScene;
     friend class EditorSettings;
 };
-
-template <class ListenerClass>
-void Editor::RegisterListener(ListenerClass *selectionListener)
-{
-    Editor::GetInstance()->EventEmitter<ListenerClass>::RegisterListener(selectionListener);
-}
-
-template <class ListenerClass>
-void Editor::UnRegisterListener(ListenerClass *selectionListener)
-{
-    Editor::GetInstance()->EventEmitter<ListenerClass>::UnRegisterListener(selectionListener);
-}
 
 NAMESPACE_BANG_EDITOR_END
 

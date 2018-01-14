@@ -1,7 +1,6 @@
 #include "BangEditor/TransformGizmo.h"
 
 #include "Bang/Input.h"
-#include "Bang/Camera.h"
 #include "Bang/Vector3.h"
 #include "Bang/Transform.h"
 
@@ -88,9 +87,5 @@ void TransformGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
 
 float TransformGizmo::GetScaleFactor() const
 {
-    GameObject *refGo = GetReferencedGameObject();
-    Transform *camT = Camera::GetActive()->GetGameObject()->GetTransform();
-    float camDist = Vector3::Distance(refGo->GetTransform()->GetPosition(),
-                                      camT->GetPosition());
-    return 0.15f * camDist;
+    return 0.15f * SelectionGizmo::GetScaleFactor();
 }

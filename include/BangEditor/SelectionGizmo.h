@@ -17,6 +17,8 @@ public:
     virtual void SetReferencedGameObject(GameObject *referencedGameObject);
     GameObject *GetReferencedGameObject() const;
 
+    float GetScaleFactor() const;
+
     // IDestroyListener
     virtual void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 

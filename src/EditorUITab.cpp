@@ -21,7 +21,7 @@ EditorUITab::EditorUITab(const String &title)
     p_container = rendCacher->GetContainer();
     rendCacher->SetCachingEnabled(true);
 
-    UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
+    UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>(); (void)hl;
     UILayoutElement *hlLE = AddComponent<UILayoutElement>();
     hlLE->SetFlexibleSize( Vector2::One );
 
@@ -32,7 +32,7 @@ EditorUITab::EditorUITab(const String &title)
     UILayoutElement *vlLE = GetTabContainer()->AddComponent<UILayoutElement>();
     vlLE->SetFlexibleSize( Vector2(1) );
 
-    p_layoutElement = GetTabContainer()->AddComponent<UILayoutElement>();
+    p_layoutElement = hlLE; // GetTabContainer()->AddComponent<UILayoutElement>();
     p_layoutElement->SetFlexibleSize(Vector2(1));
 
     GameObject *titleCont = GameObjectFactory::CreateUIGameObject();

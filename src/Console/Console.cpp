@@ -9,7 +9,8 @@ Console::Console() : EditorUITab("Console")
 {
     UILayoutElement *le = GetLayoutElement();
     le->SetMinSize( Vector2i(100, 100) );
-    le->SetPreferredWidth(250);
+    le->SetPreferredWidth(150);
+    le->SetFlexibleWidth(0.2f);
 }
 
 Console::~Console()

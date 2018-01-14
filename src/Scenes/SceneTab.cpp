@@ -74,7 +74,7 @@ SceneTab::SceneTab()
     p_sceneContainer = GameObject::Create<UISceneContainer>();
     p_sceneContainer->SetParent(this);
 
-    Editor::RegisterListener<IEditorListener>(this);
+    Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
 }
 
 SceneTab::~SceneTab()
