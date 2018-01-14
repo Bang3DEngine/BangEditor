@@ -7,7 +7,7 @@
 #include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/LineRenderer.h"
-#include "Bang/RendererFactory.h"
+#include "Bang/MaterialFactory.h"
 
 #include "BangEditor/RotateGizmoAxis.h"
 
@@ -22,7 +22,7 @@ RotateGizmo::RotateGizmo()
     p_sphereGo->SetName("Sphere");
 
     p_sphereRenderer = p_sphereGo->AddComponent<MeshRenderer>();
-    RendererFactory::ConvertToGizmoRenderer(p_sphereRenderer);
+    p_sphereRenderer->SetMaterial(MaterialFactory::GetOnlyColor().Get());
     p_sphereRenderer->SetMesh( MeshFactory::GetSphere().Get() );
     p_sphereRenderer->GetMaterial()->SetDiffuseColor( Color(1, 1, 1, 0.25f) );
     p_sphereGo->GetTransform()->SetLocalScale(0.97f);
@@ -31,7 +31,7 @@ RotateGizmo::RotateGizmo()
     p_sphereBoundsGo->SetName("SphereBounds");
 
     p_sphereBoundsRenderer = p_sphereBoundsGo->AddComponent<LineRenderer>();
-    RendererFactory::ConvertToGizmoRenderer(p_sphereBoundsRenderer);
+    p_sphereBoundsRenderer->SetMaterial(MaterialFactory::GetOnlyColor().Get());
     p_sphereBoundsRenderer->GetMaterial()->SetDiffuseColor(Color::Black);
     CreateSphereBoundsPoints();
 
