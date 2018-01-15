@@ -5,8 +5,8 @@
 #include "Bang/Debug.h"
 #include "Bang/String.h"
 #include "Bang/XMLNode.h"
-#include "Bang/XMLParser.h"
 #include "Bang/Extensions.h"
+#include "Bang/XMLNodeReader.h"
 #include "Bang/ImportFilesManager.h"
 
 #include "BangEditor/Project.h"

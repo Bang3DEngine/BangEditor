@@ -1,8 +1,8 @@
 #include "BangEditor/SceneOpenerSaver.h"
 
 #include "Bang/Dialog.h"
-#include "Bang/XMLParser.h"
 #include "Bang/Extensions.h"
+#include "Bang/XMLNodeReader.h"
 
 #include "BangEditor/MenuBar.h"
 #include "BangEditor/EditorPaths.h"
@@ -151,7 +151,7 @@ bool SceneOpenerSaver::IsCurrentSceneSaved() const
 
     if (m_currentOpenScenePath.IsFile())
     {
-        XMLNode savedInfo = XMLParser::FromFile( m_currentOpenScenePath );
+        XMLNode savedInfo = XMLNodeReader::FromFile( m_currentOpenScenePath );
         XMLNode sceneInfo;
         openScene->ExportXML(&sceneInfo);
 

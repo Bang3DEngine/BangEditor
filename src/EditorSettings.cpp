@@ -2,7 +2,7 @@
 
 #include "Bang/File.h"
 #include "Bang/XMLNode.h"
-#include "Bang/XMLParser.h"
+#include "Bang/XMLNodeReader.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorPaths.h"
@@ -53,7 +53,7 @@ void EditorSettings::ImportFromFile()
 {
     const Path editorSettingsPath = EditorSettings::GetEditorSettingsPath();
 
-    XMLNode settingsXML = XMLParser::FromFile(editorSettingsPath);
+    XMLNode settingsXML = XMLNodeReader::FromFile(editorSettingsPath);
 
     if (settingsXML.Contains("LatestProjectFileOpen"))
     {
