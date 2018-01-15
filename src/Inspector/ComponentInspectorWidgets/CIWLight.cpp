@@ -9,9 +9,9 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-void CIWLight::Init()
+void CIWLight::InitInnerWidgets()
 {
-    ComponentInspectorWidget::Init();
+    ComponentInspectorWidget::InitInnerWidgets();
 
     SetName("CIWLight");
     SetTitle("Light");
@@ -27,9 +27,9 @@ void CIWLight::Init()
     SetLabelsWidth(70);
 }
 
-void CIWLight::UpdateValuesFromComponent()
+void CIWLight::UpdateFromReference()
 {
-    ComponentInspectorWidget::UpdateValuesFromComponent();
+    ComponentInspectorWidget::UpdateFromReference();
 
     if (!p_intensityInput->HasFocus())
     {

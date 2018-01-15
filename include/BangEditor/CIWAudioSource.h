@@ -20,10 +20,10 @@ class CIWAudioSource : public ComponentInspectorWidget
 
 public:
     // InspectorWidget
-    virtual void Init() override;
+    virtual void InitInnerWidgets() override;
 
     // ComponentInspectorWidget
-    virtual void UpdateValuesFromComponent() override;
+    virtual void UpdateFromReference() override;
 
 private:
     UIInputNumber *p_rangeInput          = nullptr;

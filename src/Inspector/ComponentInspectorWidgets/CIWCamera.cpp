@@ -12,9 +12,9 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-void CIWCamera::Init()
+void CIWCamera::InitInnerWidgets()
 {
-    ComponentInspectorWidget::Init();
+    ComponentInspectorWidget::InitInnerWidgets();
 
     SetName("CIWCamera");
     SetTitle("Camera");
@@ -49,9 +49,9 @@ void CIWCamera::Init()
     SetLabelsWidth(90);
 }
 
-void CIWCamera::UpdateValuesFromComponent()
+void CIWCamera::UpdateFromReference()
 {
-    ComponentInspectorWidget::UpdateValuesFromComponent();
+    ComponentInspectorWidget::UpdateFromReference();
 
     p_zNearInput->SetValue( GetCamera()->GetZNear() );
     p_zFarInput->SetValue( GetCamera()->GetZFar() );

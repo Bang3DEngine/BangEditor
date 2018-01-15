@@ -21,10 +21,8 @@ class CIWBehaviourContainer : public ComponentInspectorWidget
 
 public:
     // InspectorWidget
-    virtual void Init() override;
-
-    // ComponentInspectorWidget
-    void UpdateValuesFromComponent() override;
+    virtual void InitInnerWidgets() override;
+    virtual void UpdateFromReference() override;
 
     BehaviourContainer *GetBehaviourContainer() const;
 

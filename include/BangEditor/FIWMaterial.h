@@ -10,6 +10,7 @@
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UISlider;
 FORWARD class UICheckBox;
+FORWARD class UIComboBox;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -31,21 +32,22 @@ public:
 private:
     RH<Material> p_material;
 
+    UIComboBox *p_renderPassInput = nullptr;
     UIInputFile *p_texturePathInput = nullptr;
     UIInputVector *p_uvMultiplyInput = nullptr;
     UIInputColor *p_diffuseColorInput = nullptr;
     UICheckBox *p_receivesLightingCheckBox = nullptr;
     UISlider *p_shininessSlider = nullptr;
+    UIInputFile *p_vertexShaderInput = nullptr;
+    UIInputFile *p_fragmentShaderInput = nullptr;
 
 	FIWMaterial();
     virtual ~FIWMaterial();
 
-    void UpdateFromMaterialFile();
-
     Material *GetMaterial() const;
 
     // FileInspectorWidget
-    void OnPathChanged(const Path &path) override;
+    void UpdateFromFileWhenChanged() override;
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;

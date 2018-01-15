@@ -48,9 +48,9 @@ RH<Texture2D> EditorIconManager::GetIcon(const String &ext)
     {
         return GetIconTexture("Brackets");
     }
-    else if ( Extensions::Equals(ext, Extensions::GetImageExtensions()) )
+    else if ( Extensions::Equals(ext, Extensions::GetMaterialExtension()) )
     {
-        return GetIconTexture("Image");
+        return GetWhiteSphereIcon();
     }
     else
     {
@@ -66,6 +66,8 @@ RH<Texture2D> EditorIconManager::GetLensLittleIcon()
 { return GetIconTexture("LensLittle"); }
 RH<Texture2D> EditorIconManager::GetSquareIcon()
 { return GetIconTexture("Square"); }
+RH<Texture2D> EditorIconManager::GetWhiteSphereIcon()
+{ return GetIconTexture("WhiteSphere"); }
 
 RH<Texture2D> EditorIconManager::GetIconTexture(const String &filename)
 {

@@ -14,10 +14,8 @@ class CIWAudioListener : public ComponentInspectorWidget
 
 public:
     // InspectorWidget
-    virtual void Init() override;
-
-    // ComponentInspectorWidget
-    virtual void UpdateValuesFromComponent() override;
+    virtual void InitInnerWidgets() override;
+    virtual void UpdateFromReference() override;
 
 public:
     CIWAudioListener() = default;

@@ -124,6 +124,13 @@ void Explorer::Update()
         }
     }
 
+    #ifdef DEBUG
+    if (Input::GetKey(Key::P) && Input::GetKey(Key::Num0))
+    {
+        SetRootPath(EditorPaths::GetEngineAssetsDir());
+    }
+    #endif
+
     m_fileTracker->Update();
 }
 
@@ -172,6 +179,8 @@ void Explorer::SetCurrentPath(const Path &path)
 
         Clear();
         List<Path> subPaths = m_currentPath.GetSubPaths(Path::FindFlag::Simple);
+        Paths::SortPathsByExtension(&subPaths);
+        Paths::SortPathsByName(&subPaths);
         for (const Path &subPath : subPaths)
         {
             AddItem(subPath);

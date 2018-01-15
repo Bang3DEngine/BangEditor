@@ -28,8 +28,13 @@ protected:
     virtual ~InspectorWidget();
 
     virtual void Init();
+    virtual void InitInnerWidgets();
+
     virtual void SetTitle(const String &title);
     void SetLabelsWidth(int labelsWidth);
+
+    virtual void Update() override;
+    virtual void UpdateFromReference();
 
     void AddLabel(const String &content, int height = -1, int width = -1);
     void AddWidget(GameObject *widget,

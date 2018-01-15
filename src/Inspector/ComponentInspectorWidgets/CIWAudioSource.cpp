@@ -16,9 +16,9 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-void CIWAudioSource::Init()
+void CIWAudioSource::InitInnerWidgets()
 {
-    ComponentInspectorWidget::Init();
+    ComponentInspectorWidget::InitInnerWidgets();
 
     SetName("CIWAudioSource");
     SetTitle("AudioSource");
@@ -61,9 +61,9 @@ void CIWAudioSource::Init()
     SetLabelsWidth(75);
 }
 
-void CIWAudioSource::UpdateValuesFromComponent()
+void CIWAudioSource::UpdateFromReference()
 {
-    ComponentInspectorWidget::UpdateValuesFromComponent();
+    ComponentInspectorWidget::UpdateFromReference();
 
     AudioSource *as = GetAudioSource();
     AudioClip *ac = as->GetAudioClip();

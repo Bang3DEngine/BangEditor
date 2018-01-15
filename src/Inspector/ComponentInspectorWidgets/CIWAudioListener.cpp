@@ -3,14 +3,14 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-void CIWAudioListener::Init()
+void CIWAudioListener::InitInnerWidgets()
 {
-    ComponentInspectorWidget::Init();
+    ComponentInspectorWidget::InitInnerWidgets();
     SetName("CIWAudioListener");
     SetTitle("AudioListener");
 }
 
-void CIWAudioListener::UpdateValuesFromComponent()
+void CIWAudioListener::UpdateFromReference()
 {
-    ComponentInspectorWidget::UpdateValuesFromComponent();
+    ComponentInspectorWidget::UpdateFromReference();
 }

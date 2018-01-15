@@ -20,10 +20,8 @@ class CIWTransform : public ComponentInspectorWidget
 
 public:
     // InspectorWidget
-    void Init() override;
-
-    // ComponentInspectorWidget
-    void UpdateValuesFromComponent() override;
+    virtual void InitInnerWidgets() override;
+    virtual void UpdateFromReference() override;
 
 private:
     UIInputVector *p_posIV   = nullptr;

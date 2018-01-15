@@ -58,6 +58,14 @@ void InspectorWidget::Init()
     topSeparator->SetParent(this);
     widgetsGo->SetParent(this);
     botSeparator->SetParent(this);
+
+    IEventListener::SetReceiveEvents(false);
+    InitInnerWidgets();
+    IEventListener::SetReceiveEvents(true);
+}
+
+void InspectorWidget::InitInnerWidgets()
+{
 }
 
 void InspectorWidget::SetBackgroundColor(const Color &bgColor)
@@ -88,6 +96,19 @@ void InspectorWidget::SetLabelsWidth(int labelsWidth)
             }
         }
     }
+}
+
+void InspectorWidget::Update()
+{
+    GameObject::Update();
+
+    IEventListener::SetReceiveEvents(false);
+    UpdateFromReference();
+    IEventListener::SetReceiveEvents(true);
+}
+
+void InspectorWidget::UpdateFromReference()
+{
 }
 
 void InspectorWidget::AddLabel(const String &content, int height, int width)

@@ -18,9 +18,9 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-void CIWTransform::Init()
+void CIWTransform::InitInnerWidgets()
 {
-    ComponentInspectorWidget::Init();
+    ComponentInspectorWidget::InitInnerWidgets();
 
     SetName("CIWTransform");
     SetTitle("Transform");
@@ -40,9 +40,9 @@ void CIWTransform::Init()
     SetLabelsWidth(60);
 }
 
-void CIWTransform::UpdateValuesFromComponent()
+void CIWTransform::UpdateFromReference()
 {
-    ComponentInspectorWidget::UpdateValuesFromComponent();
+    ComponentInspectorWidget::UpdateFromReference();
 
     if (!p_posIV->HasFocus())
     {

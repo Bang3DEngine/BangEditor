@@ -15,12 +15,13 @@ protected:
     virtual ~FileInspectorWidget() = default;
 
     // InspectorWidget
-    virtual void Init() override;
+    virtual void InitInnerWidgets() override;
+    virtual void Update() override;
+
+    virtual void UpdateFromFileWhenChanged() = 0;
 
     void SetPath(const Path &path);
     Path GetPath() const;
-
-    virtual void OnPathChanged(const Path &path) = 0;
 
 private:
     Path m_path = Path::Empty;

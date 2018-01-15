@@ -22,9 +22,9 @@ CIWRenderer::~CIWRenderer()
 {
 }
 
-void CIWRenderer::Init()
+void CIWRenderer::InitInnerWidgets()
 {
-    ComponentInspectorWidget::Init();
+    ComponentInspectorWidget::InitInnerWidgets();
 
     SetName("CIWRenderer");
     SetTitle("Renderer");
@@ -41,9 +41,9 @@ void CIWRenderer::Init()
     SetLabelsWidth(60);
 }
 
-void CIWRenderer::UpdateValuesFromComponent()
+void CIWRenderer::UpdateFromReference()
 {
-    ComponentInspectorWidget::UpdateValuesFromComponent();
+    ComponentInspectorWidget::UpdateFromReference();
 
     IValueChangedListener::SetReceiveEvents(false);
 

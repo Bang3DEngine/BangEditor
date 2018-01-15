@@ -5,14 +5,14 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-void CIWDirectionalLight::Init()
+void CIWDirectionalLight::InitInnerWidgets()
 {
-    CIWLight::Init();
+    CIWLight::InitInnerWidgets();
 }
 
-void CIWDirectionalLight::UpdateValuesFromComponent()
+void CIWDirectionalLight::UpdateFromReference()
 {
-    CIWLight::UpdateValuesFromComponent();
+    CIWLight::UpdateFromReference();
 }
 
 DirectionalLight *CIWDirectionalLight::GetDirectionalLight() const

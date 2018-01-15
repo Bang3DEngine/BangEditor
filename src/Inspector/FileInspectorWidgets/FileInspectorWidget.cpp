@@ -3,9 +3,14 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-void FileInspectorWidget::Init()
+void FileInspectorWidget::InitInnerWidgets()
 {
-    InspectorWidget::Init();
+    InspectorWidget::InitInnerWidgets();
+}
+
+void FileInspectorWidget::Update()
+{
+    InspectorWidget::Update();
 }
 
 void FileInspectorWidget::SetPath(const Path &path)
@@ -13,7 +18,7 @@ void FileInspectorWidget::SetPath(const Path &path)
     if (path != GetPath())
     {
         m_path = path;
-        OnPathChanged( GetPath() );
+        UpdateFromFileWhenChanged();
     }
 }
 

@@ -41,7 +41,7 @@ private:
     void UpdateFromTextureFile();
 
     // FileInspectorWidget
-    void OnPathChanged(const Path &path) override;
+    void UpdateFromFileWhenChanged() override;
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;

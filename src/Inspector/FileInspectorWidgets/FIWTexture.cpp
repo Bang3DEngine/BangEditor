@@ -30,22 +30,22 @@ void FIWTexture::Init()
     SetLabelsWidth(60);
 
     p_filterModeComboBox = GameObjectFactory::CreateUIComboBox();
-    p_filterModeComboBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
     p_filterModeComboBox->AddItem("Nearest",      int(GL::FilterMode::Nearest));
     p_filterModeComboBox->AddItem("Bilinear",     int(GL::FilterMode::Bilinear));
     p_filterModeComboBox->AddItem("Trilinear_NN", int(GL::FilterMode::Trilinear_NN));
     p_filterModeComboBox->AddItem("Trilinear_NL", int(GL::FilterMode::Trilinear_NL));
     p_filterModeComboBox->AddItem("Trilinear_LN", int(GL::FilterMode::Trilinear_LN));
     p_filterModeComboBox->AddItem("Trilinear_LL", int(GL::FilterMode::Trilinear_LL));
+    p_filterModeComboBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_wrapModeComboBox = GameObjectFactory::CreateUIComboBox();
-    p_wrapModeComboBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
     p_wrapModeComboBox->AddItem("Clamp", int(GL::WrapMode::ClampToEdge));
     p_wrapModeComboBox->AddItem("Repeat", int(GL::WrapMode::Repeat));
+    p_wrapModeComboBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_alphaCutoffInput = GameObjectFactory::CreateUISlider();
-    p_alphaCutoffInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     p_alphaCutoffInput->SetMinMaxValues(0.0f, 1.0f);
+    p_alphaCutoffInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_textureImageRend = GameObjectFactory::CreateUIImage();
 
@@ -64,8 +64,9 @@ Texture2D *FIWTexture::GetTexture() const
     return p_texture.Get();
 }
 
-void FIWTexture::UpdateFromTextureFile()
+void FIWTexture::UpdateFromFileWhenChanged()
 {
+    p_texture = Resources::Load<Texture2D>( GetPath() );
     Path texImportPath = ImportFilesManager::GetImportFilepath(
                                     GetTexture()->GetResourceFilepath() );
     GetTexture()->ImportXMLFromFile(texImportPath);
@@ -80,15 +81,6 @@ void FIWTexture::UpdateFromTextureFile()
     p_alphaCutoffInput->SetValue( GetTexture()->GetAlphaCutoff() );
 
     IValueChangedListener::SetReceiveEvents(true);
-}
-
-void FIWTexture::OnPathChanged(const Path &path)
-{
-    if (path.IsFile())
-    {
-        p_texture = Resources::Load<Texture2D>(path);
-        UpdateFromTextureFile();
-    }
 }
 
 void FIWTexture::OnValueChanged(Object *object)

@@ -15,9 +15,9 @@ USING_NAMESPACE_BANG_EDITOR
 CIWBehaviourContainer::CIWBehaviourContainer() {}
 CIWBehaviourContainer::~CIWBehaviourContainer() {}
 
-void CIWBehaviourContainer::Init()
+void CIWBehaviourContainer::InitInnerWidgets()
 {
-    ComponentInspectorWidget::Init();
+    ComponentInspectorWidget::InitInnerWidgets();
 
     SetName("CIWBehaviourContainer");
     SetTitle("Behaviour");
@@ -30,9 +30,9 @@ void CIWBehaviourContainer::Init()
     SetLabelsWidth(60);
 }
 
-void CIWBehaviourContainer::UpdateValuesFromComponent()
+void CIWBehaviourContainer::UpdateFromReference()
 {
-    ComponentInspectorWidget::UpdateValuesFromComponent();
+    ComponentInspectorWidget::UpdateFromReference();
 
     const Path &srcPath = GetBehaviourContainer()->GetSourceFilepath();
     if (srcPath.IsFile())

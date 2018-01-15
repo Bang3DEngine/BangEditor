@@ -21,6 +21,8 @@ ComponentsSelectionGizmo::ComponentsSelectionGizmo()
 {
     AddComponent<HideInHierarchy>();
     AddComponent<NotSelectableInEditor>();
+    GetHideFlags().SetOn(HideFlag::DontSerialize);
+    GetHideFlags().SetOn(HideFlag::DontClone);
 }
 
 ComponentsSelectionGizmo::~ComponentsSelectionGizmo()

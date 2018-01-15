@@ -13,9 +13,9 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-void CIWMeshRenderer::Init()
+void CIWMeshRenderer::InitInnerWidgets()
 {
-    CIWRenderer::Init();
+    CIWRenderer::InitInnerWidgets();
 
     SetName("CIWMeshRenderer");
     SetTitle("Mesh Renderer");
@@ -29,9 +29,9 @@ void CIWMeshRenderer::Init()
     SetLabelsWidth(60);
 }
 
-void CIWMeshRenderer::UpdateValuesFromComponent()
+void CIWMeshRenderer::UpdateFromReference()
 {
-    CIWRenderer::UpdateValuesFromComponent();
+    CIWRenderer::UpdateFromReference();
 
     Mesh *mesh = GetMeshRenderer()->GetSharedMesh();
     Path meshPath = mesh ? mesh->GetResourceFilepath() : Path::Empty;

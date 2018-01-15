@@ -111,10 +111,11 @@ void Inspector::OnExplorerPathSelected(const Path &path)
 {
     if (path.IsFile())
     {
+        Clear();
+
         InspectorWidget *fiw = FileInspectorWidgetFactory::Create(path);
         if (fiw)
         {
-            Clear();
             p_titleSeparator->SetEnabled(true);
             p_titleText->SetContent(path.GetNameExt());
             AddWidget(fiw);

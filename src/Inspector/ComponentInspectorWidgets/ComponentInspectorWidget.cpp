@@ -19,9 +19,9 @@ ComponentInspectorWidget::~ComponentInspectorWidget()
 {
 }
 
-void ComponentInspectorWidget::Init()
+void ComponentInspectorWidget::InitInnerWidgets()
 {
-    InspectorWidget::Init();
+    InspectorWidget::InitInnerWidgets();
 
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
@@ -33,16 +33,7 @@ void ComponentInspectorWidget::Init()
     p_contextMenu->AddButtonPart( GetWidgetsContainer() );
 }
 
-void ComponentInspectorWidget::Update()
-{
-    GameObject::Update();
-
-    IEventListener::SetReceiveEvents(false);
-    UpdateValuesFromComponent();
-    IEventListener::SetReceiveEvents(true);
-}
-
-void ComponentInspectorWidget::UpdateValuesFromComponent()
+void ComponentInspectorWidget::UpdateFromReference()
 {
     p_enabledCheckBox->SetChecked( GetComponent()->IsEnabled() );
 }

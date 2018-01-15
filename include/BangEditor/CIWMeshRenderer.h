@@ -19,10 +19,8 @@ class CIWMeshRenderer : public CIWRenderer
 public:
 
     // InspectorWidget
-    void Init() override;
-
-    // ComponentInspectorWidget
-    void UpdateValuesFromComponent() override;
+    virtual void InitInnerWidgets() override;
+    virtual void UpdateFromReference() override;
 
 private:
     UIInputFile *p_meshInputFile = nullptr;

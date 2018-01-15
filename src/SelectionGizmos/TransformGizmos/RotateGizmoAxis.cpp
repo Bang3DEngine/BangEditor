@@ -26,12 +26,12 @@ RotateGizmoAxis::RotateGizmoAxis()
     SetName("RotateGizmoAxis");
 
     p_circleRenderer = AddComponent<LineRenderer>();
-    p_circleRenderer->SetMaterial(MaterialFactory::GetOnlyColor().Get());
+    p_circleRenderer->SetMaterial(MaterialFactory::GetGizmosUnLightedOverlay().Get());
     p_circleRenderer->SetLineWidth(2.0f);
 
     p_selectionGo = GameObjectFactory::CreateGameObject(true);
     p_selectionRenderer = p_selectionGo->AddComponent<MeshRenderer>();
-    p_selectionRenderer->SetMaterial(MaterialFactory::GetOnlyColor().Get());
+    p_selectionRenderer->SetMaterial(MaterialFactory::GetGizmosUnLightedOverlay().Get());
     p_selectionRenderer->SetCulling(false);
 
     m_selectionMesh = Resources::Create<Mesh>();

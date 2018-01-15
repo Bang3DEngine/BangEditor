@@ -6,18 +6,18 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-void CIWPointLight::Init()
+void CIWPointLight::InitInnerWidgets()
 {
-    CIWLight::Init();
+    CIWLight::InitInnerWidgets();
 
     p_rangeInput = GameObjectFactory::CreateUIInputNumber();
     p_rangeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Range", p_rangeInput->GetGameObject());
 }
 
-void CIWPointLight::UpdateValuesFromComponent()
+void CIWPointLight::UpdateFromReference()
 {
-    CIWLight::UpdateValuesFromComponent();
+    CIWLight::UpdateFromReference();
 
     if (!p_rangeInput->HasFocus())
     {

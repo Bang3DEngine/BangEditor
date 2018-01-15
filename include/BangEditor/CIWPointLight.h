@@ -18,10 +18,8 @@ class CIWPointLight : public CIWLight
 
 public:
     // InspectorWidget
-    virtual void Init() override;
-
-    // ComponentInspectorWidget
-    virtual void UpdateValuesFromComponent() override;
+    virtual void InitInnerWidgets() override;
+    virtual void UpdateFromReference() override;
 
 private:
     UIInputNumber *p_rangeInput = nullptr;
