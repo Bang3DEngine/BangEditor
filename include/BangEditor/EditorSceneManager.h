@@ -23,6 +23,8 @@ public:
     static Scene *GetOpenScene();
     static EditorScene *GetEditorScene();
 
+    static EditorSceneManager *GetInstance();
+
 protected:
     EditorScene *p_editorScene = nullptr;
 
@@ -32,8 +34,6 @@ protected:
     void _LoadSceneInstantly(Scene *scene) override;
 
     static void SetActiveScene(Scene *activeScene);
-
-    static EditorSceneManager *GetInstance();
 
     friend class EditorScene;
     friend class EditorApplication;

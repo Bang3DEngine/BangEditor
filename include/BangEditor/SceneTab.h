@@ -2,6 +2,7 @@
 #define SCENETAB_H
 
 #include "Bang/GameObject.h"
+#include "Bang/IValueChangedListener.h"
 
 #include "BangEditor/Editor.h"
 
@@ -15,7 +16,8 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class UISceneContainer;
 
 class SceneTab : public GameObject,
-                 public IEditorListener
+                 public IEditorListener,
+                 public IValueChangedListener
 {
     GAMEOBJECT_EDITOR(SceneTab);
 
@@ -29,10 +31,6 @@ public:
     void SetSceneImageTexture(Texture2D *sceneTexture);
     Rect GetSceneImageRectNDC() const;
 
-    // IEditorListener;
-    void OnPlayStateChanged(EditorPlayState previousPlayState,
-                            EditorPlayState newPlayState) override;
-
 private:
     Scene *p_editingScene = nullptr;
     Scene *p_playingScene = nullptr;
@@ -40,7 +38,15 @@ private:
     UIButton *p_playButton = nullptr;
     UIButton *p_stopButton = nullptr;
     UITextRenderer *p_stateText = nullptr;
+    UICheckBox *p_showDebugStatsCheckbox = nullptr;
     UISceneContainer *p_sceneContainer = nullptr;
+
+    // IEditorListener;
+    void OnPlayStateChanged(EditorPlayState previousPlayState,
+                            EditorPlayState newPlayState) override;
+
+    // IValueChangedListener
+    void OnValueChanged(Object *object) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

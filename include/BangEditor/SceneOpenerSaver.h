@@ -9,7 +9,7 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class SceneOpenerSaver : public SceneManagerListener
+class SceneOpenerSaver : public ISceneManagerListener
 {
 public:
 	SceneOpenerSaver();

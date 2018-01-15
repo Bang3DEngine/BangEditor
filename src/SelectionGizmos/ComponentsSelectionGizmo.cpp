@@ -57,7 +57,7 @@ void ComponentsSelectionGizmo::RenderCameraGizmo(Camera *cam, RenderPass rp)
         Transform *camTransform = cam->GetGameObject()->GetTransform();
 
         Gizmos::Reset();
-        Gizmos::SetColor(Color::Red);
+        Gizmos::SetColor(Color::Green);
         Gizmos::SetReceivesLighting(false);
 
         if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)

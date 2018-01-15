@@ -1,0 +1,58 @@
+#include "BangEditor/SceneDebugStats.h"
+
+#include "Bang/RectTransform.h"
+#include "Bang/UITextRenderer.h"
+#include "Bang/UIImageRenderer.h"
+#include "Bang/GameObjectFactory.h"
+
+#include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorSceneManager.h"
+
+USING_NAMESPACE_BANG
+USING_NAMESPACE_BANG_EDITOR
+
+SceneDebugStats::SceneDebugStats()
+{
+    GameObjectFactory::CreateUIGameObjectInto(this);
+
+    RectTransform *rt = GetRectTransform();
+    rt->SetAnchors(Vector2::One);
+    rt->SetMargins(Vector2i::Zero, Vector2i(-70, -30));
+
+    UIImageRenderer *bg = AddComponent<UIImageRenderer>();
+    bg->SetTint(Color::White.WithAlpha(0.65f));
+
+    GameObject *debugStatsTextGo = GameObjectFactory::CreateUIGameObject();
+    debugStatsTextGo->GetRectTransform()->SetMargins(8, 8, 0, 0);
+
+    constexpr int MeanFPSSamples = 30;
+    m_editorRenderFPSChrono.SetMeanSamples(MeanFPSSamples);
+
+    p_debugStatsText = debugStatsTextGo->AddComponent<UITextRenderer>();
+    p_debugStatsText->SetHorizontalAlign(HorizontalAlignment::Left);
+    p_debugStatsText->SetVerticalAlign(VerticalAlignment::Top);
+    p_debugStatsText->SetTextColor(Color::Black);
+    p_debugStatsText->SetWrapping(true);
+    p_debugStatsText->SetTextSize(8);
+
+    debugStatsTextGo->SetParent(this);
+}
+
+SceneDebugStats::~SceneDebugStats()
+{
+}
+
+void SceneDebugStats::Update()
+{
+    GameObject::Update();
+
+    m_editorRenderFPSChrono.MarkEnd();
+    m_editorRenderFPSChrono.MarkBegin();
+
+    String fpsText = "";
+    fpsText += "FPS: ";
+    fpsText += String::ToString(m_editorRenderFPSChrono.GetMeanFPS(), 2);
+
+    p_debugStatsText->SetContent(fpsText);
+}
+

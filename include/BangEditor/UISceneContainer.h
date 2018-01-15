@@ -14,34 +14,34 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class SceneDebugStats;
+
 class UISceneContainer : public GameObject,
                          public IEditorListener
 {
     GAMEOBJECT_EDITOR(UISceneContainer);
 
 public:
-    void Update() override;
-    void BeforeChildrenRender(RenderPass renderPass) override;
-    void AfterChildrenRender(RenderPass renderPass) override;
-
-    Rect GetImageScreenRectNDC() const;
-    void SetSceneImageTexture(Texture2D *texture);
-
-    void OnGameObjectSelected(GameObject *selectedGameObject) override;
-
-protected:
     UISceneContainer();
     virtual ~UISceneContainer();
 
-private:
-    GL::BlendFactor m_prevBlendFactorColorSrc, m_prevBlendFactorColorDst;
-    GL::BlendFactor m_prevBlendFactorAlphaSrc, m_prevBlendFactorAlphaDst;
-    bool m_wasBlendingEnabled = false;
+    void Update() override;
 
+    void SetShowDebugStats(bool showDebugStats);
+    void SetSceneImageTexture(Texture2D *texture);
+
+    Rect GetImageScreenRectNDC() const;
+
+private:
     Camera *p_selectedCamera = nullptr;
 
     UIImageRenderer *p_sceneImg = nullptr;
     UIImageRenderer *p_cameraPreviewImg = nullptr;
+
+    SceneDebugStats *p_sceneDebugStats = nullptr;
+
+    // IEditorListener
+    void OnGameObjectSelected(GameObject *selectedGameObject) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

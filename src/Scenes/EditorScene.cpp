@@ -97,12 +97,6 @@ void EditorScene::Init()
     p_explorer = GameObject::Create<Explorer>();
     p_explorer->SetParent(botHLGo);
 
-    GameObject *fpsTextGo = GameObjectFactory::CreateUIGameObject();
-    p_fpsText = fpsTextGo->AddComponent<UITextRenderer>();
-    p_fpsText->SetHorizontalAlign(HorizontalAlignment::Right);
-    p_fpsText->SetVerticalAlign(VerticalAlignment::Bot);
-    fpsTextGo->SetParent(this);
-
     Camera *cam = AddComponent<Camera>();
     SetCamera(cam);
     GetCamera()->SetClearColor(Color::LightGray);
@@ -147,16 +141,6 @@ void EditorScene::Update()
         }
         UnBindOpenScene();
     }
-
-    static std::array<float, 30> lastDeltas;
-    for (int i = 1; i < lastDeltas.size(); ++i) { lastDeltas[i] = lastDeltas[i-1]; }
-    lastDeltas[0] = Time::GetDeltaTime();
-    float meanDeltas = 0.0f;
-    for (int i = 0; i < lastDeltas.size(); ++i) { meanDeltas += lastDeltas[i]; }
-    meanDeltas /= lastDeltas.size();
-    float meanFPS = (1.0f / Math::Max(0.001f, meanDeltas));
-    p_fpsText->SetContent( String(meanFPS) + " fps" );
-    // Debug_Peek(meanFPS);
 }
 
 void EditorScene::OnResize(int newWidth, int newHeight)

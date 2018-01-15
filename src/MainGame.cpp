@@ -13,7 +13,7 @@
 
 USING_NAMESPACE_BANG
 
-class BehaviourInstantiator : public SceneManagerListener
+class BehaviourInstantiator : public ISceneManagerListener
 {
 public:
     Library *behavioursLib = nullptr;

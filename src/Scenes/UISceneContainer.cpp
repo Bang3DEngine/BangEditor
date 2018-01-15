@@ -1,5 +1,3 @@
-
-
 #include "BangEditor/UISceneContainer.h"
 
 #include "Bang/Rect.h"
@@ -9,11 +7,13 @@
 #include "Bang/GEngine.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 
+#include "BangEditor/SceneDebugStats.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG_EDITOR
@@ -43,12 +43,16 @@ UISceneContainer::UISceneContainer()
     p_cameraPreviewImg->SetUvMultiply(Vector2(1, -1));
     p_cameraPreviewImg->SetVisible(false);
 
+    p_sceneDebugStats = GameObject::Create<SceneDebugStats>();
+
     cameraPreviewGo->GetRectTransform()->SetAnchors( Vector2(0.5f, 0.5f),
                                                      Vector2(1.0f, 1.0f) );
 
     sceneImgGo->SetParent(this);
     cameraPreviewGo->SetParent(this);
+    p_sceneDebugStats->SetParent(this);
 
+    SetShowDebugStats(false);
     Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
 }
 
@@ -99,34 +103,9 @@ void UISceneContainer::Update()
     }
 }
 
-void UISceneContainer::BeforeChildrenRender(RenderPass renderPass)
+void UISceneContainer::SetShowDebugStats(bool showDebugStats)
 {
-    GameObject::BeforeChildrenRender(renderPass);
-
-    if (renderPass == RenderPass::Canvas)
-    {
-        m_prevBlendFactorColorSrc = GL::GetBlendSrcFactorColor();
-        m_prevBlendFactorColorDst = GL::GetBlendDstFactorColor();
-        m_prevBlendFactorAlphaSrc = GL::GetBlendSrcFactorAlpha();
-        m_prevBlendFactorAlphaDst = GL::GetBlendDstFactorAlpha();
-        m_wasBlendingEnabled = GL::IsEnabled(GL::Test::Blend);
-
-        GL::Enable(GL::Test::Blend);
-        GL::BlendFuncSeparate(GL::BlendFactor::One, GL::BlendFactor::Zero,
-                              GL::BlendFactor::Zero, GL::BlendFactor::One);
-    }
-}
-
-void UISceneContainer::AfterChildrenRender(RenderPass renderPass)
-{
-    GameObject::AfterChildrenRender(renderPass);
-
-    if (renderPass == RenderPass::Canvas)
-    {
-        GL::BlendFuncSeparate(m_prevBlendFactorColorSrc, m_prevBlendFactorColorDst,
-                              m_prevBlendFactorAlphaSrc, m_prevBlendFactorAlphaDst);
-        GL::SetEnabled(GL::Test::Blend, m_wasBlendingEnabled);
-    }
+    p_sceneDebugStats->SetVisible( showDebugStats );
 }
 
 Rect UISceneContainer::GetImageScreenRectNDC() const

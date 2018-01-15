@@ -76,7 +76,6 @@ private:
 
     Scene *p_openScene = nullptr;
     SceneTab *p_sceneTab = nullptr;
-    UITextRenderer *p_fpsText = nullptr;
 
     MenuBar *m_menuBar = nullptr;
     GameObject *m_mainEditorVL = nullptr;

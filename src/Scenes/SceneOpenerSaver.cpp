@@ -14,7 +14,7 @@ USING_NAMESPACE_BANG_EDITOR
 SceneOpenerSaver::SceneOpenerSaver()
 {
     SceneManager::GetInstance()->
-        EventEmitter<SceneManagerListener>::RegisterListener(this);
+        EventEmitter<ISceneManagerListener>::RegisterListener(this);
 }
 
 SceneOpenerSaver::~SceneOpenerSaver()
