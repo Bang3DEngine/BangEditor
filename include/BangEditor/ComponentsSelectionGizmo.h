@@ -18,13 +18,13 @@ public:
 
     // GameObject
     void Update() override;
-    void RenderGizmos() override;
+    void Render(RenderPass rp, bool renderChildren) override;
 
     // SelectionGizmo
     void SetReferencedGameObject(GameObject *referencedGameObject) override;
 
 private:
-    void RenderCameraGizmo(Camera *cam);
+    void RenderCameraGizmo(Camera *cam, RenderPass rp);
 };
 
 NAMESPACE_BANG_EDITOR_END

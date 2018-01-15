@@ -32,13 +32,14 @@ void ComponentsSelectionGizmo::Update()
     GameObject::Update();
 }
 
-void ComponentsSelectionGizmo::RenderGizmos()
+void ComponentsSelectionGizmo::Render(RenderPass rp, bool renderChildren)
 {
-    GameObject::RenderGizmos();
+    GameObject::Render(rp, renderChildren);
+
 
     for (Component *comp : GetReferencedGameObject()->GetComponents())
     {
-        if (Camera *cam = DCAST<Camera*>(comp)) { RenderCameraGizmo(cam); }
+        if (Camera *cam = DCAST<Camera*>(comp)) { RenderCameraGizmo(cam, rp); }
     }
 }
 
@@ -47,44 +48,35 @@ void ComponentsSelectionGizmo::SetReferencedGameObject(GameObject *referencedGam
     SelectionGizmo::SetReferencedGameObject(referencedGameObject);
 }
 
-void ComponentsSelectionGizmo::RenderCameraGizmo(Camera *cam)
+void ComponentsSelectionGizmo::RenderCameraGizmo(Camera *cam, RenderPass rp)
 {
-    static RH<Mesh> cameraMesh = MeshFactory::GetCamera();
-    Camera *sceneCam = SceneManager::GetActiveScene()->GetCamera();
-    Transform *sceneCamTransform = sceneCam->GetGameObject()->GetTransform();
-    Transform *camTransform = cam->GetGameObject()->GetTransform();
-    float distScale = Vector3::Distance(sceneCamTransform->GetPosition(),
-                                        camTransform->GetPosition());
-
-    Gizmos::SetReceivesLighting(true);
-    Gizmos::SetPosition(camTransform->GetPosition());
-    Gizmos::SetRotation(camTransform->GetRotation());
-    Gizmos::SetScale(Vector3::One * 0.02f * distScale);
-    Gizmos::SetColor(Color::White);
-    Gizmos::RenderCustomMesh(cameraMesh.Get());
-
-    Gizmos::Reset();
-    Gizmos::SetColor(Color::Red);
-    Gizmos::SetReceivesLighting(false);
-
-    if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
+    if (rp == RenderPass::Scene)
     {
-        Gizmos::RenderFrustum(camTransform->GetForward(),
-                              camTransform->GetUp(),
-                              camTransform->GetPosition(),
-                              cam->GetZNear(),
-                              cam->GetZFar(),
-                              cam->GetFovDegrees(),
-                              GL::GetViewportAspectRatio() );
-    }
-    else
-    {
-        AABox orthoBox;
-        Vector3 pos = camTransform->GetPosition();
-        Vector2 orthoSize = Vector2(cam->GetOrthoWidth(), cam->GetOrthoHeight());
-        orthoBox.SetMin(pos + Vector3(-orthoSize.x, -orthoSize.y, -cam->GetZNear()));
-        orthoBox.SetMax(pos + Vector3( orthoSize.x,  orthoSize.y, -cam->GetZFar()));
-        Gizmos::SetRotation(camTransform->GetRotation());
-        Gizmos::RenderSimpleBox(orthoBox);
+        Transform *camTransform = cam->GetGameObject()->GetTransform();
+
+        Gizmos::Reset();
+        Gizmos::SetColor(Color::Red);
+        Gizmos::SetReceivesLighting(false);
+
+        if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
+        {
+            Gizmos::RenderFrustum(camTransform->GetForward(),
+                                  camTransform->GetUp(),
+                                  camTransform->GetPosition(),
+                                  cam->GetZNear(),
+                                  cam->GetZFar(),
+                                  cam->GetFovDegrees(),
+                                  GL::GetViewportAspectRatio() );
+        }
+        else
+        {
+            AABox orthoBox;
+            Vector3 pos = camTransform->GetPosition();
+            Vector2 orthoSize = Vector2(cam->GetOrthoWidth(), cam->GetOrthoHeight());
+            orthoBox.SetMin(pos + Vector3(-orthoSize.x, -orthoSize.y, -cam->GetZNear()));
+            orthoBox.SetMax(pos + Vector3( orthoSize.x,  orthoSize.y, -cam->GetZFar()));
+            Gizmos::SetRotation(camTransform->GetRotation());
+            Gizmos::RenderSimpleBox(orthoBox);
+        }
     }
 }

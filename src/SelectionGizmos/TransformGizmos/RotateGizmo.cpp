@@ -25,6 +25,7 @@ RotateGizmo::RotateGizmo()
     p_sphereRenderer->SetMaterial(MaterialFactory::GetOnlyColor().Get());
     p_sphereRenderer->SetMesh( MeshFactory::GetSphere().Get() );
     p_sphereRenderer->GetMaterial()->SetDiffuseColor( Color(1, 1, 1, 0.25f) );
+    p_sphereRenderer->SetVisible(false);
     p_sphereGo->GetTransform()->SetLocalScale(0.97f);
 
     p_sphereBoundsGo = GameObjectFactory::CreateGameObject();
