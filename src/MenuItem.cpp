@@ -121,20 +121,20 @@ void MenuItem::Update()
     const bool mustDisplayChildren = MustDisplayChildren();
     GetChildrenList()->GetGameObject()->SetEnabled(mustDisplayChildren);
 
-    if (GetItemType() == MenuItemType::Top)
+    if (p_topBg && GetItemType() == MenuItemType::Top)
     {
         UICanvas *canvas = UICanvas::GetActive(this);
         bool mouseOver = canvas->IsMouseOver(this, true);
-        bool tintWhite = mouseOver && !IsForcedShow();
-        GetText()->SetTextColor((tintWhite && mouseOver) ? Color::White :
-                                                           Color::Black);
-    }
+        bool tintBg    = mouseOver && !IsForcedShow();
 
-    if (p_topBg)
-    {
-        Color topBgColor = mustDisplayChildren ? Color::VeryLightBlue : Color::Zero;
+        Color topBgColor = Color::Zero;
+        if (tintBg && mouseOver) { topBgColor = Color::VeryLightBlue.WithValue(1.2f); }
+        else if (mustDisplayChildren) { topBgColor = Color::VeryLightBlue; }
+        else { topBgColor = Color::Zero; }
+
         p_topBg->SetTint(topBgColor);
     }
+
     if (p_rightArrow) { p_rightArrow->SetEnabled( !GetChildrenItems().IsEmpty() ); }
 }
 
