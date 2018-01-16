@@ -25,7 +25,7 @@ UISceneContainer::UISceneContainer()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetMinSize( Vector2i(100) );
+    le->SetMinSize( Vector2i(170, 100) );
     le->SetFlexibleSize( Vector2(6, 1) );
 
     AddComponent<UIFocusable>();

@@ -34,6 +34,9 @@ public:
     const Path& GetPath() const;
     UIFocusable* GetFocusable() const;
 
+    void RenamePath();
+    void RemovePath();
+
     // UIContextMenu callback
     void OnCreateContextMenu(MenuItem *menuRootItem);
 

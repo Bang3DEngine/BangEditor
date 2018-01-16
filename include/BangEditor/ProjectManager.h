@@ -11,14 +11,14 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class Project;
 
-class ProjectManagerListener : public IEventListener
+class IProjectManagerListener : public IEventListener
 {
 public:
     virtual void OnProjectClosed(const Project *project) { (void)project; }
     virtual void OnProjectOpen(const Project *project) { (void)project; }
 };
 
-class ProjectManager : public EventEmitter<ProjectManagerListener>
+class ProjectManager : public EventEmitter<IProjectManagerListener>
 {
 public:
     ProjectManager();

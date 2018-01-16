@@ -7,6 +7,7 @@
 #include "Bang/Scene.h"
 #include "Bang/UIList.h"
 #include "Bang/UITree.h"
+#include "Bang/UICanvas.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/RectTransform.h"

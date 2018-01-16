@@ -5,8 +5,10 @@
 #include "Bang/UIButton.h"
 #include "Bang/FileTracker.h"
 
+#include "BangEditor/Editor.h"
 #include "BangEditor/EditorUITab.h"
 #include "BangEditor/ProjectManager.h"
+#include "BangEditor/ShortcutManager.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UILabel;
@@ -21,7 +23,8 @@ FORWARD class ExplorerItem;
 
 class Explorer : public EditorUITab,
                  public IFileTrackerListener,
-                 public ProjectManagerListener
+                 public IProjectManagerListener,
+                 public IEditorListener
 {
     GAMEOBJECT_EDITOR(Explorer);
 
@@ -37,16 +40,21 @@ public:
 
     const Path &GetRootPath() const;
     const Path &GetCurrentPath() const;
+    const Path &GetSelectedPath() const;
 
     void Clear();
 
-    // ProjectManagerListener
+    // IProjectManagerListener
     void OnProjectOpen(const Project *project) override;
     void OnProjectClosed(const Project *project) override;
 
+    // IFileTrackerListener
     void OnPathAdded(const Path &addedPath) override;
     void OnPathModified(const Path &modifiedPath) override;
     void OnPathRemoved(const Path &removedPath) override;
+
+    // IEditorListener
+    void OnGameObjectSelected(GameObject *selectedGameObject) override;
 
     static Explorer *GetInstance();
 
@@ -66,9 +74,12 @@ private:
     void RemoveItem(const Path &itemPath);
     void GoDirectoryUp();
 
+    ExplorerItem *GetSelectedItem() const;
     ExplorerItem *GetItemFromPath(const Path &path) const;
 
     static void OnItemDoubleClicked(IFocusable*);
+
+    static void OnShortcutPressed(const Shortcut &shortcut);
 
     bool IsInsideRootPath(const Path &path) const;
 };

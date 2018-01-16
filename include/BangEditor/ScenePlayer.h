@@ -2,7 +2,9 @@
 #define SCENEPLAYER_H
 
 #include "Bang/Bang.h"
+
 #include "BangEditor/BangEditor.h"
+#include "BangEditor/ShortcutManager.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
@@ -21,10 +23,12 @@ private:
     Scene *p_editingScene = nullptr;
     Scene *p_playingScene = nullptr;
 
-    bool InstantiatePlayingSceneBehaviours();
-
     ScenePlayer();
     virtual ~ScenePlayer();
+
+    bool InstantiatePlayingSceneBehaviours();
+
+    static void OnShortcutPressed(const Shortcut &shortcut);
 
     static ScenePlayer *GetInstance();
 

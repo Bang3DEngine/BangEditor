@@ -114,51 +114,62 @@ UIFocusable *ExplorerItem::GetFocusable() const
     return p_button;
 }
 
+void ExplorerItem::RenamePath()
+{
+    String newName = Dialog::GetString("Rename", "Introduce the new name:",
+                                       GetPath().GetName());
+    String oldExtensions = String::Join(GetPath().GetExtensions(), ".");
+
+    if (!newName.IsEmpty())
+    {
+        Path newPath = GetPath().GetDirectory().Append(newName);
+
+        String newExtension = newPath.GetExtension();
+        if (newExtension.IsEmpty())
+        {
+            newPath = newPath.AppendExtension(oldExtensions);
+        }
+
+        if (newPath != GetPath())
+        {
+            if (newPath.Exists())
+            {
+                Dialog::Error("Can't rename",
+                              "The path '" + newPath.GetAbsolute() +
+                              "' already exists.");
+            }
+            else
+            {
+                File::Rename(GetPath(), newPath);
+                ImportFilesManager::OnFilepathRenamed(GetPath(), newPath);
+                SetPath(newPath);
+            }
+        }
+    }
+}
+
+void ExplorerItem::RemovePath()
+{
+    Dialog::YesNoCancel yesNoCancel =
+        Dialog::GetYesNoCancel("Remove", "Are you sure you want to remove '" +
+                               GetPath().GetNameExt() + "' ?");
+
+    if (yesNoCancel == Dialog::YesNoCancel::Yes)
+    {
+        File::Remove( GetPath() );
+        GameObject::Destroy(this);
+    }
+}
+
 void ExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
 {
     menuRootItem->SetFontSize(10);
 
     MenuItem *rename = menuRootItem->AddItem("Rename");
-    rename->SetSelectedCallback([this](MenuItem*)
-    {
-        String newName = Dialog::GetString("Rename", "Introduce the new name:",
-                                           GetPath().GetName());
-        String oldExtensions = String::Join(GetPath().GetExtensions(), ".");
-
-        if (!newName.IsEmpty())
-        {
-            Path newPath = GetPath().GetDirectory().Append(newName);
-
-            String newExtension = newPath.GetExtension();
-            if (newExtension.IsEmpty())
-            {
-                newPath = newPath.AppendExtension(oldExtensions);
-            }
-
-            if (newPath != GetPath())
-            {
-                if (newPath.Exists())
-                {
-                    Dialog::Error("Can't rename",
-                                  "The path '" + newPath.GetAbsolute() +
-                                  "' already exists.");
-                }
-                else
-                {
-                    File::Rename(GetPath(), newPath);
-                    ImportFilesManager::OnFilepathRenamed(GetPath(), newPath);
-                    SetPath(newPath);
-                }
-            }
-        }
-    });
+    rename->SetSelectedCallback([this](MenuItem*) { RenamePath(); });
 
     MenuItem *remove = menuRootItem->AddItem("Remove");
-    remove->SetSelectedCallback([this](MenuItem*)
-    {
-        File::Remove( GetPath() );
-        GameObject::Destroy(this);
-    });
+    remove->SetSelectedCallback([this](MenuItem*) { RemovePath(); });
 }
 
 const Path &ExplorerItem::GetPath() const

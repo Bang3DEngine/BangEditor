@@ -24,7 +24,6 @@
 #include "BangEditor/EditorIconManager.h"
 #include "BangEditor/EditorSceneManager.h"
 
-
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
@@ -97,8 +96,17 @@ Explorer::Explorer() : EditorUITab("Explorer")
     p_scrollPanel->SetVerticalScrollBarSide(HorizontalSide::Right);
     p_scrollPanel->SetHorizontalScrollEnabled(false);
 
+    Editor::GetInstance()->
+            EventEmitter<IEditorListener>::RegisterListener(this);
     ProjectManager::GetInstance()->
-            EventEmitter<ProjectManagerListener>::RegisterListener(this);
+            EventEmitter<IProjectManagerListener>::RegisterListener(this);
+
+    ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::D, "Duplicate"),
+                                      &Explorer::OnShortcutPressed);
+    ShortcutManager::RegisterShortcut(Shortcut(Key::F2, "Rename"),
+                                      &Explorer::OnShortcutPressed);
+    ShortcutManager::RegisterShortcut(Shortcut(Key::Delete, "Delete"),
+                                      &Explorer::OnShortcutPressed);
 }
 
 Explorer::~Explorer()
@@ -136,13 +144,13 @@ void Explorer::Update()
 
 void Explorer::SelectPath(const Path &path)
 {
+    for (ExplorerItem *explorerItem : p_items)
+    {
+        explorerItem->SetSelected(false);
+    }
+
     if (path.Exists())
     {
-        for (ExplorerItem *explorerItem : p_items)
-        {
-            explorerItem->SetSelected(false);
-        }
-
         SetCurrentPath(path.GetDirectory());
         ExplorerItem *explorerItem = GetItemFromPath(path);
         if (explorerItem)
@@ -199,6 +207,12 @@ const Path &Explorer::GetCurrentPath() const
     return m_currentPath;
 }
 
+const Path &Explorer::GetSelectedPath() const
+{
+    ExplorerItem *selectedItem = GetSelectedItem();
+    return selectedItem ? selectedItem->GetPath() : Path::Empty;
+}
+
 void Explorer::Clear()
 {
     while (!p_items.IsEmpty())
@@ -211,14 +225,14 @@ void Explorer::Clear()
 
 void Explorer::OnProjectOpen(const Project *project)
 {
-    ProjectManagerListener::OnProjectOpen(project);
+    IProjectManagerListener::OnProjectOpen(project);
     SetRootPath(EditorPaths::GetProjectAssetsDir());
     SetCurrentPath(EditorPaths::GetProjectAssetsDir());
 }
 
 void Explorer::OnProjectClosed(const Project *project)
 {
-    ProjectManagerListener::OnProjectClosed(project);
+    IProjectManagerListener::OnProjectClosed(project);
     SetCurrentPath(Paths::GetEngineAssetsDir());
 }
 
@@ -241,6 +255,14 @@ void Explorer::OnPathRemoved(const Path &removedPath)
     if (!removedPath.IsFile())
     {
         RemoveItem(removedPath);
+    }
+}
+
+void Explorer::OnGameObjectSelected(GameObject *selectedGameObject)
+{
+    if (selectedGameObject)
+    {
+        SelectPath(Path::Empty);
     }
 }
 
@@ -275,6 +297,15 @@ void Explorer::GoDirectoryUp()
     SetCurrentPath( GetCurrentPath().GetDirectory() );
 }
 
+ExplorerItem *Explorer::GetSelectedItem() const
+{
+    for (ExplorerItem *explorerItem : p_items)
+    {
+        if (explorerItem->IsSelected()) { return explorerItem; }
+    }
+    return nullptr;
+}
+
 ExplorerItem *Explorer::GetItemFromPath(const Path &path) const
 {
     return m_pathsToItem.ContainsKey(path) ? m_pathsToItem.Get(path) : nullptr;
@@ -289,6 +320,24 @@ void Explorer::OnItemDoubleClicked(IFocusable *itemFocusable)
     if (expItem->GetPath().IsDir())
     {
         Explorer::GetInstance()->SetCurrentPath(expItem->GetPath());
+    }
+}
+
+void Explorer::OnShortcutPressed(const Shortcut &shortcut)
+{
+    Explorer *exp = Explorer::GetInstance();
+
+    ExplorerItem *selectedItem = exp->GetSelectedItem();
+    if (selectedItem)
+    {
+        if (shortcut.GetName() == "Rename")
+        { selectedItem->RenamePath(); }
+
+        if (shortcut.GetName() == "Duplicate")
+        { }
+
+        if (shortcut.GetName() == "Delete")
+        { selectedItem->RemovePath(); }
     }
 }
 

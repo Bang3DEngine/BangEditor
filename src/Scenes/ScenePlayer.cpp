@@ -15,11 +15,22 @@ USING_NAMESPACE_BANG_EDITOR
 
 ScenePlayer::ScenePlayer()
 {
+    ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::P, "Play"),
+                                      &ScenePlayer::OnShortcutPressed);
 }
 
 ScenePlayer::~ScenePlayer()
 {
     if (p_playingScene) { GameObject::Destroy(p_playingScene); }
+}
+
+void ScenePlayer::OnShortcutPressed(const Shortcut &shortcut)
+{
+    if (shortcut.GetName() == "Play")
+    {
+        if (Editor::IsPlaying()) { StopScene(); }
+        else { PlayScene(); }
+    }
 }
 
 void ScenePlayer::PlayScene()

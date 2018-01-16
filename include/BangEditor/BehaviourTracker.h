@@ -11,7 +11,7 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class BehaviourTracker : public ProjectManagerListener,
+class BehaviourTracker : public IProjectManagerListener,
                          public IFileTrackerListener
 {
 public:
@@ -26,7 +26,7 @@ public:
 
     const FileTracker& GetFileTracker() const;
 
-    // ProjectManagerListener
+    // IProjectManagerListener
     void OnProjectClosed(const Project *project) override;
     void OnProjectOpen(const Project *project) override;
 

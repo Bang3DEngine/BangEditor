@@ -17,7 +17,7 @@ SceneDebugStats::SceneDebugStats()
 
     RectTransform *rt = GetRectTransform();
     rt->SetAnchors(Vector2::One);
-    rt->SetMargins(Vector2i::Zero, Vector2i(-70, -30));
+    rt->SetMargins(Vector2i::Zero, Vector2i(-80, -30));
 
     UIImageRenderer *bg = AddComponent<UIImageRenderer>();
     bg->SetTint(Color::White.WithAlpha(0.65f));
@@ -33,7 +33,7 @@ SceneDebugStats::SceneDebugStats()
     p_debugStatsText->SetVerticalAlign(VerticalAlignment::Top);
     p_debugStatsText->SetTextColor(Color::Black);
     p_debugStatsText->SetWrapping(true);
-    p_debugStatsText->SetTextSize(8);
+    p_debugStatsText->SetTextSize(10);
 
     debugStatsTextGo->SetParent(this);
 }
