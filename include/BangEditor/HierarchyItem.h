@@ -30,6 +30,9 @@ public:
     void SetReferencedGameObject(GameObject *referencedGameObject);
     GameObject *GetReferencedGameObject() const;
 
+    void RemoveReferencedGameObject();
+    void DuplicateReferencedGameObject();
+
     // INameListener
     void OnNameChanged(GameObject *go, const String &oldName,
                        const String &newName) override;

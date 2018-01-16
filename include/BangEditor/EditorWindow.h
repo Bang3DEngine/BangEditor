@@ -2,12 +2,14 @@
 #define EDITORWINDOW_H
 
 #include "Bang/Window.h"
+
 #include "BangEditor/BangEditor.h"
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class EditorScene;
+FORWARD class ShortcutManager;
 
 class EditorWindow : public Window
 {
@@ -21,6 +23,14 @@ public:
 
     void Create(uint flags) override;
     virtual SceneManager* CreateSceneManager() const override;
+
+private:
+    ShortcutManager *m_shortcutManager = nullptr;
+
+    ShortcutManager *GetShortcutManager() const;
+    static EditorWindow *GetActive();
+
+    friend class ShortcutManager;
 };
 
 NAMESPACE_BANG_EDITOR_END

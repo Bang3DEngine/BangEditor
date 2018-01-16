@@ -10,6 +10,7 @@
 #include "Bang/UILayoutManager.h"
 
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/ShortcutManager.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/EditorSceneManager.h"
 
@@ -17,14 +18,17 @@ USING_NAMESPACE_BANG_EDITOR
 
 EditorWindow::EditorWindow()
 {
+    m_shortcutManager = new ShortcutManager();
 }
 
 EditorWindow::~EditorWindow()
 {
+    delete m_shortcutManager;
 }
 
 void EditorWindow::Update()
 {
+    GetShortcutManager()->Update();
     GetSceneManager()->Update();
 }
 
@@ -51,4 +55,14 @@ void EditorWindow::Create(uint flags)
 SceneManager *EditorWindow::CreateSceneManager() const
 {
     return new EditorSceneManager();
+}
+
+ShortcutManager *EditorWindow::GetShortcutManager() const
+{
+    return m_shortcutManager;
+}
+
+EditorWindow *EditorWindow::GetActive()
+{
+    return DCAST<EditorWindow*>( Window::GetActive() );
 }

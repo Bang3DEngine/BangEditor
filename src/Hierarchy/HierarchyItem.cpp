@@ -83,6 +83,33 @@ GameObject *HierarchyItem::GetReferencedGameObject() const
     return p_refGameObject;
 }
 
+void HierarchyItem::RemoveReferencedGameObject()
+{
+    GameObject::Destroy( GetReferencedGameObject() );
+}
+
+void HierarchyItem::DuplicateReferencedGameObject()
+{
+    GameObject *original = GetReferencedGameObject();
+    GameObject *parent = original->GetParent();
+    int originalIndex = parent->GetChildren().IndexOf(original);
+    ASSERT(originalIndex != -1);
+
+    GameObject *clone = original->Clone();
+    clone->SetParent(parent, originalIndex+1);
+    clone->SetName( GameObjectFactory::GetGameObjectDuplicateName(original) );
+
+    // Collapse as clone
+    Hierarchy *h = Hierarchy::GetInstance();
+    HierarchyItem *originalItem = h->GetItemFromGameObject(original);
+    HierarchyItem *cloneItem = h->GetItemFromGameObject(clone);
+    bool isOriginalCollapsed = h->GetUITree()->IsItemCollapsed(originalItem);
+    h->GetUITree()->SetItemCollapsed(cloneItem, isOriginalCollapsed);
+
+    // Auto-select
+    Editor::SelectGameObject(clone);
+}
+
 void HierarchyItem::OnNameChanged(GameObject *go, const String &,
                                   const String &newName)
 {
@@ -103,31 +130,13 @@ void HierarchyItem::OnCreateContextMenu(MenuItem *menuRootItem)
 
     MenuItem *duplicate = menuRootItem->AddItem("Duplicate");
     duplicate->SetSelectedCallback([this](MenuItem*)
-    {
-        GameObject *original = GetReferencedGameObject();
-        GameObject *parent = original->GetParent();
-        int originalIndex = parent->GetChildren().IndexOf(original);
-        ASSERT(originalIndex != -1);
-
-        GameObject *clone = original->Clone();
-        clone->SetParent(parent, originalIndex+1);
-        clone->SetName( GameObjectFactory::GetGameObjectDuplicateName(original) );
-
-        // Collapse as clone
-        Hierarchy *h = Hierarchy::GetInstance();
-        HierarchyItem *originalItem = h->GetItemFromGameObject(original);
-        HierarchyItem *cloneItem = h->GetItemFromGameObject(clone);
-        bool isOriginalCollapsed = h->GetUITree()->IsItemCollapsed(originalItem);
-        h->GetUITree()->SetItemCollapsed(cloneItem, isOriginalCollapsed);
-    });
+    { DuplicateReferencedGameObject(); });
 
     menuRootItem->AddSeparator();
 
     MenuItem *remove = menuRootItem->AddItem("Remove");
     remove->SetSelectedCallback([this](MenuItem*)
-    {
-        GameObject::Destroy( GetReferencedGameObject() );
-    });
+    { RemoveReferencedGameObject(); });
 }
 
 void HierarchyItem::SetText(const String &text)

@@ -5,6 +5,7 @@
 #include "Bang/GameObject.h"
 
 #include "BangEditor/BangEditor.h"
+#include "BangEditor/ShortcutManager.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIFocusable;
@@ -46,6 +47,10 @@ private:
     UIHorizontalLayout *m_horizontalLayout = nullptr;
 
     SceneOpenerSaver *m_sceneOpenerSaver = nullptr;
+
+    void RegisterShortcut(const Shortcut &shortcut);
+
+    static void OnShortcutPressed(const Shortcut &shortcut);
 
     static void OnNewProject  (MenuItem *item);
     static void OnOpenProject (MenuItem *item);

@@ -50,6 +50,11 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
     Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
     EditorSceneManager::GetEditorScene()->
             EventEmitter<IEditorOpenSceneListener>::RegisterListener(this);
+
+    ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::D, "Duplicate"),
+                                      &Hierarchy::OnShortcutPressed);
+    ShortcutManager::RegisterShortcut(Shortcut(Key::Delete, "Delete"),
+                                      &Hierarchy::OnShortcutPressed);
 }
 
 Hierarchy::~Hierarchy()
@@ -203,6 +208,22 @@ GameObject *Hierarchy::GetGameObjectFromItem(GOItem *item) const
     if (!item) { return nullptr; }
     HierarchyItem *hItem = Cast<HierarchyItem*>(item);
     return hItem->GetReferencedGameObject();
+}
+
+void Hierarchy::OnShortcutPressed(const Shortcut &shortcut)
+{
+    Hierarchy *h = Hierarchy::GetInstance();
+
+    HierarchyItem *selectedItem =
+            h->GetItemFromGameObject( h->GetSelectedGameObject() );
+    if (selectedItem)
+    {
+        if (shortcut.GetName() == "Duplicate")
+        { selectedItem->DuplicateReferencedGameObject(); }
+
+        if (shortcut.GetName() == "Delete")
+        { selectedItem->RemoveReferencedGameObject(); }
+    }
 }
 
 UITree *Hierarchy::GetUITree() const { return p_tree; }

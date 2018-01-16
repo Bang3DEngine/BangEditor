@@ -142,11 +142,27 @@ MenuBar::MenuBar()
     createCube->SetSelectedCallback(MenuBar::OnCreateCube);
     createPlane->SetSelectedCallback(MenuBar::OnCreatePlane);
     createSphere->SetSelectedCallback(MenuBar::OnCreateSphere);
+
+    RegisterShortcut( Shortcut(Key::LCtrl,              Key::S, "SaveScene")   );
+    RegisterShortcut( Shortcut(Key::LCtrl, Key::LShift, Key::S, "SaveSceneAs") );
+    RegisterShortcut( Shortcut(Key::LCtrl,              Key::O, "OpenScene")   );
 }
 
 MenuBar::~MenuBar()
 {
     delete m_sceneOpenerSaver;
+}
+
+void MenuBar::RegisterShortcut(const Shortcut &shortcut)
+{
+    ShortcutManager::RegisterShortcut(shortcut, &MenuBar::OnShortcutPressed);
+}
+
+void MenuBar::OnShortcutPressed(const Shortcut &shortcut)
+{
+    if (shortcut.GetName() == "SaveScene") { OnSaveScene(nullptr); }
+    if (shortcut.GetName() == "SaveSceneAs") { OnSaveSceneAs(nullptr); }
+    if (shortcut.GetName() == "OpenScene") { OnOpenScene(nullptr); }
 }
 
 void MenuBar::Update()

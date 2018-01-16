@@ -8,6 +8,7 @@
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorUITab.h"
+#include "BangEditor/ShortcutManager.h"
 #include "BangEditor/IEditorOpenSceneListener.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
@@ -66,6 +67,8 @@ private:
 
     HierarchyItem* GetItemFromGameObject(GameObject *go) const;
     GameObject* GetGameObjectFromItem(GOItem *item) const;
+
+    static void OnShortcutPressed(const Shortcut &shortcut);
 
     UITree *GetUITree() const;
 

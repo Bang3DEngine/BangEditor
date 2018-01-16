@@ -1,9 +1,9 @@
 #ifndef EDITORAPPLICATION_H
 #define EDITORAPPLICATION_H
 
-#include "BangEditor/BangEditor.h"
-
 #include "Bang/Application.h"
+
+#include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
@@ -30,7 +30,6 @@ public:
     EditorPaths* GetEditorPaths() const;
 
 private:
-
     Paths* CreatePaths() override;
     Window* _CreateWindow() override;
     ComponentFactory* CreateComponentFactory() override;
