@@ -146,6 +146,7 @@ ${SRC_DIR}/MenuBar.cpp
 ${SRC_DIR}/MenuItem.cpp
 ${SRC_DIR}/UIContextMenu.cpp
 ${SRC_DIR}/UITabContainer.cpp
+${SRC_DIR}/UITabHeader.cpp
 
 ${SRC_DIR}/Main.cpp
 

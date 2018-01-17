@@ -4,12 +4,15 @@
 #include "Bang/List.h"
 #include "Bang/GameObject.h"
 
-#include "BangEditor/BangEditor.h"
+#include "BangEditor/UITabHeader.h"
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class UITabContainer : public GameObject
+FORWARD class UITabHeader;
+
+class UITabContainer : public GameObject,
+                       public ITabHeaderListener
 {
     GAMEOBJECT_EDITOR(UITabContainer);
 
@@ -29,10 +32,14 @@ public:
 private:
     int m_currentTabIndex = -1;
     List<GameObject*> p_childrenInTabs;
-    Map<GameObject*, GameObject*> m_childrenToTitleGo;
+    Map<GameObject*, UITabHeader*> m_childrenToHeader;
+    Map<UITabHeader*, GameObject*> m_headerToChildren;
 
-    GameObject *p_titleBar = nullptr;
+    GameObject *p_headersBar = nullptr;
     GameObject *p_currentTabContainer = nullptr;
+
+    // ITabHeaderListener
+    void OnTabHeaderClicked(UITabHeader *header) override;
 
     GameObject* GetCurrentTabContainer() const;
 

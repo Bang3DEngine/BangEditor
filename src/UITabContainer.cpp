@@ -7,6 +7,8 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 
+#include "BangEditor/UITabHeader.h"
+
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
@@ -16,14 +18,14 @@ UITabContainer::UITabContainer()
 
     UIVerticalLayout *mainVL = AddComponent<UIVerticalLayout>();
 
-    p_titleBar = GameObjectFactory::CreateUIGameObject();
-    UIHorizontalLayout *titleBarHL = p_titleBar->AddComponent<UIHorizontalLayout>();
-    titleBarHL->SetChildrenVerticalStretch(Stretch::None);
-    titleBarHL->SetChildrenVerticalAlignment(VerticalAlignment::Bot);
+    p_headersBar = GameObjectFactory::CreateUIGameObject();
+    UIHorizontalLayout *headerBarHL = p_headersBar->AddComponent<UIHorizontalLayout>();
+    headerBarHL->SetChildrenVerticalStretch(Stretch::None);
+    headerBarHL->SetChildrenVerticalAlignment(VerticalAlignment::Bot);
 
-    UILayoutElement *titleBarLE = p_titleBar->AddComponent<UILayoutElement>();
-    titleBarLE->SetMinHeight(15);
-    titleBarLE->SetLayoutPriority(2);
+    UILayoutElement *headerBarLE = p_headersBar->AddComponent<UILayoutElement>();
+    headerBarLE->SetMinHeight(15);
+    headerBarLE->SetLayoutPriority(2);
 
     p_currentTabContainer = GameObjectFactory::CreateUIGameObject();
 
@@ -33,9 +35,9 @@ UITabContainer::UITabContainer()
 
     p_currentTabContainer->AddComponent<UIHorizontalLayout>();
 
-    p_titleBar->SetParent(this);
-    GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Flexible,
-                                          1, 1.0f)->SetParent(this);
+    p_headersBar->SetParent(this);
+    // GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Flexible,
+    //                                       1, 1.0f)->SetParent(this);
     p_currentTabContainer->SetParent(this);
 }
 
@@ -47,35 +49,41 @@ void UITabContainer::AddTab(const String &title, GameObject *tabbedChild)
 {
     if (!GetChildrenInTabs().Contains(tabbedChild))
     {
-        GameObject *titleWrapper = GameObjectFactory::CreateUIGameObject();
-        UIHorizontalLayout *titleHL = titleWrapper->AddComponent<UIHorizontalLayout>();
-        titleHL->SetPaddings(3, 0, 3, 2);
+        UITabHeader *tabHeader = GameObject::Create<UITabHeader>();
+        tabHeader->SetTitle(title);
 
-        GameObject *titleGo = GameObjectFactory::CreateUIGameObject();
-        UITextRenderer *titleText = titleGo->AddComponent<UITextRenderer>();
-        titleText->SetHorizontalAlign(HorizontalAlignment::Left);
-        titleText->SetVerticalAlign(VerticalAlignment::Bot);
-        titleText->SetTextSize(11);
-        titleText->SetContent(title);
-
-        titleWrapper->SetParent(p_titleBar);
-        titleGo->SetParent(titleWrapper);
+        tabHeader->SetParent(p_headersBar);
         tabbedChild->SetParent( GetCurrentTabContainer() );
 
         p_childrenInTabs.PushBack(tabbedChild);
-        m_childrenToTitleGo.Add(tabbedChild, titleGo);
+        m_childrenToHeader.Add(tabbedChild, tabHeader);
+        m_headerToChildren.Add(tabHeader, tabbedChild);
+
+        tabHeader->EventEmitter<ITabHeaderListener>::RegisterListener(this);
 
         tabbedChild->SetEnabled(false);
         if (!GetCurrentTabChild()) { SetCurrentTabChild(tabbedChild); }
     }
 }
 
+void UITabContainer::RemoveTab(GameObject *tabbedChild)
+{
+    p_childrenInTabs.Remove(tabbedChild);
+
+    UITabHeader *header = nullptr;
+    if (m_childrenToHeader.ContainsKey(tabbedChild))
+    { header = m_childrenToHeader.Get(tabbedChild); }
+
+    m_childrenToHeader.Remove(tabbedChild);
+    m_headerToChildren.Remove(header);
+}
+
 void UITabContainer::SetTabTitle(GameObject *tabbedChild, const String &title)
 {
-    if (m_childrenToTitleGo.ContainsKey(tabbedChild))
+    if (m_childrenToHeader.ContainsKey(tabbedChild))
     {
-        GameObject *titleGo = m_childrenToTitleGo.Get(tabbedChild);
-        UITextRenderer *titleText = titleGo->GetComponent<UITextRenderer>();
+        UITabHeader *headerGo = m_childrenToHeader.Get(tabbedChild);
+        UITextRenderer *titleText = headerGo->GetComponent<UITextRenderer>();
         titleText->SetContent(title);
     }
 }
@@ -98,12 +106,6 @@ int UITabContainer::GetCurrentTabIndex() const
     return m_currentTabIndex;
 }
 
-void UITabContainer::RemoveTab(GameObject *tabbedChild)
-{
-    p_childrenInTabs.Remove(tabbedChild);
-    m_childrenToTitleGo.Remove(tabbedChild);
-}
-
 void UITabContainer::SetCurrentTabIndex(int index)
 {
     if (index != GetCurrentTabIndex())
@@ -113,7 +115,11 @@ void UITabContainer::SetCurrentTabIndex(int index)
         int i = 0;
         for(GameObject *tabbedChild : GetChildrenInTabs())
         {
+            UITabHeader *header = m_childrenToHeader.Get(tabbedChild);
+
+            header->SetInForeground( i == index );
             tabbedChild->SetEnabled( i == index );
+
             ++i;
         }
     }
@@ -128,6 +134,15 @@ void UITabContainer::SetCurrentTabChild(GameObject *currentTabChild)
 const List<GameObject*>& UITabContainer::GetChildrenInTabs() const
 {
     return p_childrenInTabs;
+}
+
+void UITabContainer::OnTabHeaderClicked(UITabHeader *header)
+{
+    if (m_headerToChildren.ContainsKey(header))
+    {
+        GameObject *tabbedChild = m_headerToChildren.Get(header);
+        SetCurrentTabChild(tabbedChild);
+    }
 }
 
 GameObject *UITabContainer::GetCurrentTabContainer() const
