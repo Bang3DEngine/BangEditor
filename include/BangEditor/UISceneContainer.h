@@ -28,6 +28,9 @@ public:
     void SetSceneImageTexture(Texture2D *sceneTexture);
     Rect GetSceneImageRectNDC() const;
 
+protected:
+    UISceneToolbar* GetSceneToolbar() const;
+
 private:
     Scene *p_editingScene = nullptr;
     Scene *p_playingScene = nullptr;

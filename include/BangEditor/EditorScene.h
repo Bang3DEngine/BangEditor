@@ -26,6 +26,7 @@ FORWARD class Inspector;
 FORWARD class Hierarchy;
 FORWARD class ScenePlayer;
 FORWARD class ProjectManager;
+FORWARD class UITabContainer;
 FORWARD class UISceneContainer;
 FORWARD class EditorApplication;
 FORWARD class EditorBehaviourManager;
@@ -75,6 +76,7 @@ private:
     Hierarchy *p_hierarchy = nullptr;
 
     Scene *p_openScene = nullptr;
+    UITabContainer *p_sceneTabContainer = nullptr;
     UISceneContainer *p_sceneEditContainer = nullptr;
     UISceneContainer *p_sceneGameContainer = nullptr;
 

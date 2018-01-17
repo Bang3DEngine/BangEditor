@@ -39,10 +39,10 @@ UISceneContainer::UISceneContainer()
     p_sceneToolbar = GameObject::Create<UISceneToolbar>();
     p_sceneImage = GameObject::Create<UISceneImage>();
 
-    p_sceneToolbar->SetParent(this);
+    GetSceneToolbar()->SetParent(this);
     p_sceneImage->SetParent(this);
 
-    p_sceneToolbar->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    GetSceneToolbar()->EventEmitter<IValueChangedListener>::RegisterListener(this);
 }
 
 UISceneContainer::~UISceneContainer()
@@ -59,8 +59,13 @@ Rect UISceneContainer::GetSceneImageRectNDC() const
     return p_sceneImage->GetRectTransform()->GetViewportRectNDC();
 }
 
-void UISceneContainer::OnValueChanged(Object *object)
+UISceneToolbar *UISceneContainer::GetSceneToolbar() const
 {
-    p_sceneImage->SetShowDebugStats( p_sceneToolbar->IsShowDebugStatsChecked() );
+    return p_sceneToolbar;
+}
+
+void UISceneContainer::OnValueChanged(Object*)
+{
+    p_sceneImage->SetShowDebugStats( GetSceneToolbar()->IsShowDebugStatsChecked() );
 }
 

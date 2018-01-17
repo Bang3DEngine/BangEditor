@@ -20,6 +20,7 @@ public:
     bool OnSaveScene();
     bool OnSaveSceneAs();
     bool CloseScene();
+    bool IsCurrentSceneSaved() const;
 
     // SceneManagerListener
     void OnSceneOpen(Scene *scene, const Path &sceneFilepath) override;
@@ -33,7 +34,6 @@ private:
     Dialog::YesNoCancel Overwrite(const Path &path);
 
     Path GetDialogStartPath() const;
-    bool IsCurrentSceneSaved() const;
 };
 
 NAMESPACE_BANG_EDITOR_END

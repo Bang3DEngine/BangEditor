@@ -35,6 +35,7 @@
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/UITabContainer.h"
+#include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/UISceneContainer.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorBehaviourManager.h"
@@ -81,14 +82,13 @@ void EditorScene::Init()
 
     p_sceneEditContainer = GameObject::Create<UISceneContainer>();
     p_sceneGameContainer = GameObject::Create<UISceneContainer>();
-    // p_sceneContainer->SetParent(hlGo);
 
-    UITabContainer *tabContainer = GameObject::Create<UITabContainer>();
-    tabContainer->AddTab("Scene", p_sceneEditContainer);
-    tabContainer->AddTab("Game",  p_sceneGameContainer);
-    tabContainer->SetParent(hlGo);
+    p_sceneTabContainer = GameObject::Create<UITabContainer>();
+    p_sceneTabContainer->AddTab("Scene", p_sceneEditContainer);
+    p_sceneTabContainer->AddTab("Game",  p_sceneGameContainer);
+    p_sceneTabContainer->SetParent(hlGo);
 
-    UILayoutElement *tabContainerLE = tabContainer->AddComponent<UILayoutElement>();
+    UILayoutElement *tabContainerLE = p_sceneTabContainer->AddComponent<UILayoutElement>();
     tabContainerLE->SetFlexibleSize( Vector2(6.0f, 1.0f) );
 
     p_inspector = GameObject::Create<Inspector>();
@@ -152,6 +152,19 @@ void EditorScene::Update()
         }
         UnBindOpenScene();
     }
+
+    // Set scene tab name
+    String sceneTabName = "Scene";
+    if (openScene)
+    {
+        // Path openScenePath = EditorSceneManager::GetOpenScenePath();
+        // sceneTabName += " " + openScenePath.GetName();
+        if (!SceneOpenerSaver::GetInstance()->IsCurrentSceneSaved())
+        {
+            sceneTabName += " (*)";
+        }
+    }
+    p_sceneTabContainer->SetTabTitle(p_sceneEditContainer, sceneTabName);
 }
 
 void EditorScene::OnResize(int newWidth, int newHeight)

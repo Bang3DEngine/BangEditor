@@ -82,9 +82,8 @@ void UITabContainer::SetTabTitle(GameObject *tabbedChild, const String &title)
 {
     if (m_childrenToHeader.ContainsKey(tabbedChild))
     {
-        UITabHeader *headerGo = m_childrenToHeader.Get(tabbedChild);
-        UITextRenderer *titleText = headerGo->GetComponent<UITextRenderer>();
-        titleText->SetContent(title);
+        UITabHeader *header = m_childrenToHeader.Get(tabbedChild);
+        header->SetTitle(title);
     }
 }
 

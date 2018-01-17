@@ -21,6 +21,7 @@ public:
     virtual ~EditorSceneManager();
 
     static Scene *GetOpenScene();
+    static Path GetOpenScenePath();
     static EditorScene *GetEditorScene();
 
     static EditorSceneManager *GetInstance();
