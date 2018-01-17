@@ -3,6 +3,7 @@
 #include "Bang/Dialog.h"
 #include "Bang/Extensions.h"
 #include "Bang/XMLNodeReader.h"
+#include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/MenuBar.h"
 #include "BangEditor/EditorPaths.h"

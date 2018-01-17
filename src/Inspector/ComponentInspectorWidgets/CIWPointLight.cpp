@@ -2,6 +2,7 @@
 
 #include "Bang/PointLight.h"
 #include "Bang/UIInputNumber.h"
+#include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

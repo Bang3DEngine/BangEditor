@@ -10,6 +10,7 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIVerticalLayout.h"
+#include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 
 #include "BangEditor/ScenePlayer.h"

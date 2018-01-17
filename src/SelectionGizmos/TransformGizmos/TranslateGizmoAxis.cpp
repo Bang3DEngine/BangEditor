@@ -16,6 +16,7 @@
 #include "Bang/AxisFunctions.h"
 #include "Bang/DebugRenderer.h"
 #include "Bang/MaterialFactory.h"
+#include "Bang/GameObjectFactory.h"
 #include "Bang/SelectionFramebuffer.h"
 
 USING_NAMESPACE_BANG

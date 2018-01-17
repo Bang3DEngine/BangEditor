@@ -8,6 +8,7 @@
 #include "Bang/MeshRenderer.h"
 #include "Bang/LineRenderer.h"
 #include "Bang/MaterialFactory.h"
+#include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/RotateGizmoAxis.h"
 

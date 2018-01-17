@@ -11,6 +11,7 @@
 #include "Bang/Window.h"
 #include "Bang/Transform.h"
 #include "Bang/SceneManager.h"
+#include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/NotSelectableInEditor.h"

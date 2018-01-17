@@ -5,6 +5,7 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 
 #include "BangEditor/EditorDialog.h"

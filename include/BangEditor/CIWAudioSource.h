@@ -6,7 +6,10 @@
 #include "BangEditor/ComponentInspectorWidget.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UIButton;
+FORWARD class UISlider;
 FORWARD class AudioSource;
+FORWARD class UIInputNumber;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

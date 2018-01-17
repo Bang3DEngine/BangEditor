@@ -7,6 +7,10 @@
 #include "BangEditor/UIContextMenu.h"
 #include "BangEditor/InspectorWidget.h"
 
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UICheckBox;
+FORWARD NAMESPACE_BANG_END
+
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 

@@ -7,6 +7,9 @@
 #include "BangEditor/Editor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UIButton;
+FORWARD class Texture2D;
+FORWARD class UICheckBox;
 FORWARD class UITextRenderer;
 FORWARD NAMESPACE_BANG_END
 

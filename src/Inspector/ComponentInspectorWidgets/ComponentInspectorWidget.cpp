@@ -6,6 +6,7 @@
 #include "Bang/UIFocusable.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 
 USING_NAMESPACE_BANG

@@ -6,7 +6,9 @@
 #include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UILabel;
 FORWARD class UITextRenderer;
+FORWARD class UIImageRenderer;
 FORWARD class UILayoutElement;
 FORWARD NAMESPACE_BANG_END
 

@@ -7,6 +7,7 @@
 #include "Bang/Extensions.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/UIInputFile.h"
 

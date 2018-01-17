@@ -9,6 +9,7 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/UILayoutIgnorer.h"
 #include "Bang/UIVerticalLayout.h"
+#include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIContentSizeFitter.h"
 
