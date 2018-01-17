@@ -1,10 +1,12 @@
-#ifndef SCENETAB_H
-#define SCENETAB_H
+#ifndef UISCENETOOLBAR_H
+#define UISCENETOOLBAR_H
 
 #include "Bang/GameObject.h"
+#include "Bang/IEventEmitter.h"
 #include "Bang/IValueChangedListener.h"
 
 #include "BangEditor/Editor.h"
+#include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIButton;
@@ -16,33 +18,27 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UISceneContainer;
-
-class SceneTab : public GameObject,
-                 public IEditorListener,
-                 public IValueChangedListener
+class UISceneToolbar : public GameObject,
+                       public EventEmitter<IValueChangedListener>,
+                       public IEditorListener,
+                       public IValueChangedListener
 {
-    GAMEOBJECT_EDITOR(SceneTab);
+    GAMEOBJECT_EDITOR(UISceneToolbar);
 
 public:
-	SceneTab();
-	virtual ~SceneTab();
+	UISceneToolbar();
+	virtual ~UISceneToolbar();
 
-    void OnPlayScene();
-    void OnStopScene();
-
-    void SetSceneImageTexture(Texture2D *sceneTexture);
-    Rect GetSceneImageRectNDC() const;
+    bool IsShowDebugStatsChecked() const;
 
 private:
-    Scene *p_editingScene = nullptr;
-    Scene *p_playingScene = nullptr;
-
     UIButton *p_playButton = nullptr;
     UIButton *p_stopButton = nullptr;
     UITextRenderer *p_stateText = nullptr;
     UICheckBox *p_showDebugStatsCheckbox = nullptr;
-    UISceneContainer *p_sceneContainer = nullptr;
+
+    void OnPlayScene();
+    void OnStopScene();
 
     // IEditorListener;
     void OnPlayStateChanged(EditorPlayState previousPlayState,
@@ -54,5 +50,5 @@ private:
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // SCENETAB_H
+#endif // UISCENETOOLBAR_H
 

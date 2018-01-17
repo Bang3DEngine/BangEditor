@@ -1,47 +1,30 @@
-#include "BangEditor/SceneTab.h"
+#include "BangEditor/UISceneToolbar.h"
 
-#include "Bang/Rect.h"
 #include "Bang/UIButton.h"
-#include "Bang/Texture2D.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/IconManager.h"
-#include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
-#include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 
 #include "BangEditor/ScenePlayer.h"
-#include "BangEditor/UISceneContainer.h"
 #include "BangEditor/EditorIconManager.h"
-#include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-SceneTab::SceneTab()
+UISceneToolbar::UISceneToolbar()
 {
-    SetName("SceneTab");
-
-    UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetFlexibleSize( Vector2(6.0f, 1.0f) );
-
     GameObjectFactory::CreateUIGameObjectInto(this);
 
-    UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
-    vl->SetChildrenHorizontalStretch(Stretch::Full);
-    vl->SetPaddings(10);
-    vl->SetSpacing(3);
-
-    GameObject *toolbarGo = GameObjectFactory::CreateUIGameObject();
-    UIHorizontalLayout *toolbarHL = toolbarGo->AddComponent<UIHorizontalLayout>();
+    UIHorizontalLayout *toolbarHL = AddComponent<UIHorizontalLayout>();
     toolbarHL->SetSpacing(6);
 
     constexpr int ToolBarHeight = 15;
 
-    UILayoutElement *toolbarLE = toolbarGo->AddComponent<UILayoutElement>();
+    UILayoutElement *toolbarLE = AddComponent<UILayoutElement>();
     toolbarLE->SetPreferredHeight(ToolBarHeight);
     toolbarLE->SetFlexibleWidth( 1.0f );
 
@@ -79,52 +62,43 @@ SceneTab::SceneTab()
     showDebugStatsText->SetTextSize(10);
     showDebugStatsText->SetContent("Stats");
 
-    p_sceneContainer = GameObject::Create<UISceneContainer>();
-
-    p_playButton->GetGameObject()->SetParent(toolbarGo);
-    p_stopButton->GetGameObject()->SetParent(toolbarGo);
-    stateTextGo->SetParent(toolbarGo);
+    p_playButton->GetGameObject()->SetParent(this);
+    p_stopButton->GetGameObject()->SetParent(this);
+    stateTextGo->SetParent(this);
     GameObjectFactory::CreateUISpacer(LayoutSizeType::Flexible, Vector2::One)->
-                        SetParent(toolbarGo);
-    showDebugStatsTextGo->SetParent(toolbarGo);
-    p_showDebugStatsCheckbox->GetGameObject()->SetParent(toolbarGo);
-
-    toolbarGo->SetParent(this);
-    p_sceneContainer->SetParent(this);
+                        SetParent(this);
+    showDebugStatsTextGo->SetParent(this);
+    p_showDebugStatsCheckbox->GetGameObject()->SetParent(this);
 
     Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
 }
 
-SceneTab::~SceneTab()
+UISceneToolbar::~UISceneToolbar()
 {
 }
 
-void SceneTab::OnPlayScene()
+bool UISceneToolbar::IsShowDebugStatsChecked() const
+{
+    return p_showDebugStatsCheckbox->IsChecked();
+}
+
+void UISceneToolbar::OnPlayScene()
 {
     p_stateText->SetContent("Playing scene");
     p_playButton->SetBlocked(true);
     p_stopButton->SetBlocked(false);
 }
 
-void SceneTab::OnStopScene()
+void UISceneToolbar::OnStopScene()
 {
     p_stateText->SetContent("Editing scene");
     p_playButton->SetBlocked(false);
     p_stopButton->SetBlocked(true);
 }
 
-void SceneTab::SetSceneImageTexture(Texture2D *sceneTexture)
-{
-    p_sceneContainer->SetSceneImageTexture(sceneTexture);
-}
 
-Rect SceneTab::GetSceneImageRectNDC() const
-{
-    return p_sceneContainer->GetRectTransform()->GetViewportRectNDC();
-}
-
-void SceneTab::OnPlayStateChanged(EditorPlayState previousPlayState,
-                                  EditorPlayState newPlayState)
+void UISceneToolbar::OnPlayStateChanged(EditorPlayState previousPlayState,
+                                        EditorPlayState newPlayState)
 {
     switch (newPlayState)
     {
@@ -133,8 +107,8 @@ void SceneTab::OnPlayStateChanged(EditorPlayState previousPlayState,
     }
 }
 
-void SceneTab::OnValueChanged(Object *object)
+void UISceneToolbar::OnValueChanged(Object *object)
 {
-    p_sceneContainer->SetShowDebugStats(p_showDebugStatsCheckbox->IsChecked());
+    EventEmitter<IValueChangedListener>::PropagateToListeners(
+                    &IValueChangedListener::OnValueChanged, object);
 }
-

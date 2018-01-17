@@ -22,11 +22,11 @@ FORWARD class Editor;
 FORWARD class Console;
 FORWARD class MenuBar;
 FORWARD class Explorer;
-FORWARD class SceneTab;
 FORWARD class Inspector;
 FORWARD class Hierarchy;
 FORWARD class ScenePlayer;
 FORWARD class ProjectManager;
+FORWARD class UISceneContainer;
 FORWARD class EditorApplication;
 FORWARD class EditorBehaviourManager;
 
@@ -75,7 +75,7 @@ private:
     Hierarchy *p_hierarchy = nullptr;
 
     Scene *p_openScene = nullptr;
-    SceneTab *p_sceneTab = nullptr;
+    UISceneContainer *p_sceneContainer = nullptr;
 
     MenuBar *m_menuBar = nullptr;
     GameObject *m_mainEditorVL = nullptr;

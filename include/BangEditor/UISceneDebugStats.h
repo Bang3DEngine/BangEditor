@@ -1,5 +1,5 @@
-#ifndef SCENEDEBUGSTATS_H
-#define SCENEDEBUGSTATS_H
+#ifndef UISCENEDEBUGSTATS_H
+#define UISCENEDEBUGSTATS_H
 
 #include "Bang/Array.h"
 #include "Bang/Scene.h"
@@ -15,13 +15,13 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class SceneDebugStats : public GameObject
+class UISceneDebugStats : public GameObject
 {
-    GAMEOBJECT_EDITOR(SceneDebugStats);
+    GAMEOBJECT_EDITOR(UISceneDebugStats);
 
 public:
-	SceneDebugStats();
-	virtual ~SceneDebugStats();
+	UISceneDebugStats();
+	virtual ~UISceneDebugStats();
 
     // GameObject
     void Update() override;
@@ -33,5 +33,5 @@ private:
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // SCENEDEBUGSTATS_H
+#endif // UISCENEDEBUGSTATS_H
 

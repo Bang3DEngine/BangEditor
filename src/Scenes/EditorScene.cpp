@@ -4,8 +4,8 @@
 
 #include "Bang/GL.h"
 #include "Bang/Input.h"
-#include "Bang/UIMask.h"
 #include "Bang/Camera.h"
+#include "Bang/UIMask.h"
 #include "Bang/Window.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
@@ -29,12 +29,12 @@
 #include "BangEditor/Console.h"
 #include "BangEditor/MenuBar.h"
 #include "BangEditor/Explorer.h"
-#include "BangEditor/SceneTab.h"
 #include "BangEditor/Hierarchy.h"
 #include "BangEditor/Inspector.h"
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/ProjectManager.h"
+#include "BangEditor/UISceneContainer.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorBehaviourManager.h"
 
@@ -78,8 +78,8 @@ void EditorScene::Init()
     p_hierarchy = GameObject::Create<Hierarchy>();
     p_hierarchy->SetParent(hlGo);
 
-    p_sceneTab = GameObject::Create<SceneTab>();
-    p_sceneTab->SetParent(hlGo);
+    p_sceneContainer = GameObject::Create<UISceneContainer>();
+    p_sceneContainer->SetParent(hlGo);
 
     p_inspector = GameObject::Create<Inspector>();
     p_inspector->SetParent(hlGo);
@@ -127,8 +127,8 @@ void EditorScene::Update()
 
         if (Input::GetMouseButtonDown(MouseButton::Left))
         {
-            UICanvas *canvas = UICanvas::GetActive(p_sceneTab);
-            bool isOverSceneCont = canvas->IsMouseOver(p_sceneTab, true);
+            UICanvas *canvas = UICanvas::GetActive(p_sceneContainer);
+            bool isOverSceneCont = canvas->IsMouseOver(p_sceneContainer, true);
             if (isOverSceneCont)
             {
                 GameObject *selectedGameObject = Selection::GetOveredGameObject(openScene);
@@ -220,7 +220,7 @@ Scene *EditorScene::GetOpenScene() const
 
 Rect EditorScene::GetOpenSceneScreenRectNDC() const
 {
-    return p_sceneTab->GetSceneImageRectNDC();
+    return p_sceneContainer->GetSceneImageRectNDC();
 }
 
 void EditorScene::RenderAndBlitToScreen()
@@ -244,7 +244,7 @@ void EditorScene::RenderAndBlitToScreen()
             }
         }
     }
-    p_sceneTab->SetSceneImageTexture(openSceneTex);
+    p_sceneContainer->SetSceneImageTexture(openSceneTex);
 
     GEngine *gEngine = GEngine::GetActive();
     RenderOpenScene();

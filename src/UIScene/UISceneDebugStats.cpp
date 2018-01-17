@@ -1,4 +1,4 @@
-#include "BangEditor/SceneDebugStats.h"
+#include "BangEditor/UISceneDebugStats.h"
 
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
@@ -11,7 +11,7 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-SceneDebugStats::SceneDebugStats()
+UISceneDebugStats::UISceneDebugStats()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
@@ -38,11 +38,11 @@ SceneDebugStats::SceneDebugStats()
     debugStatsTextGo->SetParent(this);
 }
 
-SceneDebugStats::~SceneDebugStats()
+UISceneDebugStats::~UISceneDebugStats()
 {
 }
 
-void SceneDebugStats::Update()
+void UISceneDebugStats::Update()
 {
     GameObject::Update();
 

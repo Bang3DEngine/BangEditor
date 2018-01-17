@@ -1,4 +1,4 @@
-#include "BangEditor/UISceneContainer.h"
+#include "BangEditor/UISceneImage.h"
 
 #include "Bang/Rect.h"
 #include "Bang/Scene.h"
@@ -13,12 +13,12 @@
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 
-#include "BangEditor/SceneDebugStats.h"
+#include "BangEditor/UISceneDebugStats.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG_EDITOR
 
-UISceneContainer::UISceneContainer()
+UISceneImage::UISceneImage()
 {
     SetName("SceneContainer");
 
@@ -43,7 +43,7 @@ UISceneContainer::UISceneContainer()
     p_cameraPreviewImg->SetUvMultiply(Vector2(1, -1));
     p_cameraPreviewImg->SetVisible(false);
 
-    p_sceneDebugStats = GameObject::Create<SceneDebugStats>();
+    p_sceneDebugStats = GameObject::Create<UISceneDebugStats>();
 
     cameraPreviewGo->GetRectTransform()->SetAnchors( Vector2(0.5f, 0.5f),
                                                      Vector2(1.0f, 1.0f) );
@@ -56,12 +56,12 @@ UISceneContainer::UISceneContainer()
     Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
 }
 
-UISceneContainer::~UISceneContainer()
+UISceneImage::~UISceneImage()
 {
 
 }
 
-void UISceneContainer::Update()
+void UISceneImage::Update()
 {
     GameObject::Update();
 
@@ -103,24 +103,24 @@ void UISceneContainer::Update()
     }
 }
 
-void UISceneContainer::SetShowDebugStats(bool showDebugStats)
+void UISceneImage::SetShowDebugStats(bool showDebugStats)
 {
     p_sceneDebugStats->SetVisible( showDebugStats );
 }
 
-Rect UISceneContainer::GetImageScreenRectNDC() const
+Rect UISceneImage::GetImageScreenRectNDC() const
 {
     return p_sceneImg->GetGameObject()->GetRectTransform()->GetViewportRectNDC();
 }
 
-void UISceneContainer::SetSceneImageTexture(Texture2D *texture)
+void UISceneImage::SetSceneImageTexture(Texture2D *texture)
 {
     p_sceneImg->SetImageTexture(texture);
     if (texture) { texture->SetWrapMode(GL::WrapMode::Repeat); }
     p_sceneImg->SetTint(texture ? Color::White : Color::Black);
 }
 
-void UISceneContainer::OnGameObjectSelected(GameObject *selectedGo)
+void UISceneImage::OnGameObjectSelected(GameObject *selectedGo)
 {
     p_selectedCamera = (selectedGo ? selectedGo->GetComponent<Camera>() : nullptr);
 }

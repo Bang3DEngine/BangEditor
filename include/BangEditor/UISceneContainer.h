@@ -1,23 +1,24 @@
 #ifndef UISCENECONTAINER_H
 #define UISCENECONTAINER_H
 
-#include "Bang/GL.h"
 #include "Bang/GameObject.h"
+#include "Bang/IValueChangedListener.h"
 
-#include "BangEditor/Editor.h"
+#include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Texture2D;
-FORWARD class UIImageRenderer;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class SceneDebugStats;
+FORWARD class UISceneImage;
+FORWARD class UISceneToolbar;
+FORWARD class UITabContainer;
 
 class UISceneContainer : public GameObject,
-                         public IEditorListener
+                         public IValueChangedListener
 {
     GAMEOBJECT_EDITOR(UISceneContainer);
 
@@ -25,25 +26,22 @@ public:
     UISceneContainer();
     virtual ~UISceneContainer();
 
-    void Update() override;
-
-    void SetShowDebugStats(bool showDebugStats);
-    void SetSceneImageTexture(Texture2D *texture);
-
-    Rect GetImageScreenRectNDC() const;
+    void SetSceneImageTexture(Texture2D *sceneTexture);
+    Rect GetSceneImageRectNDC() const;
 
 private:
-    Camera *p_selectedCamera = nullptr;
+    Scene *p_editingScene = nullptr;
+    Scene *p_playingScene = nullptr;
 
-    UIImageRenderer *p_sceneImg = nullptr;
-    UIImageRenderer *p_cameraPreviewImg = nullptr;
+    UISceneToolbar *p_sceneToolbar = nullptr;
+    UISceneImage *p_sceneImage = nullptr;
+    UITabContainer *p_tabContainer = nullptr;
 
-    SceneDebugStats *p_sceneDebugStats = nullptr;
-
-    // IEditorListener
-    void OnGameObjectSelected(GameObject *selectedGameObject) override;
+    // IValueChangedListener
+    void OnValueChanged(Object *object) override;
 };
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // SUBSCENE_H
+#endif // UISCENECONTAINER_H
+

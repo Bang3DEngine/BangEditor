@@ -124,11 +124,12 @@ ${SRC_DIR}/Project/ProjectManager.cpp
 ${SRC_DIR}/Project/QtProjectManager.cpp
 ${SRC_DIR}/Scenes/EditorSceneManager.cpp
 ${SRC_DIR}/Scenes/EditorScene.cpp
-${SRC_DIR}/Scenes/SceneDebugStats.cpp
 ${SRC_DIR}/Scenes/ScenePlayer.cpp
 ${SRC_DIR}/Scenes/SceneOpenerSaver.cpp
-${SRC_DIR}/Scenes/SceneTab.cpp
-${SRC_DIR}/Scenes/UISceneContainer.cpp
+${SRC_DIR}/UIScene/UISceneContainer.cpp
+${SRC_DIR}/UIScene/UISceneDebugStats.cpp
+${SRC_DIR}/UIScene/UISceneImage.cpp
+${SRC_DIR}/UIScene/UISceneToolbar.cpp
 ${SRC_DIR}/SelectionGizmos/ComponentsSelectionGizmo.cpp
 ${SRC_DIR}/SelectionGizmos/SelectionGizmo.cpp
 ${SRC_DIR}/SelectionGizmos/SelectionGizmosManager.cpp
