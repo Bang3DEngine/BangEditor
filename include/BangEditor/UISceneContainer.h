@@ -15,7 +15,6 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UISceneImage;
 FORWARD class UISceneToolbar;
-FORWARD class UITabContainer;
 
 class UISceneContainer : public GameObject,
                          public IValueChangedListener
@@ -35,7 +34,6 @@ private:
 
     UISceneToolbar *p_sceneToolbar = nullptr;
     UISceneImage *p_sceneImage = nullptr;
-    UITabContainer *p_tabContainer = nullptr;
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;

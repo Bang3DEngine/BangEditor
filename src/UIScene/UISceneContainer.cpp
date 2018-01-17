@@ -16,7 +16,6 @@
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/UISceneToolbar.h"
-#include "BangEditor/UITabContainer.h"
 #include "BangEditor/EditorIconManager.h"
 #include "BangEditor/EditorSceneManager.h"
 
@@ -32,11 +31,9 @@ UISceneContainer::UISceneContainer()
 
     GameObjectFactory::CreateUIGameObjectInto(this);
 
-    p_tabContainer = GameObject::Create<UITabContainer>();
-
     UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
     vl->SetChildrenHorizontalStretch(Stretch::Full);
-    vl->SetPaddings(10);
+    vl->SetPaddings(2);
     vl->SetSpacing(3);
 
     p_sceneToolbar = GameObject::Create<UISceneToolbar>();

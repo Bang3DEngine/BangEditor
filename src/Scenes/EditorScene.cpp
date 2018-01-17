@@ -34,6 +34,7 @@
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/ProjectManager.h"
+#include "BangEditor/UITabContainer.h"
 #include "BangEditor/UISceneContainer.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorBehaviourManager.h"
@@ -78,8 +79,17 @@ void EditorScene::Init()
     p_hierarchy = GameObject::Create<Hierarchy>();
     p_hierarchy->SetParent(hlGo);
 
-    p_sceneContainer = GameObject::Create<UISceneContainer>();
-    p_sceneContainer->SetParent(hlGo);
+    p_sceneEditContainer = GameObject::Create<UISceneContainer>();
+    p_sceneGameContainer = GameObject::Create<UISceneContainer>();
+    // p_sceneContainer->SetParent(hlGo);
+
+    UITabContainer *tabContainer = GameObject::Create<UITabContainer>();
+    tabContainer->AddTab("Scene", p_sceneEditContainer);
+    tabContainer->AddTab("Game",  p_sceneGameContainer);
+    tabContainer->SetParent(hlGo);
+
+    UILayoutElement *tabContainerLE = tabContainer->AddComponent<UILayoutElement>();
+    tabContainerLE->SetFlexibleSize( Vector2(6.0f, 1.0f) );
 
     p_inspector = GameObject::Create<Inspector>();
     p_inspector->SetParent(hlGo);
@@ -98,6 +108,7 @@ void EditorScene::Init()
     p_explorer->SetParent(botHLGo);
 
     Camera *cam = AddComponent<Camera>();
+    cam->AddRenderPass(RenderPass::Overlay);
     SetCamera(cam);
     GetCamera()->SetClearColor(Color::LightGray);
 
@@ -127,8 +138,8 @@ void EditorScene::Update()
 
         if (Input::GetMouseButtonDown(MouseButton::Left))
         {
-            UICanvas *canvas = UICanvas::GetActive(p_sceneContainer);
-            bool isOverSceneCont = canvas->IsMouseOver(p_sceneContainer, true);
+            UICanvas *canvas = UICanvas::GetActive(p_sceneEditContainer);
+            bool isOverSceneCont = canvas->IsMouseOver(p_sceneEditContainer, true);
             if (isOverSceneCont)
             {
                 GameObject *selectedGameObject = Selection::GetOveredGameObject(openScene);
@@ -220,7 +231,7 @@ Scene *EditorScene::GetOpenScene() const
 
 Rect EditorScene::GetOpenSceneScreenRectNDC() const
 {
-    return p_sceneContainer->GetSceneImageRectNDC();
+    return p_sceneEditContainer->GetSceneImageRectNDC();
 }
 
 void EditorScene::RenderAndBlitToScreen()
@@ -244,7 +255,7 @@ void EditorScene::RenderAndBlitToScreen()
             }
         }
     }
-    p_sceneContainer->SetSceneImageTexture(openSceneTex);
+    p_sceneEditContainer->SetSceneImageTexture(openSceneTex);
 
     GEngine *gEngine = GEngine::GetActive();
     RenderOpenScene();
