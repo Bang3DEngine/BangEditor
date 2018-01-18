@@ -58,6 +58,10 @@ RH<Texture2D> EditorIconManager::GetIcon(const String &ext)
     }
 }
 
+RH<Texture2D> EditorIconManager::GetRightArrowAndBarIcon()
+{ return GetIconTexture("RightArrowAndBar"); }
+RH<Texture2D> EditorIconManager::GetDoubleBarIcon()
+{ return GetIconTexture("DoubleBar"); }
 RH<Texture2D> EditorIconManager::GetBackArrowIcon()
 { return GetIconTexture("BackArrow"); }
 RH<Texture2D> EditorIconManager::GetLensIcon()

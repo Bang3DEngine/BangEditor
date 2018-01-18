@@ -40,6 +40,26 @@ UISceneToolbar::UISceneToolbar()
         ScenePlayer::PlayScene();
     });
 
+    p_pauseButton = GameObjectFactory::CreateUIButton();
+    p_pauseButton->SetIcon(EditorIconManager::GetDoubleBarIcon().Get(),
+                           Vector2i(10));
+    p_pauseButton->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
+    p_pauseButton->GetIcon()->SetTint(Color::DarkGray);
+    p_pauseButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
+    {
+        ScenePlayer::PauseScene();
+    });
+
+    p_stepButton = GameObjectFactory::CreateUIButton();
+    p_stepButton->SetIcon(EditorIconManager::GetRightArrowAndBarIcon().Get(),
+                          Vector2i(10));
+    p_stepButton->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
+    p_stepButton->GetIcon()->SetTint(Color::DarkGray);
+    p_stepButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
+    {
+        ScenePlayer::StepFrame();
+    });
+
     p_stopButton = GameObjectFactory::CreateUIButton();
     p_stopButton->SetIcon(EditorIconManager::GetSquareIcon().Get(),
                           Vector2i(10));
@@ -69,6 +89,8 @@ UISceneToolbar::UISceneToolbar()
     showDebugStatsText->SetContent("Stats");
 
     p_playButton->GetGameObject()->SetParent(this);
+    p_pauseButton->GetGameObject()->SetParent(this);
+    p_stepButton->GetGameObject()->SetParent(this);
     p_stopButton->GetGameObject()->SetParent(this);
     GameObjectFactory::CreateUISpacer(LayoutSizeType::Flexible, Vector2::One)->
                         SetParent(this);
@@ -96,12 +118,29 @@ UIComboBox *UISceneToolbar::GetRenderModeComboBox() const
 void UISceneToolbar::OnPlayScene()
 {
     p_playButton->SetBlocked(true);
+    p_pauseButton->SetBlocked(false);
+    p_stepButton->SetBlocked(false);
     p_stopButton->SetBlocked(false);
+}
+
+void UISceneToolbar::OnPauseScene()
+{
+    p_playButton->SetBlocked(false);
+    p_pauseButton->SetBlocked(true);
+    p_stepButton->SetBlocked(false);
+    p_stopButton->SetBlocked(true);
+}
+
+void UISceneToolbar::OnStepFrameScene()
+{
+    OnPauseScene();
 }
 
 void UISceneToolbar::OnStopScene()
 {
     p_playButton->SetBlocked(false);
+    p_pauseButton->SetBlocked(true);
+    p_stepButton->SetBlocked(true);
     p_stopButton->SetBlocked(true);
 }
 
@@ -110,8 +149,10 @@ void UISceneToolbar::OnPlayStateChanged(EditorPlayState,
 {
     switch (newPlayState)
     {
-        case EditorPlayState::Editing: OnStopScene(); break;
-        case EditorPlayState::Playing: OnPlayScene(); break;
+        case EditorPlayState::Editing:   OnStopScene();      break;
+        case EditorPlayState::Paused:    OnPauseScene();     break;
+        case EditorPlayState::StepFrame: OnStepFrameScene(); break;
+        case EditorPlayState::Playing:   OnPlayScene();      break;
     }
 }
 

@@ -319,3 +319,9 @@ Camera *EditorCamera::GetEditorCamera(Scene *scene)
     }
     return nullptr;
 }
+
+GameObject *EditorCamera::GetEditorCameraGameObject(Scene *scene)
+{
+    Camera *cam = GetEditorCamera(scene);
+    return cam ? cam->GetGameObject()->GetParent() : nullptr;
+}

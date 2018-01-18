@@ -19,7 +19,7 @@ USING_NAMESPACE_BANG_EDITOR
 
 EditorBehaviourManager::EditorBehaviourManager()
 {
-    m_compileThreadPool.SetMaxThreadCount(3);
+    m_compileThreadPool.SetMaxThreadCount(1);
     m_compileThreadPool.SetName("BehaviourCompileThread");
 }
 
@@ -32,7 +32,7 @@ void EditorBehaviourManager::Update()
 {
     UpdateCompileInformations();
 
-    if (!Editor::IsPlaying())
+    if (Editor::IsEditingScene())
     {
         List<Path> behaviourPaths = GetBehaviourSourcesPaths();
         for (const Path &behaviourPath : behaviourPaths)

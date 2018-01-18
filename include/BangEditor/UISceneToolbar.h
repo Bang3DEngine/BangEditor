@@ -34,12 +34,17 @@ public:
     UIComboBox* GetRenderModeComboBox() const;
 
 private:
-    UIButton *p_playButton = nullptr;
-    UIButton *p_stopButton = nullptr;
+    UIButton *p_playButton  = nullptr;
+    UIButton *p_pauseButton = nullptr;
+    UIButton *p_stepButton  = nullptr;
+    UIButton *p_stopButton  = nullptr;
+
     UIComboBox *p_renderModeInput = nullptr;
     UICheckBox *p_showDebugStatsCheckbox = nullptr;
 
     void OnPlayScene();
+    void OnPauseScene();
+    void OnStepFrameScene();
     void OnStopScene();
 
     void SetRenderMode();

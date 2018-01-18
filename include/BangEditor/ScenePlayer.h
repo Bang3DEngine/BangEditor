@@ -17,15 +17,19 @@ class ScenePlayer
 {
 public:
     static void PlayScene();
+    static void PauseScene();
+    static void StepFrame();
     static void StopScene();
 
 private:
+    bool m_pauseInNextFrame = false;
     Scene *p_editingScene = nullptr;
     Scene *p_playingScene = nullptr;
 
     ScenePlayer();
     virtual ~ScenePlayer();
 
+    void Update();
     bool InstantiatePlayingSceneBehaviours();
 
     static void OnShortcutPressed(const Shortcut &shortcut);

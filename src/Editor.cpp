@@ -54,7 +54,7 @@ void Editor::SetEditorPlayState(EditorPlayState playState)
                     previousPlayState,
                     ed->m_currentPlayState);
 
-        AudioManager::SetPlayOnStartBlocked( !Editor::IsPlaying() );
+        AudioManager::SetPlayOnStartBlocked( Editor::IsEditingScene() );
     }
 }
 
@@ -64,9 +64,9 @@ EditorPlayState Editor::GetEditorPlayState()
     return ed ? ed->m_currentPlayState : Undef<EditorPlayState>();
 }
 
-bool Editor::IsPlaying()
+bool Editor::IsEditingScene()
 {
-    return Editor::GetEditorPlayState() == EditorPlayState::Playing;
+    return Editor::GetEditorPlayState() == EditorPlayState::Editing;
 }
 
 void Editor::OnDestroyed(EventEmitter<IDestroyListener> *object)

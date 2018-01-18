@@ -19,6 +19,8 @@ class EditorIconManager
 public:
     static RH<Texture2D> GetIcon(const Path &path);
     static RH<Texture2D> GetIcon(const String &extension);
+    static RH<Texture2D> GetRightArrowAndBarIcon();
+    static RH<Texture2D> GetDoubleBarIcon();
     static RH<Texture2D> GetBackArrowIcon();
     static RH<Texture2D> GetLensIcon();
     static RH<Texture2D> GetLensLittleIcon();

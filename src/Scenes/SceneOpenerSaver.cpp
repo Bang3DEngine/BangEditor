@@ -80,7 +80,7 @@ bool SceneOpenerSaver::OnSaveScene(bool saveAs)
 {
     EditorScene *edScene = EditorSceneManager::GetEditorScene();
     Scene *openScene = edScene->GetOpenScene();
-    if (openScene && !Editor::IsPlaying())
+    if (openScene && Editor::IsEditingScene())
     {
         Path saveScenePath = m_currentOpenScenePath;
         if (saveAs || !saveScenePath.IsFile())

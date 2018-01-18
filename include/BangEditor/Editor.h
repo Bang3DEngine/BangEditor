@@ -23,6 +23,8 @@ FORWARD class SelectionGizmosManager;
 enum class EditorPlayState
 {
     Playing,
+    Paused,
+    StepFrame,
     Editing
 };
 
@@ -44,7 +46,7 @@ public:
 
     static void SetEditorPlayState(EditorPlayState playState);
     static EditorPlayState GetEditorPlayState();
-    static bool IsPlaying();
+    static bool IsEditingScene();
 
     static Editor* GetInstance();
 

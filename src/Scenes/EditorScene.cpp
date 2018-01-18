@@ -128,6 +128,7 @@ EditorScene::~EditorScene()
 void EditorScene::Update()
 {
     GetBehaviourManager()->Update();
+    GetScenePlayer()->Update();
 
     EditorSceneManager::SetActiveScene(this);
     Scene::Update();
@@ -136,8 +137,20 @@ void EditorScene::Update()
     if (openScene)
     {
         BindOpenScene();
-        openScene->Update();
+
+        if (Editor::GetEditorPlayState() == EditorPlayState::Playing)
+        {
+            openScene->Update();
+        }
+        else
+        {
+            GameObject *editorCameraGo =
+                    EditorCamera::GetEditorCameraGameObject(GetOpenScene());
+            editorCameraGo->Update();
+        }
+
         GetSceneEditContainer()->HandleSelection();
+
         UnBindOpenScene();
     }
 
@@ -147,7 +160,7 @@ void EditorScene::Update()
     {
         // Path openScenePath = EditorSceneManager::GetOpenScenePath();
         // sceneTabName += " " + openScenePath.GetName();
-        if (!Editor::IsPlaying() &&
+        if (Editor::IsEditingScene() &&
             !SceneOpenerSaver::GetInstance()->IsCurrentSceneSaved())
         {
             sceneTabName += " (*)";
@@ -312,15 +325,20 @@ void EditorScene::PopGLViewport()
     GL::SetViewport(m_prevGLViewport);
 }
 
-void EditorScene::OnPlayStateChanged(EditorPlayState, EditorPlayState)
+void EditorScene::OnPlayStateChanged(EditorPlayState,
+                                     EditorPlayState newPlayState)
 {
     // Change tab when play/stop
-    if (Editor::IsPlaying())
+    switch (newPlayState)
     {
-        p_sceneTabContainer->SetCurrentTabChild( p_scenePlayContainer );
-    }
-    else
-    {
-        p_sceneTabContainer->SetCurrentTabChild( p_sceneEditContainer );
+        case EditorPlayState::Editing:
+            p_sceneTabContainer->SetCurrentTabChild( p_sceneEditContainer );
+        break;
+
+        case EditorPlayState::Playing:
+            p_sceneTabContainer->SetCurrentTabChild( p_scenePlayContainer );
+        break;
+
+        default: break;
     }
 }

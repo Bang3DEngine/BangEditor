@@ -31,6 +31,7 @@ public:
 
     static bool IsEditorCamera(Camera *cam);
     static Camera *GetEditorCamera(Scene *scene);
+    static GameObject *GetEditorCameraGameObject(Scene *scene);
 
     Camera *GetCamera();
 
