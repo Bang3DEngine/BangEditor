@@ -26,6 +26,9 @@ public:
     // GameObject
     void Update() override;
 
+    // IEnabledListener
+    void OnEnabled() override;
+
 private:
     FPSChrono m_editorRenderFPSChrono;
     UITextRenderer *p_debugStatsText = nullptr;

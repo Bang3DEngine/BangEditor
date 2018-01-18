@@ -29,6 +29,9 @@ public:
     void SwitchProjectionModeTo(bool mode3D);
     void StartLookAt(GameObject *lookAtFocus);
 
+    static bool IsEditorCamera(Camera *cam);
+    static Camera *GetEditorCamera(Scene *scene);
+
     Camera *GetCamera();
 
 private:

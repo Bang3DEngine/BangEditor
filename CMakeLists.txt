@@ -128,7 +128,9 @@ ${SRC_DIR}/Scenes/ScenePlayer.cpp
 ${SRC_DIR}/Scenes/SceneOpenerSaver.cpp
 ${SRC_DIR}/UIScene/UISceneContainer.cpp
 ${SRC_DIR}/UIScene/UISceneDebugStats.cpp
+${SRC_DIR}/UIScene/UISceneEditContainer.cpp
 ${SRC_DIR}/UIScene/UISceneImage.cpp
+${SRC_DIR}/UIScene/UIScenePlayContainer.cpp
 ${SRC_DIR}/UIScene/UISceneToolbar.cpp
 ${SRC_DIR}/SelectionGizmos/ComponentsSelectionGizmo.cpp
 ${SRC_DIR}/SelectionGizmos/SelectionGizmo.cpp

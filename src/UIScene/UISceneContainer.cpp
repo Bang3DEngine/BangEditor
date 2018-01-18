@@ -1,6 +1,9 @@
 #include "BangEditor/UISceneContainer.h"
 
 #include "Bang/Rect.h"
+#include "Bang/Scene.h"
+#include "Bang/Camera.h"
+#include "Bang/GBuffer.h"
 #include "Bang/UIButton.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UICheckBox.h"
@@ -12,6 +15,7 @@
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
+#include "Bang/SelectionFramebuffer.h"
 
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneImage.h"
@@ -49,9 +53,31 @@ UISceneContainer::~UISceneContainer()
 {
 }
 
-void UISceneContainer::SetSceneImageTexture(Texture2D *sceneTexture)
+void UISceneContainer::SetScene(Scene *scene)
 {
-    p_sceneImage->SetSceneImageTexture(sceneTexture);
+    p_scene = scene;
+
+    Texture2D *sceneTex = nullptr;
+    if (GetScene())
+    {
+        Camera *sceneCam = GetSceneCamera(GetScene());
+        if (sceneCam)
+        {
+            GBuffer *gbuffer =  sceneCam->GetGBuffer();
+            sceneTex = gbuffer->GetAttachmentTexture(GBuffer::AttColor);
+            if (Input::GetKey(Key::Z))
+            {
+                sceneTex = sceneCam->GetSelectionFramebuffer()->
+                           GetAttachmentTexture(SelectionFramebuffer::AttColor);
+            }
+        }
+    }
+    p_sceneImage->SetSceneImageTexture(sceneTex);
+}
+
+Scene *UISceneContainer::GetScene() const
+{
+    return p_scene;
 }
 
 Rect UISceneContainer::GetSceneImageRectNDC() const

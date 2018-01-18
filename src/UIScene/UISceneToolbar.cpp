@@ -48,10 +48,6 @@ UISceneToolbar::UISceneToolbar()
         ScenePlayer::StopScene();
     });
 
-    GameObject *stateTextGo = GameObjectFactory::CreateUIGameObject();
-    p_stateText = stateTextGo->AddComponent<UITextRenderer>();
-    p_stateText->SetTextSize(10);
-
     p_showDebugStatsCheckbox = GameObjectFactory::CreateUICheckBox();
     p_showDebugStatsCheckbox->SetChecked(false);
     p_showDebugStatsCheckbox->EventEmitter<IValueChangedListener>::RegisterListener(this);
@@ -64,7 +60,6 @@ UISceneToolbar::UISceneToolbar()
 
     p_playButton->GetGameObject()->SetParent(this);
     p_stopButton->GetGameObject()->SetParent(this);
-    stateTextGo->SetParent(this);
     GameObjectFactory::CreateUISpacer(LayoutSizeType::Flexible, Vector2::One)->
                         SetParent(this);
     showDebugStatsTextGo->SetParent(this);
@@ -84,14 +79,12 @@ bool UISceneToolbar::IsShowDebugStatsChecked() const
 
 void UISceneToolbar::OnPlayScene()
 {
-    p_stateText->SetContent("Playing scene");
     p_playButton->SetBlocked(true);
     p_stopButton->SetBlocked(false);
 }
 
 void UISceneToolbar::OnStopScene()
 {
-    p_stateText->SetContent("Editing scene");
     p_playButton->SetBlocked(false);
     p_stopButton->SetBlocked(true);
 }

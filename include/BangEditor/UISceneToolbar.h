@@ -34,7 +34,6 @@ public:
 private:
     UIButton *p_playButton = nullptr;
     UIButton *p_stopButton = nullptr;
-    UITextRenderer *p_stateText = nullptr;
     UICheckBox *p_showDebugStatsCheckbox = nullptr;
 
     void OnPlayScene();

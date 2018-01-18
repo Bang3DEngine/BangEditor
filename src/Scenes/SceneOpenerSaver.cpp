@@ -5,6 +5,7 @@
 #include "Bang/XMLNodeReader.h"
 #include "Bang/GameObjectFactory.h"
 
+#include "BangEditor/Editor.h"
 #include "BangEditor/MenuBar.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
@@ -79,7 +80,7 @@ bool SceneOpenerSaver::OnSaveScene(bool saveAs)
 {
     EditorScene *edScene = EditorSceneManager::GetEditorScene();
     Scene *openScene = edScene->GetOpenScene();
-    if (openScene)
+    if (openScene && !Editor::IsPlaying())
     {
         Path saveScenePath = m_currentOpenScenePath;
         if (saveAs || !saveScenePath.IsFile())

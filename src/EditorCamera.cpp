@@ -302,3 +302,20 @@ void EditorCamera::SwitchProjectionModeTo(bool mode3D)
         p_cam->SetZFar(999999.9f);
     }
 }
+
+bool EditorCamera::IsEditorCamera(Camera *cam)
+{
+    GameObject *camGo = cam->GetGameObject();
+    return (camGo && camGo->GetParent() &&
+            DCAST<EditorCamera*>(camGo->GetParent()));
+}
+
+Camera *EditorCamera::GetEditorCamera(Scene *scene)
+{
+    List<Camera*> sceneCameras = scene->GetComponentsInChildren<Camera>(true);
+    for (Camera *cam : sceneCameras)
+    {
+        if (EditorCamera::IsEditorCamera(cam)) { return cam; }
+    }
+    return nullptr;
+}

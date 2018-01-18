@@ -65,7 +65,7 @@ void RotateGizmo::Update()
 void RotateGizmo::Render(RenderPass rp, bool renderChildren)
 {
     // Update sphere so that it faces camera
-    Camera *cam = Camera::GetActive();
+    Camera *cam = GetEditorCamera();
     Transform *camT = cam->GetGameObject()->GetTransform();
     Vector3 camCenterDir = (GetTransform()->GetPosition() - camT->GetPosition());
     p_sphereBoundsGo->GetTransform()->SetRotation(

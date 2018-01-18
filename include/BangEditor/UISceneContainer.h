@@ -19,24 +19,25 @@ FORWARD class UISceneToolbar;
 class UISceneContainer : public GameObject,
                          public IValueChangedListener
 {
-    GAMEOBJECT_EDITOR(UISceneContainer);
-
 public:
     UISceneContainer();
     virtual ~UISceneContainer();
 
-    void SetSceneImageTexture(Texture2D *sceneTexture);
+    void SetScene(Scene *scene);
+
+    Scene *GetScene() const;
     Rect GetSceneImageRectNDC() const;
 
 protected:
     UISceneToolbar* GetSceneToolbar() const;
 
 private:
-    Scene *p_editingScene = nullptr;
-    Scene *p_playingScene = nullptr;
+    Scene *p_scene = nullptr;
 
     UISceneToolbar *p_sceneToolbar = nullptr;
     UISceneImage *p_sceneImage = nullptr;
+
+    virtual Camera* GetSceneCamera(Scene *scene) = 0;
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;

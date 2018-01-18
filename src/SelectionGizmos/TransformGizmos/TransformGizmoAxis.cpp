@@ -7,6 +7,8 @@
 #include "Bang/Transform.h"
 #include "Bang/AxisFunctions.h"
 
+#include "BangEditor/EditorCamera.h"
+
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
@@ -26,9 +28,11 @@ void TransformGizmoAxis::Update()
     GameObject::Update();
 
     // Change color depending on selection state
+    Camera *editorCamera = GetEditorCamera();
+
     bool isMouseOver = false;
     SelectionState selectionState = SelectionState::Idle;
-    GameObject *overedGameObject = Selection::GetOveredGameObject();
+    GameObject *overedGameObject = Selection::GetOveredGameObject(editorCamera);
     if (IsBeingGrabbed()) { selectionState = SelectionState::Grabbed; }
     else if (overedGameObject)
     {
@@ -49,8 +53,7 @@ void TransformGizmoAxis::Update()
     else
     {
         if (Input::GetMouseButtonUp(MouseButton::Left) ||
-            Input::GetMouseButtonDown(MouseButton::Right)
-           )
+            Input::GetMouseButtonDown(MouseButton::Right) )
         {
             m_isBeingGrabbed = false;
         }

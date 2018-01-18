@@ -38,6 +38,8 @@
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/UISceneContainer.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/UISceneEditContainer.h"
+#include "BangEditor/UIScenePlayContainer.h"
 #include "BangEditor/EditorBehaviourManager.h"
 
 USING_NAMESPACE_BANG
@@ -80,12 +82,12 @@ void EditorScene::Init()
     p_hierarchy = GameObject::Create<Hierarchy>();
     p_hierarchy->SetParent(hlGo);
 
-    p_sceneEditContainer = GameObject::Create<UISceneContainer>();
-    p_sceneGameContainer = GameObject::Create<UISceneContainer>();
+    p_sceneEditContainer = GameObject::Create<UISceneEditContainer>();
+    p_scenePlayContainer = GameObject::Create<UIScenePlayContainer>();
 
     p_sceneTabContainer = GameObject::Create<UITabContainer>();
     p_sceneTabContainer->AddTab("Scene", p_sceneEditContainer);
-    p_sceneTabContainer->AddTab("Game",  p_sceneGameContainer);
+    p_sceneTabContainer->AddTab("Game",  p_scenePlayContainer);
     p_sceneTabContainer->SetParent(hlGo);
 
     UILayoutElement *tabContainerLE = p_sceneTabContainer->AddComponent<UILayoutElement>();
@@ -111,6 +113,8 @@ void EditorScene::Init()
     cam->AddRenderPass(RenderPass::Overlay);
     SetCamera(cam);
     GetCamera()->SetClearColor(Color::LightGray);
+
+    Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
 
     ScenePlayer::StopScene();
 }
@@ -142,7 +146,9 @@ void EditorScene::Update()
             bool isOverSceneCont = canvas->IsMouseOver(p_sceneEditContainer, true);
             if (isOverSceneCont)
             {
-                GameObject *selectedGameObject = Selection::GetOveredGameObject(openScene);
+                GameObject *selectedGameObject =
+                        Selection::GetOveredGameObject(
+                            EditorCamera::GetEditorCamera(openScene) );
                 if (selectedGameObject)
                 {
                     Editor::SelectGameObject(selectedGameObject);
@@ -159,12 +165,14 @@ void EditorScene::Update()
     {
         // Path openScenePath = EditorSceneManager::GetOpenScenePath();
         // sceneTabName += " " + openScenePath.GetName();
-        if (!SceneOpenerSaver::GetInstance()->IsCurrentSceneSaved())
+        if (!Editor::IsPlaying() &&
+            !SceneOpenerSaver::GetInstance()->IsCurrentSceneSaved())
         {
             sceneTabName += " (*)";
         }
     }
     p_sceneTabContainer->SetTabTitle(p_sceneEditContainer, sceneTabName);
+
 }
 
 void EditorScene::OnResize(int newWidth, int newHeight)
@@ -187,7 +195,10 @@ void EditorScene::RenderOpenScene()
     if (openScene)
     {
         BindOpenScene();
-        GEngine::GetActive()->Render(openScene);
+        Camera *editorCamera = EditorCamera::GetEditorCamera(GetOpenScene());
+        Camera *sceneCamera = GetOpenScene()->GetCamera();
+        if (editorCamera) { GEngine::GetActive()->Render(openScene, editorCamera); }
+        if (sceneCamera) { GEngine::GetActive()->Render(openScene, sceneCamera); }
         UnBindOpenScene();
     }
 }
@@ -225,15 +236,12 @@ void EditorScene::SetOpenScene(Scene *openScene, bool destroyPreviousScene)
         EventEmitter<IEditorOpenSceneListener>::PropagateToListeners(
                     &IEditorOpenSceneListener::OnOpenScene, GetOpenScene());
 
-        if (!Editor::IsPlaying())
-        {
-            EditorCamera *edCamera = GameObject::Create<EditorCamera>();
-            edCamera->SetParent(openScene, 0);
-        }
+        // Add editor camera
+        EditorCamera *edCamera = GameObject::Create<EditorCamera>();
+        edCamera->SetParent(openScene);
 
         GetOpenScene()->SetFirstFoundCamera();
         GetOpenScene()->InvalidateCanvas();
-
     }
 }
 
@@ -252,30 +260,10 @@ void EditorScene::RenderAndBlitToScreen()
     Window *window = Window::GetActive();
     window->Clear();
 
-    Scene *openScene = GetOpenScene();
-    Texture2D *openSceneTex = nullptr;
-    if (openScene)
-    {
-        Camera *openSceneCam = openScene->GetCamera();
-        if (openSceneCam)
-        {
-            GBuffer *gbuffer =  openSceneCam->GetGBuffer();
-            openSceneTex = gbuffer->GetAttachmentTexture(GBuffer::AttColor);
-            if (Input::GetKey(Key::Z))
-            {
-                openSceneTex = openSceneCam->GetSelectionFramebuffer()->
-                    GetAttachmentTexture(SelectionFramebuffer::AttColor);
-            }
-        }
-    }
-    p_sceneEditContainer->SetSceneImageTexture(openSceneTex);
-
     GEngine *gEngine = GEngine::GetActive();
     RenderOpenScene();
-    gEngine->Render(this);
+    gEngine->Render(this, GetCamera());
     window->BlitToScreen(GetCamera());
-    /*
-    */
 }
 
 void EditorScene::BindOpenScene()
@@ -309,6 +297,22 @@ ProjectManager *EditorScene::GetProjectManager() const
 {
     return m_projectManager;
 }
+
+UITabContainer *EditorScene::GetSceneTabContainer() const
+{
+    return p_sceneTabContainer;
+}
+
+UISceneEditContainer *EditorScene::GetSceneEditContainer() const
+{
+    return p_sceneEditContainer;
+}
+
+UIScenePlayContainer *EditorScene::GetScenePlayContainer() const
+{
+    return p_scenePlayContainer;
+}
+
 EditorBehaviourManager *EditorScene::GetBehaviourManager() const
 {
     return m_behaviourManager;
@@ -324,4 +328,17 @@ void EditorScene::PushGLViewport()
 void EditorScene::PopGLViewport()
 {
     GL::SetViewport(m_prevGLViewport);
+}
+
+void EditorScene::OnPlayStateChanged(EditorPlayState, EditorPlayState)
+{
+    // Change tab when play/stop
+    if (Editor::IsPlaying())
+    {
+        p_sceneTabContainer->SetCurrentTabChild( p_scenePlayContainer );
+    }
+    else
+    {
+        p_sceneTabContainer->SetCurrentTabChild( p_sceneEditContainer );
+    }
 }

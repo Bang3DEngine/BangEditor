@@ -108,7 +108,7 @@ void RotateGizmoAxis::Update()
         Transform *refGoT = refGo->GetTransform();
         Vector3 sphereCenter = refGoT->GetPosition();
 
-        Camera *cam = Camera::GetActive();
+        Camera *cam = GetEditorCamera();
         const Vector2 mousePos = Input::GetMousePositionNDC();
 
         TransformGizmo *tg = SCAST<TransformGizmo*>(GetParent()->GetParent());
@@ -215,7 +215,7 @@ void RotateGizmoAxis::UpdateCirclePoints()
     if (!GetReferencedGameObject() ||
         !GetReferencedGameObject()->GetTransform()) { return; }
 
-    Camera *cam = Camera::GetActive();
+    Camera *cam = GetEditorCamera();
     Transform *camT = cam->GetGameObject()->GetTransform();
 
     constexpr int numSegments = 32;

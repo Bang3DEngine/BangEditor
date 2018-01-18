@@ -62,7 +62,7 @@ void TranslateGizmoAxis::Update()
         // Move along axis.
         // First. Find the plane parallel to the axes, and which faces the
         // camera the most.
-        Camera *cam = Camera::GetActive();
+        Camera *cam = GetEditorCamera();
         Transform *camT = cam->GetGameObject()->GetTransform();
         Vector3 planeNormal = Vector3::Cross( GetAxisVectorWorld(),
                                 Vector3::Cross(camT->GetForward(),
@@ -71,8 +71,7 @@ void TranslateGizmoAxis::Update()
 
         // Then cast a ray through the mouse position, and see where it intersects
         // with this plane.
-        Ray mouseRay = Camera::GetActive()->
-                       FromViewportPointNDCToRay( Input::GetMousePositionNDC() );
+        Ray mouseRay = cam->FromViewportPointNDCToRay( Input::GetMousePositionNDC() );
 
         bool intersected;
         Vector3 intersection;

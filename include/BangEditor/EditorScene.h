@@ -4,7 +4,7 @@
 #include "Bang/Rect.h"
 #include "Bang/Scene.h"
 
-#include "BangEditor/BangEditor.h"
+#include "BangEditor/Editor.h"
 #include "BangEditor/IEditorOpenSceneListener.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
@@ -29,9 +29,12 @@ FORWARD class ProjectManager;
 FORWARD class UITabContainer;
 FORWARD class UISceneContainer;
 FORWARD class EditorApplication;
+FORWARD class UISceneEditContainer;
+FORWARD class UIScenePlayContainer;
 FORWARD class EditorBehaviourManager;
 
 class EditorScene : public Scene,
+                    public IEditorListener,
                     public EventEmitter<IEditorOpenSceneListener>
 {
     GAMEOBJECT_EDITOR(EditorScene);
@@ -58,6 +61,9 @@ public:
     Hierarchy *GetHierarchy() const;
     ScenePlayer *GetScenePlayer() const;
     ProjectManager *GetProjectManager() const;
+    UITabContainer *GetSceneTabContainer() const;
+    UISceneEditContainer *GetSceneEditContainer() const;
+    UIScenePlayContainer *GetScenePlayContainer() const;
     EditorBehaviourManager *GetBehaviourManager() const;
 
 protected:
@@ -77,8 +83,8 @@ private:
 
     Scene *p_openScene = nullptr;
     UITabContainer *p_sceneTabContainer = nullptr;
-    UISceneContainer *p_sceneEditContainer = nullptr;
-    UISceneContainer *p_sceneGameContainer = nullptr;
+    UISceneEditContainer *p_sceneEditContainer = nullptr;
+    UIScenePlayContainer *p_scenePlayContainer = nullptr;
 
     MenuBar *m_menuBar = nullptr;
     GameObject *m_mainEditorVL = nullptr;
@@ -91,6 +97,10 @@ private:
     void UnBindOpenScene();
     void PushGLViewport();
     void PopGLViewport();
+
+    // IEditorListener
+    void OnPlayStateChanged(EditorPlayState previousPlayState,
+                            EditorPlayState newPlayState) override;
 
     friend class BangEditor::EditorApplication;
 };

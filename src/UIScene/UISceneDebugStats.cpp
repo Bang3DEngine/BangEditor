@@ -56,3 +56,9 @@ void UISceneDebugStats::Update()
     p_debugStatsText->SetContent(fpsText);
 }
 
+void UISceneDebugStats::OnEnabled()
+{
+    Object::OnEnabled();
+    m_editorRenderFPSChrono.MarkBegin();
+}
+
