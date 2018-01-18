@@ -25,7 +25,7 @@ public:
 
     void SetScene(Scene *scene);
 
-    Scene *GetScene() const;
+    Scene *GetContainedScene() const;
     Rect GetSceneImageRectNDC() const;
 
 protected:

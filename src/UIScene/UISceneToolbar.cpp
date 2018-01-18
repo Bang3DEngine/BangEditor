@@ -2,6 +2,7 @@
 
 #include "Bang/UIButton.h"
 #include "Bang/UICheckBox.h"
+#include "Bang/UIComboBox.h"
 #include "Bang/IconManager.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -10,6 +11,7 @@
 #include "Bang/UIHorizontalLayout.h"
 
 #include "BangEditor/ScenePlayer.h"
+#include "BangEditor/UISceneImage.h"
 #include "BangEditor/EditorIconManager.h"
 
 USING_NAMESPACE_BANG
@@ -48,6 +50,14 @@ UISceneToolbar::UISceneToolbar()
         ScenePlayer::StopScene();
     });
 
+    p_renderModeInput = GameObjectFactory::CreateUIComboBox();
+    p_renderModeInput->AddItem("Color",     SCAST<int>(UISceneImage::RenderMode::Color));
+    p_renderModeInput->AddItem("Diffuse",   SCAST<int>(UISceneImage::RenderMode::Diffuse));
+    p_renderModeInput->AddItem("Normal",    SCAST<int>(UISceneImage::RenderMode::Normal));
+    // p_renderModeInput->AddItem("Depth",     SCAST<int>(UISceneImage::RenderMode::Depth));
+    p_renderModeInput->AddItem("Selection", SCAST<int>(UISceneImage::RenderMode::Selection));
+    p_renderModeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+
     p_showDebugStatsCheckbox = GameObjectFactory::CreateUICheckBox();
     p_showDebugStatsCheckbox->SetChecked(false);
     p_showDebugStatsCheckbox->EventEmitter<IValueChangedListener>::RegisterListener(this);
@@ -62,6 +72,7 @@ UISceneToolbar::UISceneToolbar()
     p_stopButton->GetGameObject()->SetParent(this);
     GameObjectFactory::CreateUISpacer(LayoutSizeType::Flexible, Vector2::One)->
                         SetParent(this);
+    p_renderModeInput->GetGameObject()->SetParent(this);
     showDebugStatsTextGo->SetParent(this);
     p_showDebugStatsCheckbox->GetGameObject()->SetParent(this);
 
@@ -77,6 +88,11 @@ bool UISceneToolbar::IsShowDebugStatsChecked() const
     return p_showDebugStatsCheckbox->IsChecked();
 }
 
+UIComboBox *UISceneToolbar::GetRenderModeComboBox() const
+{
+    return p_renderModeInput;
+}
+
 void UISceneToolbar::OnPlayScene()
 {
     p_playButton->SetBlocked(true);
@@ -89,8 +105,7 @@ void UISceneToolbar::OnStopScene()
     p_stopButton->SetBlocked(true);
 }
 
-
-void UISceneToolbar::OnPlayStateChanged(EditorPlayState previousPlayState,
+void UISceneToolbar::OnPlayStateChanged(EditorPlayState,
                                         EditorPlayState newPlayState)
 {
     switch (newPlayState)

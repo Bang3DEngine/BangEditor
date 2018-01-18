@@ -11,7 +11,6 @@
 #include "Bang/GEngine.h"
 #include "Bang/UICanvas.h"
 #include "Bang/Texture2D.h"
-#include "Bang/Selection.h"
 #include "Bang/GameObject.h"
 #include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
@@ -23,7 +22,6 @@
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
-#include "Bang/SelectionFramebuffer.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/Console.h"
@@ -139,23 +137,7 @@ void EditorScene::Update()
     {
         BindOpenScene();
         openScene->Update();
-
-        if (Input::GetMouseButtonDown(MouseButton::Left))
-        {
-            UICanvas *canvas = UICanvas::GetActive(p_sceneEditContainer);
-            bool isOverSceneCont = canvas->IsMouseOver(p_sceneEditContainer, true);
-            if (isOverSceneCont)
-            {
-                GameObject *selectedGameObject =
-                        Selection::GetOveredGameObject(
-                            EditorCamera::GetEditorCamera(openScene) );
-                if (selectedGameObject)
-                {
-                    Editor::SelectGameObject(selectedGameObject);
-                }
-                else { Editor::SelectGameObject(nullptr); }
-            }
-        }
+        GetSceneEditContainer()->HandleSelection();
         UnBindOpenScene();
     }
 

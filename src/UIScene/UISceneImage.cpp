@@ -12,6 +12,7 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/SelectionFramebuffer.h"
 
 #include "BangEditor/UISceneDebugStats.h"
 #include "BangEditor/EditorSceneManager.h"
@@ -33,23 +34,14 @@ UISceneImage::UISceneImage()
     UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
 
     GameObject *sceneImgGo = GameObjectFactory::CreateUIGameObject();
-    p_sceneImg  = sceneImgGo->AddComponent<UIImageRenderer>();
+    p_sceneImg  = sceneImgGo->AddComponent<UISceneImageRenderer>();
     p_sceneImg->SetUvMultiply(Vector2(1, -1));
     UILayoutElement *imgLE = sceneImgGo->AddComponent<UILayoutElement>();
     imgLE->SetFlexibleSize( Vector2(1) );
 
-    GameObject *cameraPreviewGo = GameObjectFactory::CreateUIGameObject();
-    p_cameraPreviewImg = cameraPreviewGo->AddComponent<UIImageRenderer>();
-    p_cameraPreviewImg->SetUvMultiply(Vector2(1, -1));
-    p_cameraPreviewImg->SetVisible(false);
-
     p_sceneDebugStats = GameObject::Create<UISceneDebugStats>();
 
-    cameraPreviewGo->GetRectTransform()->SetAnchors( Vector2(0.5f, 0.5f),
-                                                     Vector2(1.0f, 1.0f) );
-
     sceneImgGo->SetParent(this);
-    cameraPreviewGo->SetParent(this);
     p_sceneDebugStats->SetParent(this);
 
     SetShowDebugStats(false);
@@ -64,42 +56,56 @@ UISceneImage::~UISceneImage()
 void UISceneImage::Update()
 {
     GameObject::Update();
+}
 
-    // Camera preview handling
-    p_cameraPreviewImg->SetVisible( p_selectedCamera != nullptr );
-    if (p_selectedCamera)
+void UISceneImage::SetSceneImageCamera(Camera *cam)
+{
+    Texture2D *camTexture = nullptr;
+    if (GetScene())
     {
-        // Get preview texture
-        GBuffer *gbuffer = p_selectedCamera->GetGBuffer();
-        Texture2D *camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttColor);
-        camTexture->SetWrapMode( GL::WrapMode::Repeat );
-        p_cameraPreviewImg->SetImageTexture(camTexture);
+        Camera *sceneCam = cam;
+        if (sceneCam)
+        {
+            GBuffer *gbuffer =  sceneCam->GetGBuffer();
+            switch (GetRenderMode())
+            {
+                case RenderMode::Color:
+                camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttColor);
+                break;
 
-        // Set preview size
-        RectTransform *rt = GetRectTransform();
-        Recti sceneContainerRect( rt->GetViewportRect() );
-        Vector2i sceneContainerSize = sceneContainerRect.GetSize();
+                case RenderMode::Normal:
+                camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttNormal);
+                break;
 
-        Vector2i previewRectSize = sceneContainerSize / 4;
-        Recti previewRectPx(sceneContainerRect.GetMax(),
-                            sceneContainerRect.GetMax() - Vector2i(previewRectSize));
+                case RenderMode::Diffuse:
+                camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttDiffuse);
+                break;
 
-        previewRectPx.SetMin(sceneContainerRect.GetMin());
-        previewRectPx.SetMax(previewRectPx.GetMin() + Vector2i(previewRectSize));
-        gbuffer->Resize(previewRectPx.GetWidth(), previewRectPx.GetHeight());
+                case RenderMode::Depth:
+                camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttDepthStencil);
+                break;
 
-        p_cameraPreviewImg->GetGameObject()->GetRectTransform()->SetAnchors(
-           rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMin()),
-           rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMax()));
+                case RenderMode::Selection:
+                {
+                    SelectionFramebuffer *sfb = sceneCam->GetSelectionFramebuffer();
+                    camTexture = sfb->GetAttachmentTexture(SelectionFramebuffer::AttColor);
+                }
+                break;
+            }
+        }
+    }
 
-        gbuffer->Resize(previewRectPx.GetWidth(), previewRectPx.GetHeight());
+    p_sceneImg->SetImageTexture(camTexture);
 
-        // Render
-        Recti prevViewport = GL::GetViewportRect();
-        GL::SetViewport(previewRectPx);
-        Scene *openScene = EditorSceneManager::GetOpenScene();
-        GEngine::GetActive()->Render(openScene, p_selectedCamera);
-        GL::SetViewport(prevViewport);
+    if (camTexture) { camTexture->SetWrapMode(GL::WrapMode::Repeat); }
+    p_sceneImg->SetTint(camTexture ? Color::White : Color::Black);
+}
+
+void UISceneImage::SetRenderMode(UISceneImage::RenderMode renderMode)
+{
+    if (renderMode != GetRenderMode())
+    {
+        m_renderMode = renderMode;
     }
 }
 
@@ -113,14 +119,22 @@ Rect UISceneImage::GetImageScreenRectNDC() const
     return p_sceneImg->GetGameObject()->GetRectTransform()->GetViewportRectNDC();
 }
 
-void UISceneImage::SetSceneImageTexture(Texture2D *texture)
+UISceneImage::RenderMode UISceneImage::GetRenderMode() const
 {
-    p_sceneImg->SetImageTexture(texture);
-    if (texture) { texture->SetWrapMode(GL::WrapMode::Repeat); }
-    p_sceneImg->SetTint(texture ? Color::White : Color::Black);
+    return m_renderMode;
 }
 
 void UISceneImage::OnGameObjectSelected(GameObject *selectedGo)
 {
     p_selectedCamera = (selectedGo ? selectedGo->GetComponent<Camera>() : nullptr);
+}
+
+void UISceneImage::UISceneImageRenderer::OnRender()
+{
+    const bool wasBlendEnabled = GL::IsEnabled(GL::Test::Blend);
+    GL::Disable(GL::Test::Blend);
+
+    UIImageRenderer::OnRender();
+
+    GL::SetEnabled(GL::Test::Blend, wasBlendEnabled);
 }

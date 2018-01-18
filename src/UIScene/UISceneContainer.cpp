@@ -7,6 +7,7 @@
 #include "Bang/UIButton.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UICheckBox.h"
+#include "Bang/UIComboBox.h"
 #include "Bang/IconManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
@@ -28,7 +29,7 @@ USING_NAMESPACE_BANG_EDITOR
 
 UISceneContainer::UISceneContainer()
 {
-    SetName("SceneTab");
+    SetName("SceneContainer");
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetFlexibleSize( Vector2(6.0f, 1.0f) );
@@ -56,26 +57,10 @@ UISceneContainer::~UISceneContainer()
 void UISceneContainer::SetScene(Scene *scene)
 {
     p_scene = scene;
-
-    Texture2D *sceneTex = nullptr;
-    if (GetScene())
-    {
-        Camera *sceneCam = GetSceneCamera(GetScene());
-        if (sceneCam)
-        {
-            GBuffer *gbuffer =  sceneCam->GetGBuffer();
-            sceneTex = gbuffer->GetAttachmentTexture(GBuffer::AttColor);
-            if (Input::GetKey(Key::Z))
-            {
-                sceneTex = sceneCam->GetSelectionFramebuffer()->
-                           GetAttachmentTexture(SelectionFramebuffer::AttColor);
-            }
-        }
-    }
-    p_sceneImage->SetSceneImageTexture(sceneTex);
+    p_sceneImage->SetSceneImageCamera( GetSceneCamera(GetContainedScene()) );
 }
 
-Scene *UISceneContainer::GetScene() const
+Scene *UISceneContainer::GetContainedScene() const
 {
     return p_scene;
 }
@@ -93,5 +78,9 @@ UISceneToolbar *UISceneContainer::GetSceneToolbar() const
 void UISceneContainer::OnValueChanged(Object*)
 {
     p_sceneImage->SetShowDebugStats( GetSceneToolbar()->IsShowDebugStatsChecked() );
+
+    UISceneImage::RenderMode renderMode = SCAST<UISceneImage::RenderMode>(
+                  p_sceneToolbar->GetRenderModeComboBox()->GetSelectedValue());
+    p_sceneImage->SetRenderMode(renderMode);
 }
 

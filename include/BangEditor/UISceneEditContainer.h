@@ -7,6 +7,10 @@
 #include "BangEditor/Editor.h"
 #include "BangEditor/UISceneContainer.h"
 
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UIImageRenderer;
+FORWARD NAMESPACE_BANG_END
+
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
@@ -23,7 +27,11 @@ public:
     // GameObject
     void Update() override;
 
+    void HandleSelection();
+
 private:
+    UIImageRenderer *p_cameraPreviewImg = nullptr;
+
     Camera* GetSceneCamera(Scene *scene) override;
 
     // IEditorListener

@@ -2,13 +2,12 @@
 #define UISCENEIMAGE_H
 
 #include "Bang/GL.h"
-#include "Bang/GameObject.h"
+#include "Bang/UIImageRenderer.h"
 
 #include "BangEditor/Editor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Texture2D;
-FORWARD class UIImageRenderer;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -22,21 +21,28 @@ class UISceneImage : public GameObject,
     GAMEOBJECT_EDITOR(UISceneImage);
 
 public:
+    enum class RenderMode { Color, Normal, Diffuse, Depth, Selection };
+
     UISceneImage();
     virtual ~UISceneImage();
 
     void Update() override;
 
+    void SetSceneImageCamera(Camera *cam);
+    void SetRenderMode(RenderMode renderMode);
     void SetShowDebugStats(bool showDebugStats);
-    void SetSceneImageTexture(Texture2D *texture);
 
     Rect GetImageScreenRectNDC() const;
+    RenderMode GetRenderMode() const;
 
 private:
-    Camera *p_selectedCamera = nullptr;
+    class UISceneImageRenderer : public UIImageRenderer
+    { public:  void OnRender() override; };
 
-    UIImageRenderer *p_sceneImg = nullptr;
-    UIImageRenderer *p_cameraPreviewImg = nullptr;
+    Camera *p_selectedCamera = nullptr;
+    RenderMode m_renderMode = RenderMode::Color;
+
+    UISceneImageRenderer *p_sceneImg = nullptr;
 
     UISceneDebugStats *p_sceneDebugStats = nullptr;
 

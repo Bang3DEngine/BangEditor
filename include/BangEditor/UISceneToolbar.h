@@ -12,6 +12,7 @@ FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIButton;
 FORWARD class Texture2D;
 FORWARD class UICheckBox;
+FORWARD class UIComboBox;
 FORWARD class UITextRenderer;
 FORWARD NAMESPACE_BANG_END
 
@@ -30,14 +31,18 @@ public:
 	virtual ~UISceneToolbar();
 
     bool IsShowDebugStatsChecked() const;
+    UIComboBox* GetRenderModeComboBox() const;
 
 private:
     UIButton *p_playButton = nullptr;
     UIButton *p_stopButton = nullptr;
+    UIComboBox *p_renderModeInput = nullptr;
     UICheckBox *p_showDebugStatsCheckbox = nullptr;
 
     void OnPlayScene();
     void OnStopScene();
+
+    void SetRenderMode();
 
     // IEditorListener;
     void OnPlayStateChanged(EditorPlayState previousPlayState,
