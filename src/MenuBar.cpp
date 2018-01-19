@@ -28,6 +28,7 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/PostProcessEffect.h"
 #include "Bang/BehaviourContainer.h"
 #include "Bang/UIHorizontalLayout.h"
 
@@ -117,6 +118,7 @@ MenuBar::MenuBar()
     MenuItem *addTransforms = m_componentsItem->AddItem("Transform");
     MenuItem *addTransform = addTransforms->AddItem("Transform");
     MenuItem *addRectTransform = addTransforms->AddItem("RectTransform");
+    MenuItem *addPostProcessEffect = m_componentsItem->AddItem("PostProcessEffect");
     addAudioListener->SetSelectedCallback(MenuBar::OnAddAudioListener);
     addAudioSource->SetSelectedCallback(MenuBar::OnAddAudioSource);
     addNewBehaviour->SetSelectedCallback(MenuBar::OnAddNewBehaviour);
@@ -129,17 +131,20 @@ MenuBar::MenuBar()
     addMeshRenderer->SetSelectedCallback(MenuBar::OnAddMeshRenderer);
     addTransform->SetSelectedCallback(MenuBar::OnAddTransform);
     addRectTransform->SetSelectedCallback(MenuBar::OnAddRectTransform);
+    addPostProcessEffect->SetSelectedCallback(MenuBar::OnAddPostProcessEffect);
 
     // GameObject
     m_gameObjectsItem = AddItem();
     m_gameObjectsItem->GetText()->SetContent("GameObjects");
     MenuItem *primitiveGameObjectItem = m_gameObjectsItem->AddItem("Primitives");
+    MenuItem *createEmpty  = primitiveGameObjectItem->AddItem("Empty");
     MenuItem *createCone   = primitiveGameObjectItem->AddItem("Cone");
     MenuItem *createCube   = primitiveGameObjectItem->AddItem("Cube");
     MenuItem *createSphere = primitiveGameObjectItem->AddItem("Sphere");
     MenuItem *createPlane  = primitiveGameObjectItem->AddItem("Plane");
     MenuItem *uiGameObjectItem = m_gameObjectsItem->AddItem("UI");
     MenuItem *createMeh   = uiGameObjectItem->AddItem("Meh");
+    createEmpty->SetSelectedCallback(MenuBar::OnCreateEmpty);
     createCone->SetSelectedCallback(MenuBar::OnCreateCone);
     createCube->SetSelectedCallback(MenuBar::OnCreateCube);
     createPlane->SetSelectedCallback(MenuBar::OnCreatePlane);
@@ -431,6 +436,19 @@ void MenuBar::OnAddTransform(MenuItem*)
 void MenuBar::OnAddRectTransform(MenuItem*)
 {
     OnAddComponent<RectTransform>();
+}
+
+void MenuBar::OnAddPostProcessEffect(MenuItem*)
+{
+    OnAddComponent<PostProcessEffect>();
+}
+
+void MenuBar::OnCreateEmpty(MenuItem *)
+{
+    Scene *openScene = EditorSceneManager::GetOpenScene();
+    GameObject *go = GameObjectFactory::CreateGameObject();
+    go->SetName("Empty");
+    go->SetParent(openScene);
 }
 
 void MenuBar::OnCreateCone(MenuItem*)

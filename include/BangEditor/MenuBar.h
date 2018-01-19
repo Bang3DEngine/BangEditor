@@ -75,7 +75,9 @@ private:
     static void OnAddMeshRenderer      (MenuItem *item);
     static void OnAddTransform         (MenuItem *item);
     static void OnAddRectTransform     (MenuItem *item);
+    static void OnAddPostProcessEffect (MenuItem *item);
 
+    static void OnCreateEmpty  (MenuItem *item);
     static void OnCreateCone   (MenuItem *item);
     static void OnCreateCube   (MenuItem *item);
     static void OnCreatePlane  (MenuItem *item);

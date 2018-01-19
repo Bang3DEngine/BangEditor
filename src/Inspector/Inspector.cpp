@@ -79,6 +79,10 @@ Inspector::Inspector() : EditorUITab("Inspector")
     p_titleSeparator->SetParent(GetTabContainer());
     scrollPanel->GetGameObject()->SetParent(GetTabContainer());
 
+    // Add a bit of margin below...
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Min, 40)->SetParent(
+                                                               GetContainer());
+
     Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
 }
 

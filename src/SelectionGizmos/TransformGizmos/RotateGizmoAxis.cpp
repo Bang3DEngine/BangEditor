@@ -99,8 +99,8 @@ Vector3 GetAxisedSpherePointFromMousePosNDC(const Camera *cam,
 void RotateGizmoAxis::Update()
 {
     TransformGizmoAxis::Update();
-
-    if (!GetReferencedGameObject()->GetTransform()) { return; }
+    if (!GetReferencedGameObject() ||
+        !GetReferencedGameObject()->GetTransform()) { return; }
 
     if ( IsBeingGrabbed() )
     {

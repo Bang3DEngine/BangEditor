@@ -85,6 +85,7 @@ void TransformGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
     p_translateGizmo->SetReferencedGameObject(referencedGameObject);
     p_rotateGizmo->SetReferencedGameObject(referencedGameObject);
     p_scaleGizmo->SetReferencedGameObject(referencedGameObject);
+    Update();
 }
 
 float TransformGizmo::GetScaleFactor() const

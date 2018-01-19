@@ -9,6 +9,7 @@
 #include "BangEditor/CIWMeshRenderer.h"
 #include "BangEditor/CIWAudioListener.h"
 #include "BangEditor/CIWDirectionalLight.h"
+#include "BangEditor/CIWPostProcessEffect.h"
 #include "BangEditor/CIWBehaviourContainer.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
@@ -50,6 +51,10 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(Component *com
     else if (cName == "AudioSource")
     {
         ciw = GameObject::Create<CIWAudioSource>();
+    }
+    else if (cName == "PostProcessEffect")
+    {
+        ciw = GameObject::Create<CIWPostProcessEffect>();
     }
     else
     {

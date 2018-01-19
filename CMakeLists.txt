@@ -108,6 +108,7 @@ ${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWDirectionalLight.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWLight.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWMeshRenderer.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWPointLight.cpp
+${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWPostProcessEffect.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWRenderer.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWTransform.cpp
 ${SRC_DIR}/Inspector/FileInspectorWidgets/FileInspectorWidget.cpp

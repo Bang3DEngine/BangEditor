@@ -10,6 +10,14 @@ USING_NAMESPACE_BANG_EDITOR
 
 SelectionGizmosManager::SelectionGizmosManager()
 {
+    TransformGizmo *tg = GameObject::Create<TransformGizmo>();
+    p_transformGizmo = tg;
+    GetTransformGizmo()->SetReferencedGameObject(nullptr);
+
+    ComponentsSelectionGizmo *csg = GameObject::Create<ComponentsSelectionGizmo>();
+    p_componentsSelectionGizmo = csg;
+    GetComponentsSelectionGizmo()->SetReferencedGameObject(nullptr);
+
     Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
 }
 
@@ -19,99 +27,38 @@ SelectionGizmosManager::~SelectionGizmosManager()
 
 void SelectionGizmosManager::Update()
 {
-    if (GetCurrentTransformGizmo())
-    {
-        GetCurrentTransformGizmo()->Update();
-    }
-
-    if (GetCurrentComponentsSelectionGizmo())
-    {
-        GetCurrentComponentsSelectionGizmo()->Update();
-    }
+    GetTransformGizmo()->Update();
+    GetComponentsSelectionGizmo()->Update();
 }
 
 void SelectionGizmosManager::OnBeginRender(Scene *scene)
 {
-    if (GetCurrentTransformGizmo())
-    {
-        GetCurrentTransformGizmo()->SetParent(scene);
-    }
-
-    if (GetCurrentComponentsSelectionGizmo())
-    {
-        GetCurrentComponentsSelectionGizmo()->SetParent(scene);
-    }
+    GetTransformGizmo()->SetParent(scene);
+    GetComponentsSelectionGizmo()->SetParent(scene);
 }
 
 void SelectionGizmosManager::OnEndRender(Scene*)
 {
-    if (GetCurrentTransformGizmo())
-    {
-        GetCurrentTransformGizmo()->SetParent(nullptr);
-    }
-
-    if (GetCurrentComponentsSelectionGizmo())
-    {
-        GetCurrentComponentsSelectionGizmo()->SetParent(nullptr);
-    }
+    GetTransformGizmo()->SetParent(nullptr);
+    GetComponentsSelectionGizmo()->SetParent(nullptr);
 }
 
 void SelectionGizmosManager::OnGameObjectSelected(GameObject *selectedGameObject)
 {
-    // Destroy previous transform gizmo
-    if (GetCurrentTransformGizmo())
-    {
-        GameObject::Destroy( GetCurrentTransformGizmo() );
-        p_currentTransformGizmo = nullptr;
-    }
+    GetTransformGizmo()->SetReferencedGameObject(selectedGameObject);
+    GetComponentsSelectionGizmo()->SetReferencedGameObject(selectedGameObject);
 
-    // Destroy previous components selection gizmo
-    if (GetCurrentComponentsSelectionGizmo())
-    {
-        GameObject::Destroy( GetCurrentComponentsSelectionGizmo() );
-        p_currentComponentsSelectionGizmo = nullptr;
-    }
-
-    if (selectedGameObject)
-    {
-        // Create new transform gizmo
-        ASSERT(!GetCurrentTransformGizmo());
-        TransformGizmo *tg = GameObject::Create<TransformGizmo>();
-        p_currentTransformGizmo = tg;
-        GetCurrentTransformGizmo()->SetReferencedGameObject(selectedGameObject);
-        GetCurrentTransformGizmo()->
-                EventEmitter<IDestroyListener>::RegisterListener(this);
-
-        // Create new components selection gizmo
-        ASSERT(!GetCurrentComponentsSelectionGizmo());
-        ComponentsSelectionGizmo *csg = GameObject::Create<ComponentsSelectionGizmo>();
-        p_currentComponentsSelectionGizmo = csg;
-        GetCurrentComponentsSelectionGizmo()->SetReferencedGameObject(selectedGameObject);
-        GetCurrentComponentsSelectionGizmo()->
-                EventEmitter<IDestroyListener>::RegisterListener(this);
-    }
+    GetTransformGizmo()->SetEnabled( selectedGameObject != nullptr );
+    GetComponentsSelectionGizmo()->SetEnabled( selectedGameObject != nullptr );
 }
 
-void SelectionGizmosManager::OnDestroyed(EventEmitter<IDestroyListener> *object)
+TransformGizmo* SelectionGizmosManager::GetTransformGizmo() const
 {
-    if (GetCurrentTransformGizmo() == object)
-    {
-        p_currentTransformGizmo = nullptr;
-    }
-
-    if (GetCurrentComponentsSelectionGizmo() == object)
-    {
-        p_currentComponentsSelectionGizmo = nullptr;
-    }
+    return p_transformGizmo;
 }
 
-TransformGizmo* SelectionGizmosManager::GetCurrentTransformGizmo() const
+ComponentsSelectionGizmo *SelectionGizmosManager::GetComponentsSelectionGizmo() const
 {
-    return p_currentTransformGizmo;
-}
-
-ComponentsSelectionGizmo *SelectionGizmosManager::GetCurrentComponentsSelectionGizmo() const
-{
-    return p_currentComponentsSelectionGizmo;
+    return p_componentsSelectionGizmo;
 }
 

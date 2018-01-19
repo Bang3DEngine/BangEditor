@@ -57,20 +57,18 @@ UISceneContainer::~UISceneContainer()
 
 void UISceneContainer::RenderIfNeeded()
 {
+    SetScene( GetContainedScene() );
     if ( NeedsToRenderScene( GetContainedScene() ) )
     {
-        GEngine::GetActive()->Render(GetContainedScene(),
-                                     GetSceneCamera(GetContainedScene()));
+        Camera *cam = GetSceneCamera(GetContainedScene());
+        if (cam) { GEngine::GetActive()->Render(GetContainedScene(), cam); }
     }
 }
 
 void UISceneContainer::SetScene(Scene *scene)
 {
-    if (scene != GetContainedScene())
-    {
-        p_scene = scene;
-        p_sceneImage->SetSceneImageCamera( GetSceneCamera(GetContainedScene()) );
-    }
+    p_scene = scene;
+    p_sceneImage->SetSceneImageCamera( GetSceneCamera(GetContainedScene()) );
 }
 
 Scene *UISceneContainer::GetContainedScene() const

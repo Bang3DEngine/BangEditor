@@ -40,6 +40,7 @@ void ComponentsSelectionGizmo::Render(RenderPass rp, bool renderChildren)
 {
     GameObject::Render(rp, renderChildren);
 
+    if (!GetReferencedGameObject()) { return; }
     for (Component *comp : GetReferencedGameObject()->GetComponents())
     {
         if (Camera *cam = DCAST<Camera*>(comp)) { RenderCameraGizmo(cam, rp); }
@@ -49,6 +50,7 @@ void ComponentsSelectionGizmo::Render(RenderPass rp, bool renderChildren)
 void ComponentsSelectionGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
 {
     SelectionGizmo::SetReferencedGameObject(referencedGameObject);
+    Update();
 }
 
 void ComponentsSelectionGizmo::RenderCameraGizmo(Camera *cam, RenderPass rp)

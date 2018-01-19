@@ -55,7 +55,8 @@ TranslateGizmoAxis::~TranslateGizmoAxis()
 void TranslateGizmoAxis::Update()
 {
     TransformGizmoAxis::Update();
-    if (!GetReferencedGameObject()->GetTransform()) { return; }
+    if (!GetReferencedGameObject() ||
+        !GetReferencedGameObject()->GetTransform()) { return; }
 
     if (IsBeingGrabbed())
     {
