@@ -1,12 +1,16 @@
 #include "BangEditor/MenuBar.h"
 
+#include "Bang/Path.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
 #include "Bang/Thread.h"
 #include "Bang/Camera.h"
 #include "Bang/Dialog.h"
 #include "Bang/Random.h"
+#include "Bang/Material.h"
 #include "Bang/UICanvas.h"
+#include "Bang/Behaviour.h"
+#include "Bang/Resources.h"
 #include "Bang/Transform.h"
 #include "Bang/Extensions.h"
 #include "Bang/IFocusable.h"
@@ -29,6 +33,7 @@
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/Project.h"
+#include "BangEditor/Explorer.h"
 #include "BangEditor/MenuItem.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
@@ -60,33 +65,19 @@ MenuBar::MenuBar()
     m_horizontalLayout = AddComponent<UIHorizontalLayout>();
     m_horizontalLayout->SetSpacing(5);
 
-    m_fileItem        = AddItem();
-    m_editItem        = AddItem();
-    m_assetsItem      = AddItem();
-    m_componentsItem  = AddItem();
-    m_gameObjectsItem = AddItem();
-
-    // Top items
-    m_fileItem->GetText()->SetContent("File");
-    m_editItem->GetText()->SetContent("Edit");
-    m_assetsItem->GetText()->SetContent("Assets");
-    m_componentsItem->GetText()->SetContent("Components");
-    m_gameObjectsItem->GetText()->SetContent("GameObjects");
-
     // File
+    m_fileItem = AddItem();
+    m_fileItem->GetText()->SetContent("File");
     MenuItem *newProject = m_fileItem->AddItem("New Project...");
     MenuItem *openProject = m_fileItem->AddItem("Open Project...");
-
     m_fileItem->AddSeparator();
     MenuItem *newScene = m_fileItem->AddItem("New Scene");
     MenuItem *openScene = m_fileItem->AddItem("Open Scene");
     MenuItem *saveScene = m_fileItem->AddItem("Save Scene");
     MenuItem *saveSceneAs = m_fileItem->AddItem("Save Scene As...");
-
     m_fileItem->AddSeparator();
     MenuItem *build = m_fileItem->AddItem("Build");
     MenuItem *buildAndRun = m_fileItem->AddItem("Build and run");
-
     newProject->SetSelectedCallback(MenuBar::OnNewProject);
     openProject->SetSelectedCallback(MenuBar::OnOpenProject);
     newScene->SetSelectedCallback(MenuBar::OnNewScene);
@@ -96,7 +87,19 @@ MenuBar::MenuBar()
     build->SetSelectedCallback(MenuBar::OnBuild);
     buildAndRun->SetSelectedCallback(MenuBar::OnBuildAndRun);
 
+    // Edit
+    m_editItem = AddItem();
+    m_editItem->GetText()->SetContent("Edit");
+
+    // Assets
+    m_assetsItem = AddItem();
+    m_assetsItem->GetText()->SetContent("Assets");
+    MenuItem *createMaterial = m_assetsItem->AddItem("Material");
+    createMaterial->SetSelectedCallback(MenuBar::OnCreateMaterial);
+
     // Components
+    m_componentsItem = AddItem();
+    m_componentsItem->GetText()->SetContent("Components");
     MenuItem *addAudio = m_componentsItem->AddItem("Audio");
     MenuItem *addAudioListener = addAudio->AddItem("Audio Listener");
     MenuItem *addAudioSource = addAudio->AddItem("Audio Source");
@@ -114,7 +117,6 @@ MenuBar::MenuBar()
     MenuItem *addTransforms = m_componentsItem->AddItem("Transform");
     MenuItem *addTransform = addTransforms->AddItem("Transform");
     MenuItem *addRectTransform = addTransforms->AddItem("RectTransform");
-
     addAudioListener->SetSelectedCallback(MenuBar::OnAddAudioListener);
     addAudioSource->SetSelectedCallback(MenuBar::OnAddAudioSource);
     addNewBehaviour->SetSelectedCallback(MenuBar::OnAddNewBehaviour);
@@ -129,20 +131,21 @@ MenuBar::MenuBar()
     addRectTransform->SetSelectedCallback(MenuBar::OnAddRectTransform);
 
     // GameObject
+    m_gameObjectsItem = AddItem();
+    m_gameObjectsItem->GetText()->SetContent("GameObjects");
     MenuItem *primitiveGameObjectItem = m_gameObjectsItem->AddItem("Primitives");
     MenuItem *createCone   = primitiveGameObjectItem->AddItem("Cone");
     MenuItem *createCube   = primitiveGameObjectItem->AddItem("Cube");
     MenuItem *createSphere = primitiveGameObjectItem->AddItem("Sphere");
     MenuItem *createPlane  = primitiveGameObjectItem->AddItem("Plane");
-
     MenuItem *uiGameObjectItem = m_gameObjectsItem->AddItem("UI");
     MenuItem *createMeh   = uiGameObjectItem->AddItem("Meh");
-
     createCone->SetSelectedCallback(MenuBar::OnCreateCone);
     createCube->SetSelectedCallback(MenuBar::OnCreateCube);
     createPlane->SetSelectedCallback(MenuBar::OnCreatePlane);
     createSphere->SetSelectedCallback(MenuBar::OnCreateSphere);
 
+    // Shortcuts
     RegisterShortcut( Shortcut(Key::LCtrl,              Key::S, "SaveScene")   );
     RegisterShortcut( Shortcut(Key::LCtrl, Key::LShift, Key::S, "SaveSceneAs") );
     RegisterShortcut( Shortcut(Key::LCtrl,              Key::O, "OpenScene")   );
@@ -300,6 +303,31 @@ void MenuBar::OnBuildAndRun(MenuItem*)
     Thread *thread = new Thread();
     thread->SetRunnable(runnable);
     thread->Start();
+}
+
+
+void AfterCreateAssetFile(const Path &createdAssetPath)
+{
+    Explorer::GetInstance()->CheckFileChanges();
+    Explorer::GetInstance()->SelectPath(createdAssetPath);
+}
+
+template <class T>
+std::pair<RH<T>, Path>
+OnCreateAssetFile(const String &name, const String &extension)
+{
+    Path currentPath = Explorer::GetInstance()->GetCurrentPath();
+    Path assetPath = currentPath.Append("New_" + name)
+                    .AppendExtension(extension).GetDuplicatePath();
+    RH<T> asset = Resources::Create<T>();
+    asset.Get()->ExportXMLToFile(assetPath);
+    AfterCreateAssetFile(assetPath);
+    return std::make_pair(asset, assetPath);
+}
+
+void MenuBar::OnCreateMaterial(MenuItem*)
+{
+    OnCreateAssetFile<Material>("Material", Extensions::GetMaterialExtension());
 }
 
 template <class T>

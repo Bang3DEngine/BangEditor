@@ -142,6 +142,11 @@ void Explorer::Update()
     m_fileTracker->Update();
 }
 
+void Explorer::CheckFileChanges()
+{
+    m_fileTracker->CheckForChanges();
+}
+
 void Explorer::SelectPath(const Path &path)
 {
     for (ExplorerItem *explorerItem : p_items)

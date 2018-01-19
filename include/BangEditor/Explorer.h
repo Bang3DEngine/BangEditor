@@ -34,6 +34,7 @@ public:
 
     void Update() override;
 
+    void CheckFileChanges();
     void SelectPath(const Path &path);
     void SetRootPath(const Path &rootPath);
     void SetCurrentPath(const Path &path);

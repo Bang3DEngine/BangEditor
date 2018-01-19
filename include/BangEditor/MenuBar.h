@@ -61,6 +61,8 @@ private:
     static void OnBuild       (MenuItem *item);
     static void OnBuildAndRun (MenuItem *item);
 
+    static void OnCreateMaterial (MenuItem *item);
+
     static void OnAddAudioListener     (MenuItem *item);
     static void OnAddAudioSource       (MenuItem *item);
     static void OnAddNewBehaviour      (MenuItem *item);
