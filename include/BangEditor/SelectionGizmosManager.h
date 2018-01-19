@@ -18,6 +18,11 @@ public:
     SelectionGizmosManager();
 	virtual ~SelectionGizmosManager();
 
+    void Update();
+
+    void OnBeginRender(Scene *scene);
+    void OnEndRender(Scene *scene);
+
     // IEditorListener
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
 

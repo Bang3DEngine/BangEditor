@@ -18,7 +18,6 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class EditorSettings;
-FORWARD class SelectionGizmosManager;
 
 enum class EditorPlayState
 {
@@ -55,7 +54,6 @@ private:
 
     GameObject *p_selectedGameObject = nullptr;
     EditorSettings *m_editorSettings = nullptr;
-    SelectionGizmosManager *p_selectionGizmosManager = nullptr;
 
     Editor();
     virtual ~Editor();
@@ -65,7 +63,6 @@ private:
 
     static void OnPathSelected(const Path &path);
 
-    SelectionGizmosManager *GetSelectionGizmosManager() const;
     EditorSettings* GetEditorSettings() const;
 
     // IDestroyListener

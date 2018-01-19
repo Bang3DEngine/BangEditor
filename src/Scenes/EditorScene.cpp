@@ -36,6 +36,7 @@
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/UISceneContainer.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/EditSceneGameObjects.h"
 #include "BangEditor/UISceneEditContainer.h"
 #include "BangEditor/UIScenePlayContainer.h"
 #include "BangEditor/EditorBehaviourManager.h"
@@ -67,6 +68,8 @@ void EditorScene::Init()
     m_menuBar = GameObject::Create<MenuBar>();
     m_menuBar->GetTransform()->TranslateLocal( Vector3(0, 0, -0.1) );
     m_menuBar->SetParent(m_mainEditorVL);
+
+    m_editSceneGameObjects = new EditSceneGameObjects();
 
     GameObject *hlGo = GameObjectFactory::CreateUIGameObject();
     hlGo->AddComponent<UIHorizontalLayout>();
@@ -123,6 +126,7 @@ EditorScene::~EditorScene()
     delete m_scenePlayer;
     delete m_projectManager;
     delete m_behaviourManager;
+    delete m_editSceneGameObjects;
 }
 
 void EditorScene::Update()
@@ -142,13 +146,7 @@ void EditorScene::Update()
         {
             openScene->Update();
         }
-        else
-        {
-            GameObject *editorCameraGo =
-                    EditorCamera::GetEditorCameraGameObject(GetOpenScene());
-            editorCameraGo->Update();
-        }
-
+        m_editSceneGameObjects->Update();
         GetSceneEditContainer()->HandleSelection();
 
         UnBindOpenScene();
@@ -190,10 +188,18 @@ void EditorScene::RenderOpenScene()
     if (openScene)
     {
         BindOpenScene();
-        Camera *editorCamera = EditorCamera::GetEditorCamera(GetOpenScene());
+
+        Camera *editorCamera = EditorCamera::GetInstance()->GetCamera();
+        if (editorCamera)
+        {
+            m_editSceneGameObjects->OnBeginRender(openScene);
+            GEngine::GetActive()->Render(openScene, editorCamera);
+            m_editSceneGameObjects->OnEndRender(openScene);
+        }
+
         Camera *sceneCamera = GetOpenScene()->GetCamera();
-        if (editorCamera) { GEngine::GetActive()->Render(openScene, editorCamera); }
         if (sceneCamera) { GEngine::GetActive()->Render(openScene, sceneCamera); }
+
         UnBindOpenScene();
     }
 }
@@ -230,10 +236,6 @@ void EditorScene::SetOpenScene(Scene *openScene, bool destroyPreviousScene)
     {
         EventEmitter<IEditorOpenSceneListener>::PropagateToListeners(
                     &IEditorOpenSceneListener::OnOpenScene, GetOpenScene());
-
-        // Add editor camera
-        EditorCamera *edCamera = GameObject::Create<EditorCamera>();
-        edCamera->SetParent(openScene);
 
         GetOpenScene()->SetFirstFoundCamera();
         GetOpenScene()->InvalidateCanvas();
@@ -311,6 +313,11 @@ UIScenePlayContainer *EditorScene::GetScenePlayContainer() const
 EditorBehaviourManager *EditorScene::GetBehaviourManager() const
 {
     return m_behaviourManager;
+}
+
+EditSceneGameObjects *EditorScene::GetEditSceneGameObjects() const
+{
+    return m_editSceneGameObjects;
 }
 
 Editor *EditorScene::GetEditor() const { return m_editor; }

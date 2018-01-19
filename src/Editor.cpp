@@ -6,7 +6,6 @@
 #include "BangEditor/EditorSettings.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/NotSelectableInEditor.h"
-#include "BangEditor/SelectionGizmosManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -18,13 +17,11 @@ Editor::Editor()
 Editor::~Editor()
 {
     delete m_editorSettings;
-    delete p_selectionGizmosManager;
 }
 
 void Editor::Init()
 {
     m_editorSettings = new EditorSettings();
-    p_selectionGizmosManager = new SelectionGizmosManager();
     GetEditorSettings()->Init();
 }
 
@@ -108,11 +105,6 @@ void Editor::OnPathSelected(const Path &path)
 
     ed->EventEmitter<IEditorListener>::PropagateToListeners(
                 &IEditorListener::OnExplorerPathSelected, path);
-}
-
-SelectionGizmosManager *Editor::GetSelectionGizmosManager() const
-{
-    return p_selectionGizmosManager;
 }
 
 EditorSettings *Editor::GetEditorSettings() const

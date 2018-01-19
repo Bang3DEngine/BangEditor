@@ -33,7 +33,7 @@ Camera* UIScenePlayContainer::GetSceneCamera(Scene *scene)
     List<Camera*> cameras = scene->GetComponentsInChildren<Camera>(true);
     for (Camera *cam : cameras)
     {
-        if (!EditorCamera::IsEditorCamera(cam))
+        if (cam != EditorCamera::GetInstance()->GetCamera())
         {
             selectedCamera = cam;
             break;

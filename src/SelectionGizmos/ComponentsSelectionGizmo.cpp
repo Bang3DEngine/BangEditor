@@ -19,6 +19,8 @@ USING_NAMESPACE_BANG_EDITOR
 
 ComponentsSelectionGizmo::ComponentsSelectionGizmo()
 {
+    SetName("ComponentsSelectionGizmo");
+
     AddComponent<HideInHierarchy>();
     AddComponent<NotSelectableInEditor>();
     GetHideFlags().SetOn(HideFlag::DontSerialize);

@@ -21,6 +21,9 @@ class EditorCamera : public GameObject
     GAMEOBJECT_EDITOR(EditorCamera);
 
 public:
+    EditorCamera();
+    virtual ~EditorCamera();
+
     // GameObject
     void Start() override;
     void Update() override;
@@ -29,11 +32,9 @@ public:
     void SwitchProjectionModeTo(bool mode3D);
     void StartLookAt(GameObject *lookAtFocus);
 
-    static bool IsEditorCamera(Camera *cam);
-    static Camera *GetEditorCamera(Scene *scene);
-    static GameObject *GetEditorCameraGameObject(Scene *scene);
+    Camera *GetCamera() const;
 
-    Camera *GetCamera();
+    static EditorCamera *GetInstance();
 
 private:
     static float InitialFOVDegrees;
@@ -67,9 +68,6 @@ private:
     GameObject *p_currentFocus = nullptr;
     float m_lookAtRotSpeed     = 3.0f;
     float m_lookAtMoveSpeed    = 4.0f;
-
-    EditorCamera();
-    virtual ~EditorCamera();
 
     void AdjustSpeeds();
     void UpdateRotationVariables();

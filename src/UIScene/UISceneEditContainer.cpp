@@ -95,7 +95,7 @@ void UISceneEditContainer::HandleSelection()
         bool isOverSceneCont = canvas->IsMouseOver(this, true);
         if (isOverSceneCont)
         {
-            Camera *cam = EditorCamera::GetEditorCamera( GetContainedScene() );
+            Camera *cam = EditorCamera::GetInstance()->GetCamera();
             GameObject *selectedGameObject = Selection::GetOveredGameObject(cam);
             if (selectedGameObject)
             {
@@ -108,7 +108,7 @@ void UISceneEditContainer::HandleSelection()
 
 Camera* UISceneEditContainer::GetSceneCamera(Scene *scene)
 {
-    Camera *editorCamera = EditorCamera::GetEditorCamera(scene);
+    Camera *editorCamera = EditorCamera::GetInstance()->GetCamera();
     if (editorCamera) { return editorCamera; }
     return scene->GetCamera();
 }

@@ -15,6 +15,8 @@ USING_NAMESPACE_BANG_EDITOR
 
 TransformGizmo::TransformGizmo()
 {
+    SetName("TransformGizmo");
+
     AddComponent<Transform>();
     AddComponent<HideInHierarchy>();
     AddComponent<NotSelectableInEditor>();

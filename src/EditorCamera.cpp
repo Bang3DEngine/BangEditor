@@ -14,6 +14,7 @@
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/HideInHierarchy.h"
+#include "BangEditor/EditSceneGameObjects.h"
 #include "BangEditor/NotSelectableInEditor.h"
 
 USING_NAMESPACE_BANG
@@ -280,7 +281,7 @@ void EditorCamera::AlignViewWithGameObject(GameObject *selected)
     UpdateRotationVariables();
 }
 
-Camera *EditorCamera::GetCamera()
+Camera *EditorCamera::GetCamera() const
 {
     return p_camContainer->GetComponent<Camera>();
 }
@@ -303,25 +304,7 @@ void EditorCamera::SwitchProjectionModeTo(bool mode3D)
     }
 }
 
-bool EditorCamera::IsEditorCamera(Camera *cam)
+EditorCamera *EditorCamera::GetInstance()
 {
-    GameObject *camGo = cam->GetGameObject();
-    return (camGo && camGo->GetParent() &&
-            DCAST<EditorCamera*>(camGo->GetParent()));
-}
-
-Camera *EditorCamera::GetEditorCamera(Scene *scene)
-{
-    List<Camera*> sceneCameras = scene->GetComponentsInChildren<Camera>(true);
-    for (Camera *cam : sceneCameras)
-    {
-        if (EditorCamera::IsEditorCamera(cam)) { return cam; }
-    }
-    return nullptr;
-}
-
-GameObject *EditorCamera::GetEditorCameraGameObject(Scene *scene)
-{
-    Camera *cam = GetEditorCamera(scene);
-    return cam ? cam->GetGameObject()->GetParent() : nullptr;
+    return EditSceneGameObjects::GetInstance()->GetEditorCamera();
 }

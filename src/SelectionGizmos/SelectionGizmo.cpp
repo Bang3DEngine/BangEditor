@@ -44,8 +44,7 @@ float SelectionGizmo::GetScaleFactor() const
 
 Camera *SelectionGizmo::GetEditorCamera() const
 {
-    GameObject *refGo = GetReferencedGameObject();
-    Camera *editorCamera = EditorCamera::GetEditorCamera( refGo->GetScene() );
+    Camera *editorCamera = EditorCamera::GetInstance()->GetCamera();
     return editorCamera;
 }
 

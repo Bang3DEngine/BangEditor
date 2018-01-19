@@ -17,6 +17,45 @@ SelectionGizmosManager::~SelectionGizmosManager()
 {
 }
 
+void SelectionGizmosManager::Update()
+{
+    if (GetCurrentTransformGizmo())
+    {
+        GetCurrentTransformGizmo()->Update();
+    }
+
+    if (GetCurrentComponentsSelectionGizmo())
+    {
+        GetCurrentComponentsSelectionGizmo()->Update();
+    }
+}
+
+void SelectionGizmosManager::OnBeginRender(Scene *scene)
+{
+    if (GetCurrentTransformGizmo())
+    {
+        GetCurrentTransformGizmo()->SetParent(scene);
+    }
+
+    if (GetCurrentComponentsSelectionGizmo())
+    {
+        GetCurrentComponentsSelectionGizmo()->SetParent(scene);
+    }
+}
+
+void SelectionGizmosManager::OnEndRender(Scene*)
+{
+    if (GetCurrentTransformGizmo())
+    {
+        GetCurrentTransformGizmo()->SetParent(nullptr);
+    }
+
+    if (GetCurrentComponentsSelectionGizmo())
+    {
+        GetCurrentComponentsSelectionGizmo()->SetParent(nullptr);
+    }
+}
+
 void SelectionGizmosManager::OnGameObjectSelected(GameObject *selectedGameObject)
 {
     // Destroy previous transform gizmo
@@ -35,8 +74,6 @@ void SelectionGizmosManager::OnGameObjectSelected(GameObject *selectedGameObject
 
     if (selectedGameObject)
     {
-        Scene *openScene = EditorSceneManager::GetOpenScene();
-
         // Create new transform gizmo
         ASSERT(!GetCurrentTransformGizmo());
         TransformGizmo *tg = GameObject::Create<TransformGizmo>();
@@ -44,7 +81,6 @@ void SelectionGizmosManager::OnGameObjectSelected(GameObject *selectedGameObject
         GetCurrentTransformGizmo()->SetReferencedGameObject(selectedGameObject);
         GetCurrentTransformGizmo()->
                 EventEmitter<IDestroyListener>::RegisterListener(this);
-        GetCurrentTransformGizmo()->SetParent(openScene);
 
         // Create new components selection gizmo
         ASSERT(!GetCurrentComponentsSelectionGizmo());
@@ -53,7 +89,6 @@ void SelectionGizmosManager::OnGameObjectSelected(GameObject *selectedGameObject
         GetCurrentComponentsSelectionGizmo()->SetReferencedGameObject(selectedGameObject);
         GetCurrentComponentsSelectionGizmo()->
                 EventEmitter<IDestroyListener>::RegisterListener(this);
-        GetCurrentComponentsSelectionGizmo()->SetParent(openScene);
     }
 }
 
