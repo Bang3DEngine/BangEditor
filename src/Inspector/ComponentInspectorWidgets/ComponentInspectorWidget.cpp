@@ -5,9 +5,12 @@
 #include "Bang/UICheckBox.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
+
+#include "BangEditor/EditorIconManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -45,6 +48,7 @@ void ComponentInspectorWidget::SetComponent(Component *comp)
 
     p_component = comp;
     SetTitle(GetComponent()->GetClassName());
+    p_icon->SetImageTexture( GetComponentIconTexture() );
 }
 
 Component *ComponentInspectorWidget::GetComponent() const
@@ -62,6 +66,12 @@ GameObject *ComponentInspectorWidget::CreateTitleGameObject()
     GameObject *titleHLGo = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *titleHL = titleHLGo->AddComponent<UIHorizontalLayout>();
     titleHL->SetSpacing(5);
+
+    p_icon = GameObjectFactory::CreateUIImage(Color::White);
+    GameObject *iconGo = p_icon->GetGameObject();
+    UILayoutElement *iconLE = iconGo->AddComponent<UILayoutElement>();
+    iconLE->SetPreferredSize( Vector2i(16) );
+    p_icon->SetTint(Color::DarkGray);
 
     GameObject *titleTextGo = GameObjectFactory::CreateUIGameObject();
     UITextRenderer *titleText = titleTextGo->AddComponent<UITextRenderer>();
@@ -84,11 +94,17 @@ GameObject *ComponentInspectorWidget::CreateTitleGameObject()
     p_enabledCheckBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
     enabledCheckBoxGo->SetEnabled( MustShowEnabledCheckbox() );
 
+    iconGo->SetParent(titleHLGo);
     titleTextGo->SetParent(titleHLGo);
     enabledTextGo->SetParent(titleHLGo);
     enabledCheckBoxGo->SetParent(titleHLGo);
 
     return titleHLGo;
+}
+
+bool ComponentInspectorWidget::ShowRemoveInMenu() const
+{
+    return true;
 }
 
 void ComponentInspectorWidget::OnValueChanged(Object *object)
@@ -99,18 +115,31 @@ void ComponentInspectorWidget::OnValueChanged(Object *object)
     }
 }
 
+Texture2D *ComponentInspectorWidget::GetComponentIconTexture() const
+{
+    if (GetComponent())
+    {
+        String componentName = GetComponent()->GetClassName();
+        return EditorIconManager::GetComponentIcon(componentName).Get();
+    }
+    return EditorIconManager::GetCubeIcon().Get();
+}
+
 void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
 {
     menuRootItem->SetFontSize(10);
 
-    MenuItem *remove = menuRootItem->AddItem("Remove");
-    remove->SetSelectedCallback([this](MenuItem*)
+    if (ShowRemoveInMenu())
     {
-        GameObject *go = GetComponent()->GetGameObject();
-        go->RemoveComponent(GetComponent());
-    });
+        MenuItem *remove = menuRootItem->AddItem("Remove");
+        remove->SetSelectedCallback([this](MenuItem*)
+        {
+            GameObject *go = GetComponent()->GetGameObject();
+            go->RemoveComponent(GetComponent());
+        });
+        menuRootItem->AddSeparator();
+    }
 
-    menuRootItem->AddSeparator();
     MenuItem *moveUp = menuRootItem->AddItem("Move Up");
     moveUp->SetSelectedCallback([this](MenuItem*)
     {

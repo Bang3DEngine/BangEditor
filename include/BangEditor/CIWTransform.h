@@ -23,6 +23,9 @@ public:
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
 
+protected:
+    virtual bool ShowRemoveInMenu() const override;
+
 private:
     UIInputVector *p_posIV   = nullptr;
     UIInputVector *p_rotIV   = nullptr;

@@ -60,6 +60,11 @@ void CIWTransform::UpdateFromReference()
     }
 }
 
+bool CIWTransform::ShowRemoveInMenu() const
+{
+    return false;
+}
+
 Transform *CIWTransform::GetTransform() const
 {
     return SCAST<Transform*>( GetComponent() );

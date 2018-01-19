@@ -8,6 +8,7 @@
 #include "BangEditor/InspectorWidget.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Texture2D;
 FORWARD class UICheckBox;
 FORWARD NAMESPACE_BANG_END
 
@@ -35,12 +36,15 @@ protected:
     virtual void SetTitle(const String& title) override;
     virtual GameObject *CreateTitleGameObject() override;
 
-    virtual void OnValueChanged(Object *object);
+    virtual bool ShowRemoveInMenu() const;
+    virtual void OnValueChanged(Object *object) override;
+    virtual Texture2D* GetComponentIconTexture() const;
 
 private:
     Component *p_component = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
 
+    UIImageRenderer *p_icon = nullptr;
     UITextRenderer *p_titleText = nullptr;
     UICheckBox *p_enabledCheckBox = nullptr;
 

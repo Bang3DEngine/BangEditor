@@ -89,7 +89,6 @@ void ScenePlayer::StepFrame()
         Editor::SetEditorPlayState(EditorPlayState::StepFrame);
         ScenePlayer *sp = ScenePlayer::GetInstance();
         sp->m_pauseInNextFrame = true;
-        Time::SetDeltaTime(0.5f);
     }
 }
 

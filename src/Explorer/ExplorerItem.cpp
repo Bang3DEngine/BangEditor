@@ -5,6 +5,7 @@
 #include "Bang/Dialog.h"
 #include "Bang/UILabel.h"
 #include "Bang/UICanvas.h"
+#include "Bang/Extensions.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
@@ -86,7 +87,7 @@ void ExplorerItem::SetPath(const Path &path)
     if (GetPath() != path)
     {
         m_path = path;
-        RH<Texture2D> iconTex = EditorIconManager::GetIcon(GetPath());
+        RH<Texture2D> iconTex = EditorIconManager::GetIconForPath(GetPath());
         p_icon->SetImageTexture(iconTex.Get());
         p_icon->SetTint(Color::White);
         p_label->GetText()->SetContent(GetPath().GetNameExt());
