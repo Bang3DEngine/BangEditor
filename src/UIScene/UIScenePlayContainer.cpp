@@ -29,17 +29,7 @@ void UIScenePlayContainer::Update()
 
 Camera* UIScenePlayContainer::GetSceneCamera(Scene *scene)
 {
-    Camera *selectedCamera = nullptr;
-    List<Camera*> cameras = scene->GetComponentsInChildren<Camera>(true);
-    for (Camera *cam : cameras)
-    {
-        if (cam != EditorCamera::GetInstance()->GetCamera())
-        {
-            selectedCamera = cam;
-            break;
-        }
-    }
-    return selectedCamera;
+    return scene->GetCamera();
 }
 
 void UIScenePlayContainer::OnPlayStateChanged(EditorPlayState, EditorPlayState)
@@ -48,4 +38,9 @@ void UIScenePlayContainer::OnPlayStateChanged(EditorPlayState, EditorPlayState)
 
 void UIScenePlayContainer::OnSceneOpen(Scene*, const Path&)
 {
+}
+
+bool UIScenePlayContainer::NeedsToRenderScene(Scene *scene)
+{
+    return IsVisible();
 }

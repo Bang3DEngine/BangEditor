@@ -33,6 +33,7 @@ private:
     UIImageRenderer *p_cameraPreviewImg = nullptr;
 
     Camera* GetSceneCamera(Scene *scene) override;
+    bool NeedsToRenderScene(Scene *scene) override;
 
     // IEditorListener
     void OnPlayStateChanged(EditorPlayState previousPlayState,

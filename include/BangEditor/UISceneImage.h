@@ -15,8 +15,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UISceneDebugStats;
 
-class UISceneImage : public GameObject,
-                     public IEditorListener
+class UISceneImage : public GameObject
 {
     GAMEOBJECT_EDITOR(UISceneImage);
 
@@ -32,22 +31,17 @@ public:
     void SetRenderMode(RenderMode renderMode);
     void SetShowDebugStats(bool showDebugStats);
 
-    Rect GetImageScreenRectNDC() const;
     RenderMode GetRenderMode() const;
 
 private:
     class UISceneImageRenderer : public UIImageRenderer
     { public:  void OnRender() override; };
 
-    Camera *p_selectedCamera = nullptr;
+    Camera *p_currentCamera = nullptr;
     RenderMode m_renderMode = RenderMode::Color;
 
     UISceneImageRenderer *p_sceneImg = nullptr;
-
     UISceneDebugStats *p_sceneDebugStats = nullptr;
-
-    // IEditorListener
-    void OnGameObjectSelected(GameObject *selectedGameObject) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

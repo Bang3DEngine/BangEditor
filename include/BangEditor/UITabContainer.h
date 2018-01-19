@@ -36,11 +36,14 @@ private:
     Map<UITabHeader*, GameObject*> m_headerToChildren;
 
     GameObject *p_headersBar = nullptr;
+    GameObject *p_hiddenTabsContainer = nullptr;
     GameObject *p_currentTabContainer = nullptr;
+    GameObject *p_hiddenTabsFocusBlocker = nullptr;
 
     // ITabHeaderListener
     void OnTabHeaderClicked(UITabHeader *header) override;
 
+    GameObject* GetHiddenTabsContainer() const;
     GameObject* GetCurrentTabContainer() const;
 
 	UITabContainer();

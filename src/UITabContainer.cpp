@@ -1,8 +1,11 @@
 #include "BangEditor/UITabContainer.h"
 
+#include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/UILayoutIgnorer.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
@@ -27,18 +30,33 @@ UITabContainer::UITabContainer()
     headerBarLE->SetMinHeight(15);
     headerBarLE->SetLayoutPriority(2);
 
+    GameObject *botPart = GameObjectFactory::CreateUIGameObject();
+    UILayoutElement *botPartLE = botPart->AddComponent<UILayoutElement>();
+    botPartLE->SetFlexibleSize( Vector2::One );
+    botPart->AddComponent<UIVerticalLayout>();
+
     p_currentTabContainer = GameObjectFactory::CreateUIGameObject();
-
     UILayoutElement *containerLE =
-                    p_currentTabContainer->AddComponent<UILayoutElement>();
+                    GetCurrentTabContainer()->AddComponent<UILayoutElement>();
     containerLE->SetFlexibleSize(Vector2::One);
+    GetCurrentTabContainer()->AddComponent<UIHorizontalLayout>();
 
-    p_currentTabContainer->AddComponent<UIHorizontalLayout>();
+    p_hiddenTabsFocusBlocker = GameObjectFactory::CreateUIGameObject();
+    p_hiddenTabsFocusBlocker->AddComponent<UIFocusable>();
+    UIImageRenderer *bg = p_hiddenTabsFocusBlocker->AddComponent<UIImageRenderer>();
+    bg->SetTint(Color::Zero);
+
+    p_hiddenTabsContainer = GameObjectFactory::CreateUIGameObject();
+    GetHiddenTabsContainer()-> AddComponent<UIHorizontalLayout>();
+    GetHiddenTabsContainer()-> AddComponent<UILayoutIgnorer>();
 
     p_headersBar->SetParent(this);
     // GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Flexible,
     //                                       1, 1.0f)->SetParent(this);
-    p_currentTabContainer->SetParent(this);
+    botPart->SetParent(this);
+    GetHiddenTabsContainer()->SetParent(botPart); // Behind
+    p_hiddenTabsFocusBlocker->SetParent(botPart); // Between
+    GetCurrentTabContainer()->SetParent(botPart); // Front
 }
 
 UITabContainer::~UITabContainer()
@@ -61,7 +79,7 @@ void UITabContainer::AddTab(const String &title, GameObject *tabbedChild)
 
         tabHeader->EventEmitter<ITabHeaderListener>::RegisterListener(this);
 
-        tabbedChild->SetEnabled(false);
+        tabbedChild->SetParent( GetHiddenTabsContainer() );
         if (!GetCurrentTabChild()) { SetCurrentTabChild(tabbedChild); }
     }
 }
@@ -116,8 +134,13 @@ void UITabContainer::SetCurrentTabIndex(int index)
         {
             UITabHeader *header = m_childrenToHeader.Get(tabbedChild);
 
-            header->SetInForeground( i == index );
-            tabbedChild->SetEnabled( i == index );
+            bool front = (i == index);
+            GameObject *destContainer = front ? GetCurrentTabContainer() :
+                                                GetHiddenTabsContainer();
+
+            header->SetInForeground(front);
+            tabbedChild->SetVisible(front);
+            tabbedChild->SetParent(destContainer);
 
             ++i;
         }
@@ -142,6 +165,11 @@ void UITabContainer::OnTabHeaderClicked(UITabHeader *header)
         GameObject *tabbedChild = m_headerToChildren.Get(header);
         SetCurrentTabChild(tabbedChild);
     }
+}
+
+GameObject *UITabContainer::GetHiddenTabsContainer() const
+{
+    return p_hiddenTabsContainer;
 }
 
 GameObject *UITabContainer::GetCurrentTabContainer() const

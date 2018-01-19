@@ -30,7 +30,7 @@ USING_NAMESPACE_BANG_EDITOR
 Explorer::Explorer() : EditorUITab("Explorer")
 {
     m_fileTracker = new FileTracker();
-    m_fileTracker->SetCheckFrequencySeconds(1.0f);
+    m_fileTracker->SetCheckFrequencySeconds(3.0f);
     m_fileTracker->RegisterListener(this);
 
     UILayoutElement *le = GetLayoutElement();

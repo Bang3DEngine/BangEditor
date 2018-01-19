@@ -13,7 +13,7 @@ BehaviourTracker::BehaviourTracker()
     ProjectManager::GetInstance()->RegisterListener(this);
     m_fileTracker.EventEmitter<IFileTrackerListener>::RegisterListener(this);
 
-    m_fileTracker.SetCheckFrequencySeconds(2.0);
+    m_fileTracker.SetCheckFrequencySeconds(4.0);
 }
 
 BehaviourTracker::~BehaviourTracker()

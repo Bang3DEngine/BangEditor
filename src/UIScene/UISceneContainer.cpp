@@ -4,6 +4,7 @@
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
 #include "Bang/GBuffer.h"
+#include "Bang/GEngine.h"
 #include "Bang/UIButton.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UICheckBox.h"
@@ -54,10 +55,22 @@ UISceneContainer::~UISceneContainer()
 {
 }
 
+void UISceneContainer::RenderIfNeeded()
+{
+    if ( NeedsToRenderScene( GetContainedScene() ) )
+    {
+        GEngine::GetActive()->Render(GetContainedScene(),
+                                     GetSceneCamera(GetContainedScene()));
+    }
+}
+
 void UISceneContainer::SetScene(Scene *scene)
 {
-    p_scene = scene;
-    p_sceneImage->SetSceneImageCamera( GetSceneCamera(GetContainedScene()) );
+    if (scene != GetContainedScene())
+    {
+        p_scene = scene;
+        p_sceneImage->SetSceneImageCamera( GetSceneCamera(GetContainedScene()) );
+    }
 }
 
 Scene *UISceneContainer::GetContainedScene() const

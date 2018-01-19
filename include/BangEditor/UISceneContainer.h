@@ -23,6 +23,8 @@ public:
     UISceneContainer();
     virtual ~UISceneContainer();
 
+    void RenderIfNeeded();
+
     void SetScene(Scene *scene);
 
     Scene *GetContainedScene() const;
@@ -38,6 +40,7 @@ private:
     UISceneImage *p_sceneImage = nullptr;
 
     virtual Camera* GetSceneCamera(Scene *scene) = 0;
+    virtual bool NeedsToRenderScene(Scene *scene) = 0;
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;

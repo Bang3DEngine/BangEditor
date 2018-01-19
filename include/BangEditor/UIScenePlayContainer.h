@@ -25,6 +25,7 @@ public:
 
 private:
     Camera* GetSceneCamera(Scene *scene) override;
+    bool NeedsToRenderScene(Scene *scene) override;
 
     // IEditorListener
     void OnPlayStateChanged(EditorPlayState previousPlayState,

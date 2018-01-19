@@ -9,6 +9,7 @@
 #include "Bang/Selection.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/UILayoutIgnorer.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/SelectionFramebuffer.h"
 
@@ -30,9 +31,7 @@ UISceneEditContainer::UISceneEditContainer()
     p_cameraPreviewImg->SetUvMultiply(Vector2(1, -1));
     p_cameraPreviewImg->SetVisible(false);
 
-    cameraPreviewGo->GetRectTransform()->SetAnchors( Vector2(0.5f, 0.5f),
-                                                     Vector2(1.0f, 1.0f) );
-
+    cameraPreviewGo->AddComponent<UILayoutIgnorer>();
     cameraPreviewGo->SetParent(this);
 }
 
@@ -69,10 +68,10 @@ void UISceneEditContainer::Update()
 
         previewRectPx.SetMin(sceneContainerRect.GetMin());
         previewRectPx.SetMax(previewRectPx.GetMin() + Vector2i(previewRectSize));
-        gbuffer->Resize(previewRectPx.GetWidth(), previewRectPx.GetHeight());
 
+        const Vector2i marginsBotLeft = Vector2i(5);
         p_cameraPreviewImg->GetGameObject()->GetRectTransform()->SetAnchors(
-           rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMin()),
+           rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMin() + marginsBotLeft),
            rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMax()));
 
         gbuffer->Resize(previewRectPx.GetWidth(), previewRectPx.GetHeight());
@@ -111,6 +110,11 @@ Camera* UISceneEditContainer::GetSceneCamera(Scene *scene)
     Camera *editorCamera = EditorCamera::GetInstance()->GetCamera();
     if (editorCamera) { return editorCamera; }
     return scene->GetCamera();
+}
+
+bool UISceneEditContainer::NeedsToRenderScene(Scene *scene)
+{
+    return IsVisible();
 }
 
 void UISceneEditContainer::OnPlayStateChanged(EditorPlayState, EditorPlayState)

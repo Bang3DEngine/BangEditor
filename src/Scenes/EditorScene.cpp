@@ -146,7 +146,7 @@ void EditorScene::Update()
         {
             openScene->Update();
         }
-        m_editSceneGameObjects->Update();
+        GetEditSceneGameObjects()->Update();
         GetSceneEditContainer()->HandleSelection();
 
         UnBindOpenScene();
@@ -189,16 +189,11 @@ void EditorScene::RenderOpenScene()
     {
         BindOpenScene();
 
-        Camera *editorCamera = EditorCamera::GetInstance()->GetCamera();
-        if (editorCamera)
-        {
-            m_editSceneGameObjects->OnBeginRender(openScene);
-            GEngine::GetActive()->Render(openScene, editorCamera);
-            m_editSceneGameObjects->OnEndRender(openScene);
-        }
+        GetEditSceneGameObjects()->OnBeginRender(openScene);
+        GetSceneEditContainer()->RenderIfNeeded();
+        GetEditSceneGameObjects()->OnEndRender(openScene);
 
-        Camera *sceneCamera = GetOpenScene()->GetCamera();
-        if (sceneCamera) { GEngine::GetActive()->Render(openScene, sceneCamera); }
+        GetScenePlayContainer()->RenderIfNeeded();
 
         UnBindOpenScene();
     }

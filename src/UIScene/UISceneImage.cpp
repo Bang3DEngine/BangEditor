@@ -45,7 +45,6 @@ UISceneImage::UISceneImage()
     p_sceneDebugStats->SetParent(this);
 
     SetShowDebugStats(false);
-    Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
 }
 
 UISceneImage::~UISceneImage()
@@ -58,43 +57,39 @@ void UISceneImage::Update()
     GameObject::Update();
 }
 
-void UISceneImage::SetSceneImageCamera(Camera *cam)
+void UISceneImage::SetSceneImageCamera(Camera *sceneCam)
 {
     Texture2D *camTexture = nullptr;
-    if (GetScene())
+    p_currentCamera = sceneCam;
+    if (sceneCam)
     {
-        Camera *sceneCam = cam;
-        if (sceneCam)
+        GBuffer *gbuffer =  sceneCam->GetGBuffer();
+        switch (GetRenderMode())
         {
-            GBuffer *gbuffer =  sceneCam->GetGBuffer();
-            switch (GetRenderMode())
+            case RenderMode::Color:
+            camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttColor);
+            break;
+
+            case RenderMode::Normal:
+            camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttNormal);
+            break;
+
+            case RenderMode::Diffuse:
+            camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttDiffuse);
+            break;
+
+            case RenderMode::Depth:
+            camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttDepthStencil);
+            break;
+
+            case RenderMode::Selection:
             {
-                case RenderMode::Color:
-                camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttColor);
-                break;
-
-                case RenderMode::Normal:
-                camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttNormal);
-                break;
-
-                case RenderMode::Diffuse:
-                camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttDiffuse);
-                break;
-
-                case RenderMode::Depth:
-                camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttDepthStencil);
-                break;
-
-                case RenderMode::Selection:
-                {
-                    SelectionFramebuffer *sfb = sceneCam->GetSelectionFramebuffer();
-                    camTexture = sfb->GetAttachmentTexture(SelectionFramebuffer::AttColor);
-                }
-                break;
+                SelectionFramebuffer *sfb = sceneCam->GetSelectionFramebuffer();
+                camTexture = sfb->GetAttachmentTexture(SelectionFramebuffer::AttColor);
             }
+            break;
         }
     }
-
     p_sceneImg->SetImageTexture(camTexture);
 
     if (camTexture) { camTexture->SetWrapMode(GL::WrapMode::Repeat); }
@@ -106,6 +101,7 @@ void UISceneImage::SetRenderMode(UISceneImage::RenderMode renderMode)
     if (renderMode != GetRenderMode())
     {
         m_renderMode = renderMode;
+        SetSceneImageCamera( p_currentCamera );
     }
 }
 
@@ -114,19 +110,9 @@ void UISceneImage::SetShowDebugStats(bool showDebugStats)
     p_sceneDebugStats->SetVisible( showDebugStats );
 }
 
-Rect UISceneImage::GetImageScreenRectNDC() const
-{
-    return p_sceneImg->GetGameObject()->GetRectTransform()->GetViewportRectNDC();
-}
-
 UISceneImage::RenderMode UISceneImage::GetRenderMode() const
 {
     return m_renderMode;
-}
-
-void UISceneImage::OnGameObjectSelected(GameObject *selectedGo)
-{
-    p_selectedCamera = (selectedGo ? selectedGo->GetComponent<Camera>() : nullptr);
 }
 
 void UISceneImage::UISceneImageRenderer::OnRender()

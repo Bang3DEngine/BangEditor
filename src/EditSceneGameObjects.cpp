@@ -15,7 +15,7 @@ EditSceneGameObjects::EditSceneGameObjects()
 
 EditSceneGameObjects::~EditSceneGameObjects()
 {
-    delete m_editorCamera;
+    GameObject::Destroy(m_editorCamera);
     delete m_selectionGizmosManager;
 }
 
