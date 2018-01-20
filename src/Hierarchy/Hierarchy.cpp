@@ -113,7 +113,7 @@ void Hierarchy::OnGameObjectSelected(GameObject *selectedGameObject)
     if (selectedGameObject)
     {
         HierarchyItem *selectedHItem = GetItemFromGameObject(selectedGameObject);
-        ENSURE(selectedHItem);
+        if (!selectedHItem) { return; }
 
         GetUITree()->SetSelection(selectedHItem);
     }

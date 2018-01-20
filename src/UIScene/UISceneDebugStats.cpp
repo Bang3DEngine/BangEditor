@@ -25,7 +25,7 @@ UISceneDebugStats::UISceneDebugStats()
     GameObject *debugStatsTextGo = GameObjectFactory::CreateUIGameObject();
     debugStatsTextGo->GetRectTransform()->SetMargins(8, 8, 0, 0);
 
-    constexpr int MeanFPSSamples = 30;
+    constexpr int MeanFPSSamples = 10;
     m_editorRenderFPSChrono.SetMeanSamples(MeanFPSSamples);
 
     p_debugStatsText = debugStatsTextGo->AddComponent<UITextRenderer>();

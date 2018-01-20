@@ -174,7 +174,7 @@ void EditorCamera::HandleKeyMovement(Vector3 *moveStep, bool *hasMoved)
 
 void EditorCamera::HandleLookAtFocus()
 {
-    ENSURE (p_currentFocus);
+    if (!p_currentFocus) { return; }
 
     Camera *cam = GetCamera();
     Sphere focusBSphere = p_currentFocus->GetBoundingSphere();

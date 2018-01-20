@@ -58,7 +58,7 @@ void EditorSceneManager::_LoadSceneInstantly(Scene *scene)
     EditorScene *edScene = _GetEditorScene();
     if (edScene)
     {
-        ENSURE(edScene->GetOpenScene() != scene);
+        if (edScene->GetOpenScene() == scene) { return; }
         edScene->SetOpenScene(scene);
     }
     else // Load editor scene

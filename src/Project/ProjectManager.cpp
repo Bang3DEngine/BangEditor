@@ -96,7 +96,7 @@ Project *ProjectManager::CreateNewProjectFileOnly(const Path &projectFilepath)
 
 void ProjectManager::ExportProject(const Project *project)
 {
-    ENSURE(project);
+    if (!project) { return; }
     bool ok = project->ExportXMLToFile(project->GetProjectFileFilepath());
     if (ok)
     {
