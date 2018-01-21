@@ -5,6 +5,7 @@
 #include "Bang/UILabel.h"
 #include "Bang/UIButton.h"
 #include "Bang/UICanvas.h"
+#include "Bang/Extensions.h"
 #include "Bang/FileTracker.h"
 #include "Bang/UIGridLayout.h"
 #include "Bang/UIScrollArea.h"
@@ -22,6 +23,7 @@
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/EditorIconManager.h"
+#include "BangEditor/ModelExplorerItem.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
@@ -275,7 +277,13 @@ void Explorer::AddItem(const Path &itemPath)
 {
     if ( GetItemFromPath(itemPath) ) { return; }
 
-    ExplorerItem *explorerItem = GameObject::Create<ExplorerItem>();
+    ExplorerItem *explorerItem = nullptr;
+    if (itemPath.HasExtension(Extensions::GetModelExtensions()))
+    {
+        explorerItem = GameObject::Create<ModelExplorerItem>();
+    }
+    else { explorerItem = GameObject::Create<ExplorerItem>(); }
+
     explorerItem->SetPath(itemPath);
     explorerItem->SetParent(p_itemsContainer);
 

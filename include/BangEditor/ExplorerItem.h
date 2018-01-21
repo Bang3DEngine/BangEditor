@@ -38,7 +38,7 @@ public:
     void RemovePath();
 
     // UIContextMenu callback
-    void OnCreateContextMenu(MenuItem *menuRootItem);
+    virtual void OnCreateContextMenu(MenuItem *menuRootItem);
 
 protected:
     ExplorerItem();
