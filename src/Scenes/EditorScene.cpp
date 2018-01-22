@@ -129,10 +129,18 @@ EditorScene::~EditorScene()
     delete m_editSceneGameObjects;
 }
 
+
+
+#include "Bang/Resources.h"
 void EditorScene::Update()
 {
     GetBehaviourManager()->Update();
     GetScenePlayer()->Update();
+
+    if (Input::GetKeyDown(Key::R))
+    {
+        Debug_Log(Resources::ToString());
+    }
 
     EditorSceneManager::SetActiveScene(this);
     Scene::Update();

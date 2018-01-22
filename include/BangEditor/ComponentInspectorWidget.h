@@ -2,6 +2,7 @@
 #define COMPONENTINSPECTORWIDGET_H
 
 #include "Bang/Bang.h"
+#include "Bang/ResourceHandle.h"
 #include "Bang/IValueChangedListener.h"
 
 #include "BangEditor/UIContextMenu.h"
@@ -38,7 +39,7 @@ protected:
 
     virtual bool ShowRemoveInMenu() const;
     virtual void OnValueChanged(Object *object) override;
-    virtual Texture2D* GetComponentIconTexture() const;
+    virtual RH<Texture2D> GetComponentIconTexture() const;
 
 private:
     Component *p_component = nullptr;

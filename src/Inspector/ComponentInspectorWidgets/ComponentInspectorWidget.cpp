@@ -48,7 +48,7 @@ void ComponentInspectorWidget::SetComponent(Component *comp)
 
     p_component = comp;
     SetTitle(GetComponent()->GetClassName());
-    p_icon->SetImageTexture( GetComponentIconTexture() );
+    p_icon->SetImageTexture( GetComponentIconTexture().Get() );
 }
 
 Component *ComponentInspectorWidget::GetComponent() const
@@ -115,14 +115,14 @@ void ComponentInspectorWidget::OnValueChanged(Object *object)
     }
 }
 
-Texture2D *ComponentInspectorWidget::GetComponentIconTexture() const
+RH<Texture2D> ComponentInspectorWidget::GetComponentIconTexture() const
 {
     if (GetComponent())
     {
         String componentName = GetComponent()->GetClassName();
-        return EditorIconManager::GetComponentIcon(componentName).Get();
+        return EditorIconManager::GetComponentIcon(componentName);
     }
-    return EditorIconManager::GetCubeIcon().Get();
+    return EditorIconManager::GetCubeIcon();
 }
 
 void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
