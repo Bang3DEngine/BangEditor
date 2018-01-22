@@ -247,9 +247,9 @@ void Explorer::OnProjectClosed(const Project *project)
 
 void Explorer::OnPathAdded(const Path &addedPath)
 {
-    if ( addedPath.GetDirectory() == GetRootPath() &&
+    if ( addedPath.GetDirectory() == GetCurrentPath() &&
         !addedPath.IsHiddenFile() &&
-         addedPath.IsFile())
+         addedPath.Exists())
     {
         AddItem(addedPath);
     }

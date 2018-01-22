@@ -16,6 +16,7 @@ RH<Texture2D> EditorIconManager::GetIconForPath(const Path &path)
     {
         if ( Extensions::Has(path, Extensions::GetImageExtensions()) )
         {
+            Resources::SetPermanent(path, true);
             return Resources::Load<Texture2D>(path);
         }
         else
