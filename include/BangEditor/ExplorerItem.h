@@ -18,8 +18,19 @@ FORWARD NAMESPACE_BANG_END
 
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class ExplorerItem;
+
+class IExplorerItemListener : public IEventListener
+{
+public:
+    virtual void OnRename(ExplorerItem *item) = 0;
+    virtual void OnRemove(ExplorerItem *item) = 0;
+    virtual void OnDuplicate(ExplorerItem *item) = 0;
+};
+
 class ExplorerItem : public GameObject,
-                     public IFocusListener
+                     public IFocusListener,
+                     public EventEmitter<IExplorerItemListener>
 {
     GAMEOBJECT_EDITOR(ExplorerItem);
 

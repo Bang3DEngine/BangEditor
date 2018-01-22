@@ -7,6 +7,7 @@
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorUITab.h"
+#include "BangEditor/ExplorerItem.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/ShortcutManager.h"
 
@@ -19,12 +20,11 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class ExplorerItem;
-
 class Explorer : public EditorUITab,
                  public IFileTrackerListener,
                  public IProjectManagerListener,
-                 public IEditorListener
+                 public IEditorListener,
+                 public IExplorerItemListener
 {
     GAMEOBJECT_EDITOR(Explorer);
 
@@ -57,6 +57,11 @@ public:
     // IEditorListener
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
 
+    // IExplorerItemListener
+    virtual void OnRename(ExplorerItem *item) override;
+    virtual void OnRemove(ExplorerItem *item) override;
+    virtual void OnDuplicate(ExplorerItem *item) override;
+
     static Explorer *GetInstance();
 
 private:
@@ -74,6 +79,10 @@ private:
     void AddItem(const Path &itemPath);
     void RemoveItem(const Path &itemPath);
     void GoDirectoryUp();
+
+    void RenamePath(ExplorerItem *explorerItem);
+    void RemovePath(ExplorerItem *explorerItem);
+    void DuplicatePath(ExplorerItem *explorerItem);
 
     ExplorerItem *GetSelectedItem() const;
     ExplorerItem *GetItemFromPath(const Path &path) const;

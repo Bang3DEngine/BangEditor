@@ -1,7 +1,9 @@
 #include "BangEditor/Explorer.h"
 
+#include "Bang/File.h"
 #include "Bang/Input.h"
 #include "Bang/Paths.h"
+#include "Bang/Dialog.h"
 #include "Bang/UILabel.h"
 #include "Bang/UIButton.h"
 #include "Bang/UICanvas.h"
@@ -15,13 +17,13 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/ImportFilesManager.h"
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIContentSizeFitter.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
-#include "BangEditor/ExplorerItem.h"
 #include "BangEditor/EditorIconManager.h"
 #include "BangEditor/ModelExplorerItem.h"
 #include "BangEditor/EditorSceneManager.h"
@@ -290,6 +292,8 @@ void Explorer::AddItem(const Path &itemPath)
     explorerItem->GetFocusable()->AddDoubleClickedCallback(
                                         &Explorer::OnItemDoubleClicked);
 
+    explorerItem->EventEmitter<IExplorerItemListener>::RegisterListener(this);
+
     p_items.PushBack(explorerItem);
     m_pathsToItem.Add(itemPath, explorerItem);
 }
@@ -299,6 +303,9 @@ void Explorer::RemoveItem(const Path &itemPath)
     ExplorerItem *explorerItem = GetItemFromPath(itemPath);
     if (explorerItem)
     {
+        explorerItem->EventEmitter<IExplorerItemListener>::
+                UnRegisterListener(DCAST<IExplorerItemListener*>(this));
+
         p_items.Remove(explorerItem);
         m_pathsToItem.Remove(itemPath);
         GameObject::Destroy(explorerItem);
@@ -308,6 +315,67 @@ void Explorer::RemoveItem(const Path &itemPath)
 void Explorer::GoDirectoryUp()
 {
     SetCurrentPath( GetCurrentPath().GetDirectory() );
+}
+
+void Explorer::OnRename(ExplorerItem *explorerItem)
+{
+    const Path &path = explorerItem->GetPath();
+
+    String newName = Dialog::GetString("Rename", "Introduce the new name:",
+                                       path.GetName());
+    String oldExtensions = String::Join(path.GetExtensions(), ".");
+
+    if (!newName.IsEmpty())
+    {
+        Path newPath = path.GetDirectory().Append(newName);
+
+        String newExtension = newPath.GetExtension();
+        if (newExtension.IsEmpty())
+        {
+            newPath = newPath.AppendExtension(oldExtensions);
+        }
+
+        if (newPath != path)
+        {
+            if (newPath.Exists())
+            {
+                Dialog::Error("Can't rename",
+                              "The path '" + newPath.GetAbsolute() +
+                              "' already exists.");
+            }
+            else
+            {
+                File::Rename(path, newPath);
+                ImportFilesManager::OnFilepathRenamed(path, newPath);
+                explorerItem->SetPath(newPath);
+            }
+        }
+    }
+
+    CheckFileChanges();
+}
+
+void Explorer::OnRemove(ExplorerItem *explorerItem)
+{
+    const Path &path = explorerItem->GetPath();
+    Dialog::YesNoCancel yesNoCancel =
+        Dialog::GetYesNoCancel("Remove", "Are you sure you want to remove '" +
+                               path.GetNameExt() + "' ?");
+
+    if (yesNoCancel == Dialog::YesNoCancel::Yes) { File::Remove( path ); }
+
+    CheckFileChanges();
+}
+
+void Explorer::OnDuplicate(ExplorerItem *explorerItem)
+{
+    const Path &path = explorerItem->GetPath();
+    Path newPathName = path.GetDuplicatePath();
+    File::Duplicate(path, newPathName);
+
+    CheckFileChanges();
+
+    Explorer::SelectPath(newPathName);
 }
 
 ExplorerItem *Explorer::GetSelectedItem() const
