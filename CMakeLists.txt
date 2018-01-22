@@ -96,6 +96,7 @@ ${SRC_DIR}/EditSceneGameObjects.cpp
 ${SRC_DIR}/EditorWindow.cpp
 ${SRC_DIR}/Explorer/Explorer.cpp
 ${SRC_DIR}/Explorer/ExplorerItem.cpp
+${SRC_DIR}/Explorer/ExplorerItemFactory.cpp
 ${SRC_DIR}/Explorer/ModelExplorerItem.cpp
 ${SRC_DIR}/Hierarchy/Hierarchy.cpp
 ${SRC_DIR}/Hierarchy/HierarchyItem.cpp

@@ -45,9 +45,9 @@ public:
     const Path& GetPath() const;
     UIFocusable* GetFocusable() const;
 
-    void RenamePath();
-    void RemovePath();
-    void DuplicatePath();
+    void Rename();
+    void Remove();
+    void Duplicate();
 
     // UIContextMenu callback
     virtual void OnCreateContextMenu(MenuItem *menuRootItem);

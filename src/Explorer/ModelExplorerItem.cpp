@@ -3,6 +3,7 @@
 #include "Bang/Mesh.h"
 #include "Bang/Model.h"
 #include "Bang/Scene.h"
+#include "Bang/ModelIO.h"
 #include "Bang/Material.h"
 #include "Bang/Resources.h"
 #include "Bang/GameObject.h"
@@ -36,8 +37,8 @@ void ModelExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
 
             RH<Model> model = Resources::Load<Model>(GetPath());
 
-            Array< RH<Mesh> > meshes = model.Get()->GetMeshes();
-            Array< RH<Material> > materials = model.Get()->GetMaterials();
+            const Array< RH<Mesh> > &meshes = model.Get()->GetMeshes();
+            const Array< RH<Material> > &materials = model.Get()->GetMaterials();
             for (int i = 0; i < SCAST<int>(meshes.Size()); ++i)
             {
                 MeshRenderer *mr = gameObject->AddComponent<MeshRenderer>();

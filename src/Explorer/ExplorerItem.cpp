@@ -115,19 +115,19 @@ UIFocusable *ExplorerItem::GetFocusable() const
     return p_button;
 }
 
-void ExplorerItem::RenamePath()
+void ExplorerItem::Rename()
 {
     EventEmitter<IExplorerItemListener>::PropagateToListeners(
                 &IExplorerItemListener::OnRename, this);
 }
 
-void ExplorerItem::RemovePath()
+void ExplorerItem::Remove()
 {
     EventEmitter<IExplorerItemListener>::PropagateToListeners(
                 &IExplorerItemListener::OnRemove, this);
 }
 
-void ExplorerItem::DuplicatePath()
+void ExplorerItem::Duplicate()
 {
     EventEmitter<IExplorerItemListener>::PropagateToListeners(
                 &IExplorerItemListener::OnDuplicate, this);
@@ -138,13 +138,13 @@ void ExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
     menuRootItem->SetFontSize(10);
 
     MenuItem *duplicate = menuRootItem->AddItem("Duplicate");
-    duplicate->SetSelectedCallback([this](MenuItem*) { DuplicatePath(); });
+    duplicate->SetSelectedCallback([this](MenuItem*) { Duplicate(); });
 
     MenuItem *rename = menuRootItem->AddItem("Rename");
-    rename->SetSelectedCallback([this](MenuItem*) { RenamePath(); });
+    rename->SetSelectedCallback([this](MenuItem*) { Rename(); });
 
     MenuItem *remove = menuRootItem->AddItem("Remove");
-    remove->SetSelectedCallback([this](MenuItem*) { RemovePath(); });
+    remove->SetSelectedCallback([this](MenuItem*) { Remove(); });
 }
 
 const Path &ExplorerItem::GetPath() const

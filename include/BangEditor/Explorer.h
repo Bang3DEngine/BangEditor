@@ -77,6 +77,7 @@ private:
     GameObject *p_itemsContainer = nullptr;
 
     void AddItem(const Path &itemPath);
+    void AddItem(ExplorerItem *explorerItem);
     void RemoveItem(const Path &itemPath);
     void GoDirectoryUp();
 

@@ -25,8 +25,8 @@
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorIconManager.h"
-#include "BangEditor/ModelExplorerItem.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/ExplorerItemFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -187,7 +187,7 @@ void Explorer::SetCurrentPath(const Path &path)
     if (GetCurrentPath() != path && IsInsideRootPath(path))
     {
         m_currentPath = path;
-        p_currentPathLabel->GetText()->SetContent(m_currentPath.GetAbsolute());
+        p_currentPathLabel->GetText()->SetContent(GetCurrentPath().GetAbsolute());
 
         m_fileTracker->Clear();
         m_fileTracker->TrackPath(GetCurrentPath());
@@ -195,12 +195,12 @@ void Explorer::SetCurrentPath(const Path &path)
         p_backButton->SetBlocked( GetCurrentPath() == GetRootPath() );
 
         Clear();
-        List<Path> subPaths = m_currentPath.GetSubPaths(Path::FindFlag::Simple);
-        Paths::SortPathsByExtension(&subPaths);
-        Paths::SortPathsByName(&subPaths);
-        for (const Path &subPath : subPaths)
+
+        List<ExplorerItem*> subExplorerItems =
+                ExplorerItemFactory::CreateAndGetChildrenExplorerItems(path);
+        for (ExplorerItem *expItem : subExplorerItems)
         {
-            AddItem(subPath);
+            AddItem(expItem);
         }
         p_scrollPanel->SetScrolling(Vector2i::Zero);
     }
@@ -277,16 +277,14 @@ void Explorer::OnGameObjectSelected(GameObject *selectedGameObject)
 
 void Explorer::AddItem(const Path &itemPath)
 {
+    AddItem( ExplorerItemFactory::CreateExplorerItem(itemPath) );
+}
+
+void Explorer::AddItem(ExplorerItem *explorerItem)
+{
+    Path itemPath = explorerItem->GetPath();
     if ( GetItemFromPath(itemPath) ) { return; }
 
-    ExplorerItem *explorerItem = nullptr;
-    if (itemPath.HasExtension(Extensions::GetModelExtensions()))
-    {
-        explorerItem = GameObject::Create<ModelExplorerItem>();
-    }
-    else { explorerItem = GameObject::Create<ExplorerItem>(); }
-
-    explorerItem->SetPath(itemPath);
     explorerItem->SetParent(p_itemsContainer);
 
     explorerItem->GetFocusable()->AddDoubleClickedCallback(
@@ -398,7 +396,7 @@ void Explorer::OnItemDoubleClicked(IFocusable *itemFocusable)
     ExplorerItem *expItem = Cast<ExplorerItem*>(itemGo);
     ASSERT(expItem);
 
-    if (expItem->GetPath().IsDir())
+    if ( ExplorerItemFactory::CanHaveChildren(expItem->GetPath()))
     {
         Explorer::GetInstance()->SetCurrentPath(expItem->GetPath());
     }
@@ -412,13 +410,13 @@ void Explorer::OnShortcutPressed(const Shortcut &shortcut)
     if (selectedItem)
     {
         if (shortcut.GetName() == "Rename")
-        { selectedItem->RenamePath(); }
+        { selectedItem->Rename(); }
 
         if (shortcut.GetName() == "Duplicate")
-        { selectedItem->DuplicatePath(); }
+        { selectedItem->Duplicate(); }
 
         if (shortcut.GetName() == "Delete")
-        { selectedItem->RemovePath(); }
+        { selectedItem->Remove(); }
     }
 }
 
