@@ -36,6 +36,7 @@ public:
 
     void RenamePath();
     void RemovePath();
+    void DuplicatePath();
 
     // UIContextMenu callback
     virtual void OnCreateContextMenu(MenuItem *menuRootItem);

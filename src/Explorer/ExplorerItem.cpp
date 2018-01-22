@@ -162,9 +162,18 @@ void ExplorerItem::RemovePath()
     }
 }
 
+void ExplorerItem::DuplicatePath()
+{
+    Path newPathName = GetPath().GetDuplicatePath();
+    File::Duplicate(GetPath(), newPathName);
+}
+
 void ExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
 {
     menuRootItem->SetFontSize(10);
+
+    MenuItem *duplicate = menuRootItem->AddItem("Duplicate");
+    duplicate->SetSelectedCallback([this](MenuItem*) { DuplicatePath(); });
 
     MenuItem *rename = menuRootItem->AddItem("Rename");
     rename->SetSelectedCallback([this](MenuItem*) { RenamePath(); });

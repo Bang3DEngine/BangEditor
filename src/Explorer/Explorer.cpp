@@ -347,7 +347,7 @@ void Explorer::OnShortcutPressed(const Shortcut &shortcut)
         { selectedItem->RenamePath(); }
 
         if (shortcut.GetName() == "Duplicate")
-        { }
+        { selectedItem->DuplicatePath(); }
 
         if (shortcut.GetName() == "Delete")
         { selectedItem->RemovePath(); }
