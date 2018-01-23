@@ -106,7 +106,6 @@ RH<Texture2D> EditorIconManager::GetAnchoredRectIcon()
 
 RH<Texture2D> EditorIconManager::GetComponentIcon(const String &componentName)
 {
-    return EditorIconManager::GetCubeIcon();
     if (componentName == "Transform") { return EditorIconManager::GetAxesIcon(); }
     if (componentName == "RectTransform") { return EditorIconManager::GetAnchoredRectIcon(); }
     if (componentName == "PointLight") { return EditorIconManager::GetLightBulbIcon(); }

@@ -21,9 +21,10 @@ public:
     void SetReferencedGameObject(GameObject *referencedGameObject) override;
 
 private:
-    ScaleGizmoAxis *p_axisX = nullptr;
-    ScaleGizmoAxis *p_axisY = nullptr;
-    ScaleGizmoAxis *p_axisZ = nullptr;
+    ScaleGizmoAxis *p_axisX   = nullptr;
+    ScaleGizmoAxis *p_axisY   = nullptr;
+    ScaleGizmoAxis *p_axisZ   = nullptr;
+    ScaleGizmoAxis *p_axisXYZ = nullptr;
 
     ScaleGizmo();
     virtual ~ScaleGizmo();

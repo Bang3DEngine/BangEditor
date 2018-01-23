@@ -71,15 +71,32 @@ void ScaleGizmoAxis::Update()
 
     if (IsBeingGrabbed())
     {
-        // Move along axis.
-        // First. Find the plane parallel to the axes, and which faces the
-        // camera the most.
         Camera *cam = GetEditorCamera();
         Transform *camT = cam->GetGameObject()->GetTransform();
-        Vector3 planeNormal = Vector3::Cross( GetAxisVectorWorld(),
-                                Vector3::Cross(camT->GetForward(),
-                                               GetAxisVectorWorld())).Normalized();
-        Vector3 refGoCenter = GetReferencedGameObject()->GetTransform()->GetPosition();
+
+        GameObject *refGo = GetReferencedGameObject();
+        Transform *refGoT = refGo->GetTransform();
+        Vector3 refGoCenter = refGoT->GetPosition();
+
+        if (GrabHasJustChanged())
+        {
+            m_startGrabLocalScale = refGoT->GetLocalScale();
+        }
+
+        Vector3 planeNormal;
+        if (GetAxis() != Axis3DExt::XYZ)
+        {
+            // Find the plane parallel to the axes, and which faces the
+            // camera the most.
+            planeNormal = Vector3::Cross( GetAxisVectorWorld(),
+                            Vector3::Cross(camT->GetForward(),
+                                           GetAxisVectorWorld())).Normalized();
+        }
+        else
+        {
+            // Plane parallel to camera plane
+            planeNormal = (camT->GetPosition() - refGoCenter).NormalizedSafe();
+        }
 
         // Then cast a ray through the mouse position, and see where it intersects
         // with this plane.
@@ -90,26 +107,22 @@ void ScaleGizmoAxis::Update()
         mouseRay.GetIntersectionWithPlane(refGoCenter, planeNormal,
                                           &intersected, &intersection);
 
-        // Then, move the object to the intersection
-        if (intersected)
+        if (GetAxis() != Axis3DExt::XYZ)
         {
-            GameObject *refGo = GetReferencedGameObject();
-            Transform *refGoT = refGo->GetTransform();
-
-            Vector3 centerToMousePointV = (intersection - refGoCenter);
-            Vector3 centerToMousePointProjV =
-                centerToMousePointV.ProjectedOnVector(GetAxisVectorWorld());
-
-            Vector3 centerToMousePointProjLocalV =
-                    refGoT->FromWorldToLocalDirection(centerToMousePointProjV);
-
-            if (GrabHasJustChanged())
+            if (intersected)
             {
-                m_startGrabLocalScale = refGoT->GetLocalScale();
-                m_startGrabCenterToMousePointProjLocalV = centerToMousePointProjLocalV;
-            }
-            else
-            {
+                Vector3 centerToMousePointV = (intersection - refGoCenter);
+                Vector3 centerToMousePointProjV =
+                    centerToMousePointV.ProjectedOnVector(GetAxisVectorWorld());
+
+                Vector3 centerToMousePointProjLocalV =
+                        refGoT->FromWorldToLocalDirection(centerToMousePointProjV);
+
+                if (GrabHasJustChanged())
+                {
+                    m_startGrabCenterToMousePointProjLocalV = centerToMousePointProjLocalV;
+                }
+
                 Vector3 displacementLocalV = centerToMousePointProjLocalV -
                                         m_startGrabCenterToMousePointProjLocalV;
                 displacementLocalV *= Vector3(1, 1,-1);
@@ -127,6 +140,14 @@ void ScaleGizmoAxis::Update()
                 centerToMousePointProjLocalGizmoV *= Vector3(1, 1,-1);
                 UpdatePoints( centerToMousePointProjLocalGizmoV[i] );
             }
+        }
+        else // XYZ
+        {
+            Vector3 diff = (intersection - refGoCenter);
+            float scaling = (diff.x + diff.y);
+            scaling += 1.0f;
+
+            refGoT->SetLocalScale(m_startGrabLocalScale + scaling);
         }
     }
     else
@@ -154,10 +175,13 @@ void ScaleGizmoAxis::UpdatePoints(float localAxisLength)
     if (!GetParent()) { return; }
 
     Vector3 axisFwd = GetAxisVectorLocal() * localAxisLength;
+    if (GetAxis() == Axis3DExt::XYZ) { axisFwd = Vector3::Zero; }
+
     p_lineRenderer->SetPoints( {Vector3::Zero, axisFwd} );
     p_arrowCap->GetTransform()->SetLocalPosition(axisFwd);
 
-    constexpr float baseScale = 0.4f;
+    float baseScale = 0.2f;
+    if (GetAxis() == Axis3DExt::XYZ) { baseScale += 0.4f; }
     p_selectionGo->GetTransform()->SetLocalScale( Vector3(baseScale) +
                                                   Vector3::Abs(axisFwd));
     p_selectionGo->GetTransform()->SetLocalPosition( axisFwd *
