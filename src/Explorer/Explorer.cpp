@@ -158,15 +158,12 @@ void Explorer::SelectPath(const Path &path)
         explorerItem->SetSelected(false);
     }
 
-    if (path.Exists())
+    if (path.GetDirectory().Exists()) { SetCurrentPath(path.GetDirectory()); }
+    ExplorerItem *explorerItem = GetItemFromPath(path);
+    if (explorerItem)
     {
-        SetCurrentPath(path.GetDirectory());
-        ExplorerItem *explorerItem = GetItemFromPath(path);
-        if (explorerItem)
-        {
-            explorerItem->SetSelected(true);
-            Editor::OnPathSelected(explorerItem->GetPath());
-        }
+        explorerItem->SetSelected(true);
+        Editor::OnPathSelected(explorerItem->GetPath());
     }
 }
 

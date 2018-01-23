@@ -113,17 +113,13 @@ void Inspector::OnDestroyed(EventEmitter<IDestroyListener> *destroyedObject)
 
 void Inspector::OnExplorerPathSelected(const Path &path)
 {
-    if (path.IsFile())
+    InspectorWidget *fiw = FileInspectorWidgetFactory::Create(path);
+    if (fiw || path.IsFile()) { Clear(); }
+    if (fiw)
     {
-        Clear();
-
-        InspectorWidget *fiw = FileInspectorWidgetFactory::Create(path);
-        if (fiw)
-        {
-            p_titleSeparator->SetEnabled(true);
-            p_titleText->SetContent(path.GetNameExt());
-            AddWidget(fiw);
-        }
+        p_titleSeparator->SetEnabled(true);
+        p_titleText->SetContent(path.GetNameExt());
+        AddWidget(fiw);
     }
 }
 

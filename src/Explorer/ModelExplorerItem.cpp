@@ -33,20 +33,12 @@ void ModelExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
         Scene *openScene = EditorSceneManager::GetOpenScene();
         if (openScene)
         {
-            GameObject *gameObject = GameObjectFactory::CreateGameObject();
-
             RH<Model> model = Resources::Load<Model>(GetPath());
-
-            const Array< RH<Mesh> > &meshes = model.Get()->GetMeshes();
-            const Array< RH<Material> > &materials = model.Get()->GetMaterials();
-            for (int i = 0; i < SCAST<int>(meshes.Size()); ++i)
+            if (model)
             {
-                MeshRenderer *mr = gameObject->AddComponent<MeshRenderer>();
-                mr->SetMesh(meshes[i].Get());
-                mr->SetMaterial(materials[i].Get());
+                GameObject *gameObject = model.Get()->CreateGameObjectFromModel();
+                gameObject->SetParent(openScene);
             }
-
-            gameObject->SetParent(openScene);
         }
     });
 }

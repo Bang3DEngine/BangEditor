@@ -1,5 +1,6 @@
 #include "BangEditor/FIWMaterial.h"
 
+#include "Bang/Model.h"
 #include "Bang/Shader.h"
 #include "Bang/Material.h"
 #include "Bang/UISlider.h"
@@ -86,7 +87,26 @@ void FIWMaterial::Init()
 
 void FIWMaterial::UpdateFromFileWhenChanged()
 {
-    p_material = Resources::Load<Material>( GetPath() );
+    if (GetPath().IsFile()) // Typical material in path
+    {
+        p_material = Resources::Load<Material>( GetPath() );
+    }
+    else if (GetPath().GetDirectory().IsFile())
+    {
+        // Material inside other asset but without file (for example, inside a model)
+        Path containingAsset = GetPath().GetDirectory();
+        if (containingAsset.HasExtension(Extensions::GetModelExtensions()))
+        {
+            RH<Model> model = Resources::Load<Model>(containingAsset);
+            p_material = model.Get()->GetMaterialByName(GetPath().GetName());
+        }
+    }
+
+    if (!GetMaterial())
+    {
+        return;
+    }
+
     GetMaterial()->ImportXMLFromFile( GetMaterial()->GetResourceFilepath() );
 
     IValueChangedListener::SetReceiveEvents(false);
@@ -117,6 +137,8 @@ Material *FIWMaterial::GetMaterial() const
 
 void FIWMaterial::OnValueChanged(Object *object)
 {
+    if (!GetMaterial()) { return; }
+
     Path texPath = p_texturePathInput->GetPath();
     if (texPath.IsFile())
     {

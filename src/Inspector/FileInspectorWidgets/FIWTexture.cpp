@@ -67,6 +67,8 @@ Texture2D *FIWTexture::GetTexture() const
 void FIWTexture::UpdateFromFileWhenChanged()
 {
     p_texture = Resources::Load<Texture2D>( GetPath() );
+    if (!GetTexture()) { return; }
+
     Path texImportPath = ImportFilesManager::GetImportFilepath(
                                     GetTexture()->GetResourceFilepath() );
     GetTexture()->ImportXMLFromFile(texImportPath);

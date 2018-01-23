@@ -53,22 +53,20 @@ List<ExplorerItem *> ExplorerItemFactory::CreateAndGetChildrenExplorerItems(
         if (path.HasExtension(Extensions::GetModelExtensions()))
         {
             RH<Model> model = Resources::Load<Model>(path);
-            const Array< RH<Mesh> > &meshes = model.Get()->GetMeshes();
-            const Array< RH<Material> > &materials = model.Get()->GetMaterials();
-            int i = 0;
-            for (RH<Mesh> mesh : meshes)
+            Resources::SetPermanent(model.Get(), true);
+
+            for (const String& meshName : model.Get()->GetMeshesNames())
             {
-                String meshName = "Mesh_" + String(i++);
-                Path meshPath = path.Append(meshName);
+                Path meshPath = path.Append(meshName).AppendExtension("bmesh");
                 ExplorerItem *meshExplorerItem =
                         ExplorerItemFactory::CreateExplorerItem(meshPath);
                 children.PushBack( meshExplorerItem );
             }
-            i = 0;
-            for (RH<Material> material : materials)
+
+            for (const String& materialName : model.Get()->GetMaterialsNames())
             {
-                String materialName = "Material_" + String(i++);
-                Path materialPath = path.Append(materialName);
+                Path materialPath = path.Append(materialName).
+                        AppendExtension(Extensions::GetMaterialExtension());
                 ExplorerItem *materialExplorerItem =
                         ExplorerItemFactory::CreateExplorerItem(materialPath);
                 children.PushBack( materialExplorerItem );
