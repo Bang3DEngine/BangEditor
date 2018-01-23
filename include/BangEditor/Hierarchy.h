@@ -8,6 +8,7 @@
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorUITab.h"
+#include "BangEditor/HierarchyItem.h"
 #include "BangEditor/ShortcutManager.h"
 #include "BangEditor/IEditorOpenSceneListener.h"
 
@@ -23,7 +24,8 @@ FORWARD class HierarchyItem;
 class Hierarchy : public EditorUITab,
                   public ICreateListener,
                   public IEditorListener,
-                  public IEditorOpenSceneListener
+                  public IEditorOpenSceneListener,
+                  public IHierarchyItemListener
 {
     GAMEOBJECT_EDITOR(Hierarchy);
 
@@ -50,6 +52,12 @@ public:
 
     // IEditorOpenSceneListener
     virtual void OnOpenScene(Scene *scene) override;
+
+    // IHierarchyItemListener
+    virtual void OnCreateEmpty(HierarchyItem *item) override;
+    virtual void OnRename(HierarchyItem *item) override;
+    virtual void OnRemove(HierarchyItem *item) override;
+    virtual void OnDuplicate(HierarchyItem *item) override;
 
     static Hierarchy *GetInstance();
 

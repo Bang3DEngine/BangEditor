@@ -3,6 +3,7 @@
 
 #include "Bang/UIList.h"
 #include "Bang/GameObject.h"
+#include "Bang/IEventEmitter.h"
 
 #include "BangEditor/UIContextMenu.h"
 
@@ -14,8 +15,20 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class HierarchyItem;
+
+class IHierarchyItemListener : public IEventListener
+{
+public:
+    virtual void OnCreateEmpty(HierarchyItem *item) = 0;
+    virtual void OnRename(HierarchyItem *item) = 0;
+    virtual void OnRemove(HierarchyItem *item) = 0;
+    virtual void OnDuplicate(HierarchyItem *item) = 0;
+};
+
 class HierarchyItem : public GameObject,
-                      public INameListener
+                      public INameListener,
+                      public EventEmitter<IHierarchyItemListener>
 {
     GAMEOBJECT_EDITOR(HierarchyItem);
 
@@ -30,8 +43,10 @@ public:
     void SetReferencedGameObject(GameObject *referencedGameObject);
     GameObject *GetReferencedGameObject() const;
 
-    void RemoveReferencedGameObject();
-    void DuplicateReferencedGameObject();
+    void CreateEmpty();
+    void Rename();
+    void Remove();
+    void Duplicate();
 
     // INameListener
     void OnNameChanged(GameObject *go, const String &oldName,

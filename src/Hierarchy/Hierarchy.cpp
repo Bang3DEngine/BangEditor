@@ -5,6 +5,7 @@
 #include "Bang/Input.h"
 #include "Bang/Timer.h"
 #include "Bang/Scene.h"
+#include "Bang/Dialog.h"
 #include "Bang/UIList.h"
 #include "Bang/UITree.h"
 #include "Bang/UICanvas.h"
@@ -52,6 +53,8 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
     EditorSceneManager::GetEditorScene()->
             EventEmitter<IEditorOpenSceneListener>::RegisterListener(this);
 
+    ShortcutManager::RegisterShortcut(Shortcut(Key::F2, "Rename"),
+                                      &Hierarchy::OnShortcutPressed);
     ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::D, "Duplicate"),
                                       &Hierarchy::OnShortcutPressed);
     ShortcutManager::RegisterShortcut(Shortcut(Key::Delete, "Delete"),
@@ -136,6 +139,48 @@ void Hierarchy::OnOpenScene(Scene *scene)
     }
 }
 
+void Hierarchy::OnCreateEmpty(HierarchyItem *item)
+{
+    GameObject *empty = GameObjectFactory::CreateGameObjectNamed("Empty");
+    empty->SetParent( item->GetReferencedGameObject() );
+}
+
+void Hierarchy::OnRename(HierarchyItem *item)
+{
+    GameObject *go = item->GetReferencedGameObject();
+    String previousName = go->GetName();
+    String newName = Dialog::GetString("Rename", "Introduce the new name:",
+                                       previousName);
+    if (!newName.IsEmpty()) { go->SetName(newName); }
+}
+
+void Hierarchy::OnRemove(HierarchyItem *item)
+{
+    GameObject::Destroy( item->GetReferencedGameObject() );
+}
+
+void Hierarchy::OnDuplicate(HierarchyItem *item)
+{
+    GameObject *original = item->GetReferencedGameObject();
+    GameObject *parent = original->GetParent();
+    int originalIndex = parent->GetChildren().IndexOf(original);
+    ASSERT(originalIndex != -1);
+
+    GameObject *clone = original->Clone();
+    clone->SetParent(parent, originalIndex+1);
+    clone->SetName( GameObjectFactory::GetGameObjectDuplicateName(original) );
+
+    // Collapse as clone
+    Hierarchy *h = Hierarchy::GetInstance();
+    HierarchyItem *originalItem = h->GetItemFromGameObject(original);
+    HierarchyItem *cloneItem = h->GetItemFromGameObject(clone);
+    bool isOriginalCollapsed = h->GetUITree()->IsItemCollapsed(originalItem);
+    h->GetUITree()->SetItemCollapsed(cloneItem, isOriginalCollapsed);
+
+    // Auto-select
+    Editor::SelectGameObject(clone);
+}
+
 void Hierarchy::Clear()
 {
     GetUITree()->Clear();
@@ -182,6 +227,8 @@ void Hierarchy::AddGameObject(GameObject *go)
                 AddGameObject(child);
             }
         }
+
+        goItem->EventEmitter<IHierarchyItemListener>::RegisterListener(this);
     }
 }
 
@@ -219,11 +266,14 @@ void Hierarchy::OnShortcutPressed(const Shortcut &shortcut)
             h->GetItemFromGameObject( h->GetSelectedGameObject() );
     if (selectedItem)
     {
+        if (shortcut.GetName() == "Rename")
+        { selectedItem->Rename(); }
+
         if (shortcut.GetName() == "Duplicate")
-        { selectedItem->DuplicateReferencedGameObject(); }
+        { selectedItem->Duplicate(); }
 
         if (shortcut.GetName() == "Delete")
-        { selectedItem->RemoveReferencedGameObject(); }
+        { selectedItem->Remove(); }
     }
 }
 
