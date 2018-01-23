@@ -82,7 +82,9 @@ private:
     static void OnCreateCube   (MenuItem *item);
     static void OnCreatePlane  (MenuItem *item);
     static void OnCreateSphere (MenuItem *item);
-    static void OnCreatePrimitive (GameObject *primitive);
+    static void OnCreateDirectionalLightGameObject (MenuItem *item);
+    static void OnCreatePointLightGameObject (MenuItem *item);
+    static void OnCreateGameObjectFromMenuBar (GameObject *primitive);
 
     static void OpenProject(const Path& projectFileFilepath);
 

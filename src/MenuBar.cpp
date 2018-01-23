@@ -142,6 +142,9 @@ MenuBar::MenuBar()
     MenuItem *createCube   = primitiveGameObjectItem->AddItem("Cube");
     MenuItem *createSphere = primitiveGameObjectItem->AddItem("Sphere");
     MenuItem *createPlane  = primitiveGameObjectItem->AddItem("Plane");
+    MenuItem *lightsGameObjectItem = m_gameObjectsItem->AddItem("Lights");
+    MenuItem *createDirectionalLightGO = lightsGameObjectItem->AddItem("Directional Light");
+    MenuItem *createPointLightGO = lightsGameObjectItem->AddItem("Point Light");
     MenuItem *uiGameObjectItem = m_gameObjectsItem->AddItem("UI");
     MenuItem *createMeh   = uiGameObjectItem->AddItem("Meh");
     createEmpty->SetSelectedCallback(MenuBar::OnCreateEmpty);
@@ -149,6 +152,8 @@ MenuBar::MenuBar()
     createCube->SetSelectedCallback(MenuBar::OnCreateCube);
     createPlane->SetSelectedCallback(MenuBar::OnCreatePlane);
     createSphere->SetSelectedCallback(MenuBar::OnCreateSphere);
+    createDirectionalLightGO->SetSelectedCallback(MenuBar::OnCreateDirectionalLightGameObject);
+    createPointLightGO->SetSelectedCallback(MenuBar::OnCreatePointLightGameObject);
 
     // Shortcuts
     RegisterShortcut( Shortcut(Key::LCtrl,              Key::S, "SaveScene")   );
@@ -453,25 +458,43 @@ void MenuBar::OnCreateEmpty(MenuItem *)
 
 void MenuBar::OnCreateCone(MenuItem*)
 {
-    MenuBar::OnCreatePrimitive( GameObjectFactory::CreateConeGameObject() );
+    MenuBar::OnCreateGameObjectFromMenuBar(
+                GameObjectFactory::CreateConeGameObject() );
 }
 
 void MenuBar::OnCreateCube(MenuItem*)
 {
-    MenuBar::OnCreatePrimitive( GameObjectFactory::CreateCubeGameObject() );
+    MenuBar::OnCreateGameObjectFromMenuBar(
+                GameObjectFactory::CreateCubeGameObject() );
 }
 
 void MenuBar::OnCreateSphere(MenuItem*)
 {
-    MenuBar::OnCreatePrimitive( GameObjectFactory::CreateSphereGameObject() );
+    MenuBar::OnCreateGameObjectFromMenuBar(
+                GameObjectFactory::CreateSphereGameObject() );
+}
+
+void MenuBar::OnCreateDirectionalLightGameObject(MenuItem*)
+{
+    GameObject *dlGo = GameObjectFactory::CreateGameObject();
+    dlGo->AddComponent<DirectionalLight>();
+    MenuBar::OnCreateGameObjectFromMenuBar(dlGo);
+}
+
+void MenuBar::OnCreatePointLightGameObject(MenuItem*)
+{
+    GameObject *plGo = GameObjectFactory::CreateGameObject();
+    plGo->AddComponent<PointLight>();
+    MenuBar::OnCreateGameObjectFromMenuBar(plGo);
 }
 
 void MenuBar::OnCreatePlane(MenuItem*)
 {
-    MenuBar::OnCreatePrimitive( GameObjectFactory::CreatePlaneGameObject() );
+    MenuBar::OnCreateGameObjectFromMenuBar(
+                GameObjectFactory::CreatePlaneGameObject() );
 }
 
-void MenuBar::OnCreatePrimitive(GameObject *primitive)
+void MenuBar::OnCreateGameObjectFromMenuBar(GameObject *primitive)
 {
     Scene *openScene = EditorSceneManager::GetOpenScene();
     if (openScene)
