@@ -7,7 +7,11 @@
 #include "Bang/Camera.h"
 #include "Bang/Dialog.h"
 #include "Bang/Random.h"
+#include "Bang/UIMask.h"
+#include "Bang/UILabel.h"
 #include "Bang/Material.h"
+#include "Bang/UIButton.h"
+#include "Bang/UISlider.h"
 #include "Bang/UICanvas.h"
 #include "Bang/Behaviour.h"
 #include "Bang/Resources.h"
@@ -15,20 +19,29 @@
 #include "Bang/Extensions.h"
 #include "Bang/IFocusable.h"
 #include "Bang/PointLight.h"
+#include "Bang/UICheckBox.h"
+#include "Bang/UIComboBox.h"
+#include "Bang/UIRectMask.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/AudioSource.h"
 #include "Bang/UIFocusable.h"
+#include "Bang/UIInputText.h"
 #include "Bang/SceneManager.h"
 #include "Bang/LineRenderer.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/AudioListener.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UIAutoFocuser.h"
+#include "Bang/UIScrollPanel.h"
 #include "Bang/UITextRenderer.h"
-#include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/UILayoutElement.h"
+#include "Bang/UILayoutIgnorer.h"
 #include "Bang/DirectionalLight.h"
+#include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/PostProcessEffect.h"
+#include "Bang/UIHorizontalLayout.h"
 #include "Bang/BehaviourContainer.h"
 #include "Bang/UIHorizontalLayout.h"
 
@@ -119,6 +132,25 @@ MenuBar::MenuBar()
     MenuItem *addTransform = addTransforms->AddItem("Transform");
     MenuItem *addRectTransform = addTransforms->AddItem("RectTransform");
     MenuItem *addPostProcessEffect = m_componentsItem->AddItem("PostProcessEffect");
+    MenuItem *addUI = m_componentsItem->AddItem("UI");
+    MenuItem *addUIAutoFocuser = addUI->AddItem("Auto Focuser");
+    MenuItem *addUIButton = addUI->AddItem("Button");
+    MenuItem *addUICanvas = addUI->AddItem("Canvas");
+    MenuItem *addUICheckBox = addUI->AddItem("CheckBox");
+    MenuItem *addUIComboBox = addUI->AddItem("ComboBox");
+    MenuItem *addUIFocusable = addUI->AddItem("Focusable");
+    MenuItem *addUIHorizontalLayout = addUI->AddItem("HorizontalLayout");
+    MenuItem *addUIImageRenderer = addUI->AddItem("Image Renderer");
+    MenuItem *addUIInputText = addUI->AddItem("InputText");
+    MenuItem *addUIMask = addUI->AddItem("Mask");
+    MenuItem *addUILabel = addUI->AddItem("Label");
+    MenuItem *addUILayoutIgnorer = addUI->AddItem("LayoutIgnorer");
+    MenuItem *addUILayoutElement = addUI->AddItem("LayoutElement");
+    MenuItem *addUIRectMask = addUI->AddItem("RectMask");
+    MenuItem *addUISlider = addUI->AddItem("Slider");
+    MenuItem *addUIScrollPanel = addUI->AddItem("ScrollPanel");
+    MenuItem *addUITextRenderer = addUI->AddItem("Text Renderer");
+    MenuItem *addUIVerticalLayout = addUI->AddItem("VerticalLayout");
     addAudioListener->SetSelectedCallback(MenuBar::OnAddAudioListener);
     addAudioSource->SetSelectedCallback(MenuBar::OnAddAudioSource);
     addNewBehaviour->SetSelectedCallback(MenuBar::OnAddNewBehaviour);
@@ -132,6 +164,24 @@ MenuBar::MenuBar()
     addTransform->SetSelectedCallback(MenuBar::OnAddTransform);
     addRectTransform->SetSelectedCallback(MenuBar::OnAddRectTransform);
     addPostProcessEffect->SetSelectedCallback(MenuBar::OnAddPostProcessEffect);
+    addUICanvas->SetSelectedCallback(MenuBar::OnAddUICanvas);
+    addUIImageRenderer->SetSelectedCallback(MenuBar::OnAddUIImageRenderer);
+    addUITextRenderer->SetSelectedCallback(MenuBar::OnAddUITextRenderer);
+    addUIFocusable->SetSelectedCallback(MenuBar::OnAddUIFocusable);
+    addUILayoutIgnorer->SetSelectedCallback(MenuBar::OnAddUILayoutIgnorer);
+    addUILayoutElement->SetSelectedCallback(MenuBar::OnAddUILayoutElement);
+    addUIButton->SetSelectedCallback(MenuBar::OnAddUIButton);
+    addUILabel->SetSelectedCallback(MenuBar::OnAddUILabel);
+    addUIInputText->SetSelectedCallback(MenuBar::OnAddUIInputText);
+    addUIMask->SetSelectedCallback(MenuBar::OnAddUIMask);
+    addUIRectMask->SetSelectedCallback(MenuBar::OnAddUIRectMask);
+    addUICheckBox->SetSelectedCallback(MenuBar::OnAddUICheckBox);
+    addUIComboBox->SetSelectedCallback(MenuBar::OnAddUIComboBox);
+    addUIHorizontalLayout->SetSelectedCallback(MenuBar::OnAddUIHorizontalLayout);
+    addUIVerticalLayout->SetSelectedCallback(MenuBar::OnAddUIVerticalLayout);
+    addUISlider->SetSelectedCallback(MenuBar::OnAddUISlider);
+    addUIScrollPanel->SetSelectedCallback(MenuBar::OnAddUIScrollPanel);
+    addUIAutoFocuser->SetSelectedCallback(MenuBar::OnAddUIAutoFocuser);
 
     // GameObject
     m_gameObjectsItem = AddItem();
@@ -142,18 +192,25 @@ MenuBar::MenuBar()
     MenuItem *createCube   = primitiveGameObjectItem->AddItem("Cube");
     MenuItem *createSphere = primitiveGameObjectItem->AddItem("Sphere");
     MenuItem *createPlane  = primitiveGameObjectItem->AddItem("Plane");
-    MenuItem *lightsGameObjectItem = m_gameObjectsItem->AddItem("Lights");
-    MenuItem *createDirectionalLightGO = lightsGameObjectItem->AddItem("Directional Light");
-    MenuItem *createPointLightGO = lightsGameObjectItem->AddItem("Point Light");
-    MenuItem *uiGameObjectItem = m_gameObjectsItem->AddItem("UI");
-    MenuItem *createMeh   = uiGameObjectItem->AddItem("Meh");
+    MenuItem *lightsGOItem = m_gameObjectsItem->AddItem("Lights");
+    MenuItem *createDirectionalLightGO = lightsGOItem->AddItem("Directional Light");
+    MenuItem *createPointLightGO = lightsGOItem->AddItem("Point Light");
+    MenuItem *uiItemGO = m_gameObjectsItem->AddItem("UI");
+    MenuItem *createUIEmptyGO = uiItemGO->AddItem("Empty");
+    MenuItem *createUICanvasGO = uiItemGO->AddItem("Canvas");
+    MenuItem *createUITextGO = uiItemGO->AddItem("Text");
+    MenuItem *createUIImageGO = uiItemGO->AddItem("Image");
     createEmpty->SetSelectedCallback(MenuBar::OnCreateEmpty);
     createCone->SetSelectedCallback(MenuBar::OnCreateCone);
     createCube->SetSelectedCallback(MenuBar::OnCreateCube);
     createPlane->SetSelectedCallback(MenuBar::OnCreatePlane);
     createSphere->SetSelectedCallback(MenuBar::OnCreateSphere);
-    createDirectionalLightGO->SetSelectedCallback(MenuBar::OnCreateDirectionalLightGameObject);
-    createPointLightGO->SetSelectedCallback(MenuBar::OnCreatePointLightGameObject);
+    createDirectionalLightGO->SetSelectedCallback(MenuBar::OnCreateDirectionalLightGO);
+    createPointLightGO->SetSelectedCallback(MenuBar::OnCreatePointLightGO);
+    createUIEmptyGO->SetSelectedCallback(MenuBar::OnCreateUIEmptyGO);
+    createUICanvasGO->SetSelectedCallback(MenuBar::OnCreateUICanvasGO);
+    createUITextGO->SetSelectedCallback(MenuBar::OnCreateUITextGO);
+    createUIImageGO->SetSelectedCallback(MenuBar::OnCreateUIImageGO);
 
     // Shortcuts
     RegisterShortcut( Shortcut(Key::LCtrl,              Key::S, "SaveScene")   );
@@ -362,7 +419,7 @@ void MenuBar::OnAddAudioSource(MenuItem*)
     OnAddComponent<AudioSource>();
 }
 
-void MenuBar::OnAddNewBehaviour(MenuItem *item)
+void MenuBar::OnAddNewBehaviour(MenuItem*)
 {
     Path behaviourDir = EditorPaths::GetProjectAssetsDir();
     String behaviourName = "";
@@ -443,6 +500,96 @@ void MenuBar::OnAddRectTransform(MenuItem*)
     OnAddComponent<RectTransform>();
 }
 
+void MenuBar::OnAddUIAutoFocuser(MenuItem*)
+{
+    OnAddComponent<UIAutoFocuser>();
+}
+
+void MenuBar::OnAddUIButton(MenuItem*)
+{
+    OnAddComponent<UIButton>();
+}
+
+void MenuBar::OnAddUIHorizontalLayout(MenuItem*)
+{
+    OnAddComponent<UIHorizontalLayout>();
+}
+
+void MenuBar::OnAddUIVerticalLayout(MenuItem*)
+{
+    OnAddComponent<UIVerticalLayout>();
+}
+
+void MenuBar::OnAddUILayoutElement(MenuItem*)
+{
+    OnAddComponent<UILayoutElement>();
+}
+
+void MenuBar::OnAddUILayoutIgnorer(MenuItem*)
+{
+    OnAddComponent<UILayoutIgnorer>();
+}
+
+void MenuBar::OnAddUIMask(MenuItem*)
+{
+    OnAddComponent<UIMask>();
+}
+
+void MenuBar::OnAddUIRectMask(MenuItem*)
+{
+    OnAddComponent<UIRectMask>();
+}
+
+void MenuBar::OnAddUISlider(MenuItem*)
+{
+    OnAddComponent<UISlider>();
+}
+
+void MenuBar::OnAddUIScrollPanel(MenuItem*)
+{
+    OnAddComponent<UIScrollPanel>();
+}
+
+void MenuBar::OnAddUITextRenderer(MenuItem*)
+{
+    OnAddComponent<UITextRenderer>();
+}
+
+void MenuBar::OnAddUIImageRenderer(MenuItem*)
+{
+    OnAddComponent<UIImageRenderer>();
+}
+
+void MenuBar::OnAddUICanvas(MenuItem*)
+{
+    OnAddComponent<UICanvas>();
+}
+
+void MenuBar::OnAddUICheckBox(MenuItem*)
+{
+    OnAddComponent<UICheckBox>();
+}
+
+void MenuBar::OnAddUIComboBox(MenuItem*)
+{
+    OnAddComponent<UIComboBox>();
+}
+
+void MenuBar::OnAddUIFocusable(MenuItem*)
+{
+    OnAddComponent<UIFocusable>();
+}
+
+void MenuBar::OnAddUIInputText(MenuItem*)
+{
+    OnAddComponent<UIInputText>();
+}
+
+void MenuBar::OnAddUILabel(MenuItem*)
+{
+    OnAddComponent<UILabel>();
+}
+
 void MenuBar::OnAddPostProcessEffect(MenuItem*)
 {
     OnAddComponent<PostProcessEffect>();
@@ -458,49 +605,100 @@ void MenuBar::OnCreateEmpty(MenuItem *)
 
 void MenuBar::OnCreateCone(MenuItem*)
 {
-    MenuBar::OnCreateGameObjectFromMenuBar(
+    MenuBar::OnEndCreateGameObjectFromMenuBar(
                 GameObjectFactory::CreateConeGameObject() );
 }
 
 void MenuBar::OnCreateCube(MenuItem*)
 {
-    MenuBar::OnCreateGameObjectFromMenuBar(
+    MenuBar::OnEndCreateGameObjectFromMenuBar(
                 GameObjectFactory::CreateCubeGameObject() );
 }
 
 void MenuBar::OnCreateSphere(MenuItem*)
 {
-    MenuBar::OnCreateGameObjectFromMenuBar(
+    MenuBar::OnEndCreateGameObjectFromMenuBar(
                 GameObjectFactory::CreateSphereGameObject() );
 }
 
-void MenuBar::OnCreateDirectionalLightGameObject(MenuItem*)
+void MenuBar::OnCreateDirectionalLightGO(MenuItem*)
 {
     GameObject *dlGo = GameObjectFactory::CreateGameObject();
     dlGo->AddComponent<DirectionalLight>();
-    MenuBar::OnCreateGameObjectFromMenuBar(dlGo);
+    MenuBar::OnEndCreateGameObjectFromMenuBar(dlGo);
 }
 
-void MenuBar::OnCreatePointLightGameObject(MenuItem*)
+void MenuBar::OnCreatePointLightGO(MenuItem*)
 {
     GameObject *plGo = GameObjectFactory::CreateGameObject();
     plGo->AddComponent<PointLight>();
-    MenuBar::OnCreateGameObjectFromMenuBar(plGo);
+    MenuBar::OnEndCreateGameObjectFromMenuBar(plGo);
+}
+
+UICanvas* MenuBar::OnCreateUICanvasGO(MenuItem*)
+{
+    GameObject *uiGo = GameObjectFactory::CreateUIGameObject();
+    uiGo->SetName("Canvas");
+    UICanvas *canvas = uiGo->AddComponent<UICanvas>();
+    MenuBar::OnEndCreateUIGameObjectFromMenuBar(uiGo);
+    return canvas;
+}
+
+void MenuBar::OnCreateUIEmptyGO(MenuItem*)
+{
+    GameObject *uiGo = GameObjectFactory::CreateUIGameObject();
+    uiGo->SetName("EmptyUI");
+    MenuBar::OnEndCreateUIGameObjectFromMenuBar(uiGo);
+}
+
+void MenuBar::OnCreateUIImageGO(MenuItem*)
+{
+    GameObject *uiGo = GameObjectFactory::CreateUIGameObject();
+    uiGo->SetName("Image");
+    uiGo->AddComponent<UIImageRenderer>();
+    MenuBar::OnEndCreateUIGameObjectFromMenuBar(uiGo);
+}
+
+void MenuBar::OnCreateUITextGO(MenuItem*)
+{
+    GameObject *uiGo = GameObjectFactory::CreateUIGameObject();
+    uiGo->SetName("Text");
+    UITextRenderer *text = uiGo->AddComponent<UITextRenderer>();
+    text->SetContent("UIText");
+    MenuBar::OnEndCreateUIGameObjectFromMenuBar(uiGo);
 }
 
 void MenuBar::OnCreatePlane(MenuItem*)
 {
-    MenuBar::OnCreateGameObjectFromMenuBar(
+    MenuBar::OnEndCreateGameObjectFromMenuBar(
                 GameObjectFactory::CreatePlaneGameObject() );
 }
 
-void MenuBar::OnCreateGameObjectFromMenuBar(GameObject *primitive)
+void MenuBar::OnEndCreateGameObjectFromMenuBar(GameObject *primitive)
 {
-    Scene *openScene = EditorSceneManager::GetOpenScene();
-    if (openScene)
+    GameObject *parentGo = Editor::GetSelectedGameObject();
+    if (!parentGo) { parentGo = EditorSceneManager::GetOpenScene(); }
+    if (parentGo)
     {
-        primitive->SetParent(openScene);
+        primitive->SetParent(parentGo);
         Editor::SelectGameObject(primitive);
+    }
+}
+
+void MenuBar::OnEndCreateUIGameObjectFromMenuBar(GameObject *uiGo)
+{
+    GameObject *parentGo = Editor::GetSelectedGameObject();
+    if (!parentGo) { parentGo = EditorSceneManager::GetOpenScene(); }
+    if (parentGo)
+    {
+        uiGo->SetParent(parentGo);
+        if (!UICanvas::GetActive(uiGo))
+        {
+            UICanvas *createdCanvas = OnCreateUICanvasGO(nullptr);
+            GameObject *createdCanvasGo = createdCanvas->GetGameObject();
+            uiGo->SetParent( createdCanvasGo );
+        }
+        Editor::SelectGameObject(uiGo);
     }
 }
 

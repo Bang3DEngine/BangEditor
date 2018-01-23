@@ -8,6 +8,8 @@
 #include "BangEditor/CIWAudioSource.h"
 #include "BangEditor/CIWMeshRenderer.h"
 #include "BangEditor/CIWAudioListener.h"
+#include "BangEditor/CIWRectTransform.h"
+#include "BangEditor/CIWUITextRenderer.h"
 #include "BangEditor/CIWDirectionalLight.h"
 #include "BangEditor/CIWPostProcessEffect.h"
 #include "BangEditor/CIWBehaviourContainer.h"
@@ -23,6 +25,14 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(Component *com
     if (cName == "Transform")
     {
         ciw = GameObject::Create<CIWTransform>();
+    }
+    if (cName == "RectTransform")
+    {
+        ciw = GameObject::Create<CIWRectTransform>();
+    }
+    if (cName == "UITextRenderer")
+    {
+        ciw = GameObject::Create<CIWUITextRenderer>();
     }
     else if (cName == "MeshRenderer")
     {

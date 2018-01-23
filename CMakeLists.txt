@@ -111,8 +111,10 @@ ${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWLight.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWMeshRenderer.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWPointLight.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWPostProcessEffect.cpp
+${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWRectTransform.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWRenderer.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWTransform.cpp
+${SRC_DIR}/Inspector/ComponentInspectorWidgets/CIWUITextRenderer.cpp
 ${SRC_DIR}/Inspector/FileInspectorWidgets/FileInspectorWidget.cpp
 ${SRC_DIR}/Inspector/FileInspectorWidgets/FileInspectorWidgetFactory.cpp
 ${SRC_DIR}/Inspector/FileInspectorWidgets/FIWMaterial.cpp

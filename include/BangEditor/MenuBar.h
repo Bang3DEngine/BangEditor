@@ -8,6 +8,7 @@
 #include "BangEditor/ShortcutManager.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UICanvas;
 FORWARD class UIFocusable;
 FORWARD class UIHorizontalLayout;
 FORWARD NAMESPACE_BANG_END
@@ -63,28 +64,51 @@ private:
 
     static void OnCreateMaterial (MenuItem *item);
 
-    static void OnAddAudioListener     (MenuItem *item);
-    static void OnAddAudioSource       (MenuItem *item);
-    static void OnAddNewBehaviour      (MenuItem *item);
-    static void OnAddExistingBehaviour (MenuItem *item);
-    static void OnAddEmptyBehaviour    (MenuItem *item);
-    static void OnAddCamera            (MenuItem *item);
-    static void OnAddPointLight        (MenuItem *item);
-    static void OnAddDirectionalLight  (MenuItem *item);
-    static void OnAddLineRenderer      (MenuItem *item);
-    static void OnAddMeshRenderer      (MenuItem *item);
-    static void OnAddTransform         (MenuItem *item);
-    static void OnAddRectTransform     (MenuItem *item);
-    static void OnAddPostProcessEffect (MenuItem *item);
+    static void OnAddAudioListener        (MenuItem *item);
+    static void OnAddAudioSource          (MenuItem *item);
+    static void OnAddNewBehaviour         (MenuItem *item);
+    static void OnAddExistingBehaviour    (MenuItem *item);
+    static void OnAddEmptyBehaviour       (MenuItem *item);
+    static void OnAddCamera               (MenuItem *item);
+    static void OnAddPointLight           (MenuItem *item);
+    static void OnAddDirectionalLight     (MenuItem *item);
+    static void OnAddLineRenderer         (MenuItem *item);
+    static void OnAddMeshRenderer         (MenuItem *item);
+    static void OnAddTransform            (MenuItem *item);
+    static void OnAddRectTransform        (MenuItem *item);
+    static void OnAddPostProcessEffect    (MenuItem *item);
+    static void OnAddUIAutoFocuser        (MenuItem *item);
+    static void OnAddUIButton             (MenuItem *item);
+    static void OnAddUICanvas             (MenuItem *item);
+    static void OnAddUICheckBox           (MenuItem *item);
+    static void OnAddUIComboBox           (MenuItem *item);
+    static void OnAddUIFocusable          (MenuItem *item);
+    static void OnAddUIHorizontalLayout   (MenuItem *item);
+    static void OnAddUIImageRenderer      (MenuItem *item);
+    static void OnAddUIInputText          (MenuItem *item);
+    static void OnAddUILabel              (MenuItem *item);
+    static void OnAddUILayoutElement      (MenuItem *item);
+    static void OnAddUILayoutIgnorer      (MenuItem *item);
+    static void OnAddUIMask               (MenuItem *item);
+    static void OnAddUIRectMask           (MenuItem *item);
+    static void OnAddUISlider             (MenuItem *item);
+    static void OnAddUIScrollPanel        (MenuItem *item);
+    static void OnAddUITextRenderer       (MenuItem *item);
+    static void OnAddUIVerticalLayout     (MenuItem *item);
 
-    static void OnCreateEmpty  (MenuItem *item);
-    static void OnCreateCone   (MenuItem *item);
-    static void OnCreateCube   (MenuItem *item);
-    static void OnCreatePlane  (MenuItem *item);
-    static void OnCreateSphere (MenuItem *item);
-    static void OnCreateDirectionalLightGameObject (MenuItem *item);
-    static void OnCreatePointLightGameObject (MenuItem *item);
-    static void OnCreateGameObjectFromMenuBar (GameObject *primitive);
+    static void OnCreateEmpty                    (MenuItem *item);
+    static void OnCreateCone                     (MenuItem *item);
+    static void OnCreateCube                     (MenuItem *item);
+    static void OnCreatePlane                    (MenuItem *item);
+    static void OnCreateSphere                   (MenuItem *item);
+    static void OnCreateDirectionalLightGO       (MenuItem *item);
+    static void OnCreatePointLightGO             (MenuItem *item);
+    static UICanvas* OnCreateUICanvasGO          (MenuItem *item);
+    static void OnCreateUIEmptyGO                (MenuItem *item);
+    static void OnCreateUIImageGO                (MenuItem *item);
+    static void OnCreateUITextGO                 (MenuItem *item);
+    static void OnEndCreateGameObjectFromMenuBar   (GameObject *primitive);
+    static void OnEndCreateUIGameObjectFromMenuBar (GameObject *uiGo);
 
     static void OpenProject(const Path& projectFileFilepath);
 
