@@ -10,6 +10,7 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 
+#include "BangEditor/EditorClipboard.h"
 #include "BangEditor/EditorIconManager.h"
 
 USING_NAMESPACE_BANG
@@ -54,6 +55,11 @@ void ComponentInspectorWidget::SetComponent(Component *comp)
 Component *ComponentInspectorWidget::GetComponent() const
 {
     return p_component;
+}
+
+GameObject *ComponentInspectorWidget::GetInspectedGameObject() const
+{
+    return GetComponent()->GetGameObject();
 }
 
 void ComponentInspectorWidget::SetTitle(const String &title)
@@ -139,6 +145,36 @@ void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
         });
         menuRootItem->AddSeparator();
     }
+
+    MenuItem *copy = menuRootItem->AddItem("Copy");
+    copy->SetSelectedCallback([this](MenuItem*)
+    { EditorClipboard::CopyComponent( GetComponent() ); });
+
+    MenuItem *cut = menuRootItem->AddItem("Cut");
+    cut->SetSelectedCallback([this](MenuItem*)
+    {
+        EditorClipboard::CopyComponent( GetComponent() );
+        Component::Destroy( GetComponent() );
+    });
+
+    MenuItem *paste = menuRootItem->AddItem("Paste");
+    paste->SetSelectedCallback([this](MenuItem*)
+    {
+        Component *copiedComp = EditorClipboard::GetCopiedComponent();
+        Component *newComponent = copiedComp->Clone();
+        GetInspectedGameObject()->AddComponent(newComponent);
+    });
+    paste->SetOverAndActionEnabled( (EditorClipboard::HasCopiedComponent()) );
+
+    MenuItem *pasteValues = menuRootItem->AddItem("Paste values");
+    pasteValues->SetSelectedCallback([this](MenuItem*)
+    {
+        Component *copiedComp = EditorClipboard::GetCopiedComponent();
+        copiedComp->CloneInto( GetComponent() );
+    });
+    pasteValues->SetOverAndActionEnabled( (EditorClipboard::HasCopiedComponent()) );
+
+    menuRootItem->AddSeparator();
 
     MenuItem *moveUp = menuRootItem->AddItem("Move Up");
     moveUp->SetSelectedCallback([this](MenuItem*)

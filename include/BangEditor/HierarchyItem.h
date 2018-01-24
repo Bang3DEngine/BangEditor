@@ -23,6 +23,9 @@ public:
     virtual void OnCreateEmpty(HierarchyItem *item) = 0;
     virtual void OnRename(HierarchyItem *item) = 0;
     virtual void OnRemove(HierarchyItem *item) = 0;
+    virtual void OnCopy(HierarchyItem *item) = 0;
+    virtual void OnCut(HierarchyItem *item) = 0;
+    virtual void OnPaste(HierarchyItem *item) = 0;
     virtual void OnDuplicate(HierarchyItem *item) = 0;
 };
 
@@ -46,6 +49,9 @@ public:
     void CreateEmpty();
     void Rename();
     void Remove();
+    void Copy();
+    void Cut();
+    void Paste();
     void Duplicate();
 
     // INameListener

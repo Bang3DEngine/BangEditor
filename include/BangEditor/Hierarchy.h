@@ -57,6 +57,9 @@ public:
     virtual void OnCreateEmpty(HierarchyItem *item) override;
     virtual void OnRename(HierarchyItem *item) override;
     virtual void OnRemove(HierarchyItem *item) override;
+    virtual void OnCopy(HierarchyItem *item) override;
+    virtual void OnCut(HierarchyItem *item) override;
+    virtual void OnPaste(HierarchyItem *item) override;
     virtual void OnDuplicate(HierarchyItem *item) override;
 
     static Hierarchy *GetInstance();

@@ -18,6 +18,7 @@
 
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/HierarchyItem.h"
+#include "BangEditor/EditorClipboard.h"
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/EditorSceneManager.h"
 
@@ -36,8 +37,10 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
     UIScrollPanel *scrollPanel = GetUITree()->GetUIList()->GetScrollPanel();
     scrollPanel->SetVerticalScrollBarSide(HorizontalSide::Left);
     scrollPanel->GetScrollArea()->GetBackground()->SetTint(Color::Zero);
-    scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
-    scrollPanel->SetHorizontalShowScrollMode(ShowScrollMode::WhenNeeded);
+    scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::Always);
+    scrollPanel->SetHorizontalShowScrollMode(ShowScrollMode::Always);
+    scrollPanel->SetVerticalScrollEnabled(true);
+    scrollPanel->SetHorizontalScrollEnabled(true);
 
     GameObject *treeGo = GetUITree()->GetGameObject();
     UILayoutElement *treeLE = treeGo->AddComponent<UILayoutElement>();
@@ -54,6 +57,12 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
             EventEmitter<IEditorOpenSceneListener>::RegisterListener(this);
 
     ShortcutManager::RegisterShortcut(Shortcut(Key::F2, "Rename"),
+                                      &Hierarchy::OnShortcutPressed);
+    ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::C, "Copy"),
+                                      &Hierarchy::OnShortcutPressed);
+    ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::X, "Cut"),
+                                      &Hierarchy::OnShortcutPressed);
+    ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::V, "Paste"),
                                       &Hierarchy::OnShortcutPressed);
     ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::D, "Duplicate"),
                                       &Hierarchy::OnShortcutPressed);
@@ -159,26 +168,50 @@ void Hierarchy::OnRemove(HierarchyItem *item)
     GameObject::Destroy( item->GetReferencedGameObject() );
 }
 
-void Hierarchy::OnDuplicate(HierarchyItem *item)
+void Hierarchy::OnCopy(HierarchyItem *item)
 {
-    GameObject *original = item->GetReferencedGameObject();
-    GameObject *parent = original->GetParent();
-    int originalIndex = parent->GetChildren().IndexOf(original);
-    ASSERT(originalIndex != -1);
+    EditorClipboard::CopyGameObject( item->GetReferencedGameObject() );
+}
 
+void Hierarchy::OnCut(HierarchyItem *item)
+{
+    EditorClipboard::CopyGameObject( item->GetReferencedGameObject() );
+    RemoveGameObject(item->GetReferencedGameObject());
+}
+
+void Hierarchy::OnPaste(HierarchyItem *item)
+{
+    if (!EditorClipboard::HasCopiedGameObject()) { return; }
+
+    GameObject *pastingOverGo = item ? item->GetReferencedGameObject() :
+                                       EditorSceneManager::GetOpenScene();
+
+    int pastingOverIndex = pastingOverGo ?
+                              pastingOverGo->GetChildren().IndexOf(pastingOverGo) :
+                              -1;
+
+    GameObject *original = EditorClipboard::GetCopiedGameObject();
     GameObject *clone = original->Clone();
-    clone->SetParent(parent, originalIndex+1);
     clone->SetName( GameObjectFactory::GetGameObjectDuplicateName(original) );
+    clone->SetParent(pastingOverGo, pastingOverIndex+1);
 
     // Collapse as clone
+    /*
     Hierarchy *h = Hierarchy::GetInstance();
     HierarchyItem *originalItem = h->GetItemFromGameObject(original);
     HierarchyItem *cloneItem = h->GetItemFromGameObject(clone);
     bool isOriginalCollapsed = h->GetUITree()->IsItemCollapsed(originalItem);
     h->GetUITree()->SetItemCollapsed(cloneItem, isOriginalCollapsed);
+    */
 
     // Auto-select
     Editor::SelectGameObject(clone);
+}
+
+void Hierarchy::OnDuplicate(HierarchyItem *item)
+{
+    OnCopy(item);
+    OnPaste( SCAST<HierarchyItem*>(GetUITree()->GetParentItem(item)) );
 }
 
 void Hierarchy::Clear()
@@ -268,6 +301,15 @@ void Hierarchy::OnShortcutPressed(const Shortcut &shortcut)
     {
         if (shortcut.GetName() == "Rename")
         { selectedItem->Rename(); }
+
+        if (shortcut.GetName() == "Copy")
+        { selectedItem->Copy(); }
+
+        if (shortcut.GetName() == "Cut")
+        { selectedItem->Cut(); }
+
+        if (shortcut.GetName() == "Paste")
+        { selectedItem->Paste(); }
 
         if (shortcut.GetName() == "Duplicate")
         { selectedItem->Duplicate(); }

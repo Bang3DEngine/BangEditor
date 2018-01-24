@@ -26,11 +26,11 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(Component *com
     {
         ciw = GameObject::Create<CIWTransform>();
     }
-    if (cName == "RectTransform")
+    else if (cName == "RectTransform")
     {
         ciw = GameObject::Create<CIWRectTransform>();
     }
-    if (cName == "UITextRenderer")
+    else if (cName == "UITextRenderer")
     {
         ciw = GameObject::Create<CIWUITextRenderer>();
     }

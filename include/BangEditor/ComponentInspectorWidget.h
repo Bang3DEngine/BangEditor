@@ -33,6 +33,7 @@ protected:
 
 protected:
     Component *GetComponent() const;
+    GameObject *GetInspectedGameObject() const;
 
     virtual void SetTitle(const String& title) override;
     virtual GameObject *CreateTitleGameObject() override;
@@ -43,6 +44,7 @@ protected:
 
 private:
     Component *p_component = nullptr;
+
     UIContextMenu *p_contextMenu = nullptr;
 
     UIImageRenderer *p_icon = nullptr;

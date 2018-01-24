@@ -17,7 +17,7 @@ UISceneDebugStats::UISceneDebugStats()
 
     RectTransform *rt = GetRectTransform();
     rt->SetAnchors(Vector2::One);
-    rt->SetMargins(Vector2i::Zero, Vector2i(-80, -30));
+    rt->SetMargins(Vector2i(-80, -30), Vector2i::Zero);
 
     UIImageRenderer *bg = AddComponent<UIImageRenderer>();
     bg->SetTint(Color::White.WithAlpha(0.65f));

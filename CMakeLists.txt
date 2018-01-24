@@ -86,6 +86,7 @@ ${SRC_DIR}/Console/Console.cpp
 ${SRC_DIR}/Editor.cpp
 ${SRC_DIR}/EditorApplication.cpp
 ${SRC_DIR}/EditorCamera.cpp
+${SRC_DIR}/EditorClipboard.cpp
 ${SRC_DIR}/EditorComponentFactory.cpp
 ${SRC_DIR}/EditorDialog.cpp
 ${SRC_DIR}/EditorIconManager.cpp

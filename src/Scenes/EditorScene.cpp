@@ -33,6 +33,7 @@
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/UITabContainer.h"
+#include "BangEditor/EditorClipboard.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/UISceneContainer.h"
 #include "BangEditor/EditorSceneManager.h"
@@ -55,6 +56,7 @@ void EditorScene::Init()
 
     m_projectManager = new ProjectManager();
     m_scenePlayer = new ScenePlayer();
+    m_editorClipboard = new EditorClipboard();
     m_behaviourManager = new EditorBehaviourManager();
 
     GameObjectFactory::CreateUIGameObjectInto(this);
@@ -291,6 +293,11 @@ ScenePlayer *EditorScene::GetScenePlayer() const { return m_scenePlayer; }
 ProjectManager *EditorScene::GetProjectManager() const
 {
     return m_projectManager;
+}
+
+EditorClipboard *EditorScene::GetEditorClipboard() const
+{
+    return m_editorClipboard;
 }
 
 UITabContainer *EditorScene::GetSceneTabContainer() const

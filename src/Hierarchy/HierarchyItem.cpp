@@ -13,6 +13,7 @@
 #include "BangEditor/Editor.h"
 #include "BangEditor/Hierarchy.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorClipboard.h"
 #include "BangEditor/EditorIconManager.h"
 #include "BangEditor/EditorSceneManager.h"
 
@@ -101,6 +102,24 @@ void HierarchyItem::Remove()
                 &IHierarchyItemListener::OnRemove, this);
 }
 
+void HierarchyItem::Copy()
+{
+    EventEmitter<IHierarchyItemListener>::PropagateToListeners(
+                &IHierarchyItemListener::OnCopy, this);
+}
+
+void HierarchyItem::Cut()
+{
+    EventEmitter<IHierarchyItemListener>::PropagateToListeners(
+                &IHierarchyItemListener::OnCut, this);
+}
+
+void HierarchyItem::Paste()
+{
+    EventEmitter<IHierarchyItemListener>::PropagateToListeners(
+                &IHierarchyItemListener::OnPaste, this);
+}
+
 void HierarchyItem::Duplicate()
 {
     EventEmitter<IHierarchyItemListener>::PropagateToListeners(
@@ -122,19 +141,30 @@ void HierarchyItem::OnCreateContextMenu(MenuItem *menuRootItem)
     createEmpty->SetSelectedCallback([this](MenuItem*)
     { CreateEmpty(); });
 
-    MenuItem *rename = menuRootItem->AddItem("Rename");
-    rename->SetSelectedCallback([this](MenuItem*)
-    { Rename(); });
+    menuRootItem->AddSeparator();
+
+    MenuItem *copy = menuRootItem->AddItem("Copy");
+    copy->SetSelectedCallback([this](MenuItem*) { Copy(); });
+
+    MenuItem *cut = menuRootItem->AddItem("Cut");
+    cut->SetSelectedCallback([this](MenuItem*) { Cut(); });
+
+    MenuItem *paste = menuRootItem->AddItem("Paste");
+    paste->SetSelectedCallback([this](MenuItem*) { Paste(); });
+    paste->SetOverAndActionEnabled( EditorClipboard::HasCopiedGameObject() );
 
     MenuItem *duplicate = menuRootItem->AddItem("Duplicate");
-    duplicate->SetSelectedCallback([this](MenuItem*)
-    { Duplicate(); });
+    duplicate->SetSelectedCallback([this](MenuItem*) { Duplicate(); });
+
+    menuRootItem->AddSeparator();
+
+    MenuItem *rename = menuRootItem->AddItem("Rename");
+    rename->SetSelectedCallback([this](MenuItem*) { Rename(); });
 
     menuRootItem->AddSeparator();
 
     MenuItem *remove = menuRootItem->AddItem("Remove");
-    remove->SetSelectedCallback([this](MenuItem*)
-    { Remove(); });
+    remove->SetSelectedCallback([this](MenuItem*) { Remove(); });
 }
 
 void HierarchyItem::SetText(const String &text)

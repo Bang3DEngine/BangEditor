@@ -27,6 +27,7 @@ FORWARD class Hierarchy;
 FORWARD class ScenePlayer;
 FORWARD class ProjectManager;
 FORWARD class UITabContainer;
+FORWARD class EditorClipboard;
 FORWARD class UISceneContainer;
 FORWARD class EditorApplication;
 FORWARD class EditSceneGameObjects;
@@ -62,6 +63,7 @@ public:
     Hierarchy *GetHierarchy() const;
     ScenePlayer *GetScenePlayer() const;
     ProjectManager *GetProjectManager() const;
+    EditorClipboard *GetEditorClipboard() const;
     UITabContainer *GetSceneTabContainer() const;
     UISceneEditContainer *GetSceneEditContainer() const;
     UIScenePlayContainer *GetScenePlayContainer() const;
@@ -76,6 +78,7 @@ private:
     Editor *m_editor = nullptr;
     ScenePlayer *m_scenePlayer = nullptr;
     ProjectManager *m_projectManager = nullptr;
+    EditorClipboard *m_editorClipboard = nullptr;
     EditorBehaviourManager *m_behaviourManager = nullptr;
     EditSceneGameObjects *m_editSceneGameObjects = nullptr;
 
