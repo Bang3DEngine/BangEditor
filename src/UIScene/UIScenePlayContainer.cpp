@@ -29,7 +29,7 @@ void UIScenePlayContainer::Update()
 
 Camera* UIScenePlayContainer::GetSceneCamera(Scene *scene)
 {
-    return scene->GetCamera();
+    return scene ? scene->GetCamera() : nullptr;
 }
 
 void UIScenePlayContainer::OnPlayStateChanged(EditorPlayState, EditorPlayState)

@@ -16,6 +16,7 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UIVerticalLayout.h"
+#include "Bang/UIRendererCacher.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIContentSizeFitter.h"
 
@@ -28,12 +29,22 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-Inspector::Inspector() : EditorUITab("Inspector")
+Inspector::Inspector()
 {
-    UILayoutElement *le = GetLayoutElement();
-    le->SetMinSize( Vector2i(100) );
-    le->SetPreferredSize( Vector2i(200) );
-    le->SetFlexibleSize( Vector2(1) );
+    SetName("Inspector");
+
+    UILayoutElement *le = AddComponent<UILayoutElement>();
+    le->SetFlexibleSize( Vector2::One );
+
+    GameObjectFactory::CreateUIGameObjectInto(this);
+    UIRendererCacher *rendCacher = GameObjectFactory::CreateUIRendererCacherInto(this);
+    GameObject *rendererCacherContainer = rendCacher->GetContainer();
+    rendCacher->GetContainer()->GetRectTransform()->SetMargins(0, 10, 0, 5);
+
+    GameObject *mainVLGo = rendererCacherContainer;
+    UIVerticalLayout *mainVL = mainVLGo->AddComponent<UIVerticalLayout>(); (void)(mainVL);
+    UILayoutElement *mainVLLE = mainVLGo->AddComponent<UILayoutElement>();
+    mainVLLE->SetFlexibleSize(Vector2::One);
 
     UIScrollPanel *scrollPanel = GameObjectFactory::CreateUIScrollPanel();
     scrollPanel->GetScrollArea()->GetBackground()->SetVisible(false);
@@ -47,8 +58,9 @@ Inspector::Inspector() : EditorUITab("Inspector")
     // GameObject *topSpacer = GameObjectFactory::CreateUISpacer(LayoutSizeType::Min,
     //                                                           Vector2i(0, 30));
 
-    GameObject *mainVLGo = GameObjectFactory::CreateUIGameObjectNamed("MainVL");
-    mainVLGo->GetRectTransform()->SetPivotPosition( Vector2(-1, 1) );
+    GameObject *widgetsVLGo = GameObjectFactory::CreateUIGameObjectNamed("MainVL");
+    widgetsVLGo->GetRectTransform()->SetPivotPosition( Vector2(-1, 1) );
+    widgetsVLGo->SetParent(rendererCacherContainer);
 
     UILabel *goNameLabel = GameObjectFactory::CreateUILabel();
     GameObject *goNameLabelGo = goNameLabel->GetGameObject();
@@ -60,13 +72,13 @@ Inspector::Inspector() : EditorUITab("Inspector")
     p_titleSeparator = GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5);
     p_titleSeparator->SetEnabled(false);
 
-    UIVerticalLayout *mainVL = mainVLGo->AddComponent<UIVerticalLayout>();
-    mainVL->SetSpacing(2);
+    UIVerticalLayout *widgetsVL = widgetsVLGo->AddComponent<UIVerticalLayout>();
+    widgetsVL->SetSpacing(2);
 
-    UIContentSizeFitter *vlCSF = mainVLGo->AddComponent<UIContentSizeFitter>();
+    UIContentSizeFitter *vlCSF = widgetsVLGo->AddComponent<UIContentSizeFitter>();
     vlCSF->SetVerticalSizeType(LayoutSizeType::Preferred);
 
-    p_mainVL = mainVL;
+    p_mainVL = widgetsVL;
     p_scrollPanel = scrollPanel;
 
     GetScrollPanel()->SetHorizontalScrollEnabled(false);
@@ -75,13 +87,13 @@ Inspector::Inspector() : EditorUITab("Inspector")
                                                 GetMainVL()->GetGameObject() );
     GetScrollPanel()->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
 
-    goNameLabel->GetGameObject()->SetParent(GetTabContainer());
-    p_titleSeparator->SetParent(GetTabContainer());
-    scrollPanel->GetGameObject()->SetParent(GetTabContainer());
+    goNameLabel->GetGameObject()->SetParent(mainVLGo);
+    p_titleSeparator->SetParent(mainVLGo);
+    scrollPanel->GetGameObject()->SetParent(mainVLGo);
 
     // Add a bit of margin below...
     GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Min, 40)->SetParent(
-                                                               GetContainer());
+                                                               GetWidgetsContainer());
 
     Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
 }
@@ -93,12 +105,12 @@ Inspector::~Inspector()
 
 void Inspector::OnStart()
 {
-    EditorUITab::OnStart();
+    GameObject::OnStart();
 }
 
 void Inspector::Update()
 {
-    EditorUITab::Update();
+    GameObject::Update();
 }
 
 GameObject *Inspector::GetCurrentGameObject() const
@@ -146,7 +158,7 @@ void Inspector::OnComponentRemoved(Component *removedComponent)
     m_objToWidget.Remove(removedComponent);
 }
 
-GameObject *Inspector::GetContainer() const
+GameObject *Inspector::GetWidgetsContainer() const
 {
     return GetScrollPanel()->GetScrollArea()->GetContainedGameObject();
 }
@@ -180,7 +192,7 @@ void Inspector::AddWidget(InspectorWidget *widget, int _index)
     m_widgets.Insert(index, widget);
     Color bgColor = Color::LightGray.WithValue(0.9f);
     widget->SetBackgroundColor(bgColor);
-    widget->SetParent( GetContainer(), index );
+    widget->SetParent( GetWidgetsContainer(), index );
 }
 
 void Inspector::RemoveWidget(InspectorWidget *widget)

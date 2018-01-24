@@ -41,21 +41,22 @@ UITabContainer::UITabContainer()
     containerLE->SetFlexibleSize(Vector2::One);
     GetCurrentTabContainer()->AddComponent<UIHorizontalLayout>();
 
-    p_hiddenTabsFocusBlocker = GameObjectFactory::CreateUIGameObject();
-    p_hiddenTabsFocusBlocker->AddComponent<UIFocusable>();
-    UIImageRenderer *bg = p_hiddenTabsFocusBlocker->AddComponent<UIImageRenderer>();
-    bg->SetTint(Color::Zero);
+    /*
+    GameObject *hiddenTabsFocusBlocker = GameObjectFactory::CreateUIGameObject();
+    hiddenTabsFocusBlocker->AddComponent<UIFocusable>();
+    UIImageRenderer *bg = hiddenTabsFocusBlocker->AddComponent<UIImageRenderer>();
+    bg->SetTint(Color::Zero);*/
 
     p_hiddenTabsContainer = GameObjectFactory::CreateUIGameObject();
-    GetHiddenTabsContainer()-> AddComponent<UIHorizontalLayout>();
-    GetHiddenTabsContainer()-> AddComponent<UILayoutIgnorer>();
+    GetHiddenTabsContainer()->AddComponent<UIHorizontalLayout>();
+    GetHiddenTabsContainer()->AddComponent<UILayoutIgnorer>();
 
     p_headersBar->SetParent(this);
     // GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Flexible,
     //                                       1, 1.0f)->SetParent(this);
     botPart->SetParent(this);
     GetHiddenTabsContainer()->SetParent(botPart); // Behind
-    p_hiddenTabsFocusBlocker->SetParent(botPart); // Between
+    // hiddenTabsFocusBlocker->SetParent(botPart); // Between
     GetCurrentTabContainer()->SetParent(botPart); // Front
 }
 

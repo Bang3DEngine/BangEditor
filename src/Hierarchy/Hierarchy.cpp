@@ -14,6 +14,8 @@
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/UIVerticalLayout.h"
+#include "Bang/UIRendererCacher.h"
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/EditorScene.h"
@@ -25,14 +27,20 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
+Hierarchy::Hierarchy()
 {
-    UILayoutElement *le = GetLayoutElement();
-    le->SetMinSize( Vector2i(100) );
-    le->SetPreferredSize( Vector2i(150, 200) );
+    SetName("Hierarchy");
+
+    UILayoutElement *le = AddComponent<UILayoutElement>();
+    le->SetFlexibleSize( Vector2::One );
+
+    GameObjectFactory::CreateUIGameObjectInto(this);
+    UIRendererCacher *rendCacher = GameObjectFactory::CreateUIRendererCacherInto(this);
+    GameObject *rendererCacherContainer = rendCacher->GetContainer();
+    rendCacher->GetContainer()->GetRectTransform()->SetMargins(0, 5, 0, 5);
 
     p_tree = GameObjectFactory::CreateUITree();
-    p_tree->GetUIList()->GetScrollPanel()->SetForceHorizontalFit(true);
+    GetUITree()->GetUIList()->GetScrollPanel()->SetForceHorizontalFit(true);
 
     UIScrollPanel *scrollPanel = GetUITree()->GetUIList()->GetScrollPanel();
     scrollPanel->SetVerticalScrollBarSide(HorizontalSide::Left);
@@ -49,7 +57,7 @@ Hierarchy::Hierarchy() : EditorUITab("Hierarchy")
     GetUITree()->SetSelectionCallback(
                           [this](GOItem *item, UIList::Action action)
                           { this->TreeSelectionCallback(item, action); } );
-    treeGo->SetParent(GetTabContainer());
+    treeGo->SetParent(rendererCacherContainer);
 
     ObjectManager::RegisterCreateListener(this);
     Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
@@ -76,12 +84,7 @@ Hierarchy::~Hierarchy()
 
 void Hierarchy::Update()
 {
-    EditorUITab::Update();
-    if (Input::GetKeyDownRepeat(Key::Delete))
-    {
-        GameObject *selectedGameObject = GetSelectedGameObject();
-        if (selectedGameObject) { GameObject::Destroy(selectedGameObject); }
-    }
+    GameObject::Update();
 }
 
 void Hierarchy::OnCreated(Object *object)

@@ -88,9 +88,13 @@ private:
     Hierarchy *p_hierarchy = nullptr;
 
     Scene *p_openScene = nullptr;
-    UITabContainer *p_sceneTabContainer = nullptr;
     UISceneEditContainer *p_sceneEditContainer = nullptr;
     UIScenePlayContainer *p_scenePlayContainer = nullptr;
+
+    UITabContainer *p_leftTabContainer = nullptr;
+    UITabContainer *p_centerTabContainer = nullptr;
+    UITabContainer *p_rightTabContainer = nullptr;
+    UITabContainer *p_botTabContainer = nullptr;
 
     MenuBar *m_menuBar = nullptr;
     GameObject *m_mainEditorVL = nullptr;

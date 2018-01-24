@@ -16,6 +16,8 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/UIRendererCacher.h"
+#include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/ImportFilesManager.h"
 #include "Bang/UIHorizontalLayout.h"
@@ -31,15 +33,23 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-Explorer::Explorer() : EditorUITab("Explorer")
+Explorer::Explorer()
 {
+    SetName("Explorer");
+
+    UILayoutElement *le = AddComponent<UILayoutElement>();
+    le->SetFlexibleSize( Vector2::One );
+
+    GameObjectFactory::CreateUIGameObjectInto(this);
+    UIRendererCacher *rendCacher = GameObjectFactory::CreateUIRendererCacherInto(this);
+    GameObject *rendererCacherContainer = rendCacher->GetContainer();
+
+    GameObject *mainVLGo = rendererCacherContainer;
+    UIVerticalLayout *mainVL = mainVLGo->AddComponent<UIVerticalLayout>(); (void)(mainVL);
+
     m_fileTracker = new FileTracker();
     m_fileTracker->SetCheckFrequencySeconds(3.0f);
     m_fileTracker->RegisterListener(this);
-
-    UILayoutElement *le = GetLayoutElement();
-    le->SetMinSize( Vector2i(100) );
-    le->SetPreferredWidth(250);
 
     // Tool Bar
     GameObject *toolBar = GameObjectFactory::CreateUIGameObject();
@@ -88,12 +98,12 @@ Explorer::Explorer() : EditorUITab("Explorer")
 
     SetCurrentPath( Paths::GetEngineAssetsDir() );
 
-    toolBar->SetParent(GetTabContainer());
+    toolBar->SetParent(mainVLGo);
     p_backButton->GetGameObject()->SetParent(toolBar);
     dirBar->SetParent(toolBar);
-    GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5)->SetParent(GetTabContainer());
+    GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5)->SetParent(mainVLGo);
 
-    p_scrollPanel->GetGameObject()->SetParent(GetTabContainer());
+    p_scrollPanel->GetGameObject()->SetParent(mainVLGo);
 
     p_scrollPanel->GetScrollArea()->SetContainedGameObject(p_itemsContainer);
     p_scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
@@ -120,7 +130,7 @@ Explorer::~Explorer()
 
 void Explorer::Update()
 {
-    EditorUITab::Update();
+    GameObject::Update();
 
     if (Input::GetMouseButtonDown(MouseButton::Left) ||
         Input::GetMouseButtonDown(MouseButton::Right))

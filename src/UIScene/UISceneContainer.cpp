@@ -33,7 +33,7 @@ UISceneContainer::UISceneContainer()
     SetName("SceneContainer");
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetFlexibleSize( Vector2(6.0f, 1.0f) );
+    le->SetFlexibleSize( Vector2::One );
 
     GameObjectFactory::CreateUIGameObjectInto(this);
 
@@ -68,7 +68,10 @@ void UISceneContainer::RenderIfNeeded()
 void UISceneContainer::SetScene(Scene *scene)
 {
     p_scene = scene;
-    p_sceneImage->SetSceneImageCamera( GetSceneCamera(GetContainedScene()) );
+    if (GetContainedScene())
+    {
+        p_sceneImage->SetSceneImageCamera( GetSceneCamera(GetContainedScene()) );
+    }
 }
 
 Scene *UISceneContainer::GetContainedScene() const

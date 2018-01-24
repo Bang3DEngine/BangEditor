@@ -1,16 +1,23 @@
 #include "BangEditor/Console.h"
 
 #include "Bang/UILayoutElement.h"
+#include "Bang/UIRendererCacher.h"
+#include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-Console::Console() : EditorUITab("Console")
+Console::Console()
 {
-    UILayoutElement *le = GetLayoutElement();
-    le->SetMinSize( Vector2i(100, 100) );
-    le->SetPreferredWidth(150);
-    le->SetFlexibleWidth(0.2f);
+    SetName("Console");
+
+    UILayoutElement *le = AddComponent<UILayoutElement>();
+    le->SetFlexibleSize( Vector2::One );
+
+    GameObjectFactory::CreateUIGameObjectInto(this);
+    UIRendererCacher *rendCacher = GameObjectFactory::CreateUIRendererCacherInto(this);
+    GameObject *rendererCacherContainer = rendCacher->GetContainer();
+    (void)(rendererCacherContainer);
 }
 
 Console::~Console()

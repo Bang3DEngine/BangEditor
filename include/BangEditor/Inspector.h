@@ -5,7 +5,6 @@
 #include "Bang/IComponentListener.h"
 
 #include "BangEditor/Editor.h"
-#include "BangEditor/EditorUITab.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIScrollPanel;
@@ -19,7 +18,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class InspectorWidget;
 
-class Inspector : public EditorUITab,
+class Inspector : public GameObject,
                   public IDestroyListener,
                   public IComponentListener,
                   public IEditorListener
@@ -57,7 +56,7 @@ private:
     UITextRenderer *p_titleText = nullptr;
     GameObject *p_titleSeparator = nullptr;
 
-    GameObject* GetContainer() const;
+    GameObject* GetWidgetsContainer() const;
     UIVerticalLayout *GetMainVL() const;
     UIScrollPanel* GetScrollPanel() const;
 

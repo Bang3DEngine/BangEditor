@@ -82,23 +82,6 @@ void EditorScene::Init()
     GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10)->
             SetParent(m_mainEditorVL);
 
-    p_hierarchy = GameObject::Create<Hierarchy>();
-    p_hierarchy->SetParent(hlGo);
-
-    p_sceneEditContainer = GameObject::Create<UISceneEditContainer>();
-    p_scenePlayContainer = GameObject::Create<UIScenePlayContainer>();
-
-    p_sceneTabContainer = GameObject::Create<UITabContainer>();
-    p_sceneTabContainer->AddTab("Scene", p_sceneEditContainer);
-    p_sceneTabContainer->AddTab("Game",  p_scenePlayContainer);
-    p_sceneTabContainer->SetParent(hlGo);
-
-    UILayoutElement *tabContainerLE = p_sceneTabContainer->AddComponent<UILayoutElement>();
-    tabContainerLE->SetFlexibleSize( Vector2(6.0f, 1.0f) );
-
-    p_inspector = GameObject::Create<Inspector>();
-    p_inspector->SetParent(hlGo);
-
     GameObject *botHLGo = GameObjectFactory::CreateUIGameObjectNamed("BotHL");
     botHLGo->AddComponent<UIHorizontalLayout>();
     UILayoutElement *botHLLe = botHLGo->AddComponent<UILayoutElement>();
@@ -106,12 +89,44 @@ void EditorScene::Init()
     botHLLe->SetFlexibleSize( Vector2(1) );
     botHLGo->SetParent(m_mainEditorVL);
 
+    // Inspector, Hierarchy, etc. creation
+    p_sceneEditContainer = GameObject::Create<UISceneEditContainer>();
+    p_scenePlayContainer = GameObject::Create<UIScenePlayContainer>();
+    p_inspector = GameObject::Create<Inspector>();
+    p_hierarchy = GameObject::Create<Hierarchy>();
     p_console = GameObject::Create<Console>();
-    p_console->SetParent(botHLGo);
-
     p_explorer = GameObject::Create<Explorer>();
-    p_explorer->SetParent(botHLGo);
 
+    // Tab containers creation
+    p_leftTabContainer = GameObject::Create<UITabContainer>();
+    UILayoutElement *leftTabContainerLE = p_leftTabContainer->AddComponent<UILayoutElement>();
+    leftTabContainerLE->SetFlexibleSize( Vector2(2.0f, 1.0f) );
+
+    p_centerTabContainer = GameObject::Create<UITabContainer>();
+    UILayoutElement *centerTabContainerLE = p_centerTabContainer->AddComponent<UILayoutElement>();
+    centerTabContainerLE->SetFlexibleSize( Vector2(6.0f, 1.0f) );
+
+    p_rightTabContainer = GameObject::Create<UITabContainer>();
+    UILayoutElement *rightTabContainerLE = p_rightTabContainer->AddComponent<UILayoutElement>();
+    rightTabContainerLE->SetFlexibleSize( Vector2(2.0f, 1.0f) );
+
+    p_botTabContainer = GameObject::Create<UITabContainer>();
+    UILayoutElement *botTabContainerLE = p_botTabContainer->AddComponent<UILayoutElement>();
+    botTabContainerLE->SetFlexibleSize( Vector2(1.0f, 1.0f) );
+
+    p_leftTabContainer->SetParent(hlGo);
+    p_centerTabContainer->SetParent(hlGo);
+    p_rightTabContainer->SetParent(hlGo);
+    p_botTabContainer->SetParent(botHLGo);
+    p_leftTabContainer->AddTab("Hierarchy", p_hierarchy);
+    p_centerTabContainer->AddTab("Scene", p_sceneEditContainer);
+    p_centerTabContainer->AddTab("Game",  p_scenePlayContainer);
+    p_rightTabContainer->AddTab("Inspector", p_inspector);
+    p_botTabContainer->AddTab("Explorer", p_explorer);
+    p_botTabContainer->AddTab("Console", p_console);
+    p_botTabContainer->SetCurrentTabChild(p_explorer);
+
+    // Editor cam creation
     Camera *cam = AddComponent<Camera>();
     cam->AddRenderPass(RenderPass::Overlay);
     SetCamera(cam);
@@ -131,9 +146,6 @@ EditorScene::~EditorScene()
     delete m_editSceneGameObjects;
 }
 
-
-
-#include "Bang/Resources.h"
 void EditorScene::Update()
 {
     GetBehaviourManager()->Update();
@@ -169,7 +181,7 @@ void EditorScene::Update()
             sceneTabName += " (*)";
         }
     }
-    p_sceneTabContainer->SetTabTitle(p_sceneEditContainer, sceneTabName);
+    p_centerTabContainer->SetTabTitle(p_sceneEditContainer, sceneTabName);
 
 }
 
@@ -302,7 +314,7 @@ EditorClipboard *EditorScene::GetEditorClipboard() const
 
 UITabContainer *EditorScene::GetSceneTabContainer() const
 {
-    return p_sceneTabContainer;
+    return p_centerTabContainer;
 }
 
 UISceneEditContainer *EditorScene::GetSceneEditContainer() const
@@ -344,11 +356,11 @@ void EditorScene::OnPlayStateChanged(EditorPlayState,
     switch (newPlayState)
     {
         case EditorPlayState::Editing:
-            p_sceneTabContainer->SetCurrentTabChild( p_sceneEditContainer );
+            p_centerTabContainer->SetCurrentTabChild( p_sceneEditContainer );
         break;
 
         case EditorPlayState::Playing:
-            p_sceneTabContainer->SetCurrentTabChild( p_scenePlayContainer );
+            p_centerTabContainer->SetCurrentTabChild( p_scenePlayContainer );
         break;
 
         default: break;

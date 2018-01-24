@@ -38,7 +38,6 @@ private:
     GameObject *p_headersBar = nullptr;
     GameObject *p_hiddenTabsContainer = nullptr;
     GameObject *p_currentTabContainer = nullptr;
-    GameObject *p_hiddenTabsFocusBlocker = nullptr;
 
     // ITabHeaderListener
     void OnTabHeaderClicked(UITabHeader *header) override;

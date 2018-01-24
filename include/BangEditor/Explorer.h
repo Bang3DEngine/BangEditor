@@ -6,7 +6,6 @@
 #include "Bang/FileTracker.h"
 
 #include "BangEditor/Editor.h"
-#include "BangEditor/EditorUITab.h"
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/ShortcutManager.h"
@@ -20,7 +19,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class Explorer : public EditorUITab,
+class Explorer : public GameObject,
                  public IFileTrackerListener,
                  public IProjectManagerListener,
                  public IEditorListener,

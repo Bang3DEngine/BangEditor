@@ -7,7 +7,6 @@
 #include "Bang/IChildrenListener.h"
 
 #include "BangEditor/Editor.h"
-#include "BangEditor/EditorUITab.h"
 #include "BangEditor/HierarchyItem.h"
 #include "BangEditor/ShortcutManager.h"
 #include "BangEditor/IEditorOpenSceneListener.h"
@@ -21,7 +20,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class HierarchyItem;
 
-class Hierarchy : public EditorUITab,
+class Hierarchy : public GameObject,
                   public ICreateListener,
                   public IEditorListener,
                   public IEditorOpenSceneListener,

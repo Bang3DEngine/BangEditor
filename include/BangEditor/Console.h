@@ -1,12 +1,14 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
-#include "BangEditor/EditorUITab.h"
+#include "Bang/GameObject.h"
+
+#include "BangEditor/BangEditor.h"
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class Console : public EditorUITab
+class Console : public GameObject
 {
     GAMEOBJECT_EDITOR(Console);
 
