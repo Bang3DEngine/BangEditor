@@ -27,6 +27,7 @@ public:
     virtual void OnCut(HierarchyItem *item) = 0;
     virtual void OnPaste(HierarchyItem *item) = 0;
     virtual void OnDuplicate(HierarchyItem *item) = 0;
+    virtual void OnCreatePrefab(HierarchyItem *item) = 0;
 };
 
 class HierarchyItem : public GameObject,
@@ -53,6 +54,7 @@ public:
     void Cut();
     void Paste();
     void Duplicate();
+    void CreatePrefab();
 
     // INameListener
     void OnNameChanged(GameObject *go, const String &oldName,

@@ -60,6 +60,7 @@ public:
     virtual void OnCut(HierarchyItem *item) override;
     virtual void OnPaste(HierarchyItem *item) override;
     virtual void OnDuplicate(HierarchyItem *item) override;
+    virtual void OnCreatePrefab(HierarchyItem *item) override;
 
     static Hierarchy *GetInstance();
 

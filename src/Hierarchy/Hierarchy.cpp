@@ -6,9 +6,12 @@
 #include "Bang/Timer.h"
 #include "Bang/Scene.h"
 #include "Bang/Dialog.h"
+#include "Bang/Prefab.h"
 #include "Bang/UIList.h"
 #include "Bang/UITree.h"
 #include "Bang/UICanvas.h"
+#include "Bang/Resources.h"
+#include "Bang/Extensions.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/RectTransform.h"
@@ -18,6 +21,7 @@
 #include "Bang/UIRendererCacher.h"
 #include "Bang/GameObjectFactory.h"
 
+#include "BangEditor/Explorer.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/HierarchyItem.h"
 #include "BangEditor/EditorClipboard.h"
@@ -215,6 +219,18 @@ void Hierarchy::OnDuplicate(HierarchyItem *item)
 {
     OnCopy(item);
     OnPaste( SCAST<HierarchyItem*>(GetUITree()->GetParentItem(item)) );
+}
+
+void Hierarchy::OnCreatePrefab(HierarchyItem *item)
+{
+    RH<Prefab> prefabRH = Resources::Create<Prefab>();
+    prefabRH.Get()->SetGameObject( item->GetReferencedGameObject() );
+
+    Path exportFilepath = Explorer::GetInstance()->GetCurrentPath().
+                          Append(item->GetReferencedGameObject()->GetName()).
+                          AppendExtension(Extensions::GetPrefabExtension()).
+                          GetDuplicatePath();
+    Resources::ExportXMLResource(prefabRH.Get(), exportFilepath);
 }
 
 void Hierarchy::Clear()

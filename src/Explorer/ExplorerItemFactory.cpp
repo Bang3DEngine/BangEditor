@@ -10,6 +10,7 @@
 
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/ModelExplorerItem.h"
+#include "BangEditor/PrefabExplorerItem.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -20,6 +21,10 @@ ExplorerItem *ExplorerItemFactory::CreateExplorerItem(const Path &path)
     if (path.HasExtension(Extensions::GetModelExtensions()))
     {
         explorerItem = GameObject::Create<ModelExplorerItem>();
+    }
+    else if (path.HasExtension(Extensions::GetPrefabExtension()))
+    {
+        explorerItem = GameObject::Create<PrefabExplorerItem>();
     }
     else
     {

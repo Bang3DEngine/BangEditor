@@ -98,6 +98,7 @@ ${SRC_DIR}/Explorer/Explorer.cpp
 ${SRC_DIR}/Explorer/ExplorerItem.cpp
 ${SRC_DIR}/Explorer/ExplorerItemFactory.cpp
 ${SRC_DIR}/Explorer/ModelExplorerItem.cpp
+${SRC_DIR}/Explorer/PrefabExplorerItem.cpp
 ${SRC_DIR}/Hierarchy/Hierarchy.cpp
 ${SRC_DIR}/Hierarchy/HierarchyItem.cpp
 ${SRC_DIR}/Inspector/ComponentInspectorWidgets/ComponentInspectorWidget.cpp

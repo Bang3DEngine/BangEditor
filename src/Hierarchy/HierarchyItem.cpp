@@ -126,6 +126,12 @@ void HierarchyItem::Duplicate()
                 &IHierarchyItemListener::OnDuplicate, this);
 }
 
+void HierarchyItem::CreatePrefab()
+{
+    EventEmitter<IHierarchyItemListener>::PropagateToListeners(
+                &IHierarchyItemListener::OnCreatePrefab, this);
+}
+
 void HierarchyItem::OnNameChanged(GameObject *go, const String &,
                                   const String &newName)
 {
@@ -140,6 +146,10 @@ void HierarchyItem::OnCreateContextMenu(MenuItem *menuRootItem)
     MenuItem *createEmpty = menuRootItem->AddItem("Create Empty");
     createEmpty->SetSelectedCallback([this](MenuItem*)
     { CreateEmpty(); });
+
+    MenuItem *createPrefab = menuRootItem->AddItem("Create Prefab");
+    createPrefab->SetSelectedCallback([this](MenuItem*)
+    { CreatePrefab(); });
 
     menuRootItem->AddSeparator();
 
