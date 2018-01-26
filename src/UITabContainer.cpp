@@ -19,7 +19,7 @@ UITabContainer::UITabContainer()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
-    UIVerticalLayout *mainVL = AddComponent<UIVerticalLayout>();
+    UIVerticalLayout *mainVL = AddComponent<UIVerticalLayout>(); (void)(mainVL);
 
     p_headersBar = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *headerBarHL = p_headersBar->AddComponent<UIHorizontalLayout>();

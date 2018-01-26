@@ -73,20 +73,19 @@ void EditorScene::Init()
 
     m_editSceneGameObjects = new EditSceneGameObjects();
 
-    GameObject *hlGo = GameObjectFactory::CreateUIGameObject();
-    hlGo->AddComponent<UIHorizontalLayout>();
-    UILayoutElement *hlLe = hlGo->AddComponent<UILayoutElement>();
+    GameObject *topHLGo = GameObjectFactory::CreateUIGameObject();
+    topHLGo->AddComponent<UIHorizontalLayout>();
+    UILayoutElement *hlLe = topHLGo->AddComponent<UILayoutElement>();
     hlLe->SetFlexibleSize(Vector2(1));
-    hlGo->SetParent(m_mainEditorVL);
+    topHLGo->SetParent(m_mainEditorVL);
 
-    GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 10)->
-            SetParent(m_mainEditorVL);
+    GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 20)->SetParent(m_mainEditorVL);
 
     GameObject *botHLGo = GameObjectFactory::CreateUIGameObjectNamed("BotHL");
     botHLGo->AddComponent<UIHorizontalLayout>();
     UILayoutElement *botHLLe = botHLGo->AddComponent<UILayoutElement>();
     botHLLe->SetMinSize( Vector2i(1, 150) );
-    botHLLe->SetFlexibleSize( Vector2(1) );
+    botHLLe->SetFlexibleSize( Vector2(1, 0.5f) );
     botHLGo->SetParent(m_mainEditorVL);
 
     // Inspector, Hierarchy, etc. creation
@@ -114,9 +113,11 @@ void EditorScene::Init()
     UILayoutElement *botTabContainerLE = p_botTabContainer->AddComponent<UILayoutElement>();
     botTabContainerLE->SetFlexibleSize( Vector2(1.0f, 1.0f) );
 
-    p_leftTabContainer->SetParent(hlGo);
-    p_centerTabContainer->SetParent(hlGo);
-    p_rightTabContainer->SetParent(hlGo);
+    p_leftTabContainer->SetParent(topHLGo);
+    GameObjectFactory::CreateUIVSeparator(LayoutSizeType::Min, 20)->SetParent(topHLGo);
+    p_centerTabContainer->SetParent(topHLGo);
+    GameObjectFactory::CreateUIVSeparator(LayoutSizeType::Min, 20)->SetParent(topHLGo);
+    p_rightTabContainer->SetParent(topHLGo);
     p_botTabContainer->SetParent(botHLGo);
     p_leftTabContainer->AddTab("Hierarchy", p_hierarchy);
     p_centerTabContainer->AddTab("Scene", p_sceneEditContainer);
@@ -131,6 +132,7 @@ void EditorScene::Init()
     cam->AddRenderPass(RenderPass::Overlay);
     SetCamera(cam);
     GetCamera()->SetClearColor(Color::LightGray);
+    GetCamera()->SetRenderSelectionBuffer(false);
 
     Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
 
@@ -194,7 +196,7 @@ void EditorScene::OnResize(int newWidth, int newHeight)
     if (openScene)
     {
         BindOpenScene();
-        openScene->InvalidateCanvas();
+        openScene->OnResize(newWidth, newHeight);
         UnBindOpenScene();
     }
 }

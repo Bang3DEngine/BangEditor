@@ -47,8 +47,8 @@ void QtProjectManager::CreateQtProjectFile()
 {
     Project *p_proj = ProjectManager::GetCurrentProject();
     Path projectDir = p_proj->GetProjectDirPath();
-    const Path &engineDir = Paths::GetEngineDir();
-    const Path &projAssetsDir = projectDir.Append("Assets");
+    const Path &engineDir = Paths::GetEngineDir(); (void)(engineDir);
+    const Path &projAssetsDir = projectDir.Append("Assets"); (void)(projAssetsDir);
 /*
     List<String> headers =
             projAssetsDir.GetFiles(true, {"h"}).To<List, String>();
