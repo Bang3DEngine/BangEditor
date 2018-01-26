@@ -97,8 +97,9 @@ void FIWTexture::OnValueChanged(Object *object)
 
         GetTexture()->SetAlphaCutoff( p_alphaCutoffInput->GetValue() );
 
+        ;
         Path texImportPath = ImportFilesManager::GetImportFilepath(
-                                        GetTexture()->GetResourceFilepath() );
+                                GetTexture()->GetResourceFilepath());
         if (texImportPath.IsFile())
         {
             GetTexture()->ExportXMLToFile(texImportPath);

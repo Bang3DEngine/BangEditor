@@ -387,7 +387,7 @@ OnCreateAssetFile(const String &name, const String &extension)
     Path assetPath = currentPath.Append("New_" + name)
                     .AppendExtension(extension).GetDuplicatePath();
     RH<T> asset = Resources::Create<T>();
-    asset.Get()->ExportXMLToFile(assetPath);
+    Resources::ExportToFile(asset.Get(), assetPath);
     AfterCreateAssetFile(assetPath);
     return std::make_pair(asset, assetPath);
 }

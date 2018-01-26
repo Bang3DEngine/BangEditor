@@ -14,6 +14,7 @@
 #include "Bang/UIInputNumber.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/ImportFilesManager.h"
 #include "Bang/ShaderProgramFactory.h"
 
 #include "BangEditor/UIInputVector.h"
@@ -85,11 +86,12 @@ void FIWMaterial::Init()
     SetLabelsWidth(78);
 }
 
+#include "Bang/Debug.h"
 void FIWMaterial::UpdateFromFileWhenChanged()
 {
     if (GetPath().IsFile()) // Typical material in path
     {
-        p_material = Resources::Load<Material>( GetPath() );
+        m_materialRH = Resources::Load<Material>( GetPath() );
     }
     else if (GetPath().GetDirectory().IsFile())
     {
@@ -98,7 +100,7 @@ void FIWMaterial::UpdateFromFileWhenChanged()
         if (containingAsset.HasExtension(Extensions::GetModelExtensions()))
         {
             RH<Model> model = Resources::Load<Model>(containingAsset);
-            p_material = model.Get()->GetMaterialByName(GetPath().GetName());
+            m_materialRH = model.Get()->GetMaterialByName(GetPath().GetName());
         }
     }
 
@@ -132,10 +134,10 @@ void FIWMaterial::UpdateFromFileWhenChanged()
 
 Material *FIWMaterial::GetMaterial() const
 {
-    return p_material.Get();
+    return m_materialRH.Get();
 }
 
-void FIWMaterial::OnValueChanged(Object *object)
+void FIWMaterial::OnValueChanged(Object *)
 {
     if (!GetMaterial()) { return; }
 
@@ -159,9 +161,10 @@ void FIWMaterial::OnValueChanged(Object *object)
     GetMaterial()->SetShaderProgram( ShaderProgramFactory::Get(vsPath,
                                                                fsPath) );
 
-    Path matPath = GetMaterial()->GetResourceFilepath();
-    if (matPath.IsFile())
+    GUID matGUID = GetMaterial()->GetGUID();
+    Path importPath = ImportFilesManager::GetImportFilepath(matGUID);
+    if (importPath.IsFile())
     {
-        GetMaterial()->ExportXMLToFile(matPath);
+        GetMaterial()->ExportXMLToFile(importPath);
     }
 }

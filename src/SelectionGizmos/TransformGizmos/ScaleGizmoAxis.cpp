@@ -147,7 +147,7 @@ void ScaleGizmoAxis::Update()
             float scaling = (diff.x + diff.y);
             scaling += 1.0f;
 
-            refGoT->SetLocalScale(m_startGrabLocalScale + scaling);
+            refGoT->SetLocalScale(m_startGrabLocalScale * scaling);
         }
     }
     else

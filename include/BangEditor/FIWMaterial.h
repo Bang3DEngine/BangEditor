@@ -30,7 +30,7 @@ public:
     void Init() override;
 
 private:
-    RH<Material> p_material;
+    RH<Material> m_materialRH;
 
     UIComboBox *p_renderPassInput = nullptr;
     UIInputFile *p_texturePathInput = nullptr;

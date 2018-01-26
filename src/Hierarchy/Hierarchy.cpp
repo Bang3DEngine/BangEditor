@@ -179,7 +179,7 @@ void Hierarchy::OnCopy(HierarchyItem *item)
 void Hierarchy::OnCut(HierarchyItem *item)
 {
     EditorClipboard::CopyGameObject( item->GetReferencedGameObject() );
-    RemoveGameObject(item->GetReferencedGameObject());
+    GameObject::Destroy(item->GetReferencedGameObject());
 }
 
 void Hierarchy::OnPaste(HierarchyItem *item)
