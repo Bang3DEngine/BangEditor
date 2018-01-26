@@ -29,15 +29,12 @@ public:
     static RH<Texture2D> GetWhiteSphereIcon();
     static RH<Texture2D> GetFolderIcon();
     static RH<Texture2D> GetLetterIcon();
-    static RH<Texture2D> GetAudioIcon();
     static RH<Texture2D> GetPillIcon();
     static RH<Texture2D> GetCubeIcon();
     static RH<Texture2D> GetBracketsIcon();
     static RH<Texture2D> GetFileIcon();
     static RH<Texture2D> GetSceneIcon();
     static RH<Texture2D> GetAxesIcon();
-    static RH<Texture2D> GetLightBulbIcon();
-    static RH<Texture2D> GetSunIcon();
     static RH<Texture2D> GetHairCrossIcon();
     static RH<Texture2D> GetEyeIcon();
     static RH<Texture2D> GetAnchoredRectIcon();

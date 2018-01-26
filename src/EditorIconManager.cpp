@@ -35,7 +35,7 @@ RH<Texture2D> EditorIconManager::GetIconForExtension(const String &ext)
     }
     else if ( Extensions::Equals(ext, Extensions::GetAudioClipExtensions()) )
     {
-        return EditorIconManager::GetAudioIcon();
+        return IconManager::GetAudioIcon();
     }
     else if ( Extensions::Equals(ext, Extensions::GetSceneExtension()) )
     {
@@ -79,8 +79,6 @@ RH<Texture2D> EditorIconManager::GetFolderIcon()
 { return EditorIconManager::GetIconTexture("Folder"); }
 RH<Texture2D> EditorIconManager::GetLetterIcon()
 { return EditorIconManager::GetIconTexture("Letter"); }
-RH<Texture2D> EditorIconManager::GetAudioIcon()
-{ return EditorIconManager::GetIconTexture("Audio"); }
 RH<Texture2D> EditorIconManager::GetPillIcon()
 { return EditorIconManager::GetIconTexture("Pill"); }
 RH<Texture2D> EditorIconManager::GetCubeIcon()
@@ -93,10 +91,6 @@ RH<Texture2D> EditorIconManager::GetSceneIcon()
 { return EditorIconManager::GetIconTexture("Scene"); }
 RH<Texture2D> EditorIconManager::GetAxesIcon()
 { return EditorIconManager::GetIconTexture("Axes"); }
-RH<Texture2D> EditorIconManager::GetLightBulbIcon()
-{ return EditorIconManager::GetIconTexture("LightBulb"); }
-RH<Texture2D> EditorIconManager::GetSunIcon()
-{ return EditorIconManager::GetIconTexture("Sun"); }
 RH<Texture2D> EditorIconManager::GetHairCrossIcon()
 { return EditorIconManager::GetIconTexture("HairCross"); }
 RH<Texture2D> EditorIconManager::GetEyeIcon()
@@ -108,12 +102,12 @@ RH<Texture2D> EditorIconManager::GetComponentIcon(const String &componentName)
 {
     if (componentName == "Transform") { return EditorIconManager::GetAxesIcon(); }
     if (componentName == "RectTransform") { return EditorIconManager::GetAnchoredRectIcon(); }
-    if (componentName == "PointLight") { return EditorIconManager::GetLightBulbIcon(); }
-    if (componentName == "DirectionalLight") { return EditorIconManager::GetSunIcon(); }
+    if (componentName == "PointLight") { return IconManager::GetLightBulbIcon(); }
+    if (componentName == "DirectionalLight") { return IconManager::GetSunIcon(); }
     if (componentName == "Behaviour") { return EditorIconManager::GetBracketsIcon(); }
     if (componentName == "MeshRenderer") { return EditorIconManager::GetCubeIcon(); }
-    if (componentName == "AudioSource") { return EditorIconManager::GetAudioIcon(); }
-    if (componentName == "AudioListener") { return EditorIconManager::GetAudioIcon(); }
+    if (componentName == "AudioSource") { return IconManager::GetAudioIcon(); }
+    if (componentName == "AudioListener") { return IconManager::GetAudioIcon(); }
     return EditorIconManager::GetCubeIcon();
 }
 
