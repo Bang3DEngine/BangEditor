@@ -79,7 +79,6 @@ private:
     ScenePlayer *m_scenePlayer = nullptr;
     ProjectManager *m_projectManager = nullptr;
     EditorClipboard *m_editorClipboard = nullptr;
-    EditorBehaviourManager *m_behaviourManager = nullptr;
     EditSceneGameObjects *m_editSceneGameObjects = nullptr;
 
     Console *p_console     = nullptr;
@@ -107,6 +106,9 @@ private:
     void UnBindOpenScene();
     void PushGLViewport();
     void PopGLViewport();
+
+    // Scene
+    virtual BehaviourManager* CreateBehaviourManager() const override;
 
     // IEditorListener
     void OnPlayStateChanged(EditorPlayState previousPlayState,

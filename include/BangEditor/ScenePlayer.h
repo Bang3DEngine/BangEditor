@@ -23,14 +23,13 @@ public:
 
 private:
     bool m_pauseInNextFrame = false;
-    Scene *p_editingScene = nullptr;
-    Scene *p_playingScene = nullptr;
+    Scene *p_editOpenScene = nullptr;
+    Scene *p_playOpenScene = nullptr;
 
     ScenePlayer();
     virtual ~ScenePlayer();
 
     void Update();
-    bool InstantiatePlayingSceneBehaviours();
 
     static void OnShortcutPressed(const Shortcut &shortcut);
 

@@ -2,6 +2,7 @@
 
 #include "Bang/Scene.h"
 #include "Bang/Behaviour.h"
+#include "Bang/GameObjectFactory.h"
 #include "Bang/BehaviourContainer.h"
 
 #include "BangEditor/Editor.h"
@@ -21,7 +22,7 @@ ScenePlayer::ScenePlayer()
 
 ScenePlayer::~ScenePlayer()
 {
-    if (p_playingScene) { GameObject::Destroy(p_playingScene); }
+    if (p_playOpenScene) { GameObject::Destroy(p_playOpenScene); }
 }
 
 void ScenePlayer::Update()
@@ -50,19 +51,33 @@ void ScenePlayer::PlayScene()
         if (Editor::GetEditorPlayState() == EditorPlayState::Editing)
         {
             // Clone scene
-            EditorBehaviourManager *behaviourMgr = EditorBehaviourManager::GetInstance();
-            bool behavioursReady = behaviourMgr->PrepareBehavioursLibrary();
+            EditorScene *edScene = EditorSceneManager::GetEditorScene();
+            EditorBehaviourManager *edBehaviourMgr = EditorBehaviourManager::GetActive();
+            bool behavioursReady = edBehaviourMgr->PrepareBehavioursLibrary();
             if (behavioursReady)
             {
-                sp->p_editingScene = EditorSceneManager::GetOpenScene();
-                if (sp->p_editingScene)
+                sp->p_editOpenScene = EditorSceneManager::GetOpenScene();
+                if (sp->p_editOpenScene)
                 {
-                    sp->p_playingScene = sp->p_editingScene->Clone();
+                    // Create empty scene, set it active, start it empty
+                    sp->p_playOpenScene = GameObjectFactory::CreateScene(false);
+                    edScene->GetLocalObjectManager()->StartObjects();
 
-                    EditorScene *edScene = EditorSceneManager::GetEditorScene();
-                    edScene->SetOpenScene(sp->p_playingScene, false);
+                    EditorSceneManager::SetActiveScene(sp->p_playOpenScene);
 
-                    sp->InstantiatePlayingSceneBehaviours();
+                    // Copy the editor's behaviours library to it, so that it
+                    // can instantiate its behaviours!
+                    Path libPath = edScene->GetBehaviourManager()->
+                                   GetBehavioursLibrary()->GetLibraryPath();
+                    sp->p_playOpenScene->GetBehaviourManager()->
+                                         SetBehavioursLibrary(libPath);
+
+                    // Clone the editing scene into the playing scene
+                    sp->p_editOpenScene->CloneInto(sp->p_playOpenScene);
+
+                    // Now set the open scene in the editor
+                    edScene->SetOpenScene(sp->p_playOpenScene, false);
+
                     Time::SetDeltaTimeReferenceToNow();
                 }
             }
@@ -99,37 +114,15 @@ void ScenePlayer::StopScene()
         Editor::SetEditorPlayState(EditorPlayState::Editing);
 
         ScenePlayer *sp = ScenePlayer::GetInstance();
-        if (sp->p_editingScene)
+        if (sp->p_editOpenScene)
         {
             EditorScene *edScene = EditorSceneManager::GetEditorScene();
-            edScene->SetOpenScene(sp->p_editingScene, true);
+            edScene->SetOpenScene(sp->p_editOpenScene, true);
 
-            sp->p_editingScene = sp->p_playingScene = nullptr;
+            sp->p_editOpenScene = sp->p_playOpenScene = nullptr;
             sp->m_pauseInNextFrame = false;
         }
     }
-}
-
-bool ScenePlayer::InstantiatePlayingSceneBehaviours()
-{
-    ASSERT(p_playingScene);
-
-    EditorBehaviourManager *behaviourMgr = EditorBehaviourManager::GetInstance();
-
-    if (!behaviourMgr->PrepareBehavioursLibrary()) { return false; }
-
-    Library *behavioursLib = behaviourMgr->GetBehavioursLibrary();
-    if (behavioursLib)
-    {
-        List<BehaviourContainer*> sceneBehaviourContainers =
-                p_playingScene->GetComponentsInChildren<BehaviourContainer>(true);
-        for (BehaviourContainer* behaviourContainer : sceneBehaviourContainers)
-        {
-            behaviourContainer->SubstituteByBehaviourInstance(behavioursLib);
-        }
-    }
-
-    return (behavioursLib != nullptr);
 }
 
 ScenePlayer *ScenePlayer::GetInstance()

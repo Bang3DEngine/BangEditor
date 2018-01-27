@@ -29,7 +29,7 @@ EditorWindow::~EditorWindow()
 void EditorWindow::Update()
 {
     GetShortcutManager()->Update();
-    GetSceneManager()->Update();
+    Window::Update();
 }
 
 void EditorWindow::Render()

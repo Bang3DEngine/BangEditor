@@ -175,7 +175,7 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
         BangPreprocessor::Preprocess(behaviourHeader);
     }
 
-    EditorBehaviourManager *behaviourMgr = EditorBehaviourManager::GetInstance();
+    EditorBehaviourManager *behaviourMgr = EditorBehaviourManager::GetActive();
     behaviourMgr->WaitForAsyncCompileJobs();
 
     // Compile

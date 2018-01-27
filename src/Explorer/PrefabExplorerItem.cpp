@@ -22,7 +22,6 @@ PrefabExplorerItem::~PrefabExplorerItem()
 {
 }
 
-#include "Bang/Debug.h"
 void PrefabExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
 {
     ExplorerItem::OnCreateContextMenu(menuRootItem);
@@ -34,8 +33,6 @@ void PrefabExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
         if (openScene)
         {
             RH<Prefab> prefabRH = Resources::Load<Prefab>(GetPath());
-            Debug_Peek(prefabRH.Get()->m_gameObjectXMLInfoContent);
-
             if (prefabRH)
             {
                 GameObject *gameObject = prefabRH.Get()->Instantiate();

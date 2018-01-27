@@ -39,18 +39,17 @@ public:
     bool IsSomeBehaviourBeingCompiled() const;
     bool AreAllBehavioursCompiledSuccessfully() const;
     bool IsBehavioursLibraryReady() const;
-
-    Library* GetBehavioursLibrary() const;
-
-    static EditorBehaviourManager* GetInstance();
     static Behaviour* CreateBehaviourInstance(const String &behaviourName);
     static bool DeleteBehaviourInstance(const String &behaviourName,
                                         Behaviour *behaviour);
 
+    virtual bool IsInstanceCreationAllowed() const override;
+
+    static EditorBehaviourManager *GetActive();
+
 private:
     ThreadPool m_compileThreadPool;
     BehaviourTracker m_behaviourTracker;
-    Library *m_behavioursLibrary = nullptr;
 
     Set<Path> m_compiledBehaviours;
     Set<Path> m_behavioursBeingCompiled;
@@ -68,7 +67,6 @@ private:
     void CompileBehaviourObjectAsync(const Path &behaviourPath);
     void CompileAllProjectBehaviours();
     void MergeIntoBehavioursLibrary();
-    void SetBehavioursLibrary(Library *behavioursLibrary);
 
     static Compiler::Result MergeBehaviourObjects(
                                       const List<Path> &behaviourObjectPaths,

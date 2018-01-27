@@ -144,7 +144,6 @@ EditorScene::~EditorScene()
     delete m_editor;
     delete m_scenePlayer;
     delete m_projectManager;
-    delete m_behaviourManager;
     delete m_editSceneGameObjects;
 }
 
@@ -161,10 +160,7 @@ void EditorScene::Update()
     {
         BindOpenScene();
 
-        if (Editor::GetEditorPlayState() == EditorPlayState::Playing)
-        {
-            openScene->Update();
-        }
+        SceneManager::UpdateScene(openScene);
         GetEditSceneGameObjects()->Update();
         GetSceneEditContainer()->HandleSelection();
 
@@ -242,6 +238,7 @@ void EditorScene::SetOpenScene(Scene *openScene, bool destroyPreviousScene)
     if (GetOpenScene())
     {
         if (destroyPreviousScene) { GameObject::Destroy(GetOpenScene()); }
+        GetOpenScene()->GetLocalObjectManager()->DestroyObjects();
         AudioManager::StopAllSounds();
     }
 
@@ -251,8 +248,12 @@ void EditorScene::SetOpenScene(Scene *openScene, bool destroyPreviousScene)
         EventEmitter<IEditorOpenSceneListener>::PropagateToListeners(
                     &IEditorOpenSceneListener::OnOpenScene, GetOpenScene());
 
+        GetLocalObjectManager()->StartObjects();
+
+        BindOpenScene();
         GetOpenScene()->SetFirstFoundCamera();
         GetOpenScene()->InvalidateCanvas();
+        UnBindOpenScene();
     }
 }
 
@@ -331,7 +332,7 @@ UIScenePlayContainer *EditorScene::GetScenePlayContainer() const
 
 EditorBehaviourManager *EditorScene::GetBehaviourManager() const
 {
-    return m_behaviourManager;
+    return SCAST<EditorBehaviourManager*>( Scene::GetBehaviourManager() );
 }
 
 EditSceneGameObjects *EditorScene::GetEditSceneGameObjects() const
@@ -349,6 +350,11 @@ void EditorScene::PushGLViewport()
 void EditorScene::PopGLViewport()
 {
     GL::SetViewport(m_prevGLViewport);
+}
+
+BehaviourManager *EditorScene::CreateBehaviourManager() const
+{
+    return new EditorBehaviourManager();
 }
 
 void EditorScene::OnPlayStateChanged(EditorPlayState,

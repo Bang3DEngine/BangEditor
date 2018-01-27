@@ -13,23 +13,6 @@
 
 USING_NAMESPACE_BANG
 
-class BehaviourInstantiator : public ISceneManagerListener
-{
-public:
-    Library *behavioursLib = nullptr;
-
-    void OnSceneOpen(Scene *scene, const Path&) override
-    {
-        List<BehaviourContainer*> sceneBehaviourContainers =
-                scene->GetComponentsInChildren<BehaviourContainer>(true);
-        Debug_Peek(sceneBehaviourContainers);
-        for (BehaviourContainer* behaviourContainer : sceneBehaviourContainers)
-        {
-            behaviourContainer->SubstituteByBehaviourInstance(behavioursLib);
-        }
-    }
-};
-
 int main(int, char **)
 {
     // Get path and directories, and check for their existence.
@@ -72,7 +55,12 @@ int main(int, char **)
         return 6;
     }
 
-    // Load behaviours library
+    // Load the first scene
+    Path scenePath = sceneFilepaths.Front();
+    Debug_Log("Opening scene " << scenePath);
+    SceneManager::LoadSceneInstantly(scenePath);
+
+    // Find the behaviours library
     Path behavioursLibPath;
     List<Path> libPaths = librariesDir.GetFiles(Path::FindFlag::Simple);
     for (const Path &libPath : libPaths)
@@ -90,18 +78,12 @@ int main(int, char **)
         return 7;
     }
 
-    Library behavioursLib (behavioursLibPath);
-    BehaviourInstantiator behaviourInstantiator;
-    behaviourInstantiator.behavioursLib = &behavioursLib;
-
     Debug_Log("Picking as Behaviours library: '" <<
               behavioursLibPath.GetAbsolute() << "'");
 
-    Path scenePath = sceneFilepaths.Front();
-    SceneManager::GetInstance()->RegisterListener(&behaviourInstantiator);
-
-    Debug_Log("Opening scene " << scenePath);
-    SceneManager::LoadSceneInstantly(scenePath);
+    // Set the behaviour library
+    SceneManager::GetActiveScene()->GetBehaviourManager()->
+                                    SetBehavioursLibrary(behavioursLibPath);
 
     return app.MainLoop();
 }

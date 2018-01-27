@@ -5,8 +5,8 @@
 
 #include "BangEditor/BangEditor.h"
 
-#define EDPATH(path) Paths::CreateEditorPath(path)  // Engine assets path
-#define PPATH(path)  Paths::CreateProjectPath(path) // Project assets path
+#define EDPATH(path) BangEditor::EditorPaths::CreateEditorPath(path)  // Engine assets path
+#define PPATH(path)  BangEditor::EditorPaths::CreateProjectPath(path) // Project assets path
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN

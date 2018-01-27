@@ -25,7 +25,6 @@ EditorBehaviourManager::EditorBehaviourManager()
 
 EditorBehaviourManager::~EditorBehaviourManager()
 {
-    if (m_behavioursLibrary) { delete m_behavioursLibrary; }
 }
 
 void EditorBehaviourManager::Update()
@@ -148,24 +147,29 @@ bool EditorBehaviourManager::IsBeingCompiled(const Path &behaviourFilepath) cons
     return m_behavioursBeingCompiled.Contains(behaviourFilepath);
 }
 
-Library *EditorBehaviourManager::GetBehavioursLibrary() const
-{
-    return m_behavioursLibrary;
-}
-
 Behaviour *EditorBehaviourManager::CreateBehaviourInstance(const String &behaviourName)
 {
-    Library *behavioursLib = EditorBehaviourManager::GetInstance()->GetBehavioursLibrary();
+    Library *behavioursLib = EditorBehaviourManager::GetActive()->GetBehavioursLibrary();
     return BehaviourManager::CreateBehaviourInstance(behaviourName, behavioursLib);
 }
 
 bool EditorBehaviourManager::DeleteBehaviourInstance(const String &behaviourName,
                                                      Behaviour *behaviour)
 {
-    Library *behavioursLib = EditorBehaviourManager::GetInstance()->GetBehavioursLibrary();
+    Library *behavioursLib = EditorBehaviourManager::GetActive()->GetBehavioursLibrary();
     return BehaviourManager::DeleteBehaviourInstance(behaviourName,
                                                      behaviour,
                                                      behavioursLib);
+}
+
+bool EditorBehaviourManager::IsInstanceCreationAllowed() const
+{
+    return false;
+}
+
+EditorBehaviourManager *EditorBehaviourManager::GetActive()
+{
+    return DCAST<EditorBehaviourManager*>( BehaviourManager::GetActive() );
 }
 
 
@@ -274,12 +278,6 @@ void EditorBehaviourManager::MergeIntoBehavioursLibrary()
     }
 }
 
-void EditorBehaviourManager::SetBehavioursLibrary(Library *behavioursLibrary)
-{
-    if (GetBehavioursLibrary()) { delete GetBehavioursLibrary(); }
-    m_behavioursLibrary = behavioursLibrary;
-}
-
 Compiler::Result EditorBehaviourManager::MergeBehaviourObjects(
                                     const List<Path> &behaviourObjectFilepaths,
                                     const Path &outputLibFilepath,
@@ -378,11 +376,6 @@ BehaviourTracker *EditorBehaviourManager::GetBehaviourTracker()
 { return &m_behaviourTracker; }
 const BehaviourTracker *EditorBehaviourManager::GetBehaviourTracker() const
 { return &m_behaviourTracker; }
-
-EditorBehaviourManager *EditorBehaviourManager::GetInstance()
-{
-    return EditorSceneManager::GetEditorScene()->GetBehaviourManager();
-}
 
 void EditorBehaviourManager::BehaviourCompileRunnable::Run()
 {

@@ -37,6 +37,7 @@ protected:
     static void SetActiveScene(Scene *activeScene);
 
     friend class EditorScene;
+    friend class ScenePlayer;
     friend class EditorApplication;
 };
 
