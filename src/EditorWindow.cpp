@@ -10,6 +10,7 @@
 #include "Bang/UILayoutManager.h"
 
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorResources.h"
 #include "BangEditor/ShortcutManager.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/EditorSceneManager.h"
@@ -55,6 +56,11 @@ void EditorWindow::Create(uint flags)
 SceneManager *EditorWindow::CreateSceneManager() const
 {
     return new EditorSceneManager();
+}
+
+Resources *EditorWindow::CreateResources() const
+{
+    return new EditorResources();
 }
 
 ShortcutManager *EditorWindow::GetShortcutManager() const

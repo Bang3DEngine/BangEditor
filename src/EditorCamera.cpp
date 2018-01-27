@@ -210,9 +210,9 @@ void EditorCamera::HandleLookAtFocus()
     }
 }
 
-void EditorCamera::Start()
+void EditorCamera::OnStart()
 {
-    GameObject::Start();
+    GameObject::OnStart();
 
     /*
     Sphere sceneSphere = SceneManager::GetActiveScene()->GetBoundingSphere();

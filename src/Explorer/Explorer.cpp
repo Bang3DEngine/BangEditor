@@ -367,7 +367,11 @@ void Explorer::OnRemove(ExplorerItem *explorerItem)
         Dialog::GetYesNoCancel("Remove", "Are you sure you want to remove '" +
                                path.GetNameExt() + "' ?");
 
-    if (yesNoCancel == Dialog::YesNoCancel::Yes) { File::Remove( path ); }
+    if (yesNoCancel == Dialog::YesNoCancel::Yes)
+    {
+        File::Remove( path );
+        File::Remove( ImportFilesManager::GetImportFilepath(path) );
+    }
 
     CheckFileChanges();
 }

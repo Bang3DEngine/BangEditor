@@ -12,8 +12,8 @@ BehaviourTracker::BehaviourTracker()
 {
     ProjectManager::GetInstance()->RegisterListener(this);
     m_fileTracker.EventEmitter<IFileTrackerListener>::RegisterListener(this);
-
     m_fileTracker.SetCheckFrequencySeconds(4.0);
+    m_fileTracker.TrackPath( EditorPaths::GetProjectAssetsDir() );
 }
 
 BehaviourTracker::~BehaviourTracker()
@@ -24,6 +24,7 @@ void BehaviourTracker::Update()
 {
     m_changedPathsFromLastUpdate.Clear();
     m_fileTracker.Update();
+
 }
 
 void BehaviourTracker::CheckForChanges()

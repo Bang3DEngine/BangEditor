@@ -25,7 +25,7 @@ public:
     virtual ~EditorCamera();
 
     // GameObject
-    void Start() override;
+    void OnStart() override;
     void Update() override;
 
     void AlignViewWithGameObject(GameObject *selected);

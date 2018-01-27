@@ -231,6 +231,8 @@ void Hierarchy::OnCreatePrefab(HierarchyItem *item)
                           AppendExtension(Extensions::GetPrefabExtension()).
                           GetDuplicatePath();
     Resources::ExportXMLResource(prefabRH.Get(), exportFilepath);
+
+    Explorer::GetInstance()->CheckFileChanges();
 }
 
 void Hierarchy::Clear()

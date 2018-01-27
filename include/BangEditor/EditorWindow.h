@@ -27,6 +27,8 @@ public:
 private:
     ShortcutManager *m_shortcutManager = nullptr;
 
+    virtual Resources *CreateResources() const override;
+
     ShortcutManager *GetShortcutManager() const;
     static EditorWindow *GetActive();
 

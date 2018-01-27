@@ -91,6 +91,7 @@ ${SRC_DIR}/EditorComponentFactory.cpp
 ${SRC_DIR}/EditorDialog.cpp
 ${SRC_DIR}/EditorIconManager.cpp
 ${SRC_DIR}/EditorPaths.cpp
+${SRC_DIR}/EditorResources.cpp
 ${SRC_DIR}/EditorSettings.cpp
 ${SRC_DIR}/EditSceneGameObjects.cpp
 ${SRC_DIR}/EditorWindow.cpp

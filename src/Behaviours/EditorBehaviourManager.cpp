@@ -335,7 +335,7 @@ Compiler::Job EditorBehaviourManager::CreateCompileBehaviourJob(
     Compiler::Job job = EditorBehaviourManager::CreateBaseJob(binaryType);
     job.outputMode = Compiler::OutputType::Object;
     job.includePaths.PushBack( Paths::GetEngineIncludeDirs() );
-    job.includePaths.PushBack( EditorPaths::GetEditorIncludeDirs() );
+    // job.includePaths.PushBack( EditorPaths::GetEditorIncludeDirs() );
     job.includePaths.PushBack( EditorPaths::GetProjectIncludeDirs() );
     job.inputFiles.PushBack(behaviourFilepath);
     job.outputFile = outputObjectFilepath;
@@ -353,7 +353,6 @@ void EditorBehaviourManager::UpdateCompileInformations()
     {
         if ( GetBehaviourTracker()->HasBeenModified(compiledBehaviour) )
         {
-            Debug_Log("Modified " << compiledBehaviour);
             SetBehavioursLibrary(nullptr);
             modifiedBehaviours.PushBack(compiledBehaviour);
         }
