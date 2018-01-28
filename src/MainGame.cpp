@@ -48,6 +48,7 @@ int main(int, char **)
     Window *mainWindow = app.CreateWindow();
     Window::SetActive(mainWindow);
     mainWindow->SetTitle("Bang");
+    mainWindow->Maximize();
 
     List<Path> sceneFilepaths = gameAssetsDir.GetFiles(Path::FindFlag::Recursive,
                                                 {Extensions::GetSceneExtension()});
@@ -57,7 +58,8 @@ int main(int, char **)
     }
 
     // Load the first scene
-    Path scenePath = sceneFilepaths.Front();
+    Paths::SortPathsByName(&sceneFilepaths);
+    Path scenePath = sceneFilepaths.Back();
     Debug_Log("Opening scene " << scenePath);
     SceneManager::LoadSceneInstantly(scenePath);
 

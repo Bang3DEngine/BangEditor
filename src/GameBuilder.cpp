@@ -34,7 +34,8 @@ void GameBuilder::BuildGame()
 
     GameBuilder::BuildGame(gameExecPath.GetName(),
                            gameExecPath.GetDirectory(),
-                           BinType::Debug,
+                           // BinType::Debug,
+                           BinType::Release,
                            true);
 }
 
@@ -73,6 +74,8 @@ void GameBuilder::BuildGame(const String &gameName,
 
     File::Remove(gameExecutablePath); // Remove old game, if any
     File::Rename(originalGameOutputDir, gameExecutablePath);
+
+    Debug_Log("Build finished successfully!");
 }
 
 bool GameBuilder::CompileGameExecutable(BinType binaryType)
@@ -157,7 +160,7 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
 }
 
 bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
-                                    BinType binType)
+                                          BinType binType)
 {
     // Create Libraries directory
     Path dataLibsDir = Path(executableDir).Append("Data").Append("Libraries");
