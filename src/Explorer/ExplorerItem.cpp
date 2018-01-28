@@ -5,7 +5,6 @@
 #include "Bang/Dialog.h"
 #include "Bang/UILabel.h"
 #include "Bang/UICanvas.h"
-#include "Bang/Extensions.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"

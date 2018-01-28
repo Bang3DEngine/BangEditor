@@ -407,9 +407,18 @@ void Explorer::OnItemDoubleClicked(IFocusable *itemFocusable)
     ExplorerItem *expItem = Cast<ExplorerItem*>(itemGo);
     ASSERT(expItem);
 
-    if ( ExplorerItemFactory::CanHaveChildren(expItem->GetPath()))
+    const Path itemPath = expItem->GetPath();
+    if ( ExplorerItemFactory::CanHaveChildren(itemPath) )
     {
-        Explorer::GetInstance()->SetCurrentPath(expItem->GetPath());
+        Explorer::GetInstance()->SetCurrentPath(itemPath);
+    }
+    else
+    {
+        if (Editor::IsEditingScene() &&
+            itemPath.HasExtension(Extensions::GetSceneExtension()))
+        {
+            SceneManager::LoadScene(itemPath);
+        }
     }
 }
 
