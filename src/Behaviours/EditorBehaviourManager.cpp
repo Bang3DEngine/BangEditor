@@ -164,7 +164,7 @@ bool EditorBehaviourManager::DeleteBehaviourInstance(const String &behaviourName
 
 bool EditorBehaviourManager::IsInstanceCreationAllowed() const
 {
-    return false;
+    return Editor::GetEditorPlayState() != EditorPlayState::Editing;
 }
 
 EditorBehaviourManager *EditorBehaviourManager::GetActive()

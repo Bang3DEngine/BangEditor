@@ -33,7 +33,6 @@ FORWARD class EditorApplication;
 FORWARD class EditSceneGameObjects;
 FORWARD class UISceneEditContainer;
 FORWARD class UIScenePlayContainer;
-FORWARD class EditorBehaviourManager;
 
 class EditorScene : public Scene,
                     public IEditorListener,
@@ -67,7 +66,6 @@ public:
     UITabContainer *GetSceneTabContainer() const;
     UISceneEditContainer *GetSceneEditContainer() const;
     UIScenePlayContainer *GetScenePlayContainer() const;
-    EditorBehaviourManager *GetBehaviourManager() const;
     EditSceneGameObjects *GetEditSceneGameObjects() const;
 
 protected:
@@ -106,9 +104,6 @@ private:
     void UnBindOpenScene();
     void PushGLViewport();
     void PopGLViewport();
-
-    // Scene
-    virtual BehaviourManager* CreateBehaviourManager() const override;
 
     // IEditorListener
     void OnPlayStateChanged(EditorPlayState previousPlayState,

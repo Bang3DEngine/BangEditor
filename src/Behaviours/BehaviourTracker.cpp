@@ -10,10 +10,8 @@ USING_NAMESPACE_BANG_EDITOR
 
 BehaviourTracker::BehaviourTracker()
 {
-    ProjectManager::GetInstance()->RegisterListener(this);
     m_fileTracker.EventEmitter<IFileTrackerListener>::RegisterListener(this);
     m_fileTracker.SetCheckFrequencySeconds(4.0);
-    m_fileTracker.TrackPath( Paths::GetProjectAssetsDir() );
 }
 
 BehaviourTracker::~BehaviourTracker()
@@ -22,6 +20,14 @@ BehaviourTracker::~BehaviourTracker()
 
 void BehaviourTracker::Update()
 {
+    if (m_previousProjectPath != Paths::GetProjectAssetsDir())
+    {
+        m_fileTracker.UnTrackPath(m_previousProjectPath);
+
+        m_previousProjectPath = Paths::GetProjectAssetsDir();
+        m_fileTracker.TrackPath( Paths::GetProjectAssetsDir() );
+    }
+
     m_changedPathsFromLastUpdate.Clear();
     m_fileTracker.Update();
 
@@ -54,16 +60,6 @@ List<Path> BehaviourTracker::GetIncludeDirs() const
 const FileTracker &BehaviourTracker::GetFileTracker() const
 {
     return m_fileTracker;
-}
-
-void BehaviourTracker::OnProjectClosed(const Project *project)
-{
-    m_fileTracker.UnTrackPath( Paths::GetProjectAssetsDir() );
-}
-
-void BehaviourTracker::OnProjectOpen(const Project *project)
-{
-    m_fileTracker.TrackPath( Paths::GetProjectAssetsDir() );
 }
 
 void BehaviourTracker::OnPathAdded(const Path &addedPath)

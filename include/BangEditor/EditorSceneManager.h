@@ -13,6 +13,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class EditorScene;
+FORWARD class EditorBehaviourManager;
 
 class EditorSceneManager : public SceneManager
 {
@@ -26,15 +27,21 @@ public:
 
     static EditorSceneManager *GetInstance();
 
+    EditorBehaviourManager *GetEditorBehaviourManager() const;
+
 protected:
     EditorScene *p_editorScene = nullptr;
 
     Scene *_GetOpenScene() const;
     EditorScene *_GetEditorScene() const;
 
+    static void SetActiveScene(Scene *activeScene);
+
+private:
+    void _Update() override;
     void _LoadSceneInstantly(Scene *scene) override;
 
-    static void SetActiveScene(Scene *activeScene);
+    BehaviourManager *CreateBehaviourManager() const override;
 
     friend class EditorScene;
     friend class ScenePlayer;

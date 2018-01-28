@@ -7,6 +7,7 @@
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorBehaviourManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -42,6 +43,11 @@ EditorScene *EditorSceneManager::GetEditorScene()
     return esm ? esm->_GetEditorScene() : nullptr;
 }
 
+EditorBehaviourManager* EditorSceneManager::GetEditorBehaviourManager() const
+{
+    return DCAST<EditorBehaviourManager*>( SceneManager::GetBehaviourManager() );
+}
+
 Scene *EditorSceneManager::_GetOpenScene() const
 {
     EditorScene *edScene = GetEditorScene();
@@ -71,6 +77,17 @@ void EditorSceneManager::_LoadSceneInstantly(Scene *scene)
 void EditorSceneManager::SetActiveScene(Scene *activeScene)
 {
     GetInstance()->_SetActiveScene(activeScene);
+}
+
+void EditorSceneManager::_Update()
+{
+    GetEditorBehaviourManager()->Update();
+    SceneManager::_Update();
+}
+
+BehaviourManager *EditorSceneManager::CreateBehaviourManager() const
+{
+    return new EditorBehaviourManager();
 }
 
 EditorSceneManager *EditorSceneManager::GetInstance()

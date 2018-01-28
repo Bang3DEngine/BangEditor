@@ -11,8 +11,7 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class BehaviourTracker : public IProjectManagerListener,
-                         public IFileTrackerListener
+class BehaviourTracker : public IFileTrackerListener
 {
 public:
 	BehaviourTracker();
@@ -26,10 +25,6 @@ public:
 
     const FileTracker& GetFileTracker() const;
 
-    // IProjectManagerListener
-    void OnProjectClosed(const Project *project) override;
-    void OnProjectOpen(const Project *project) override;
-
     // IFileTrackerListener
     void OnPathAdded(const Path &addedPath) override;
     void OnPathModified(const Path &modifiedPath) override;
@@ -37,6 +32,7 @@ public:
 
 private:
     FileTracker m_fileTracker;
+    Path m_previousProjectPath = Path::Empty;
     Set<Path> m_changedPathsFromLastUpdate;
 };
 

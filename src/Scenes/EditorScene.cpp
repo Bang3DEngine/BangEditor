@@ -40,7 +40,6 @@
 #include "BangEditor/EditSceneGameObjects.h"
 #include "BangEditor/UISceneEditContainer.h"
 #include "BangEditor/UIScenePlayContainer.h"
-#include "BangEditor/EditorBehaviourManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -57,7 +56,6 @@ void EditorScene::Init()
     m_projectManager = new ProjectManager();
     m_scenePlayer = new ScenePlayer();
     m_editorClipboard = new EditorClipboard();
-    m_behaviourManager = new EditorBehaviourManager();
 
     GameObjectFactory::CreateUIGameObjectInto(this);
     GameObjectFactory::CreateUICanvasInto(this);
@@ -149,7 +147,6 @@ EditorScene::~EditorScene()
 
 void EditorScene::Update()
 {
-    GetBehaviourManager()->Update();
     GetScenePlayer()->Update();
 
     EditorSceneManager::SetActiveScene(this);
@@ -337,11 +334,6 @@ UIScenePlayContainer *EditorScene::GetScenePlayContainer() const
     return p_scenePlayContainer;
 }
 
-EditorBehaviourManager *EditorScene::GetBehaviourManager() const
-{
-    return SCAST<EditorBehaviourManager*>( Scene::GetBehaviourManager() );
-}
-
 EditSceneGameObjects *EditorScene::GetEditSceneGameObjects() const
 {
     return m_editSceneGameObjects;
@@ -357,11 +349,6 @@ void EditorScene::PushGLViewport()
 void EditorScene::PopGLViewport()
 {
     GL::SetViewport(m_prevGLViewport);
-}
-
-BehaviourManager *EditorScene::CreateBehaviourManager() const
-{
-    return new EditorBehaviourManager();
 }
 
 void EditorScene::OnPlayStateChanged(EditorPlayState,

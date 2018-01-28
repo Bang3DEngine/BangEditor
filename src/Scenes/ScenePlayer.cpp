@@ -50,6 +50,8 @@ void ScenePlayer::PlayScene()
         ScenePlayer *sp = ScenePlayer::GetInstance();
         if (Editor::GetEditorPlayState() == EditorPlayState::Editing)
         {
+            Editor::SetEditorPlayState(EditorPlayState::Playing);
+
             // Play scene!
             EditorScene *edScene = EditorSceneManager::GetEditorScene();
             EditorBehaviourManager *edBehaviourMgr = EditorBehaviourManager::GetActive();
@@ -66,13 +68,6 @@ void ScenePlayer::PlayScene()
 
                     EditorSceneManager::SetActiveScene(sp->p_playOpenScene);
 
-                    // Copy the editor's behaviours library to it, so that it
-                    // can instantiate its behaviours!
-                    Path libPath = edScene->GetBehaviourManager()->
-                                   GetBehavioursLibrary()->GetLibraryPath();
-                    sp->p_playOpenScene->GetBehaviourManager()->
-                                         SetBehavioursLibrary(libPath);
-
                     // Clone the editing scene into the playing scene
                     openScene->CloneInto(sp->p_playOpenScene);
 
@@ -84,7 +79,6 @@ void ScenePlayer::PlayScene()
             }
         }
         sp->m_pauseInNextFrame = false;
-        Editor::SetEditorPlayState(EditorPlayState::Playing);
     }
 }
 
