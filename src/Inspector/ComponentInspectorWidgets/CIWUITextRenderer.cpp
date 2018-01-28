@@ -1,12 +1,17 @@
 #include "BangEditor/CIWUITextRenderer.h"
 
+#include "Bang/Font.h"
 #include "Bang/UICanvas.h"
+#include "Bang/Resources.h"
 #include "Bang/GameObject.h"
+#include "Bang/Extensions.h"
+#include "Bang/UIComboBox.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
+#include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputColor.h"
 
 USING_NAMESPACE_BANG
@@ -25,13 +30,32 @@ void CIWUITextRenderer::InitInnerWidgets()
 
     p_colorInput = GameObject::Create<UIInputColor>();
 
+    p_horizontalAlignmentInput = GameObjectFactory::CreateUIComboBox();
+    p_horizontalAlignmentInput->AddItem("Left",   int(HorizontalAlignment::Left));
+    p_horizontalAlignmentInput->AddItem("Center", int(HorizontalAlignment::Center));
+    p_horizontalAlignmentInput->AddItem("Right",  int(HorizontalAlignment::Right));
+
+    p_verticalAlignmentInput = GameObjectFactory::CreateUIComboBox();
+    p_verticalAlignmentInput->AddItem("Bot",    int(VerticalAlignment::Bot));
+    p_verticalAlignmentInput->AddItem("Center", int(VerticalAlignment::Center));
+    p_verticalAlignmentInput->AddItem("Top",    int(VerticalAlignment::Top));
+
+    p_fontFileInput = GameObject::Create<UIInputFile>();
+    p_fontFileInput->SetExtensions( Extensions::GetTTFExtensions() );
+
     p_colorInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     p_contentInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     p_sizeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_horizontalAlignmentInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_verticalAlignmentInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_fontFileInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
-    AddWidget("Content",  p_contentInput->GetGameObject());
-    AddWidget("Size",     p_sizeInput->GetGameObject());
-    AddWidget("Color",    p_colorInput);
+    AddWidget("Content", p_contentInput->GetGameObject());
+    AddWidget("Size",    p_sizeInput->GetGameObject());
+    AddWidget("Color",   p_colorInput);
+    AddWidget("HAlign",  p_horizontalAlignmentInput->GetGameObject());
+    AddWidget("VAlign",  p_verticalAlignmentInput->GetGameObject());
+    AddWidget("Font",    p_fontFileInput);
 
     SetLabelsWidth(80);
 }
@@ -55,6 +79,12 @@ void CIWUITextRenderer::UpdateFromReference()
         p_colorInput->SetColor( GetUITextRenderer()->GetTextColor() );
     }
 
+    p_horizontalAlignmentInput->SetSelectionByValue(
+                int(GetUITextRenderer()->GetHorizontalAlignment()) );
+    p_verticalAlignmentInput->SetSelectionByValue(
+                int(GetUITextRenderer()->GetVerticalAlignment()) );
+
+    p_fontFileInput->SetPath( GetUITextRenderer()->GetFont()->GetResourceFilepath() );
 }
 
 UITextRenderer *CIWUITextRenderer::GetUITextRenderer() const
@@ -69,4 +99,9 @@ void CIWUITextRenderer::OnValueChanged(Object *object)
     GetUITextRenderer()->SetContent( p_contentInput->GetText()->GetContent() );
     GetUITextRenderer()->SetTextSize( p_sizeInput->GetValue() );
     GetUITextRenderer()->SetTextColor( p_colorInput->GetColor() );
+    GetUITextRenderer()->SetFont( Resources::Load<Font>(p_fontFileInput->GetPath()).Get() );
+    GetUITextRenderer()->SetHorizontalAlign(
+        SCAST<HorizontalAlignment>(p_horizontalAlignmentInput->GetSelectedValue()) );
+    GetUITextRenderer()->SetVerticalAlign(
+        SCAST<VerticalAlignment>(p_verticalAlignmentInput->GetSelectedValue()) );
 }

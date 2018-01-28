@@ -50,15 +50,17 @@ void ScenePlayer::PlayScene()
         ScenePlayer *sp = ScenePlayer::GetInstance();
         if (Editor::GetEditorPlayState() == EditorPlayState::Editing)
         {
-            Editor::SetEditorPlayState(EditorPlayState::Playing);
-
             // Play scene!
             EditorScene *edScene = EditorSceneManager::GetEditorScene();
             EditorBehaviourManager *edBehaviourMgr = EditorBehaviourManager::GetActive();
             bool behavioursReady = edBehaviourMgr->PrepareBehavioursLibrary();
             if (behavioursReady)
             {
+                Editor::SetEditorPlayState(EditorPlayState::Playing);
+
                 sp->m_prevOpenScenePath = SceneManager::GetActiveSceneFilepath();
+                Debug_Peek(sp->m_prevOpenScenePath);
+
                 Scene *openScene = EditorSceneManager::GetOpenScene();
                 if (openScene)
                 {
@@ -68,11 +70,15 @@ void ScenePlayer::PlayScene()
 
                     EditorSceneManager::SetActiveScene(sp->p_playOpenScene);
 
+                    // Set open scene to null first
+                    edScene->SetOpenScene(nullptr, false);
+
                     // Clone the editing scene into the playing scene
                     openScene->CloneInto(sp->p_playOpenScene);
 
                     // Now set the open scene in the editor
                     edScene->SetOpenScene(sp->p_playOpenScene, false);
+
 
                     Time::SetDeltaTimeReferenceToNow();
                 }
@@ -109,7 +115,13 @@ void ScenePlayer::StopScene()
         Editor::SetEditorPlayState(EditorPlayState::Editing);
 
         ScenePlayer *sp = ScenePlayer::GetInstance();
-        SceneManager::LoadScene(sp->m_prevOpenScenePath);
+
+        Debug_Peek(sp->m_prevOpenScenePath);
+        if (sp->m_prevOpenScenePath.IsFile())
+        {
+            SceneManager::LoadScene(sp->m_prevOpenScenePath);
+        }
+        else { SceneManager::LoadSceneInstantly(nullptr); }
 
         sp->p_playOpenScene = nullptr;
         sp->m_pauseInNextFrame = false;

@@ -238,26 +238,28 @@ void EditorScene::SetViewportForOpenScene()
 
 void EditorScene::SetOpenScene(Scene *openScene, bool destroyPreviousScene)
 {
-    if (GetOpenScene())
+    if (openScene != GetOpenScene())
     {
-        if (destroyPreviousScene) { GameObject::Destroy(GetOpenScene()); }
-        GetOpenScene()->GetLocalObjectManager()->DestroyObjects();
-        AudioManager::StopAllSounds();
-    }
+        if (GetOpenScene())
+        {
+            if (destroyPreviousScene) { GameObject::Destroy(GetOpenScene()); }
+            GetOpenScene()->GetLocalObjectManager()->DestroyObjects();
+        }
 
-    p_openScene = openScene;
-    if (GetOpenScene())
-    {
-        EventEmitter<IEditorOpenSceneListener>::PropagateToListeners(
-                    &IEditorOpenSceneListener::OnOpenScene, GetOpenScene());
+        p_openScene = openScene;
+        if (GetOpenScene())
+        {
+            EventEmitter<IEditorOpenSceneListener>::PropagateToListeners(
+                        &IEditorOpenSceneListener::OnOpenScene, GetOpenScene());
 
-        GetLocalObjectManager()->StartObjects();
+            GetLocalObjectManager()->StartObjects();
 
-        BindOpenScene();
-        GetOpenScene()->GetLocalObjectManager()->StartObjects();
-        GetOpenScene()->SetFirstFoundCamera();
-        GetOpenScene()->InvalidateCanvas();
-        UnBindOpenScene();
+            BindOpenScene();
+            GetOpenScene()->GetLocalObjectManager()->StartObjects();
+            GetOpenScene()->SetFirstFoundCamera();
+            GetOpenScene()->InvalidateCanvas();
+            UnBindOpenScene();
+        }
     }
 }
 

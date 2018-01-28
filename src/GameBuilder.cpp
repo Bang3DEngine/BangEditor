@@ -144,7 +144,7 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
     }
 
     // Copy the Project Assets in the Data directory
-    Path gameDataAssetsDir = gameDataResDir.Append("Assets");
+    Path gameDataAssetsDir = dataDir.Append("Assets");
     if (!File::DuplicateDir(Paths::GetProjectAssetsDir(), gameDataAssetsDir))
     {
         Debug_Error("Could not duplicate assets directory '" <<

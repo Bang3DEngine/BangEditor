@@ -55,13 +55,13 @@ void Project::SetProjectRootFilepath(const Path &projectDir)
 
 bool Project::OpenFirstFoundScene() const
 {
-    Path firstFoundScene = GetFirstFoundScenePath();
-    if (firstFoundScene.IsFile())
+    Path firstFoundScenePath = GetFirstFoundScenePath();
+    if (firstFoundScenePath.IsFile())
     {
-        EditorSceneManager::LoadScene(firstFoundScene);
+        EditorSceneManager::LoadScene(firstFoundScenePath);
     }
 
-    return (firstFoundScene.IsFile());
+    return (firstFoundScenePath.IsFile());
 }
 
 Path Project::GetFirstFoundScenePath() const
@@ -69,7 +69,8 @@ Path Project::GetFirstFoundScenePath() const
     List<Path> sceneFilepaths = GetProjectAssetsRootFilepath()
                                 .GetFiles(Path::FindFlag::Recursive,
                                            {Extensions::GetSceneExtension()});
-    return !sceneFilepaths.IsEmpty() ? sceneFilepaths.Front() : Path::Empty;
+    Paths::SortPathsByName(&sceneFilepaths);
+    return !sceneFilepaths.IsEmpty() ? sceneFilepaths.Back() : Path::Empty;
 }
 
 

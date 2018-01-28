@@ -30,7 +30,7 @@ int main(int, char **)
     if (!engineAssetsDir.IsDir())
     { Debug_Error("Could not find engine assets directory '" << engineAssetsDir << "'."); return 3; }
 
-    Path gameAssetsDir = resDir.Append("Assets");
+    Path gameAssetsDir = dataDir.Append("Assets");
     if (!gameAssetsDir.IsDir())
     { Debug_Error("Could not find game assets directory '" << gameAssetsDir << "'."); return 4; }
 
@@ -42,6 +42,8 @@ int main(int, char **)
     app.Init(dataDir);
     ImportFilesManager::CreateMissingImportFiles(gameAssetsDir);
     ImportFilesManager::LoadImportFilepathGUIDs(gameAssetsDir);
+
+    Paths::SetProjectRoot(dataDir);
 
     Window *mainWindow = app.CreateWindow();
     Window::SetActive(mainWindow);

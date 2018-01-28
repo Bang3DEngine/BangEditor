@@ -345,6 +345,8 @@ Compiler::Job EditorBehaviourManager::CreateCompileBehaviourJob(
 
 void EditorBehaviourManager::UpdateCompileInformations()
 {
+    if (Editor::GetEditorPlayState() != EditorPlayState::Editing) { return; }
+
     GetBehaviourTracker()->Update();
 
     GetMutex()->Lock();

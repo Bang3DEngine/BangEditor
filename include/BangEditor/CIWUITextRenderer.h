@@ -9,11 +9,13 @@ FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIInputText;
 FORWARD class UIInputNumber;
 FORWARD class UITextRenderer;
+FORWARD class UIComboBox;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class UIInputFile;
 FORWARD class UIInputColor;
 
 class CIWUITextRenderer : public ComponentInspectorWidget
@@ -35,6 +37,9 @@ private:
     UIInputText *p_contentInput = nullptr;
     UIInputNumber *p_sizeInput = nullptr;
     UIInputColor *p_colorInput = nullptr;
+    UIComboBox *p_horizontalAlignmentInput = nullptr;
+    UIComboBox *p_verticalAlignmentInput = nullptr;
+    UIInputFile *p_fontFileInput = nullptr;
 
     CIWUITextRenderer() = default;
     virtual ~CIWUITextRenderer() = default;

@@ -50,11 +50,7 @@ bool SceneOpenerSaver::OnOpenScene()
         {
             if (CloseScene())
             {
-                EditorScene *edScene = EditorSceneManager::GetEditorScene();
-                Scene *scene = GameObjectFactory::CreateScene(false);
-                scene->ImportXMLFromFile(openScenePath);
-                edScene->SetOpenScene(scene);
-
+                SceneManager::LoadScene(openScenePath);
                 m_currentOpenScenePath = openScenePath;
                 return true;
             }
