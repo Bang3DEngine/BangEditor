@@ -34,7 +34,7 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
     currentProject->ImportXMLFromFile(projectFilepath);
     currentProject->SetProjectRootFilepath( projectFilepath.GetDirectory() );
 
-    EditorPaths::SetProjectRoot(currentProject->GetProjectDirPath());
+    Paths::SetProjectRoot(currentProject->GetProjectDirPath());
 
     Path assetsDir = currentProject->GetProjectAssetsRootFilepath();
     ImportFilesManager::CreateMissingImportFiles(assetsDir);

@@ -20,7 +20,7 @@ USING_NAMESPACE_BANG_EDITOR
 Path GameBuilder::GetExecutablePath()
 {
     Project *project = ProjectManager::GetCurrentProject();
-    Path outputExecutableFilepath = EditorPaths::GetProjectDir().
+    Path outputExecutableFilepath = Paths::GetProjectDir().
                                          Append(project->GetProjectName() + "_Game").
                                          Append(project->GetProjectName()).
                                          AppendExtension("exe");
@@ -77,7 +77,7 @@ void GameBuilder::BuildGame(const String &gameName,
 
 bool GameBuilder::CompileGameExecutable(BinType binaryType)
 {
-    List<Path> sceneFiles = EditorPaths::GetProjectAssetsDir()
+    List<Path> sceneFiles = Paths::GetProjectAssetsDir()
                                     .GetFiles(Path::FindFlag::Recursive,
                                                {Extensions::GetSceneExtension()});
     if (sceneFiles.IsEmpty())
@@ -145,10 +145,10 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
 
     // Copy the Project Assets in the Data directory
     Path gameDataAssetsDir = gameDataResDir.Append("Assets");
-    if (!File::DuplicateDir(EditorPaths::GetProjectAssetsDir(), gameDataAssetsDir))
+    if (!File::DuplicateDir(Paths::GetProjectAssetsDir(), gameDataAssetsDir))
     {
         Debug_Error("Could not duplicate assets directory '" <<
-                    EditorPaths::GetProjectAssetsDir() << "' into '" <<
+                    Paths::GetProjectAssetsDir() << "' into '" <<
                     gameDataAssetsDir << "'");
         return false;
     }
@@ -164,7 +164,7 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
     File::CreateDirectory(dataLibsDir);
 
     // Compile every behaviour into its .o
-    List<Path> behavioursSourceFiles = EditorPaths::GetProjectAssetsDir()
+    List<Path> behavioursSourceFiles = Paths::GetProjectAssetsDir()
                                         .GetFiles(Path::FindFlag::Recursive,
                                          Extensions::GetSourceFileExtensions());
 

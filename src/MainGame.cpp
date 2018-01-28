@@ -50,8 +50,7 @@ int main(int, char **)
     List<Path> sceneFilepaths = gameAssetsDir.GetFiles(Path::FindFlag::Recursive,
                                                 {Extensions::GetSceneExtension()});
     if (sceneFilepaths.IsEmpty())
-    {
-        Debug_Error("No scene found in '" << gameAssetsDir << "'");
+    { Debug_Error("No scene found in '" << gameAssetsDir << "'");
         return 6;
     }
 

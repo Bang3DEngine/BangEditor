@@ -139,9 +139,9 @@ bool SceneOpenerSaver::CloseScene()
 
 Path SceneOpenerSaver::GetDialogStartPath() const
 {
-    if (EditorPaths::GetProjectAssetsDir().Exists())
+    if (Paths::GetProjectAssetsDir().Exists())
     {
-        return EditorPaths::GetProjectAssetsDir();
+        return Paths::GetProjectAssetsDir();
     }
     return Paths::GetHome();
 }

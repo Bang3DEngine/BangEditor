@@ -160,9 +160,15 @@ void EditorScene::Update()
     {
         BindOpenScene();
 
-        SceneManager::UpdateScene(openScene);
+        if (Editor::GetEditorPlayState() == EditorPlayState::Playing)
+        {
+            SceneManager::UpdateScene(openScene);
+        }
         GetEditSceneGameObjects()->Update();
+
+        EditorSceneManager::SetActiveScene(this);
         GetSceneEditContainer()->HandleSelection();
+        EditorSceneManager::SetActiveScene(openScene);
 
         UnBindOpenScene();
     }
@@ -251,6 +257,7 @@ void EditorScene::SetOpenScene(Scene *openScene, bool destroyPreviousScene)
         GetLocalObjectManager()->StartObjects();
 
         BindOpenScene();
+        GetOpenScene()->GetLocalObjectManager()->StartObjects();
         GetOpenScene()->SetFirstFoundCamera();
         GetOpenScene()->InvalidateCanvas();
         UnBindOpenScene();

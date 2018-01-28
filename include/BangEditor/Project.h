@@ -13,7 +13,6 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class Project : public Serializable
 {
-    ICLONEABLE(Project)
     SERIALIZABLE(Project)
 
 public:

@@ -2,6 +2,7 @@
 #define SCENEPLAYER_H
 
 #include "Bang/Bang.h"
+#include "Bang/Path.h"
 
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ShortcutManager.h"
@@ -23,8 +24,8 @@ public:
 
 private:
     bool m_pauseInNextFrame = false;
-    Scene *p_editOpenScene = nullptr;
     Scene *p_playOpenScene = nullptr;
+    Path m_prevOpenScenePath = Path::Empty;
 
     ScenePlayer();
     virtual ~ScenePlayer();

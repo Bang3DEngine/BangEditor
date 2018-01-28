@@ -129,8 +129,8 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
             Paths::GetEngineAssetsDir().GetFiles(Path::FindFlag::Recursive,
                                             extensions);
     List<Path> projectAssetPaths =
-            EditorPaths::GetProjectAssetsDir().GetFiles(Path::FindFlag::Recursive,
-                                                   extensions);
+            Paths::GetProjectAssetsDir().GetFiles(Path::FindFlag::Recursive,
+                                                  extensions);
     foundAssetPaths.PushBack(engineAssetPaths);
     foundAssetPaths.PushBack(projectAssetPaths);
     foundAssetPaths.PushFront(Path::Empty);

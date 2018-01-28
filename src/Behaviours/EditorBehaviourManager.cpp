@@ -227,8 +227,8 @@ void EditorBehaviourManager::RemoveBehaviourLibrariesOf(const String& behaviourN
 {
     if (behaviourName.IsEmpty()) { return; }
 
-    List<Path> libFilepaths = EditorPaths::GetProjectLibrariesDir().
-                                           GetFiles(Path::FindFlag::Simple);
+    List<Path> libFilepaths = Paths::GetProjectLibrariesDir().
+                                     GetFiles(Path::FindFlag::Simple);
     for (const Path &libFilepath : libFilepaths)
     {
         if (libFilepath.GetName() == behaviourName)
@@ -255,12 +255,12 @@ void EditorBehaviourManager::CompileAllProjectBehaviours()
 
 void EditorBehaviourManager::MergeIntoBehavioursLibrary()
 {
-    Path outputLibPath = EditorPaths::GetProjectLibrariesDir().
+    Path outputLibPath = Paths::GetProjectLibrariesDir().
                               Append("Behaviours").
                               AppendExtension("so").
                               AppendExtension( String(Time::GetNow_Nanos()) );
 
-    List<Path> behaviourObjs = EditorPaths::GetProjectLibrariesDir().
+    List<Path> behaviourObjs = Paths::GetProjectLibrariesDir().
                                GetFiles(Path::FindFlag::Simple, {"o"});
 
     EditorBehaviourManager::RemoveBehaviourLibrariesOf( "Behaviours" );
@@ -295,7 +295,7 @@ Compiler::Result EditorBehaviourManager::MergeBehaviourObjects(
 
 List<Path> EditorBehaviourManager::GetBehaviourSourcesPaths()
 {
-    List<Path> behaviourSources = EditorPaths::GetProjectAssetsDir().
+    List<Path> behaviourSources = Paths::GetProjectAssetsDir().
                                   GetFiles(Path::FindFlag::Recursive,
                                            Extensions::GetSourceFileExtensions());
     return behaviourSources;
@@ -321,7 +321,7 @@ Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType)
 
 Path EditorBehaviourManager::GetObjectOutputPath(const Path &inputBehaviourPath)
 {
-    return EditorPaths::GetProjectLibrariesDir().
+    return Paths::GetProjectLibrariesDir().
                               Append(inputBehaviourPath.GetName()).
                               AppendExtension("o").
                               AppendExtension( String(Time::GetNow_Nanos()) );
@@ -336,7 +336,7 @@ Compiler::Job EditorBehaviourManager::CreateCompileBehaviourJob(
     job.outputMode = Compiler::OutputType::Object;
     job.includePaths.PushBack( Paths::GetEngineIncludeDirs() );
     // job.includePaths.PushBack( EditorPaths::GetEditorIncludeDirs() );
-    job.includePaths.PushBack( EditorPaths::GetProjectIncludeDirs() );
+    job.includePaths.PushBack( Paths::GetProjectIncludeDirs() );
     job.inputFiles.PushBack(behaviourFilepath);
     job.outputFile = outputObjectFilepath;
 
@@ -387,5 +387,9 @@ void EditorBehaviourManager::BehaviourCompileRunnable::Run()
         Debug_Error("Behaviour '"  << outputPath.GetName() <<
                     "' did not compile correctly: " <<
                     compileResult.output);
+    }
+    else
+    {
+        Debug_Log("Behaviour '" << outputPath.GetName() << "' correctly compiled!");
     }
 }

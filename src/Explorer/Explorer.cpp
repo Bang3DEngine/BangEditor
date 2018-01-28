@@ -242,8 +242,8 @@ void Explorer::Clear()
 void Explorer::OnProjectOpen(const Project *project)
 {
     IProjectManagerListener::OnProjectOpen(project);
-    SetRootPath(EditorPaths::GetProjectAssetsDir());
-    SetCurrentPath(EditorPaths::GetProjectAssetsDir());
+    SetRootPath(Paths::GetProjectAssetsDir());
+    SetCurrentPath(Paths::GetProjectAssetsDir());
 }
 
 void Explorer::OnProjectClosed(const Project *project)

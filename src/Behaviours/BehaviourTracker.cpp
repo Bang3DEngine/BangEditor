@@ -13,7 +13,7 @@ BehaviourTracker::BehaviourTracker()
     ProjectManager::GetInstance()->RegisterListener(this);
     m_fileTracker.EventEmitter<IFileTrackerListener>::RegisterListener(this);
     m_fileTracker.SetCheckFrequencySeconds(4.0);
-    m_fileTracker.TrackPath( EditorPaths::GetProjectAssetsDir() );
+    m_fileTracker.TrackPath( Paths::GetProjectAssetsDir() );
 }
 
 BehaviourTracker::~BehaviourTracker()
@@ -47,7 +47,7 @@ bool BehaviourTracker::HasBeenModified(const Path &sourcePath) const
 List<Path> BehaviourTracker::GetIncludeDirs() const
 {
     List<Path> includePaths;
-    includePaths.PushBack( EditorPaths::GetProjectIncludeDirs() );
+    includePaths.PushBack( Paths::GetProjectIncludeDirs() );
     return includePaths;
 }
 
@@ -58,12 +58,12 @@ const FileTracker &BehaviourTracker::GetFileTracker() const
 
 void BehaviourTracker::OnProjectClosed(const Project *project)
 {
-    m_fileTracker.UnTrackPath( EditorPaths::GetProjectAssetsDir() );
+    m_fileTracker.UnTrackPath( Paths::GetProjectAssetsDir() );
 }
 
 void BehaviourTracker::OnProjectOpen(const Project *project)
 {
-    m_fileTracker.TrackPath( EditorPaths::GetProjectAssetsDir() );
+    m_fileTracker.TrackPath( Paths::GetProjectAssetsDir() );
 }
 
 void BehaviourTracker::OnPathAdded(const Path &addedPath)

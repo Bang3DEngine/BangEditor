@@ -15,6 +15,6 @@ EditorResources::~EditorResources()
 
 Array<Path> EditorResources::GetLookUpPaths() const
 {
-    return {EditorPaths::GetProjectAssetsDir(), Paths::GetEngineAssetsDir()};
+    return {Paths::GetProjectAssetsDir(), Paths::GetEngineAssetsDir()};
 }
 

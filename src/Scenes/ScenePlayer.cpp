@@ -50,14 +50,15 @@ void ScenePlayer::PlayScene()
         ScenePlayer *sp = ScenePlayer::GetInstance();
         if (Editor::GetEditorPlayState() == EditorPlayState::Editing)
         {
-            // Clone scene
+            // Play scene!
             EditorScene *edScene = EditorSceneManager::GetEditorScene();
             EditorBehaviourManager *edBehaviourMgr = EditorBehaviourManager::GetActive();
             bool behavioursReady = edBehaviourMgr->PrepareBehavioursLibrary();
             if (behavioursReady)
             {
-                sp->p_editOpenScene = EditorSceneManager::GetOpenScene();
-                if (sp->p_editOpenScene)
+                sp->m_prevOpenScenePath = SceneManager::GetActiveSceneFilepath();
+                Scene *openScene = EditorSceneManager::GetOpenScene();
+                if (openScene)
                 {
                     // Create empty scene, set it active, start it empty
                     sp->p_playOpenScene = GameObjectFactory::CreateScene(false);
@@ -73,7 +74,7 @@ void ScenePlayer::PlayScene()
                                          SetBehavioursLibrary(libPath);
 
                     // Clone the editing scene into the playing scene
-                    sp->p_editOpenScene->CloneInto(sp->p_playOpenScene);
+                    openScene->CloneInto(sp->p_playOpenScene);
 
                     // Now set the open scene in the editor
                     edScene->SetOpenScene(sp->p_playOpenScene, false);
@@ -114,14 +115,10 @@ void ScenePlayer::StopScene()
         Editor::SetEditorPlayState(EditorPlayState::Editing);
 
         ScenePlayer *sp = ScenePlayer::GetInstance();
-        if (sp->p_editOpenScene)
-        {
-            EditorScene *edScene = EditorSceneManager::GetEditorScene();
-            edScene->SetOpenScene(sp->p_editOpenScene, true);
+        SceneManager::LoadScene(sp->m_prevOpenScenePath);
 
-            sp->p_editOpenScene = sp->p_playOpenScene = nullptr;
-            sp->m_pauseInNextFrame = false;
-        }
+        sp->p_playOpenScene = nullptr;
+        sp->m_pauseInNextFrame = false;
     }
 }
 

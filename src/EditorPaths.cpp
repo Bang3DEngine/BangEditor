@@ -18,26 +18,10 @@ void EditorPaths::InitEditorPath(const Path &editorRootPath)
     c_editorRoot = editorRootPath;
 }
 
-List<Path> EditorPaths::GetAllProjectSubDirs()
-{
-    List<Path> subdirs = EditorPaths::GetProjectDir()
-                         .GetSubDirectories(Path::FindFlag::Recursive);
-    subdirs.PushFront(EditorPaths::GetProjectDir());
-    return subdirs;
-}
-
 List<Path> EditorPaths::GetEditorIncludeDirs()
 {
     List<Path> incDirs;
     incDirs.PushBack( EditorPaths::GetEditorDir().Append("include") );
-    return incDirs;
-}
-
-List<Path> EditorPaths::GetProjectIncludeDirs()
-{
-    List<Path> incDirs = EditorPaths::GetProjectAssetsDir()
-                        .GetSubDirectories(Path::FindFlag::Recursive);
-    incDirs.PushBack( EditorPaths::GetProjectAssetsDir() );
     return incDirs;
 }
 
@@ -50,21 +34,6 @@ Path EditorPaths::GetEditorBinaryDir(BinType binaryType)
 Path EditorPaths::GetGameExecutableOutputFile(BinType binaryType)
 {
     return EditorPaths::GetEditorBinaryDir(binaryType).Append("Game");
-}
-
-const Path &EditorPaths::GetProjectDir()
-{
-    return EditorPaths::GetInstance()->c_projectRoot;
-}
-
-Path EditorPaths::GetProjectAssetsDir()
-{
-    return GetProjectDir().Append("Assets");
-}
-
-Path EditorPaths::GetProjectLibrariesDir()
-{
-    return GetProjectDir().Append("Libraries");
 }
 
 const Path &EditorPaths::GetEditorDir()
@@ -80,16 +49,6 @@ Path EditorPaths::GetEditorResourcesDir()
 Path EditorPaths::CreateEditorPath(const String &path)
 {
     return EditorPaths::GetEditorResourcesDir().Append(path);
-}
-
-Path EditorPaths::CreateProjectPath(const String &path)
-{
-    return EditorPaths::GetProjectAssetsDir().Append(path);
-}
-
-void EditorPaths::SetProjectRoot(const Path &projectRootDir)
-{
-    EditorPaths::GetInstance()->c_projectRoot = projectRootDir;
 }
 
 EditorPaths *EditorPaths::GetInstance()

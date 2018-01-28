@@ -421,7 +421,7 @@ void MenuBar::OnAddAudioSource(MenuItem*)
 
 void MenuBar::OnAddNewBehaviour(MenuItem*)
 {
-    Path behaviourDir = EditorPaths::GetProjectAssetsDir();
+    Path behaviourDir = Paths::GetProjectAssetsDir();
     String behaviourName = "";
     do
     {
