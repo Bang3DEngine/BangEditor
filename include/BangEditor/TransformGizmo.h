@@ -8,9 +8,10 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class TranslateGizmo;
-FORWARD class RotateGizmo;
 FORWARD class ScaleGizmo;
+FORWARD class RotateGizmo;
+FORWARD class TranslateGizmo;
+FORWARD class RectTransformSelectionGizmo;
 
 class TransformGizmo : public GameObject,
                        public SelectionGizmo
@@ -27,12 +28,13 @@ public:
     float GetScaleFactor() const;
 
 private:
-    enum class TransformMode { Translate, Rotate, Scale };
+    enum class TransformMode { Translate, Rotate, Scale, Rect };
     TransformMode m_transformMode = TransformMode::Translate;
 
-    TranslateGizmo *p_translateGizmo = nullptr;
-    RotateGizmo    *p_rotateGizmo    = nullptr;
-    ScaleGizmo     *p_scaleGizmo     = nullptr;
+    TranslateGizmo              *p_translateGizmo     = nullptr;
+    RotateGizmo                 *p_rotateGizmo        = nullptr;
+    ScaleGizmo                  *p_scaleGizmo         = nullptr;
+    RectTransformSelectionGizmo *p_rectTransformGizmo = nullptr;
 
 	TransformGizmo();
     virtual ~TransformGizmo();

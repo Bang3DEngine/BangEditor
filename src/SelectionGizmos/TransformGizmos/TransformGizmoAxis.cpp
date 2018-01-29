@@ -48,7 +48,7 @@ void TransformGizmoAxis::Update()
     if (!IsBeingGrabbed())
     {
         m_isBeingGrabbed = isMouseOver &&
-                         Input::GetMouseButtonDown(MouseButton::Left);
+                           Input::GetMouseButtonDown(MouseButton::Left);
     }
     else
     {

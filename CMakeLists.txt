@@ -151,6 +151,8 @@ ${SRC_DIR}/SelectionGizmos/TransformGizmos/TransformGizmo.cpp
 ${SRC_DIR}/SelectionGizmos/TransformGizmos/TransformGizmoAxis.cpp
 ${SRC_DIR}/SelectionGizmos/TransformGizmos/TranslateGizmo.cpp
 ${SRC_DIR}/SelectionGizmos/TransformGizmos/TranslateGizmoAxis.cpp
+${SRC_DIR}/SelectionGizmos/RectTransformGizmos/RectTransformCornerSelectionGizmo.cpp
+${SRC_DIR}/SelectionGizmos/RectTransformGizmos/RectTransformSelectionGizmo.cpp
 ${SRC_DIR}/ShortcutManager.cpp
 ${SRC_DIR}/MenuBar.cpp
 ${SRC_DIR}/MenuItem.cpp

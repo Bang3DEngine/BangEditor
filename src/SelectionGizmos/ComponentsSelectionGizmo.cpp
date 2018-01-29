@@ -60,6 +60,7 @@ void ComponentsSelectionGizmo::RenderCameraGizmo(Camera *cam, RenderPass rp)
         Transform *camTransform = cam->GetGameObject()->GetTransform();
 
         Gizmos::Reset();
+        Gizmos::SetRenderPass(rp);
         Gizmos::SetColor(Color::Green);
         Gizmos::SetReceivesLighting(false);
 

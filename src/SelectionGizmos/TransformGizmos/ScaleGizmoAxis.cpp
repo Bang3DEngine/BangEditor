@@ -66,15 +66,14 @@ void ScaleGizmoAxis::SetReferencedGameObject(GameObject *referencedGameObject)
 void ScaleGizmoAxis::Update()
 {
     TransformGizmoAxis::Update();
-    if (!GetReferencedGameObject() ||
-        !GetReferencedGameObject()->GetTransform()) { return; }
+    GameObject *refGo = GetReferencedGameObject();
+    if (!refGo || !refGo->GetTransform()) { return; }
 
     if (IsBeingGrabbed())
     {
         Camera *cam = GetEditorCamera();
         Transform *camT = cam->GetGameObject()->GetTransform();
 
-        GameObject *refGo = GetReferencedGameObject();
         Transform *refGoT = refGo->GetTransform();
         Vector3 refGoCenter = refGoT->GetPosition();
 
