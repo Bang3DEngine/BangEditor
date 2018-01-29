@@ -11,8 +11,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class TranslateGizmoAxis;
 
-class TranslateGizmo : public GameObject,
-                       public SelectionGizmo
+class TranslateGizmo : public SelectionGizmo
 {
     GAMEOBJECT_EDITOR(TranslateGizmo);
 

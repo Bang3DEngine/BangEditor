@@ -7,8 +7,7 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class ComponentsSelectionGizmo : public GameObject,
-                                 public SelectionGizmo
+class ComponentsSelectionGizmo : public SelectionGizmo
 {
     GAMEOBJECT_EDITOR(ComponentsSelectionGizmo);
 

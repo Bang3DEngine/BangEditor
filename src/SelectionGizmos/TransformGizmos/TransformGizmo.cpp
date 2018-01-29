@@ -4,6 +4,7 @@
 #include "Bang/Vector3.h"
 #include "Bang/Transform.h"
 #include "Bang/RectTransform.h"
+#include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/ScaleGizmo.h"
 #include "BangEditor/RotateGizmo.h"
@@ -25,15 +26,21 @@ TransformGizmo::TransformGizmo()
     GetHideFlags().SetOn(HideFlag::DontSerialize);
     GetHideFlags().SetOn(HideFlag::DontClone);
 
+    p_worldGizmoContainer = GameObjectFactory::CreateGameObject(true);
+    p_canvasGizmoContainer = GameObjectFactory::CreateUIGameObject(true);
+    GameObjectFactory::CreateUICanvasInto(p_canvasGizmoContainer);
+    p_worldGizmoContainer->SetParent(this);
+    p_canvasGizmoContainer->SetParent(this);
+
     p_translateGizmo     = GameObject::Create<TranslateGizmo>();
     p_rotateGizmo        = GameObject::Create<RotateGizmo>();
     p_scaleGizmo         = GameObject::Create<ScaleGizmo>();
     p_rectTransformGizmo = GameObject::Create<RectTransformSelectionGizmo>();
 
-    p_translateGizmo->SetParent(this);
-    p_rotateGizmo->SetParent(this);
-    p_scaleGizmo->SetParent(this);
-    p_rectTransformGizmo->SetParent(this);
+    p_translateGizmo->SetParent(p_worldGizmoContainer);
+    p_rotateGizmo->SetParent(p_worldGizmoContainer);
+    p_scaleGizmo->SetParent(p_worldGizmoContainer);
+    p_rectTransformGizmo->SetParent(p_canvasGizmoContainer);
 
     p_translateGizmo->SetEnabled(false);
     p_rotateGizmo->SetEnabled(false);
@@ -47,7 +54,7 @@ TransformGizmo::~TransformGizmo()
 
 void TransformGizmo::Update()
 {
-    GameObject::Update();
+    SelectionGizmo::Update();
 
     GameObject *refGo = GetReferencedGameObject();
     if (!refGo || !refGo->GetTransform()) { return; }
@@ -114,9 +121,9 @@ void TransformGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
         {
             m_transformMode = TransformMode::Translate;
         }
-    }
 
-    Update(); // To avoid a bit of flickering
+        Update(); // To avoid a bit of flickering
+    }
 }
 
 float TransformGizmo::GetScaleFactor() const

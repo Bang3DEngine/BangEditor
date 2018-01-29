@@ -48,12 +48,7 @@ bool SceneOpenerSaver::OnOpenScene()
     {
         if (openScenePath.IsFile())
         {
-            if (CloseScene())
-            {
-                SceneManager::LoadScene(openScenePath);
-                m_currentOpenScenePath = openScenePath;
-                return true;
-            }
+            return OpenSceneInEditor(openScenePath);
         }
     }
     return false;
@@ -154,6 +149,17 @@ bool SceneOpenerSaver::IsCurrentSceneSaved() const
         openScene->ExportXML(&sceneInfo);
 
         return (savedInfo.ToString() == sceneInfo.ToString());
+    }
+    return false;
+}
+
+bool SceneOpenerSaver::OpenSceneInEditor(const Path &scenePath)
+{
+    if (CloseScene())
+    {
+        SceneManager::LoadScene(scenePath);
+        m_currentOpenScenePath = scenePath;
+        return true;
     }
     return false;
 }

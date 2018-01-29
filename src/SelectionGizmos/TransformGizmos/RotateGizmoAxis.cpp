@@ -111,7 +111,8 @@ void RotateGizmoAxis::Update()
         Camera *cam = GetEditorCamera();
         const Vector2 mousePos = Input::GetMousePositionNDC();
 
-        TransformGizmo *tg = SCAST<TransformGizmo*>(GetParent()->GetParent());
+        TransformGizmo *tg = SCAST<TransformGizmo*>(GetParent()->GetParent()->
+                                                    GetParent());
         const float SphereRadius = tg->GetScaleFactor() * 1.0f;
 
         if (GrabHasJustChanged())

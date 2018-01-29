@@ -11,8 +11,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class ScaleGizmoAxis;
 
-class ScaleGizmo : public GameObject,
-                   public SelectionGizmo
+class ScaleGizmo : public SelectionGizmo
 {
     GAMEOBJECT_EDITOR(ScaleGizmo);
 

@@ -14,8 +14,7 @@ NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class TransformGizmoAxis : public GameObject,
-                           public SelectionGizmo
+class TransformGizmoAxis : public SelectionGizmo
 {
 public:
     // GameObject
@@ -32,15 +31,10 @@ protected:
     TransformGizmoAxis();
     virtual ~TransformGizmoAxis();
 
-    bool IsBeingGrabbed() const;
-    bool GrabHasJustChanged() const;
-
 private:
     using SelectionState = SelectionGizmo::SelectionState;
 
     Axis3DExt m_axis = Undef<Axis3DExt>();
-    bool m_grabHasJustChanged = false;
-    bool m_isBeingGrabbed = false;
 
     void SetColor(SelectionState state);
 

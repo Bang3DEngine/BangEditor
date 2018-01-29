@@ -50,6 +50,7 @@ UITabContainer::UITabContainer()
     p_hiddenTabsContainer = GameObjectFactory::CreateUIGameObject();
     GetHiddenTabsContainer()->AddComponent<UIHorizontalLayout>();
     GetHiddenTabsContainer()->AddComponent<UILayoutIgnorer>();
+    GetHiddenTabsContainer()->SetVisible(false);
 
     p_headersBar->SetParent(this);
     // GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Flexible,

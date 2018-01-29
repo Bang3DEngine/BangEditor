@@ -93,6 +93,10 @@ RH<Texture2D> EditorIconManager::GetAxesIcon()
 { return EditorIconManager::GetIconTexture("Axes"); }
 RH<Texture2D> EditorIconManager::GetHairCrossIcon()
 { return EditorIconManager::GetIconTexture("HairCross"); }
+RH<Texture2D> EditorIconManager::GetCircleIcon()
+{ return EditorIconManager::GetIconTexture("Circle"); }
+RH<Texture2D> EditorIconManager::GetCircleHardIcon()
+{ return EditorIconManager::GetIconTexture("CircleHard"); }
 RH<Texture2D> EditorIconManager::GetEyeIcon()
 { return EditorIconManager::GetIconTexture("Eye"); }
 RH<Texture2D> EditorIconManager::GetAnchoredRectIcon()

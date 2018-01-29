@@ -14,8 +14,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class RectTransformCornerSelectionGizmo;
 
-class RectTransformSelectionGizmo : public GameObject,
-                                    public SelectionGizmo
+class RectTransformSelectionGizmo : public SelectionGizmo
 {
     GAMEOBJECT_EDITOR(RectTransformSelectionGizmo);
 

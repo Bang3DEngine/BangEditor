@@ -13,8 +13,7 @@ FORWARD class RotateGizmo;
 FORWARD class TranslateGizmo;
 FORWARD class RectTransformSelectionGizmo;
 
-class TransformGizmo : public GameObject,
-                       public SelectionGizmo
+class TransformGizmo : public SelectionGizmo
 {
     GAMEOBJECT_EDITOR(TransformGizmo);
 
@@ -30,6 +29,9 @@ public:
 private:
     enum class TransformMode { Translate, Rotate, Scale, Rect };
     TransformMode m_transformMode = TransformMode::Translate;
+
+    GameObject                  *p_worldGizmoContainer  = nullptr;
+    GameObject                  *p_canvasGizmoContainer = nullptr;
 
     TranslateGizmo              *p_translateGizmo     = nullptr;
     RotateGizmo                 *p_rotateGizmo        = nullptr;

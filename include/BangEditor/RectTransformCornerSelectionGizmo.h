@@ -13,8 +13,7 @@ NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class RectTransformCornerSelectionGizmo : public GameObject,
-                                          public SelectionGizmo
+class RectTransformCornerSelectionGizmo : public SelectionGizmo
 {
     GAMEOBJECT_EDITOR(RectTransformCornerSelectionGizmo);
 

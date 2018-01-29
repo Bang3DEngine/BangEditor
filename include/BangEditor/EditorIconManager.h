@@ -36,6 +36,8 @@ public:
     static RH<Texture2D> GetSceneIcon();
     static RH<Texture2D> GetAxesIcon();
     static RH<Texture2D> GetHairCrossIcon();
+    static RH<Texture2D> GetCircleIcon();
+    static RH<Texture2D> GetCircleHardIcon();
     static RH<Texture2D> GetEyeIcon();
     static RH<Texture2D> GetAnchoredRectIcon();
 

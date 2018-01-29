@@ -59,7 +59,7 @@ RotateGizmo::~RotateGizmo()
 
 void RotateGizmo::Update()
 {
-    GameObject::Update();
+    SelectionGizmo::Update();
 }
 
 void RotateGizmo::Render(RenderPass rp, bool renderChildren)

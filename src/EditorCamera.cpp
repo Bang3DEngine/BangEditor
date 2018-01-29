@@ -307,5 +307,6 @@ void EditorCamera::SwitchProjectionModeTo(bool mode3D)
 
 EditorCamera *EditorCamera::GetInstance()
 {
-    return EditSceneGameObjects::GetInstance()->GetEditorCamera();
+    EditSceneGameObjects *editSceneGameObject = EditSceneGameObjects::GetInstance();
+    return editSceneGameObject ? editSceneGameObject->GetEditorCamera() : nullptr;
 }

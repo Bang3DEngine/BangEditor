@@ -117,10 +117,10 @@ UISceneImage::RenderMode UISceneImage::GetRenderMode() const
 
 void UISceneImage::UISceneImageRenderer::OnRender()
 {
-    const bool wasBlendEnabled = GL::IsEnabled(GL::Test::Blend);
-    GL::Disable(GL::Test::Blend);
+    const bool wasBlendEnabled = GL::IsEnabledi(GL::Test::Blend, 0);
+    GL::Disablei(GL::Test::Blend, 0);
 
     UIImageRenderer::OnRender();
 
-    GL::SetEnabled(GL::Test::Blend, wasBlendEnabled);
+    GL::SetEnabledi(GL::Test::Blend, 0, wasBlendEnabled);
 }

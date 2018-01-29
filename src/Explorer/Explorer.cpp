@@ -26,6 +26,7 @@
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/EditorIconManager.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/ExplorerItemFactory.h"
@@ -417,7 +418,7 @@ void Explorer::OnItemDoubleClicked(IFocusable *itemFocusable)
         if (Editor::IsEditingScene() &&
             itemPath.HasExtension(Extensions::GetSceneExtension()))
         {
-            SceneManager::LoadScene(itemPath);
+            SceneOpenerSaver::GetInstance()->OpenSceneInEditor(itemPath);
         }
     }
 }

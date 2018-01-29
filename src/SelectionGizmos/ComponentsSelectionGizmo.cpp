@@ -33,7 +33,7 @@ ComponentsSelectionGizmo::~ComponentsSelectionGizmo()
 
 void ComponentsSelectionGizmo::Update()
 {
-    GameObject::Update();
+    SelectionGizmo::Update();
 }
 
 void ComponentsSelectionGizmo::Render(RenderPass rp, bool renderChildren)

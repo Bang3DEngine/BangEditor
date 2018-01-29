@@ -25,6 +25,10 @@ RectTransformSelectionGizmo::RectTransformSelectionGizmo()
     p_topLeftCorner  = GameObject::Create<RectTransformCornerSelectionGizmo>();
     p_topRightCorner = GameObject::Create<RectTransformCornerSelectionGizmo>();
     p_botRightCorner = GameObject::Create<RectTransformCornerSelectionGizmo>();
+    p_botLeftCorner-> SetSides( Side::Left, Side::Bot);
+    p_topLeftCorner-> SetSides( Side::Left, Side::Top);
+    p_topRightCorner->SetSides(Side::Right, Side::Top);
+    p_botRightCorner->SetSides(Side::Right, Side::Bot);
 
     p_selectionGo = GameObjectFactory::CreateUIGameObject(true);
     p_selectionGo->SetName("RectSelection");
@@ -34,7 +38,6 @@ RectTransformSelectionGizmo::RectTransformSelectionGizmo()
     p_topLeftCorner->SetParent(this);
     p_topRightCorner->SetParent(this);
     p_botRightCorner->SetParent(this);
-
 }
 
 RectTransformSelectionGizmo::~RectTransformSelectionGizmo()
@@ -43,7 +46,7 @@ RectTransformSelectionGizmo::~RectTransformSelectionGizmo()
 
 void RectTransformSelectionGizmo::Update()
 {
-    GameObject::Update();
+    SelectionGizmo::Update();
 
     GameObject *refGo = GetReferencedGameObject();
     if (!refGo || !refGo->GetTransform()) { return; }
@@ -51,6 +54,8 @@ void RectTransformSelectionGizmo::Update()
 
 void RectTransformSelectionGizmo::Render(RenderPass renderPass, bool renderChildren)
 {
+    GetTransform()->SetScale(Vector3::One);
+
     bool selection = GL::IsBound( GEngine::GetActiveSelectionFramebuffer() );
     p_selectionGo->SetEnabled(selection);
 

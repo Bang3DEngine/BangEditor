@@ -16,8 +16,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class RotateGizmoAxis;
 
-class RotateGizmo : public GameObject,
-                    public SelectionGizmo
+class RotateGizmo : public SelectionGizmo
 {
     GAMEOBJECT_EDITOR(RotateGizmo);
 

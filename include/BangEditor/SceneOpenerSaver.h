@@ -22,6 +22,8 @@ public:
     bool CloseScene();
     bool IsCurrentSceneSaved() const;
 
+    bool OpenSceneInEditor(const Path &scenePath);
+
     // SceneManagerListener
     void OnSceneOpen(Scene *scene, const Path &sceneFilepath) override;
 
