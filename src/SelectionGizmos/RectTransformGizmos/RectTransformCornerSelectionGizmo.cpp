@@ -1,6 +1,7 @@
 #include "BangEditor/RectTransformCornerSelectionGizmo.h"
 
 #include "Bang/Rect.h"
+#include "Bang/Input.h"
 #include "Bang/Gizmos.h"
 #include "Bang/GEngine.h"
 #include "Bang/Material.h"
@@ -44,6 +45,33 @@ RectTransformCornerSelectionGizmo::~RectTransformCornerSelectionGizmo()
 void RectTransformCornerSelectionGizmo::Update()
 {
     SelectionGizmo::Update();
+
+    GameObject *refGo = GetReferencedGameObject(); if (!refGo) { return; }
+    RectTransform *refRT = refGo->GetRectTransform(); if (!refRT) { return; }
+
+    if (IsBeingGrabbed())
+    {
+        Vector2i mousePos = Input::GetMousePosition();
+        if (GrabHasJustChanged())
+        {
+            m_startGrabMousePos = mousePos;
+            m_startMarginLeftBot  = refRT->GetMarginLeftBot();
+            m_startMarginRightTop = refRT->GetMarginRightTop();
+        }
+
+        Vector2i displacement = (mousePos - m_startGrabMousePos);
+        Vector2i newMarginLeftBot  = m_startMarginLeftBot;
+        Vector2i newMarginRightTop = m_startMarginRightTop;
+
+        if (m_hSide == Side::Left) { newMarginLeftBot.x -= displacement.x; }
+        else if (m_hSide == Side::Right) { newMarginRightTop.x -= displacement.x; }
+
+        if (m_vSide == Side::Bot) { newMarginLeftBot.y -= displacement.y; }
+        else if (m_vSide == Side::Top) { newMarginRightTop.y -= displacement.y; }
+
+        refRT->SetMarginLeftBot( newMarginLeftBot );
+        refRT->SetMarginRightTop( newMarginRightTop );
+    }
 }
 
 void RectTransformCornerSelectionGizmo::Render(RenderPass renderPass,
@@ -53,9 +81,25 @@ void RectTransformCornerSelectionGizmo::Render(RenderPass renderPass,
 
     bool selection = GL::IsBound( GEngine::GetActiveSelectionFramebuffer() );
     p_selectionRenderer->SetEnabled(selection);
-    p_selectionRenderer->SetEnabled(false);
 
-    GameObject::Render(renderPass, renderChildren);
+    SelectionGizmo::Render(renderPass, renderChildren);
+
+    Color color;
+    switch (GetSelectionState())
+    {
+        case SelectionGizmo::SelectionState::Idle:
+            color = Color::Blue;
+        break;
+
+        case SelectionGizmo::SelectionState::Over:
+            color = Color::Orange;
+        break;
+
+        case SelectionGizmo::SelectionState::Grabbed:
+            color = Color::Yellow;
+        break;
+    }
+    p_cornerRenderer->GetMaterial()->SetDiffuseColor(color);
 }
 
 void RectTransformCornerSelectionGizmo::SetReferencedGameObject(

@@ -59,25 +59,23 @@ void RectTransformSelectionGizmo::Render(RenderPass renderPass, bool renderChild
     bool selection = GL::IsBound( GEngine::GetActiveSelectionFramebuffer() );
     p_selectionGo->SetEnabled(selection);
 
-    GameObject::Render(renderPass, renderChildren);
+    if (renderPass == RenderPass::Overlay)
+    {
+        GameObject *refGo = GetReferencedGameObject();
+        if (!refGo) { return; }
 
-    if (renderPass != RenderPass::Overlay) { return; }
+        // Gizmos rendering!
+        Gizmos::Reset();
 
-    GameObject *refGo = GetReferencedGameObject();
-    if (!refGo) { return; }
+        // Rect
+        Gizmos::SetSelectable(nullptr);
+        Gizmos::SetThickness(2.0f);
+        Gizmos::SetColor( Color::White );
+        Gizmos::SetRenderPass(renderPass);
+        Gizmos::RenderRect( refGo->GetRectTransform()->GetViewportRectNDC() );
+    }
 
-    // Gizmos rendering!
-    Gizmos::Reset();
-
-    // Rect
-    Gizmos::SetSelectable(nullptr);
-    Gizmos::SetThickness(1.0f);
-    Gizmos::SetColor( Color::White );
-    Gizmos::SetRenderPass(renderPass);
-    Gizmos::RenderRect( refGo->GetRectTransform()->GetViewportRectNDC() );
-
-    // Grabs
-
+    SelectionGizmo::Render(renderPass, renderChildren);
 }
 
 void RectTransformSelectionGizmo::SetReferencedGameObject(

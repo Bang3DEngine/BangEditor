@@ -33,6 +33,9 @@ private:
 
     Side m_hSide = Undef<Side>();
     Side m_vSide = Undef<Side>();
+    Vector2i m_startGrabMousePos   = Vector2i::Zero;
+    Vector2i m_startMarginLeftBot  = Vector2i::Zero;
+    Vector2i m_startMarginRightTop = Vector2i::Zero;
 
     GameObject *p_cornerGO = nullptr;
     GameObject *p_selectionGO = nullptr;
