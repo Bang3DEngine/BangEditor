@@ -10,6 +10,7 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/SelectionFramebuffer.h"
 
+#include "BangEditor/RectTransformAnchorSelectionGizmo.h"
 #include "BangEditor/RectTransformCornerSelectionGizmo.h"
 
 USING_NAMESPACE_BANG
@@ -32,6 +33,15 @@ RectTransformSelectionGizmo::RectTransformSelectionGizmo()
     p_rightBotCorner->SetCornerSide( RectTransformCornerSelectionGizmo::CornerSide::RightBot );
     p_centerCorner->SetCornerSide  ( RectTransformCornerSelectionGizmo::CornerSide::Center   );
 
+    p_leftBotAnchor  = GameObject::Create<RectTransformAnchorSelectionGizmo>();
+    p_leftTopAnchor  = GameObject::Create<RectTransformAnchorSelectionGizmo>();
+    p_rightTopAnchor = GameObject::Create<RectTransformAnchorSelectionGizmo>();
+    p_rightBotAnchor = GameObject::Create<RectTransformAnchorSelectionGizmo>();
+    p_leftBotAnchor->SetAnchorSide ( RectTransformAnchorSelectionGizmo::AnchorSide::LeftBot  );
+    p_leftTopAnchor->SetAnchorSide ( RectTransformAnchorSelectionGizmo::AnchorSide::LeftTop  );
+    p_rightTopAnchor->SetAnchorSide( RectTransformAnchorSelectionGizmo::AnchorSide::RightTop );
+    p_rightBotAnchor->SetAnchorSide( RectTransformAnchorSelectionGizmo::AnchorSide::RightBot );
+
     p_selectionGo = GameObjectFactory::CreateUIGameObject(true);
     p_selectionGo->SetName("RectSelection");
 
@@ -41,6 +51,11 @@ RectTransformSelectionGizmo::RectTransformSelectionGizmo()
     p_rightTopCorner->SetParent(this);
     p_rightBotCorner->SetParent(this);
     p_centerCorner->SetParent(this);
+
+    p_leftBotAnchor->SetParent(this);
+    p_leftTopAnchor->SetParent(this);
+    p_rightTopAnchor->SetParent(this);
+    p_rightBotAnchor->SetParent(this);
 }
 
 RectTransformSelectionGizmo::~RectTransformSelectionGizmo()
@@ -91,4 +106,9 @@ void RectTransformSelectionGizmo::SetReferencedGameObject(
     p_rightTopCorner->SetReferencedGameObject(referencedGameObject);
     p_rightBotCorner->SetReferencedGameObject(referencedGameObject);
     p_centerCorner->SetReferencedGameObject(referencedGameObject);
+
+    p_leftBotAnchor->SetReferencedGameObject (referencedGameObject);
+    p_leftTopAnchor->SetReferencedGameObject (referencedGameObject);
+    p_rightTopAnchor->SetReferencedGameObject(referencedGameObject);
+    p_rightBotAnchor->SetReferencedGameObject(referencedGameObject);
 }

@@ -11,7 +11,7 @@ USING_NAMESPACE_BANG_EDITOR
 
 void CIWRectTransform::InitInnerWidgets()
 {
-    ComponentInspectorWidget::InitInnerWidgets();
+    CIWTransform::InitInnerWidgets();
 
     SetName("CIWRectTransform");
     SetTitle("Rect Transform");
@@ -39,7 +39,7 @@ void CIWRectTransform::InitInnerWidgets()
 
 void CIWRectTransform::UpdateFromReference()
 {
-    ComponentInspectorWidget::UpdateFromReference();
+    CIWTransform::UpdateFromReference();
 
     if (!p_anchorMinInput->HasFocus())
     {
@@ -79,7 +79,7 @@ RectTransform *CIWRectTransform::GetRectTransform() const
 
 void CIWRectTransform::OnValueChanged(Object *object)
 {
-    ComponentInspectorWidget::OnValueChanged(object);
+    CIWTransform::OnValueChanged(object);
 
     GetRectTransform()->SetAnchorMin(p_anchorMinInput->GetVector2());
     GetRectTransform()->SetAnchorMax(p_anchorMaxInput->GetVector2());

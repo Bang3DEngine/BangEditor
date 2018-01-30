@@ -3,7 +3,7 @@
 
 #include "Bang/IValueChangedListener.h"
 
-#include "BangEditor/ComponentInspectorWidget.h"
+#include "BangEditor/CIWTransform.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class RectTransform;
@@ -14,7 +14,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UIInputVector;
 
-class CIWRectTransform : public ComponentInspectorWidget
+class CIWRectTransform : public CIWTransform
 {
     GAMEOBJECT_EDITOR(CIWRectTransform);
 

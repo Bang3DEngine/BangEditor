@@ -12,6 +12,7 @@ NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class RectTransformAnchorSelectionGizmo;
 FORWARD class RectTransformCornerSelectionGizmo;
 
 class RectTransformSelectionGizmo : public SelectionGizmo
@@ -33,6 +34,11 @@ private:
     RectTransformCornerSelectionGizmo *p_rightTopCorner = nullptr;
     RectTransformCornerSelectionGizmo *p_rightBotCorner = nullptr;
     RectTransformCornerSelectionGizmo *p_centerCorner   = nullptr;
+
+    RectTransformAnchorSelectionGizmo *p_leftBotAnchor  = nullptr;
+    RectTransformAnchorSelectionGizmo *p_leftTopAnchor  = nullptr;
+    RectTransformAnchorSelectionGizmo *p_rightTopAnchor = nullptr;
+    RectTransformAnchorSelectionGizmo *p_rightBotAnchor = nullptr;
 
 	RectTransformSelectionGizmo();
 	virtual ~RectTransformSelectionGizmo();

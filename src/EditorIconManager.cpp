@@ -73,6 +73,8 @@ RH<Texture2D> EditorIconManager::GetLensLittleIcon()
 { return EditorIconManager::GetIconTexture("LensLittle"); }
 RH<Texture2D> EditorIconManager::GetSquareIcon()
 { return EditorIconManager::GetIconTexture("Square"); }
+RH<Texture2D> EditorIconManager::GetAnchorIcon()
+{ return EditorIconManager::GetIconTexture("Anchor"); }
 RH<Texture2D> EditorIconManager::GetWhiteSphereIcon()
 { return EditorIconManager::GetIconTexture("WhiteSphere"); }
 RH<Texture2D> EditorIconManager::GetFolderIcon()

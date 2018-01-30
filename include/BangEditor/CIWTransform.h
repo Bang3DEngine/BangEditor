@@ -24,7 +24,13 @@ public:
     virtual void UpdateFromReference() override;
 
 protected:
+    CIWTransform() = default;
+    virtual ~CIWTransform() = default;
+
     virtual bool ShowRemoveInMenu() const override;
+
+    // IValueChangedListener
+    void OnValueChanged(Object *object) override;
 
 private:
     UIInputVector *p_posIV   = nullptr;
@@ -33,14 +39,8 @@ private:
 
     Transform *GetTransform() const;
 
-    // IValueChangedListener
-    void OnValueChanged(Object *object) override;
-
     // ComponentWidget
     bool MustShowEnabledCheckbox() const override;
-
-    CIWTransform() = default;
-    virtual ~CIWTransform() = default;
 };
 
 NAMESPACE_BANG_EDITOR_END

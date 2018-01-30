@@ -16,8 +16,8 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-const int RectTransformCornerSelectionGizmo::CornerSize = 5;
-const int RectTransformCornerSelectionGizmo::CornerSelectionSize = 10;
+const int RectTransformCornerSelectionGizmo::CornerSize = 0;
+const int RectTransformCornerSelectionGizmo::CornerSelectionSize = 0;
 
 RectTransformCornerSelectionGizmo::RectTransformCornerSelectionGizmo()
 {
