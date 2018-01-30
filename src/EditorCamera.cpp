@@ -244,7 +244,7 @@ void EditorCamera::Update()
         bool hasMoved = false;
         Vector3 moveStep = Vector3::Zero;
 
-        if ( GL::GetViewportRect().Contains( Input::GetMousePositionScreen() ))
+        if ( GL::GetViewportRect().Contains( Input::GetMousePositionWindow() ))
         {
             HandleKeyMovement(&moveStep, &hasMoved); //WASD
             if (!HandleMouseRotation(&hasMoved, &unwrapMouse)) //Mouse rot with right click

@@ -225,7 +225,7 @@ void EditorScene::SetViewportForOpenScene()
         Camera *openSceneCam = openScene->GetCamera();
         if (openSceneCam)
         {
-            Rect ndcRect = GetOpenSceneScreenRectNDC();
+            Rect ndcRect = GetOpenSceneWindowRectNDC();
             Rect ndcRectNorm = ndcRect * 0.5f + 0.5f;
             Recti vpRectPx(
                Vector2i(ndcRectNorm.GetMin() * Vector2(GL::GetViewportSize())),
@@ -268,12 +268,12 @@ Scene *EditorScene::GetOpenScene() const
     return p_openScene;
 }
 
-Rect EditorScene::GetOpenSceneScreenRectNDC() const
+Rect EditorScene::GetOpenSceneWindowRectNDC() const
 {
     return p_sceneEditContainer->GetSceneImageRectNDC();
 }
 
-void EditorScene::RenderAndBlitToScreen()
+void EditorScene::RenderAndBlitToWindow()
 {
     Window *window = Window::GetActive();
     window->Clear();
@@ -281,7 +281,7 @@ void EditorScene::RenderAndBlitToScreen()
     GEngine *gEngine = GEngine::GetActive();
     RenderOpenScene();
     gEngine->Render(this, GetCamera());
-    window->BlitToScreen(GetCamera());
+    window->BlitToWindow(GetCamera());
 }
 
 void EditorScene::BindOpenScene()

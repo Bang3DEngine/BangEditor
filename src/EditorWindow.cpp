@@ -38,7 +38,7 @@ void EditorWindow::Render()
     EditorScene *edScene = EditorSceneManager::GetEditorScene();
     if (edScene)
     {
-        edScene->RenderAndBlitToScreen();
+        edScene->RenderAndBlitToWindow();
     }
 }
 

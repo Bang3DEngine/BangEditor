@@ -50,9 +50,9 @@ public:
     void SetOpenScene(Scene *openScene, bool destroyPreviousScene = true);
     Scene *GetOpenScene() const;
 
-    Rect GetOpenSceneScreenRectNDC() const;
+    Rect GetOpenSceneWindowRectNDC() const;
 
-    void RenderAndBlitToScreen();
+    void RenderAndBlitToWindow();
 
     MenuBar *GetMenuBar() const;
     Editor *GetEditor() const;
