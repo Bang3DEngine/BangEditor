@@ -16,8 +16,8 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-const int RectTransformCornerSelectionGizmo::CornerSize = 10;
-const int RectTransformCornerSelectionGizmo::CornerSelectionSize = 20;
+const int RectTransformCornerSelectionGizmo::CornerSize = 5;
+const int RectTransformCornerSelectionGizmo::CornerSelectionSize = 10;
 
 RectTransformCornerSelectionGizmo::RectTransformCornerSelectionGizmo()
 {
@@ -63,11 +63,35 @@ void RectTransformCornerSelectionGizmo::Update()
         Vector2i newMarginLeftBot  = m_startMarginLeftBot;
         Vector2i newMarginRightTop = m_startMarginRightTop;
 
-        if (m_hSide == Side::Left) { newMarginLeftBot.x -= displacement.x; }
-        else if (m_hSide == Side::Right) { newMarginRightTop.x -= displacement.x; }
+        switch (m_cornerSide)
+        {
+            case CornerSide::LeftBot:
+                newMarginLeftBot.x += displacement.x;
+                newMarginLeftBot.y += displacement.y;
+            break;
 
-        if (m_vSide == Side::Bot) { newMarginLeftBot.y -= displacement.y; }
-        else if (m_vSide == Side::Top) { newMarginRightTop.y -= displacement.y; }
+            case CornerSide::LeftTop:
+                newMarginLeftBot.x += displacement.x;
+                newMarginRightTop.y -= displacement.y;
+            break;
+
+            case CornerSide::RightTop:
+                newMarginRightTop.x -= displacement.x;
+                newMarginRightTop.y -= displacement.y;
+            break;
+
+            case CornerSide::RightBot:
+                newMarginRightTop.x -= displacement.x;
+                newMarginLeftBot.y += displacement.y;
+            break;
+
+            case CornerSide::Center:
+                newMarginLeftBot.x  += displacement.x;
+                newMarginLeftBot.y  += displacement.y;
+                newMarginRightTop.x -= displacement.x;
+                newMarginRightTop.y -= displacement.y;
+            break;
+        }
 
         refRT->SetMarginLeftBot( newMarginLeftBot );
         refRT->SetMarginRightTop( newMarginRightTop );
@@ -77,7 +101,7 @@ void RectTransformCornerSelectionGizmo::Update()
 void RectTransformCornerSelectionGizmo::Render(RenderPass renderPass,
                                                bool renderChildren)
 {
-    UpdateBasedOnSides();
+    UpdateBasedOnCornerSide();
 
     bool selection = GL::IsBound( GEngine::GetActiveSelectionFramebuffer() );
     p_selectionRenderer->SetEnabled(selection);
@@ -106,30 +130,50 @@ void RectTransformCornerSelectionGizmo::SetReferencedGameObject(
                                             GameObject *referencedGameObject)
 {
     SelectionGizmo::SetReferencedGameObject(referencedGameObject);
-    UpdateBasedOnSides();
+    UpdateBasedOnCornerSide();
 }
 
-void RectTransformCornerSelectionGizmo::SetSides(Side hSide, Side vSide)
+void RectTransformCornerSelectionGizmo::SetCornerSide(CornerSide cornerSide)
 {
-    m_hSide = hSide;
-    m_vSide = vSide;
-
-    ASSERT_SOFT_MSG(m_hSide == Side::Left || m_hSide == Side::Right, "Wrong side!");
-    ASSERT_SOFT_MSG(m_vSide == Side::Top  || m_vSide == Side::Bot, "Wrong side!");
-
-    UpdateBasedOnSides();
+    m_cornerSide = cornerSide;
+    UpdateBasedOnCornerSide();
 }
 
-void RectTransformCornerSelectionGizmo::UpdateBasedOnSides()
+void RectTransformCornerSelectionGizmo::UpdateBasedOnCornerSide()
 {
     GameObject *refGo    = GetReferencedGameObject(); if (!refGo) { return; }
     RectTransform *refRT = refGo->GetRectTransform(); if (!refRT) { return; }
 
     Rect refRect = refRT->GetViewportRectNDC();
-    float cornerAnchorX = (m_hSide == Side::Left) ? refRect.GetMin().x :
-                                                    refRect.GetMax().x;
-    float cornerAnchorY = (m_vSide == Side::Bot)  ? refRect.GetMin().y :
-                                                    refRect.GetMax().y;
+
+    float cornerAnchorX, cornerAnchorY;
+    switch (m_cornerSide)
+    {
+        case CornerSide::LeftBot:
+            cornerAnchorX = refRect.GetMin().x;
+            cornerAnchorY = refRect.GetMin().y;
+        break;
+
+        case CornerSide::LeftTop:
+            cornerAnchorX = refRect.GetMin().x;
+            cornerAnchorY = refRect.GetMax().y;
+        break;
+
+        case CornerSide::RightTop:
+            cornerAnchorX = refRect.GetMax().x;
+            cornerAnchorY = refRect.GetMax().y;
+        break;
+
+        case CornerSide::RightBot:
+            cornerAnchorX = refRect.GetMax().x;
+            cornerAnchorY = refRect.GetMin().y;
+        break;
+
+        case CornerSide::Center:
+            cornerAnchorX = refRect.GetCenter().x;
+            cornerAnchorY = refRect.GetCenter().y;
+        break;
+    }
 
     // Update corner and selection rectTransforms
     for (int i = 0; i < 2; ++i)

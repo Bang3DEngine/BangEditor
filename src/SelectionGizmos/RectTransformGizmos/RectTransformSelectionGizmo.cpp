@@ -21,23 +21,26 @@ RectTransformSelectionGizmo::RectTransformSelectionGizmo()
 
     AddComponent<Transform>();
 
-    p_botLeftCorner  = GameObject::Create<RectTransformCornerSelectionGizmo>();
-    p_topLeftCorner  = GameObject::Create<RectTransformCornerSelectionGizmo>();
-    p_topRightCorner = GameObject::Create<RectTransformCornerSelectionGizmo>();
-    p_botRightCorner = GameObject::Create<RectTransformCornerSelectionGizmo>();
-    p_botLeftCorner-> SetSides( Side::Left, Side::Bot);
-    p_topLeftCorner-> SetSides( Side::Left, Side::Top);
-    p_topRightCorner->SetSides(Side::Right, Side::Top);
-    p_botRightCorner->SetSides(Side::Right, Side::Bot);
+    p_leftBotCorner  = GameObject::Create<RectTransformCornerSelectionGizmo>();
+    p_leftTopCorner  = GameObject::Create<RectTransformCornerSelectionGizmo>();
+    p_rightTopCorner = GameObject::Create<RectTransformCornerSelectionGizmo>();
+    p_rightBotCorner = GameObject::Create<RectTransformCornerSelectionGizmo>();
+    p_centerCorner   = GameObject::Create<RectTransformCornerSelectionGizmo>();
+    p_leftBotCorner->SetCornerSide ( RectTransformCornerSelectionGizmo::CornerSide::LeftBot  );
+    p_leftTopCorner->SetCornerSide ( RectTransformCornerSelectionGizmo::CornerSide::LeftTop  );
+    p_rightTopCorner->SetCornerSide( RectTransformCornerSelectionGizmo::CornerSide::RightTop );
+    p_rightBotCorner->SetCornerSide( RectTransformCornerSelectionGizmo::CornerSide::RightBot );
+    p_centerCorner->SetCornerSide  ( RectTransformCornerSelectionGizmo::CornerSide::Center   );
 
     p_selectionGo = GameObjectFactory::CreateUIGameObject(true);
     p_selectionGo->SetName("RectSelection");
 
     p_selectionGo->SetParent(this);
-    p_botLeftCorner->SetParent(this);
-    p_topLeftCorner->SetParent(this);
-    p_topRightCorner->SetParent(this);
-    p_botRightCorner->SetParent(this);
+    p_leftBotCorner->SetParent(this);
+    p_leftTopCorner->SetParent(this);
+    p_rightTopCorner->SetParent(this);
+    p_rightBotCorner->SetParent(this);
+    p_centerCorner->SetParent(this);
 }
 
 RectTransformSelectionGizmo::~RectTransformSelectionGizmo()
@@ -83,8 +86,9 @@ void RectTransformSelectionGizmo::SetReferencedGameObject(
 {
     SelectionGizmo::SetReferencedGameObject(referencedGameObject);
 
-    p_botLeftCorner->SetReferencedGameObject (referencedGameObject);
-    p_topLeftCorner->SetReferencedGameObject (referencedGameObject);
-    p_topRightCorner->SetReferencedGameObject(referencedGameObject);
-    p_botRightCorner->SetReferencedGameObject(referencedGameObject);
+    p_leftBotCorner->SetReferencedGameObject (referencedGameObject);
+    p_leftTopCorner->SetReferencedGameObject (referencedGameObject);
+    p_rightTopCorner->SetReferencedGameObject(referencedGameObject);
+    p_rightBotCorner->SetReferencedGameObject(referencedGameObject);
+    p_centerCorner->SetReferencedGameObject(referencedGameObject);
 }

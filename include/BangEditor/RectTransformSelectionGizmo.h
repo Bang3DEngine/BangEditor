@@ -28,10 +28,11 @@ public:
 
 private:
     GameObject *p_selectionGo = nullptr;
-    RectTransformCornerSelectionGizmo *p_botLeftCorner  = nullptr;
-    RectTransformCornerSelectionGizmo *p_topLeftCorner  = nullptr;
-    RectTransformCornerSelectionGizmo *p_topRightCorner = nullptr;
-    RectTransformCornerSelectionGizmo *p_botRightCorner = nullptr;
+    RectTransformCornerSelectionGizmo *p_leftBotCorner  = nullptr;
+    RectTransformCornerSelectionGizmo *p_leftTopCorner  = nullptr;
+    RectTransformCornerSelectionGizmo *p_rightTopCorner = nullptr;
+    RectTransformCornerSelectionGizmo *p_rightBotCorner = nullptr;
+    RectTransformCornerSelectionGizmo *p_centerCorner   = nullptr;
 
 	RectTransformSelectionGizmo();
 	virtual ~RectTransformSelectionGizmo();

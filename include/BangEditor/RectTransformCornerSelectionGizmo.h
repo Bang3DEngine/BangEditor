@@ -18,6 +18,8 @@ class RectTransformCornerSelectionGizmo : public SelectionGizmo
     GAMEOBJECT_EDITOR(RectTransformCornerSelectionGizmo);
 
 public:
+    enum class CornerSide { LeftBot, LeftTop, RightTop, RightBot, Center };
+
     // GameObject
     void Update() override;
     void Render(RenderPass renderPass, bool renderChildren) override;
@@ -25,14 +27,13 @@ public:
     // SelectionGizmo
     void SetReferencedGameObject(GameObject *referencedGameObject) override;
 
-    void SetSides(Side hSide, Side vSide);
+    void SetCornerSide(CornerSide cornerSide);
 
 private:
     static const int CornerSize;
     static const int CornerSelectionSize;
 
-    Side m_hSide = Undef<Side>();
-    Side m_vSide = Undef<Side>();
+    CornerSide m_cornerSide = CornerSide::LeftBot;
     Vector2i m_startGrabMousePos   = Vector2i::Zero;
     Vector2i m_startMarginLeftBot  = Vector2i::Zero;
     Vector2i m_startMarginRightTop = Vector2i::Zero;
@@ -45,7 +46,7 @@ private:
     RectTransformCornerSelectionGizmo();
 	virtual ~RectTransformCornerSelectionGizmo();
 
-    void UpdateBasedOnSides();
+    void UpdateBasedOnCornerSide();
 };
 
 NAMESPACE_BANG_EDITOR_END
