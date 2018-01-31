@@ -16,8 +16,8 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-const int RectTransformAnchorSelectionGizmo::AnchorSize = 5;
-const int RectTransformAnchorSelectionGizmo::AnchorSelectionSize = 10;
+const int RectTransformAnchorSelectionGizmo::AnchorSize = 8;
+const int RectTransformAnchorSelectionGizmo::AnchorSelectionSize = 16;
 
 RectTransformAnchorSelectionGizmo::RectTransformAnchorSelectionGizmo()
 {
@@ -72,16 +72,16 @@ void RectTransformAnchorSelectionGizmo::Update()
 
             case AnchorSide::LeftTop:
                 newAnchorMin.x += displacement.x;
-                newAnchorMax.y -= displacement.y;
+                newAnchorMax.y += displacement.y;
             break;
 
             case AnchorSide::RightTop:
-                newAnchorMax.x -= displacement.x;
-                newAnchorMax.y -= displacement.y;
+                newAnchorMax.x += displacement.x;
+                newAnchorMax.y += displacement.y;
             break;
 
             case AnchorSide::RightBot:
-                newAnchorMax.x -= displacement.x;
+                newAnchorMax.x += displacement.x;
                 newAnchorMin.y += displacement.y;
             break;
         }
@@ -137,38 +137,33 @@ void RectTransformAnchorSelectionGizmo::UpdateBasedOnAnchorSide()
     GameObject *refGo    = GetReferencedGameObject(); if (!refGo) { return; }
     RectTransform *refRT = refGo->GetRectTransform(); if (!refRT) { return; }
 
-    Rect refRect = refRT->GetViewportRectNDC();
-
     float anchorX, anchorY, anchorRot;
     switch (m_anchorSide)
     {
         case AnchorSide::LeftBot:
-            anchorX = refRect.GetMin().x;
-            anchorY = refRect.GetMin().y;
-            anchorRot = -45.0f;
+            anchorX = refRT->GetAnchorMin().x;
+            anchorY = refRT->GetAnchorMin().y;
+            anchorRot = 225.0f;
         break;
 
         case AnchorSide::LeftTop:
-            anchorX = refRect.GetMin().x;
-            anchorY = refRect.GetMax().y;
-            anchorRot =  45.0f;
+            anchorX = refRT->GetAnchorMin().x;
+            anchorY = refRT->GetAnchorMax().y;
+            anchorRot = -45.0f;
         break;
 
         case AnchorSide::RightTop:
-            anchorX = refRect.GetMax().x;
-            anchorY = refRect.GetMax().y;
-            anchorRot = -135.0f;
+            anchorX = refRT->GetAnchorMax().x;
+            anchorY = refRT->GetAnchorMax().y;
+            anchorRot = 45.0f;
         break;
 
         case AnchorSide::RightBot:
-            anchorX = refRect.GetMax().x;
-            anchorY = refRect.GetMin().y;
-            anchorRot =  135.0f;
+            anchorX = refRT->GetAnchorMax().x;
+            anchorY = refRT->GetAnchorMin().y;
+            anchorRot = 135.0f;
         break;
     }
-    static double time = 0.0;
-    time += Time::GetDeltaTime() * 360.0f * 0.1;
-    anchorRot = Math::Modf(time, 360.0);
 
     // Update anchor and selection rectTransforms
     for (int i = 0; i < 2; ++i)
@@ -176,21 +171,13 @@ void RectTransformAnchorSelectionGizmo::UpdateBasedOnAnchorSide()
         RectTransform *rt = (i == 0) ? p_anchorGO->GetRectTransform() :
                                        p_selectionGO->GetRectTransform();
 
-        static float time = 0.0f;
-        time += Time::GetDeltaTime();
         rt->SetAnchorX(Vector2(anchorX));
         rt->SetAnchorY(Vector2(anchorY));
         rt->SetRotation( Quaternion::AngleAxis(Math::DegToRad(anchorRot),
                                                Vector3::Forward) );
 
-        rt->SetMargins( -( (i == 0) ? AnchorSize : AnchorSelectionSize ) );
-        if (m_anchorSide == AnchorSide::LeftBot ||
-            m_anchorSide == AnchorSide::RightTop)
-        { rt->SetMargins(-5, -25, -5, -25); }
-        if (m_anchorSide == AnchorSide::LeftTop ||
-            m_anchorSide == AnchorSide::RightBot)
-        { rt->SetMargins(-25, -5, -25, -5); }
-
+        int size = (  (i == 0) ? AnchorSize : AnchorSelectionSize );
+        rt->SetMargins(-size, -size*2, -size, 0);
         rt->SetPivotPosition( Vector2(0, -1) );
     }
 }

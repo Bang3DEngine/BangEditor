@@ -39,7 +39,6 @@ ExplorerItem::ExplorerItem()
     iconRT->SetAnchorY( Vector2(-1,  1) );
     iconRT->SetMarginBot(textPixels + spacing);
     p_icon = iconGo->AddComponent<UIImageRenderer>();
-    p_icon->SetAspectRatioMode(AspectRatioMode::Keep);
     p_icon->SetTint(Color::Zero);
 
     p_label = GameObjectFactory::CreateUILabel();

@@ -5,6 +5,7 @@
 #include "Bang/Camera.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
+#include "Bang/Material.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
@@ -35,7 +36,7 @@ UISceneImage::UISceneImage()
 
     GameObject *sceneImgGo = GameObjectFactory::CreateUIGameObject();
     p_sceneImg  = sceneImgGo->AddComponent<UISceneImageRenderer>();
-    p_sceneImg->SetUvMultiply(Vector2(1, -1));
+    p_sceneImg->GetMaterial()->SetUvMultiply(Vector2(1, -1));
     UILayoutElement *imgLE = sceneImgGo->AddComponent<UILayoutElement>();
     imgLE->SetFlexibleSize( Vector2(1) );
 

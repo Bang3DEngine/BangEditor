@@ -5,6 +5,7 @@
 #include "Bang/Camera.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
+#include "Bang/Material.h"
 #include "Bang/UICanvas.h"
 #include "Bang/Selection.h"
 #include "Bang/RectTransform.h"
@@ -28,7 +29,7 @@ UISceneEditContainer::UISceneEditContainer()
 
     GameObject *cameraPreviewGo = GameObjectFactory::CreateUIGameObject();
     p_cameraPreviewImg = cameraPreviewGo->AddComponent<UIImageRenderer>();
-    p_cameraPreviewImg->SetUvMultiply(Vector2(1, -1));
+    p_cameraPreviewImg->GetMaterial()->SetUvMultiply(Vector2(1, -1));
     p_cameraPreviewImg->SetVisible(false);
 
     cameraPreviewGo->AddComponent<UILayoutIgnorer>();

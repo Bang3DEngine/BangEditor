@@ -16,8 +16,8 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-const int RectTransformCornerSelectionGizmo::CornerSize = 0;
-const int RectTransformCornerSelectionGizmo::CornerSelectionSize = 0;
+const int RectTransformCornerSelectionGizmo::CornerSize = 5;
+const int RectTransformCornerSelectionGizmo::CornerSelectionSize = 10;
 
 RectTransformCornerSelectionGizmo::RectTransformCornerSelectionGizmo()
 {
@@ -181,8 +181,6 @@ void RectTransformCornerSelectionGizmo::UpdateBasedOnCornerSide()
         RectTransform *rt = (i == 0) ? p_cornerGO->GetRectTransform() :
                                        p_selectionGO->GetRectTransform();
 
-        static float time = 0.0f;
-        time += Time::GetDeltaTime();
         rt->SetAnchorX(Vector2(cornerAnchorX));
         rt->SetAnchorY(Vector2(cornerAnchorY));
 
