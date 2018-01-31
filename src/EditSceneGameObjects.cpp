@@ -21,6 +21,7 @@ EditSceneGameObjects::~EditSceneGameObjects()
 
 void EditSceneGameObjects::Update()
 {
+    GetEditorCamera()->Start();
     GetEditorCamera()->Update();
     GetSelectionGizmosManager()->Update();
 }

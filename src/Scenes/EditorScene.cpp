@@ -157,6 +157,7 @@ void EditorScene::Update()
     {
         BindOpenScene();
 
+        SceneManager::StartScene(openScene);
         if (Editor::GetEditorPlayState() == EditorPlayState::Playing)
         {
             SceneManager::UpdateScene(openScene);

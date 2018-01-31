@@ -116,7 +116,6 @@ void ScenePlayer::StopScene()
 
         ScenePlayer *sp = ScenePlayer::GetInstance();
 
-        Debug_Peek(sp->m_prevOpenScenePath);
         if (sp->m_prevOpenScenePath.IsFile())
         {
             SceneManager::LoadScene(sp->m_prevOpenScenePath);

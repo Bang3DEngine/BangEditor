@@ -24,7 +24,7 @@ UISceneEditContainer::UISceneEditContainer()
 {
     Editor::GetInstance()->
             EventEmitter<IEditorListener>::RegisterListener(this);
-    SceneManager::GetInstance()->
+    SceneManager::GetActive()->
             EventEmitter<ISceneManagerListener>::RegisterListener(this);
 
     GameObject *cameraPreviewGo = GameObjectFactory::CreateUIGameObject();

@@ -25,7 +25,7 @@ public:
     static Path GetOpenScenePath();
     static EditorScene *GetEditorScene();
 
-    static EditorSceneManager *GetInstance();
+    static EditorSceneManager *GetActive();
 
     EditorBehaviourManager *GetEditorBehaviourManager() const;
 

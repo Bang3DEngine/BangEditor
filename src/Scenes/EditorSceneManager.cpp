@@ -28,7 +28,7 @@ EditorSceneManager::~EditorSceneManager()
 
 Scene *EditorSceneManager::GetOpenScene()
 {
-    EditorSceneManager *esm = EditorSceneManager::GetInstance();
+    EditorSceneManager *esm = EditorSceneManager::GetActive();
     return esm ? esm->_GetOpenScene() : nullptr;
 }
 
@@ -39,7 +39,7 @@ Path EditorSceneManager::GetOpenScenePath()
 
 EditorScene *EditorSceneManager::GetEditorScene()
 {
-    EditorSceneManager *esm = EditorSceneManager::GetInstance();
+    EditorSceneManager *esm = EditorSceneManager::GetActive();
     return esm ? esm->_GetEditorScene() : nullptr;
 }
 
@@ -76,7 +76,7 @@ void EditorSceneManager::_LoadSceneInstantly(Scene *scene)
 
 void EditorSceneManager::SetActiveScene(Scene *activeScene)
 {
-    GetInstance()->_SetActiveScene(activeScene);
+    GetActive()->_SetActiveScene(activeScene);
 }
 
 void EditorSceneManager::_Update()
@@ -90,8 +90,8 @@ BehaviourManager *EditorSceneManager::CreateBehaviourManager() const
     return new EditorBehaviourManager();
 }
 
-EditorSceneManager *EditorSceneManager::GetInstance()
+EditorSceneManager *EditorSceneManager::GetActive()
 {
-    SceneManager *sm = SceneManager::GetInstance();
+    SceneManager *sm = SceneManager::GetActive();
     return sm ? Cast<EditorSceneManager*>(sm) : nullptr;
 }

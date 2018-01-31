@@ -27,6 +27,9 @@ SelectionGizmosManager::~SelectionGizmosManager()
 
 void SelectionGizmosManager::Update()
 {
+    GetTransformGizmo()->Start();
+    GetComponentsSelectionGizmo()->Start();
+
     GetTransformGizmo()->Update();
     GetComponentsSelectionGizmo()->Update();
 }

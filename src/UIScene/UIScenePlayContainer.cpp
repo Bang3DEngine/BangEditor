@@ -13,7 +13,7 @@ UIScenePlayContainer::UIScenePlayContainer()
 {
     Editor::GetInstance()->
             EventEmitter<IEditorListener>::RegisterListener(this);
-    SceneManager::GetInstance()->
+    SceneManager::GetActive()->
             EventEmitter<ISceneManagerListener>::RegisterListener(this);
 }
 

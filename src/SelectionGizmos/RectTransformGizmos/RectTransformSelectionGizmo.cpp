@@ -81,6 +81,7 @@ void RectTransformSelectionGizmo::Render(RenderPass renderPass, bool renderChild
     {
         GameObject *refGo = GetReferencedGameObject();
         if (!refGo) { return; }
+        if (!refGo->GetRectTransform()) { return; }
 
         // Gizmos rendering!
         Gizmos::Reset();

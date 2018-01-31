@@ -45,12 +45,9 @@ EditorPaths *EditorApplication::GetEditorPaths() const
 
 void EditorApplication::OpenEditorScene()
 {
-    // Window::GetActive()->GetGlobalObjectManager()->StartObjects();
     EditorScene *edScene = GameObject::Create<EditorScene>();
-    // Window::GetActive()->GetGlobalObjectManager()->StartObjects();
     EditorSceneManager::LoadSceneInstantly(edScene);
     edScene->Init();
-    // Window::GetActive()->GetGlobalObjectManager()->StartObjects();
 }
 
 EditorApplication *EditorApplication::GetInstance()

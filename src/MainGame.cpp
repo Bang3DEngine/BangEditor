@@ -85,7 +85,7 @@ int main(int, char **)
               behavioursLibPath.GetAbsolute() << "'");
 
     // Set the behaviour library
-    SceneManager::GetInstance()->GetBehaviourManager()->
+    SceneManager::GetActive()->GetBehaviourManager()->
                   SetBehavioursLibrary(behavioursLibPath);
 
     return app.MainLoop();
