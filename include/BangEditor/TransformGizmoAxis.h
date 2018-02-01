@@ -38,7 +38,7 @@ private:
 
     void SetColor(SelectionState state);
 
-    // IEnabledListener
+    // IObjectListener
     void OnDisabled() override;
 };
 

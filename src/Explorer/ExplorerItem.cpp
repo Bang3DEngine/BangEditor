@@ -13,6 +13,7 @@
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/ImportFilesManager.h"
+#include "Bang/UIAspectRatioFitter.h"
 
 #include "BangEditor/Explorer.h"
 #include "BangEditor/EditorIconManager.h"
@@ -33,13 +34,20 @@ ExplorerItem::ExplorerItem()
     GameObject *bgGo = GameObjectFactory::CreateUIGameObject();
     p_bg = bgGo->AddComponent<UIImageRenderer>();
 
+    GameObject *iconContainerGo = GameObjectFactory::CreateUIGameObject();
+    RectTransform *iconContainerRT = iconContainerGo->GetRectTransform();
+    iconContainerRT->SetMarginBot(textPixels + spacing);
+
     GameObject *iconGo = GameObjectFactory::CreateUIGameObject();
     RectTransform *iconRT = iconGo->GetRectTransform();
-    iconRT->SetAnchorX( Vector2(-1,  1) );
-    iconRT->SetAnchorY( Vector2(-1,  1) );
-    iconRT->SetMarginBot(textPixels + spacing);
+    iconRT->SetAnchorX( Vector2::Zero );
+    iconRT->SetAnchorY( Vector2::Zero );
+    iconRT->SetPivotPosition( Vector2::Zero );
     p_icon = iconGo->AddComponent<UIImageRenderer>();
     p_icon->SetTint(Color::Zero);
+
+    p_aspectRatioFitter = iconGo->AddComponent<UIAspectRatioFitter>();
+    p_aspectRatioFitter->SetAspectRatioMode(AspectRatioMode::Keep);
 
     p_label = GameObjectFactory::CreateUILabel();
     GameObject *labelGo = p_label->GetGameObject();
@@ -65,8 +73,9 @@ ExplorerItem::ExplorerItem()
     p_contextMenu->AddButtonPart(bgGo);
 
     bgGo->SetParent(this);
-    iconGo->SetParent(this);
     labelGo->SetParent(this);
+    iconContainerGo->SetParent(this);
+    iconGo->SetParent(iconContainerGo);
 
     SetSelected(false);
 }
@@ -85,9 +94,17 @@ void ExplorerItem::SetPath(const Path &path)
     if (GetPath() != path)
     {
         m_path = path;
+
         RH<Texture2D> iconTex = EditorIconManager::GetIconForPath(GetPath());
         p_icon->SetImageTexture(iconTex.Get());
         p_icon->SetTint(Color::White);
+
+        if (iconTex.Get())
+        {
+            p_aspectRatioFitter->SetAspectRatio( iconTex.Get()->GetSize() );
+        }
+        else { p_aspectRatioFitter->SetAspectRatio(1.0f); }
+
         p_label->GetText()->SetContent(GetPath().GetNameExt());
     }
 }

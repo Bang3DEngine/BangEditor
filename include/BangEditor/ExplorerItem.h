@@ -14,6 +14,7 @@ FORWARD class UILabel;
 FORWARD class IFocusable;
 FORWARD class UIFocusable;
 FORWARD class UIImageRenderer;
+FORWARD class UIAspectRatioFitter;
 FORWARD NAMESPACE_BANG_END
 
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -65,6 +66,7 @@ private:
     UIImageRenderer *p_bg = nullptr;
     UIImageRenderer *p_icon = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
+    UIAspectRatioFitter *p_aspectRatioFitter = nullptr;
 
     // IFocusListener
     virtual void OnMouseEnter(IFocusable*) override;

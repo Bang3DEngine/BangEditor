@@ -5,10 +5,13 @@
 #include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UIComboBox.h"
+#include "Bang/RectTransform.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/UILayoutIgnorer.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/UIAspectRatioFitter.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -47,14 +50,23 @@ void FIWTexture::Init()
     p_alphaCutoffInput->SetMinMaxValues(0.0f, 1.0f);
     p_alphaCutoffInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
-    p_textureImageRend = GameObjectFactory::CreateUIImage();
+    GameObject *imageContainerGo = GameObjectFactory::CreateUIGameObject();
+
+    GameObject *imageGo = GameObjectFactory::CreateUIGameObject();
+    imageGo->GetRectTransform()->SetAnchorX( Vector2(0, 0) );
+    imageGo->GetRectTransform()->SetAnchorY( Vector2(1, 1) );
+    imageGo->GetRectTransform()->SetPivotPosition( Vector2(0, 1) );
+    p_imageAspectRatioFitter = imageGo->AddComponent<UIAspectRatioFitter>();
+    p_imageAspectRatioFitter->SetAspectRatioMode(AspectRatioMode::Keep);
+    p_textureImageRend = imageGo->AddComponent<UIImageRenderer>();
+    imageGo->SetParent(imageContainerGo);
 
     AddWidget("Filter Mode", p_filterModeComboBox->GetGameObject());
     AddWidget("Wrap Mode", p_wrapModeComboBox->GetGameObject());
     AddWidget("Alpha Cutoff", p_alphaCutoffInput->GetGameObject());
 
     AddLabel("Texture");
-    AddWidget(p_textureImageRend->GetGameObject(), 100);
+    AddWidget(imageGo, 200);
 
     SetLabelsWidth(100);
 }
@@ -75,8 +87,10 @@ void FIWTexture::UpdateFromFileWhenChanged()
 
     IValueChangedListener::SetReceiveEvents(false);
 
-    p_textureImageRend->SetImageTexture(p_texture.Get());
-    p_textureImageRend->SetTint( p_texture.Get() ? Color::White : Color::Black );
+    p_textureImageRend->SetImageTexture( GetTexture() );
+    p_textureImageRend->SetTint(Color::White);
+    p_imageAspectRatioFitter->SetAspectRatio( GetTexture()->GetSize() );
+    p_imageAspectRatioFitter->Invalidate();
 
     p_filterModeComboBox->SetSelectionByValue( int(GetTexture()->GetFilterMode()) );
     p_wrapModeComboBox->SetSelectionByValue( int(GetTexture()->GetWrapMode()) );
@@ -85,7 +99,7 @@ void FIWTexture::UpdateFromFileWhenChanged()
     IValueChangedListener::SetReceiveEvents(true);
 }
 
-void FIWTexture::OnValueChanged(Object *object)
+void FIWTexture::OnValueChanged(Object*)
 {
     if (GetTexture())
     {

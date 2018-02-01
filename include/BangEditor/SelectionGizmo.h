@@ -35,7 +35,7 @@ public:
     bool IsBeingGrabbed() const;
     bool GrabHasJustChanged() const;
 
-    // IEnabledListener
+    // IObjectListener
     void OnDisabled() override;
 
     // IDestroyListener
