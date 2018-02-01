@@ -300,22 +300,22 @@ void MenuBar::OnNewProject(MenuItem*)
         {
             Project *proj = ProjectManager::CreateNewProject(newProjectDirPath,
                                                              projectName);
-            MenuBar::OpenProject(proj->GetProjectFileFilepath());
+            MenuBar::OpenProject(proj->GetProjectFilepath());
         }
     }
 }
 void MenuBar::OnOpenProject(MenuItem*)
 {
-    Path projectFileFilepath = Dialog::OpenFilePath("Open Project...",
-                                                    {Extensions::GetProjectExtension()},
-                                                     EditorPaths::GetHome());
-    OpenProject(projectFileFilepath);
+    Path projectFilepath = Dialog::OpenFilePath("Open Project...",
+                                                {Extensions::GetProjectExtension()},
+                                                EditorPaths::GetHome());
+    OpenProject(projectFilepath);
 }
-void MenuBar::OpenProject(const Path &projectFileFilepath)
+void MenuBar::OpenProject(const Path &projectFilepath)
 {
-    if (projectFileFilepath.IsFile())
+    if (projectFilepath.IsFile())
     {
-        ProjectManager::OpenProject(projectFileFilepath);
+        ProjectManager::OpenProject(projectFilepath);
     }
 }
 

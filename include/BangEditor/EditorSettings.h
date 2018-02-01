@@ -12,8 +12,8 @@ class EditorSettings
 {
 public:
 
-    static void SetLatestProjectFilePathOpen(const Path &latestProjectFilePathOpen);
-    static Path GetLatestProjectFilePathOpen();
+    static void SetLatestProjectFilepathOpen(const Path &latestProjectFilePathOpen);
+    static Path GetLatestProjectFilepathOpen();
 
 private:
     Path m_latestProjectFileOpen = Path::Empty;

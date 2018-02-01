@@ -22,25 +22,24 @@ Project::~Project()
 {
 }
 
-const Path&  Project::GetProjectDirPath() const
+Path Project::GetProjectDirectory() const
 {
-    return m_projectRootFilepath;
+    return GetProjectFilepath().GetDirectory();
 }
 
-Path Project::GetProjectAssetsRootFilepath() const
+Path Project::GetProjectAssetsFilepath() const
 {
-    return Path(m_projectRootFilepath + "/Assets");
+    return Path(GetProjectDirectory() + "/Assets");
 }
 
-Path Project::GetProjectFileFilepath() const
+Path Project::GetProjectFilepath() const
 {
-    return Path(m_projectRootFilepath + "/" +
-                GetProjectName() + "." + Extensions::GetProjectExtension());
+    return m_projectFilepath;
 }
 
 String Project::GetProjectName() const
 {
-    return m_projectRootFilepath.GetName();
+    return GetProjectFilepath().GetName();
 }
 
 const GUID& Project::GetProjectRandomId() const
@@ -48,9 +47,9 @@ const GUID& Project::GetProjectRandomId() const
     return m_id;
 }
 
-void Project::SetProjectRootFilepath(const Path &projectDir)
+void Project::SetProjectFilepath(const Path &projectFilepath)
 {
-    m_projectRootFilepath = projectDir;
+    m_projectFilepath = projectFilepath;
 }
 
 bool Project::OpenFirstFoundScene() const
@@ -66,7 +65,7 @@ bool Project::OpenFirstFoundScene() const
 
 Path Project::GetFirstFoundScenePath() const
 {
-    List<Path> sceneFilepaths = GetProjectAssetsRootFilepath()
+    List<Path> sceneFilepaths = GetProjectAssetsFilepath()
                                 .GetFiles(Path::FindFlag::Recursive,
                                            {Extensions::GetSceneExtension()});
     Paths::SortPathsByName(&sceneFilepaths);

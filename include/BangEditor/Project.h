@@ -19,13 +19,13 @@ public:
     Project();
     virtual ~Project();
 
-    const Path& GetProjectDirPath() const;
-    Path GetProjectAssetsRootFilepath() const;
-    Path GetProjectFileFilepath() const;
+    Path GetProjectDirectory() const;
+    Path GetProjectAssetsFilepath() const;
+    Path GetProjectFilepath() const;
     String GetProjectName() const;
     const GUID& GetProjectRandomId() const;
 
-    void SetProjectRootFilepath(const Path &projectDir);
+    void SetProjectFilepath(const Path &projectFilepath);
 
     virtual bool OpenFirstFoundScene() const;
     Path GetFirstFoundScenePath() const;
@@ -36,7 +36,7 @@ public:
 
 private:
     GUID m_id;
-    Path m_projectRootFilepath;
+    Path m_projectFilepath;
 };
 
 NAMESPACE_BANG_EDITOR_END

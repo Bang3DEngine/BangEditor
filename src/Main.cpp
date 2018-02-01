@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     edApp.OpenEditorScene();
 
     // Open project (arg or latest one)
-    Path projectToOpenPath = EditorSettings::GetLatestProjectFilePathOpen();
+    Path projectToOpenPath = EditorSettings::GetLatestProjectFilepathOpen();
     if (argc >= 2)
     {
         projectToOpenPath = Path(argv[1]);

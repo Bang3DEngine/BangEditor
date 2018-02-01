@@ -10,7 +10,7 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-void EditorSettings::SetLatestProjectFilePathOpen(const Path &latestProjectFilePathOpen)
+void EditorSettings::SetLatestProjectFilepathOpen(const Path &latestProjectFilePathOpen)
 {
     EditorSettings *es = EditorSettings::GetInstance();
     ASSERT(es);
@@ -20,7 +20,7 @@ void EditorSettings::SetLatestProjectFilePathOpen(const Path &latestProjectFileP
     es->ExportToFile();
 }
 
-Path EditorSettings::GetLatestProjectFilePathOpen()
+Path EditorSettings::GetLatestProjectFilepathOpen()
 {
     EditorSettings *es = EditorSettings::GetInstance();
     ASSERT(es);
@@ -57,7 +57,7 @@ void EditorSettings::ImportFromFile()
 
     if (settingsXML.Contains("LatestProjectFileOpen"))
     {
-        EditorSettings::SetLatestProjectFilePathOpen(
+        EditorSettings::SetLatestProjectFilepathOpen(
                     settingsXML.Get<Path>("LatestProjectFileOpen"));
     }
 }

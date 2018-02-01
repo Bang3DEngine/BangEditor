@@ -17,7 +17,7 @@ Path QtProjectManager::GetQtProjectDir()
 {
     Project *p_proj = ProjectManager::GetCurrentProject();
     if (!p_proj) { return Path::Empty; }
-    return p_proj->GetProjectDirPath().Append("Project");
+    return p_proj->GetProjectDirectory().Append("Project");
 }
 
 Path QtProjectManager::GetQtProjectFilepath()
@@ -46,7 +46,7 @@ bool QtProjectManager::IsQtCreatorOpenedCurrentProject()
 void QtProjectManager::CreateQtProjectFile()
 {
     Project *p_proj = ProjectManager::GetCurrentProject();
-    Path projectDir = p_proj->GetProjectDirPath();
+    Path projectDir = p_proj->GetProjectDirectory();
     const Path &engineDir = Paths::GetEngineDir(); (void)(engineDir);
     const Path &projAssetsDir = projectDir.Append("Assets"); (void)(projAssetsDir);
 /*

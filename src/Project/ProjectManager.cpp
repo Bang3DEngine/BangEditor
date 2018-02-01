@@ -27,16 +27,16 @@ ProjectManager::ProjectManager()
 
 Project* ProjectManager::OpenProject(const Path &projectFilepath)
 {
-    ProjectManager::CloseCurrentProject();
+    if (!ProjectManager::CloseCurrentProject()) { return nullptr; }
 
     ProjectManager::s_currentProject = new Project();
     Project *currentProject = ProjectManager::s_currentProject;
     currentProject->ImportXMLFromFile(projectFilepath);
-    currentProject->SetProjectRootFilepath( projectFilepath.GetDirectory() );
+    currentProject->SetProjectFilepath( projectFilepath );
 
-    Paths::SetProjectRoot(currentProject->GetProjectDirPath());
+    Paths::SetProjectRoot(currentProject->GetProjectDirectory());
 
-    Path assetsDir = currentProject->GetProjectAssetsRootFilepath();
+    Path assetsDir = currentProject->GetProjectAssetsFilepath();
     ImportFilesManager::CreateMissingImportFiles(assetsDir);
     ImportFilesManager::LoadImportFilepathGUIDs(assetsDir);
 
@@ -44,8 +44,8 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
         EventEmitter<IProjectManagerListener>::PropagateToListeners(
                &IProjectManagerListener::OnProjectOpen, s_currentProject);
 
-    EditorSettings::SetLatestProjectFilePathOpen(
-                            currentProject->GetProjectFileFilepath() );
+    EditorSettings::SetLatestProjectFilepathOpen(
+                            currentProject->GetProjectFilepath() );
 
     bool sceneOpen = currentProject->OpenFirstFoundScene();
     if (!sceneOpen) { SceneOpenerSaver::GetInstance()->OnNewScene(); }
@@ -56,6 +56,8 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
 Project* ProjectManager::CreateNewProject(const Path &projectDirPath,
                                           const String &projectName)
 {
+    if (!ProjectManager::CloseCurrentProject()) { return nullptr; }
+
     Path projectDir(projectDirPath + "/" + projectName);
     if (!projectDir.Exists())
     {
@@ -72,14 +74,11 @@ Project* ProjectManager::CreateNewProject(const Path &projectDirPath,
         Debug_Warn("Directory '" << projectDir << "' already existed, using it.");
     }
 
-    ProjectManager::CloseCurrentProject();
-
-    Path projectFileFilepath(projectDir + "/" + projectName + "." +
+    Path projectFilepath(projectDir + "/" + projectName + "." +
                              Extensions::GetProjectExtension());
 
-    ProjectManager::s_currentProject =
-            CreateNewProjectFileOnly(projectFileFilepath);
-    ProjectManager::s_currentProject->SetProjectRootFilepath(projectDir);
+    ProjectManager::s_currentProject = CreateNewProjectFileOnly(projectFilepath);
+    ProjectManager::s_currentProject->SetProjectFilepath(projectFilepath);
 
     File::CreateDirectory(projectDir.Append("Assets"));
     File::CreateDirectory(projectDir.Append("Libraries"));
@@ -97,7 +96,7 @@ Project *ProjectManager::CreateNewProjectFileOnly(const Path &projectFilepath)
 void ProjectManager::ExportProject(const Project *project)
 {
     if (!project) { return; }
-    bool ok = project->ExportXMLToFile(project->GetProjectFileFilepath());
+    bool ok = project->ExportXMLToFile(project->GetProjectFilepath());
     if (ok)
     {
         Debug_Log("Project '" << project->GetProjectName() <<
@@ -114,8 +113,10 @@ void ProjectManager::ExportCurrentProject()
     ProjectManager::ExportProject( ProjectManager::GetCurrentProject() );
 }
 
-void ProjectManager::CloseCurrentProject()
+bool ProjectManager::CloseCurrentProject()
 {
+    if (!SceneOpenerSaver::GetInstance()->CloseScene()) { return false; }
+
     if (ProjectManager::s_currentProject)
     {
         ProjectManager::GetInstance()->
@@ -125,7 +126,7 @@ void ProjectManager::CloseCurrentProject()
         delete s_currentProject;
         ProjectManager::s_currentProject = nullptr;
     }
-
+    return true;
 }
 
 Project *ProjectManager::GetCurrentProject()

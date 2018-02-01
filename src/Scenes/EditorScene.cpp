@@ -243,7 +243,6 @@ void EditorScene::SetOpenScene(Scene *openScene, bool destroyPreviousScene)
         if (GetOpenScene())
         {
             if (destroyPreviousScene) { GameObject::Destroy(GetOpenScene()); }
-            GetOpenScene()->DestroyPending();
         }
 
         p_openScene = openScene;

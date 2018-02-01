@@ -140,7 +140,7 @@ Path SceneOpenerSaver::GetDialogStartPath() const
 bool SceneOpenerSaver::IsCurrentSceneSaved() const
 {
     Scene *openScene = EditorSceneManager::GetOpenScene();
-    if (!openScene) { return false; }
+    if (!openScene) { return true; }
 
     if (m_currentOpenScenePath.IsFile())
     {
