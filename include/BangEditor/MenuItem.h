@@ -82,8 +82,6 @@ private:
 
     bool IsSelected() const;
     static void OnListSelectionCallback(GameObject *item, UIList::Action action);
-
-    friend class Bang::ObjectManager;
 };
 
 NAMESPACE_BANG_EDITOR_END

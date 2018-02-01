@@ -157,11 +157,10 @@ void EditorScene::Update()
     {
         BindOpenScene();
 
-        SceneManager::StartScene(openScene);
-        if (Editor::GetEditorPlayState() == EditorPlayState::Playing)
-        {
-            SceneManager::UpdateScene(openScene);
-        }
+        bool updateOpenScene =
+                (Editor::GetEditorPlayState() == EditorPlayState::Playing);
+        SceneManager::OnNewFrame(openScene, updateOpenScene);
+
         GetEditSceneGameObjects()->Update();
 
         EditorSceneManager::SetActiveScene(this);
@@ -244,7 +243,7 @@ void EditorScene::SetOpenScene(Scene *openScene, bool destroyPreviousScene)
         if (GetOpenScene())
         {
             if (destroyPreviousScene) { GameObject::Destroy(GetOpenScene()); }
-            GetOpenScene()->GetLocalObjectManager()->DestroyObjects();
+            GetOpenScene()->DestroyPending();
         }
 
         p_openScene = openScene;
@@ -253,10 +252,7 @@ void EditorScene::SetOpenScene(Scene *openScene, bool destroyPreviousScene)
             EventEmitter<IEditorOpenSceneListener>::PropagateToListeners(
                         &IEditorOpenSceneListener::OnOpenScene, GetOpenScene());
 
-            GetLocalObjectManager()->StartObjects();
-
             BindOpenScene();
-            GetOpenScene()->GetLocalObjectManager()->StartObjects();
             GetOpenScene()->SetFirstFoundCamera();
             GetOpenScene()->InvalidateCanvas();
             UnBindOpenScene();

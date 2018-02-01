@@ -14,7 +14,6 @@
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorBehaviourManager.h"
-#include "BangEditor/EditorComponentFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -63,9 +62,4 @@ Paths *EditorApplication::CreatePaths()
 Window *EditorApplication::_CreateWindow()
 {
     return new EditorWindow();
-}
-
-ComponentFactory *EditorApplication::CreateComponentFactory()
-{
-    return new EditorComponentFactory();
 }

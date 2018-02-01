@@ -66,7 +66,6 @@ void ScenePlayer::PlayScene()
                 {
                     // Create empty scene, set it active, start it empty
                     sp->p_playOpenScene = GameObjectFactory::CreateScene(false);
-                    edScene->GetLocalObjectManager()->StartObjects();
 
                     EditorSceneManager::SetActiveScene(sp->p_playOpenScene);
 

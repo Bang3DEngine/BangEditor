@@ -63,7 +63,6 @@ Hierarchy::Hierarchy()
                           { this->TreeSelectionCallback(item, action); } );
     treeGo->SetParent(rendererCacherContainer);
 
-    ObjectManager::RegisterCreateListener(this);
     Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
     EditorSceneManager::GetEditorScene()->
             EventEmitter<IEditorOpenSceneListener>::RegisterListener(this);

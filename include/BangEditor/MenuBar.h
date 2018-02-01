@@ -116,7 +116,6 @@ private:
 
     friend class ProjectManager;
     friend class SceneOpenerSaver;
-    friend class Bang::ObjectManager;
 };
 
 NAMESPACE_BANG_EDITOR_END

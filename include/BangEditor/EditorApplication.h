@@ -32,7 +32,6 @@ public:
 private:
     Paths* CreatePaths() override;
     Window* _CreateWindow() override;
-    ComponentFactory* CreateComponentFactory() override;
 
     static EditorApplication* GetInstance();
 
