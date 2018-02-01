@@ -122,6 +122,6 @@ void UISceneEditContainer::OnPlayStateChanged(EditorPlayState, EditorPlayState)
 {
 }
 
-void UISceneEditContainer::OnSceneOpen(Scene *scene, const Path&)
+void UISceneEditContainer::OnSceneLoaded(Scene *scene, const Path&)
 {
 }

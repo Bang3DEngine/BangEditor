@@ -3,13 +3,12 @@
 
 #include "Bang/Map.h"
 #include "Bang/UIList.h"
-#include "Bang/ICreateListener.h"
+#include "Bang/SceneManager.h"
 #include "Bang/IChildrenListener.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/HierarchyItem.h"
 #include "BangEditor/ShortcutManager.h"
-#include "BangEditor/IEditorOpenSceneListener.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UITree;
@@ -21,9 +20,9 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class HierarchyItem;
 
 class Hierarchy : public GameObject,
-                  public ICreateListener,
                   public IEditorListener,
-                  public IEditorOpenSceneListener,
+                  public IDestroyListener,
+                  public ISceneManagerListener,
                   public IHierarchyItemListener
 {
     GAMEOBJECT_EDITOR(Hierarchy);
@@ -39,18 +38,12 @@ public:
     // Object
     void Update() override;
 
-    // ICreateListener
-    void OnCreated(Object *object) override;
-
     // IChildrenListener
     void OnChildAdded(GameObject *parent, GameObject *addedChild) override;
     void OnChildRemoved(GameObject *parent, GameObject *removedChild) override;
 
     // IEditorListener
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
-
-    // IEditorOpenSceneListener
-    virtual void OnOpenScene(Scene *scene) override;
 
     // IHierarchyItemListener
     virtual void OnCreateEmpty(HierarchyItem *item) override;
@@ -62,6 +55,12 @@ public:
     virtual void OnDuplicate(HierarchyItem *item) override;
     virtual void OnCreatePrefab(HierarchyItem *item) override;
 
+    // ISceneManagerListener
+    void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
+
+    // IDestroyListener
+    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
+
     static Hierarchy *GetInstance();
 
 private:
@@ -71,7 +70,6 @@ private:
     void TreeSelectionCallback(GOItem *item, UIList::Action action);
     void AddGameObject(GameObject *go);
     void RemoveGameObject(GameObject *go);
-    void OnCreatedDestroyed(Object *object, bool created);
 
     GOItem *GetSelectedGameObject() const;
     GOItem *GetSelectedItem() const;

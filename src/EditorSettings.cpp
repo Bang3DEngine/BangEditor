@@ -65,7 +65,7 @@ void EditorSettings::ImportFromFile()
 Path EditorSettings::GetEditorSettingsPath()
 {
     return EditorPaths::GetEditorResourcesDir().Append("EditorSettings")
-                                         .AppendExtension("txt");
+                                              .AppendExtension("txt");
 }
 
 EditorSettings *EditorSettings::GetInstance()

@@ -248,9 +248,6 @@ void EditorScene::SetOpenScene(Scene *openScene, bool destroyPreviousScene)
         p_openScene = openScene;
         if (GetOpenScene())
         {
-            EventEmitter<IEditorOpenSceneListener>::PropagateToListeners(
-                        &IEditorOpenSceneListener::OnOpenScene, GetOpenScene());
-
             BindOpenScene();
             GetOpenScene()->SetFirstFoundCamera();
             GetOpenScene()->InvalidateCanvas();

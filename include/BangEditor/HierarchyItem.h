@@ -17,7 +17,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class HierarchyItem;
 
-class IHierarchyItemListener : public IEventListener
+class IHierarchyItemListener : public virtual IEventListener
 {
 public:
     virtual void OnCreateEmpty(HierarchyItem *item) = 0;

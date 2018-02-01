@@ -25,7 +25,7 @@ public:
     bool OpenSceneInEditor(const Path &scenePath);
 
     // SceneManagerListener
-    void OnSceneOpen(Scene *scene, const Path &sceneFilepath) override;
+    void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
 
     static SceneOpenerSaver* GetInstance();
 

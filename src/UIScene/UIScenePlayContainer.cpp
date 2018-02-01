@@ -36,7 +36,7 @@ void UIScenePlayContainer::OnPlayStateChanged(EditorPlayState, EditorPlayState)
 {
 }
 
-void UIScenePlayContainer::OnSceneOpen(Scene*, const Path&)
+void UIScenePlayContainer::OnSceneLoaded(Scene*, const Path&)
 {
 }
 

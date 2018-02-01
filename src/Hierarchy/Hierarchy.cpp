@@ -64,8 +64,8 @@ Hierarchy::Hierarchy()
     treeGo->SetParent(rendererCacherContainer);
 
     Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
-    EditorSceneManager::GetEditorScene()->
-            EventEmitter<IEditorOpenSceneListener>::RegisterListener(this);
+    EditorSceneManager::GetActive()->
+            EventEmitter<ISceneManagerListener>::RegisterListener(this);
 
     ShortcutManager::RegisterShortcut(Shortcut(Key::F2, "Rename"),
                                       &Hierarchy::OnShortcutPressed);
@@ -90,13 +90,7 @@ void Hierarchy::Update()
     GameObject::Update();
 }
 
-void Hierarchy::OnCreated(Object *object)
-{
-    GameObject *go = Cast<GameObject*>(object);
-    if (go) { go->EventEmitter<IChildrenListener>::RegisterListener(this); }
-}
-
-void Hierarchy::OnChildAdded(GameObject *addedChild, GameObject *parent)
+void Hierarchy::OnChildAdded(GameObject *addedChild, GameObject*)
 {
     bool isScene = (DCAST<Scene*>(addedChild));
     Scene *goScene = addedChild->GetScene();
@@ -107,7 +101,7 @@ void Hierarchy::OnChildAdded(GameObject *addedChild, GameObject *parent)
     }
 }
 
-void Hierarchy::OnChildRemoved(GameObject *removedChild, GameObject *parent)
+void Hierarchy::OnChildRemoved(GameObject *removedChild, GameObject*)
 {
     if (m_gameObjectToItem.ContainsKey(removedChild))
     {
@@ -138,19 +132,6 @@ void Hierarchy::OnGameObjectSelected(GameObject *selectedGameObject)
     else
     {
         GetUITree()->GetUIList()->ClearSelection();
-    }
-}
-
-void Hierarchy::OnOpenScene(Scene *scene)
-{
-    Clear();
-    if (scene)
-    {
-        const List<GameObject*> &sceneGos = scene->GetChildren();
-        for (GameObject *go : sceneGos)
-        {
-            AddGameObject(go);
-        }
     }
 }
 
@@ -234,6 +215,26 @@ void Hierarchy::OnCreatePrefab(HierarchyItem *item)
     Explorer::GetInstance()->CheckFileChanges();
 }
 
+void Hierarchy::OnSceneLoaded(Scene *scene, const Path&)
+{
+    Clear();
+    if (scene)
+    {
+        const List<GameObject*> &sceneGos = scene->GetChildren();
+        for (GameObject *go : sceneGos)
+        {
+            AddGameObject(go);
+        }
+        scene->EventEmitter<IChildrenListener>::RegisterListener(this);
+    }
+}
+
+void Hierarchy::OnDestroyed(EventEmitter<IDestroyListener> *object)
+{
+    GameObject *destroyedGo = DCAST<GameObject*>(object);
+    if (destroyedGo) { RemoveGameObject(destroyedGo); }
+}
+
 void Hierarchy::Clear()
 {
     GetUITree()->Clear();
@@ -281,6 +282,8 @@ void Hierarchy::AddGameObject(GameObject *go)
             }
         }
 
+        go->EventEmitter<IChildrenListener>::RegisterListener(this);
+        go->EventEmitter<IDestroyListener>::RegisterListener(this);
         goItem->EventEmitter<IHierarchyItemListener>::RegisterListener(this);
     }
 }

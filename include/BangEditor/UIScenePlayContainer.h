@@ -32,7 +32,7 @@ private:
                             EditorPlayState newPlayState) override;
 
     // ISceneManagerListener
-    void OnSceneOpen(Scene *scene, const Path &sceneFilepath) override;
+    void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

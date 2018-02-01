@@ -57,7 +57,7 @@ bool SceneOpenerSaver::OnOpenScene()
 bool SceneOpenerSaver::OnSaveScene() { return OnSaveScene(false); }
 bool SceneOpenerSaver::OnSaveSceneAs() { return OnSaveScene(true); }
 
-void SceneOpenerSaver::OnSceneOpen(Scene*, const Path &sceneFilepath)
+void SceneOpenerSaver::OnSceneLoaded(Scene*, const Path &sceneFilepath)
 {
     m_currentOpenScenePath = sceneFilepath;
 }
