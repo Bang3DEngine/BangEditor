@@ -96,6 +96,8 @@ void RectTransformAnchorSelectionGizmo::Update()
         refRT->SetAnchorMin( newAnchorMin );
         refRT->SetAnchorMax( newAnchorMax );
     }
+
+    UpdateBasedOnAnchorSide();
 }
 
 void RectTransformAnchorSelectionGizmo::Render(RenderPass renderPass,
@@ -180,12 +182,18 @@ void RectTransformAnchorSelectionGizmo::UpdateBasedOnAnchorSide()
 
         rt->SetAnchorX(Vector2(anchorX));
         rt->SetAnchorY(Vector2(anchorY));
-        rt->SetRotation( Quaternion::AngleAxis(Math::DegToRad(anchorRot),
-                                               Vector3::Forward) );
 
         int size = (  (i == 0) ? AnchorSize : AnchorSelectionSize );
         rt->SetMargins(-size, -size*2, -size, 0);
         rt->SetPivotPosition( Vector2(0, -1) );
+
+        // Fit into screen if in borders
+        if ( Math::Abs(anchorX) >= 0.9f || Math::Abs(anchorY) >= 0.9f)
+        {
+            anchorRot += 180.0f;
+        }
+        rt->SetRotation( Quaternion::AngleAxis(Math::DegToRad(anchorRot),
+                                                          Vector3::Forward) );
     }
 }
 
