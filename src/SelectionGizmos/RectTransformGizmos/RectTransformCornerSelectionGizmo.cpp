@@ -93,6 +93,13 @@ void RectTransformCornerSelectionGizmo::Update()
             break;
         }
 
+        if (Input::GetKey(Key::LShift))
+        {
+            constexpr int Snapping = 5;
+            newMarginLeftBot  = (newMarginLeftBot  / Snapping) * Snapping;
+            newMarginRightTop = (newMarginRightTop / Snapping) * Snapping;
+        }
+
         refRT->SetMarginLeftBot( newMarginLeftBot );
         refRT->SetMarginRightTop( newMarginRightTop );
     }

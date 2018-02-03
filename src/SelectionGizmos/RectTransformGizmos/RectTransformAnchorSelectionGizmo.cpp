@@ -86,6 +86,13 @@ void RectTransformAnchorSelectionGizmo::Update()
             break;
         }
 
+        if (Input::GetKey(Key::LShift))
+        {
+            constexpr float Snapping = 10.0f;
+            newAnchorMin = Vector2::Round(newAnchorMin * Snapping) / Snapping;
+            newAnchorMax = Vector2::Round(newAnchorMax * Snapping) / Snapping;
+        }
+
         refRT->SetAnchorMin( newAnchorMin );
         refRT->SetAnchorMax( newAnchorMax );
     }
