@@ -49,6 +49,8 @@ UISceneContainer::UISceneContainer()
     p_sceneImage->SetParent(this);
 
     GetSceneToolbar()->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_sceneImage->GetRectTransform()->
+                  EventEmitter<ITransformListener>::RegisterListener(this);
 }
 
 UISceneContainer::~UISceneContainer()
@@ -87,6 +89,12 @@ Rect UISceneContainer::GetSceneImageRectNDC() const
 UISceneToolbar *UISceneContainer::GetSceneToolbar() const
 {
     return p_sceneToolbar;
+}
+
+void UISceneContainer::OnTransformChanged()
+{
+    Scene *containerScene = GetContainedScene();
+    if (containerScene) { containerScene->InvalidateCanvas(); }
 }
 
 void UISceneContainer::OnValueChanged(Object*)

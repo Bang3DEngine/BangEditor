@@ -2,6 +2,7 @@
 #define UISCENECONTAINER_H
 
 #include "Bang/GameObject.h"
+#include "Bang/ITransformListener.h"
 #include "Bang/IValueChangedListener.h"
 
 #include "BangEditor/BangEditor.h"
@@ -17,7 +18,8 @@ FORWARD class UISceneImage;
 FORWARD class UISceneToolbar;
 
 class UISceneContainer : public GameObject,
-                         public IValueChangedListener
+                         public IValueChangedListener,
+                         public ITransformListener
 {
 public:
     UISceneContainer();
@@ -41,6 +43,9 @@ private:
 
     virtual Camera* GetSceneCamera(Scene *scene) = 0;
     virtual bool NeedsToRenderScene(Scene *scene) = 0;
+
+    // ITransformListener
+    void OnTransformChanged() override;
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;

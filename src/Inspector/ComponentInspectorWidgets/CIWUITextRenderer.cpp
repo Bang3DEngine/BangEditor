@@ -36,9 +36,9 @@ void CIWUITextRenderer::InitInnerWidgets()
     p_horizontalAlignmentInput->AddItem("Right",  int(HorizontalAlignment::Right));
 
     p_verticalAlignmentInput = GameObjectFactory::CreateUIComboBox();
-    p_verticalAlignmentInput->AddItem("Bot",    int(VerticalAlignment::Bot));
-    p_verticalAlignmentInput->AddItem("Center", int(VerticalAlignment::Center));
     p_verticalAlignmentInput->AddItem("Top",    int(VerticalAlignment::Top));
+    p_verticalAlignmentInput->AddItem("Center", int(VerticalAlignment::Center));
+    p_verticalAlignmentInput->AddItem("Bot",    int(VerticalAlignment::Bot));
 
     p_fontFileInput = GameObject::Create<UIInputFile>();
     p_fontFileInput->SetExtensions( Extensions::GetTTFExtensions() );

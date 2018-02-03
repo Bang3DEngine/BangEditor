@@ -15,6 +15,7 @@
 #include "Bang/SelectionFramebuffer.h"
 
 #include "BangEditor/EditorCamera.h"
+#include "BangEditor/UISceneImage.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
