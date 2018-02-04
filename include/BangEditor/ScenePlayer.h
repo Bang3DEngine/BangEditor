@@ -44,7 +44,6 @@ private:
 
     bool m_pauseInNextFrame = false;
     Scene *p_playOpenScene = nullptr;
-    Path m_prevOpenScenePath = Path::Empty;
 
     ScenePlayer();
     virtual ~ScenePlayer();

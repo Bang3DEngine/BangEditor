@@ -8,6 +8,7 @@
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorCamera.h"
+#include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorBehaviourManager.h"
 
@@ -87,9 +88,6 @@ void ScenePlayer::PlayScene()
             {
                 ScenePlayer::SetPlayState(PlayState::Playing);
 
-                sp->m_prevOpenScenePath = SceneManager::GetActiveSceneFilepath();
-                Debug_Peek(sp->m_prevOpenScenePath);
-
                 Scene *openScene = EditorSceneManager::GetOpenScene();
                 if (openScene)
                 {
@@ -142,14 +140,14 @@ void ScenePlayer::StopScene()
     {
         ScenePlayer::SetPlayState(PlayState::Editing);
 
-        ScenePlayer *sp = ScenePlayer::GetInstance();
-
-        if (sp->m_prevOpenScenePath.IsFile())
+        Path openScenePath = SceneOpenerSaver::GetInstance()->GetOpenScenePath();
+        if (openScenePath.IsFile())
         {
-            SceneManager::LoadScene(sp->m_prevOpenScenePath);
+            SceneManager::LoadSceneInstantly(openScenePath);
         }
         else { SceneManager::LoadSceneInstantly(nullptr); }
 
+        ScenePlayer *sp = ScenePlayer::GetInstance();
         sp->p_playOpenScene = nullptr;
         sp->m_pauseInNextFrame = false;
     }

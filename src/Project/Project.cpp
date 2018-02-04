@@ -8,7 +8,7 @@
 #include "Bang/Extensions.h"
 #include "Bang/SceneManager.h"
 
-#include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/SceneOpenerSaver.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -57,7 +57,7 @@ bool Project::OpenFirstFoundScene() const
     Path firstFoundScenePath = GetFirstFoundScenePath();
     if (firstFoundScenePath.IsFile())
     {
-        EditorSceneManager::LoadScene(firstFoundScenePath);
+        SceneOpenerSaver::GetInstance()->OpenSceneInEditor(firstFoundScenePath);
     }
 
     return (firstFoundScenePath.IsFile());

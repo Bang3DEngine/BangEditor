@@ -32,11 +32,6 @@ Scene *EditorSceneManager::GetOpenScene()
     return esm ? esm->_GetOpenScene() : nullptr;
 }
 
-Path EditorSceneManager::GetOpenScenePath()
-{
-    return SceneManager::GetActiveSceneFilepath();
-}
-
 EditorScene *EditorSceneManager::GetEditorScene()
 {
     EditorSceneManager *esm = EditorSceneManager::GetActive();

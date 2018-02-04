@@ -17,7 +17,6 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class MenuItem;
-FORWARD class SceneOpenerSaver;
 
 class MenuBar : public GameObject
 {
@@ -46,8 +45,6 @@ private:
     UIFocusable *p_focusable = nullptr;
     MenuItem *p_currentTopItemBeingShown = nullptr;
     UIHorizontalLayout *m_horizontalLayout = nullptr;
-
-    SceneOpenerSaver *m_sceneOpenerSaver = nullptr;
 
     void RegisterShortcut(const Shortcut &shortcut);
 

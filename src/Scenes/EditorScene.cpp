@@ -56,6 +56,7 @@ void EditorScene::Init()
     m_projectManager = new ProjectManager();
     m_scenePlayer = new ScenePlayer();
     m_editorClipboard = new EditorClipboard();
+    m_sceneOpenerSaver = new SceneOpenerSaver();
 
     GameObjectFactory::CreateUIGameObjectInto(this);
     GameObjectFactory::CreateUICanvasInto(this);
@@ -142,6 +143,7 @@ EditorScene::~EditorScene()
     delete m_editor;
     delete m_scenePlayer;
     delete m_projectManager;
+    delete m_sceneOpenerSaver;
     delete m_editSceneGameObjects;
 }
 
@@ -173,8 +175,8 @@ void EditorScene::Update()
     String sceneTabName = "Scene";
     if (openScene)
     {
-        Path openScenePath = EditorSceneManager::GetOpenScenePath();
-        sceneTabName += " - " + openScenePath.GetName();
+        Path loadedScenePath = SceneOpenerSaver::GetInstance()->GetLoadedScenePath();
+        sceneTabName += " - " + loadedScenePath.GetName();
         if (Editor::IsEditingScene() &&
             !SceneOpenerSaver::GetInstance()->IsCurrentSceneSaved())
         {
@@ -316,6 +318,11 @@ EditorClipboard *EditorScene::GetEditorClipboard() const
 UITabContainer *EditorScene::GetSceneTabContainer() const
 {
     return p_centerTabContainer;
+}
+
+SceneOpenerSaver *EditorScene::GetSceneOpenerSaver() const
+{
+    return m_sceneOpenerSaver;
 }
 
 UISceneEditContainer *EditorScene::GetSceneEditContainer() const

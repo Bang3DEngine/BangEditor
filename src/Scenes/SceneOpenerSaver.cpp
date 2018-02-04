@@ -1,5 +1,6 @@
 #include "BangEditor/SceneOpenerSaver.h"
 
+#include "Bang/Debug.h"
 #include "Bang/Dialog.h"
 #include "Bang/Extensions.h"
 #include "Bang/XMLNodeReader.h"
@@ -48,6 +49,7 @@ bool SceneOpenerSaver::OnOpenScene()
     {
         if (openScenePath.IsFile())
         {
+            m_currentOpenScenePath = openScenePath;
             return OpenSceneInEditor(openScenePath);
         }
     }
@@ -59,12 +61,22 @@ bool SceneOpenerSaver::OnSaveSceneAs() { return OnSaveScene(true); }
 
 void SceneOpenerSaver::OnSceneLoaded(Scene*, const Path &sceneFilepath)
 {
-    m_currentOpenScenePath = sceneFilepath;
+    m_currentLoadedScenePath = sceneFilepath;
+}
+
+const Path &SceneOpenerSaver::GetLoadedScenePath() const
+{
+    return m_currentLoadedScenePath;
+}
+
+const Path &SceneOpenerSaver::GetOpenScenePath() const
+{
+    return m_currentOpenScenePath;
 }
 
 SceneOpenerSaver *SceneOpenerSaver::GetInstance()
 {
-    return MenuBar::GetInstance()->m_sceneOpenerSaver;
+    return EditorSceneManager::GetEditorScene()->GetSceneOpenerSaver();
 }
 
 bool SceneOpenerSaver::OnSaveScene(bool saveAs)
@@ -73,17 +85,17 @@ bool SceneOpenerSaver::OnSaveScene(bool saveAs)
     Scene *openScene = edScene->GetOpenScene();
     if (openScene && Editor::IsEditingScene())
     {
-        Path saveScenePath = m_currentOpenScenePath;
+        Path saveScenePath = GetOpenScenePath();
         if (saveAs || !saveScenePath.IsFile())
         {
             saveScenePath = Dialog::SaveFilePath("Save Scene As...",
-                                        { Extensions::GetSceneExtension() },
-                                        GetDialogStartPath(),
-                                        m_currentOpenScenePath.GetName());
+                            { Extensions::GetSceneExtension() },
+                             GetDialogStartPath(),
+                             GetOpenScenePath().GetName());
         }
 
         bool saveScene = true;
-        if (saveScenePath.IsFile() && saveScenePath != m_currentOpenScenePath)
+        if (saveScenePath.IsFile() && saveScenePath != GetOpenScenePath())
         {
             Dialog::YesNoCancel yesNoCancel = Overwrite(saveScenePath);
             saveScene = (yesNoCancel == Dialog::Yes);
@@ -142,9 +154,9 @@ bool SceneOpenerSaver::IsCurrentSceneSaved() const
     Scene *openScene = EditorSceneManager::GetOpenScene();
     if (!openScene) { return true; }
 
-    if (m_currentOpenScenePath.IsFile())
+    if (GetOpenScenePath().IsFile())
     {
-        XMLNode savedInfo = XMLNodeReader::FromFile( m_currentOpenScenePath );
+        XMLNode savedInfo = XMLNodeReader::FromFile( GetOpenScenePath() );
         XMLNode sceneInfo;
         openScene->ExportXML(&sceneInfo);
 

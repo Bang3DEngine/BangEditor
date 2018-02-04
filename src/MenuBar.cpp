@@ -66,8 +66,6 @@ MenuBar::MenuBar()
     SetName("MenuBar");
     GameObjectFactory::CreateUIGameObjectInto(this);
 
-    m_sceneOpenerSaver = new SceneOpenerSaver();
-
     p_focusable = AddComponent<UIFocusable>();
 
     UIImageRenderer *bg = AddComponent<UIImageRenderer>();
@@ -220,7 +218,6 @@ MenuBar::MenuBar()
 
 MenuBar::~MenuBar()
 {
-    delete m_sceneOpenerSaver;
 }
 
 void MenuBar::RegisterShortcut(const Shortcut &shortcut)
@@ -327,25 +324,25 @@ MenuBar *MenuBar::GetInstance()
 void MenuBar::OnNewScene(MenuItem*)
 {
     MenuBar *mb = MenuBar::GetInstance();
-    mb->m_sceneOpenerSaver->OnNewScene();
+    SceneOpenerSaver::GetInstance()->OnNewScene();
 }
 
 void MenuBar::OnSaveScene(MenuItem*)
 {
     MenuBar *mb = MenuBar::GetInstance();
-    mb->m_sceneOpenerSaver->OnSaveScene();
+    SceneOpenerSaver::GetInstance()->OnSaveScene();
 }
 
 void MenuBar::OnSaveSceneAs(MenuItem*)
 {
     MenuBar *mb = MenuBar::GetInstance();
-    mb->m_sceneOpenerSaver->OnSaveSceneAs();
+    SceneOpenerSaver::GetInstance()->OnSaveSceneAs();
 }
 
 void MenuBar::OnOpenScene(MenuItem*)
 {
     MenuBar *mb = MenuBar::GetInstance();
-    mb->m_sceneOpenerSaver->OnOpenScene();
+    SceneOpenerSaver::GetInstance()->OnOpenScene();
 }
 
 void MenuBar::OnBuild(MenuItem*)

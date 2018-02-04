@@ -28,6 +28,7 @@ FORWARD class ScenePlayer;
 FORWARD class ProjectManager;
 FORWARD class UITabContainer;
 FORWARD class EditorClipboard;
+FORWARD class SceneOpenerSaver;
 FORWARD class UISceneContainer;
 FORWARD class EditorApplication;
 FORWARD class EditSceneGameObjects;
@@ -63,6 +64,7 @@ public:
     ProjectManager *GetProjectManager() const;
     EditorClipboard *GetEditorClipboard() const;
     UITabContainer *GetSceneTabContainer() const;
+    SceneOpenerSaver *GetSceneOpenerSaver() const;
     UISceneEditContainer *GetSceneEditContainer() const;
     UIScenePlayContainer *GetScenePlayContainer() const;
     EditSceneGameObjects *GetEditSceneGameObjects() const;
@@ -73,9 +75,11 @@ protected:
 
 private:
     Editor *m_editor = nullptr;
+
     ScenePlayer *m_scenePlayer = nullptr;
     ProjectManager *m_projectManager = nullptr;
     EditorClipboard *m_editorClipboard = nullptr;
+    SceneOpenerSaver *m_sceneOpenerSaver = nullptr;
     EditSceneGameObjects *m_editSceneGameObjects = nullptr;
 
     Console *p_console     = nullptr;

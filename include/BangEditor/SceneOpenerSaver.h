@@ -24,12 +24,16 @@ public:
 
     bool OpenSceneInEditor(const Path &scenePath);
 
-    // SceneManagerListener
+    // ISceneManagerListener
     void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
+
+    const Path& GetOpenScenePath() const;
+    const Path& GetLoadedScenePath() const;
 
     static SceneOpenerSaver* GetInstance();
 
 private:
+    Path m_currentLoadedScenePath = Path::Empty;
     Path m_currentOpenScenePath = Path::Empty;
 
     bool OnSaveScene(bool saveAs);
