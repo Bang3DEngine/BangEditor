@@ -3,6 +3,7 @@
 
 #include "Bang/Rect.h"
 #include "Bang/Scene.h"
+#include "Bang/SceneManager.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/ScenePlayer.h"
@@ -36,7 +37,8 @@ FORWARD class UISceneEditContainer;
 FORWARD class UIScenePlayContainer;
 
 class EditorScene : public Scene,
-                    public IScenePlayerListener
+                    public IScenePlayerListener,
+                    public ISceneManagerListener
 {
     GAMEOBJECT_EDITOR(EditorScene);
 
@@ -47,7 +49,6 @@ public:
     void RenderOpenScene();
     void SetViewportForOpenScene();
 
-    void SetOpenScene(Scene *openScene, bool destroyPreviousScene = true);
     Scene *GetOpenScene() const;
 
     Rect GetOpenSceneWindowRectNDC() const;
@@ -108,11 +109,17 @@ private:
     void PushGLViewport();
     void PopGLViewport();
 
+    void SetOpenScene(Scene *openScene);
+
+    // ISceneManagerListener
+    void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
+
     // IScenePlayerListener
     void OnPlayStateChanged(PlayState previousPlayState,
                             PlayState newPlayState) override;
 
-    friend class BangEditor::EditorApplication;
+    friend class EditorApplication;
+    friend class EditorSceneManager;
 };
 
 NAMESPACE_BANG_EDITOR_END

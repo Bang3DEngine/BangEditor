@@ -1,6 +1,7 @@
 ﻿#ifndef INSPECTOR_H
 #define INSPECTOR_H
 
+#include "Bang/SceneManager.h"
 #include "Bang/IDestroyListener.h"
 #include "Bang/IComponentListener.h"
 
@@ -19,9 +20,10 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class InspectorWidget;
 
 class Inspector : public GameObject,
+                  public IEditorListener,
                   public IDestroyListener,
                   public IComponentListener,
-                  public IEditorListener
+                  public ISceneManagerListener
 {
     GAMEOBJECT_EDITOR(Inspector);
 
@@ -35,6 +37,9 @@ public:
 
     GameObject *GetCurrentGameObject() const;
 
+    // ISceneManagerListener
+    void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
+
     // IDestroyListener
     void OnDestroyed(EventEmitter<IDestroyListener> *destroyedObject) override;
 
@@ -43,8 +48,8 @@ public:
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
 
     // IComponentListener
-    virtual void OnComponentAdded(Component *addedComponent, int index);
-    virtual void OnComponentRemoved(Component *removedComponent);
+    void OnComponentAdded(Component *addedComponent, int index) override;
+    void OnComponentRemoved(Component *removedComponent) override;
 
 private:
     List<InspectorWidget*> m_widgets;

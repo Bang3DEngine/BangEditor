@@ -323,25 +323,21 @@ MenuBar *MenuBar::GetInstance()
 
 void MenuBar::OnNewScene(MenuItem*)
 {
-    MenuBar *mb = MenuBar::GetInstance();
     SceneOpenerSaver::GetInstance()->OnNewScene();
 }
 
 void MenuBar::OnSaveScene(MenuItem*)
 {
-    MenuBar *mb = MenuBar::GetInstance();
     SceneOpenerSaver::GetInstance()->OnSaveScene();
 }
 
 void MenuBar::OnSaveSceneAs(MenuItem*)
 {
-    MenuBar *mb = MenuBar::GetInstance();
     SceneOpenerSaver::GetInstance()->OnSaveSceneAs();
 }
 
 void MenuBar::OnOpenScene(MenuItem*)
 {
-    MenuBar *mb = MenuBar::GetInstance();
     SceneOpenerSaver::GetInstance()->OnOpenScene();
 }
 

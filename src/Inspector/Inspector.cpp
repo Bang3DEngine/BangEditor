@@ -96,6 +96,7 @@ Inspector::Inspector()
                                                                GetWidgetsContainer());
 
     Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
+    SceneManager::GetActive()->EventEmitter<ISceneManagerListener>::RegisterListener(this);
 }
 
 Inspector::~Inspector()
@@ -118,7 +119,12 @@ GameObject *Inspector::GetCurrentGameObject() const
     return p_currentGameObject;
 }
 
-void Inspector::OnDestroyed(EventEmitter<IDestroyListener> *destroyedObject)
+void Inspector::OnSceneLoaded(Scene*, const Path &)
+{
+    Clear();
+}
+
+void Inspector::OnDestroyed(EventEmitter<IDestroyListener>*)
 {
     Clear();
 }

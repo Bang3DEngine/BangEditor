@@ -28,10 +28,8 @@ bool SceneOpenerSaver::OnNewScene()
 {
     if (CloseScene())
     {
-        EditorScene *edScene = EditorSceneManager::GetEditorScene();
-
         Scene *defaultScene = GameObjectFactory::CreateScene();
-        edScene->SetOpenScene(defaultScene);
+        SceneManager::LoadSceneInstantly(defaultScene);
 
         GameObjectFactory::CreateDefaultSceneInto(defaultScene);
         defaultScene->SetFirstFoundCamera();
@@ -131,12 +129,17 @@ bool SceneOpenerSaver::CloseScene()
         if (saveSceneYNC == Dialog::Yes)
         {
             if (!OnSaveScene()) { return false; }
+            else
+            {
+                Scene *previousScene = SceneManager::GetActiveScene();
+                if (previousScene) { GameObject::Destroy(previousScene); }
+            }
         }
         else if (saveSceneYNC == Dialog::Cancel) { return false; }
     }
 
     m_currentOpenScenePath = Path::Empty;
-    EditorSceneManager::GetEditorScene()->SetOpenScene(nullptr);
+    SceneManager::LoadScene(nullptr);
     return true;
 }
 

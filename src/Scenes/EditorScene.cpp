@@ -134,6 +134,7 @@ void EditorScene::Init()
     GetCamera()->SetRenderSelectionBuffer(false);
 
     ScenePlayer::GetInstance()->EventEmitter<IScenePlayerListener>::RegisterListener(this);
+    SceneManager::GetActive()->EventEmitter<ISceneManagerListener>::RegisterListener(this);
 
     ScenePlayer::StopScene();
 }
@@ -237,15 +238,10 @@ void EditorScene::SetViewportForOpenScene()
     }
 }
 
-void EditorScene::SetOpenScene(Scene *openScene, bool destroyPreviousScene)
+void EditorScene::SetOpenScene(Scene *openScene)
 {
     if (openScene != GetOpenScene())
     {
-        if (GetOpenScene())
-        {
-            if (destroyPreviousScene) { GameObject::Destroy(GetOpenScene()); }
-        }
-
         p_openScene = openScene;
         if (GetOpenScene())
         {
@@ -255,6 +251,11 @@ void EditorScene::SetOpenScene(Scene *openScene, bool destroyPreviousScene)
             UnBindOpenScene();
         }
     }
+}
+
+void EditorScene::OnSceneLoaded(Scene *scene, const Path &)
+{
+    if (scene != this) { SetOpenScene(scene); }
 }
 
 Scene *EditorScene::GetOpenScene() const

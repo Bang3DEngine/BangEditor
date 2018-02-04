@@ -81,7 +81,6 @@ void ScenePlayer::PlayScene()
         if (ScenePlayer::GetPlayState() == PlayState::Editing)
         {
             // Play scene!
-            EditorScene *edScene = EditorSceneManager::GetEditorScene();
             EditorBehaviourManager *edBehaviourMgr = EditorBehaviourManager::GetActive();
             bool behavioursReady = edBehaviourMgr->PrepareBehavioursLibrary();
             if (behavioursReady)
@@ -94,17 +93,14 @@ void ScenePlayer::PlayScene()
                     // Create empty scene, set it active, start it empty
                     sp->p_playOpenScene = GameObjectFactory::CreateScene(false);
 
-                    EditorSceneManager::SetActiveScene(sp->p_playOpenScene);
-
                     // Set open scene to null first
-                    edScene->SetOpenScene(nullptr, false);
+                    SceneManager::LoadSceneInstantly(nullptr);
 
                     // Clone the editing scene into the playing scene
                     openScene->CloneInto(sp->p_playOpenScene);
 
                     // Now set the open scene in the editor
-                    edScene->SetOpenScene(sp->p_playOpenScene, false);
-
+                    SceneManager::LoadSceneInstantly(sp->p_playOpenScene);
 
                     Time::SetDeltaTimeReferenceToNow();
                 }

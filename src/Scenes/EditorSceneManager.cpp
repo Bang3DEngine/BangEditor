@@ -59,10 +59,10 @@ void EditorSceneManager::_LoadSceneInstantly(Scene *scene)
     EditorScene *edScene = _GetEditorScene();
     if (edScene)
     {
-        if (edScene->GetOpenScene() == scene) { return; }
         edScene->SetOpenScene(scene);
+        AudioManager::StopAllSounds();
     }
-    else // Load editor scene
+    else // Retrieve editor scene
     {
         p_editorScene = SCAST<EditorScene*>(scene);
         SceneManager::_LoadSceneInstantly(scene);
