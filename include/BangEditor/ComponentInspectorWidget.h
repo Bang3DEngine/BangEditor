@@ -38,7 +38,7 @@ protected:
     virtual void SetTitle(const String& title) override;
     virtual GameObject *CreateTitleGameObject() override;
 
-    virtual bool ShowRemoveInMenu() const;
+    virtual bool CanBeRemovedFromContextMenu() const;
     virtual void OnValueChanged(Object *object) override;
     virtual RH<Texture2D> GetComponentIconTexture() const;
 

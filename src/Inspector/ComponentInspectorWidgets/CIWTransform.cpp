@@ -60,7 +60,7 @@ void CIWTransform::UpdateFromReference()
     }
 }
 
-bool CIWTransform::ShowRemoveInMenu() const
+bool CIWTransform::CanBeRemovedFromContextMenu() const
 {
     return false;
 }

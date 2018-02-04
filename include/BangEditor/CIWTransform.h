@@ -27,7 +27,7 @@ protected:
     CIWTransform() = default;
     virtual ~CIWTransform() = default;
 
-    virtual bool ShowRemoveInMenu() const override;
+    virtual bool CanBeRemovedFromContextMenu() const override;
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;

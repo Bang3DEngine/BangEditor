@@ -24,7 +24,7 @@ public:
     virtual void UpdateFromReference() override;
 
 protected:
-    virtual bool ShowRemoveInMenu() const override;
+    virtual bool CanBeRemovedFromContextMenu() const override;
 
     RectTransform *GetRectTransform() const;
 

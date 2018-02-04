@@ -67,7 +67,7 @@ void CIWRectTransform::UpdateFromReference()
     }
 }
 
-bool CIWRectTransform::ShowRemoveInMenu() const
+bool CIWRectTransform::CanBeRemovedFromContextMenu() const
 {
     return false;
 }

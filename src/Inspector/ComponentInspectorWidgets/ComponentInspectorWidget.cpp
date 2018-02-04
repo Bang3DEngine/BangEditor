@@ -108,7 +108,7 @@ GameObject *ComponentInspectorWidget::CreateTitleGameObject()
     return titleHLGo;
 }
 
-bool ComponentInspectorWidget::ShowRemoveInMenu() const
+bool ComponentInspectorWidget::CanBeRemovedFromContextMenu() const
 {
     return true;
 }
@@ -135,16 +135,13 @@ void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
 {
     menuRootItem->SetFontSize(10);
 
-    if (ShowRemoveInMenu())
+    MenuItem *remove = menuRootItem->AddItem("Remove");
+    remove->SetSelectedCallback([this](MenuItem*)
     {
-        MenuItem *remove = menuRootItem->AddItem("Remove");
-        remove->SetSelectedCallback([this](MenuItem*)
-        {
-            GameObject *go = GetComponent()->GetGameObject();
-            go->RemoveComponent(GetComponent());
-        });
-        menuRootItem->AddSeparator();
-    }
+        GameObject *go = GetComponent()->GetGameObject();
+        go->RemoveComponent(GetComponent());
+    });
+    menuRootItem->AddSeparator();
 
     MenuItem *copy = menuRootItem->AddItem("Copy");
     copy->SetSelectedCallback([this](MenuItem*)
@@ -188,6 +185,9 @@ void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
         MoveComponent(GetComponent(), 1);
     });
     menuRootItem->AddSeparator();
+
+    remove->SetOverAndActionEnabled( CanBeRemovedFromContextMenu() );
+    cut->SetOverAndActionEnabled( CanBeRemovedFromContextMenu() );
 }
 
 void ComponentInspectorWidget::MoveComponent(Component *comp, int offset)
