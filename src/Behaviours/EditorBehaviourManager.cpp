@@ -164,7 +164,7 @@ bool EditorBehaviourManager::DeleteBehaviourInstance(const String &behaviourName
 
 bool EditorBehaviourManager::IsInstanceCreationAllowed() const
 {
-    return Editor::GetEditorPlayState() != EditorPlayState::Editing;
+    return ScenePlayer::GetPlayState() != PlayState::Editing;
 }
 
 EditorBehaviourManager *EditorBehaviourManager::GetActive()
@@ -345,7 +345,7 @@ Compiler::Job EditorBehaviourManager::CreateCompileBehaviourJob(
 
 void EditorBehaviourManager::UpdateCompileInformations()
 {
-    if (Editor::GetEditorPlayState() != EditorPlayState::Editing) { return; }
+    if (ScenePlayer::GetPlayState() != PlayState::Editing) { return; }
 
     GetBehaviourTracker()->Update();
 

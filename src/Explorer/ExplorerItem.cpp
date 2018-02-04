@@ -59,6 +59,7 @@ ExplorerItem::ExplorerItem()
     p_label->GetText()->SetContent("");
     p_label->GetText()->SetWrapping(true);
     p_label->GetText()->SetVerticalAlign(VerticalAlignment::Top);
+    p_label->GetText()->SetHorizontalAlign(HorizontalAlignment::Center);
     p_label->SetSelectable(false);
 
     p_button = AddComponent<UIFocusable>();

@@ -37,35 +37,6 @@ void Editor::SelectGameObject(GameObject *selectedGameObject)
     if (ed) { ed->_SelectGameObject(selectedGameObject); }
 }
 
-void Editor::SetEditorPlayState(EditorPlayState playState)
-{
-    if (playState != Editor::GetEditorPlayState())
-    {
-        EditorPlayState previousPlayState = Editor::GetEditorPlayState();
-
-        Editor *ed = Editor::GetInstance();
-        ed->m_currentPlayState = playState;
-
-        ed->EventEmitter<IEditorListener>::PropagateToListeners(
-                    &IEditorListener::OnPlayStateChanged,
-                    previousPlayState,
-                    ed->m_currentPlayState);
-
-        AudioManager::SetPlayOnStartBlocked( Editor::IsEditingScene() );
-    }
-}
-
-EditorPlayState Editor::GetEditorPlayState()
-{
-    Editor *ed = Editor::GetInstance();
-    return ed ? ed->m_currentPlayState : Undef<EditorPlayState>();
-}
-
-bool Editor::IsEditingScene()
-{
-    return Editor::GetEditorPlayState() == EditorPlayState::Editing;
-}
-
 void Editor::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
     if (GetSelectedGameObject() == object)

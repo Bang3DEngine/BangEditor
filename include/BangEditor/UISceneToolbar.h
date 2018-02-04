@@ -5,8 +5,8 @@
 #include "Bang/IEventEmitter.h"
 #include "Bang/IValueChangedListener.h"
 
-#include "BangEditor/Editor.h"
 #include "BangEditor/BangEditor.h"
+#include "BangEditor/ScenePlayer.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIButton;
@@ -21,7 +21,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class UISceneToolbar : public GameObject,
                        public EventEmitter<IValueChangedListener>,
-                       public IEditorListener,
+                       public IScenePlayerListener,
                        public IValueChangedListener
 {
     GAMEOBJECT_EDITOR(UISceneToolbar);
@@ -49,9 +49,9 @@ private:
 
     void SetRenderMode();
 
-    // IEditorListener;
-    void OnPlayStateChanged(EditorPlayState previousPlayState,
-                            EditorPlayState newPlayState) override;
+    // IScenePlayerListener
+    void OnPlayStateChanged(PlayState previousPlayState,
+                            PlayState newPlayState) override;
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;

@@ -11,8 +11,8 @@ USING_NAMESPACE_BANG_EDITOR
 
 UIScenePlayContainer::UIScenePlayContainer()
 {
-    Editor::GetInstance()->
-            EventEmitter<IEditorListener>::RegisterListener(this);
+    ScenePlayer::GetInstance()->
+            EventEmitter<IScenePlayerListener>::RegisterListener(this);
     SceneManager::GetActive()->
             EventEmitter<ISceneManagerListener>::RegisterListener(this);
 }
@@ -32,7 +32,7 @@ Camera* UIScenePlayContainer::GetSceneCamera(Scene *scene)
     return scene ? scene->GetCamera() : nullptr;
 }
 
-void UIScenePlayContainer::OnPlayStateChanged(EditorPlayState, EditorPlayState)
+void UIScenePlayContainer::OnPlayStateChanged(PlayState, PlayState)
 {
 }
 

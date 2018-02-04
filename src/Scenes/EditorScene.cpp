@@ -132,7 +132,7 @@ void EditorScene::Init()
     GetCamera()->SetClearColor(Color::LightGray);
     GetCamera()->SetRenderSelectionBuffer(false);
 
-    Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
+    ScenePlayer::GetInstance()->EventEmitter<IScenePlayerListener>::RegisterListener(this);
 
     ScenePlayer::StopScene();
 }
@@ -157,8 +157,7 @@ void EditorScene::Update()
     {
         BindOpenScene();
 
-        bool updateOpenScene =
-                (Editor::GetEditorPlayState() == EditorPlayState::Playing);
+        bool updateOpenScene = (ScenePlayer::GetPlayState() == PlayState::Playing);
         SceneManager::OnNewFrame(openScene, updateOpenScene);
 
         GetEditSceneGameObjects()->Update();
@@ -346,17 +345,19 @@ void EditorScene::PopGLViewport()
     GL::SetViewport(m_prevGLViewport);
 }
 
-void EditorScene::OnPlayStateChanged(EditorPlayState,
-                                     EditorPlayState newPlayState)
+void EditorScene::OnPlayStateChanged(PlayState previousPlayState,
+                                     PlayState newPlayState)
 {
+    (void)(previousPlayState);
+
     // Change tab when play/stop
     switch (newPlayState)
     {
-        case EditorPlayState::Editing:
+        case PlayState::Editing:
             p_centerTabContainer->SetCurrentTabChild( p_sceneEditContainer );
         break;
 
-        case EditorPlayState::Playing:
+        case PlayState::Playing:
             p_centerTabContainer->SetCurrentTabChild( p_scenePlayContainer );
         break;
 

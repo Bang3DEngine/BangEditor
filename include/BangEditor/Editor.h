@@ -19,21 +19,11 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class EditorSettings;
 
-enum class EditorPlayState
-{
-    Playing,
-    Paused,
-    StepFrame,
-    Editing
-};
-
 class IEditorListener : public virtual IEventListener
 {
 public:
     virtual void OnGameObjectSelected(GameObject *selectedGameObject) { }
     virtual void OnExplorerPathSelected(const Path &selectedPath) { }
-    virtual void OnPlayStateChanged(EditorPlayState previousPlayState,
-                                    EditorPlayState newPlayState) { }
 };
 
 class Editor : public EventEmitter<IEditorListener>,
@@ -43,15 +33,11 @@ public:
     static GameObject *GetSelectedGameObject();
     static void SelectGameObject(GameObject *selectedGameObject);
 
-    static void SetEditorPlayState(EditorPlayState playState);
-    static EditorPlayState GetEditorPlayState();
     static bool IsEditingScene();
 
     static Editor* GetInstance();
 
 private:
-    EditorPlayState m_currentPlayState = Undef<EditorPlayState>();
-
     GameObject *p_selectedGameObject = nullptr;
     EditorSettings *m_editorSettings = nullptr;
 

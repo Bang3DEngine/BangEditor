@@ -98,7 +98,7 @@ UISceneToolbar::UISceneToolbar()
     showDebugStatsTextGo->SetParent(this);
     p_showDebugStatsCheckbox->GetGameObject()->SetParent(this);
 
-    Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
+    ScenePlayer::GetInstance()->EventEmitter<IScenePlayerListener>::RegisterListener(this);
 }
 
 UISceneToolbar::~UISceneToolbar()
@@ -144,15 +144,15 @@ void UISceneToolbar::OnStopScene()
     p_stopButton->SetBlocked(true);
 }
 
-void UISceneToolbar::OnPlayStateChanged(EditorPlayState,
-                                        EditorPlayState newPlayState)
+void UISceneToolbar::OnPlayStateChanged(PlayState,
+                                        PlayState newPlayState)
 {
     switch (newPlayState)
     {
-        case EditorPlayState::Editing:   OnStopScene();      break;
-        case EditorPlayState::Paused:    OnPauseScene();     break;
-        case EditorPlayState::StepFrame: OnStepFrameScene(); break;
-        case EditorPlayState::Playing:   OnPlayScene();      break;
+        case PlayState::Editing:   OnStopScene();      break;
+        case PlayState::Paused:    OnPauseScene();     break;
+        case PlayState::StepFrame: OnStepFrameScene(); break;
+        case PlayState::Playing:   OnPlayScene();      break;
     }
 }
 

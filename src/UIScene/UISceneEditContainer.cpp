@@ -23,8 +23,8 @@ USING_NAMESPACE_BANG_EDITOR
 
 UISceneEditContainer::UISceneEditContainer()
 {
-    Editor::GetInstance()->
-            EventEmitter<IEditorListener>::RegisterListener(this);
+    ScenePlayer::GetInstance()->
+            EventEmitter<IScenePlayerListener>::RegisterListener(this);
     SceneManager::GetActive()->
             EventEmitter<ISceneManagerListener>::RegisterListener(this);
 
@@ -119,7 +119,7 @@ bool UISceneEditContainer::NeedsToRenderScene(Scene *scene)
     return IsVisible();
 }
 
-void UISceneEditContainer::OnPlayStateChanged(EditorPlayState, EditorPlayState)
+void UISceneEditContainer::OnPlayStateChanged(PlayState, PlayState)
 {
 }
 

@@ -5,6 +5,7 @@
 #include "Bang/Scene.h"
 
 #include "BangEditor/Editor.h"
+#include "BangEditor/ScenePlayer.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
@@ -34,7 +35,7 @@ FORWARD class UISceneEditContainer;
 FORWARD class UIScenePlayContainer;
 
 class EditorScene : public Scene,
-                    public IEditorListener
+                    public IScenePlayerListener
 {
     GAMEOBJECT_EDITOR(EditorScene);
 
@@ -103,9 +104,9 @@ private:
     void PushGLViewport();
     void PopGLViewport();
 
-    // IEditorListener
-    void OnPlayStateChanged(EditorPlayState previousPlayState,
-                            EditorPlayState newPlayState) override;
+    // IScenePlayerListener
+    void OnPlayStateChanged(PlayState previousPlayState,
+                            PlayState newPlayState) override;
 
     friend class BangEditor::EditorApplication;
 };

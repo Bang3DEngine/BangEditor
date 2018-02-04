@@ -4,14 +4,14 @@
 #include "Bang/Bang.h"
 #include "Bang/SceneManager.h"
 
-#include "BangEditor/Editor.h"
+#include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneContainer.h"
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class UIScenePlayContainer : public UISceneContainer,
-                             public IEditorListener,
+                             public IScenePlayerListener,
                              public ISceneManagerListener
 {
     GAMEOBJECT_EDITOR(UIScenePlayContainer);
@@ -27,9 +27,9 @@ private:
     Camera* GetSceneCamera(Scene *scene) override;
     bool NeedsToRenderScene(Scene *scene) override;
 
-    // IEditorListener
-    void OnPlayStateChanged(EditorPlayState previousPlayState,
-                            EditorPlayState newPlayState) override;
+    // IScenePlayerListener
+    void OnPlayStateChanged(PlayState previousPlayState,
+                            PlayState newPlayState) override;
 
     // ISceneManagerListener
     void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
