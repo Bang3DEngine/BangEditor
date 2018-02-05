@@ -55,6 +55,10 @@ void SelectionGizmosManager::OnGameObjectSelected(GameObject *selectedGameObject
     GetComponentsSelectionGizmo()->SetEnabled( selectedGameObject != nullptr );
 }
 
+void SelectionGizmosManager::OnDestroyed(EventEmitter<IDestroyListener> *object)
+{
+}
+
 TransformGizmo* SelectionGizmosManager::GetTransformGizmo() const
 {
     return p_transformGizmo;

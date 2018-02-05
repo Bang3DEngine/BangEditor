@@ -20,6 +20,8 @@ enum class PlayState { Playing, Paused, StepFrame, Editing };
 
 class IScenePlayerListener : public virtual IEventListener
 {
+    EVENTLISTENER(IScenePlayerListener)
+
 public:
     virtual void OnPlayStateChanged(PlayState previousPlayState,
                                     PlayState newPlayState)

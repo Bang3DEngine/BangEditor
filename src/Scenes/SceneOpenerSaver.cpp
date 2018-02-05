@@ -47,7 +47,6 @@ bool SceneOpenerSaver::OnOpenScene()
     {
         if (openScenePath.IsFile())
         {
-            m_currentOpenScenePath = openScenePath;
             return OpenSceneInEditor(openScenePath);
         }
     }
@@ -135,7 +134,7 @@ bool SceneOpenerSaver::CloseScene()
             if (!OnSaveScene()) { return false; }
             else
             {
-                Scene *previousScene = SceneManager::GetActiveScene();
+                Scene *previousScene = EditorSceneManager::GetOpenScene();
                 if (previousScene) { GameObject::Destroy(previousScene); }
             }
         }

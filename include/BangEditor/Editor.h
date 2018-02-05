@@ -21,6 +21,8 @@ FORWARD class EditorSettings;
 
 class IEditorListener : public virtual IEventListener
 {
+    EVENTLISTENER(IEditorListener)
+
 public:
     virtual void OnGameObjectSelected(GameObject *selectedGameObject) { }
     virtual void OnExplorerPathSelected(const Path &selectedPath) { }
