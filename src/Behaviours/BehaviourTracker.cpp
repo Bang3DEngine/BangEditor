@@ -33,9 +33,9 @@ void BehaviourTracker::Update()
 
 }
 
-void BehaviourTracker::CheckForChanges()
+void BehaviourTracker::ForceCheckNow()
 {
-    m_fileTracker.CheckForChanges();
+    m_fileTracker.ForceCheckNow();
 }
 
 bool BehaviourTracker::HasBeenModified(const Path &sourcePath) const

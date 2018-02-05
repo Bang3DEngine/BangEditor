@@ -12,7 +12,6 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UILabel;
-FORWARD class FileTracker;
 FORWARD class UIScrollPanel;
 FORWARD NAMESPACE_BANG_END
 
@@ -20,10 +19,10 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class Explorer : public GameObject,
-                 public IFileTrackerListener,
-                 public IProjectManagerListener,
                  public IEditorListener,
-                 public IExplorerItemListener
+                 public IFileTrackerListener,
+                 public IExplorerItemListener,
+                 public IProjectManagerListener
 {
     GAMEOBJECT_EDITOR(Explorer);
 
@@ -68,7 +67,6 @@ private:
     Path m_currentPath = Path::Empty;
     List<ExplorerItem*> p_items;
     Map<Path, ExplorerItem*> m_pathsToItem;
-    FileTracker *m_fileTracker = nullptr;
 
     UILabel *p_currentPathLabel = nullptr;
     UIButton *p_backButton = nullptr;

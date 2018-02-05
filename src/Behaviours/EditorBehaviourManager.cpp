@@ -54,7 +54,7 @@ bool EditorBehaviourManager::PrepareBehavioursLibrary()
     WaitForAsyncCompileJobs();
 
     // Compile
-    GetBehaviourTracker()->CheckForChanges();
+    GetBehaviourTracker()->ForceCheckNow();
     UpdateCompileInformations();
     if (!AreAllBehavioursCompiledSuccessfully())
     {

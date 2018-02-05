@@ -14,8 +14,8 @@ FORWARD class Project;
 class IProjectManagerListener : public IEventListener
 {
 public:
-    virtual void OnProjectClosed(const Project *project) { (void)project; }
     virtual void OnProjectOpen(const Project *project) { (void)project; }
+    virtual void OnProjectClosed(const Project *project) { (void)project; }
 };
 
 class ProjectManager : public EventEmitter<IProjectManagerListener>

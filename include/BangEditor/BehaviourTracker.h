@@ -18,7 +18,7 @@ public:
 	virtual ~BehaviourTracker();
 
     void Update();
-    void CheckForChanges();
+    void ForceCheckNow();
 
     bool HasBeenModified(const Path &sourcePath) const;
     List<Path> GetIncludeDirs() const;

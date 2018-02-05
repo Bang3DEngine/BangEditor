@@ -8,7 +8,6 @@
 #include "Bang/UIButton.h"
 #include "Bang/UICanvas.h"
 #include "Bang/Extensions.h"
-#include "Bang/FileTracker.h"
 #include "Bang/UIGridLayout.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
@@ -27,6 +26,7 @@
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/SceneOpenerSaver.h"
+#include "BangEditor/EditorFileTracker.h"
 #include "BangEditor/EditorIconManager.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/ExplorerItemFactory.h"
@@ -47,10 +47,6 @@ Explorer::Explorer()
 
     GameObject *mainVLGo = rendererCacherContainer;
     UIVerticalLayout *mainVL = mainVLGo->AddComponent<UIVerticalLayout>(); (void)(mainVL);
-
-    m_fileTracker = new FileTracker();
-    m_fileTracker->SetCheckFrequencySeconds(3.0f);
-    m_fileTracker->RegisterListener(this);
 
     // Tool Bar
     GameObject *toolBar = GameObjectFactory::CreateUIGameObject();
@@ -115,6 +111,8 @@ Explorer::Explorer()
             EventEmitter<IEditorListener>::RegisterListener(this);
     ProjectManager::GetInstance()->
             EventEmitter<IProjectManagerListener>::RegisterListener(this);
+    EditorFileTracker::GetInstance()->GetFileTracker()->
+            EventEmitter<IFileTrackerListener>::RegisterListener(this);
 
     ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::D, "Duplicate"),
                                       &Explorer::OnShortcutPressed);
@@ -126,7 +124,6 @@ Explorer::Explorer()
 
 Explorer::~Explorer()
 {
-    delete m_fileTracker;
 }
 
 void Explorer::Update()
@@ -153,13 +150,11 @@ void Explorer::Update()
         SetRootPath(EditorPaths::GetEngineAssetsDir());
     }
     #endif
-
-    m_fileTracker->Update();
 }
 
 void Explorer::CheckFileChanges()
 {
-    m_fileTracker->CheckForChanges();
+    EditorFileTracker::GetInstance()->GetFileTracker()->ForceCheckNow();
 }
 
 void Explorer::SelectPath(const Path &path)
@@ -196,9 +191,6 @@ void Explorer::SetCurrentPath(const Path &path)
     {
         m_currentPath = path;
         p_currentPathLabel->GetText()->SetContent(GetCurrentPath().GetAbsolute());
-
-        m_fileTracker->Clear();
-        m_fileTracker->TrackPath(GetCurrentPath());
 
         p_backButton->SetBlocked( GetCurrentPath() == GetRootPath() );
 
@@ -352,7 +344,7 @@ void Explorer::OnRename(ExplorerItem *explorerItem)
             else
             {
                 File::Rename(path, newPath);
-                ImportFilesManager::OnFilepathRenamed(path, newPath);
+                EditorFileTracker::GetInstance()->OnPathRenamed(path, newPath);
                 explorerItem->SetPath(newPath);
             }
         }

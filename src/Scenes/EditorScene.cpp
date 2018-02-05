@@ -36,6 +36,8 @@
 #include "BangEditor/EditorClipboard.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/UISceneContainer.h"
+#include "BangEditor/BehaviourTracker.h"
+#include "BangEditor/EditorFileTracker.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditSceneGameObjects.h"
 #include "BangEditor/UISceneEditContainer.h"
@@ -57,6 +59,7 @@ void EditorScene::Init()
     m_scenePlayer = new ScenePlayer();
     m_editorClipboard = new EditorClipboard();
     m_sceneOpenerSaver = new SceneOpenerSaver();
+    m_editorFileTracker = new EditorFileTracker();
 
     GameObjectFactory::CreateUIGameObjectInto(this);
     GameObjectFactory::CreateUICanvasInto(this);
@@ -145,12 +148,15 @@ EditorScene::~EditorScene()
     delete m_scenePlayer;
     delete m_projectManager;
     delete m_sceneOpenerSaver;
+    delete m_editorFileTracker;
     delete m_editSceneGameObjects;
 }
 
 void EditorScene::Update()
 {
     GetScenePlayer()->Update();
+    GetEditorFileTracker()->GetFileTracker()->Update();
+    GetEditorFileTracker()->GetBehaviourTracker()->Update();
 
     EditorSceneManager::SetActiveScene(this);
     Scene::Update();
@@ -324,6 +330,11 @@ UITabContainer *EditorScene::GetSceneTabContainer() const
 SceneOpenerSaver *EditorScene::GetSceneOpenerSaver() const
 {
     return m_sceneOpenerSaver;
+}
+
+EditorFileTracker *EditorScene::GetEditorFileTracker() const
+{
+    return m_editorFileTracker;
 }
 
 UISceneEditContainer *EditorScene::GetSceneEditContainer() const
