@@ -32,7 +32,7 @@ public:
 
     void Update() override;
 
-    void CheckFileChanges();
+    void ForceCheckFileChanges();
     void SelectPath(const Path &path);
     void SetRootPath(const Path &rootPath);
     void SetCurrentPath(const Path &path);

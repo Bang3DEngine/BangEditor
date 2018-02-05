@@ -7,6 +7,7 @@
 #include "Bang/UILabel.h"
 #include "Bang/UIButton.h"
 #include "Bang/UICanvas.h"
+#include "Bang/Resources.h"
 #include "Bang/Extensions.h"
 #include "Bang/UIGridLayout.h"
 #include "Bang/UIScrollArea.h"
@@ -152,7 +153,7 @@ void Explorer::Update()
     #endif
 }
 
-void Explorer::CheckFileChanges()
+void Explorer::ForceCheckFileChanges()
 {
     EditorFileTracker::GetInstance()->GetFileTracker()->ForceCheckNow();
 }
@@ -255,7 +256,7 @@ void Explorer::OnPathAdded(const Path &addedPath)
     }
 }
 
-void Explorer::OnPathModified(const Path &modifiedPath)
+void Explorer::OnPathModified(const Path &)
 {
 }
 
@@ -350,7 +351,7 @@ void Explorer::OnRename(ExplorerItem *explorerItem)
         }
     }
 
-    CheckFileChanges();
+    ForceCheckFileChanges();
 }
 
 void Explorer::OnRemove(ExplorerItem *explorerItem)
@@ -366,17 +367,38 @@ void Explorer::OnRemove(ExplorerItem *explorerItem)
         File::Remove( ImportFilesManager::GetImportFilepath(path) );
     }
 
-    CheckFileChanges();
+    ForceCheckFileChanges();
+}
+
+void DuplicateImportFiles(const Path &oriPath, const Path &dupPath)
+{
+    ASSERT(oriPath.Exists() && dupPath.Exists());
+    ASSERT(oriPath != dupPath);
+
+    if (dupPath.IsFile())
+    {
+        ImportFilesManager::DuplicateImportFile(oriPath, dupPath);
+    }
+    else
+    {
+        Array<Path> oriSubPaths = oriPath.GetSubPaths(Path::FindFlag::Simple).To<Array>();
+        Array<Path> dupSubPaths = dupPath.GetSubPaths(Path::FindFlag::Simple).To<Array>();
+        for (uint i = 0; i < oriSubPaths.Size(); ++i)
+        {
+            DuplicateImportFiles(oriSubPaths[i], dupSubPaths[i]);
+        }
+    }
 }
 
 void Explorer::OnDuplicate(ExplorerItem *explorerItem)
 {
-    const Path &path = explorerItem->GetPath();
+    Path path = explorerItem->GetPath();
     Path newPathName = path.GetDuplicatePath();
     File::Duplicate(path, newPathName);
 
-    CheckFileChanges();
+    DuplicateImportFiles(path, newPathName);
 
+    ForceCheckFileChanges();
     Explorer::SelectPath(newPathName);
 }
 

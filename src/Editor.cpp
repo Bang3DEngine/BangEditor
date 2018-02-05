@@ -73,7 +73,6 @@ void Editor::OnPathSelected(const Path &path)
     ASSERT(ed);
 
     Editor::SelectGameObject(nullptr);
-
     ed->EventEmitter<IEditorListener>::PropagateToListeners(
                 &IEditorListener::OnExplorerPathSelected, path);
 }

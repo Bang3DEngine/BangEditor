@@ -370,7 +370,7 @@ void MenuBar::OnBuildAndRun(MenuItem*)
 
 void AfterCreateAssetFile(const Path &createdAssetPath)
 {
-    Explorer::GetInstance()->CheckFileChanges();
+    Explorer::GetInstance()->ForceCheckFileChanges();
     Explorer::GetInstance()->SelectPath(createdAssetPath);
 }
 

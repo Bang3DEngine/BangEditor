@@ -212,7 +212,7 @@ void Hierarchy::OnCreatePrefab(HierarchyItem *item)
                           GetDuplicatePath();
     Resources::ExportXMLResource(prefabRH.Get(), exportFilepath);
 
-    Explorer::GetInstance()->CheckFileChanges();
+    Explorer::GetInstance()->ForceCheckFileChanges();
 }
 
 void Hierarchy::OnSceneLoaded(Scene *scene, const Path&)

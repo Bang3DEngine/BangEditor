@@ -86,7 +86,6 @@ void FIWMaterial::Init()
     SetLabelsWidth(78);
 }
 
-#include "Bang/Debug.h"
 void FIWMaterial::UpdateFromFileWhenChanged()
 {
     if (GetPath().IsFile()) // Typical material in path
