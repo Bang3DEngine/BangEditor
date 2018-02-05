@@ -101,8 +101,9 @@ bool SceneOpenerSaver::OnSaveScene(bool saveAs)
                              hintName);
         }
 
-        bool saveScene = true;
-        if (saveScenePath.IsFile() && saveScenePath != GetOpenScenePath())
+        bool saveScene = (saveScenePath != Path::Empty);
+        if (saveScene && saveScenePath.IsFile() &&
+            saveScenePath != GetOpenScenePath())
         {
             Dialog::YesNoCancel yesNoCancel = Overwrite(saveScenePath);
             saveScene = (yesNoCancel == Dialog::Yes);

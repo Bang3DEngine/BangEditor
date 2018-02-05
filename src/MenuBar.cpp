@@ -214,6 +214,7 @@ MenuBar::MenuBar()
     RegisterShortcut( Shortcut(Key::LCtrl,              Key::S, "SaveScene")   );
     RegisterShortcut( Shortcut(Key::LCtrl, Key::LShift, Key::S, "SaveSceneAs") );
     RegisterShortcut( Shortcut(Key::LCtrl,              Key::O, "OpenScene")   );
+    RegisterShortcut( Shortcut(Key::LCtrl, Key::LShift, Key::O, "OpenProject") );
 }
 
 MenuBar::~MenuBar()
@@ -230,6 +231,7 @@ void MenuBar::OnShortcutPressed(const Shortcut &shortcut)
     if (shortcut.GetName() == "SaveScene") { OnSaveScene(nullptr); }
     if (shortcut.GetName() == "SaveSceneAs") { OnSaveSceneAs(nullptr); }
     if (shortcut.GetName() == "OpenScene") { OnOpenScene(nullptr); }
+    if (shortcut.GetName() == "OpenProject") { OnOpenProject(nullptr); }
 }
 
 void MenuBar::Update()
