@@ -86,10 +86,12 @@ bool SceneOpenerSaver::OnSaveScene(bool saveAs)
         Path saveScenePath = GetOpenScenePath();
         if (saveAs || !saveScenePath.IsFile())
         {
+            String hintName = GetOpenScenePath().GetName();
+            if (hintName.IsEmpty()) { hintName = "Scene"; }
             saveScenePath = Dialog::SaveFilePath("Save Scene As...",
                             { Extensions::GetSceneExtension() },
                              GetDialogStartPath(),
-                             GetOpenScenePath().GetName());
+                             hintName);
         }
 
         bool saveScene = true;
@@ -102,7 +104,8 @@ bool SceneOpenerSaver::OnSaveScene(bool saveAs)
         if (saveScene)
         {
             m_currentOpenScenePath = saveScenePath;
-            openScene->ExportXMLToFile( Path(saveScenePath) );
+            m_currentLoadedScenePath = saveScenePath;
+            openScene->ExportXMLToFile( Path( GetOpenScenePath() ) );
         }
 
         return true;
@@ -119,7 +122,8 @@ Dialog::YesNoCancel SceneOpenerSaver::Overwrite(const Path &path)
 
 bool SceneOpenerSaver::CloseScene()
 {
-    if (!IsCurrentSceneSaved())
+    if ( EditorSceneManager::GetOpenScene() != nullptr &&
+        !IsCurrentSceneSaved())
     {
         Dialog::YesNoCancel saveSceneYNC =
                 Dialog::GetYesNoCancel("Save current scene",
@@ -155,7 +159,7 @@ Path SceneOpenerSaver::GetDialogStartPath() const
 bool SceneOpenerSaver::IsCurrentSceneSaved() const
 {
     Scene *openScene = EditorSceneManager::GetOpenScene();
-    if (!openScene) { return true; }
+    if (!openScene) { return false; }
 
     if (GetOpenScenePath().IsFile())
     {

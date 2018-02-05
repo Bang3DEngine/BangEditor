@@ -184,7 +184,7 @@ void EditorScene::Update()
     {
         Path loadedScenePath = SceneOpenerSaver::GetInstance()->GetLoadedScenePath();
         sceneTabName += " - " + loadedScenePath.GetName();
-        if (Editor::IsEditingScene() &&
+        if ( Editor::IsEditingScene() &&
             !SceneOpenerSaver::GetInstance()->IsCurrentSceneSaved())
         {
             sceneTabName += " (*)";
