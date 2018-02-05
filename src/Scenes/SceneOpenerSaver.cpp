@@ -18,6 +18,8 @@ SceneOpenerSaver::SceneOpenerSaver()
 {
     SceneManager::GetActive()->
         EventEmitter<ISceneManagerListener>::RegisterListener(this);
+    ScenePlayer::GetInstance()->
+        EventEmitter<IScenePlayerListener>::RegisterListener(this);
 }
 
 SceneOpenerSaver::~SceneOpenerSaver()
@@ -26,6 +28,8 @@ SceneOpenerSaver::~SceneOpenerSaver()
 
 bool SceneOpenerSaver::OnNewScene()
 {
+    if (!Editor::IsEditingScene()) { return false; }
+
     if (CloseScene())
     {
         Scene *defaultScene = GameObjectFactory::CreateScene();
@@ -40,6 +44,8 @@ bool SceneOpenerSaver::OnNewScene()
 
 bool SceneOpenerSaver::OnOpenScene()
 {
+    if (!Editor::IsEditingScene()) { return false; }
+
     Path openScenePath = Dialog::OpenFilePath("Open Scene...",
                                              { Extensions::GetSceneExtension() },
                                               GetDialogStartPath());
@@ -78,6 +84,8 @@ SceneOpenerSaver *SceneOpenerSaver::GetInstance()
 
 bool SceneOpenerSaver::OnSaveScene(bool saveAs)
 {
+    if (!Editor::IsEditingScene()) { return false; }
+
     EditorScene *edScene = EditorSceneManager::GetEditorScene();
     Scene *openScene = edScene->GetOpenScene();
     if (openScene && Editor::IsEditingScene())
@@ -116,13 +124,13 @@ Dialog::YesNoCancel SceneOpenerSaver::Overwrite(const Path &path)
 {
     return Dialog::GetYesNoCancel("Overwrite?",
                          "Are you sure you want to overwrite the file '" +
-                         path.GetNameExt() + "'?");
+                                  path.GetNameExt() + "'?");
 }
 
 bool SceneOpenerSaver::CloseScene()
 {
-    if ( EditorSceneManager::GetOpenScene() != nullptr &&
-        !IsCurrentSceneSaved())
+    Scene *previousScene = EditorSceneManager::GetOpenScene();
+    if (previousScene && !IsCurrentSceneSaved())
     {
         Dialog::YesNoCancel saveSceneYNC =
                 Dialog::GetYesNoCancel("Save current scene",
@@ -132,16 +140,14 @@ bool SceneOpenerSaver::CloseScene()
         if (saveSceneYNC == Dialog::Yes)
         {
             if (!OnSaveScene()) { return false; }
-            else
-            {
-                Scene *previousScene = EditorSceneManager::GetOpenScene();
-                if (previousScene) { GameObject::Destroy(previousScene); }
-            }
         }
         else if (saveSceneYNC == Dialog::Cancel) { return false; }
     }
 
-    m_currentOpenScenePath = Path::Empty;
+    if (previousScene) { GameObject::Destroy(previousScene); }
+
+    m_currentOpenScenePath   = Path::Empty;
+    m_currentLoadedScenePath = Path::Empty;
     SceneManager::LoadScene(nullptr);
     return true;
 }
@@ -153,6 +159,25 @@ Path SceneOpenerSaver::GetDialogStartPath() const
         return Paths::GetProjectAssetsDir();
     }
     return Paths::GetHome();
+}
+
+void SceneOpenerSaver::OnPlayStateChanged(PlayState, PlayState newPlayState)
+{
+    switch (newPlayState)
+    {
+        case PlayState::JustBeforePlaying:
+            m_previousLoadedScenePath = m_currentLoadedScenePath;
+            m_previousOpenScenePath = m_currentOpenScenePath;
+        break;
+
+        case PlayState::Playing:
+        case PlayState::Editing:
+            m_currentLoadedScenePath = m_previousLoadedScenePath;
+            m_currentOpenScenePath = m_previousOpenScenePath;
+        break;
+
+        default: break;
+    }
 }
 
 bool SceneOpenerSaver::IsCurrentSceneSaved() const
@@ -173,6 +198,8 @@ bool SceneOpenerSaver::IsCurrentSceneSaved() const
 
 bool SceneOpenerSaver::OpenSceneInEditor(const Path &scenePath)
 {
+    if (!Editor::IsEditingScene()) { return false; }
+
     if (CloseScene())
     {
         SceneManager::LoadScene(scenePath);

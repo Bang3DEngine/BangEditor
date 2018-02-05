@@ -69,16 +69,22 @@ void UISceneContainer::RenderIfNeeded()
 
 void UISceneContainer::SetScene(Scene *scene)
 {
-    p_scene = scene;
     if (GetContainedScene())
     {
+        GetContainedScene()->EventEmitter<IDestroyListener>::UnRegisterListener(this);
+    }
+
+    p_containedScene = scene;
+    if (GetContainedScene())
+    {
+        GetContainedScene()->EventEmitter<IDestroyListener>::RegisterListener(this);
         p_sceneImage->SetSceneImageCamera( GetSceneCamera(GetContainedScene()) );
     }
 }
 
 Scene *UISceneContainer::GetContainedScene() const
 {
-    return p_scene;
+    return p_containedScene;
 }
 
 Rect UISceneContainer::GetSceneImageRectNDC() const
@@ -104,5 +110,10 @@ void UISceneContainer::OnValueChanged(Object*)
     UISceneImage::RenderMode renderMode = SCAST<UISceneImage::RenderMode>(
                   p_sceneToolbar->GetRenderModeComboBox()->GetSelectedValue());
     p_sceneImage->SetRenderMode(renderMode);
+}
+
+void UISceneContainer::OnDestroyed(EventEmitter<IDestroyListener>*)
+{
+    SetScene(nullptr);
 }
 

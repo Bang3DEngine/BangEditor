@@ -1,9 +1,9 @@
 #ifndef EDITORSCENEMANAGER_H
 #define EDITORSCENEMANAGER_H
 
-#include "BangEditor/BangEditor.h"
-
 #include "Bang/SceneManager.h"
+
+#include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;

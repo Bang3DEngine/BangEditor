@@ -153,6 +153,7 @@ void UISceneToolbar::OnPlayStateChanged(PlayState,
         case PlayState::Paused:    OnPauseScene();     break;
         case PlayState::StepFrame: OnStepFrameScene(); break;
         case PlayState::Playing:   OnPlayScene();      break;
+        default: break;
     }
 }
 

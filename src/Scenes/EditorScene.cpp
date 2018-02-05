@@ -251,6 +251,8 @@ void EditorScene::SetOpenScene(Scene *openScene)
         p_openScene = openScene;
         if (GetOpenScene())
         {
+            GetOpenScene()->EventEmitter<IDestroyListener>::RegisterListener(this);
+
             BindOpenScene();
             GetOpenScene()->SetFirstFoundCamera();
             GetOpenScene()->InvalidateCanvas();
@@ -381,5 +383,15 @@ void EditorScene::OnPlayStateChanged(PlayState previousPlayState,
         break;
 
         default: break;
+    }
+}
+
+void EditorScene::OnDestroyed(EventEmitter<IDestroyListener> *object)
+{
+    Scene::OnDestroyed(object);
+
+    if (object == GetOpenScene())
+    {
+        p_openScene = nullptr;
     }
 }

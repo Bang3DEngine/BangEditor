@@ -18,6 +18,7 @@ FORWARD class UISceneImage;
 FORWARD class UISceneToolbar;
 
 class UISceneContainer : public GameObject,
+                         public IDestroyListener,
                          public IValueChangedListener,
                          public ITransformListener
 {
@@ -36,7 +37,7 @@ protected:
     UISceneToolbar* GetSceneToolbar() const;
 
 private:
-    Scene *p_scene = nullptr;
+    Scene *p_containedScene = nullptr;
 
     UISceneToolbar *p_sceneToolbar = nullptr;
     UISceneImage *p_sceneImage = nullptr;
@@ -49,6 +50,9 @@ private:
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;
+
+    // IDestroyListener
+    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

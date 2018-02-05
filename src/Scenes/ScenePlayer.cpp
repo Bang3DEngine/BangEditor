@@ -23,7 +23,6 @@ ScenePlayer::ScenePlayer()
 
 ScenePlayer::~ScenePlayer()
 {
-    if (p_playOpenScene) { GameObject::Destroy(p_playOpenScene); }
 }
 
 void ScenePlayer::Update()
@@ -80,31 +79,34 @@ void ScenePlayer::PlayScene()
         ScenePlayer *sp = ScenePlayer::GetInstance();
         if (ScenePlayer::GetPlayState() == PlayState::Editing)
         {
+            sp->p_editOpenScene = EditorSceneManager::GetOpenScene();
+
             // Play scene!
             EditorBehaviourManager *edBehaviourMgr = EditorBehaviourManager::GetActive();
             bool behavioursReady = edBehaviourMgr->PrepareBehavioursLibrary();
             if (behavioursReady)
             {
-                ScenePlayer::SetPlayState(PlayState::Playing);
-
                 Scene *openScene = EditorSceneManager::GetOpenScene();
                 if (openScene)
                 {
-                    // Create empty scene, set it active, start it empty
-                    sp->p_playOpenScene = GameObjectFactory::CreateScene(false);
+                    ScenePlayer::SetPlayState(PlayState::JustBeforePlaying);
 
-                    // Set open scene to null first
+                    // Create new scene cloning the open scene into it
+                    Scene *playScene = GameObjectFactory::CreateScene(false);
+                    openScene->CloneInto(playScene);
+
+                    // Close the open scene
                     SceneManager::LoadSceneInstantly(nullptr);
 
-                    // Clone the editing scene into the playing scene
-                    openScene->CloneInto(sp->p_playOpenScene);
-
                     // Now set the open scene in the editor
-                    SceneManager::LoadSceneInstantly(sp->p_playOpenScene);
+                    SceneManager::LoadSceneInstantly(playScene);
 
                     Time::SetDeltaTimeReferenceToNow();
+
+                    ScenePlayer::SetPlayState(PlayState::Playing);
                 }
             }
+
         }
         sp->m_pauseInNextFrame = false;
     }
@@ -134,18 +136,12 @@ void ScenePlayer::StopScene()
 {
     if (ScenePlayer::GetPlayState() != PlayState::Editing)
     {
-        ScenePlayer::SetPlayState(PlayState::Editing);
-
-        Path openScenePath = SceneOpenerSaver::GetInstance()->GetOpenScenePath();
-        if (openScenePath.IsFile())
-        {
-            SceneManager::LoadSceneInstantly(openScenePath);
-        }
-        else { SceneManager::LoadSceneInstantly(nullptr); }
-
         ScenePlayer *sp = ScenePlayer::GetInstance();
-        sp->p_playOpenScene = nullptr;
+        SceneManager::LoadSceneInstantly(sp->p_editOpenScene);
+
         sp->m_pauseInNextFrame = false;
+
+        ScenePlayer::SetPlayState(PlayState::Editing);
     }
 }
 

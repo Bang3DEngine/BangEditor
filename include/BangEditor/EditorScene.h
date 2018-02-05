@@ -4,6 +4,7 @@
 #include "Bang/Rect.h"
 #include "Bang/Scene.h"
 #include "Bang/SceneManager.h"
+#include "Bang/IDestroyListener.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/ScenePlayer.h"
@@ -120,6 +121,9 @@ private:
     // IScenePlayerListener
     void OnPlayStateChanged(PlayState previousPlayState,
                             PlayState newPlayState) override;
+
+    // IDestroyListener
+    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 
     friend class EditorApplication;
     friend class EditorSceneManager;

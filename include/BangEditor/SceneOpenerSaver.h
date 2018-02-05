@@ -4,12 +4,14 @@
 #include "Bang/Path.h"
 #include "Bang/Dialog.h"
 
+#include "BangEditor/ScenePlayer.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class SceneOpenerSaver : public ISceneManagerListener
+class SceneOpenerSaver : public ISceneManagerListener,
+                         public IScenePlayerListener
 {
 public:
 	SceneOpenerSaver();
@@ -33,6 +35,9 @@ public:
     static SceneOpenerSaver* GetInstance();
 
 private:
+    Path m_previousLoadedScenePath = Path::Empty;
+    Path m_previousOpenScenePath = Path::Empty;
+
     Path m_currentLoadedScenePath = Path::Empty;
     Path m_currentOpenScenePath = Path::Empty;
 
@@ -40,6 +45,10 @@ private:
     Dialog::YesNoCancel Overwrite(const Path &path);
 
     Path GetDialogStartPath() const;
+
+    // IScenePlayerListener
+    void OnPlayStateChanged(PlayState previousPlayState,
+                            PlayState newPlayState) override;
 };
 
 NAMESPACE_BANG_EDITOR_END
