@@ -89,23 +89,55 @@ ContextMenu::ContextMenu()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     p_rootItem = GameObject::Create<MenuItem>( MenuItem::MenuItemType::Root );
-    p_rootItem->SetDestroyOnClose(true);
+    GetRootItem()->SetDestroyOnClose(true);
 
-    RectTransform *rt = p_rootItem->GetRectTransform();
-    rt->SetAnchors( Input::GetMousePositionNDC() );
-    rt->SetPivotPosition( Vector2(-1, 1) );
+    RectTransform *rt = GetRootItem()->GetRectTransform();
+    Vector2 mousePosNDC = Input::GetMousePositionNDC();
+    rt->SetAnchors( mousePosNDC );
     rt->TranslateLocal( Vector3(0, 0, -0.001f) );
+    rt->SetPivotPosition( Vector2(-1, 1) );
+    AdjustToBeInsideScreen();
 
-    UIContentSizeFitter *csf = p_rootItem->AddComponent<UIContentSizeFitter>();
+    UIContentSizeFitter *csf = GetRootItem()->AddComponent<UIContentSizeFitter>();
     csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
     csf->SetVerticalSizeType(LayoutSizeType::Preferred);
 
-    p_rootItem->AddComponent<UILayoutIgnorer>();
-    p_rootItem->EventEmitter<IDestroyListener>::RegisterListener(this);
-    p_rootItem->SetDestroyOnClose(true);
-    p_rootItem->SetParent(this);
+    GetRootItem()->AddComponent<UILayoutIgnorer>();
+    GetRootItem()->EventEmitter<IDestroyListener>::RegisterListener(this);
+    GetRootItem()->SetDestroyOnClose(true);
+    GetRootItem()->SetParent(this);
 
     m_justCreated = true;
+}
+
+void ContextMenu::AdjustToBeInsideScreen()
+{
+    RectTransform *rt = GetRootItem()->GetRectTransform();
+    RectTransform *listRT = GetRootItem()->GetChildrenList()->GetGameObject()->
+                            GetRectTransform();
+
+    Vector2 pivotPos = listRT->GetPivotPosition();
+
+    Rect allRect = GetRootItem()->GetRectTransform()->GetViewportRectNDC();
+    List<GameObject*> menuChildren = GetRootItem()->GetChildrenRecursively();
+    for (GameObject *child : menuChildren)
+    {
+        RectTransform *crt = child->GetRectTransform();
+        if (crt) { allRect = Rect::Union(allRect, crt->GetViewportRectNDC()); }
+    }
+
+    for (int axis = 0; axis < 2; ++axis) // X and Y
+    {
+        // Avoid side where it overflows.
+        // If it overflows both, just pick 1
+        bool overflowingMax = ((rt->GetAnchorMax() + allRect.GetSize())[axis] >  1.0f);
+        bool overflowingMin = ((rt->GetAnchorMin() - allRect.GetSize())[axis] < -1.0f);
+        if      (overflowingMax && overflowingMin) { pivotPos[axis] =  1.0f; }
+        else if (overflowingMax)                   { pivotPos[axis] =  1.0f; }
+        else if (overflowingMin)                   { pivotPos[axis] = -1.0f; }
+    }
+
+    listRT->SetPivotPosition(pivotPos);
 }
 
 void ContextMenu::Update()
@@ -122,6 +154,7 @@ void ContextMenu::Update()
         }
     }
     m_justCreated = false;
+    AdjustToBeInsideScreen();
 }
 
 MenuItem *ContextMenu::GetRootItem() const

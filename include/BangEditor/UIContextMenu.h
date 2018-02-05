@@ -67,6 +67,8 @@ private:
 
     ContextMenu();
     virtual ~ContextMenu() = default;
+
+    void AdjustToBeInsideScreen();
 };
 
 NAMESPACE_BANG_EDITOR_END
