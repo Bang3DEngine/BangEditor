@@ -84,7 +84,8 @@ void CIWUITextRenderer::UpdateFromReference()
     p_verticalAlignmentInput->SetSelectionByValue(
                 int(GetUITextRenderer()->GetVerticalAlignment()) );
 
-    p_fontFileInput->SetPath( GetUITextRenderer()->GetFont()->GetResourceFilepath() );
+    Font *font = GetUITextRenderer()->GetFont();
+    p_fontFileInput->SetPath( font ? font->GetResourceFilepath() : Path::Empty);
 }
 
 UITextRenderer *CIWUITextRenderer::GetUITextRenderer() const

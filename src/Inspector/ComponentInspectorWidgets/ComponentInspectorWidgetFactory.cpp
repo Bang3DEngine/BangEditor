@@ -10,6 +10,7 @@
 #include "BangEditor/CIWAudioListener.h"
 #include "BangEditor/CIWRectTransform.h"
 #include "BangEditor/CIWUITextRenderer.h"
+#include "BangEditor/CIWUIImageRenderer.h"
 #include "BangEditor/CIWDirectionalLight.h"
 #include "BangEditor/CIWPostProcessEffect.h"
 #include "BangEditor/CIWBehaviourContainer.h"
@@ -33,6 +34,10 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(Component *com
     else if (cName == "UITextRenderer")
     {
         ciw = GameObject::Create<CIWUITextRenderer>();
+    }
+    else if (cName == "UIImageRenderer")
+    {
+        ciw = GameObject::Create<CIWUIImageRenderer>();
     }
     else if (cName == "MeshRenderer")
     {
