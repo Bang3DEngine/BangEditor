@@ -23,6 +23,9 @@ void Editor::Init()
 {
     m_editorSettings = new EditorSettings();
     GetEditorSettings()->Init();
+
+    SceneManager::GetActive()->
+                  EventEmitter<ISceneManagerListener>::RegisterListener(this);
 }
 
 GameObject *Editor::GetSelectedGameObject()
@@ -80,6 +83,11 @@ void Editor::OnPathSelected(const Path &path)
 EditorSettings *Editor::GetEditorSettings() const
 {
     return m_editorSettings;
+}
+
+void Editor::OnSceneLoaded(Scene*, const Path &)
+{
+    SelectGameObject(nullptr);
 }
 
 Editor *Editor::GetInstance()

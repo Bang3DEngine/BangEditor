@@ -92,14 +92,14 @@ void ScenePlayer::PlayScene()
                     ScenePlayer::SetPlayState(PlayState::JustBeforePlaying);
 
                     // Create new scene cloning the open scene into it
-                    Scene *playScene = GameObjectFactory::CreateScene(false);
-                    openScene->CloneInto(playScene);
+                    sp->p_playOpenScene = GameObjectFactory::CreateScene(false);
+                    openScene->CloneInto(sp->p_playOpenScene);
 
                     // Close the open scene
-                    SceneManager::LoadSceneInstantly(nullptr);
+                    SceneManager::LoadSceneInstantly(nullptr, false);
 
                     // Now set the open scene in the editor
-                    SceneManager::LoadSceneInstantly(playScene);
+                    SceneManager::LoadSceneInstantly(sp->p_playOpenScene, false);
 
                     Time::SetDeltaTimeReferenceToNow();
 
@@ -137,8 +137,10 @@ void ScenePlayer::StopScene()
     if (ScenePlayer::GetPlayState() != PlayState::Editing)
     {
         ScenePlayer *sp = ScenePlayer::GetInstance();
-        SceneManager::LoadSceneInstantly(sp->p_editOpenScene);
 
+        SceneManager::LoadSceneInstantly(sp->p_editOpenScene, false);
+
+        if (sp->p_playOpenScene) { GameObject::Destroy(sp->p_playOpenScene); }
         sp->m_pauseInNextFrame = false;
 
         ScenePlayer::SetPlayState(PlayState::Editing);

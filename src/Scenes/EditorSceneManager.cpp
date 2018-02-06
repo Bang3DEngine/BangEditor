@@ -14,7 +14,6 @@ USING_NAMESPACE_BANG_EDITOR
 
 EditorSceneManager::~EditorSceneManager()
 {
-    // Dont delete active scene because ~SceneManager does it
     if (GetOpenScene() && GetOpenScene() != GetActiveScene())
     {
         GameObject::Destroy( GetOpenScene() );
@@ -54,19 +53,20 @@ EditorScene *EditorSceneManager::_GetEditorScene() const
     return p_editorScene;
 }
 
-void EditorSceneManager::_LoadSceneInstantly(Scene *scene)
+void EditorSceneManager::_LoadSceneInstantly()
 {
-    EditorScene *edScene = _GetEditorScene();
-    if (edScene)
+    ASSERT( GetNextLoadNeeded() );
+
+    if (_GetEditorScene())
     {
-        edScene->SetOpenScene(scene);
-        AudioManager::StopAllSounds();
+        _GetEditorScene()->SetOpenScene( GetNextLoadScene() );
     }
     else // Retrieve editor scene
     {
-        p_editorScene = SCAST<EditorScene*>(scene);
-        SceneManager::_LoadSceneInstantly(scene);
+        p_editorScene = SCAST<EditorScene*>( GetNextLoadScene() );
     }
+
+    SceneManager::_LoadSceneInstantly();
 }
 
 void EditorSceneManager::SetActiveScene(Scene *activeScene)

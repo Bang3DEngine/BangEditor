@@ -38,7 +38,7 @@ protected:
 
 private:
     void _Update() override;
-    void _LoadSceneInstantly(Scene *scene) override;
+    void _LoadSceneInstantly() override;
 
     BehaviourManager *CreateBehaviourManager() const override;
 

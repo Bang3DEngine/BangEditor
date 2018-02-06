@@ -61,7 +61,7 @@ int main(int, char **)
     Paths::SortPathsByName(&sceneFilepaths);
     Path scenePath = sceneFilepaths.Back();
     Debug_Log("Opening scene " << scenePath);
-    SceneManager::LoadSceneInstantly(scenePath);
+    SceneManager::LoadSceneInstantly(scenePath, false);
 
     // Find the behaviours library
     Path behavioursLibPath;

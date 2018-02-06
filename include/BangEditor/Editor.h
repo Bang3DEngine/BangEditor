@@ -4,6 +4,7 @@
 #include "Bang/Bang.h"
 #include "Bang/Object.h"
 #include "Bang/GameObject.h"
+#include "Bang/SceneManager.h"
 #include "Bang/IEventEmitter.h"
 #include "Bang/IEventListener.h"
 #include "Bang/IDestroyListener.h"
@@ -29,6 +30,7 @@ public:
 };
 
 class Editor : public EventEmitter<IEditorListener>,
+               public ISceneManagerListener,
                public IDestroyListener
 {
 public:
@@ -53,8 +55,11 @@ private:
 
     EditorSettings* GetEditorSettings() const;
 
+    // ISceneManagerListener
+    void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
+
     // IDestroyListener
-    virtual void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
+    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 
     friend class Explorer;
     friend class EditorScene;

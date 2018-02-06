@@ -51,7 +51,7 @@ void EditorDialog::GetAsset(const String &title,
 
     Scene *scene = GameObjectFactory::CreateScene(false);
     EditorDialog::CreateGetAssetSceneInto(scene, extensions);
-    SceneManager::LoadSceneInstantly(scene);
+    SceneManager::LoadSceneInstantly(scene, false);
 
     Dialog::EndCreateDialog(dialog);
     *resultPath = EditorDialog::s_assetPathResult;

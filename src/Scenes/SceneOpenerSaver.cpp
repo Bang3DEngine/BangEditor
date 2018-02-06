@@ -33,7 +33,7 @@ bool SceneOpenerSaver::OnNewScene()
     if (CloseScene())
     {
         Scene *defaultScene = GameObjectFactory::CreateScene();
-        SceneManager::LoadSceneInstantly(defaultScene);
+        SceneManager::LoadSceneInstantly(defaultScene, false);
 
         GameObjectFactory::CreateDefaultSceneInto(defaultScene);
         defaultScene->SetFirstFoundCamera();
@@ -149,7 +149,7 @@ bool SceneOpenerSaver::CloseScene()
 
     m_currentOpenScenePath   = Path::Empty;
     m_currentLoadedScenePath = Path::Empty;
-    SceneManager::LoadScene(nullptr);
+    SceneManager::LoadScene(nullptr, false);
     return true;
 }
 
@@ -203,7 +203,7 @@ bool SceneOpenerSaver::OpenSceneInEditor(const Path &scenePath)
 
     if (CloseScene())
     {
-        SceneManager::LoadScene(scenePath);
+        SceneManager::LoadScene(scenePath, false);
         m_currentOpenScenePath = scenePath;
         return true;
     }
