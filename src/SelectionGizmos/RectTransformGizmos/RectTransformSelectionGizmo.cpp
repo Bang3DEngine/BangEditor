@@ -1,6 +1,6 @@
 #include "BangEditor/RectTransformSelectionGizmo.h"
 
-#include "Bang/Rect.h"
+#include "Bang/AARect.h"
 #include "Bang/Gizmos.h"
 #include "Bang/GEngine.h"
 #include "Bang/Material.h"

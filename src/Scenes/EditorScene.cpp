@@ -233,9 +233,9 @@ void EditorScene::SetViewportForOpenScene()
         Camera *openSceneCam = openScene->GetCamera();
         if (openSceneCam)
         {
-            Rect ndcRect = GetOpenSceneWindowRectNDC();
-            Rect ndcRectNorm = ndcRect * 0.5f + 0.5f;
-            Recti vpRectPx(
+            AARect ndcRect = GetOpenSceneWindowRectNDC();
+            AARect ndcRectNorm = ndcRect * 0.5f + 0.5f;
+            AARecti vpRectPx(
                Vector2i(ndcRectNorm.GetMin() * Vector2(GL::GetViewportSize())),
                Vector2i(ndcRectNorm.GetMax() * Vector2(GL::GetViewportSize())));
 
@@ -271,7 +271,7 @@ Scene *EditorScene::GetOpenScene() const
     return p_openScene;
 }
 
-Rect EditorScene::GetOpenSceneWindowRectNDC() const
+AARect EditorScene::GetOpenSceneWindowRectNDC() const
 {
     return p_sceneEditContainer->GetSceneImageRectNDC();
 }

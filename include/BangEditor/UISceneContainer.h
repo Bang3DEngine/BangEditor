@@ -31,7 +31,7 @@ public:
     void SetScene(Scene *scene);
 
     Scene *GetContainedScene() const;
-    Rect GetSceneImageRectNDC() const;
+    AARect GetSceneImageRectNDC() const;
 
 protected:
     UISceneToolbar* GetSceneToolbar() const;

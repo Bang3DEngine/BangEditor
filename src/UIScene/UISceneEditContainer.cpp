@@ -61,11 +61,11 @@ void UISceneEditContainer::Update()
 
         // Set preview size
         RectTransform *rt = GetRectTransform();
-        Recti sceneContainerRect( rt->GetViewportRect() );
+        AARecti sceneContainerRect( rt->GetViewportRect() );
         Vector2i sceneContainerSize = sceneContainerRect.GetSize();
 
         Vector2i previewRectSize = sceneContainerSize / 4;
-        Recti previewRectPx(sceneContainerRect.GetMax(),
+        AARecti previewRectPx(sceneContainerRect.GetMax(),
                             sceneContainerRect.GetMax() - Vector2i(previewRectSize));
 
         previewRectPx.SetMin(sceneContainerRect.GetMin());
@@ -79,7 +79,7 @@ void UISceneEditContainer::Update()
         gbuffer->Resize(previewRectPx.GetWidth(), previewRectPx.GetHeight());
 
         // Render
-        Recti prevViewport = GL::GetViewportRect();
+        AARecti prevViewport = GL::GetViewportRect();
         GL::SetViewport(previewRectPx);
         Scene *openScene = EditorSceneManager::GetOpenScene();
         GEngine::GetActive()->Render(openScene, selectedCamera);

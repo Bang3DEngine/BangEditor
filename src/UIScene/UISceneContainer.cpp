@@ -1,7 +1,7 @@
 #include "BangEditor/UISceneContainer.h"
 
-#include "Bang/Rect.h"
 #include "Bang/Scene.h"
+#include "Bang/AARect.h"
 #include "Bang/Camera.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
@@ -87,7 +87,7 @@ Scene *UISceneContainer::GetContainedScene() const
     return p_containedScene;
 }
 
-Rect UISceneContainer::GetSceneImageRectNDC() const
+AARect UISceneContainer::GetSceneImageRectNDC() const
 {
     return p_sceneImage->GetRectTransform()->GetViewportRectNDC();
 }

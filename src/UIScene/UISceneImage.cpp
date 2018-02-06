@@ -1,7 +1,7 @@
 #include "BangEditor/UISceneImage.h"
 
-#include "Bang/Rect.h"
 #include "Bang/Scene.h"
+#include "Bang/AARect.h"
 #include "Bang/Camera.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"

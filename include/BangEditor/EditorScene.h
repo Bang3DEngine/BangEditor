@@ -1,8 +1,8 @@
 #ifndef EDITORSCENE_H
 #define EDITORSCENE_H
 
-#include "Bang/Rect.h"
 #include "Bang/Scene.h"
+#include "Bang/AARect.h"
 #include "Bang/SceneManager.h"
 #include "Bang/IDestroyListener.h"
 
@@ -53,7 +53,7 @@ public:
 
     Scene *GetOpenScene() const;
 
-    Rect GetOpenSceneWindowRectNDC() const;
+    AARect GetOpenSceneWindowRectNDC() const;
 
     void RenderAndBlitToWindow();
 
@@ -104,7 +104,7 @@ private:
     MenuBar *m_menuBar = nullptr;
     GameObject *m_mainEditorVL = nullptr;
 
-    Recti m_prevGLViewport = Recti::Zero;
+    AARecti m_prevGLViewport = AARecti::Zero;
 
     void Init();
 

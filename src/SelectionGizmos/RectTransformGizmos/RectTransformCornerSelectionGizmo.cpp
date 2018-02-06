@@ -1,7 +1,7 @@
 #include "BangEditor/RectTransformCornerSelectionGizmo.h"
 
-#include "Bang/Rect.h"
 #include "Bang/Input.h"
+#include "Bang/AARect.h"
 #include "Bang/Gizmos.h"
 #include "Bang/GEngine.h"
 #include "Bang/Material.h"
@@ -151,7 +151,7 @@ void RectTransformCornerSelectionGizmo::UpdateBasedOnCornerSide()
     GameObject *refGo    = GetReferencedGameObject(); if (!refGo) { return; }
     RectTransform *refRT = refGo->GetRectTransform(); if (!refRT) { return; }
 
-    Rect refRect = refRT->GetViewportRectNDC();
+    AARect refRect = refRT->GetViewportRectNDC();
 
     float cornerAnchorX, cornerAnchorY;
     switch (m_cornerSide)
