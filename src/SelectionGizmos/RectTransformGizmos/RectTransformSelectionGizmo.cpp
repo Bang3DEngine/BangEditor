@@ -91,7 +91,7 @@ void RectTransformSelectionGizmo::Render(RenderPass renderPass, bool renderChild
         Gizmos::SetThickness(2.0f);
         Gizmos::SetColor( Color::White );
         Gizmos::SetRenderPass(renderPass);
-        Gizmos::RenderRect( refGo->GetRectTransform()->GetViewportRectNDC() );
+        Gizmos::RenderRect( AARect(refGo->GetRectTransform()->GetViewportRectNDC()) );
     }
 
     SelectionGizmo::Render(renderPass, renderChildren);

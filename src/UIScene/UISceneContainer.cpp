@@ -89,7 +89,7 @@ Scene *UISceneContainer::GetContainedScene() const
 
 AARect UISceneContainer::GetSceneImageRectNDC() const
 {
-    return p_sceneImage->GetRectTransform()->GetViewportRectNDC();
+    return AARect(p_sceneImage->GetRectTransform()->GetViewportRectNDC());
 }
 
 UISceneToolbar *UISceneContainer::GetSceneToolbar() const

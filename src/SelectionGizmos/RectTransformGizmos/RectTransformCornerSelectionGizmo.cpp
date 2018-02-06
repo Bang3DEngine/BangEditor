@@ -151,29 +151,35 @@ void RectTransformCornerSelectionGizmo::UpdateBasedOnCornerSide()
     GameObject *refGo    = GetReferencedGameObject(); if (!refGo) { return; }
     RectTransform *refRT = refGo->GetRectTransform(); if (!refRT) { return; }
 
+    // Rect refRect = refRT->GetViewportRectNDC();
     AARect refRect = refRT->GetViewportRectNDC();
+
+    // Vector2 leftBot (refRect.GetCenter() + refRect.GetHalfSize() * Vector2(-1));
+    // Vector2 rightTop(refRect.GetCenter() + refRect.GetHalfSize() * Vector2( 1));
+    Vector2 leftBot  = refRect.GetMin();
+    Vector2 rightTop = refRect.GetMax();
 
     float cornerAnchorX, cornerAnchorY;
     switch (m_cornerSide)
     {
         case CornerSide::LeftBot:
-            cornerAnchorX = refRect.GetMin().x;
-            cornerAnchorY = refRect.GetMin().y;
+            cornerAnchorX = leftBot.x;
+            cornerAnchorY = leftBot.y;
         break;
 
         case CornerSide::LeftTop:
-            cornerAnchorX = refRect.GetMin().x;
-            cornerAnchorY = refRect.GetMax().y;
+            cornerAnchorX = leftBot.x;
+            cornerAnchorY = rightTop.y;
         break;
 
         case CornerSide::RightTop:
-            cornerAnchorX = refRect.GetMax().x;
-            cornerAnchorY = refRect.GetMax().y;
+            cornerAnchorX = rightTop.x;
+            cornerAnchorY = rightTop.y;
         break;
 
         case CornerSide::RightBot:
-            cornerAnchorX = refRect.GetMax().x;
-            cornerAnchorY = refRect.GetMin().y;
+            cornerAnchorX = rightTop.x;
+            cornerAnchorY = leftBot.y;
         break;
 
         case CornerSide::Center:
