@@ -1,6 +1,7 @@
 #include "BangEditor/TransformGizmo.h"
 
 #include "Bang/Input.h"
+#include "Bang/Scene.h"
 #include "Bang/Vector3.h"
 #include "Bang/Transform.h"
 #include "Bang/RectTransform.h"
@@ -27,10 +28,14 @@ TransformGizmo::TransformGizmo()
     GetHideFlags().SetOn(HideFlag::DontClone);
 
     p_worldGizmoContainer = GameObjectFactory::CreateGameObject(true);
+    p_worldGizmoContainer->AddComponent<HideInHierarchy>();
+
     p_canvasGizmoContainer = GameObjectFactory::CreateUIGameObject(true);
+    p_canvasGizmoContainer->AddComponent<HideInHierarchy>();
     GameObjectFactory::CreateUICanvasInto(p_canvasGizmoContainer);
+
     p_worldGizmoContainer->SetParent(this);
-    p_canvasGizmoContainer->SetParent(this);
+    p_canvasGizmoContainer->SetParent(nullptr);
 
     p_translateGizmo     = GameObject::Create<TranslateGizmo>();
     p_rotateGizmo        = GameObject::Create<RotateGizmo>();
@@ -99,6 +104,18 @@ void TransformGizmo::Update()
             p_rectTransformGizmo->SetEnabled(true);
             break;
     }
+}
+
+void TransformGizmo::OnBeginRender(Scene *scene)
+{
+    p_worldGizmoContainer->SetParent(this);
+    p_canvasGizmoContainer->SetParent(scene);
+}
+
+void TransformGizmo::OnEndRender(Scene *)
+{
+    p_worldGizmoContainer->SetParent(this);
+    p_canvasGizmoContainer->SetParent(this);
 }
 
 void TransformGizmo::SetReferencedGameObject(GameObject *referencedGameObject)

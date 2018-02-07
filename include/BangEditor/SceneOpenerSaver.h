@@ -41,6 +41,9 @@ private:
     Path m_currentLoadedScenePath = Path::Empty;
     Path m_currentOpenScenePath = Path::Empty;
 
+    mutable double m_lastTimeCheckSaved = 0.0;
+    mutable bool m_isCurrentSceneSaved = false;
+
     bool OnSaveScene(bool saveAs);
     Dialog::YesNoCancel Overwrite(const Path &path);
 

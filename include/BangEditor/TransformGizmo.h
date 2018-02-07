@@ -21,6 +21,9 @@ public:
     // GameObject
     void Update() override;
 
+    void OnBeginRender(Scene *scene);
+    void OnEndRender(Scene *scene);
+
     // SelectionGizmo
     void SetReferencedGameObject(GameObject *referencedGameObject) override;
 

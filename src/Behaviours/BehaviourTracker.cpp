@@ -30,7 +30,6 @@ void BehaviourTracker::Update()
 
     m_changedPathsFromLastUpdate.Clear();
     m_fileTracker.Update();
-
 }
 
 void BehaviourTracker::ForceCheckNow()

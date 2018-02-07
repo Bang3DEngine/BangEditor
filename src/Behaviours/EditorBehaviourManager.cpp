@@ -347,29 +347,31 @@ void EditorBehaviourManager::UpdateCompileInformations()
 {
     if (ScenePlayer::GetPlayState() != PlayState::Editing) { return; }
 
+    if (GetBehaviourTracker()->GetFileTracker().NeedsCheck())
+    {
+        GetMutex()->Lock();
+        List<Path> modifiedBehaviours;
+        for (const Path &compiledBehaviour : m_compiledBehaviours)
+        {
+            if ( GetBehaviourTracker()->HasBeenModified(compiledBehaviour) )
+            {
+                SetBehavioursLibrary(nullptr);
+                modifiedBehaviours.PushBack(compiledBehaviour);
+            }
+        }
+        GetMutex()->UnLock();
+
+        for (const Path &modifiedBehaviour : modifiedBehaviours)
+        {
+            if ( !IsBeingCompiled(modifiedBehaviour) )
+            {
+                MutexLocker ml(GetMutex()); (void)ml;
+                m_compiledBehaviours.Remove(modifiedBehaviour);
+                m_successfullyCompiledBehaviours.Remove(modifiedBehaviour);
+            }
+        }
+    }
     GetBehaviourTracker()->Update();
-
-    GetMutex()->Lock();
-    List<Path> modifiedBehaviours;
-    for (const Path &compiledBehaviour : m_compiledBehaviours)
-    {
-        if ( GetBehaviourTracker()->HasBeenModified(compiledBehaviour) )
-        {
-            SetBehavioursLibrary(nullptr);
-            modifiedBehaviours.PushBack(compiledBehaviour);
-        }
-    }
-    GetMutex()->UnLock();
-
-    for (const Path &modifiedBehaviour : modifiedBehaviours)
-    {
-        if ( !IsBeingCompiled(modifiedBehaviour) )
-        {
-            MutexLocker ml(GetMutex()); (void)ml;
-            m_compiledBehaviours.Remove(modifiedBehaviour);
-            m_successfullyCompiledBehaviours.Remove(modifiedBehaviour);
-        }
-    }
 }
 
 Mutex* EditorBehaviourManager::GetMutex() const { return &m_mutex; }

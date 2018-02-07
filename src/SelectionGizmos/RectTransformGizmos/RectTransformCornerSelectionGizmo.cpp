@@ -159,7 +159,7 @@ void RectTransformCornerSelectionGizmo::UpdateBasedOnCornerSide()
     Vector2 leftBot  = refRect.GetMin();
     Vector2 rightTop = refRect.GetMax();
 
-    float cornerAnchorX, cornerAnchorY;
+    float cornerAnchorX = 0.0f, cornerAnchorY = 0.0f;
     switch (m_cornerSide)
     {
         case CornerSide::LeftBot:

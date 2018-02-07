@@ -55,46 +55,46 @@ void RectTransformAnchorSelectionGizmo::Update()
         if (GrabHasJustChanged())
         {
             m_startGrabMousePosNDC = mousePosNDC;
-            m_startAnchorMin = refRT->GetAnchorMin();
-            m_startAnchorMax = refRT->GetAnchorMax();
+            m_startLocalAnchorMin = refRT->GetAnchorMin();
+            m_startLocalAnchorMax = refRT->GetAnchorMax();
         }
 
         Vector2 displacement = (mousePosNDC - m_startGrabMousePosNDC);
-        Vector2 newAnchorMin = m_startAnchorMin;
-        Vector2 newAnchorMax = m_startAnchorMax;
+        Vector2 newLocalAnchorMin = m_startLocalAnchorMin;
+        Vector2 newLocalAnchorMax = m_startLocalAnchorMax;
 
         switch (m_anchorSide)
         {
             case AnchorSide::LeftBot:
-                newAnchorMin.x += displacement.x;
-                newAnchorMin.y += displacement.y;
+                newLocalAnchorMin.x += displacement.x;
+                newLocalAnchorMin.y += displacement.y;
             break;
 
             case AnchorSide::LeftTop:
-                newAnchorMin.x += displacement.x;
-                newAnchorMax.y += displacement.y;
+                newLocalAnchorMin.x += displacement.x;
+                newLocalAnchorMax.y += displacement.y;
             break;
 
             case AnchorSide::RightTop:
-                newAnchorMax.x += displacement.x;
-                newAnchorMax.y += displacement.y;
+                newLocalAnchorMax.x += displacement.x;
+                newLocalAnchorMax.y += displacement.y;
             break;
 
             case AnchorSide::RightBot:
-                newAnchorMax.x += displacement.x;
-                newAnchorMin.y += displacement.y;
+                newLocalAnchorMax.x += displacement.x;
+                newLocalAnchorMin.y += displacement.y;
             break;
         }
 
         if (Input::GetKey(Key::LShift))
         {
             constexpr float Snapping = 10.0f;
-            newAnchorMin = Vector2::Round(newAnchorMin * Snapping) / Snapping;
-            newAnchorMax = Vector2::Round(newAnchorMax * Snapping) / Snapping;
+            newLocalAnchorMin = Vector2::Round(newLocalAnchorMin * Snapping) / Snapping;
+            newLocalAnchorMax = Vector2::Round(newLocalAnchorMax * Snapping) / Snapping;
         }
 
-        refRT->SetAnchorMin( newAnchorMin );
-        refRT->SetAnchorMax( newAnchorMax );
+        refRT->SetAnchorMin( newLocalAnchorMin );
+        refRT->SetAnchorMax( newLocalAnchorMax );
     }
 
     UpdateBasedOnAnchorSide();
@@ -146,32 +146,40 @@ void RectTransformAnchorSelectionGizmo::UpdateBasedOnAnchorSide()
     GameObject *refGo    = GetReferencedGameObject(); if (!refGo) { return; }
     RectTransform *refRT = refGo->GetRectTransform(); if (!refRT) { return; }
 
-    float anchorX, anchorY, anchorRot;
+    float localAnchorRot;
+    Vector2 localAnchor;
     switch (m_anchorSide)
     {
         case AnchorSide::LeftBot:
-            anchorX = refRT->GetAnchorMin().x;
-            anchorY = refRT->GetAnchorMin().y;
-            anchorRot = 225.0f;
+            localAnchor.x = refRT->GetAnchorMin().x;
+            localAnchor.y = refRT->GetAnchorMin().y;
+            localAnchorRot = 225.0f;
         break;
 
         case AnchorSide::LeftTop:
-            anchorX = refRT->GetAnchorMin().x;
-            anchorY = refRT->GetAnchorMax().y;
-            anchorRot = -45.0f;
+            localAnchor.x = refRT->GetAnchorMin().x;
+            localAnchor.y = refRT->GetAnchorMax().y;
+            localAnchorRot = -45.0f;
         break;
 
         case AnchorSide::RightTop:
-            anchorX = refRT->GetAnchorMax().x;
-            anchorY = refRT->GetAnchorMax().y;
-            anchorRot = 45.0f;
+            localAnchor.x = refRT->GetAnchorMax().x;
+            localAnchor.y = refRT->GetAnchorMax().y;
+            localAnchorRot = 45.0f;
         break;
 
         case AnchorSide::RightBot:
-            anchorX = refRT->GetAnchorMax().x;
-            anchorY = refRT->GetAnchorMin().y;
-            anchorRot = 135.0f;
+            localAnchor.x = refRT->GetAnchorMax().x;
+            localAnchor.y = refRT->GetAnchorMin().y;
+            localAnchorRot = 135.0f;
         break;
+    }
+
+    Vector2 vpAnchor = localAnchor;
+    if (refGo->GetParent() && refGo->GetParent()->GetRectTransform())
+    {
+        vpAnchor = refGo->GetParent()->GetRectTransform()->
+                        FromLocalPointNDCToViewportPointNDC( localAnchor );
     }
 
     // Update anchor and selection rectTransforms
@@ -180,20 +188,20 @@ void RectTransformAnchorSelectionGizmo::UpdateBasedOnAnchorSide()
         RectTransform *rt = (i == 0) ? p_anchorGO->GetRectTransform() :
                                        p_selectionGO->GetRectTransform();
 
-        rt->SetAnchorX(Vector2(anchorX));
-        rt->SetAnchorY(Vector2(anchorY));
+        rt->SetAnchorX(Vector2(vpAnchor.x));
+        rt->SetAnchorY(Vector2(vpAnchor.y));
 
         int size = (  (i == 0) ? AnchorSize : AnchorSelectionSize );
         rt->SetMargins(-size, -size*2, -size, 0);
         rt->SetPivotPosition( Vector2(0, -1) );
 
         // Fit into screen if in borders
-        if ( Math::Abs(anchorX) >= 0.9f || Math::Abs(anchorY) >= 0.9f)
+        if ( Math::Abs(vpAnchor.x) >= 0.9f || Math::Abs(vpAnchor.y) >= 0.9f)
         {
-            anchorRot += 180.0f;
+            localAnchorRot += 180.0f;
         }
-        // rt->SetRotation( Quaternion::AngleAxis(Math::DegToRad(anchorRot),
-        //                                                   Vector3::Forward) );
+        rt->SetRotation( Quaternion::AngleAxis(Math::DegToRad(localAnchorRot),
+                                                          Vector3::Forward) );
     }
 }
 

@@ -35,8 +35,8 @@ private:
 
     AnchorSide m_anchorSide = AnchorSide::LeftBot;
     Vector2 m_startGrabMousePosNDC = Vector2::Zero;
-    Vector2 m_startAnchorMin = Vector2::Zero;
-    Vector2 m_startAnchorMax = Vector2::Zero;
+    Vector2 m_startLocalAnchorMin = Vector2::Zero;
+    Vector2 m_startLocalAnchorMax = Vector2::Zero;
 
     GameObject *p_anchorGO = nullptr;
     GameObject *p_selectionGO = nullptr;

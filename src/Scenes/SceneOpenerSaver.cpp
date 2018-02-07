@@ -186,15 +186,19 @@ bool SceneOpenerSaver::IsCurrentSceneSaved() const
     Scene *openScene = EditorSceneManager::GetOpenScene();
     if (!openScene) { return false; }
 
-    if (GetOpenScenePath().IsFile())
+    if (Time::GetNow_Seconds() - m_lastTimeCheckSaved >= 2.0f)
     {
-        XMLNode savedInfo = XMLNodeReader::FromFile( GetOpenScenePath() );
-        XMLNode sceneInfo;
-        openScene->ExportXML(&sceneInfo);
+        if (GetOpenScenePath().IsFile())
+        {
+            XMLNode savedInfo = XMLNodeReader::FromFile( GetOpenScenePath() );
+            XMLNode sceneInfo;
+            openScene->ExportXML(&sceneInfo);
 
-        return (savedInfo.ToString() == sceneInfo.ToString());
+            m_lastTimeCheckSaved = Time::GetNow_Seconds();
+            m_isCurrentSceneSaved = (savedInfo.ToString() == sceneInfo.ToString());
+        }
     }
-    return false;
+    return m_isCurrentSceneSaved;
 }
 
 bool SceneOpenerSaver::OpenSceneInEditor(const Path &scenePath)
@@ -205,6 +209,7 @@ bool SceneOpenerSaver::OpenSceneInEditor(const Path &scenePath)
     {
         SceneManager::LoadScene(scenePath, false);
         m_currentOpenScenePath = scenePath;
+        m_isCurrentSceneSaved = true;
         return true;
     }
     return false;

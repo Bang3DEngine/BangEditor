@@ -37,12 +37,14 @@ void SelectionGizmosManager::Update()
 void SelectionGizmosManager::OnBeginRender(Scene *scene)
 {
     GetTransformGizmo()->SetParent(scene);
+    GetTransformGizmo()->OnBeginRender(scene);
     GetComponentsSelectionGizmo()->SetParent(scene);
 }
 
 void SelectionGizmosManager::OnEndRender(Scene*)
 {
     GetTransformGizmo()->SetParent(nullptr);
+    GetTransformGizmo()->OnEndRender(nullptr);
     GetComponentsSelectionGizmo()->SetParent(nullptr);
 }
 
