@@ -192,8 +192,8 @@ void RectTransformAnchorSelectionGizmo::UpdateBasedOnAnchorSide()
         {
             anchorRot += 180.0f;
         }
-        rt->SetRotation( Quaternion::AngleAxis(Math::DegToRad(anchorRot),
-                                                          Vector3::Forward) );
+        // rt->SetRotation( Quaternion::AngleAxis(Math::DegToRad(anchorRot),
+        //                                                   Vector3::Forward) );
     }
 }
 

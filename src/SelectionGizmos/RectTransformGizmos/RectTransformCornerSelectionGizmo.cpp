@@ -152,7 +152,7 @@ void RectTransformCornerSelectionGizmo::UpdateBasedOnCornerSide()
     RectTransform *refRT = refGo->GetRectTransform(); if (!refRT) { return; }
 
     // Rect refRect = refRT->GetViewportRectNDC();
-    AARect refRect = refRT->GetViewportRectNDC();
+    AARect refRect ( refRT->GetViewportRectNDC() );
 
     // Vector2 leftBot (refRect.GetCenter() + refRect.GetHalfSize() * Vector2(-1));
     // Vector2 rightTop(refRect.GetCenter() + refRect.GetHalfSize() * Vector2( 1));
