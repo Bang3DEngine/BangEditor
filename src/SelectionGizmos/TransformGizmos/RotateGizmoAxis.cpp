@@ -163,8 +163,7 @@ void RotateGizmoAxis::Update()
                 if (Input::GetKey(Key::LShift))
                 {
                     constexpr float SnappingDeg = 15.0f;
-                    Vector3 deltaEulerDeg = deltaLocalRot.GetEulerAngles()
-                                            .ToDegrees();
+                    Vector3 deltaEulerDeg = deltaLocalRot.GetEulerAngles();
 
                     const int i = GetAxisIndex(GetAxis());
                     float snappingDeg = Math::Round(deltaEulerDeg[i] /

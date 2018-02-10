@@ -16,8 +16,8 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-const int RectTransformCornerSelectionGizmo::CornerSize = 5;
-const int RectTransformCornerSelectionGizmo::CornerSelectionSize = 10;
+const int RectTransformCornerSelectionGizmo::CornerSize = 3;
+const int RectTransformCornerSelectionGizmo::CornerSelectionSize = 5;
 
 RectTransformCornerSelectionGizmo::RectTransformCornerSelectionGizmo()
 {
@@ -113,8 +113,6 @@ void RectTransformCornerSelectionGizmo::Render(RenderPass renderPass,
     bool selection = GL::IsBound( GEngine::GetActiveSelectionFramebuffer() );
     p_selectionRenderer->SetEnabled(selection);
 
-    SelectionGizmo::Render(renderPass, renderChildren);
-
     Color color;
     switch (GetSelectionState())
     {
@@ -131,6 +129,8 @@ void RectTransformCornerSelectionGizmo::Render(RenderPass renderPass,
         break;
     }
     p_cornerRenderer->GetMaterial()->SetDiffuseColor(color);
+
+    SelectionGizmo::Render(renderPass, renderChildren);
 }
 
 void RectTransformCornerSelectionGizmo::SetReferencedGameObject(
@@ -151,40 +151,34 @@ void RectTransformCornerSelectionGizmo::UpdateBasedOnCornerSide()
     GameObject *refGo    = GetReferencedGameObject(); if (!refGo) { return; }
     RectTransform *refRT = refGo->GetRectTransform(); if (!refRT) { return; }
 
-    // Rect refRect = refRT->GetViewportRectNDC();
-    AARect refRect ( refRT->GetViewportRectNDC() );
+    Rect refRect = refRT->GetViewportRect();
+    Vector2 leftBotNDC  ( GL::FromViewportPointToViewportPointNDC(refRect.GetLeftBot() ) );
+    Vector2 leftTopNDC  ( GL::FromViewportPointToViewportPointNDC(refRect.GetLeftTop() ) );
+    Vector2 rightTopNDC ( GL::FromViewportPointToViewportPointNDC(refRect.GetRightTop()) );
+    Vector2 rightBotNDC  ( GL::FromViewportPointToViewportPointNDC(refRect.GetRightBot() ) );
+    Vector2 centerNDC   ( GL::FromViewportPointToViewportPointNDC(refRect.GetCenter()) );
 
-    // Vector2 leftBot (refRect.GetCenter() + refRect.GetHalfSize() * Vector2(-1));
-    // Vector2 rightTop(refRect.GetCenter() + refRect.GetHalfSize() * Vector2( 1));
-    Vector2 leftBot  = refRect.GetMin();
-    Vector2 rightTop = refRect.GetMax();
-
-    float cornerAnchorX = 0.0f, cornerAnchorY = 0.0f;
+    Vector2 cornerAnchor = Vector2::Zero;
     switch (m_cornerSide)
     {
         case CornerSide::LeftBot:
-            cornerAnchorX = leftBot.x;
-            cornerAnchorY = leftBot.y;
+            cornerAnchor = Vector2(leftBotNDC.x, leftBotNDC.y);
         break;
 
         case CornerSide::LeftTop:
-            cornerAnchorX = leftBot.x;
-            cornerAnchorY = rightTop.y;
+            cornerAnchor = Vector2(leftTopNDC.x, leftTopNDC.y);
         break;
 
         case CornerSide::RightTop:
-            cornerAnchorX = rightTop.x;
-            cornerAnchorY = rightTop.y;
+            cornerAnchor = Vector2(rightTopNDC.x, rightTopNDC.y);
         break;
 
         case CornerSide::RightBot:
-            cornerAnchorX = rightTop.x;
-            cornerAnchorY = leftBot.y;
+            cornerAnchor = Vector2(rightBotNDC.x, rightBotNDC.y);
         break;
 
         case CornerSide::Center:
-            cornerAnchorX = refRect.GetCenter().x;
-            cornerAnchorY = refRect.GetCenter().y;
+            cornerAnchor = Vector2(centerNDC.x, centerNDC.y);
         break;
     }
 
@@ -194,8 +188,8 @@ void RectTransformCornerSelectionGizmo::UpdateBasedOnCornerSide()
         RectTransform *rt = (i == 0) ? p_cornerGO->GetRectTransform() :
                                        p_selectionGO->GetRectTransform();
 
-        rt->SetAnchorX(Vector2(cornerAnchorX));
-        rt->SetAnchorY(Vector2(cornerAnchorY));
+        rt->SetAnchorX(Vector2(cornerAnchor.x));
+        rt->SetAnchorY(Vector2(cornerAnchor.y));
 
         rt->SetMargins( -( (i == 0) ? CornerSize : CornerSelectionSize ) );
     }

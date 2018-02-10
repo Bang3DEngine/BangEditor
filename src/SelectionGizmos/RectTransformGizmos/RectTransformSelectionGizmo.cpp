@@ -20,7 +20,7 @@ RectTransformSelectionGizmo::RectTransformSelectionGizmo()
 {
     SetName("RectTransformSelectionGizmo");
 
-    AddComponent<Transform>();
+    GameObjectFactory::CreateUIGameObjectInto(this);
 
     p_leftBotCorner  = GameObject::Create<RectTransformCornerSelectionGizmo>();
     p_leftTopCorner  = GameObject::Create<RectTransformCornerSelectionGizmo>();
@@ -72,8 +72,6 @@ void RectTransformSelectionGizmo::Update()
 
 void RectTransformSelectionGizmo::Render(RenderPass renderPass, bool renderChildren)
 {
-    GetTransform()->SetScale(Vector3::One);
-
     bool selection = GL::IsBound( GEngine::GetActiveSelectionFramebuffer() );
     p_selectionGo->SetEnabled(selection);
 
@@ -91,7 +89,7 @@ void RectTransformSelectionGizmo::Render(RenderPass renderPass, bool renderChild
         Gizmos::SetThickness(2.0f);
         Gizmos::SetColor( Color::White );
         Gizmos::SetRenderPass(renderPass);
-        Gizmos::RenderRect( AARect(refGo->GetRectTransform()->GetViewportRectNDC()) );
+        Gizmos::RenderRect(refGo->GetRectTransform()->GetViewportRect().GetPoints());
     }
 
     SelectionGizmo::Render(renderPass, renderChildren);

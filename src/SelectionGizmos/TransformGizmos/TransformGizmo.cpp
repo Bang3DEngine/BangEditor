@@ -35,7 +35,7 @@ TransformGizmo::TransformGizmo()
     GameObjectFactory::CreateUICanvasInto(p_canvasGizmoContainer);
 
     p_worldGizmoContainer->SetParent(this);
-    p_canvasGizmoContainer->SetParent(nullptr);
+    p_canvasGizmoContainer->SetParent(this);
 
     p_translateGizmo     = GameObject::Create<TranslateGizmo>();
     p_rotateGizmo        = GameObject::Create<RotateGizmo>();
@@ -64,15 +64,23 @@ void TransformGizmo::Update()
     GameObject *refGo = GetReferencedGameObject();
     if (!refGo || !refGo->GetTransform()) { return; }
 
-    GetTransform()->SetPosition( refGo->GetTransform()->GetPosition() );
-    GetTransform()->SetRotation( refGo->GetTransform()->GetRotation() );
-
-    GetTransform()->SetScale( GetScaleFactor() );
-
     if      (Input::GetKeyDown(Key::W)) { m_transformMode = TransformMode::Translate; }
     else if (Input::GetKeyDown(Key::E)) { m_transformMode = TransformMode::Rotate; }
     else if (Input::GetKeyDown(Key::R)) { m_transformMode = TransformMode::Scale; }
     else if (Input::GetKeyDown(Key::T)) { m_transformMode = TransformMode::Rect; }
+
+    switch (m_transformMode)
+    {
+        case TransformMode::Rect:
+            GetTransform()->SetLocalPosition(Vector3::Zero);
+            GetTransform()->SetLocalRotation(Quaternion::Identity);
+            GetTransform()->SetLocalScale(Vector3::One);
+        break;
+        default:
+            GetTransform()->SetPosition( refGo->GetTransform()->GetPosition() );
+            GetTransform()->SetRotation( refGo->GetTransform()->GetRotation() );
+            GetTransform()->SetScale( GetScaleFactor() );
+    }
 
     switch (m_transformMode)
     {
@@ -138,7 +146,6 @@ void TransformGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
         {
             m_transformMode = TransformMode::Translate;
         }
-
         Update(); // To avoid a bit of flickering
     }
 }

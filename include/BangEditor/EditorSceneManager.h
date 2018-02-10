@@ -26,6 +26,8 @@ public:
 
     static EditorSceneManager *GetActive();
 
+    virtual void OnResize(int width, int height);
+
     EditorBehaviourManager *GetEditorBehaviourManager() const;
 
 protected:

@@ -16,8 +16,8 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-const int RectTransformAnchorSelectionGizmo::AnchorSize = 8;
-const int RectTransformAnchorSelectionGizmo::AnchorSelectionSize = 16;
+const int RectTransformAnchorSelectionGizmo::AnchorSize = 3;
+const int RectTransformAnchorSelectionGizmo::AnchorSelectionSize = 5;
 
 RectTransformAnchorSelectionGizmo::RectTransformAnchorSelectionGizmo()
 {
@@ -175,11 +175,14 @@ void RectTransformAnchorSelectionGizmo::UpdateBasedOnAnchorSide()
         break;
     }
 
-    Vector2 vpAnchor = localAnchor;
-    if (refGo->GetParent() && refGo->GetParent()->GetRectTransform())
+    Vector2 vpAnchorNDC = localAnchor;
+    Quaternion parentRot = Quaternion::Identity;
+    GameObject *parent = refGo->GetParent();
+    RectTransform *parentRT = parent ? parent->GetRectTransform() : nullptr;
+    if (parentRT)
     {
-        vpAnchor = refGo->GetParent()->GetRectTransform()->
-                        FromLocalPointNDCToViewportPointNDC( localAnchor );
+        vpAnchorNDC = parentRT->FromLocalPointNDCToViewportPointNDC( localAnchor );
+        parentRot = parentRT->GetRotation();
     }
 
     // Update anchor and selection rectTransforms
@@ -188,20 +191,22 @@ void RectTransformAnchorSelectionGizmo::UpdateBasedOnAnchorSide()
         RectTransform *rt = (i == 0) ? p_anchorGO->GetRectTransform() :
                                        p_selectionGO->GetRectTransform();
 
-        rt->SetAnchorX(Vector2(vpAnchor.x));
-        rt->SetAnchorY(Vector2(vpAnchor.y));
+        rt->SetAnchorX(Vector2(vpAnchorNDC.x));
+        rt->SetAnchorY(Vector2(vpAnchorNDC.y));
 
-        int size = (  (i == 0) ? AnchorSize : AnchorSelectionSize );
+        const int size = (  (i == 0) ? AnchorSize : AnchorSelectionSize );
         rt->SetMargins(-size, -size*2, -size, 0);
         rt->SetPivotPosition( Vector2(0, -1) );
 
         // Fit into screen if in borders
-        if ( Math::Abs(vpAnchor.x) >= 0.9f || Math::Abs(vpAnchor.y) >= 0.9f)
+        if ( Math::Abs(vpAnchorNDC.x) >= 0.9f || Math::Abs(vpAnchorNDC.y) >= 0.9f)
         {
             localAnchorRot += 180.0f;
         }
-        rt->SetRotation( Quaternion::AngleAxis(Math::DegToRad(localAnchorRot),
-                                                          Vector3::Forward) );
+        Quaternion anchorRot = Quaternion::AngleAxis(Math::DegToRad(localAnchorRot),
+                                                     Vector3::Forward);
+        anchorRot = anchorRot * parentRot;
+        rt->SetLocalRotation(anchorRot);
     }
 }
 

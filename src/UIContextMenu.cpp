@@ -118,13 +118,13 @@ void ContextMenu::AdjustToBeInsideScreen()
 
     Vector2 pivotPos = listRT->GetPivotPosition();
 
-    AARect allRect ( GetRootItem()->GetRectTransform()->GetViewportRectNDC() );
+    AARect allRect ( GetRootItem()->GetRectTransform()->GetViewportAARectNDC() );
     List<GameObject*> menuChildren = GetRootItem()->GetChildrenRecursively();
     for (GameObject *child : menuChildren)
     {
         RectTransform *crt = child->GetRectTransform();
         if (crt) { allRect = AARect::Union(allRect,
-                                           AARect( crt->GetViewportRectNDC() )); }
+                                           AARect( crt->GetViewportAARectNDC() )); }
     }
 
     for (int axis = 0; axis < 2; ++axis) // X and Y

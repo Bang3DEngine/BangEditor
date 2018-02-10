@@ -74,6 +74,19 @@ void EditorSceneManager::SetActiveScene(Scene *activeScene)
     GetActive()->_SetActiveScene(activeScene);
 }
 
+void EditorSceneManager::OnResize(int width, int height)
+{
+    if (GetOpenScene())
+    {
+        GetOpenScene()->OnResize(width, height);
+    }
+
+    if (GetEditorScene())
+    {
+        GetEditorScene()->OnResize(width, height);
+    }
+}
+
 void EditorSceneManager::_Update()
 {
     GetEditorBehaviourManager()->Update();
