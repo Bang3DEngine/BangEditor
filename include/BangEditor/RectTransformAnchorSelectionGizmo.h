@@ -34,7 +34,7 @@ private:
     static const int AnchorSelectionSize;
 
     AnchorSide m_anchorSide = AnchorSide::LeftBot;
-    Vector2 m_startGrabMousePosNDC = Vector2::Zero;
+    Vector2 m_startGrabMousePos = Vector2::Zero;
     Vector2 m_startLocalAnchorMin = Vector2::Zero;
     Vector2 m_startLocalAnchorMax = Vector2::Zero;
 

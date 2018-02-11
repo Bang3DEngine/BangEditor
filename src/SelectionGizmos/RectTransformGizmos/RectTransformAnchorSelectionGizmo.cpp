@@ -16,8 +16,8 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-const int RectTransformAnchorSelectionGizmo::AnchorSize = 3;
-const int RectTransformAnchorSelectionGizmo::AnchorSelectionSize = 5;
+const int RectTransformAnchorSelectionGizmo::AnchorSize = 6;
+const int RectTransformAnchorSelectionGizmo::AnchorSelectionSize = 8;
 
 RectTransformAnchorSelectionGizmo::RectTransformAnchorSelectionGizmo()
 {
@@ -48,53 +48,59 @@ void RectTransformAnchorSelectionGizmo::Update()
 
     GameObject *refGo = GetReferencedGameObject(); if (!refGo) { return; }
     RectTransform *refRT = refGo->GetRectTransform(); if (!refRT) { return; }
+    RectTransform *parentRT = refGo->GetParent()->GetRectTransform();
+    parentRT = parentRT ? parentRT : refRT;
 
     if (IsBeingGrabbed())
     {
-        Vector2 mousePosNDC = Input::GetMousePositionNDC();
+        Vector2 mousePos ( Input::GetMousePosition() );
         if (GrabHasJustChanged())
         {
-            m_startGrabMousePosNDC = mousePosNDC;
+            m_startGrabMousePos   = mousePos;
             m_startLocalAnchorMin = refRT->GetAnchorMin();
             m_startLocalAnchorMax = refRT->GetAnchorMax();
         }
 
-        Vector2 displacement = (mousePosNDC - m_startGrabMousePosNDC);
-        Vector2 newLocalAnchorMin = m_startLocalAnchorMin;
-        Vector2 newLocalAnchorMax = m_startLocalAnchorMax;
+        Vector2 startGrabMousePosLocal =
+                parentRT->FromViewportPointToLocalPointNDC(m_startGrabMousePos);
+        Vector2 mousePosLocal =
+                parentRT->FromViewportPointToLocalPointNDC(mousePos);
+        Vector2 displacementLocal = (mousePosLocal - startGrabMousePosLocal);
+        Vector2 newAnchorMinLocal = m_startLocalAnchorMin;
+        Vector2 newAnchorMaxLocal = m_startLocalAnchorMax;
 
         switch (m_anchorSide)
         {
             case AnchorSide::LeftBot:
-                newLocalAnchorMin.x += displacement.x;
-                newLocalAnchorMin.y += displacement.y;
+                newAnchorMinLocal.x += displacementLocal.x;
+                newAnchorMinLocal.y += displacementLocal.y;
             break;
 
             case AnchorSide::LeftTop:
-                newLocalAnchorMin.x += displacement.x;
-                newLocalAnchorMax.y += displacement.y;
+                newAnchorMinLocal.x += displacementLocal.x;
+                newAnchorMaxLocal.y += displacementLocal.y;
             break;
 
             case AnchorSide::RightTop:
-                newLocalAnchorMax.x += displacement.x;
-                newLocalAnchorMax.y += displacement.y;
+                newAnchorMaxLocal.x += displacementLocal.x;
+                newAnchorMaxLocal.y += displacementLocal.y;
             break;
 
             case AnchorSide::RightBot:
-                newLocalAnchorMax.x += displacement.x;
-                newLocalAnchorMin.y += displacement.y;
+                newAnchorMaxLocal.x += displacementLocal.x;
+                newAnchorMinLocal.y += displacementLocal.y;
             break;
         }
 
         if (Input::GetKey(Key::LShift))
         {
             constexpr float Snapping = 10.0f;
-            newLocalAnchorMin = Vector2::Round(newLocalAnchorMin * Snapping) / Snapping;
-            newLocalAnchorMax = Vector2::Round(newLocalAnchorMax * Snapping) / Snapping;
+            newAnchorMinLocal = Vector2::Round(newAnchorMinLocal * Snapping) / Snapping;
+            newAnchorMaxLocal = Vector2::Round(newAnchorMaxLocal * Snapping) / Snapping;
         }
 
-        refRT->SetAnchorMin( newLocalAnchorMin );
-        refRT->SetAnchorMax( newLocalAnchorMax );
+        refRT->SetAnchorMin( newAnchorMinLocal );
+        refRT->SetAnchorMax( newAnchorMaxLocal );
     }
 
     UpdateBasedOnAnchorSide();

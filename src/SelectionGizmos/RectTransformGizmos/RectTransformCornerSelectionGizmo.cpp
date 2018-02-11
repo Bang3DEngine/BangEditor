@@ -16,8 +16,8 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-const int RectTransformCornerSelectionGizmo::CornerSize = 3;
-const int RectTransformCornerSelectionGizmo::CornerSelectionSize = 5;
+const int RectTransformCornerSelectionGizmo::CornerSize = 6;
+const int RectTransformCornerSelectionGizmo::CornerSelectionSize = 8;
 
 RectTransformCornerSelectionGizmo::RectTransformCornerSelectionGizmo()
 {
@@ -48,21 +48,30 @@ void RectTransformCornerSelectionGizmo::Update()
 
     GameObject *refGo = GetReferencedGameObject(); if (!refGo) { return; }
     RectTransform *refRT = refGo->GetRectTransform(); if (!refRT) { return; }
+    RectTransform *parentRT = refGo->GetParent()->GetRectTransform();
+    parentRT = parentRT ? parentRT : refRT;
 
     if (IsBeingGrabbed())
     {
         Vector2i mousePos = Input::GetMousePosition();
         if (GrabHasJustChanged())
         {
-            m_startGrabMousePos = mousePos;
+            m_startGrabMousePos   = mousePos;
             m_startMarginLeftBot  = refRT->GetMarginLeftBot();
             m_startMarginRightTop = refRT->GetMarginRightTop();
         }
 
-        Vector2i displacement = (mousePos - m_startGrabMousePos);
+        Vector2 startGrabMousePosLocal =
+                     refRT->FromViewportPointToLocalPoint(m_startGrabMousePos);
+        Vector2 mousePosLocal = refRT->FromViewportPointToLocalPoint(mousePos);
+
+        Vector2 displacement (mousePos - m_startGrabMousePos);
+        Vector2 displacementLocal = mousePosLocal - startGrabMousePosLocal;
+        Vector2 dispDir = displacementLocal.NormalizedSafe();
+        displacement = dispDir * displacement.Length();
+
         Vector2i newMarginLeftBot  = m_startMarginLeftBot;
         Vector2i newMarginRightTop = m_startMarginRightTop;
-
         switch (m_cornerSide)
         {
             case CornerSide::LeftBot:
@@ -86,10 +95,8 @@ void RectTransformCornerSelectionGizmo::Update()
             break;
 
             case CornerSide::Center:
-                newMarginLeftBot.x  += displacement.x;
-                newMarginLeftBot.y  += displacement.y;
-                newMarginRightTop.x -= displacement.x;
-                newMarginRightTop.y -= displacement.y;
+                newMarginLeftBot  += Vector2i(displacement);
+                newMarginRightTop -= Vector2i(displacement);
             break;
         }
 
