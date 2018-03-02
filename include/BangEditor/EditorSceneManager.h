@@ -26,7 +26,9 @@ public:
 
     static EditorSceneManager *GetActive();
 
-    virtual void OnResize(int width, int height);
+    void Update() override;
+    void Render() override;
+    void OnResize(int width, int height);
 
     EditorBehaviourManager *GetEditorBehaviourManager() const;
 
@@ -39,7 +41,6 @@ protected:
     static void SetActiveScene(Scene *activeScene);
 
 private:
-    void _Update() override;
     void _LoadSceneInstantly() override;
 
     BehaviourManager *CreateBehaviourManager() const override;

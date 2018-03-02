@@ -194,6 +194,11 @@ void EditorScene::Update()
 
 }
 
+void EditorScene::Render(RenderPass rp, bool renderChildren)
+{
+    Scene::Render(rp, renderChildren);
+}
+
 void EditorScene::OnResize(int newWidth, int newHeight)
 {
     EditorSceneManager::SetActiveScene(this);
@@ -285,6 +290,7 @@ void EditorScene::RenderAndBlitToWindow()
     RenderOpenScene();
     gEngine->Render(this, GetCamera());
     window->BlitToWindow(GetCamera());
+    SceneManager::GetActive()->Render();
 }
 
 void EditorScene::BindOpenScene()

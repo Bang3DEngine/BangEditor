@@ -87,10 +87,15 @@ void EditorSceneManager::OnResize(int width, int height)
     }
 }
 
-void EditorSceneManager::_Update()
+void EditorSceneManager::Update()
 {
     GetEditorBehaviourManager()->Update();
-    SceneManager::_Update();
+    SceneManager::Update();
+}
+
+void EditorSceneManager::Render()
+{
+    SceneManager::Render();
 }
 
 BehaviourManager *EditorSceneManager::CreateBehaviourManager() const
