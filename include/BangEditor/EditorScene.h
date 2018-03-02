@@ -46,7 +46,6 @@ class EditorScene : public Scene,
 
 public:
     void Update() override;
-    void Render(RenderPass rp, bool renderChildren = true) override;
     void OnResize(int newWidth, int newHeight) override;
 
     void RenderOpenScene();
@@ -55,8 +54,6 @@ public:
     Scene *GetOpenScene() const;
 
     AARect GetOpenSceneWindowRectNDC() const;
-
-    void RenderAndBlitToWindow();
 
     MenuBar *GetMenuBar() const;
     Editor *GetEditor() const;

@@ -35,11 +35,7 @@ void EditorWindow::Update()
 
 void EditorWindow::Render()
 {
-    EditorScene *edScene = EditorSceneManager::GetEditorScene();
-    if (edScene)
-    {
-        edScene->RenderAndBlitToWindow();
-    }
+    Window::Render();
 }
 
 void EditorWindow::OnClosed()

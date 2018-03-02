@@ -39,6 +39,7 @@ protected:
     EditorScene *_GetEditorScene() const;
 
     static void SetActiveScene(Scene *activeScene);
+    Scene *GetSceneToBeRenderedToWindow() const override;
 
 private:
     void _LoadSceneInstantly() override;

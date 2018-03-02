@@ -2,6 +2,8 @@
 
 #include "Bang/Time.h"
 #include "Bang/Scene.h"
+#include "Bang/Camera.h"
+#include "Bang/GEngine.h"
 #include "Bang/AudioManager.h"
 #include "Bang/UILayoutManager.h"
 
@@ -74,6 +76,11 @@ void EditorSceneManager::SetActiveScene(Scene *activeScene)
     GetActive()->_SetActiveScene(activeScene);
 }
 
+Scene *EditorSceneManager::GetSceneToBeRenderedToWindow() const
+{
+    return GetEditorScene();
+}
+
 void EditorSceneManager::OnResize(int width, int height)
 {
     if (GetOpenScene())
@@ -95,6 +102,8 @@ void EditorSceneManager::Update()
 
 void EditorSceneManager::Render()
 {
+    EditorScene *edScene = EditorSceneManager::GetEditorScene();
+    edScene->RenderOpenScene();
     SceneManager::Render();
 }
 

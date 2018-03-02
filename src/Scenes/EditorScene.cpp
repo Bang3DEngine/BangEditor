@@ -194,11 +194,6 @@ void EditorScene::Update()
 
 }
 
-void EditorScene::Render(RenderPass rp, bool renderChildren)
-{
-    Scene::Render(rp, renderChildren);
-}
-
 void EditorScene::OnResize(int newWidth, int newHeight)
 {
     EditorSceneManager::SetActiveScene(this);
@@ -279,18 +274,6 @@ Scene *EditorScene::GetOpenScene() const
 AARect EditorScene::GetOpenSceneWindowRectNDC() const
 {
     return p_sceneEditContainer->GetSceneImageRectNDC();
-}
-
-void EditorScene::RenderAndBlitToWindow()
-{
-    Window *window = Window::GetActive();
-    window->Clear();
-
-    GEngine *gEngine = GEngine::GetActive();
-    RenderOpenScene();
-    gEngine->Render(this, GetCamera());
-    window->BlitToWindow(GetCamera());
-    SceneManager::GetActive()->Render();
 }
 
 void EditorScene::BindOpenScene()
