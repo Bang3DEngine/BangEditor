@@ -3,9 +3,11 @@
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Window.h"
+#include "Bang/WindowManager.h"
 
 #include "BangEditor/Project.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorWindow.h"
 #include "BangEditor/EditorSettings.h"
 #include "BangEditor/ProjectManager.h"
 
@@ -21,7 +23,7 @@ int main(int argc, char **argv)
     EditorApplication edApp;
     edApp.Init( Path("" BANG_PROJECT_ROOT) );
 
-    Window *mainWindow = edApp.CreateWindow();
+    Window *mainWindow = WindowManager::CreateWindow<EditorWindow>();
     Window::SetActive(mainWindow);
     mainWindow->SetTitle("Bang Editor");
     edApp.OpenEditorScene();

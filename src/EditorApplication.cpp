@@ -58,8 +58,3 @@ Paths *EditorApplication::CreatePaths()
 {
     return new EditorPaths();
 }
-
-Window *EditorApplication::_CreateWindow()
-{
-    return new EditorWindow();
-}

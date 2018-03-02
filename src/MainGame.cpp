@@ -7,6 +7,7 @@
 #include "Bang/Library.h"
 #include "Bang/Extensions.h"
 #include "Bang/SceneManager.h"
+#include "Bang/WindowManager.h"
 #include "Bang/BehaviourManager.h"
 #include "Bang/BehaviourContainer.h"
 #include "Bang/ImportFilesManager.h"
@@ -45,7 +46,7 @@ int main(int, char **)
 
     Paths::SetProjectRoot(dataDir);
 
-    Window *mainWindow = app.CreateWindow();
+    Window *mainWindow = WindowManager::CreateWindow<Window>();
     Window::SetActive(mainWindow);
     mainWindow->SetTitle("Bang");
     mainWindow->Maximize();

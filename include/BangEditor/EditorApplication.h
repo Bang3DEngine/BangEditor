@@ -31,7 +31,6 @@ public:
 
 private:
     Paths* CreatePaths() override;
-    Window* _CreateWindow() override;
 
     static EditorApplication* GetInstance();
 
