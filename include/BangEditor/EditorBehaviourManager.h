@@ -73,6 +73,7 @@ private:
                                       const Path &outputLibFilepath,
                                       BinType binaryType);
 
+    static List<Path> GetCompiledObjectsPaths();
     static List<Path> GetBehaviourSourcesPaths();
     static Compiler::Job CreateBaseJob(BinType binaryType);
     static Path GetObjectOutputPath(const Path &inputBehaviourPath);

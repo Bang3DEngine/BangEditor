@@ -19,7 +19,7 @@ USING_NAMESPACE_BANG_EDITOR
 
 EditorBehaviourManager::EditorBehaviourManager()
 {
-    m_compileThreadPool.SetMaxThreadCount(1);
+    m_compileThreadPool.SetMaxThreadCount(3);
     m_compileThreadPool.SetName("BehaviourCompileThread");
 }
 
@@ -227,8 +227,7 @@ void EditorBehaviourManager::RemoveBehaviourLibrariesOf(const String& behaviourN
 {
     if (behaviourName.IsEmpty()) { return; }
 
-    List<Path> libFilepaths = Paths::GetProjectLibrariesDir().
-                                     GetFiles(Path::FindFlag::Simple);
+    List<Path> libFilepaths = GetCompiledObjectsPaths();
     for (const Path &libFilepath : libFilepaths)
     {
         if (libFilepath.GetName() == behaviourName)
@@ -249,8 +248,7 @@ void EditorBehaviourManager::RemoveOrphanBehaviourLibraries()
     }
 
     // Remove those libs that do not have a corresponding existing behaviour path
-    List<Path> libFilepaths = Paths::GetProjectLibrariesDir().
-                                     GetFiles(Path::FindFlag::Simple);
+    List<Path> libFilepaths = GetCompiledObjectsPaths();
     for (const Path &libPath : libFilepaths)
     {
         if (!behaviourNames.Contains(libPath.GetName()))
@@ -282,9 +280,7 @@ void EditorBehaviourManager::MergeIntoBehavioursLibrary()
                               AppendExtension("so").
                               AppendExtension( String(Time::GetNow_Nanos()) );
 
-    List<Path> behaviourObjs = Paths::GetProjectLibrariesDir().
-                               GetFiles(Path::FindFlag::Simple, {"o"});
-
+    List<Path> behaviourObjs = GetCompiledObjectsPaths();
     EditorBehaviourManager::RemoveBehaviourLibrariesOf( "Behaviours" );
     Compiler::Result mergeResult = MergeBehaviourObjects(behaviourObjs,
                                                          outputLibPath,
@@ -317,6 +313,10 @@ Compiler::Result EditorBehaviourManager::MergeBehaviourObjects(
     return Compiler::Compile(job);
 }
 
+List<Path> EditorBehaviourManager::GetCompiledObjectsPaths()
+{
+    return Paths::GetProjectLibrariesDir().GetFiles(Path::FindFlag::Simple, {"o"});
+}
 List<Path> EditorBehaviourManager::GetBehaviourSourcesPaths()
 {
     List<Path> behaviourSources = Paths::GetProjectAssetsDir().
@@ -418,6 +418,6 @@ void EditorBehaviourManager::BehaviourCompileRunnable::Run()
     }
     else
     {
-        Debug_Log("Behaviour '" << outputPath.GetName() << "' correctly compiled!");
+        Debug_DLog("Behaviour '" << outputPath.GetName() << "' correctly compiled!");
     }
 }
