@@ -80,6 +80,7 @@ private:
                                                    const Path& outputObjectFilepath,
                                                    BinType binaryType);
     static void RemoveBehaviourLibrariesOf(const String& behaviourName);
+    static void RemoveOrphanBehaviourLibraries();
 
     Mutex* GetMutex() const;
     BehaviourTracker *GetBehaviourTracker();

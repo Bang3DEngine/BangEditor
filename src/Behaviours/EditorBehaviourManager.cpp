@@ -238,6 +238,28 @@ void EditorBehaviourManager::RemoveBehaviourLibrariesOf(const String& behaviourN
     }
 }
 
+void EditorBehaviourManager::RemoveOrphanBehaviourLibraries()
+{
+    // Get existing behaviour names
+    List<String> behaviourNames;
+    List<Path> behaviourFilepaths = GetBehaviourSourcesPaths();
+    for (const Path &behaviourPath : behaviourFilepaths)
+    {
+        behaviourNames.PushBack(behaviourPath.GetName());
+    }
+
+    // Remove those libs that do not have a corresponding existing behaviour path
+    List<Path> libFilepaths = Paths::GetProjectLibrariesDir().
+                                     GetFiles(Path::FindFlag::Simple);
+    for (const Path &libPath : libFilepaths)
+    {
+        if (!behaviourNames.Contains(libPath.GetName()))
+        {
+            File::Remove(libPath);
+        }
+    }
+}
+
 void EditorBehaviourManager::CompileAllProjectBehaviours()
 {
     UpdateCompileInformations();
@@ -283,10 +305,12 @@ Compiler::Result EditorBehaviourManager::MergeBehaviourObjects(
                                     const Path &outputLibFilepath,
                                     BinType binaryType)
 {
+    EditorBehaviourManager::RemoveOrphanBehaviourLibraries();
     File::CreateDirectory(outputLibFilepath.GetDirectory());
 
     Compiler::Job job = EditorBehaviourManager::CreateBaseJob(binaryType);
     job.outputMode = Compiler::OutputType::SharedLib;
+    job.libDirs.PushBack( Paths::GetEngineLibrariesDir( BinType::Debug ) );
     job.inputFiles.PushBack(behaviourObjectFilepaths);
     job.outputFile = outputLibFilepath;
 
