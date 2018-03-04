@@ -37,6 +37,7 @@ protected:
 
     Scene *_GetOpenScene() const;
     EditorScene *_GetEditorScene() const;
+    Scene *_GetActiveScene() const override;
 
     static void SetActiveScene(Scene *activeScene);
     Scene *GetSceneToBeRenderedToWindow() const override;

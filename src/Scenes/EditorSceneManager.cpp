@@ -1,6 +1,7 @@
 #include "BangEditor/EditorSceneManager.h"
 
 #include "Bang/Time.h"
+#include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
 #include "Bang/GEngine.h"
@@ -16,12 +17,12 @@ USING_NAMESPACE_BANG_EDITOR
 
 EditorSceneManager::~EditorSceneManager()
 {
-    if (GetOpenScene() && GetOpenScene() != GetActiveScene())
+    if (GetOpenScene() && GetOpenScene() != _GetActiveScene())
     {
         GameObject::Destroy( GetOpenScene() );
     }
 
-    if (GetEditorScene() && GetEditorScene() != GetActiveScene())
+    if (GetEditorScene() && GetEditorScene() != _GetActiveScene())
     {
         GameObject::Destroy( GetEditorScene() );
     }
@@ -55,10 +56,16 @@ EditorScene *EditorSceneManager::_GetEditorScene() const
     return p_editorScene;
 }
 
+Scene *EditorSceneManager::_GetActiveScene() const
+{
+    return GetOpenScene();
+}
+
 void EditorSceneManager::_LoadSceneInstantly()
 {
     ASSERT( GetNextLoadNeeded() );
 
+    SceneManager::PreLoadSceneInstantly();
     if (_GetEditorScene())
     {
         _GetEditorScene()->SetOpenScene( GetNextLoadScene() );
@@ -67,8 +74,7 @@ void EditorSceneManager::_LoadSceneInstantly()
     {
         p_editorScene = SCAST<EditorScene*>( GetNextLoadScene() );
     }
-
-    SceneManager::_LoadSceneInstantly();
+    SceneManager::PostLoadSceneInstantly();
 }
 
 void EditorSceneManager::SetActiveScene(Scene *activeScene)
@@ -83,21 +89,17 @@ Scene *EditorSceneManager::GetSceneToBeRenderedToWindow() const
 
 void EditorSceneManager::OnResize(int width, int height)
 {
-    if (GetOpenScene())
-    {
-        GetOpenScene()->OnResize(width, height);
-    }
-
-    if (GetEditorScene())
-    {
-        GetEditorScene()->OnResize(width, height);
-    }
+    if (GetOpenScene()) { GetOpenScene()->OnResize(width, height); }
+    if (GetEditorScene()) { GetEditorScene()->OnResize(width, height); }
 }
 
 void EditorSceneManager::Update()
 {
     GetEditorBehaviourManager()->Update();
-    SceneManager::Update();
+
+    if (GetNextLoadNeeded())  {  _LoadSceneInstantly(); }
+    SceneManager::OnNewFrame( GetEditorScene(), true );
+    SceneManager::OnNewFrame( GetOpenScene(), true );
 }
 
 void EditorSceneManager::Render()
