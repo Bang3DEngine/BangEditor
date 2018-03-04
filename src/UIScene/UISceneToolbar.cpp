@@ -128,12 +128,7 @@ void UISceneToolbar::OnPauseScene()
     p_playButton->SetBlocked(false);
     p_pauseButton->SetBlocked(true);
     p_stepButton->SetBlocked(false);
-    p_stopButton->SetBlocked(true);
-}
-
-void UISceneToolbar::OnStepFrameScene()
-{
-    OnPauseScene();
+    p_stopButton->SetBlocked(false);
 }
 
 void UISceneToolbar::OnStopScene()
@@ -151,7 +146,6 @@ void UISceneToolbar::OnPlayStateChanged(PlayState,
     {
         case PlayState::Editing:   OnStopScene();      break;
         case PlayState::Paused:    OnPauseScene();     break;
-        case PlayState::StepFrame: OnStepFrameScene(); break;
         case PlayState::Playing:   OnPlayScene();      break;
         default: break;
     }

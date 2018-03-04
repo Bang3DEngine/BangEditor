@@ -27,10 +27,10 @@ ScenePlayer::~ScenePlayer()
 
 void ScenePlayer::Update()
 {
-    if (m_pauseInNextFrame)
+    if (m_steppingFrame)
     {
         ScenePlayer::PauseScene();
-        m_pauseInNextFrame = false;
+        m_steppingFrame = false;
     }
 }
 
@@ -102,13 +102,15 @@ void ScenePlayer::PlayScene()
                     SceneManager::LoadSceneInstantly(sp->p_playOpenScene, false);
 
                     Time::SetDeltaTimeReferenceToNow();
-
                     ScenePlayer::SetPlayState(PlayState::Playing);
                 }
             }
-
         }
-        sp->m_pauseInNextFrame = false;
+        else if (ScenePlayer::GetPlayState() == PlayState::Paused)
+        {
+            AudioManager::ResumeAllSounds();
+            ScenePlayer::SetPlayState(PlayState::Playing);
+        }
     }
 }
 
@@ -117,19 +119,15 @@ void ScenePlayer::PauseScene()
     if (ScenePlayer::GetPlayState() != PlayState::Paused)
     {
         ScenePlayer::SetPlayState(PlayState::Paused);
-        ScenePlayer *sp = ScenePlayer::GetInstance();
-        sp->m_pauseInNextFrame = false;
+        AudioManager::PauseAllSounds();
     }
 }
 
 void ScenePlayer::StepFrame()
 {
-    if (ScenePlayer::GetPlayState() != PlayState::StepFrame)
-    {
-        ScenePlayer::SetPlayState(PlayState::StepFrame);
-        ScenePlayer *sp = ScenePlayer::GetInstance();
-        sp->m_pauseInNextFrame = true;
-    }
+    ScenePlayer::PlayScene();
+    ScenePlayer *sp = ScenePlayer::GetInstance();
+    sp->m_steppingFrame = true;
 }
 
 void ScenePlayer::StopScene()
@@ -137,11 +135,8 @@ void ScenePlayer::StopScene()
     if (ScenePlayer::GetPlayState() != PlayState::Editing)
     {
         ScenePlayer *sp = ScenePlayer::GetInstance();
-
         SceneManager::LoadSceneInstantly(sp->p_editOpenScene, false);
-
         if (sp->p_playOpenScene) { GameObject::Destroy(sp->p_playOpenScene); }
-        sp->m_pauseInNextFrame = false;
 
         ScenePlayer::SetPlayState(PlayState::Editing);
     }

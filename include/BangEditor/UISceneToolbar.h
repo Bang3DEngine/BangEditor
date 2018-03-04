@@ -44,7 +44,6 @@ private:
 
     void OnPlayScene();
     void OnPauseScene();
-    void OnStepFrameScene();
     void OnStopScene();
 
     void SetRenderMode();

@@ -197,7 +197,6 @@ void EditorScene::Update()
         }
     }
     p_centerTabContainer->SetTabTitle(p_sceneEditContainer, sceneTabName);
-
 }
 
 void EditorScene::OnResize(int newWidth, int newHeight)

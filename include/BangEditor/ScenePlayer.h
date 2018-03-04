@@ -16,7 +16,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-enum class PlayState { JustBeforePlaying, Playing, Paused, StepFrame, Editing };
+enum class PlayState { JustBeforePlaying, Playing, Paused, Editing };
 
 class IScenePlayerListener : public virtual IEventListener
 {
@@ -44,7 +44,7 @@ public:
 private:
     PlayState m_currentPlayState;
 
-    bool m_pauseInNextFrame = false;
+    bool m_steppingFrame = false;
     Scene *p_editOpenScene = nullptr;
     Scene *p_playOpenScene = nullptr;
 
