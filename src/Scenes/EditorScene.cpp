@@ -142,6 +142,12 @@ void EditorScene::Init()
     ScenePlayer::StopScene();
 }
 
+void EditorScene::BeforeRender()
+{
+    Scene::BeforeRender();
+    RenderOpenScene();
+}
+
 EditorScene::~EditorScene()
 {
     delete m_editor;
@@ -196,28 +202,24 @@ void EditorScene::Update()
 
 void EditorScene::OnResize(int newWidth, int newHeight)
 {
-    EditorSceneManager::SetActiveScene(this);
     Scene::OnResize(newWidth, newHeight);
-
-    Scene *openScene = GetOpenScene();
-    if (openScene)
+    if ( GetOpenScene() )
     {
         BindOpenScene();
-        openScene->OnResize(newWidth, newHeight);
+        GetOpenScene()->OnResize(newWidth, newHeight);
         UnBindOpenScene();
     }
 }
 
 void EditorScene::RenderOpenScene()
 {
-    Scene *openScene = GetOpenScene();
-    if (openScene)
+    if ( GetOpenScene() )
     {
         BindOpenScene();
 
-        GetEditSceneGameObjects()->OnBeginRender(openScene);
+        GetEditSceneGameObjects()->OnBeginRender( GetOpenScene() );
         GetSceneEditContainer()->RenderIfNeeded();
-        GetEditSceneGameObjects()->OnEndRender(openScene);
+        GetEditSceneGameObjects()->OnEndRender( GetOpenScene() );
 
         GetScenePlayContainer()->RenderIfNeeded();
 

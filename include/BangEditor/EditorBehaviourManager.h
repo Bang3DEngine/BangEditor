@@ -27,7 +27,7 @@ public:
     EditorBehaviourManager();
     virtual ~EditorBehaviourManager();
 
-    void Update();
+    void Update() override;
 
     void WaitForAsyncCompileJobs();
     bool PrepareBehavioursLibrary();

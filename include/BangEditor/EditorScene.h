@@ -106,6 +106,9 @@ private:
 
     void Init();
 
+    // GameObject
+    void BeforeRender() override;
+
     void BindOpenScene();
     void UnBindOpenScene();
     void PushGLViewport();

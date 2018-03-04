@@ -29,8 +29,9 @@ EditorBehaviourManager::~EditorBehaviourManager()
 
 void EditorBehaviourManager::Update()
 {
-    UpdateCompileInformations();
+    BehaviourManager::Update();
 
+    UpdateCompileInformations();
     if (Editor::IsEditingScene())
     {
         List<Path> behaviourPaths = GetBehaviourSourcesPaths();

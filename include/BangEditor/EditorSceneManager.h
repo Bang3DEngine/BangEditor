@@ -15,21 +15,16 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class EditorScene;
 FORWARD class EditorBehaviourManager;
 
-class EditorSceneManager : public SceneManager
+class EditorSceneManager : public SceneManager,
+                           public ISceneManagerListener
 {
 public:
-    EditorSceneManager() = default;
+    EditorSceneManager();
     virtual ~EditorSceneManager();
 
     static Scene *GetOpenScene();
     static EditorScene *GetEditorScene();
-
     static EditorSceneManager *GetActive();
-
-    void Update() override;
-    void Render() override;
-    void OnResize(int width, int height);
-
     EditorBehaviourManager *GetEditorBehaviourManager() const;
 
 protected:
@@ -37,19 +32,17 @@ protected:
 
     Scene *_GetOpenScene() const;
     EditorScene *_GetEditorScene() const;
-    Scene *_GetActiveScene() const override;
 
     static void SetActiveScene(Scene *activeScene);
-    Scene *GetSceneToBeRenderedToWindow() const override;
 
 private:
-    void _LoadSceneInstantly() override;
-
     BehaviourManager *CreateBehaviourManager() const override;
+    void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
 
     friend class EditorScene;
     friend class ScenePlayer;
     friend class EditorApplication;
+
 };
 
 NAMESPACE_BANG_EDITOR_END

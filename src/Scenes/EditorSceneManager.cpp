@@ -15,17 +15,15 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
+EditorSceneManager::EditorSceneManager()
+{
+    EventEmitter<ISceneManagerListener>::RegisterListener(this);
+}
+
 EditorSceneManager::~EditorSceneManager()
 {
-    if (GetOpenScene() && GetOpenScene() != _GetActiveScene())
-    {
-        GameObject::Destroy( GetOpenScene() );
-    }
-
-    if (GetEditorScene() && GetEditorScene() != _GetActiveScene())
-    {
-        GameObject::Destroy( GetEditorScene() );
-    }
+    if (GetOpenScene()) { GameObject::Destroy( GetOpenScene() ); }
+    if (GetEditorScene()) { GameObject::Destroy( GetEditorScene() ); }
 }
 
 Scene *EditorSceneManager::GetOpenScene()
@@ -56,62 +54,26 @@ EditorScene *EditorSceneManager::_GetEditorScene() const
     return p_editorScene;
 }
 
-Scene *EditorSceneManager::_GetActiveScene() const
-{
-    return GetOpenScene();
-}
-
-void EditorSceneManager::_LoadSceneInstantly()
-{
-    ASSERT( GetNextLoadNeeded() );
-
-    SceneManager::PreLoadSceneInstantly();
-    if (_GetEditorScene())
-    {
-        _GetEditorScene()->SetOpenScene( GetNextLoadScene() );
-    }
-    else // Retrieve editor scene
-    {
-        p_editorScene = SCAST<EditorScene*>( GetNextLoadScene() );
-    }
-    SceneManager::PostLoadSceneInstantly();
-}
-
 void EditorSceneManager::SetActiveScene(Scene *activeScene)
 {
-    GetActive()->_SetActiveScene(activeScene);
-}
-
-Scene *EditorSceneManager::GetSceneToBeRenderedToWindow() const
-{
-    return GetEditorScene();
-}
-
-void EditorSceneManager::OnResize(int width, int height)
-{
-    if (GetOpenScene()) { GetOpenScene()->OnResize(width, height); }
-    if (GetEditorScene()) { GetEditorScene()->OnResize(width, height); }
-}
-
-void EditorSceneManager::Update()
-{
-    GetEditorBehaviourManager()->Update();
-
-    if (GetNextLoadNeeded())  {  _LoadSceneInstantly(); }
-    SceneManager::OnNewFrame( GetEditorScene(), true );
-    SceneManager::OnNewFrame( GetOpenScene(), true );
-}
-
-void EditorSceneManager::Render()
-{
-    EditorScene *edScene = EditorSceneManager::GetEditorScene();
-    edScene->RenderOpenScene();
-    SceneManager::Render();
+    GetActive()->SetActiveScene_(activeScene);
 }
 
 BehaviourManager *EditorSceneManager::CreateBehaviourManager() const
 {
     return new EditorBehaviourManager();
+}
+
+void EditorSceneManager::OnSceneLoaded(Scene *scene, const Path &sceneFilepath)
+{
+    if (_GetEditorScene())
+    {
+        _GetEditorScene()->SetOpenScene( GetLoadedScene() );
+    }
+    else // Retrieve editor scene
+    {
+        p_editorScene = SCAST<EditorScene*>( GetLoadedScene() );
+    }
 }
 
 EditorSceneManager *EditorSceneManager::GetActive()
