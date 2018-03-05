@@ -44,6 +44,7 @@ private:
 
     virtual Camera* GetSceneCamera(Scene *scene) = 0;
     virtual bool NeedsToRenderScene(Scene *scene) = 0;
+    virtual void OnRenderNeededSceneFinished();
 
     // ITransformListener
     void OnTransformChanged() override;

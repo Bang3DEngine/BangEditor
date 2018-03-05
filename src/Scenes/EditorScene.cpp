@@ -145,7 +145,7 @@ void EditorScene::Init()
 void EditorScene::BeforeRender()
 {
     Scene::BeforeRender();
-    RenderOpenScene();
+    RenderOpenSceneIfNeeded();
 }
 
 EditorScene::~EditorScene()
@@ -177,9 +177,8 @@ void EditorScene::Update()
 
         GetEditSceneGameObjects()->Update();
 
-        EditorSceneManager::SetActiveScene(this);
         GetSceneEditContainer()->HandleSelection();
-        EditorSceneManager::SetActiveScene(openScene);
+        EditorSceneManager::SetActiveScene(this);
 
         UnBindOpenScene();
     }
@@ -210,7 +209,7 @@ void EditorScene::OnResize(int newWidth, int newHeight)
     }
 }
 
-void EditorScene::RenderOpenScene()
+void EditorScene::RenderOpenSceneIfNeeded()
 {
     if ( GetOpenScene() )
     {
@@ -279,23 +278,21 @@ AARect EditorScene::GetOpenSceneWindowRectNDC() const
 
 void EditorScene::BindOpenScene()
 {
-    Scene *openScene = GetOpenScene();
-    if (openScene)
+    if ( GetOpenScene() )
     {
-        EditorSceneManager::SetActiveScene(openScene);
         PushGLViewport();
         SetViewportForOpenScene();
+        EditorSceneManager::SetActiveScene( GetOpenScene() );
     }
 }
 
 void EditorScene::UnBindOpenScene()
 {
-    Scene *openScene = GetOpenScene();
-    if (openScene)
+    if ( GetOpenScene() )
     {
+        EditorSceneManager::SetActiveScene(this);
         PopGLViewport();
     }
-    EditorSceneManager::SetActiveScene(this);
 }
 
 MenuBar *EditorScene::GetMenuBar() const { return m_menuBar; }
@@ -348,12 +345,16 @@ Editor *EditorScene::GetEditor() const { return m_editor; }
 
 void EditorScene::PushGLViewport()
 {
-    m_prevGLViewport = GL::GetViewportRect();
+    m_viewportsStack.push(GL::GetViewportRect());
 }
 
 void EditorScene::PopGLViewport()
 {
-    GL::SetViewport(m_prevGLViewport);
+    if (!m_viewportsStack.empty())
+    {
+        GL::SetViewport( m_viewportsStack.top() );
+        m_viewportsStack.pop();
+    }
 }
 
 void EditorScene::OnPlayStateChanged(PlayState previousPlayState,

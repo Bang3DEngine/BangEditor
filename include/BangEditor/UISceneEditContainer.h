@@ -32,8 +32,10 @@ public:
 private:
     UIImageRenderer *p_cameraPreviewImg = nullptr;
 
+    void RenderCameraPreviewIfSelected();
     Camera* GetSceneCamera(Scene *scene) override;
     bool NeedsToRenderScene(Scene *scene) override;
+    void OnRenderNeededSceneFinished() override;
 
     // IScenePlayerListener
     void OnPlayStateChanged(PlayState previousPlayState,

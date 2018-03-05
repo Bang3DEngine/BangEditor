@@ -44,48 +44,7 @@ UISceneEditContainer::~UISceneEditContainer()
 void UISceneEditContainer::Update()
 {
     GameObject::Update();
-
     SetScene( EditorSceneManager::GetOpenScene() );
-
-    GameObject *selectedGO = Editor::GetSelectedGameObject();
-    Camera *selectedCamera = selectedGO ? selectedGO->GetComponent<Camera>() :
-                                          nullptr;
-    // Camera preview handling
-    if (selectedCamera)
-    {
-        // Get preview texture
-        GBuffer *gbuffer = selectedCamera->GetGBuffer();
-        Texture2D *camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttColor);
-        camTexture->SetWrapMode( GL::WrapMode::Repeat );
-        p_cameraPreviewImg->SetImageTexture(camTexture);
-
-        // Set preview size
-        RectTransform *rt = GetRectTransform();
-        AARecti sceneContainerRect( rt->GetViewportRect() );
-        Vector2i sceneContainerSize = sceneContainerRect.GetSize();
-
-        Vector2i previewRectSize = sceneContainerSize / 4;
-        AARecti previewRectPx(sceneContainerRect.GetMax(),
-                            sceneContainerRect.GetMax() - Vector2i(previewRectSize));
-
-        previewRectPx.SetMin(sceneContainerRect.GetMin());
-        previewRectPx.SetMax(previewRectPx.GetMin() + Vector2i(previewRectSize));
-
-        const Vector2i marginsBotLeft = Vector2i(5);
-        p_cameraPreviewImg->GetGameObject()->GetRectTransform()->SetAnchors(
-           rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMin() + marginsBotLeft),
-           rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMax()));
-
-        gbuffer->Resize(previewRectPx.GetWidth(), previewRectPx.GetHeight());
-
-        // Render
-        AARecti prevViewport = GL::GetViewportRect();
-        GL::SetViewport(previewRectPx);
-        Scene *openScene = EditorSceneManager::GetOpenScene();
-        GEngine::GetActive()->Render(openScene, selectedCamera);
-        GL::SetViewport(prevViewport);
-    }
-    p_cameraPreviewImg->SetVisible( selectedCamera != nullptr );
 }
 
 void UISceneEditContainer::HandleSelection()
@@ -107,6 +66,47 @@ void UISceneEditContainer::HandleSelection()
     }
 }
 
+void UISceneEditContainer::RenderCameraPreviewIfSelected()
+{
+    GameObject *selectedGO = Editor::GetSelectedGameObject();
+    Camera *selectedCamera = selectedGO ? selectedGO->GetComponent<Camera>() :
+                                          nullptr;
+    // Camera preview handling
+    if (selectedCamera)
+    {
+        // Get preview texture
+        GBuffer *gbuffer = selectedCamera->GetGBuffer();
+        Texture2D *camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttColor);
+        camTexture->SetWrapMode( GL::WrapMode::Repeat );
+        p_cameraPreviewImg->SetImageTexture(camTexture);
+
+        // Set preview size
+        RectTransform *rt = GetRectTransform();
+        AARecti sceneContainerRect( rt->GetViewportRect() );
+        Vector2i sceneContainerSize = sceneContainerRect.GetSize();
+
+        Vector2i previewRectSize = sceneContainerSize / 4;
+        AARecti previewRectPx(sceneContainerRect.GetMax(),
+                              sceneContainerRect.GetMax() - Vector2i(previewRectSize));
+
+        previewRectPx.SetMin(sceneContainerRect.GetMin());
+        previewRectPx.SetMax(previewRectPx.GetMin() + Vector2i(previewRectSize));
+
+        const Vector2i marginsBotLeft = Vector2i(5);
+        p_cameraPreviewImg->GetGameObject()->GetRectTransform()->SetAnchors(
+           rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMin() + marginsBotLeft),
+           rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMax()));
+
+        gbuffer->Resize(previewRectPx.GetWidth(), previewRectPx.GetHeight());
+
+        // Render in the size of sceneEditContainer, since we have a miniature,
+        // but the canvas must be the same as in the scenePlayContainer size!!!
+        Scene *openScene = EditorSceneManager::GetOpenScene();
+        GEngine::GetActive()->Render(openScene, selectedCamera);
+    }
+    p_cameraPreviewImg->SetVisible( selectedCamera != nullptr );
+}
+
 Camera* UISceneEditContainer::GetSceneCamera(Scene *scene)
 {
     Camera *editorCamera = EditorCamera::GetInstance()->GetCamera();
@@ -117,6 +117,11 @@ Camera* UISceneEditContainer::GetSceneCamera(Scene *scene)
 bool UISceneEditContainer::NeedsToRenderScene(Scene *scene)
 {
     return IsVisible();
+}
+
+void UISceneEditContainer::OnRenderNeededSceneFinished()
+{
+    RenderCameraPreviewIfSelected();
 }
 
 void UISceneEditContainer::OnPlayStateChanged(PlayState, PlayState)

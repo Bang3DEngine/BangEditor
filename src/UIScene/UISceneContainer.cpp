@@ -59,11 +59,14 @@ UISceneContainer::~UISceneContainer()
 
 void UISceneContainer::RenderIfNeeded()
 {
-    SetScene( GetContainedScene() );
     if ( NeedsToRenderScene( GetContainedScene() ) )
     {
         Camera *cam = GetSceneCamera(GetContainedScene());
-        if (cam) { GEngine::GetActive()->Render(GetContainedScene(), cam); }
+        if (cam)
+        {
+            GEngine::GetActive()->Render(GetContainedScene(), cam);
+            OnRenderNeededSceneFinished();
+        }
     }
 }
 
@@ -95,6 +98,10 @@ AARect UISceneContainer::GetSceneImageRectNDC() const
 UISceneToolbar *UISceneContainer::GetSceneToolbar() const
 {
     return p_sceneToolbar;
+}
+
+void UISceneContainer::OnRenderNeededSceneFinished()
+{
 }
 
 void UISceneContainer::OnTransformChanged()
