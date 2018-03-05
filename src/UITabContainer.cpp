@@ -82,7 +82,12 @@ void UITabContainer::AddTab(const String &title, GameObject *tabbedChild)
         tabHeader->EventEmitter<ITabHeaderListener>::RegisterListener(this);
 
         tabbedChild->SetParent( GetHiddenTabsContainer() );
-        if (!GetCurrentTabChild()) { SetCurrentTabChild(tabbedChild); }
+        if (!GetCurrentTabChild())
+        {
+            SetCurrentTabChild(tabbedChild);
+            tabbedChild->SetVisible(true);
+        }
+        else { tabbedChild->SetVisible(false); }
     }
 }
 
