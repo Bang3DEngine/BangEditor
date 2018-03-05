@@ -142,12 +142,6 @@ void EditorScene::Init()
     ScenePlayer::StopScene();
 }
 
-void EditorScene::BeforeRender()
-{
-    Scene::BeforeRender();
-    RenderOpenSceneIfNeeded();
-}
-
 EditorScene::~EditorScene()
 {
     delete m_editor;
@@ -156,6 +150,12 @@ EditorScene::~EditorScene()
     delete m_sceneOpenerSaver;
     delete m_editorFileTracker;
     delete m_editSceneGameObjects;
+}
+
+void EditorScene::BeforeRender()
+{
+    Scene::BeforeRender();
+    RenderOpenSceneIfNeeded();
 }
 
 void EditorScene::Update()

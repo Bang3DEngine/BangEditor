@@ -92,6 +92,7 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
         previewRectPx.SetMin(sceneContainerRect.GetMin());
         previewRectPx.SetMax(previewRectPx.GetMin() + Vector2i(previewRectSize));
 
+        // Add a bit of margin
         const Vector2i marginsBotLeft = Vector2i(5);
         p_cameraPreviewImg->GetGameObject()->GetRectTransform()->SetAnchors(
            rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMin() + marginsBotLeft),
