@@ -7,6 +7,8 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Light;
+FORWARD class UISlider;
+FORWARD class UIComboBox;
 FORWARD class UIInputNumber;
 FORWARD NAMESPACE_BANG_END
 
@@ -36,6 +38,8 @@ protected:
 private:
     UIInputNumber *p_intensityInput = nullptr;
     UIInputColor *p_colorInput = nullptr;
+    UISlider *p_shadowBiasInput = nullptr;
+    UIComboBox *p_shadowTypeInput = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END
