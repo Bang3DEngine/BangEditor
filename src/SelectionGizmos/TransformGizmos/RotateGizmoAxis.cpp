@@ -5,6 +5,7 @@
 #include "Bang/Input.h"
 #include "Bang/Camera.h"
 #include "Bang/GEngine.h"
+#include "Bang/Geometry.h"
 #include "Bang/Material.h"
 #include "Bang/Resources.h"
 #include "Bang/Transform.h"
@@ -44,14 +45,6 @@ RotateGizmoAxis::~RotateGizmoAxis()
 {
 }
 
-Vector3 GetProjectedPointIntoSphere(const Vector3 &point,
-                                    const Sphere &sphere)
-{
-    Vector3 closestRayPointToSphereV = sphere.GetCenter() - point;
-    Vector3 closestRayPointToSphereDir = closestRayPointToSphereV.Normalized();
-    return sphere.GetCenter() - closestRayPointToSphereDir * sphere.GetRadius();
-}
-
 Vector3 GetAxisedSpherePoint(const Vector3 &spherePoint,
                              const Vector3 &axisWorld,
                              const Sphere &sphere)
@@ -76,13 +69,14 @@ Vector3 GetAxisedSpherePointFromMousePosNDC(const Camera *cam,
     // with the sphere
     bool intersected;
     Vector3 spherePoint;
-    mouseRay.GetIntersectionWithSphere(sphere, &intersected, &spherePoint);
+    Geometry::RaySphere(mouseRay, sphere, &intersected, &spherePoint);
     if (!intersected)
     {
         // If it did not intersect, find closest sphere point to ray
         Vector3 closestRayPointToSphere =
-                        mouseRay.GetClosestPointToPoint(sphere.GetCenter());
-        spherePoint = GetProjectedPointIntoSphere(closestRayPointToSphere, sphere);
+                Geometry::RayClosestPointTo(mouseRay, sphere.GetCenter());
+        spherePoint = Geometry::PointProjectedToSphere(closestRayPointToSphere,
+                                                            sphere);
     }
 
     // Get the sphere point but constrained on the axis (over rotation plane)
@@ -141,9 +135,9 @@ void RotateGizmoAxis::Update()
                 (displacedMouseAxisedSpherePoint - rotationSphere.GetCenter());
 
             Vector3 startDirLocal = GetTransform()->FromWorldToLocalDirection(
-                                            sphereCenterToStartAxisedSpherePoint);
-            Vector3 newDirLocal = GetTransform()->FromWorldToLocalDirection(
-                                            sphereCenterToCurrentAxisedSpherePoint);
+                                       sphereCenterToStartAxisedSpherePoint);
+            Vector3 newDirLocal   = GetTransform()->FromWorldToLocalDirection(
+                                       sphereCenterToCurrentAxisedSpherePoint);
             startDirLocal.Normalize();
             newDirLocal.Normalize();
 

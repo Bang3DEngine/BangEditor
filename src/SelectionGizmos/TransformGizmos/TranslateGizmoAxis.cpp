@@ -8,6 +8,7 @@
 #include "Bang/Camera.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
+#include "Bang/Geometry.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/Selection.h"
@@ -81,7 +82,7 @@ void TranslateGizmoAxis::Update()
 
         bool intersected;
         Vector3 intersection;
-        mouseRay.GetIntersectionWithPlane(plane, &intersected, &intersection);
+        Geometry::RayPlane(mouseRay, plane, &intersected, &intersection);
 
         // Then, move the object to the intersection
         if (intersected)
