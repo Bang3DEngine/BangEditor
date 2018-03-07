@@ -4,6 +4,7 @@
 #include "Bang/Ray.h"
 #include "Bang/Mesh.h"
 #include "Bang/Input.h"
+#include "Bang/Plane.h"
 #include "Bang/Camera.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
@@ -66,10 +67,13 @@ void TranslateGizmoAxis::Update()
         // camera the most.
         Camera *cam = GetEditorCamera();
         Transform *camT = cam->GetGameObject()->GetTransform();
-        Vector3 planeNormal = Vector3::Cross( GetAxisVectorWorld(),
-                                Vector3::Cross(camT->GetForward(),
-                                               GetAxisVectorWorld())).Normalized();
         Vector3 refGoCenter = GetReferencedGameObject()->GetTransform()->GetPosition();
+
+        Plane plane;
+        plane.SetNormal(Vector3::Cross( GetAxisVectorWorld(),
+                                Vector3::Cross(camT->GetForward(),
+                                               GetAxisVectorWorld())).Normalized());
+        plane.SetPoint(refGoCenter);
 
         // Then cast a ray through the mouse position, and see where it intersects
         // with this plane.
@@ -77,8 +81,7 @@ void TranslateGizmoAxis::Update()
 
         bool intersected;
         Vector3 intersection;
-        mouseRay.GetIntersectionWithPlane(refGoCenter, planeNormal,
-                                          &intersected, &intersection);
+        mouseRay.GetIntersectionWithPlane(plane, &intersected, &intersection);
 
         // Then, move the object to the intersection
         if (intersected)

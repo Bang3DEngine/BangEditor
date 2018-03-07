@@ -4,7 +4,9 @@
 #include "Bang/Ray.h"
 #include "Bang/Mesh.h"
 #include "Bang/Input.h"
+#include "Bang/Plane.h"
 #include "Bang/Camera.h"
+#include "Bang/Sphere.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
 #include "Bang/Material.h"
@@ -82,19 +84,20 @@ void ScaleGizmoAxis::Update()
             m_startGrabLocalScale = refGoT->GetLocalScale();
         }
 
-        Vector3 planeNormal;
+        Plane plane;
+        plane.SetPoint(refGoCenter);
         if (GetAxis() != Axis3DExt::XYZ)
         {
             // Find the plane parallel to the axes, and which faces the
             // camera the most.
-            planeNormal = Vector3::Cross( GetAxisVectorWorld(),
+            plane.SetNormal(Vector3::Cross( GetAxisVectorWorld(),
                             Vector3::Cross(camT->GetForward(),
-                                           GetAxisVectorWorld())).Normalized();
+                                           GetAxisVectorWorld())).Normalized());
         }
         else
         {
             // Plane parallel to camera plane
-            planeNormal = (camT->GetPosition() - refGoCenter).NormalizedSafe();
+            plane.SetNormal( (camT->GetPosition() - refGoCenter).NormalizedSafe() );
         }
 
         // Then cast a ray through the mouse position, and see where it intersects
@@ -103,8 +106,7 @@ void ScaleGizmoAxis::Update()
 
         bool intersected;
         Vector3 intersection;
-        mouseRay.GetIntersectionWithPlane(refGoCenter, planeNormal,
-                                          &intersected, &intersection);
+        mouseRay.GetIntersectionWithPlane(plane, &intersected, &intersection);
 
         if (GetAxis() != Axis3DExt::XYZ)
         {

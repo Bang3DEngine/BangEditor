@@ -45,32 +45,30 @@ RotateGizmoAxis::~RotateGizmoAxis()
 }
 
 Vector3 GetProjectedPointIntoSphere(const Vector3 &point,
-                                    const Vector3 &sphereCenter,
-                                    float sphereRadius)
+                                    const Sphere &sphere)
 {
-    Vector3 closestRayPointToSphereV = sphereCenter - point;
+    Vector3 closestRayPointToSphereV = sphere.GetCenter() - point;
     Vector3 closestRayPointToSphereDir = closestRayPointToSphereV.Normalized();
-    return sphereCenter - closestRayPointToSphereDir * sphereRadius;
+    return sphere.GetCenter() - closestRayPointToSphereDir * sphere.GetRadius();
 }
 
 Vector3 GetAxisedSpherePoint(const Vector3 &spherePoint,
                              const Vector3 &axisWorld,
-                             const Vector3 &sphereCenter,
-                             float sphereRadius)
+                             const Sphere &sphere)
 {
     // Returns the point in the sphere over the specified axis (i.e., on the
     // plane with normal axisWorld)
     Vector3 axisedSpherePoint = spherePoint.ProjectedOnPlane(axisWorld,
-                                                             sphereCenter);
-    return sphereCenter + (axisedSpherePoint - sphereCenter).Normalized() *
-           sphereRadius;
+                                                             sphere.GetCenter());
+    return  sphere.GetCenter() +
+           (axisedSpherePoint - sphere.GetCenter()).Normalized() *
+            sphere.GetRadius();
 }
 
 Vector3 GetAxisedSpherePointFromMousePosNDC(const Camera *cam,
                                             const Vector2 &mousePosNDC,
                                             const Vector3 &axis,
-                                            const Vector3 &sphereCenter,
-                                            float sphereRadius)
+                                            const Sphere &sphere)
 {
     Ray mouseRay = cam->FromViewportPointNDCToRay(mousePosNDC);
 
@@ -78,20 +76,17 @@ Vector3 GetAxisedSpherePointFromMousePosNDC(const Camera *cam,
     // with the sphere
     bool intersected;
     Vector3 spherePoint;
-    mouseRay.GetIntersectionWithSphere(sphereCenter, sphereRadius,
-                                       &intersected, &spherePoint);
+    mouseRay.GetIntersectionWithSphere(sphere, &intersected, &spherePoint);
     if (!intersected)
     {
         // If it did not intersect, find closest sphere point to ray
-        Vector3 closestRayPointToSphere = mouseRay.GetClosestPointToPoint(sphereCenter);
-        spherePoint = GetProjectedPointIntoSphere(closestRayPointToSphere,
-                                                  sphereCenter, sphereRadius);
+        Vector3 closestRayPointToSphere =
+                        mouseRay.GetClosestPointToPoint(sphere.GetCenter());
+        spherePoint = GetProjectedPointIntoSphere(closestRayPointToSphere, sphere);
     }
 
     // Get the sphere point but constrained on the axis (over rotation plane)
-    Vector3 axisedSpherePoint = GetAxisedSpherePoint(spherePoint, axis,
-                                                     sphereCenter,
-                                                     sphereRadius);
+    Vector3 axisedSpherePoint = GetAxisedSpherePoint(spherePoint, axis, sphere);
 
     return axisedSpherePoint;
 }
@@ -106,14 +101,16 @@ void RotateGizmoAxis::Update()
     {
         GameObject *refGo = GetReferencedGameObject();
         Transform *refGoT = refGo->GetTransform();
-        Vector3 sphereCenter = refGoT->GetPosition();
 
         Camera *cam = GetEditorCamera();
         const Vector2 mousePos = Input::GetMousePositionNDC();
 
         TransformGizmo *tg = SCAST<TransformGizmo*>(GetParent()->GetParent()->
                                                     GetParent());
-        const float SphereRadius = tg->GetScaleFactor() * 1.0f;
+
+        Sphere rotationSphere;
+        rotationSphere.SetCenter( refGoT->GetPosition() );
+        rotationSphere.SetRadius( tg->GetScaleFactor() * 1.0f );
 
         if (GrabHasJustChanged())
         {
@@ -121,8 +118,7 @@ void RotateGizmoAxis::Update()
             m_startingGrabAxisedSpherePoint =
                     GetAxisedSpherePointFromMousePosNDC(cam, mousePos,
                                                         GetAxisVectorWorld(),
-                                                        sphereCenter,
-                                                        SphereRadius);
+                                                        rotationSphere);
         }
         else
         {
@@ -134,16 +130,15 @@ void RotateGizmoAxis::Update()
                     GetAxisedSpherePointFromMousePosNDC(cam,
                                                         displacedMousePosition,
                                                         GetAxisVectorWorld(),
-                                                        sphereCenter,
-                                                        SphereRadius);
+                                                        rotationSphere);
 
             // Now that we have the two points (starting and new displaced), get
             // the 2 vectors from the center outwards, and just apply the rotation
             // using a Quaternion From starting To new_displaced_sphere_position
             Vector3 sphereCenterToStartAxisedSpherePoint =
-                    (m_startingGrabAxisedSpherePoint - sphereCenter);
+                (m_startingGrabAxisedSpherePoint - rotationSphere.GetCenter());
             Vector3 sphereCenterToCurrentAxisedSpherePoint =
-                    (displacedMouseAxisedSpherePoint - sphereCenter);
+                (displacedMouseAxisedSpherePoint - rotationSphere.GetCenter());
 
             Vector3 startDirLocal = GetTransform()->FromWorldToLocalDirection(
                                             sphereCenterToStartAxisedSpherePoint);
