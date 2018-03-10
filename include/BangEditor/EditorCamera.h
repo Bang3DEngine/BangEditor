@@ -59,7 +59,7 @@ private:
     Vector2 m_mouseRotDegreesPerPixel = Vector2(0.0f); // Parameter
 
     // Zoom
-    float m_mouseZoomPerDeltaWheel = 0.2f;
+    float m_mouseZoomPerDeltaWheel = 1.0f;
     float m_zoomCurrentSpeed = 0.0f;
 
     float m_orthoHeight = 30.0f;

@@ -6,10 +6,10 @@
 #include "BangEditor/CIWLight.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UISlider;
 FORWARD class DirectionalLight;
 FORWARD NAMESPACE_BANG_END
 
-USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class CIWDirectionalLight : public CIWLight
@@ -22,6 +22,8 @@ public:
     virtual void UpdateFromReference() override;
 
 private:
+    UISlider *p_shadowDistanceInput = nullptr;
+
     DirectionalLight *GetDirectionalLight() const;
 
     // IValueChangedListener
