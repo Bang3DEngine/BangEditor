@@ -69,7 +69,7 @@ Vector3 GetAxisedSpherePointFromMousePosNDC(const Camera *cam,
     // with the sphere
     bool intersected;
     Vector3 spherePoint;
-    Geometry::RaySphere(mouseRay, sphere, &intersected, &spherePoint);
+    Geometry::IntersectRaySphere(mouseRay, sphere, &intersected, &spherePoint);
     if (!intersected)
     {
         // If it did not intersect, find closest sphere point to ray

@@ -1,5 +1,6 @@
 #include "BangEditor/EditorPaths.h"
 
+#include "Bang/Debug.h"
 #include "BangEditor/EditorApplication.h"
 
 USING_NAMESPACE_BANG
@@ -16,6 +17,7 @@ EditorPaths::~EditorPaths()
 void EditorPaths::InitEditorPath(const Path &editorRootPath)
 {
     c_editorRoot = editorRootPath;
+    Debug_Log("Picking as EditorPaths Bang Editor Root: '" << GetEditorDir() << "'");
 }
 
 List<Path> EditorPaths::GetEditorIncludeDirs()

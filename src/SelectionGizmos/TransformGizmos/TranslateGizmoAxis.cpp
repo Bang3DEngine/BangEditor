@@ -82,7 +82,7 @@ void TranslateGizmoAxis::Update()
 
         bool intersected;
         Vector3 intersection;
-        Geometry::RayPlane(mouseRay, plane, &intersected, &intersection);
+        Geometry::IntersectRayPlane(mouseRay, plane, &intersected, &intersection);
 
         // Then, move the object to the intersection
         if (intersected)

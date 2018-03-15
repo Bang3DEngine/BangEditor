@@ -107,7 +107,7 @@ void ScaleGizmoAxis::Update()
 
         bool intersected;
         Vector3 intersection;
-        Geometry::RayPlane(mouseRay, plane, &intersected, &intersection);
+        Geometry::IntersectRayPlane(mouseRay, plane, &intersected, &intersection);
 
         if (GetAxis() != Axis3DExt::XYZ)
         {

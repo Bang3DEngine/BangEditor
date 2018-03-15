@@ -1,8 +1,89 @@
+#=================================================================
+# CMake options ==================================================
+#=================================================================
 cmake_minimum_required(VERSION 2.8)
+set(CMAKE_VERBOSE_MAKEFILE on)
+#=================================================================
+#=================================================================
+#=================================================================
 
+#=================================================================
+# CMake Includes =================================================
+#=================================================================
+include(CMakeConfig.txt REQUIRED)
+include(${BANG_PROJECT_ROOT}/CMakeIncludes/CMakeMacros.cmake REQUIRED)
+#=================================================================
+#=================================================================
+#=================================================================
+
+#=================================================================
+# Check input params =============================================
+#=================================================================
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
+    message(FATAL_ERROR "Please specify the build type -DCMAKE_BUILD_TYPE=(Debug|Release|RelWithDebInfo)")
+endif()
+
+if (NOT EXISTS "${CMAKE_SOURCE_DIR}/CMakeConfig.txt")
+    message(FATAL_ERROR "Can't find \"CMakeConfig.txt\". ${PLEASE_SET_PATH_MSG}")
+endif ()
+
+if (NOT EXISTS "${BANG_PROJECT_ROOT}")
+    set(PLEASE_SET_PATH_MSG "Please, set the correct Bang root path using \"scripts/set-bang-path.sh\". Current path: " ${BANG_PROJECT_ROOT})
+endif ()
+#=================================================================
+#=================================================================
+#=================================================================
+
+#=================================================================
+# Bang CMake =====================================================
+#=================================================================
+set(BANG_DIR ${BANG_PROJECT_ROOT})
+include(${BANG_PROJECT_ROOT}/CMakeLists.txt)
+#=================================================================
+#=================================================================
+#=================================================================
+
+#=================================================================
+# General variables ==============================================
+#=================================================================
 project(BangEditor C CXX)
 
-set(CMAKE_BINARY_DIR bin)
+set(SRC_DIR "src")
+
+# Output params
+message("===========================================")
+message("CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
+message("CMAKE_BINARY_DIR: " ${CMAKE_BINARY_DIR})
+message("EXECUTABLE_OUTPUT_PATH: " ${EXECUTABLE_OUTPUT_PATH})
+message("LIBRARY_OUTPUT_PATH: " ${LIBRARY_OUTPUT_PATH})
+message("PROJECT_SOURCE_DIR: " ${PROJECT_SOURCE_DIR})
+message("SRC_DIR: " ${SRC_DIR})
+message("===========================================")
+
+if (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    add_definitions(-DGPROF)
+    link_libraries("profiler") # gperftools
+endif()
+
+message("Building BangEditor in ${CMAKE_BUILD_TYPE} mode...")
+#=================================================================
+#=================================================================
+#=================================================================
+
+#=================================================================
+# Includes =======================================================
+#=================================================================
+set(INCLUDE_ROOT "${CMAKE_SOURCE_DIR}/include")
+include_directories("${INCLUDE_ROOT}")
+include_directories("${BANG_PROJECT_ROOT}/include")
+add_definitions(-DBANG_PROJECT_ROOT="${BANG_PROJECT_ROOT}")
+#=================================================================
+#=================================================================
+#=================================================================
+
+#=================================================================
+# Flags ==========================================================
+#=================================================================
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -Wl,-O0 -g")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=undefined")
@@ -14,40 +95,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=integer-divide-by
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=return")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=null")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2 -Wl,-O2")
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-
-set(PLEASE_SET_PATH_MSG "Please, set the correct Bang root path using \"scripts/set-bang-path.sh\"")
-
-if (NOT EXISTS "${CMAKE_SOURCE_DIR}/CMakeConfig.txt")
-	message(FATAL_ERROR "Can't find \"CMakeConfig.txt\". ${PLEASE_SET_PATH_MSG}")
-endif ()
-
-include(CMakeConfig.txt REQUIRED)
-
-# Compile Bang, if BANG_PROJECT_ROOT is set
-if (NOT "${BANG_PROJECT_ROOT}" STREQUAL "")
-	set(BANG_COMPILE_SCRIPT "${BANG_PROJECT_ROOT}/scripts/compile.sh")
-        set(BANG_CLEAN_SCRIPT "${BANG_PROJECT_ROOT}/scripts/clean.sh")
-	if (NOT EXISTS "${BANG_COMPILE_SCRIPT}")
-	   message(FATAL_ERROR "Can't find ${BANG_COMPILE_SCRIPT} to compile Bang. ${PLEASE_SET_PATH_MSG}")
-	endif ()
-endif ()
-
-message("Compiling Bang using ${BANG_COMPILE_SCRIPT}")
-add_custom_target(CompileBang ALL "${BANG_COMPILE_SCRIPT}" "${CMAKE_BUILD_TYPE}")
-
-set(SRC_DIR "src")
-
-if (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-    add_definitions(-DGPROF)
-    link_libraries("profiler") # gperftools
-endif()
-
-set(INCLUDE_ROOT "${CMAKE_SOURCE_DIR}/include")
-include_directories("${INCLUDE_ROOT}")
-include_directories("${BANG_PROJECT_ROOT}/include")
-add_definitions(-DBANG_PROJECT_ROOT="${BANG_PROJECT_ROOT}")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Wl,-O3")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
@@ -58,27 +106,24 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wswitch")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--export-dynamic")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+#=================================================================
+#=================================================================
+#=================================================================
 
-macro(add_info_files)
-     foreach(_it ${ARGN})
-         if(NOT IS_DIRECTORY ${_it})
-             get_filename_component(name ${_it} NAME)
-             if(NOT ${_it} MATCHES "^/\\\\..*$;~$")
-                set_source_files_properties(${_it} PROPERTIES HEADER_FILE_ONLY TRUE)
-             endif()
-         endif()
-     endforeach()
-endmacro()
+#=================================================================
+# Add misc files =================================================
+#=================================================================
 file(GLOB_RECURSE OTHER_FILES "${INCLUDE_ROOT}/BangEditor/*.h")
 set(OTHER_FILES README.md "${OTHER_FILES}")
 add_info_files(${OTHER_FILES})
+#=================================================================
+#=================================================================
+#=================================================================
 
-message("Building BangEditor in ${CMAKE_BUILD_TYPE} mode...")
-set(BANG_LIBS_DIR "${BANG_PROJECT_ROOT}/bin/${CMAKE_BUILD_TYPE}/lib")
-set(BANG_LIB_NAME "libBang.so")
-link_libraries("${BANG_LIBS_DIR}/${BANG_LIB_NAME}")
-
-add_executable(BangEditor
+#=================================================================
+# BangEngine sources =============================================
+#=================================================================
+set(EDITOR_SRC_FILES
 ${SRC_DIR}/Behaviours/BehaviourCreator.cpp
 ${SRC_DIR}/Behaviours/BehaviourTracker.cpp
 ${SRC_DIR}/Behaviours/EditorBehaviourManager.cpp
@@ -166,8 +211,21 @@ ${SRC_DIR}/Main.cpp
 
 ${OTHER_FILES}
 )
-add_dependencies(BangEditor CompileBang)
+#=================================================================
+#=================================================================
+#=================================================================
+
+#=================================================================
+#Executables =====================================================
+#=================================================================
+link_libraries(BangSharedLib)
+
+add_executable(BangEditor ${EDITOR_SRC_FILES})
+add_dependencies(BangEditor BangEngineObjects)
 
 add_executable(Game ${SRC_DIR}/MainGame.cpp)
-add_dependencies(Game CompileBang)
+add_dependencies(Game BangEngineObjects)
+#=================================================================
+#=================================================================
+#=================================================================
 

@@ -31,7 +31,6 @@ void EditorApplication::Init(const Path &engineRootPath)
     Application::Init(engineRootPath);
 
     GetEditorPaths()->InitEditorPath( Paths::GetExecutablePath().GetDirectory()
-                                                                .GetDirectory()
                                                                 .GetDirectory());
     ImportFilesManager::CreateMissingImportFiles( EditorPaths::GetEditorResourcesDir() );
     ImportFilesManager::LoadImportFilepathGUIDs( EditorPaths::GetEditorResourcesDir() );
