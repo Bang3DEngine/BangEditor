@@ -43,14 +43,14 @@ const Path &EditorPaths::GetEditorDir()
     return EditorPaths::GetInstance()->c_editorRoot;
 }
 
-Path EditorPaths::GetEditorResourcesDir()
+Path EditorPaths::GetEditorAssetsDir()
 {
-    return GetEditorDir().Append("res");
+    return GetEditorDir().Append("Assets");
 }
 
 Path EditorPaths::CreateEditorPath(const String &path)
 {
-    return EditorPaths::GetEditorResourcesDir().Append(path);
+    return EditorPaths::GetEditorAssetsDir().Append(path);
 }
 
 EditorPaths *EditorPaths::GetInstance()

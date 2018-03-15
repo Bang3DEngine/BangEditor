@@ -10,7 +10,7 @@ set(CMAKE_VERBOSE_MAKEFILE on)
 #=================================================================
 # CMake Includes =================================================
 #=================================================================
-include(CMakeConfig.txt REQUIRED)
+include(CMakeIncludes/CMakeConfig.txt REQUIRED)
 include(${BANG_PROJECT_ROOT}/CMakeIncludes/CMakeMacros.cmake REQUIRED)
 #=================================================================
 #=================================================================
@@ -23,12 +23,8 @@ if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
     message(FATAL_ERROR "Please specify the build type -DCMAKE_BUILD_TYPE=(Debug|Release|RelWithDebInfo)")
 endif()
 
-if (NOT EXISTS "${CMAKE_SOURCE_DIR}/CMakeConfig.txt")
-    message(FATAL_ERROR "Can't find \"CMakeConfig.txt\". ${PLEASE_SET_PATH_MSG}")
-endif ()
-
 if (NOT EXISTS "${BANG_PROJECT_ROOT}")
-    set(PLEASE_SET_PATH_MSG "Please, set the correct Bang root path using \"scripts/set-bang-path.sh\". Current path: " ${BANG_PROJECT_ROOT})
+    set(PLEASE_SET_PATH_MSG "Please, set the correct Bang root path using \"scripts/setBangPath.sh\". Current path: " ${BANG_PROJECT_ROOT})
 endif ()
 #=================================================================
 #=================================================================
@@ -221,10 +217,10 @@ ${OTHER_FILES}
 link_libraries(BangSharedLib)
 
 add_executable(BangEditor ${EDITOR_SRC_FILES})
-add_dependencies(BangEditor BangEngineObjects)
+add_dependencies(BangEditor BangSharedLib)
 
 add_executable(Game ${SRC_DIR}/MainGame.cpp)
-add_dependencies(Game BangEngineObjects)
+add_dependencies(Game BangSharedLib)
 #=================================================================
 #=================================================================
 #=================================================================

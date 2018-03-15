@@ -61,7 +61,7 @@ void BehaviourCreator::CreateNewBehaviour(const Path &dirPath,
 
 String BehaviourCreator::GetNewBehaviourHeaderCode(const String &behaviourName)
 {
-    Path templatePath = EditorPaths::GetEditorResourcesDir().
+    Path templatePath = EditorPaths::GetEditorAssetsDir().
                                      Append("Templates").
                                      Append("BehaviourTemplates").
                                      Append("Header").
@@ -75,7 +75,7 @@ String BehaviourCreator::GetNewBehaviourHeaderCode(const String &behaviourName)
 
 String BehaviourCreator::GetNewBehaviourSourceCode(const String &behaviourName)
 {
-    Path templatePath = EditorPaths::GetEditorResourcesDir().
+    Path templatePath = EditorPaths::GetEditorAssetsDir().
                                      Append("Templates").
                                      Append("BehaviourTemplates").
                                      Append("Source").

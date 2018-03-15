@@ -16,7 +16,7 @@ public:
     void InitEditorPath(const Path &editorRootPath);
 
     static const Path& GetEditorDir();
-    static Path GetEditorResourcesDir();
+    static Path GetEditorAssetsDir();
 
     static List<Path> GetEditorIncludeDirs();
     static Path GetEditorBinaryDir(BinType binaryType);

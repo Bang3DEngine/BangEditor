@@ -136,9 +136,8 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
     if (!File::CreateDirectory(dataDir)) { return false; }
 
     // Copy the Engine Assets in the Data directory
-    Path gameDataResDir = dataDir.Append("res");
-    Path gameDataEngineAssetsDir = gameDataResDir.Append("EngineAssets");
-    if (!File::CreateDirectory(gameDataResDir)) { return false; }
+    Path gameDataEngineAssetsDir = dataDir.Append("Assets");
+    if (!File::CreateDirectory(gameDataEngineAssetsDir)) { return false; }
     if (!File::DuplicateDir(Paths::GetEngineAssetsDir(), gameDataEngineAssetsDir))
     {
         Debug_Error("Could not duplicate engine assets directory '" <<

@@ -23,11 +23,7 @@ int main(int, char **)
     if (!dataDir.IsDir())
     { Debug_Error("Could not find data directory '" << dataDir << "'."); return 1; }
 
-    Path resDir = dataDir.Append("res");
-    if (!resDir.IsDir())
-    { Debug_Error("Could not find resources directory '" << resDir << "'."); return 2; }
-
-    Path engineAssetsDir = resDir.Append("EngineAssets");
+    Path engineAssetsDir = dataDir.Append("EngineAssets");
     if (!engineAssetsDir.IsDir())
     { Debug_Error("Could not find engine assets directory '" << engineAssetsDir << "'."); return 3; }
 

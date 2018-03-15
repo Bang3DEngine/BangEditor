@@ -120,7 +120,7 @@ RH<Texture2D> EditorIconManager::GetComponentIcon(const String &componentName)
 RH<Texture2D> EditorIconManager::GetIconTexture(const String &filename)
 {
     return IconManager::GetIconTexture(filename,
-                                       EditorPaths::GetEditorResourcesDir().
+                                       EditorPaths::GetEditorAssetsDir().
                                        Append("Icons"));
 }
 
