@@ -31,7 +31,6 @@ include(${BANG_PROJECT_ROOT}/CMakeIncludes/CMakeCheckInputParams.cmake)
 #=================================================================
 # Bang CMake =====================================================
 #=================================================================
-set(BANG_DIR ${BANG_PROJECT_ROOT})
 include(${BANG_PROJECT_ROOT}/CMakeLists.txt)
 #=================================================================
 #=================================================================
@@ -217,11 +216,12 @@ ${OTHER_FILES}
 link_libraries(BangLib)
 link_libraries(${ALL_DEPENDENCIES_LIB_FILES})
 
+message("AAAAAAAAAAAAAA " ${ALL_DEPENDENCIES_LIB_FILES})
 add_executable(BangEditor ${EDITOR_SRC_FILES})
 add_executable(Game ${SRC_DIR}/MainGame.cpp)
 
-add_dependencies(BangEditor BangLib)
-add_dependencies(Game BangLib)
+add_dependencies(BangEditor BangLib ${ALL_DEPENDENCIES_LIB_FILES})
+add_dependencies(Game BangLib ${ALL_DEPENDENCIES_LIB_FILES})
 
 #=================================================================
 #=================================================================
