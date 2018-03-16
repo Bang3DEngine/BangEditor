@@ -15,6 +15,8 @@ public:
 	virtual ~EditorResources();
 
 private:
+    virtual MeshFactory* CreateMeshFactory() const override;
+
     Array<Path> GetLookUpPaths() const override;
 };
 

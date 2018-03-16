@@ -19,13 +19,11 @@ include(${BANG_PROJECT_ROOT}/CMakeIncludes/CMakeMacros.cmake REQUIRED)
 #=================================================================
 # Check input params =============================================
 #=================================================================
-if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
-    message(FATAL_ERROR "Please specify the build type -DCMAKE_BUILD_TYPE=(Debug|Release|RelWithDebInfo)")
-endif()
-
 if (NOT EXISTS "${BANG_PROJECT_ROOT}")
-    set(PLEASE_SET_PATH_MSG "Please, set the correct Bang root path using \"scripts/setBangPath.sh\". Current path: " ${BANG_PROJECT_ROOT})
+    message(FATAL_ERROR "Please, set the correct Bang root path using \"scripts/setBangPath.sh\". Current path: " ${BANG_PROJECT_ROOT})
 endif ()
+
+include(${BANG_PROJECT_ROOT}/CMakeIncludes/CMakeCheckInputParams.cmake)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -48,6 +46,7 @@ set(SRC_DIR "src")
 
 # Output params
 message("===========================================")
+message("BUILD_SHARED_LIBS: " ${BUILD_SHARED_LIBS})
 message("CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
 message("CMAKE_BINARY_DIR: " ${CMAKE_BINARY_DIR})
 message("EXECUTABLE_OUTPUT_PATH: " ${EXECUTABLE_OUTPUT_PATH})
@@ -61,7 +60,6 @@ if (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     link_libraries("profiler") # gperftools
 endif()
 
-message("Building BangEditor in ${CMAKE_BUILD_TYPE} mode...")
 #=================================================================
 #=================================================================
 #=================================================================
@@ -111,7 +109,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 #=================================================================
 file(GLOB_RECURSE OTHER_FILES "${INCLUDE_ROOT}/BangEditor/*.h")
 set(OTHER_FILES README.md "${OTHER_FILES}")
-add_info_files(${OTHER_FILES})
+AddMiscFiles(${OTHER_FILES})
 #=================================================================
 #=================================================================
 #=================================================================
@@ -131,6 +129,7 @@ ${SRC_DIR}/EditorClipboard.cpp
 ${SRC_DIR}/EditorDialog.cpp
 ${SRC_DIR}/EditorFileTracker.cpp
 ${SRC_DIR}/EditorIconManager.cpp
+${SRC_DIR}/EditorMeshFactory.cpp
 ${SRC_DIR}/EditorPaths.cpp
 ${SRC_DIR}/EditorResources.cpp
 ${SRC_DIR}/EditorSettings.cpp
@@ -214,13 +213,16 @@ ${OTHER_FILES}
 #=================================================================
 #Executables =====================================================
 #=================================================================
-link_libraries(BangSharedLib)
+
+link_libraries(BangLib)
+link_libraries(${ALL_DEPENDENCIES_LIB_FILES})
 
 add_executable(BangEditor ${EDITOR_SRC_FILES})
-add_dependencies(BangEditor BangSharedLib)
-
 add_executable(Game ${SRC_DIR}/MainGame.cpp)
-add_dependencies(Game BangSharedLib)
+
+add_dependencies(BangEditor BangLib)
+add_dependencies(Game BangLib)
+
 #=================================================================
 #=================================================================
 #=================================================================
