@@ -8,10 +8,26 @@ set(CMAKE_VERBOSE_MAKEFILE on)
 #=================================================================
 
 #=================================================================
-# CMake Includes =================================================
+# Include guard ==================================================
 #=================================================================
-include(CMakeIncludes/CMakeConfig.txt REQUIRED)
-include(${BANG_PROJECT_ROOT}/CMakeIncludes/CMakeMacros.cmake REQUIRED)
+if (DEFINED BANG_EDITOR_BUILT)
+    return()
+endif()
+set(BANG_EDITOR_BUILT ON)
+#=================================================================
+#=================================================================
+#=================================================================
+
+#=================================================================
+# Bang project root ==============================================
+#=================================================================
+if (NOT DEFINED BANG_PROJECT_ROOT)
+    include(${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes/CMakeSetBangProjectRoot.cmake REQUIRED)
+    if (NOT DEFINED BANG_PROJECT_ROOT_DEFINE)
+        set(BANG_PROJECT_ROOT_DEFINE ${BANG_PROJECT_ROOT})
+    endif()
+endif()
+add_definitions(-DBANG_PROJECT_ROOT="${BANG_PROJECT_ROOT_DEFINE}")
 #=================================================================
 #=================================================================
 #=================================================================
@@ -19,11 +35,15 @@ include(${BANG_PROJECT_ROOT}/CMakeIncludes/CMakeMacros.cmake REQUIRED)
 #=================================================================
 # Check input params =============================================
 #=================================================================
-if (NOT EXISTS "${BANG_PROJECT_ROOT}")
-    message(FATAL_ERROR "Please, set the correct Bang root path using \"scripts/setBangPath.sh\". Current path: " ${BANG_PROJECT_ROOT})
-endif ()
+include(${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
+#=================================================================
+#=================================================================
+#=================================================================
 
-include(${BANG_PROJECT_ROOT}/CMakeIncludes/CMakeCheckInputParams.cmake)
+#=================================================================
+# CMake Includes =================================================
+#=================================================================
+include(${BANG_PROJECT_ROOT}/CMakeIncludes/CMakeMacros.cmake REQUIRED)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -41,7 +61,8 @@ include(${BANG_PROJECT_ROOT}/CMakeLists.txt)
 #=================================================================
 project(BangEditor C CXX)
 
-set(SRC_DIR "src")
+set(SRC_DIR "${CMAKE_CURRENT_LIST_DIR}/src")
+set(INCLUDE_ROOT "${CMAKE_CURRENT_LIST_DIR}/include")
 
 # Output params
 message("===========================================")
@@ -66,10 +87,8 @@ endif()
 #=================================================================
 # Includes =======================================================
 #=================================================================
-set(INCLUDE_ROOT "${CMAKE_SOURCE_DIR}/include")
 include_directories("${INCLUDE_ROOT}")
 include_directories("${BANG_PROJECT_ROOT}/include")
-add_definitions(-DBANG_PROJECT_ROOT="${BANG_PROJECT_ROOT}")
 #=================================================================
 #=================================================================
 #=================================================================
@@ -77,28 +96,7 @@ add_definitions(-DBANG_PROJECT_ROOT="${BANG_PROJECT_ROOT}")
 #=================================================================
 # Flags ==========================================================
 #=================================================================
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -Wl,-O0 -g")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=undefined")
-# set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-sanitize-recover")
-# set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=leak")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=float-divide-by-zero")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=integer-divide-by-zero")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=return")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=null")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Wl,-O3")
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wint-to-pointer-cast")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-sign-compare")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wswitch")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--export-dynamic")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+include(${BANG_PROJECT_ROOT}/CMakeIncludes/CMakeFlags.cmake)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -107,8 +105,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 # Add misc files =================================================
 #=================================================================
 file(GLOB_RECURSE OTHER_FILES "${INCLUDE_ROOT}/BangEditor/*.h")
-set(OTHER_FILES README.md "${OTHER_FILES}")
-AddMiscFiles(${OTHER_FILES})
+add_misc_files(${OTHER_FILES})
 #=================================================================
 #=================================================================
 #=================================================================
@@ -213,17 +210,14 @@ ${OTHER_FILES}
 #Executables =====================================================
 #=================================================================
 
-link_libraries(BangLib)
-link_libraries(${ALL_DEPENDENCIES_LIB_FILES})
+link_libraries(BangLib ${ALL_DEPENDENCIES_LIB_FILES})
 
-message("AAAAAAAAAAAAAA " ${ALL_DEPENDENCIES_LIB_FILES})
 add_executable(BangEditor ${EDITOR_SRC_FILES})
 add_executable(Game ${SRC_DIR}/MainGame.cpp)
 
-add_dependencies(BangEditor BangLib ${ALL_DEPENDENCIES_LIB_FILES})
-add_dependencies(Game BangLib ${ALL_DEPENDENCIES_LIB_FILES})
+add_dependencies(BangEditor BangLib)
+add_dependencies(Game BangLib)
 
 #=================================================================
 #=================================================================
 #=================================================================
-
