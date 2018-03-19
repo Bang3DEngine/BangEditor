@@ -69,6 +69,25 @@ include(${EDITOR_ROOT}/CMakeLists.txt REQUIRED)
 project(BuildPackageBangEditor C CXX)
 
 #=================================================================
+# Copy dependencies ==============================================
+#=================================================================
+set(BANG_EDITOR_EXE_PATH ${EXECUTABLE_OUTPUT_PATH}/BangEditor)
+add_custom_command(
+  OUTPUT COPY_BANG_EDITOR_PKG_DEPS
+  COMMAND /bin/sh ${CMAKE_CURRENT_LIST_DIR}/copyBinaryDependencies.sh
+                  ${BANG_EDITOR_EXE_PATH} ${LIBRARY_OUTPUT_PATH}
+  WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
+  COMMENT "Copying dependencies of ${BANG_EDITOR_EXE_PATH} to ${LIBRARY_OUTPUT_PATH}..."
+  VERBATIM
+ )
+add_custom_target(COPY_BANG_EDITOR_PKG_DEPS_TGT ALL DEPENDS
+    BangEditor Game
+    COPY_BANG_EDITOR_PKG_DEPS)
+#=================================================================
+#=================================================================
+#=================================================================
+
+#=================================================================
 # Copy editor directories ========================================
 #=================================================================
 # Assets

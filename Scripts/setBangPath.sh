@@ -16,4 +16,4 @@ then
 	exit 2
 fi
 
-echo "set(BANG_PROJECT_ROOT \"${BANG_PATH_ROOT}\")" > "CMakeIncludes/CMakeConfig.txt"
+echo "set(BANG_PROJECT_ROOT \"${BANG_PATH_ROOT}\")" > "CMakeIncludes/CMakeSetBangProjectRoot.cmake"
