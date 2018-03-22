@@ -64,6 +64,8 @@ project(BangEditor C CXX)
 set(SRC_DIR "${CMAKE_CURRENT_LIST_DIR}/src")
 set(INCLUDE_ROOT "${CMAKE_CURRENT_LIST_DIR}/include")
 
+# Extra make flags
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pie")
 # Output params
 message("===========================================")
 message("BUILD_SHARED_LIBS: " ${BUILD_SHARED_LIBS})
