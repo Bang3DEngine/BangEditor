@@ -102,6 +102,8 @@ MenuBar::MenuBar()
     // Edit
     m_editItem = AddItem();
     m_editItem->GetText()->SetContent("Edit");
+    MenuItem *editNone = m_assetsItem->AddItem("None");
+    (void) editNone;
 
     // Assets
     m_assetsItem = AddItem();
