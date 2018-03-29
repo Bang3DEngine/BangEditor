@@ -22,9 +22,9 @@ set(BANG_EDITOR_PKG_BUILT ON)
 # Set variables (I) ==============================================
 #=================================================================
 set(EDITOR_ROOT "${CMAKE_CURRENT_LIST_DIR}/../..")
-if (NOT ${BUILD_SHARED_LIBS})
+# if (NOT ${BUILD_SHARED_LIBS})
     # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
-endif()
+# endif()
 include(${EDITOR_ROOT}/CMakeIncludes/CMakeSetBangProjectRoot.cmake REQUIRED)
 #=================================================================
 #=================================================================
@@ -41,7 +41,8 @@ include(${CMAKE_CURRENT_LIST_DIR}/../../CMakeIncludes/CMakeCheckInputParams.cmak
 #=================================================================
 # Build Bang package =============================================
 #=================================================================
-set(PKG_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/BangEditorPackage")
+set(PKG_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/BangEditor")
+file(MAKE_DIRECTORY ${PKG_DIRECTORY})
 set(BANG_PROJECT_ROOT_DEFINE ".")
 include(${BANG_PROJECT_ROOT}/Scripts/BuildPackage/CMakeLists.txt REQUIRED)
 #=================================================================

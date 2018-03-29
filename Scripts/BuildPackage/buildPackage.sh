@@ -10,5 +10,6 @@ if [ $? -ne 0 ] ; then exit 1 ; fi
 make VERBOSE=1 -j6
 if [ $? -ne 0 ] ; then exit 1 ; fi
 
-tar -czvf BangEditorPackage.tar.gz BangEditorPackage/
+cd ..
+tar -czvf BangEditor.tar.gz BangEditor/
 if [ $? -ne 0 ] ; then exit 1 ; fi
