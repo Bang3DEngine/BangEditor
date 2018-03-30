@@ -26,7 +26,7 @@ set(BANG_PROJECT_ROOT "${EDITOR_ROOT}/Bang")
 set(EDITOR_ROOT_RELATIVE_TO_EXEC "${EDITOR_ROOT}")
 file(RELATIVE_PATH EDITOR_ROOT_RELATIVE_TO_EXEC ${CMAKE_BINARY_DIR} ${EDITOR_ROOT})
 add_definitions(-DEDITOR_ROOT_RELATIVE_TO_EXEC="${EDITOR_ROOT_RELATIVE_TO_EXEC}")
-include(${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
+include(${BANG_PROJECT_ROOT}/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
 #=================================================================
 #=================================================================
 #=================================================================

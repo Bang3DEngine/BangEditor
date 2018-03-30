@@ -22,15 +22,9 @@ set(BANG_EDITOR_PKG_BUILT ON)
 # Set variables (I) ==============================================
 #=================================================================
 set(EDITOR_ROOT "${CMAKE_CURRENT_LIST_DIR}/../..")
-include(${EDITOR_ROOT}/CMakeIncludes/CMakeSetBangProjectRoot.cmake REQUIRED)
-#=================================================================
-#=================================================================
-#=================================================================
-
-#=================================================================
-# Check input params =============================================
-#=================================================================
-include(${CMAKE_CURRENT_LIST_DIR}/../../CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
+set(BANG_ENGINE_ROOT "${EDITOR_ROOT}/Bang")
+set(PKG_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/BangEditor")
+file(MAKE_DIRECTORY ${PKG_DIRECTORY})
 #=================================================================
 #=================================================================
 #=================================================================
@@ -38,9 +32,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../../CMakeIncludes/CMakeCheckInputParams.cmak
 #=================================================================
 # Build Bang package =============================================
 #=================================================================
-set(PKG_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/BangEditor")
-file(MAKE_DIRECTORY ${PKG_DIRECTORY})
-include(${BANG_PROJECT_ROOT}/Scripts/BuildPackage/CMakeLists.txt REQUIRED)
+include(${BANG_ENGINE_ROOT}/Scripts/BuildPackage/CMakeLists.txt REQUIRED)
 #=================================================================
 #=================================================================
 #=================================================================
