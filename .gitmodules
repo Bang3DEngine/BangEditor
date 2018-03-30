@@ -1,0 +1,3 @@
+[submodule "Bang"]
+	path = Bang
+	url = https://github.com/Bang3DEngine/Bang

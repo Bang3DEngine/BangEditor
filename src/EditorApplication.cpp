@@ -26,13 +26,14 @@ EditorApplication::~EditorApplication()
 {
 }
 
-void EditorApplication::Init(const Path &engineRootPath)
+void EditorApplication::Init(const Path &editorRootPath)
 {
+    Path engineRootPath = editorRootPath.Append("Bang");
     Application::Init(engineRootPath);
 
-    GetEditorPaths()->InitEditorPath( Paths::GetExecutablePath().GetDirectory() );
+    GetEditorPaths()->InitEditorPath(editorRootPath);
     ImportFilesManager::CreateMissingImportFiles( EditorPaths::GetEditorAssetsDir() );
-    ImportFilesManager::LoadImportFilepathGUIDs( EditorPaths::GetEditorAssetsDir() );
+    ImportFilesManager::LoadImportFilepathGUIDs(  EditorPaths::GetEditorAssetsDir() );
 }
 
 EditorPaths *EditorApplication::GetEditorPaths() const

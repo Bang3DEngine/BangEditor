@@ -40,7 +40,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/../../CMakeIncludes/CMakeCheckInputParams.cmak
 #=================================================================
 set(PKG_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/BangEditor")
 file(MAKE_DIRECTORY ${PKG_DIRECTORY})
-set(BANG_PROJECT_ROOT_DEFINE ".")
 include(${BANG_PROJECT_ROOT}/Scripts/BuildPackage/CMakeLists.txt REQUIRED)
 #=================================================================
 #=================================================================

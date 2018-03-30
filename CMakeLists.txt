@@ -19,22 +19,13 @@ set(BANG_EDITOR_BUILT ON)
 #=================================================================
 
 #=================================================================
-# Bang project root ==============================================
+# Check input params and set some paths ==========================
 #=================================================================
-if (NOT DEFINED BANG_PROJECT_ROOT)
-    include(${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes/CMakeSetBangProjectRoot.cmake REQUIRED)
-    if (NOT DEFINED BANG_PROJECT_ROOT_DEFINE)
-        set(BANG_PROJECT_ROOT_DEFINE ${BANG_PROJECT_ROOT})
-    endif()
-endif()
-add_definitions(-DBANG_PROJECT_ROOT="${BANG_PROJECT_ROOT_DEFINE}")
-#=================================================================
-#=================================================================
-#=================================================================
-
-#=================================================================
-# Check input params =============================================
-#=================================================================
+set(EDITOR_ROOT "${CMAKE_CURRENT_LIST_DIR}")
+set(BANG_PROJECT_ROOT "${EDITOR_ROOT}/Bang")
+set(EDITOR_ROOT_RELATIVE_TO_EXEC "${EDITOR_ROOT}")
+file(RELATIVE_PATH EDITOR_ROOT_RELATIVE_TO_EXEC ${CMAKE_BINARY_DIR} ${EDITOR_ROOT})
+add_definitions(-DEDITOR_ROOT_RELATIVE_TO_EXEC="${EDITOR_ROOT_RELATIVE_TO_EXEC}")
 include(${CMAKE_CURRENT_LIST_DIR}/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
 #=================================================================
 #=================================================================
@@ -66,6 +57,7 @@ set(INCLUDE_ROOT "${CMAKE_CURRENT_LIST_DIR}/include")
 
 # Extra make flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pie")
+
 # Output params
 message("BangEditor ================================")
 message("BUILD_SHARED_LIBS: " ${BUILD_SHARED_LIBS})

@@ -1,6 +1,7 @@
 #include "BangEditor/EditorApplication.h"
 
 #include "Bang/Debug.h"
+#include "Bang/Paths.h"
 #include "Bang/Scene.h"
 #include "Bang/Window.h"
 #include "Bang/WindowManager.h"
@@ -11,17 +12,17 @@
 #include "BangEditor/EditorSettings.h"
 #include "BangEditor/ProjectManager.h"
 
-#ifndef BANG_PROJECT_ROOT
-    #define BANG_PROJECT_ROOT
-#endif
-
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
+#include "BangEditor/EditorPaths.h"
 int main(int argc, char **argv)
 {
     EditorApplication edApp;
-    edApp.Init( Path("" BANG_PROJECT_ROOT) );
+    Path editorRootPath = Paths::GetExecutableDir().
+                          Append("" EDITOR_ROOT_RELATIVE_TO_EXEC);
+    editorRootPath = Paths::GetResolvedPath(editorRootPath);
+    edApp.Init(editorRootPath);
 
     Window *mainWindow = WindowManager::CreateWindow<EditorWindow>();
     Window::SetActive(mainWindow);

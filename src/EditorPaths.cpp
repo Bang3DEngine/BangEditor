@@ -18,23 +18,14 @@ void EditorPaths::InitEditorPath(const Path &editorRootPath)
 {
     c_editorRoot = editorRootPath;
 
-    if (!GetEditorAssetsDir().IsDir()) // Try some other directories
-    {
-        c_editorRoot = Paths::GetExecutablePath().GetDirectory();
-    }
-
-    if (!GetEditorAssetsDir().IsDir()) // Try some other directories
-    {
-        c_editorRoot = Paths::GetExecutablePath().GetDirectory().GetDirectory();
-    }
-
     if (GetEditorAssetsDir().IsDir())
     {
         Debug_Log("Picking as EditorPaths Bang Editor Root: '" << GetEditorDir() << "'");
     }
     else
     {
-        Debug_Log("Could not find an Editor directory!");
+        Debug_Error("Could not find an Editor directory!");
+        Application::Exit(1, true);
     }
 }
 
