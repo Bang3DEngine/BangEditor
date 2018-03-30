@@ -26,7 +26,7 @@ USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
 bool EditorDialog::s_accepted = false;
-Path EditorDialog::s_assetPathResult = Path::Empty;
+Path EditorDialog::s_assetPathResult = Path::EmptyPath();
 
 EditorDialog::EditorDialog()
 {

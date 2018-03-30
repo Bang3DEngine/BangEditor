@@ -22,9 +22,10 @@ set(BANG_EDITOR_PKG_BUILT ON)
 # Set variables (I) ==============================================
 #=================================================================
 set(EDITOR_ROOT "${CMAKE_CURRENT_LIST_DIR}/../..")
-# if (NOT ${BUILD_SHARED_LIBS})
+if (NOT ${BUILD_SHARED_LIBS})
     # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
-# endif()
+    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++")
+endif()
 include(${EDITOR_ROOT}/CMakeIncludes/CMakeSetBangProjectRoot.cmake REQUIRED)
 #=================================================================
 #=================================================================
