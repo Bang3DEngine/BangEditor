@@ -26,6 +26,14 @@ before_install:
       - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
       - sudo apt-get update -qq
 
+git: 
+    submodules: false
+
+# Use sed to replace the SSH URL with the public URL, then initialize submodules
+before_install: 
+    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+    - git submodule update --init --recursive
+
 install:
 - sudo apt-get update
 - sudo apt-get -y install cmake make autoconf automake libtool git autogen build-essential libegl1-mesa-dev libgles2-mesa-dev libglew-dev libglu1-mesa-dev zlib1g-dev libsndfile-dev libsndio-dev libfreetype6-dev libopenal-dev libsdl2-dev libsdl2-ttf-dev libassimp-dev
