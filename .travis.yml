@@ -27,6 +27,7 @@ before_install:
 - sudo apt-get update -qq
 - git clone --recurse-submodules https://github.com/Bang3DEngine/BangEditor
 - cd BangEditor
+- git checkout TravisFix
 - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
 - git submodule update --init --recursive
 
