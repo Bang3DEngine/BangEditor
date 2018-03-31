@@ -51,6 +51,8 @@ script:
 # - rm -rf build && mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Debug   .. && make -j6 && cd ..
 # - rm -rf build && mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=ON  -DCMAKE_BUILD_TYPE=Release .. && make -j6 && cd ..
 - rm -rf build && mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release .. && make -j6 && cd ..
-- cd Scripts/BuildPackage && ./buildPackage.sh && cd ../..
+- ls
+- ls *
+- cd BangEditor && cd Scripts/BuildPackage && ./buildPackage.sh && cd ../..
 - cd ..
 
