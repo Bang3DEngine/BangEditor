@@ -45,9 +45,9 @@ addons:
 script:
 - git clone --recurse-submodules https://github.com/Bang3DEngine/BangEditor
 - cd BangEditor
-- rm -rf build && mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=ON  -DCMAKE_BUILD_TYPE=Debug   .. && make -j6 && cd ..
+# - rm -rf build && mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=ON  -DCMAKE_BUILD_TYPE=Debug   .. && make -j6 && cd ..
 - rm -rf build && mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Debug   .. && make -j6 && cd ..
-- rm -rf build && mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=ON  -DCMAKE_BUILD_TYPE=Release .. && make -j6 && cd ..
+# - rm -rf build && mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=ON  -DCMAKE_BUILD_TYPE=Release .. && make -j6 && cd ..
 - rm -rf build && mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release .. && make -j6 && cd ..
 - cd Scripts/BuildPackage && ./buildPackage.sh && cd ../..
 - cd ..
