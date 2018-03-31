@@ -59,6 +59,14 @@ bool SceneOpenerSaver::OnOpenScene()
     return false;
 }
 
+void SceneOpenerSaver::OpenDefaultScene() const
+{
+    Scene *scene = GameObjectFactory::CreateScene(true);
+    GameObjectFactory::CreateDefaultSceneInto(scene);
+    
+    SceneManager::LoadScene(scene);
+}
+
 bool SceneOpenerSaver::OnSaveScene() { return OnSaveScene(false); }
 bool SceneOpenerSaver::OnSaveSceneAs() { return OnSaveScene(true); }
 

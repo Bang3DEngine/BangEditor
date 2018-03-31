@@ -34,15 +34,9 @@ endif()
 
 add_definitions(-DBANG_ENGINE_ROOT="${BANG_ENGINE_ROOT_DEFINE}")
 add_definitions(-DBANG_EDITOR_ROOT="${BANG_EDITOR_ROOT_DEFINE}")
-include(${BANG_ENGINE_ROOT}/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
-#=================================================================
-#=================================================================
-#=================================================================
 
-#=================================================================
-# CMake Includes =================================================
-#=================================================================
 include(${BANG_ENGINE_ROOT}/CMakeIncludes/CMakeMacros.cmake REQUIRED)
+include(${BANG_ENGINE_ROOT}/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -61,7 +55,7 @@ include(${BANG_ENGINE_ROOT}/CMakeLists.txt)
 project(BangEditor C CXX)
 
 set(SRC_DIR "${CMAKE_CURRENT_LIST_DIR}/src")
-set(INCLUDE_ROOT "${CMAKE_CURRENT_LIST_DIR}/include")
+set(BANG_EDITOR_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}/include")
 
 # Extra make flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pie")
@@ -87,15 +81,6 @@ endif()
 #=================================================================
 
 #=================================================================
-# Includes =======================================================
-#=================================================================
-include_directories("${INCLUDE_ROOT}")
-include_directories("${BANG_ENGINE_ROOT}/include")
-#=================================================================
-#=================================================================
-#=================================================================
-
-#=================================================================
 # Flags ==========================================================
 #=================================================================
 include(${BANG_ENGINE_ROOT}/CMakeIncludes/CMakeFlags.cmake)
@@ -106,7 +91,7 @@ include(${BANG_ENGINE_ROOT}/CMakeIncludes/CMakeFlags.cmake)
 #=================================================================
 # Add misc files =================================================
 #=================================================================
-file(GLOB_RECURSE OTHER_FILES "${INCLUDE_ROOT}/BangEditor/*.h")
+file(GLOB_RECURSE OTHER_FILES "${BANG_EDITOR_INCLUDE_DIR}/BangEditor/*.h")
 add_misc_files(${OTHER_FILES})
 #=================================================================
 #=================================================================
@@ -209,17 +194,16 @@ ${OTHER_FILES}
 #=================================================================
 
 #=================================================================
-#Executables =====================================================
+# Executables ====================================================
 #=================================================================
 
-link_libraries(BangLib)
-
+include_directories(${BANG_EDITOR_INCLUDE_DIR})
 add_executable(BangEditor ${EDITOR_SRC_FILES})
-add_dependencies(BangEditor BangLib)
+target_link_libraries(BangEditor BangLib)
 
 if (${COMPILE_GAME})
     add_executable(Game ${SRC_DIR}/MainGame.cpp)
-    add_dependencies(Game BangLib)
+    target_link_libraries(Game BangLib)
 endif()
 
 #=================================================================

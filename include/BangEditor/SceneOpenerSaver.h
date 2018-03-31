@@ -14,8 +14,8 @@ class SceneOpenerSaver : public ISceneManagerListener,
                          public IScenePlayerListener
 {
 public:
-	SceneOpenerSaver();
-	virtual ~SceneOpenerSaver();
+    SceneOpenerSaver();
+    virtual ~SceneOpenerSaver();
 
     bool OnNewScene();
     bool OnOpenScene();
@@ -23,6 +23,7 @@ public:
     bool OnSaveSceneAs();
     bool CloseScene();
     bool IsCurrentSceneSaved() const;
+    void OpenDefaultScene() const;
 
     bool OpenSceneInEditor(const Path &scenePath);
 
