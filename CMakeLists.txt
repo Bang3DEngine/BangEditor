@@ -21,12 +21,20 @@ set(BANG_EDITOR_BUILT ON)
 #=================================================================
 # Check input params and set some paths ==========================
 #=================================================================
-set(EDITOR_ROOT "${CMAKE_CURRENT_LIST_DIR}")
-set(BANG_PROJECT_ROOT "${EDITOR_ROOT}/Bang")
-set(EDITOR_ROOT_RELATIVE_TO_EXEC "${EDITOR_ROOT}")
-file(RELATIVE_PATH EDITOR_ROOT_RELATIVE_TO_EXEC ${CMAKE_BINARY_DIR} ${EDITOR_ROOT})
-add_definitions(-DEDITOR_ROOT_RELATIVE_TO_EXEC="${EDITOR_ROOT_RELATIVE_TO_EXEC}")
-include(${BANG_PROJECT_ROOT}/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
+set(BANG_EDITOR_ROOT "${CMAKE_CURRENT_LIST_DIR}")
+set(BANG_ENGINE_ROOT "${BANG_EDITOR_ROOT}/Bang")
+
+if (NOT DEFINED BANG_ENGINE_ROOT_DEFINE)
+    file(RELATIVE_PATH BANG_ENGINE_ROOT_DEFINE ${CMAKE_BINARY_DIR} ${BANG_ENGINE_ROOT})
+endif()
+
+if (NOT DEFINED BANG_EDITOR_ROOT_DEFINE)
+    file(RELATIVE_PATH BANG_EDITOR_ROOT_DEFINE ${CMAKE_BINARY_DIR} ${BANG_EDITOR_ROOT})
+endif()
+
+add_definitions(-DBANG_ENGINE_ROOT="${BANG_ENGINE_ROOT_DEFINE}")
+add_definitions(-DBANG_EDITOR_ROOT="${BANG_EDITOR_ROOT_DEFINE}")
+include(${BANG_ENGINE_ROOT}/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -34,7 +42,7 @@ include(${BANG_PROJECT_ROOT}/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
 #=================================================================
 # CMake Includes =================================================
 #=================================================================
-include(${BANG_PROJECT_ROOT}/CMakeIncludes/CMakeMacros.cmake REQUIRED)
+include(${BANG_ENGINE_ROOT}/CMakeIncludes/CMakeMacros.cmake REQUIRED)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -42,7 +50,7 @@ include(${BANG_PROJECT_ROOT}/CMakeIncludes/CMakeMacros.cmake REQUIRED)
 #=================================================================
 # Bang CMake =====================================================
 #=================================================================
-include(${BANG_PROJECT_ROOT}/CMakeLists.txt)
+include(${BANG_ENGINE_ROOT}/CMakeLists.txt)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -82,7 +90,7 @@ endif()
 # Includes =======================================================
 #=================================================================
 include_directories("${INCLUDE_ROOT}")
-include_directories("${BANG_PROJECT_ROOT}/include")
+include_directories("${BANG_ENGINE_ROOT}/include")
 #=================================================================
 #=================================================================
 #=================================================================
@@ -90,7 +98,7 @@ include_directories("${BANG_PROJECT_ROOT}/include")
 #=================================================================
 # Flags ==========================================================
 #=================================================================
-include(${BANG_PROJECT_ROOT}/CMakeIncludes/CMakeFlags.cmake)
+include(${BANG_ENGINE_ROOT}/CMakeIncludes/CMakeFlags.cmake)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -204,7 +212,7 @@ ${OTHER_FILES}
 #Executables =====================================================
 #=================================================================
 
-link_libraries(BangLib ${ALL_DEPENDENCIES_LIB_FILES})
+link_libraries(BangLib)
 
 add_executable(BangEditor ${EDITOR_SRC_FILES})
 add_dependencies(BangEditor BangLib)

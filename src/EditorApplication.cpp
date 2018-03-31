@@ -26,9 +26,9 @@ EditorApplication::~EditorApplication()
 {
 }
 
-void EditorApplication::Init(const Path &editorRootPath)
+void EditorApplication::InitEditorApplication(const Path &engineRootPath,
+                                              const Path &editorRootPath)
 {
-    Path engineRootPath = editorRootPath.Append("Bang");
     Application::Init(engineRootPath);
 
     GetEditorPaths()->InitEditorPath(editorRootPath);

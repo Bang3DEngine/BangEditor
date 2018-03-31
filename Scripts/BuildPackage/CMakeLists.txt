@@ -23,6 +23,8 @@ set(BANG_EDITOR_PKG_BUILT ON)
 #=================================================================
 set(EDITOR_ROOT "${CMAKE_CURRENT_LIST_DIR}/../..")
 set(BANG_ENGINE_ROOT "${EDITOR_ROOT}/Bang")
+set(BANG_ENGINE_ROOT_DEFINE ".")
+set(BANG_EDITOR_ROOT_DEFINE ".")
 set(PKG_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/BangEditor")
 file(MAKE_DIRECTORY ${PKG_DIRECTORY})
 #=================================================================
