@@ -12,27 +12,21 @@ matrix:
     - os: linux
       dist: trusty
       sudo: required
-    - os: linux
-      dist: precise
-      sudo: required
 
 notifications:
   email:
     on_success: never
     on_failure: never
 
-before_install:
-      - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
-      - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-      - sudo apt-get update -qq
-
 git: 
     submodules: false
 
-# Use sed to replace the SSH URL with the public URL, then initialize submodules
-before_install: 
-    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
-    - git submodule update --init --recursive
+before_install:
+- echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+- sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+- sudo apt-get update -qq
+- sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+- git submodule update --init --recursive
 
 install:
 - sudo apt-get update
