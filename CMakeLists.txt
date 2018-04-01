@@ -58,7 +58,7 @@ set(SRC_DIR "${CMAKE_CURRENT_LIST_DIR}/src")
 set(BANG_EDITOR_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}/include")
 
 # Extra make flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pie")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -no-pie")
 
 # Output params
 message("BangEditor ================================")
@@ -199,11 +199,11 @@ ${OTHER_FILES}
 
 include_directories(${BANG_EDITOR_INCLUDE_DIR})
 add_executable(BangEditor ${EDITOR_SRC_FILES})
-target_link_libraries(BangEditor BangLib)
+target_link_libraries(BangEditor BangLib ${ALL_DEPENDENCIES_LIB_FILES})
 
 if (${COMPILE_GAME})
     add_executable(Game ${SRC_DIR}/MainGame.cpp)
-    target_link_libraries(Game BangLib)
+    target_link_libraries(Game BangLib ${ALL_DEPENDENCIES_LIB_FILES})
 endif()
 
 #=================================================================
