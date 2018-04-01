@@ -58,7 +58,7 @@ set(SRC_DIR "${CMAKE_CURRENT_LIST_DIR}/src")
 set(BANG_EDITOR_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}/include")
 
 # Extra make flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pie")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -no-pie")
 
 # Output params
 message("BangEditor ================================")
