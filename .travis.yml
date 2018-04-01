@@ -44,15 +44,15 @@ addons:
       description: "Description"
     notification_email: ""
     build_command_prepend: ""
-    build_command: "mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=ON  -DCMAKE_BUILD_TYPE=Debug .. && make -j6"
+    build_command: "mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release .. && make -j6"
     branch_pattern: coverity_scan
 
 script:
 - export PATH=$PATH:/usr/lib/x86_64-linux-gnu
-- rm -rf build && mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Debug   .. && make -j6 && cd ..
+# - rm -rf build && mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Debug   .. && make -j6 && cd ..
 - rm -rf build && mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release .. && make -j6 && cd ..
 - sudo apt-get -y install libglew-dev libfreetype6-dev libopenal-dev libsdl2-dev libsdl2-ttf-dev libassimp-dev
-- rm -rf build && mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=ON  -DCMAKE_BUILD_TYPE=Debug   .. && make -j6 && cd ..
+# - rm -rf build && mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=ON  -DCMAKE_BUILD_TYPE=Debug   .. && make -j6 && cd ..
 - rm -rf build && mkdir -p build && cd build && cmake -DBUILD_SHARED_LIBS=ON  -DCMAKE_BUILD_TYPE=Release .. && make -j6 && cd ..
 - cd Scripts/BuildPackage && ./buildPackage.sh && cd ../..
 - cd ..
