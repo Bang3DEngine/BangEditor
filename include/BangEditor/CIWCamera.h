@@ -32,6 +32,7 @@ protected:
     Camera *GetCamera() const;
 
     // IValueChangedListener
+    void LimitValues();
     virtual void OnValueChanged(Object *object) override;
 
 private:

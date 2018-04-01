@@ -96,6 +96,11 @@ Vector4 UIInputVector::GetVector4() const
     return Vector4(Get(0), Get(1), Get(2), Get(3));
 }
 
+const Array<UIInputNumber *> UIInputVector::GetInputNumbers() const
+{
+    return m_inputNumbers;
+}
+
 bool UIInputVector::HasFocus() const
 {
     return m_inputNumbers[0]->HasFocus() || m_inputNumbers[1]->HasFocus() ||

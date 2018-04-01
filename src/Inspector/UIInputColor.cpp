@@ -2,6 +2,7 @@
 
 #include "Bang/UIButton.h"
 #include "Bang/Material.h"
+#include "Bang/UIInputNumber.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -46,6 +47,11 @@ UIInputColor::UIInputColor()
     p_colorInputVector->EventEmitter<IValueChangedListener>::RegisterListener(this);
     UILayoutElement *inputVectorLE = p_colorInputVector->AddComponent<UILayoutElement>();
     inputVectorLE->SetFlexibleWidth(1.0f);
+
+    for (int i = 0; i < 4; ++i)
+    {
+        p_colorInputVector->GetInputNumbers()[i]->SetMinMaxValues(0.0f, 1.0f);
+    }
 
     p_colorInputVector->SetParent(this);
     p_colorImage->GetGameObject()->SetParent(this);

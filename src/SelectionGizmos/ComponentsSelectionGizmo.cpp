@@ -43,7 +43,10 @@ void ComponentsSelectionGizmo::Render(RenderPass rp, bool renderChildren)
     if (!GetReferencedGameObject()) { return; }
     for (Component *comp : GetReferencedGameObject()->GetComponents())
     {
-        if (Camera *cam = DCAST<Camera*>(comp)) { RenderCameraGizmo(cam, rp); }
+        if (Camera *cam = DCAST<Camera*>(comp))
+        {
+            if (cam->IsActive()) { RenderCameraGizmo(cam, rp); }
+        }
     }
 }
 

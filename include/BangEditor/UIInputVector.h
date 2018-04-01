@@ -35,6 +35,8 @@ public:
     Vector3 GetVector3() const;
     Vector4 GetVector4() const;
 
+    const Array<UIInputNumber*> GetInputNumbers() const;
+
     bool HasFocus() const;
 
     void OnValueChanged(Object *object) override;

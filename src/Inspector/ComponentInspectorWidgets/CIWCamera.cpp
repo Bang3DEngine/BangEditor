@@ -29,6 +29,7 @@ void CIWCamera::InitInnerWidgets()
 
     p_orthoHeightInput = GameObjectFactory::CreateUIInputNumber();
     p_orthoHeightInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_orthoHeightInput->SetMinMaxValues(0.0f, Math::Infinity<float>());
     AddWidget("Ortho Height", p_orthoHeightInput->GetGameObject());
 
     p_fovInput = GameObjectFactory::CreateUISlider();
@@ -53,17 +54,52 @@ void CIWCamera::UpdateFromReference()
 {
     ComponentInspectorWidget::UpdateFromReference();
 
-    p_zNearInput->SetValue( GetCamera()->GetZNear() );
-    p_zFarInput->SetValue( GetCamera()->GetZFar() );
-    p_orthoHeightInput->SetValue( GetCamera()->GetOrthoHeight() );
-    p_fovInput->SetValue( GetCamera()->GetFovDegrees() );
-    p_projectionModeInput->SetSelectionByValue( GetCamera()->GetProjectionMode() );
-    p_clearColorInput->SetColor( GetCamera()->GetClearColor() );
+    if (!p_zNearInput->HasFocus())
+    {
+        p_zNearInput->SetValue( GetCamera()->GetZNear() );
+    }
+
+    if (!p_zNearInput->HasFocus())
+    {
+        p_zFarInput->SetValue( GetCamera()->GetZFar() );
+    }
+
+
+    if (!p_zNearInput->HasFocus())
+    {
+        p_orthoHeightInput->SetValue( GetCamera()->GetOrthoHeight() );
+    }
+
+
+    if (!p_zNearInput->HasFocus())
+    {
+        p_fovInput->SetValue( GetCamera()->GetFovDegrees() );
+    }
+
+
+    if (!p_zNearInput->HasFocus())
+    {
+        p_projectionModeInput->SetSelectionByValue( GetCamera()->GetProjectionMode() );
+    }
+
+
+    if (!p_zNearInput->HasFocus())
+    {
+        p_clearColorInput->SetColor( GetCamera()->GetClearColor() );
+    }
+
+    LimitValues();
 }
 
 Camera *CIWCamera::GetCamera() const
 {
     return SCAST<Camera*>( GetComponent() );
+}
+
+void CIWCamera::LimitValues()
+{
+    p_zNearInput->SetMinMaxValues(0.001f, GetCamera()->GetZFar());
+    p_zFarInput->SetMinMaxValues(GetCamera()->GetZNear(), Math::Infinity<float>());
 }
 
 void CIWCamera::OnValueChanged(Object *object)
@@ -77,5 +113,6 @@ void CIWCamera::OnValueChanged(Object *object)
     GetCamera()->SetProjectionMode(SCAST<Camera::ProjectionMode>(
                                      p_projectionModeInput->GetSelectedValue()) );
     GetCamera()->SetClearColor( p_clearColorInput->GetColor() );
+    LimitValues();
 }
 
