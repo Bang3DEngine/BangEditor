@@ -22,6 +22,7 @@ void CIWPostProcessEffect::InitInnerWidgets()
 
     p_priorityInput = GameObjectFactory::CreateUIInputNumber();
     p_priorityInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_priorityInput->SetDecimalPlaces(0);
 
     p_fragmentShaderInput = GameObject::Create<UIInputFile>();
     p_fragmentShaderInput->SetExtensions(
@@ -66,7 +67,8 @@ void CIWPostProcessEffect::OnValueChanged(Object *object)
 
     if (p_fragmentShaderInput->GetPath().IsFile())
     {
-        RH<Shader> shader = Resources::Load<Shader>(p_fragmentShaderInput->GetPath());
+        const Path fragPath = p_fragmentShaderInput->GetPath();
+        RH<Shader> shader = Resources::Load<Shader>(fragPath);
         ppe->SetPostProcessShader( shader.Get() );
     }
     else
