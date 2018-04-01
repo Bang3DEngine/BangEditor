@@ -33,7 +33,7 @@ before_install:
 
 install:
 - sudo apt-get update
-- sudo apt-get -y install cmake make autoconf automake libtool git autogen build-essential libegl1-mesa-dev libgles2-mesa-dev libglew-dev libglu1-mesa-dev zlib1g-dev libsndfile1-dev libsndio-dev libfreetype6-dev libopenal-dev libsdl2-dev libsdl2-ttf-dev libassimp-dev
+- sudo apt-get -y install cmake make autoconf automake libtool git autogen build-essential libegl1-mesa-dev libgles2-mesa-dev libglew-dev libglu1-mesa-dev zlib1g-dev libsndfile1-dev libfreetype6-dev libopenal-dev libsdl2-dev libsdl2-ttf-dev libassimp-dev
 - sudo apt-get -y install -qq g++-5
 - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
 
