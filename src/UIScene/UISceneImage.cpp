@@ -36,7 +36,6 @@ UISceneImage::UISceneImage()
 
     GameObject *sceneImgGo = GameObjectFactory::CreateUIGameObject();
     p_sceneImg  = sceneImgGo->AddComponent<UISceneImageRenderer>();
-    p_sceneImg->GetMaterial()->SetUvMultiply(Vector2(1, -1));
     UILayoutElement *imgLE = sceneImgGo->AddComponent<UILayoutElement>();
     imgLE->SetFlexibleSize( Vector2(1) );
 

@@ -66,7 +66,7 @@ Explorer::Explorer()
     // Back button
     p_backButton = GameObjectFactory::CreateUIButton("", nullptr);
     RH<Texture2D> backButtonTex = EditorIconManager::GetBackArrowIcon();
-    p_backButton->SetIcon(backButtonTex.Get(), Vector2i(15), 0);
+    p_backButton->SetIcon(backButtonTex.Get(), Vector2i(12, 15), 0);
     p_backButton->GetText()->SetContent("");
     p_backButton->GetFocusable()->AddClickedCallback( [this](IFocusable*)
     { GoDirectoryUp(); });

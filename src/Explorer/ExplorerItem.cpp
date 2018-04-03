@@ -7,6 +7,7 @@
 #include "Bang/UICanvas.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
+#include "Bang/MaterialFactory.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -44,6 +45,7 @@ ExplorerItem::ExplorerItem()
     iconRT->SetAnchorY( Vector2::Zero );
     iconRT->SetPivotPosition( Vector2::Zero );
     p_icon = iconGo->AddComponent<UIImageRenderer>();
+    p_icon->SetMaterial( MaterialFactory::GetUIImageInvY().Get() );
     p_icon->SetTint(Color::Zero);
 
     p_aspectRatioFitter = iconGo->AddComponent<UIAspectRatioFitter>();

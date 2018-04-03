@@ -5,6 +5,7 @@
 #include "Bang/UICheckBox.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/MaterialFactory.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
@@ -49,6 +50,7 @@ void ComponentInspectorWidget::SetComponent(Component *comp)
 
     p_component = comp;
     SetTitle(GetComponent()->GetClassName());
+    p_icon->SetMaterial( MaterialFactory::GetUIImageInvY().Get() );
     p_icon->SetImageTexture( GetComponentIconTexture().Get() );
     Update();
 }

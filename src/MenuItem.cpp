@@ -4,6 +4,8 @@
 #include "Bang/UICanvas.h"
 #include "Bang/IconManager.h"
 #include "Bang/UIFocusable.h"
+#include "Bang/UIScrollArea.h"
+#include "Bang/UIScrollPanel.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"

@@ -40,7 +40,7 @@ UIInputFile::UIInputFile()
     p_searchButton = GameObjectFactory::CreateUIButton();
     p_searchButton->GetText()->SetContent("");
     p_searchButton->SetIcon( EditorIconManager::GetLensLittleIcon().Get(),
-                             Vector2i(14) );
+                             Vector2i(10, 14) );
     p_searchButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
     {
         Path openPath;

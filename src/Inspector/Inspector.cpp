@@ -73,7 +73,10 @@ Inspector::Inspector()
     p_titleSeparator->SetEnabled(false);
 
     UIVerticalLayout *widgetsVL = widgetsVLGo->AddComponent<UIVerticalLayout>();
-    widgetsVL->SetSpacing(2);
+    widgetsVL->SetSpacing(10);
+    widgetsVL->SetPaddingTop(10);
+    widgetsVL->SetPaddingLeft(5);
+    widgetsVL->SetPaddingRight(10);
 
     UIContentSizeFitter *vlCSF = widgetsVLGo->AddComponent<UIContentSizeFitter>();
     vlCSF->SetVerticalSizeType(LayoutSizeType::Preferred);

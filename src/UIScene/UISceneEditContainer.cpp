@@ -30,7 +30,6 @@ UISceneEditContainer::UISceneEditContainer()
 
     GameObject *cameraPreviewGo = GameObjectFactory::CreateUIGameObject();
     p_cameraPreviewImg = cameraPreviewGo->AddComponent<UIImageRenderer>();
-    p_cameraPreviewImg->GetMaterial()->SetUvMultiply(Vector2(1, -1));
     p_cameraPreviewImg->SetVisible(false);
 
     cameraPreviewGo->AddComponent<UILayoutIgnorer>();

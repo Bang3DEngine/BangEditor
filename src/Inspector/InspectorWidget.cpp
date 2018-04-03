@@ -1,6 +1,9 @@
 #include "BangEditor/InspectorWidget.h"
 
+#include "Bang/Paths.h"
 #include "Bang/UILabel.h"
+#include "Bang/Resources.h"
+#include "Bang/Texture2D.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -25,6 +28,9 @@ void InspectorWidget::Init()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     p_bgRenderer = AddComponent<UIImageRenderer>();
+    p_bgRenderer->SetImageTexture( Resources::Load<Texture2D>(
+                                        EPATH("Images/RRect_9s.png")).Get() );
+    p_bgRenderer->SetMode(UIImageRenderer::Mode::SLICE_9);
     p_bgRenderer->SetTint(Color::Zero);
 
     UIVerticalLayout *mainVL = AddComponent<UIVerticalLayout>();
@@ -47,9 +53,6 @@ void InspectorWidget::Init()
     UILayoutElement *widgetsLE = widgetsGo->AddComponent<UILayoutElement>();
     widgetsLE->SetFlexibleWidth(1.0f);
 
-    GameObject *botSeparator =
-            GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5, 1.0f);
-
     p_widgetsContainer = widgetsGo;
 
     SetLabelsWidth( DefaultLabelWidth );
@@ -57,7 +60,6 @@ void InspectorWidget::Init()
     titleGo->SetParent(this);
     topSeparator->SetParent(this);
     widgetsGo->SetParent(this);
-    botSeparator->SetParent(this);
 
     IEventListener::SetReceiveEvents(false);
     InitInnerWidgets();
