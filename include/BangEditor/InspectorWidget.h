@@ -24,7 +24,7 @@ public:
 
 protected:
     static constexpr int DefaultLabelWidth  = 50;
-    static constexpr int DefaultWidgetHeight = 15;
+    static constexpr int DefaultWidgetHeight = 20;
 
     InspectorWidget();
     virtual ~InspectorWidget();

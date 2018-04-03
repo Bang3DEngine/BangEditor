@@ -86,7 +86,7 @@ GameObject *ComponentInspectorWidget::CreateTitleGameObject()
     UITextRenderer *titleText = titleTextGo->AddComponent<UITextRenderer>();
     titleText->SetHorizontalAlign(HorizontalAlignment::Left);
     titleText->SetContent("InspectorWidget");
-    titleText->SetTextSize(10);
+    titleText->SetTextSize(12);
     p_titleText = titleText;
 
     UILayoutElement *titleLE = titleTextGo->AddComponent<UILayoutElement>();
@@ -95,7 +95,7 @@ GameObject *ComponentInspectorWidget::CreateTitleGameObject()
     GameObject *enabledTextGo = GameObjectFactory::CreateUIGameObject();
     UITextRenderer *enabledText = enabledTextGo->AddComponent<UITextRenderer>();
     enabledText->SetContent("Enabled");
-    enabledText->SetTextSize(9);
+    enabledText->SetTextSize(12);
     enabledTextGo->SetEnabled( MustShowEnabledCheckbox() );
 
     p_enabledCheckBox = GameObjectFactory::CreateUICheckBox();

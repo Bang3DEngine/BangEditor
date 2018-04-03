@@ -38,7 +38,7 @@ HierarchyItem::HierarchyItem()
     GameObject *textGo = GameObjectFactory::CreateUIGameObject();
     textGo->SetName("HierarchyItemText");
     p_textRenderer = textGo->AddComponent<UITextRenderer>();
-    p_textRenderer->SetTextSize(10);
+    p_textRenderer->SetTextSize(12);
     p_textRenderer->SetHorizontalAlign(HorizontalAlignment::Left);
     SetText("HierarchyItem");
 

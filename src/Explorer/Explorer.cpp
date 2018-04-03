@@ -52,9 +52,15 @@ Explorer::Explorer()
     // Tool Bar
     GameObject *toolBar = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *toolBarHL = toolBar->AddComponent<UIHorizontalLayout>();
+    toolBarHL->SetPaddingTop(3);
+    toolBarHL->SetPaddingBot(3);
     toolBarHL->SetPaddingLeft(3);
-    toolBarHL->SetPaddingRight( toolBarHL->GetPaddingLeft() );
+    toolBarHL->SetPaddingRight(3);
     toolBarHL->SetSpacing(3);
+
+    UILayoutElement *toolBarLE = toolBar->AddComponent<UILayoutElement>();
+    toolBarLE->SetMinHeight(30);
+    toolBarLE->SetFlexibleHeight(0);
 
     // Scroll Panel
     p_scrollPanel = GameObjectFactory::CreateUIScrollPanel();
@@ -66,18 +72,14 @@ Explorer::Explorer()
     // Back button
     p_backButton = GameObjectFactory::CreateUIButton("", nullptr);
     RH<Texture2D> backButtonTex = EditorIconManager::GetBackArrowIcon();
-    p_backButton->SetIcon(backButtonTex.Get(), Vector2i(12, 15), 0);
+    p_backButton->SetIcon(backButtonTex.Get(), Vector2i(20, 15), 0);
     p_backButton->GetText()->SetContent("");
     p_backButton->GetFocusable()->AddClickedCallback( [this](IFocusable*)
     { GoDirectoryUp(); });
 
-    UILayoutElement *toolBarLE = toolBar->AddComponent<UILayoutElement>();
-    toolBarLE->SetMinHeight(15);
-    toolBarLE->SetFlexibleHeight(0);
-
     // Direction label
     p_currentPathLabel = GameObjectFactory::CreateUILabel();
-    p_currentPathLabel->GetText()->SetTextSize(9);
+    p_currentPathLabel->GetText()->SetTextSize(11);
     p_currentPathLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::Right);
 
     GameObject *dirBar = p_currentPathLabel->GetGameObject();

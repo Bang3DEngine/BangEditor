@@ -15,7 +15,7 @@ UITabHeader::UITabHeader()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
     UIHorizontalLayout *titleHL = AddComponent<UIHorizontalLayout>();
-    titleHL->SetPaddings(3, 0, 3, 2);
+    titleHL->SetPaddings(6);
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetFlexibleHeight( 1.0f );
@@ -27,7 +27,7 @@ UITabHeader::UITabHeader()
     p_titleText = titleGo->AddComponent<UITextRenderer>();
     p_titleText->SetHorizontalAlign(HorizontalAlignment::Left);
     p_titleText->SetVerticalAlign(VerticalAlignment::Bot);
-    p_titleText->SetTextSize(11);
+    p_titleText->SetTextSize(12);
     p_titleText->SetContent( GetTitle() );
 
     p_focusable = AddComponent<UIFocusable>();

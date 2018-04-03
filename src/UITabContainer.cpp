@@ -27,7 +27,7 @@ UITabContainer::UITabContainer()
     headerBarHL->SetChildrenVerticalAlignment(VerticalAlignment::Bot);
 
     UILayoutElement *headerBarLE = p_headersBar->AddComponent<UILayoutElement>();
-    headerBarLE->SetMinHeight(15);
+    headerBarLE->SetMinHeight(22);
     headerBarLE->SetLayoutPriority(2);
 
     GameObject *botPart = GameObjectFactory::CreateUIGameObject();

@@ -70,7 +70,8 @@ void GameBuilder::BuildGame(const String &gameName,
 
     Path gameExecutablePath = gameDir.Append(gameName).AppendExtension("exe");
     Debug_Log("Moving the executable to '" << gameExecutablePath  << "'...");
-    const Path originalGameOutputDir = EditorPaths::GetGameExecutableOutputFile(binaryType);
+    const Path originalGameOutputDir = EditorPaths::GetExecutableDir();
+                // EditorPaths::GetGameExecutableOutputFile(binaryType);
 
     File::Remove(gameExecutablePath); // Remove old game, if any
     File::Rename(originalGameOutputDir, gameExecutablePath);
@@ -90,14 +91,13 @@ bool GameBuilder::CompileGameExecutable(BinType binaryType)
         return false;
     }
 
-    const Path gameOutputFilepath = EditorPaths::GetGameExecutableOutputFile(binaryType);
-    File::Remove(gameOutputFilepath);
+    const Path gameOutputFilepath = EditorPaths::GetExecutableDir();
+                      // EditorPaths::GetGameExecutableOutputFile(binaryType);
+    // File::Remove(gameOutputFilepath);
 
-    String debugRelease = (binaryType == BinType::Debug) ? "Debug" : "Release";
-    String cmd = EditorPaths::GetEditorDir().GetAbsolute() +
-                 "/scripts/compileTargets.sh " +
-                 debugRelease +
-                 " Game";
+    String debugOrRelease = (binaryType == BinType::Debug) ? "Debug" : "Release";
+    String cmd = "cd " + EditorPaths::GetExecutableDir().GetAbsolute() + " ; " +
+                 " mkdir a ; mkdir b " + debugOrRelease;
 
     Debug_Log("Compiling game executable with: " << cmd);
 

@@ -30,7 +30,7 @@ UIInputFile::UIInputFile()
 
     p_pathInputText = GameObjectFactory::CreateUIInputText();
     p_pathInputText->SetBlocked(true);
-    p_pathInputText->GetText()->SetTextSize(11);
+    p_pathInputText->GetText()->SetTextSize(12);
     UILayoutElement *pathInputTextLE = p_pathInputText->GetGameObject()->
                                        AddComponent<UILayoutElement>();
     pathInputTextLE->SetFlexibleSize( Vector2(9999.9f) );

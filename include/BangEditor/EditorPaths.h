@@ -19,8 +19,6 @@ public:
     static Path GetEditorAssetsDir();
 
     static List<Path> GetEditorIncludeDirs();
-    static Path GetEditorBinaryDir(BinType binaryType);
-    static Path GetGameExecutableOutputFile(BinType binaryType);
 
     static Path CreateEditorPath(const String &path);
 

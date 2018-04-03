@@ -177,7 +177,7 @@ UILabel *InspectorWidget::CreateWidgetLabel(const String &content,
 
     UILabel *label = GameObjectFactory::CreateUILabel();
     label->GetText()->SetContent(content);
-    label->GetText()->SetTextSize(11);
+    label->GetText()->SetTextSize(12);
     label->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
     label->SetSelectable(false);
 
@@ -208,7 +208,7 @@ GameObject *InspectorWidget::CreateTitleGameObject()
     UITextRenderer *titleText = titleGo->AddComponent<UITextRenderer>();
     titleText->SetHorizontalAlign(HorizontalAlignment::Left);
     titleText->SetContent("InspectorWidget");
-    titleText->SetTextSize(10);
+    titleText->SetTextSize(13);
     p_titleText = titleText;
 
     return titleGo;

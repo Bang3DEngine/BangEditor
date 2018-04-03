@@ -32,7 +32,7 @@ UISceneToolbar::UISceneToolbar()
 
     p_playButton = GameObjectFactory::CreateUIButton();
     p_playButton->SetIcon(IconManager::GetRightArrowIcon().Get(),
-                          Vector2i(10));
+                          Vector2i(ToolBarHeight));
     p_playButton->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
     p_playButton->GetIcon()->SetTint(Color::DarkGray);
     p_playButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
@@ -42,7 +42,7 @@ UISceneToolbar::UISceneToolbar()
 
     p_pauseButton = GameObjectFactory::CreateUIButton();
     p_pauseButton->SetIcon(EditorIconManager::GetDoubleBarIcon().Get(),
-                           Vector2i(10));
+                           Vector2i(ToolBarHeight));
     p_pauseButton->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
     p_pauseButton->GetIcon()->SetTint(Color::DarkGray);
     p_pauseButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
@@ -52,7 +52,7 @@ UISceneToolbar::UISceneToolbar()
 
     p_stepButton = GameObjectFactory::CreateUIButton();
     p_stepButton->SetIcon(EditorIconManager::GetRightArrowAndBarIcon().Get(),
-                          Vector2i(10));
+                          Vector2i(ToolBarHeight));
     p_stepButton->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
     p_stepButton->GetIcon()->SetTint(Color::DarkGray);
     p_stepButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
@@ -62,7 +62,7 @@ UISceneToolbar::UISceneToolbar()
 
     p_stopButton = GameObjectFactory::CreateUIButton();
     p_stopButton->SetIcon(EditorIconManager::GetSquareIcon().Get(),
-                          Vector2i(10));
+                          Vector2i(ToolBarHeight));
     p_stopButton->GetIcon()->SetTint(Color::DarkGray);
     p_stopButton->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
     p_stopButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
@@ -85,7 +85,7 @@ UISceneToolbar::UISceneToolbar()
     GameObject *showDebugStatsTextGo = GameObjectFactory::CreateUIGameObject();
     UITextRenderer*showDebugStatsText =
                         showDebugStatsTextGo->AddComponent<UITextRenderer>();
-    showDebugStatsText->SetTextSize(10);
+    showDebugStatsText->SetTextSize(11);
     showDebugStatsText->SetContent("Stats");
 
     p_playButton->GetGameObject()->SetParent(this);

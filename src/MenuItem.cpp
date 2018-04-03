@@ -21,7 +21,7 @@ USING_NAMESPACE_BANG_EDITOR
 MenuItem::MenuItem(MenuItemType itemType)
 {
     SetName("MenuItem");
-    SetFontSize(11);
+    SetFontSize(13);
     m_itemType = itemType;
 
     GameObjectFactory::CreateUIGameObjectInto(this);

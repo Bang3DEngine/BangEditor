@@ -33,7 +33,7 @@ UISceneDebugStats::UISceneDebugStats()
     p_debugStatsText->SetVerticalAlign(VerticalAlignment::Top);
     p_debugStatsText->SetTextColor(Color::Black);
     p_debugStatsText->SetWrapping(true);
-    p_debugStatsText->SetTextSize(10);
+    p_debugStatsText->SetTextSize(11);
 
     debugStatsTextGo->SetParent(this);
 }

@@ -2,6 +2,7 @@
 
 #include "Bang/UIButton.h"
 #include "Bang/Material.h"
+#include "Bang/Resources.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -29,9 +30,12 @@ UIInputColor::UIInputColor()
     le->SetFlexibleWidth(1.0f);
 
     p_colorImage = GameObjectFactory::CreateUIImage(Color::Black);
+    p_colorImage->SetMode(UIImageRenderer::Mode::SLICE_9);
+    p_colorImage->SetImageTexture( Resources::Load<Texture2D>(
+                                    EPATH("Images/RRect_9s.png") ).Get() );
     UILayoutElement *colorImgLE = p_colorImage->GetGameObject()->
                                        AddComponent<UILayoutElement>();
-    colorImgLE->SetPreferredWidth(12);
+    colorImgLE->SetPreferredWidth(20);
 
     p_searchColorButton = GameObjectFactory::CreateUIButton();
     p_searchColorButton->GetText()->SetContent("");

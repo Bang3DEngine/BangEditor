@@ -58,7 +58,7 @@ ExplorerItem::ExplorerItem()
     labelRT->SetAnchorY( Vector2(-1, -1) );
     labelRT->SetMarginTop(-textPixels);
     p_label->SetFocusEnabled(false);
-    p_label->GetText()->SetTextSize(9);
+    p_label->GetText()->SetTextSize(11);
     p_label->GetText()->SetContent("");
     p_label->GetText()->SetWrapping(true);
     p_label->GetText()->SetVerticalAlign(VerticalAlignment::Top);
