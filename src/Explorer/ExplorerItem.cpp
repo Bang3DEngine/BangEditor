@@ -154,7 +154,7 @@ void ExplorerItem::Duplicate()
 
 void ExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
 {
-    menuRootItem->SetFontSize(10);
+    menuRootItem->SetFontSize(12);
 
     MenuItem *duplicate = menuRootItem->AddItem("Duplicate");
     duplicate->SetSelectedCallback([this](MenuItem*) { Duplicate(); });

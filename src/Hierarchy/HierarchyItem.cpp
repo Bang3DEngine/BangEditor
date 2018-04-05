@@ -141,7 +141,7 @@ void HierarchyItem::OnNameChanged(GameObject *go, const String &,
 
 void HierarchyItem::OnCreateContextMenu(MenuItem *menuRootItem)
 {
-    menuRootItem->SetFontSize(10);
+    menuRootItem->SetFontSize(12);
 
     MenuItem *createEmpty = menuRootItem->AddItem("Create Empty");
     createEmpty->SetSelectedCallback([this](MenuItem*)

@@ -136,7 +136,7 @@ RH<Texture2D> ComponentInspectorWidget::GetComponentIconTexture() const
 
 void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
 {
-    menuRootItem->SetFontSize(10);
+    menuRootItem->SetFontSize(12);
 
     MenuItem *remove = menuRootItem->AddItem("Remove");
     remove->SetSelectedCallback([this](MenuItem*)
