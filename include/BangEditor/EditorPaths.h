@@ -17,6 +17,7 @@ public:
 
     static const Path& GetEditorDir();
     static Path GetEditorAssetsDir();
+    static Path GetEditorBuildDir();
 
     static List<Path> GetEditorIncludeDirs();
 

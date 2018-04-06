@@ -46,6 +46,11 @@ Path EditorPaths::GetEditorAssetsDir()
     return GetEditorDir().Append("Assets");
 }
 
+Path EditorPaths::GetEditorBuildDir()
+{
+    return GetEditorDir().Append("Build");
+}
+
 Path EditorPaths::CreateEditorPath(const String &path)
 {
     return EditorPaths::GetEditorAssetsDir().Append(path);

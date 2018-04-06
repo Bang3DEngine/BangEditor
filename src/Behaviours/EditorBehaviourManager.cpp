@@ -52,6 +52,8 @@ void EditorBehaviourManager::WaitForAsyncCompileJobs()
 
 bool EditorBehaviourManager::PrepareBehavioursLibrary()
 {
+    if (GetBehaviourSourcesPaths().IsEmpty()) { return true; }
+
     WaitForAsyncCompileJobs();
 
     // Compile

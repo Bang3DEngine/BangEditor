@@ -21,7 +21,7 @@ set(BANG_EDITOR_PKG_BUILT ON)
 #=================================================================
 # Set variables (I) ==============================================
 #=================================================================
-set(EDITOR_ROOT "${CMAKE_CURRENT_LIST_DIR}/../..")
+set(EDITOR_ROOT "${CMAKE_CURRENT_LIST_DIR}/..")
 set(BANG_ENGINE_ROOT "${EDITOR_ROOT}/Bang")
 set(BANG_ENGINE_ROOT_DEFINE ".")
 set(BANG_EDITOR_ROOT_DEFINE ".")
@@ -34,7 +34,7 @@ file(MAKE_DIRECTORY ${PKG_DIRECTORY})
 #=================================================================
 # Build Bang package =============================================
 #=================================================================
-include(${BANG_ENGINE_ROOT}/Scripts/BuildPackage/CMakeLists.txt REQUIRED)
+include(${BANG_ENGINE_ROOT}/Build/CMakeLists.txt REQUIRED)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -54,12 +54,15 @@ include(${EDITOR_ROOT}/CMakeLists.txt REQUIRED)
 project(BuildPackageBangEditor C CXX)
 
 #=================================================================
-# Copy/Remove editor directories =================================
+# Copy directories ===============================================
 #=================================================================
-# Assets Copy
 set(ENGINE_ASSETS_DIR_NAME "Assets")
 set(ENGINE_ASSETS_DIR_SRC "${EDITOR_ROOT}/${ENGINE_ASSETS_DIR_NAME}")
 set(ENGINE_ASSETS_DIR_DST "${PKG_DIRECTORY}")
+set(ENGINE_INCLUDE_DIR   "${PKG_DIRECTORY}/include")
+set(ENGINE_LIBRARIES_DIR "${PKG_DIRECTORY}/Libraries")
+
+# Assets Copy
 add_custom_command(
   OUTPUT COPY_ASSETS_BANG_EDITOR_PKG_DIR
   COMMAND cp -r ${ENGINE_ASSETS_DIR_SRC} ${ENGINE_ASSETS_DIR_DST}
@@ -68,21 +71,50 @@ add_custom_command(
   VERBATIM
  )
 
-# Remove useless directories
-set(ENGINE_INCLUDE_DIR "${PKG_DIRECTORY}/include")
-# LIBRARY_OUTPUT_PATH defined by bang build package CMake
+# Include copy
+# add_custom_command(
+#   OUTPUT COPY_INCLUDE_BANG_EDITOR_PKG_DIR
+#   COMMAND
+#   ${CMAKE_COMMAND} -E copy ${ENGINE_INCLUDE_DIR} ${LIBRARY_OUTPUT_DIRECTORY}
+#   WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
+#   COMMENT "Copying ${ENGINE_INCLUDE_DIR}"
+#   VERBATIM
+#   DEPENDS COPY_DIRS CREATE_PKG_DIRS
+# )
+
+# Libraries remove
+# add_custom_command(
+#   OUTPUT REMOVE_LIBRARIES_BANG_EDITOR_PKG_DIR
+#   COMMAND
+#   ${CMAKE_COMMAND} -E remove_directory ${ENGINE_LIBRARIES_DIR}
+#   WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
+#   COMMENT "Removing ${ENGINE_LIBRARIES_DIR}"
+#   VERBATIM
+#   DEPENDS COPY_DIRS CREATE_PKG_DIRS
+# )
+
+# Libraries copy
+set(EDITOR_LIBRARIES_DIR_NAME "Libraries")
+set(EDITOR_LIBRARIES_DIR_SRC "${LIBRARY_OUTPUT_PATH}")
+set(EDITOR_LIBRARIES_DIR_DST "${PKG_DIRECTORY}/${EDITOR_LIBRARIES_DIR_NAME}")
 add_custom_command(
-  OUTPUT REMOVE_INCLUDE_BANG_EDITOR_PKG_DIR
-  COMMAND rm -rf ${ENGINE_INCLUDE_DIR} ${LIBRARY_OUTPUT_DIRECTORY}
+  OUTPUT COPY_LIBRARIES_BANG_EDITOR_PKG_DIR
+  COMMAND
+  ${CMAKE_COMMAND} -E copy ${EDITOR_LIBRARIES_DIR_SRC}/libbang_static.a ${EDITOR_LIBRARIES_DIR_DST}
   WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
-  COMMENT "Removing ${ENGINE_INCLUDE_DIR} and ${LIBRARY_OUTPUT_DIRECTORY}..."
+  COMMENT "Copying ${EDITOR_LIBRARIES_DIR_SRC} to ${EDITOR_LIBRARIES_DIR_DST}..."
   VERBATIM
-  DEPENDS COPY_DIRS CREATE_PKG_DIRS
 )
+
 add_custom_target(COPY_EDITOR_PKG_DIRS ALL DEPENDS
+    BangEditor
     COPY_ASSETS_BANG_EDITOR_PKG_DIR
-    REMOVE_INCLUDE_BANG_EDITOR_PKG_DIR
+    #COPY_INCLUDE_BANG_EDITOR_PKG_DIR
+    #REMOVE_LIBRARIES_BANG_EDITOR_PKG_DIR
+    COPY_LIBRARIES_BANG_EDITOR_PKG_DIR
 )
+
+
 #=================================================================
 #=================================================================
 #=================================================================

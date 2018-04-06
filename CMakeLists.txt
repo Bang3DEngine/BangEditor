@@ -22,7 +22,9 @@ set(BANG_EDITOR_BUILT ON)
 # Check input params and set some paths ==========================
 #=================================================================
 set(BANG_EDITOR_ROOT "${CMAKE_CURRENT_LIST_DIR}")
+set(BANG_EDITOR_LIBRARIES_DIR "${BANG_EDITOR_ROOT}/Libraries")
 set(BANG_ENGINE_ROOT "${BANG_EDITOR_ROOT}/Bang")
+set(BANG_ENGINE_LIBRARIES_DIR "${BANG_ENGINE_ROOT}/Libraries")
 
 if (NOT DEFINED BANG_ENGINE_ROOT_DEFINE)
     file(RELATIVE_PATH BANG_ENGINE_ROOT_DEFINE ${CMAKE_BINARY_DIR} ${BANG_ENGINE_ROOT})
@@ -56,6 +58,7 @@ project(BangEditor C CXX)
 
 set(SRC_DIR "${CMAKE_CURRENT_LIST_DIR}/src")
 set(BANG_EDITOR_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}/include")
+set(LIBRARY_OUTPUT_PATH ${BANG_EDITOR_LIBRARIES_DIR})
 
 # Extra make flags
 # Flag no-pie ####
@@ -98,7 +101,8 @@ include(${BANG_ENGINE_ROOT}/CMakeIncludes/CMakeFlags.cmake)
 #=================================================================
 # Add misc files =================================================
 #=================================================================
-file(GLOB_RECURSE OTHER_FILES "${BANG_EDITOR_INCLUDE_DIR}/BangEditor/*.h")
+file(GLOB_RECURSE OTHER_FILES "${BANG_EDITOR_INCLUDE_DIR}/BangEditor/*.h"
+                              "${BANG_EDITOR_ROOT}/Build/CMakeLists.txt")
 add_misc_files(${OTHER_FILES})
 #=================================================================
 #=================================================================

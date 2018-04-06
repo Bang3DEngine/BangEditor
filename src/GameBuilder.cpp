@@ -91,14 +91,21 @@ bool GameBuilder::CompileGameExecutable(BinType binaryType)
         return false;
     }
 
-    const Path gameOutputFilepath = EditorPaths::GetExecutableDir();
-                      // EditorPaths::GetGameExecutableOutputFile(binaryType);
-    // File::Remove(gameOutputFilepath);
-
+    const Path execDir = EditorPaths::GetExecutableDir();
+    const String buildGameDirectory = "buildGame";
+    const Path gameOutputFilepath = execDir.Append(buildGameDirectory).
+                                    Append("Game");
     String debugOrRelease = (binaryType == BinType::Debug) ? "Debug" : "Release";
-    String cmd = "cd " + EditorPaths::GetExecutableDir().GetAbsolute() + " ; " +
-                 " mkdir a ; mkdir b " + debugOrRelease;
-
+    String cmd = "cd " + execDir.GetAbsolute()                 + " && " +
+                 "mkdir -p " + buildGameDirectory              + " && " +
+                 "cd "       + buildGameDirectory              + " && " +
+                 "cmake " +
+                 " -DBUILD_GAME=ON " +
+                 " -DBUILD_SHARED_LIBS=OFF " +
+                 " -DCMAKE_BUILD_TYPE=" + debugOrRelease +
+                 " " + execDir.Append("..").GetAbsolute()      + " && " +
+                 "make -j4 "                                   + "" +
+                 "";
     Debug_Log("Compiling game executable with: " << cmd);
 
     SystemProcess process;
