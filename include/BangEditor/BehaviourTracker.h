@@ -14,11 +14,11 @@ NAMESPACE_BANG_EDITOR_BEGIN
 class BehaviourTracker : public IFileTrackerListener
 {
 public:
-	BehaviourTracker();
-	virtual ~BehaviourTracker();
+    BehaviourTracker();
+    virtual ~BehaviourTracker();
 
-    void Update();
-    void ForceCheckNow();
+    void Update(bool forceCheckNow);
+    void ResetModifications();
 
     bool HasBeenModified(const Path &sourcePath) const;
     List<Path> GetIncludeDirs() const;

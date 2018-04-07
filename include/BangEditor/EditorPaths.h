@@ -17,7 +17,11 @@ public:
 
     static const Path& GetEditorDir();
     static Path GetEditorAssetsDir();
+    static Path GetEditorBinariesDir();
+    static Path GetEditorLibrariesDir();
     static Path GetEditorBuildDir();
+    static Path GetBangStaticLibPath();
+    static Path GetBangDynamicLibPath();
 
     static List<Path> GetEditorIncludeDirs();
 

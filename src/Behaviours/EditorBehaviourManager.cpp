@@ -56,9 +56,11 @@ bool EditorBehaviourManager::PrepareBehavioursLibrary()
 
     WaitForAsyncCompileJobs();
 
-    // Compile
-    GetBehaviourTracker()->ForceCheckNow();
+    // Update for changes
+    GetBehaviourTracker()->Update(true);
     UpdateCompileInformations();
+
+    // Compile
     if (!AreAllBehavioursCompiledSuccessfully())
     {
         CompileAllProjectBehaviours();
@@ -323,16 +325,48 @@ List<Path> EditorBehaviourManager::GetCompiledObjectsPaths()
 List<Path> EditorBehaviourManager::GetBehaviourSourcesPaths()
 {
     List<Path> behaviourSources = Paths::GetProjectAssetsDir().
-                                  GetFiles(Path::FindFlag::Recursive,
-                                           Extensions::GetSourceFileExtensions());
+                              GetFiles(Path::FindFlag::Recursive,
+                                       Extensions::GetSourceFileExtensions());
+
+    // Sometimes we have intermediate files .cpp.hf62 or some things like that
+    // Filter them out, by making sure they really end in "*.cpp"
+    const Array<String> srcExts = Extensions::GetSourceFileExtensions();
+    for (auto it = behaviourSources.Begin(); it != behaviourSources.End();)
+    {
+        bool correct = false;
+        String pathLower = (*it).GetAbsolute().ToLower();
+        for (const String &srcExt : srcExts)
+        {
+            if (pathLower.EndsWith(srcExt.ToLower())) { correct = true; break; }
+        }
+        if (!correct) { it = behaviourSources.Remove(it); } else { ++it; }
+    }
     return behaviourSources;
 }
 
 Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType)
 {
+    const Path editorLibDir = EditorPaths::GetEditorLibrariesDir();
+    Path bangLibPath = EditorPaths::GetBangStaticLibPath();
+    if (!bangLibPath.Exists())
+    {
+        Debug_Warn(bangLibPath << " not found. Will try with dynamic version...");
+    }
+    bangLibPath = EditorPaths::GetBangDynamicLibPath();
+    if (!bangLibPath.Exists())
+    {
+        Debug_Error(bangLibPath << " not found. Won't be able to link game");
+        return Compiler::Job();
+    }
+    Debug_DLog("Using Bang library '" << bangLibPath << "'");
+
+    const Path bangLibsDir = bangLibPath.GetDirectory();
+    String bangLibName = bangLibPath.GetName();
+    if (bangLibName.BeginsWith("lib")) { bangLibName.Remove(0, 3); }
+
     Compiler::Job job;
-    job.libDirs.PushBack(Paths::GetEngineLibrariesDir(binaryType));
-    job.libraries.PushBack( List<String>({"Bang"}) );
+    job.libDirs.PushBack(bangLibsDir);
+    job.libraries.PushBack(bangLibName);
 
     job.flags =  {"-fPIC", "--std=c++11"};
     if (binaryType == BinType::Debug)
@@ -374,31 +408,35 @@ void EditorBehaviourManager::UpdateCompileInformations()
 {
     if (ScenePlayer::GetPlayState() != PlayState::Editing) { return; }
 
-    if (GetBehaviourTracker()->GetFileTracker().NeedsCheck())
-    {
-        GetMutex()->Lock();
-        List<Path> modifiedBehaviours;
-        for (const Path &compiledBehaviour : m_compiledBehaviours)
-        {
-            if ( GetBehaviourTracker()->HasBeenModified(compiledBehaviour) )
-            {
-                SetBehavioursLibrary(nullptr);
-                modifiedBehaviours.PushBack(compiledBehaviour);
-            }
-        }
-        GetMutex()->UnLock();
+    GetBehaviourTracker()->Update(false);
 
-        for (const Path &modifiedBehaviour : modifiedBehaviours)
+    GetMutex()->Lock();
+    const List<Path> behaviourPaths = GetBehaviourSourcesPaths();
+    Set<Path> modifiedBehaviours;
+    for (const Path &behaviourPath : behaviourPaths)
+    {
+        if ( GetBehaviourTracker()->HasBeenModified(behaviourPath) )
         {
-            if ( !IsBeingCompiled(modifiedBehaviour) )
-            {
-                MutexLocker ml(GetMutex()); (void)ml;
-                m_compiledBehaviours.Remove(modifiedBehaviour);
-                m_successfullyCompiledBehaviours.Remove(modifiedBehaviour);
-            }
+            modifiedBehaviours.Add(behaviourPath);
         }
     }
-    GetBehaviourTracker()->Update();
+    GetMutex()->UnLock();
+
+    // Invalidate library if some behaviour has changed
+    if (!modifiedBehaviours.IsEmpty()) { SetBehavioursLibrary(nullptr); }
+
+    // Remove them from compiled structures
+    for (const Path &modifiedBehaviour : modifiedBehaviours)
+    {
+        if ( !IsBeingCompiled(modifiedBehaviour) )
+        {
+            MutexLocker ml(GetMutex()); (void)ml;
+            m_compiledBehaviours.Remove(modifiedBehaviour);
+            m_successfullyCompiledBehaviours.Remove(modifiedBehaviour);
+        }
+    }
+
+    GetBehaviourTracker()->ResetModifications();
 }
 
 Mutex* EditorBehaviourManager::GetMutex() const { return &m_mutex; }

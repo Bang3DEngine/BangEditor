@@ -44,65 +44,60 @@ void GameBuilder::BuildGame(const String &gameName,
                             BinType binaryType,
                             bool compileBehaviours)
 {
-    Debug_Log("Compiling the game executable...");
-    if (!GameBuilder::CompileGameExecutable(binaryType))
+    List<Path> sceneFiles = Paths::GetProjectAssetsDir()
+                                    .GetFiles(Path::FindFlag::Recursive,
+                                        {Extensions::GetSceneExtension()});
+    if (sceneFiles.IsEmpty())
     {
-        Debug_Error("Could not compile game executable");
+        Debug_Error("Please save at least one scene in the "
+                     "Assets directory to build the game");
         return;
     }
 
+    #define BANG_BUILD_GAME_CHECK_EXISTANCE(path) \
+    if (!path.Exists())  { Debug_Error("'" << path << "' not found."); return; }
+
+    const Path binariesDir = EditorPaths::GetEditorBinariesDir();
+    const Path librariesDir = EditorPaths::GetEditorLibrariesDir();
+    const Path gameBinaryTemplatePath = binariesDir.Append("Game");
+    const Path gameBinaryPath = gameDir.Append(gameName).AppendExtension("exe");
+    BANG_BUILD_GAME_CHECK_EXISTANCE(binariesDir);
+    BANG_BUILD_GAME_CHECK_EXISTANCE(librariesDir);
+    BANG_BUILD_GAME_CHECK_EXISTANCE(gameBinaryTemplatePath);
+
     Debug_Log("Copying assets into data directory...");
     if (!GameBuilder::CreateDataDirectory(gameDir))
-    {
-        Debug_Error("Could not create data directory");
-        return;
-    }
+    { Debug_Error("Could not create data directory"); return; }
 
     if (compileBehaviours)
     {
         Debug_Log("Compiling behaviours...");
         if (!GameBuilder::CreateBehavioursLibrary(gameDir, binaryType))
         {
-            Debug_Error("Could not compile the behaviours");
+            Debug_Error("Could not compile behaviours!");
             return;
         }
     }
 
-    Path gameExecutablePath = gameDir.Append(gameName).AppendExtension("exe");
-    Debug_Log("Moving the executable to '" << gameExecutablePath  << "'...");
-    const Path originalGameOutputDir = EditorPaths::GetExecutableDir();
-                // EditorPaths::GetGameExecutableOutputFile(binaryType);
+    Debug_Log("Moving the Game executable to '" << gameBinaryPath  << "'...");
+    File::Duplicate(gameBinaryTemplatePath, gameBinaryPath);
 
-    File::Remove(gameExecutablePath); // Remove old game, if any
-    File::Rename(originalGameOutputDir, gameExecutablePath);
-
-    Debug_Log("Build finished successfully!");
+    Debug_Log("Build finished successfully! "
+              "Game path: '" << gameBinaryPath << "'");
 }
 
 bool GameBuilder::CompileGameExecutable(BinType binaryType)
-{
-    List<Path> sceneFiles = Paths::GetProjectAssetsDir()
-                                    .GetFiles(Path::FindFlag::Recursive,
-                                               {Extensions::GetSceneExtension()});
-    if (sceneFiles.IsEmpty())
-    {
-        Debug_Error("Please save at least one scene in the "
-                     "Assets directory to build the game");
-        return false;
-    }
-
-    const Path execDir = EditorPaths::GetExecutableDir();
-    const String buildGameDirectory = "buildGame";
+{/*
     const Path gameOutputFilepath = execDir.Append(buildGameDirectory).
                                     Append("Game");
     String debugOrRelease = (binaryType == BinType::Debug) ? "Debug" : "Release";
     String cmd = "cd " + execDir.GetAbsolute()                 + " && " +
                  "mkdir -p " + buildGameDirectory              + " && " +
                  "cd "       + buildGameDirectory              + " && " +
-                 "cmake " +
-                 " -DBUILD_GAME=ON " +
-                 " -DBUILD_SHARED_LIBS=OFF " +
-                 " -DCMAKE_BUILD_TYPE=" + debugOrRelease +
+                 "cmake"                                       + " " +
+                 "-DBUILD_GAME=ON"                             + " " +
+                 "-DBUILD_SHARED_LIBS=OFF"                     + " " +
+                 "-DCMAKE_BUILD_TYPE=" + debugOrRelease        + " " +
                  " " + execDir.Append("..").GetAbsolute()      + " && " +
                  "make -j4 "                                   + "" +
                  "";
@@ -133,6 +128,7 @@ bool GameBuilder::CompileGameExecutable(BinType binaryType)
         Debug_Error(out);
         return false;
     }
+*/
     return true;
 }
 
@@ -142,13 +138,15 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
     File::Remove(dataDir);
     if (!File::CreateDirectory(dataDir)) { return false; }
 
-    // Copy the Engine Assets in the Data directory
-    Path gameDataEngineAssetsDir = dataDir.Append("Assets");
-    if (!File::CreateDirectory(gameDataEngineAssetsDir)) { return false; }
-    if (!File::DuplicateDir(Paths::GetEngineAssetsDir(), gameDataEngineAssetsDir))
+    // Copy the Engine needed directories into the Data directory
+    Path bangDataDir = dataDir.Append("Bang");
+    Path bangAssetsDataDir = bangDataDir.Append("Assets");
+    if (!File::CreateDirectory(bangDataDir)) { return false; }
+    if (!File::DuplicateDir(Paths::GetEngineAssetsDir(), bangAssetsDataDir))
     {
         Debug_Error("Could not duplicate engine assets directory '" <<
-                    Paths::GetEngineAssetsDir() << "' into '" << gameDataEngineAssetsDir << "'");
+                    Paths::GetEngineAssetsDir() << "' into '" <<
+                    bangAssetsDataDir << "'");
         return false;
     }
 

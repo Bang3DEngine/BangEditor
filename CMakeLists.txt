@@ -23,8 +23,12 @@ set(BANG_EDITOR_BUILT ON)
 #=================================================================
 set(BANG_EDITOR_ROOT "${CMAKE_CURRENT_LIST_DIR}")
 set(BANG_EDITOR_LIBRARIES_DIR "${BANG_EDITOR_ROOT}/Libraries")
+set(BANG_EDITOR_BINARIES_DIR "${BANG_EDITOR_ROOT}/Binaries")
 set(BANG_ENGINE_ROOT "${BANG_EDITOR_ROOT}/Bang")
 set(BANG_ENGINE_LIBRARIES_DIR "${BANG_ENGINE_ROOT}/Libraries")
+
+set(EXECUTABLE_OUTPUT_PATH "${BANG_EDITOR_BINARIES_DIR}")
+set(LIBRARY_OUTPUT_PATH "${BANG_EDITOR_LIBRARIES_DIR}")
 
 if (NOT DEFINED BANG_ENGINE_ROOT_DEFINE)
     file(RELATIVE_PATH BANG_ENGINE_ROOT_DEFINE ${CMAKE_BINARY_DIR} ${BANG_ENGINE_ROOT})
@@ -195,10 +199,6 @@ ${SRC_DIR}/MenuItem.cpp
 ${SRC_DIR}/UIContextMenu.cpp
 ${SRC_DIR}/UITabContainer.cpp
 ${SRC_DIR}/UITabHeader.cpp
-
-${SRC_DIR}/Main.cpp
-
-${OTHER_FILES}
 )
 #=================================================================
 #=================================================================
@@ -207,16 +207,14 @@ ${OTHER_FILES}
 #=================================================================
 # Executables ====================================================
 #=================================================================
-
 include_directories(${BANG_EDITOR_INCLUDE_DIR})
-add_executable(BangEditor ${EDITOR_SRC_FILES})
+
+add_executable(Game ${SRC_DIR}/MainGame.cpp)
+target_link_libraries(Game BangLib ${ALL_DEPENDENCIES_LIB_FILES})
+
+add_library(BangEditorObjects OBJECT ${EDITOR_SRC_FILES})
+add_executable(BangEditor $<TARGET_OBJECTS:BangEditorObjects> ${SRC_DIR}/Main.cpp)
 target_link_libraries(BangEditor BangLib ${ALL_DEPENDENCIES_LIB_FILES})
-
-if (${COMPILE_GAME})
-    add_executable(Game ${SRC_DIR}/MainGame.cpp)
-    target_link_libraries(Game BangLib ${ALL_DEPENDENCIES_LIB_FILES})
-endif()
-
 #=================================================================
 #=================================================================
 #=================================================================

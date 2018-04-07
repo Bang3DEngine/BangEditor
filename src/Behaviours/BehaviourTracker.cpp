@@ -1,5 +1,6 @@
 #include "BangEditor/BehaviourTracker.h"
 
+#include "Bang/Debug.h"
 #include "Bang/Paths.h"
 #include "Bang/CodePreprocessor.h"
 
@@ -18,8 +19,11 @@ BehaviourTracker::~BehaviourTracker()
 {
 }
 
-void BehaviourTracker::Update()
+void BehaviourTracker::Update(bool forceCheckNow)
 {
+    m_fileTracker.Update(forceCheckNow);
+
+    // Handle project changing
     if (m_previousProjectPath != Paths::GetProjectAssetsDir())
     {
         m_fileTracker.UnTrackPath(m_previousProjectPath);
@@ -27,14 +31,11 @@ void BehaviourTracker::Update()
         m_previousProjectPath = Paths::GetProjectAssetsDir();
         m_fileTracker.TrackPath( Paths::GetProjectAssetsDir() );
     }
-
-    m_changedPathsFromLastUpdate.Clear();
-    m_fileTracker.Update();
 }
 
-void BehaviourTracker::ForceCheckNow()
+void BehaviourTracker::ResetModifications()
 {
-    m_fileTracker.ForceCheckNow();
+    m_changedPathsFromLastUpdate.Clear();
 }
 
 bool BehaviourTracker::HasBeenModified(const Path &sourcePath) const
@@ -68,6 +69,7 @@ void BehaviourTracker::OnPathAdded(const Path &addedPath)
 
 void BehaviourTracker::OnPathModified(const Path &modifiedPath)
 {
+    // Debug_DLog("Behaviour modified: " << modifiedPath);
     m_changedPathsFromLastUpdate.Add(modifiedPath);
 }
 

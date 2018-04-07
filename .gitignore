@@ -1,5 +1,7 @@
 # C++ and Bang
 *EditorSettings.txt*
+Binaries/*
+Libraries/*
 build*/
 *.refl.h
 tmp

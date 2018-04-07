@@ -157,7 +157,7 @@ void Explorer::Update()
 
 void Explorer::ForceCheckFileChanges()
 {
-    EditorFileTracker::GetInstance()->GetFileTracker()->ForceCheckNow();
+    EditorFileTracker::GetInstance()->GetFileTracker()->Update(true);
 }
 
 void Explorer::SelectPath(const Path &path)

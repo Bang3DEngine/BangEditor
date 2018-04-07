@@ -14,7 +14,7 @@
 
 USING_NAMESPACE_BANG
 
-int main(int, char **)
+int main(int argc, char **argv)
 {
     // Get path and directories, and check for their existence.
     Path execPath     = Paths::GetExecutablePath();
@@ -23,9 +23,9 @@ int main(int, char **)
     if (!dataDir.IsDir())
     { Debug_Error("Could not find data directory '" << dataDir << "'."); return 1; }
 
-    Path engineAssetsDir = dataDir.Append("EngineAssets");
-    if (!engineAssetsDir.IsDir())
-    { Debug_Error("Could not find engine assets directory '" << engineAssetsDir << "'."); return 3; }
+    Path bangDataDir = dataDir.Append("Bang");
+    if (!bangDataDir.IsDir())
+    { Debug_Error("Could not find bang data directory '" << bangDataDir << "'."); return 3; }
 
     Path gameAssetsDir = dataDir.Append("Assets");
     if (!gameAssetsDir.IsDir())
@@ -36,7 +36,8 @@ int main(int, char **)
     { Debug_Error("Could not find libraries directory '" << librariesDir << "'."); return 5; }
 
     Application app;
-    app.Init(dataDir);
+    app.Init(bangDataDir);
+
     ImportFilesManager::CreateMissingImportFiles(gameAssetsDir);
     ImportFilesManager::LoadImportFilepathGUIDs(gameAssetsDir);
 
@@ -50,7 +51,8 @@ int main(int, char **)
     List<Path> sceneFilepaths = gameAssetsDir.GetFiles(Path::FindFlag::Recursive,
                                                 {Extensions::GetSceneExtension()});
     if (sceneFilepaths.IsEmpty())
-    { Debug_Error("No scene found in '" << gameAssetsDir << "'");
+    {
+        Debug_Error("No scene found in '" << gameAssetsDir << "'");
         return 6;
     }
 
@@ -74,8 +76,8 @@ int main(int, char **)
 
     if (!behavioursLibPath.IsFile())
     {
-        Debug_Error("No behaviours library found in '" << librariesDir << "'");
-        return 7;
+        Debug_Warn("No behaviours library found in '" << librariesDir << "'");
+        // return 7;
     }
 
     Debug_Log("Picking as Behaviours library: '" <<

@@ -18,9 +18,10 @@ void EditorPaths::InitEditorPath(const Path &editorRootPath)
 {
     c_editorRoot = editorRootPath;
 
-    if (GetEditorAssetsDir().IsDir())
+    if (EditorPaths::GetEditorAssetsDir().IsDir())
     {
-        Debug_Log("Picking as EditorPaths Bang Editor Root: '" << GetEditorDir() << "'");
+        Debug_Log("Picking as EditorPaths Bang Editor Root: '" <<
+                  EditorPaths::GetEditorDir() << "'");
     }
     else
     {
@@ -43,12 +44,32 @@ const Path &EditorPaths::GetEditorDir()
 
 Path EditorPaths::GetEditorAssetsDir()
 {
-    return GetEditorDir().Append("Assets");
+    return EditorPaths::GetEditorDir().Append("Assets");
+}
+
+Path EditorPaths::GetEditorBinariesDir()
+{
+    return EditorPaths::GetEditorDir().Append("Binaries");
+}
+
+Path EditorPaths::GetEditorLibrariesDir()
+{
+    return EditorPaths::GetEditorDir().Append("Libraries");
 }
 
 Path EditorPaths::GetEditorBuildDir()
 {
-    return GetEditorDir().Append("Build");
+    return EditorPaths::GetEditorDir().Append("Build");
+}
+
+Path EditorPaths::GetBangStaticLibPath()
+{
+    return EditorPaths::GetEditorLibrariesDir().Append("libbang_static.a");
+}
+
+Path EditorPaths::GetBangDynamicLibPath()
+{
+    return EditorPaths::GetEditorLibrariesDir().Append("libbang_shared.so");
 }
 
 Path EditorPaths::CreateEditorPath(const String &path)

@@ -161,8 +161,8 @@ void EditorScene::BeforeRender()
 void EditorScene::Update()
 {
     GetScenePlayer()->Update();
-    GetEditorFileTracker()->GetFileTracker()->Update();
-    GetEditorFileTracker()->GetBehaviourTracker()->Update();
+    GetEditorFileTracker()->GetFileTracker()->Update(false);
+    GetEditorFileTracker()->GetBehaviourTracker()->Update(false);
 
     EditorSceneManager::SetActiveScene(this);
     Scene::Update();
