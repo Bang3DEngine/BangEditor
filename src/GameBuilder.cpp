@@ -81,6 +81,7 @@ void GameBuilder::BuildGame(const String &gameName,
 
     Debug_Log("Moving the Game executable to '" << gameBinaryPath  << "'...");
     File::Duplicate(gameBinaryTemplatePath, gameBinaryPath);
+    File::AddExecutablePermission(gameBinaryPath);
 
     Debug_Log("Build finished successfully! "
               "Game path: '" << gameBinaryPath << "'");
