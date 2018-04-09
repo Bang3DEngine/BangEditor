@@ -21,7 +21,7 @@ set(BANG_EDITOR_PKG_BUILT ON)
 #=================================================================
 # Set variables (I) ==============================================
 #=================================================================
-set(EDITOR_ROOT "${CMAKE_CURRENT_LIST_DIR}/..")
+set(EDITOR_ROOT "${CMAKE_CURRENT_LIST_DIR}/../..")
 set(BANG_ENGINE_ROOT "${EDITOR_ROOT}/Bang")
 set(BANG_ENGINE_ROOT_DEFINE ".")
 set(BANG_EDITOR_ROOT_DEFINE ".")
@@ -34,7 +34,7 @@ file(MAKE_DIRECTORY ${PKG_DIRECTORY})
 #=================================================================
 # Build Bang package =============================================
 #=================================================================
-include(${BANG_ENGINE_ROOT}/Build/CMakeLists.txt REQUIRED)
+include(${BANG_ENGINE_ROOT}/Build/BuildPackage/CMakeLists.txt REQUIRED)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -56,26 +56,44 @@ project(BuildPackageBangEditor C CXX)
 #=================================================================
 # Copy directories ===============================================
 #=================================================================
-set(ENGINE_ASSETS_DIR_NAME "Assets")
-set(ENGINE_ASSETS_DIR_SRC "${EDITOR_ROOT}/${ENGINE_ASSETS_DIR_NAME}")
-set(ENGINE_ASSETS_DIR_DST "${PKG_DIRECTORY}")
-set(ENGINE_INCLUDE_DIR   "${PKG_DIRECTORY}/include")
-set(ENGINE_LIBRARIES_DIR "${PKG_DIRECTORY}/Libraries")
+set(ASSETS_DIR_NAME "Assets")
+set(INCLUDE_DIR_NAME "include")
+set(LIBRARIES_DIR_NAME "Libraries")
+set(BINARIES_DIR_NAME "Binaries")
+set(ENGINE_ASSETS_DIR "${ENGINE_ROOT}/${ASSETS_DIR_NAME}")
+set(EDITOR_ASSETS_DIR "${EDITOR_ROOT}/${ASSETS_DIR_NAME}")
+set(ENGINE_INCLUDE_DIR   "${PKG_DIRECTORY}/${INCLUDE_DIR_NAME}")
+set(ENGINE_LIBRARIES_DIR "${PKG_DIRECTORY}/${LIBRARIES_DIR_NAME}")
+set(EDITOR_BINARIES_DIR "${EDITOR_ROOT}/${BINARIES_DIR_NAME}")
+set(PKG_ASSETS_DIR "${PKG_DIRECTORY}/${ASSETS_DIR_NAME}")
+set(PKG_BINARIES_DIR "${PKG_DIRECTORY}/${BINARIES_DIR_NAME}")
 
 # Assets Copy
 add_custom_command(
-  OUTPUT COPY_ASSETS_BANG_EDITOR_PKG_DIR
-  COMMAND cp -r ${ENGINE_ASSETS_DIR_SRC} ${ENGINE_ASSETS_DIR_DST}
+  OUTPUT COPY_PKG_ASSETS_EDITOR
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${ENGINE_ASSETS_DIR} ${PKG_ASSETS_DIR}
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${EDITOR_ASSETS_DIR} ${PKG_ASSETS_DIR}
+  COMMAND ${CMAKE_COMMAND} -E remove -f "${PKG_ASSETS_DIR}/EditorSettings.txt"
   WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
-  COMMENT "Copying ${ENGINE_ASSETS_DIR_SRC} to ${ENGINE_ASSETS_DIR_DST}..."
+  COMMENT "Copying ${ENGINE_ASSETS_DIR} and ${EDITOR_ASSETS_DIR} to ${PKG_ASSETS_DIRECTORY}..."
+  VERBATIM
+ )
+
+# Binaries Copy
+add_custom_command(
+  OUTPUT COPY_PKG_BINARIES_EDITOR
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${PKG_BINARIES_DIR}
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${EDITOR_BINARIES_DIR} ${PKG_BINARIES_DIR}
+  COMMAND ${CMAKE_COMMAND} -E rename ${PKG_BINARIES_DIR}/BangEditor ${PKG_DIRECTORY}/BangEditor
+  WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
+  COMMENT "Copying ${ENGINE_ASSETS_DIR} to ${PKG_ASSETS_DIR}..."
   VERBATIM
  )
 
 # Include copy
 # add_custom_command(
-#   OUTPUT COPY_INCLUDE_BANG_EDITOR_PKG_DIR
-#   COMMAND
-#   ${CMAKE_COMMAND} -E copy ${ENGINE_INCLUDE_DIR} ${LIBRARY_OUTPUT_DIRECTORY}
+#   OUTPUT COPY_PKG_INCLUDES_EDITOR
+#   COMMAND ${CMAKE_COMMAND} -E copy ${ENGINE_INCLUDE_DIR} ${LIBRARY_OUTPUT_DIRECTORY}
 #   WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
 #   COMMENT "Copying ${ENGINE_INCLUDE_DIR}"
 #   VERBATIM
@@ -85,8 +103,7 @@ add_custom_command(
 # Libraries remove
 # add_custom_command(
 #   OUTPUT REMOVE_LIBRARIES_BANG_EDITOR_PKG_DIR
-#   COMMAND
-#   ${CMAKE_COMMAND} -E remove_directory ${ENGINE_LIBRARIES_DIR}
+#   COMMAND ${CMAKE_COMMAND} -E remove_directory ${ENGINE_LIBRARIES_DIR}
 #   WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
 #   COMMENT "Removing ${ENGINE_LIBRARIES_DIR}"
 #   VERBATIM
@@ -98,9 +115,8 @@ set(EDITOR_LIBRARIES_DIR_NAME "Libraries")
 set(EDITOR_LIBRARIES_DIR_SRC "${LIBRARY_OUTPUT_PATH}")
 set(EDITOR_LIBRARIES_DIR_DST "${PKG_DIRECTORY}/${EDITOR_LIBRARIES_DIR_NAME}")
 add_custom_command(
-  OUTPUT COPY_LIBRARIES_BANG_EDITOR_PKG_DIR
-  COMMAND
-  ${CMAKE_COMMAND} -E copy ${EDITOR_LIBRARIES_DIR_SRC}/libbang_static.a ${EDITOR_LIBRARIES_DIR_DST}
+  OUTPUT COPY_PKG_LIBRARIES_EDITOR
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${EDITOR_LIBRARIES_DIR_SRC} ${EDITOR_LIBRARIES_DIR_DST}
   WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
   COMMENT "Copying ${EDITOR_LIBRARIES_DIR_SRC} to ${EDITOR_LIBRARIES_DIR_DST}..."
   VERBATIM
@@ -108,10 +124,11 @@ add_custom_command(
 
 add_custom_target(COPY_EDITOR_PKG_DIRS ALL
     DEPENDS BangEditor
-    DEPENDS COPY_ASSETS_BANG_EDITOR_PKG_DIR
-    #DEPENDS COPY_INCLUDE_BANG_EDITOR_PKG_DIR
+    DEPENDS COPY_PKG_ASSETS_EDITOR
+    DEPENDS COPY_PKG_BINARIES_EDITOR
+    #DEPENDS COPY_PKG_INCLUDES_EDITOR
     #DEPENDS REMOVE_LIBRARIES_BANG_EDITOR_PKG_DIR
-    DEPENDS COPY_LIBRARIES_BANG_EDITOR_PKG_DIR
+    DEPENDS COPY_PKG_LIBRARIES_EDITOR
 )
 
 

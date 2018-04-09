@@ -64,12 +64,12 @@ Path EditorPaths::GetEditorBuildDir()
 
 Path EditorPaths::GetBangStaticLibPath()
 {
-    return EditorPaths::GetEditorLibrariesDir().Append("libbang_static.a");
+    return EditorPaths::GetEditorLibrariesDir().Append("libBang.a");
 }
 
 Path EditorPaths::GetBangDynamicLibPath()
 {
-    return EditorPaths::GetEditorLibrariesDir().Append("libbang_shared.so");
+    return EditorPaths::GetEditorLibrariesDir().Append("libBang.so");
 }
 
 Path EditorPaths::CreateEditorPath(const String &path)

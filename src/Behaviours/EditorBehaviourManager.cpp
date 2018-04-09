@@ -247,6 +247,15 @@ void EditorBehaviourManager::RemoveOrphanBehaviourLibraries()
     // Get existing behaviour names
     List<String> behaviourNames;
     List<Path> behaviourFilepaths = GetBehaviourSourcesPaths();
+    {
+        List<Path> currentLibPaths = Paths::GetProjectLibrariesDir().
+                                     GetFiles(Path::FindFlag::Recursive);
+        for (Path &libPath : currentLibPaths)
+        {
+            if (libPath.HasExtension("so")) { File::Remove(libPath); }
+        }
+    }
+
     for (const Path &behaviourPath : behaviourFilepaths)
     {
         behaviourNames.PushBack(behaviourPath.GetName());
@@ -286,7 +295,6 @@ void EditorBehaviourManager::MergeIntoBehavioursLibrary()
                               AppendExtension( String(Time::GetNow_Nanos()) );
 
     List<Path> behaviourObjs = GetCompiledObjectsPaths();
-    EditorBehaviourManager::RemoveBehaviourLibrariesOf( "Behaviours" );
     Compiler::Result mergeResult = MergeBehaviourObjects(behaviourObjs,
                                                          outputLibPath,
                                                          BinType::Debug);
@@ -311,8 +319,8 @@ Compiler::Result EditorBehaviourManager::MergeBehaviourObjects(
 
     Compiler::Job job = EditorBehaviourManager::CreateBaseJob(binaryType);
     job.outputMode = Compiler::OutputType::SharedLib;
-    job.libDirs.PushBack( Paths::GetEngineLibrariesDir( BinType::Debug ) );
-    job.inputFiles.PushBack(behaviourObjectFilepaths);
+    // job.libDirs.PushBack( Paths::GetEngineLibrariesDir( BinType::Debug ) );
+    job.AddInputFiles(behaviourObjectFilepaths.To<Array>());
     job.outputFile = outputLibFilepath;
 
     return Compiler::Compile(job);
@@ -346,36 +354,27 @@ List<Path> EditorBehaviourManager::GetBehaviourSourcesPaths()
 
 Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType)
 {
-    const Path editorLibDir = EditorPaths::GetEditorLibrariesDir();
-    Path bangLibPath = EditorPaths::GetBangStaticLibPath();
+    const Path bangLibPath = EditorPaths::GetBangStaticLibPath();
     if (!bangLibPath.Exists())
     {
-        Debug_Warn(bangLibPath << " not found. Will try with dynamic version...");
-    }
-    bangLibPath = EditorPaths::GetBangDynamicLibPath();
-    if (!bangLibPath.Exists())
-    {
-        Debug_Error(bangLibPath << " not found. Won't be able to link game");
+        Debug_Error(bangLibPath << " not found! Needed to build behaviours..." <<
+                    "Will not compile them!");
         return Compiler::Job();
     }
-    Debug_DLog("Using Bang library '" << bangLibPath << "'");
-
-    const Path bangLibsDir = bangLibPath.GetDirectory();
-    String bangLibName = bangLibPath.GetName();
-    if (bangLibName.BeginsWith("lib")) { bangLibName.Remove(0, 3); }
 
     Compiler::Job job;
-    job.libDirs.PushBack(bangLibsDir);
-    job.libraries.PushBack(bangLibName);
+    job.AddInputFile(" -Wl,--whole-archive " + bangLibPath.GetAbsolute() +
+                     " -Wl,--no-whole-archive");
 
-    job.flags =  {"-fPIC", "--std=c++11"};
+    job.flags =  {"-fPIC", "--std=c++11", "-Wl,-O0,--export-dynamic",
+                 "-Wl,--whole-archive"};
     if (binaryType == BinType::Debug)
     {
-        job.flags.PushBack( List<String>({"-O0", "-g", "-Wl,-O0,--export-dynamic"}) );
+        job.flags.PushBack( List<String>({"-O0", "-g", "-Wl,-O0"}) );
     }
     else
     {
-        job.flags.PushBack( List<String>({"-O3", "-Wl,-O3,--export-dynamic"}) );
+        job.flags.PushBack( List<String>({"-O3", "-Wl,-O3"}) );
     }
     return job;
 }
@@ -398,7 +397,7 @@ Compiler::Job EditorBehaviourManager::CreateCompileBehaviourJob(
     job.includePaths.PushBack( Paths::GetEngineIncludeDirs() );
     // job.includePaths.PushBack( EditorPaths::GetEditorIncludeDirs() );
     job.includePaths.PushBack( Paths::GetProjectIncludeDirs() );
-    job.inputFiles.PushBack(behaviourFilepath);
+    job.AddInputFile(behaviourFilepath);
     job.outputFile = outputObjectFilepath;
 
     return job;
@@ -459,6 +458,7 @@ void EditorBehaviourManager::BehaviourCompileRunnable::Run()
     }
     else
     {
-        Debug_DLog("Behaviour '" << outputPath.GetName() << "' correctly compiled!");
+        Debug_DLog("Behaviour '" << outputPath.GetName() <<
+                   "' correctly compiled!");
     }
 }

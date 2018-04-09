@@ -3,6 +3,7 @@
 #=================================================================
 cmake_minimum_required(VERSION 2.8)
 set(CMAKE_VERBOSE_MAKEFILE on)
+project(BangEditor C CXX)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -21,14 +22,14 @@ set(BANG_EDITOR_BUILT ON)
 #=================================================================
 # Check input params and set some paths ==========================
 #=================================================================
-set(BANG_EDITOR_ROOT "${CMAKE_CURRENT_LIST_DIR}")
+set(BANG_EDITOR_ROOT          "${CMAKE_CURRENT_LIST_DIR}")
 set(BANG_EDITOR_LIBRARIES_DIR "${BANG_EDITOR_ROOT}/Libraries")
-set(BANG_EDITOR_BINARIES_DIR "${BANG_EDITOR_ROOT}/Binaries")
-set(BANG_ENGINE_ROOT "${BANG_EDITOR_ROOT}/Bang")
+set(BANG_EDITOR_BINARIES_DIR  "${BANG_EDITOR_ROOT}/Binaries")
+set(BANG_ENGINE_ROOT          "${BANG_EDITOR_ROOT}/Bang")
 set(BANG_ENGINE_LIBRARIES_DIR "${BANG_ENGINE_ROOT}/Libraries")
-
-set(EXECUTABLE_OUTPUT_PATH "${BANG_EDITOR_BINARIES_DIR}")
-set(LIBRARY_OUTPUT_PATH "${BANG_EDITOR_LIBRARIES_DIR}")
+set(BANG_ENGINE_INCLUDE_DIR   "${BANG_ENGINE_ROOT}/include")
+set(EXECUTABLE_OUTPUT_PATH    "${BANG_EDITOR_BINARIES_DIR}")
+set(LIBRARY_OUTPUT_PATH       "${BANG_EDITOR_LIBRARIES_DIR}")
 
 if (NOT DEFINED BANG_ENGINE_ROOT_DEFINE)
     file(RELATIVE_PATH BANG_ENGINE_ROOT_DEFINE ${CMAKE_BINARY_DIR} ${BANG_ENGINE_ROOT})
@@ -38,11 +39,8 @@ if (NOT DEFINED BANG_EDITOR_ROOT_DEFINE)
     file(RELATIVE_PATH BANG_EDITOR_ROOT_DEFINE ${CMAKE_BINARY_DIR} ${BANG_EDITOR_ROOT})
 endif()
 
-add_definitions(-DBANG_ENGINE_ROOT="${BANG_ENGINE_ROOT_DEFINE}")
-add_definitions(-DBANG_EDITOR_ROOT="${BANG_EDITOR_ROOT_DEFINE}")
-
-include(${BANG_ENGINE_ROOT}/CMakeIncludes/CMakeMacros.cmake REQUIRED)
-include(${BANG_ENGINE_ROOT}/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
+include(${BANG_ENGINE_ROOT}/Build/CMakeIncludes/CMakeMacros.cmake REQUIRED)
+include(${BANG_ENGINE_ROOT}/Build/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -50,7 +48,7 @@ include(${BANG_ENGINE_ROOT}/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
 #=================================================================
 # Bang CMake =====================================================
 #=================================================================
-include(${BANG_ENGINE_ROOT}/CMakeLists.txt)
+add_subdirectory("${BANG_ENGINE_ROOT}" "${CMAKE_CURRENT_BINARY_DIR}/buildEditor")
 #=================================================================
 #=================================================================
 #=================================================================
@@ -58,31 +56,19 @@ include(${BANG_ENGINE_ROOT}/CMakeLists.txt)
 #=================================================================
 # General variables ==============================================
 #=================================================================
-project(BangEditor C CXX)
-
 set(SRC_DIR "${CMAKE_CURRENT_LIST_DIR}/src")
 set(BANG_EDITOR_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}/include")
 set(LIBRARY_OUTPUT_PATH ${BANG_EDITOR_LIBRARIES_DIR})
 
-# Extra make flags
-# Flag no-pie ####
-if (NOT DEFINED FORCE_NO_PIE)
-    set(FORCE_NO_PIE ON)
-endif()
-if (${FORCE_NO_PIE})
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -no-pie")
-endif()
-##################
-
 # Output params
 message("BangEditor ================================")
-message("BUILD_SHARED_LIBS: " ${BUILD_SHARED_LIBS})
-message("CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
-message("CMAKE_BINARY_DIR: " ${CMAKE_BINARY_DIR})
-message("EXECUTABLE_OUTPUT_PATH: " ${EXECUTABLE_OUTPUT_PATH})
-message("LIBRARY_OUTPUT_PATH: " ${LIBRARY_OUTPUT_PATH})
-message("PROJECT_SOURCE_DIR: " ${PROJECT_SOURCE_DIR})
-message("SRC_DIR: " ${SRC_DIR})
+message("BUILD_SHARED_LIBS:      ${BUILD_SHARED_LIBS}")
+message("CMAKE_BUILD_TYPE:       ${CMAKE_BUILD_TYPE}")
+message("CMAKE_BINARY_DIR:       ${CMAKE_BINARY_DIR}")
+message("EXECUTABLE_OUTPUT_PATH: ${EXECUTABLE_OUTPUT_PATH}")
+message("LIBRARY_OUTPUT_PATH:    ${LIBRARY_OUTPUT_PATH}")
+message("PROJECT_SOURCE_DIR:     ${PROJECT_SOURCE_DIR}")
+message("SRC_DIR:                ${SRC_DIR}")
 message("===========================================")
 
 if (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
@@ -95,18 +81,10 @@ endif()
 #=================================================================
 
 #=================================================================
-# Flags ==========================================================
-#=================================================================
-include(${BANG_ENGINE_ROOT}/CMakeIncludes/CMakeFlags.cmake)
-#=================================================================
-#=================================================================
-#=================================================================
-
-#=================================================================
 # Add misc files =================================================
 #=================================================================
 file(GLOB_RECURSE OTHER_FILES "${BANG_EDITOR_INCLUDE_DIR}/BangEditor/*.h"
-                              "${BANG_EDITOR_ROOT}/Build/CMakeLists.txt")
+                              "${BANG_EDITOR_ROOT}/Build/BuildPackage/CMakeLists.txt")
 add_misc_files(${OTHER_FILES})
 #=================================================================
 #=================================================================
@@ -207,14 +185,32 @@ ${SRC_DIR}/UITabHeader.cpp
 #=================================================================
 # Executables ====================================================
 #=================================================================
-include_directories(${BANG_EDITOR_INCLUDE_DIR})
-
-add_executable(Game ${SRC_DIR}/MainGame.cpp)
-target_link_libraries(Game BangLib ${ALL_DEPENDENCIES_LIB_FILES})
-
 add_library(BangEditorObjects OBJECT ${EDITOR_SRC_FILES})
+
+set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
+add_executable(Game ${SRC_DIR}/MainGame.cpp)
 add_executable(BangEditor $<TARGET_OBJECTS:BangEditorObjects> ${SRC_DIR}/Main.cpp)
-target_link_libraries(BangEditor BangLib ${ALL_DEPENDENCIES_LIB_FILES})
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+target_compile_definitions(Game              PRIVATE -DBANG_ENGINE_ROOT="${BANG_ENGINE_ROOT_DEFINE}")
+target_compile_definitions(Game              PRIVATE -DBANG_EDITOR_ROOT="${BANG_EDITOR_ROOT_DEFINE}")
+target_compile_definitions(BangEditor        PRIVATE -DBANG_ENGINE_ROOT="${BANG_ENGINE_ROOT_DEFINE}")
+target_compile_definitions(BangEditor        PRIVATE -DBANG_EDITOR_ROOT="${BANG_EDITOR_ROOT_DEFINE}")
+target_compile_definitions(BangEditorObjects PRIVATE -DBANG_ENGINE_ROOT="${BANG_ENGINE_ROOT_DEFINE}")
+target_compile_definitions(BangEditorObjects PRIVATE -DBANG_EDITOR_ROOT="${BANG_EDITOR_ROOT_DEFINE}")
+target_include_directories(Game              PRIVATE ${BANG_ENGINE_INCLUDE_DIR} ${BANG_EDITOR_INCLUDE_DIR})
+target_include_directories(BangEditor        PRIVATE ${BANG_ENGINE_INCLUDE_DIR} ${BANG_EDITOR_INCLUDE_DIR})
+target_include_directories(BangEditorObjects PRIVATE ${BANG_ENGINE_INCLUDE_DIR} ${BANG_EDITOR_INCLUDE_DIR})
+target_link_libraries(Game       PRIVATE BangLib ${ALL_DEPENDENCIES_LIB_FILES})
+target_link_libraries(BangEditor PRIVATE BangLib ${ALL_DEPENDENCIES_LIB_FILES})
+
+if (NOT DEFINED FORCE_NO_PIE)
+    set(FORCE_NO_PIE ON)
+endif()
+
+if (${FORCE_NO_PIE})
+    target_compile_options(BangEditor PRIVATE "-no-pie")
+endif()
 #=================================================================
 #=================================================================
 #=================================================================
