@@ -122,14 +122,27 @@ add_custom_command(
   VERBATIM
 )
 
-add_custom_target(COPY_EDITOR_PKG_DIRS ALL
+add_custom_target(COPY_EDITOR_PKG_DIRS
     DEPENDS BangEditor
     DEPENDS COPY_PKG_ASSETS_EDITOR
     DEPENDS COPY_PKG_BINARIES_EDITOR
     #DEPENDS COPY_PKG_INCLUDES_EDITOR
     #DEPENDS REMOVE_LIBRARIES_BANG_EDITOR_PKG_DIR
     DEPENDS COPY_PKG_LIBRARIES_EDITOR
+    DEPENDS PKG_TAR
 )
+
+# Tar everything
+set (PKG_TAR_PATH "${CMAKE_CURRENT_LIST_DIR}/BangEditor.tar.gz")
+add_custom_command(
+  OUTPUT PKG_TAR
+  COMMAND cd ${CMAKE_CURRENT_LIST_DIR} && ${CMAKE_COMMAND} -E tar "czvf" "${PKG_TAR_PATH}" "${PKG_DIRECTORY}"
+  COMMENT "Packing package into a tar ${PKG_TAR_PATH}"
+  DEPENDS COPY_EDITOR_PKG_DIRS
+  VERBATIM
+)
+
+add_custom_target(CREATE_EDITOR_PKG ALL DEPENDS PKG_TAR)
 
 
 #=================================================================

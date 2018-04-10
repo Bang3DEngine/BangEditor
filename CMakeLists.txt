@@ -32,15 +32,15 @@ set(EXECUTABLE_OUTPUT_PATH    "${BANG_EDITOR_BINARIES_DIR}")
 set(LIBRARY_OUTPUT_PATH       "${BANG_EDITOR_LIBRARIES_DIR}")
 
 if (NOT DEFINED BANG_ENGINE_ROOT_DEFINE)
-    file(RELATIVE_PATH BANG_ENGINE_ROOT_DEFINE ${CMAKE_BINARY_DIR} ${BANG_ENGINE_ROOT})
+    file(RELATIVE_PATH BANG_ENGINE_ROOT_DEFINE ${EXECUTABLE_OUTPUT_PATH} ${BANG_ENGINE_ROOT})
 endif()
 
 if (NOT DEFINED BANG_EDITOR_ROOT_DEFINE)
-    file(RELATIVE_PATH BANG_EDITOR_ROOT_DEFINE ${CMAKE_BINARY_DIR} ${BANG_EDITOR_ROOT})
+    file(RELATIVE_PATH BANG_EDITOR_ROOT_DEFINE ${EXECUTABLE_OUTPUT_PATH} ${BANG_EDITOR_ROOT})
 endif()
 
-include(${BANG_ENGINE_ROOT}/Build/CMakeIncludes/CMakeMacros.cmake REQUIRED)
 include(${BANG_ENGINE_ROOT}/Build/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
+include(${BANG_ENGINE_ROOT}/Build/CMakeIncludes/CMakeMacros.cmake REQUIRED)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -188,29 +188,38 @@ ${SRC_DIR}/UITabHeader.cpp
 add_library(BangEditorObjects OBJECT ${EDITOR_SRC_FILES})
 
 set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
+
 add_executable(Game ${SRC_DIR}/MainGame.cpp)
 add_executable(BangEditor $<TARGET_OBJECTS:BangEditorObjects> ${SRC_DIR}/Main.cpp)
+
+add_bang_compilation_flags(BangEditorObjects)
+add_bang_compilation_flags(BangEditor)
+add_bang_compilation_flags(Game)
+
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+if (NOT DEFINED FORCE_NO_PIE)
+    set(FORCE_NO_PIE ON)
+endif()
+if (${FORCE_NO_PIE})
+    set_target_properties(Game       PROPERTIES LINK_FLAGS "-no-pie")
+    set_target_properties(BangEditor PROPERTIES LINK_FLAGS "-no-pie")
+endif()
+
+get_target_property(BANG_ENGINE_INCLUDE_DIRS_0 BangEngineObjects INCLUDE_DIRECTORIES)
+get_target_property(BANG_ENGINE_INCLUDE_DIRS_1 BangLib           INCLUDE_DIRECTORIES)
+set(BANG_ENGINE_INCLUDE_DIRS "${BANG_ENGINE_INCLUDE_DIRS_0} ${BANG_ENGINE_INCLUDE_DIRS_1}")
 target_compile_definitions(Game              PRIVATE -DBANG_ENGINE_ROOT="${BANG_ENGINE_ROOT_DEFINE}")
 target_compile_definitions(Game              PRIVATE -DBANG_EDITOR_ROOT="${BANG_EDITOR_ROOT_DEFINE}")
 target_compile_definitions(BangEditor        PRIVATE -DBANG_ENGINE_ROOT="${BANG_ENGINE_ROOT_DEFINE}")
 target_compile_definitions(BangEditor        PRIVATE -DBANG_EDITOR_ROOT="${BANG_EDITOR_ROOT_DEFINE}")
 target_compile_definitions(BangEditorObjects PRIVATE -DBANG_ENGINE_ROOT="${BANG_ENGINE_ROOT_DEFINE}")
 target_compile_definitions(BangEditorObjects PRIVATE -DBANG_EDITOR_ROOT="${BANG_EDITOR_ROOT_DEFINE}")
-target_include_directories(Game              PRIVATE ${BANG_ENGINE_INCLUDE_DIR} ${BANG_EDITOR_INCLUDE_DIR})
-target_include_directories(BangEditor        PRIVATE ${BANG_ENGINE_INCLUDE_DIR} ${BANG_EDITOR_INCLUDE_DIR})
-target_include_directories(BangEditorObjects PRIVATE ${BANG_ENGINE_INCLUDE_DIR} ${BANG_EDITOR_INCLUDE_DIR})
-target_link_libraries(Game       PRIVATE BangLib ${ALL_DEPENDENCIES_LIB_FILES})
-target_link_libraries(BangEditor PRIVATE BangLib ${ALL_DEPENDENCIES_LIB_FILES})
-
-if (NOT DEFINED FORCE_NO_PIE)
-    set(FORCE_NO_PIE ON)
-endif()
-
-if (${FORCE_NO_PIE})
-    target_compile_options(BangEditor PRIVATE "-no-pie")
-endif()
+target_include_directories(Game              PRIVATE ${BANG_ENGINE_INCLUDE_DIRS} ${BANG_EDITOR_INCLUDE_DIR})
+target_include_directories(BangEditor        PRIVATE ${BANG_ENGINE_INCLUDE_DIRS} ${BANG_EDITOR_INCLUDE_DIR})
+target_include_directories(BangEditorObjects PRIVATE ${BANG_ENGINE_INCLUDE_DIRS} ${BANG_EDITOR_INCLUDE_DIR})
+target_link_libraries(Game       PRIVATE BangLib)
+target_link_libraries(BangEditor PRIVATE BangLib)
 #=================================================================
 #=================================================================
 #=================================================================

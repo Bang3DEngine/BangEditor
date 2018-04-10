@@ -1,4 +1,6 @@
 # C++ and Bang
+/coverityBuild/
+/BangEditor_Coverity.tgz
 *EditorSettings.txt*
 Binaries/*
 Libraries/*
