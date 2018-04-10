@@ -2,6 +2,7 @@
 #define EDITORSETTINGS_H
 
 #include "Bang/Path.h"
+#include "Bang/Array.h"
 
 #include "BangEditor/BangEditor.h"
 
@@ -12,14 +13,14 @@ class EditorSettings
 {
 public:
 
-    static void SetLatestProjectFilepathOpen(const Path &latestProjectFilePathOpen);
-    static Path GetLatestProjectFilepathOpen();
+    static void AddRecentProjectFilepathOpen(const Path &recentProjectFilePathOpen);
+    static const Array<Path>& GetRecentProjectFilepathsOpen();
 
 private:
-    Path m_latestProjectFileOpen = Path::Empty;
+    Array<Path> m_recentProjectFilesOpen;
 
     EditorSettings();
-	virtual ~EditorSettings();
+    virtual ~EditorSettings();
 
     void Init();
     void ExportToFile();

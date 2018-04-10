@@ -22,7 +22,6 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class Editor;
 FORWARD class Console;
 FORWARD class MenuBar;
 FORWARD class Explorer;
@@ -58,7 +57,6 @@ public:
     AARect GetOpenSceneWindowRectNDC() const;
 
     MenuBar *GetMenuBar() const;
-    Editor *GetEditor() const;
     Console *GetConsole() const;
     Explorer *GetExplorer() const;
     Inspector *GetInspector() const;
@@ -78,7 +76,6 @@ protected:
     virtual ~EditorScene();
 
 private:
-    Editor *m_editor = nullptr;
     EditorFileTracker *m_editorFileTracker = nullptr;
 
     ScenePlayer *m_scenePlayer = nullptr;

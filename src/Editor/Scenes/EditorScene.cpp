@@ -52,9 +52,6 @@ EditorScene::EditorScene()
 
 void EditorScene::Init()
 {
-    m_editor = new Editor();
-    m_editor->Init();
-
     m_projectManager = new ProjectManager();
     m_scenePlayer = new ScenePlayer();
     m_editorClipboard = new EditorClipboard();
@@ -144,7 +141,6 @@ void EditorScene::Init()
 
 EditorScene::~EditorScene()
 {
-    delete m_editor;
     delete m_scenePlayer;
     delete m_projectManager;
     delete m_sceneOpenerSaver;
@@ -340,8 +336,6 @@ EditSceneGameObjects *EditorScene::GetEditSceneGameObjects() const
 {
     return m_editSceneGameObjects;
 }
-
-Editor *EditorScene::GetEditor() const { return m_editor; }
 
 void EditorScene::PushGLViewport()
 {

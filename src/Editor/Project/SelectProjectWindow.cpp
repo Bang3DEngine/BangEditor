@@ -32,7 +32,7 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-Path SelectProjectWindow::OpenProjectResult = Path::EmptyPath();
+Path SelectProjectWindow::SelectedProjectPath = Path::EmptyPath();
 
 SelectProjectWindow::SelectProjectWindow()
 {
@@ -45,6 +45,7 @@ SelectProjectWindow::~SelectProjectWindow()
 void SelectProjectWindow::Init()
 {
     SetTitle("Bang Editor - Select Project");
+    SetMinSize(500, 200);
 
     Scene *scene = GameObject::Create<SelectProjectScene>();
     EditorSceneManager::LoadScene(scene, true);
@@ -85,8 +86,8 @@ SelectProjectScene::SelectProjectScene()
     logo->SetImageTexture(logoTex);
     GameObject *logoGo = logo->GetGameObject();
     logoGo->GetRectTransform()->SetAnchorX( Vector2(0) );
-    logoGo->GetRectTransform()->SetAnchorY( Vector2(-1) );
-    logoGo->GetRectTransform()->SetPivotPosition( Vector2(0, -1) );
+    logoGo->GetRectTransform()->SetAnchorY( Vector2(0) );
+    logoGo->GetRectTransform()->SetPivotPosition( Vector2(0,0) );
     UIAspectRatioFitter *logoARF = logoGo->AddComponent<UIAspectRatioFitter>();
     logoARF->SetAspectRatio( logoTex->GetSize() );
     logoARF->SetAspectRatioMode(AspectRatioMode::Keep);
@@ -106,19 +107,45 @@ SelectProjectScene::SelectProjectScene()
 
     GameObject *recentPLContainer =
                         GameObjectFactory::CreateUIGameObject(true);
-    UIImageRenderer *rplBG = recentPLContainer->AddComponent<UIImageRenderer>();
-    rplBG->SetTint(Color::DarkGray.WithValue(0.5f));
 
     UILayoutElement *rplLE = recentPLContainer->AddComponent<UILayoutElement>();
     rplLE->SetFlexibleSize( Vector2(1,1) );
     recentPLContainer->SetParent(mainVLGo);
 
     UIList *recentProjectsList = GameObjectFactory::CreateUIList(true);
+    recentProjectsList->SetSelectionCallback([this](GOItem *item, UIList::Action action)
+    {
+        if (!item) { return; }
+        RecentProjectListEntry *entry = SCAST<RecentProjectListEntry*>(item);
+        switch (action)
+        {
+            case UIList::Action::ClickedLeft:
+                m_selectedRecentPath = entry->m_projectPath;
+            break;
+
+            case UIList::Action::DoubleClickedLeft:
+                ConfirmOpenProject(entry->m_projectPath);
+            break;
+
+            default: break;
+        }
+    });
     GameObject *recentProjectsListGo  = recentProjectsList->GetGameObject();
+    recentProjectsListGo->SetParent(recentPLContainer);
     UIScrollPanel *rplSP = recentProjectsList->GetScrollPanel();
+    rplSP->SetForceHorizontalFit(true);
+    rplSP->SetHorizontalScrollBarSide(VerticalSide::Bot);
+    rplSP->SetVerticalScrollBarSide(HorizontalSide::Right);
     rplSP->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
     rplSP->SetHorizontalShowScrollMode(ShowScrollMode::WhenNeeded);
-    recentProjectsListGo->SetParent(recentPLContainer);
+    recentProjectsList->Clear();
+    const Array<Path> &recentProjects = EditorSettings::GetRecentProjectFilepathsOpen();
+    for (const Path &recentProjectPath : recentProjects)
+    {
+        GameObject *entry =
+                 GameObject::Create<RecentProjectListEntry>(recentProjectPath);
+        recentProjectsList->AddItem(entry);
+    }
 
     GameObjectFactory::CreateUIHSeparator()->SetParent(mainVLGo);
 
@@ -159,6 +186,8 @@ SelectProjectScene::~SelectProjectScene()
 void SelectProjectScene::Update()
 {
     Scene::Update();
+    bool somethingSelected = !m_selectedRecentPath.IsEmpty();
+    p_openSelectedProjectButton->SetBlocked(!somethingSelected);
 }
 
 void SelectProjectScene::NewProject()
@@ -192,7 +221,7 @@ void SelectProjectScene::OpenProject()
 
 void SelectProjectScene::ConfirmOpenProject(const Path &projectFilepath)
 {
-    SelectProjectWindow::OpenProjectResult = projectFilepath;
+    SelectProjectWindow::SelectedProjectPath = projectFilepath;
     WindowManager::GetInstance()->DestroyWindow( Window::GetActive() );
 }
 
@@ -208,5 +237,37 @@ void SelectProjectScene::OnClicked(IFocusable *focusable)
     }
     else if (focusable == p_openSelectedProjectButton->GetFocusable())
     {
+        ConfirmOpenProject(m_selectedRecentPath);
     }
+}
+
+// ===========================================================================
+
+SelectProjectScene::RecentProjectListEntry::RecentProjectListEntry()
+{
+}
+
+SelectProjectScene::RecentProjectListEntry::
+    RecentProjectListEntry(const Path &projectPath) : GameObject()
+{
+    m_projectPath = projectPath;
+
+    GameObjectFactory::CreateUIGameObjectInto(this);
+    AddComponent<UIFocusable>();
+
+    UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
+    vl->SetPaddings(5);
+
+    GameObject *container = GameObjectFactory::CreateUIGameObject();
+    UITextRenderer *text = container->AddComponent<UITextRenderer>();
+    text->SetContent( projectPath.GetAbsolute() );
+    text->SetTextSize(12);
+    text->SetTextColor(Color::Black);
+    text->SetHorizontalAlign(HorizontalAlignment::Left);
+
+    container->SetParent(this);
+}
+
+SelectProjectScene::RecentProjectListEntry::~RecentProjectListEntry()
+{
 }

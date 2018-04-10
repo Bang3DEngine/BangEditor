@@ -64,7 +64,8 @@ Explorer::Explorer()
 
     // Scroll Panel
     p_scrollPanel = GameObjectFactory::CreateUIScrollPanel();
-    p_scrollPanel->GetScrollArea()->GetBackground()->SetTint(Color::Zero);
+    p_scrollPanel->GetScrollArea()->GetBackground()->SetTint(
+                                        Color::LightGray.WithValue(0.9f));
     GameObject *scrollPanelGo = p_scrollPanel->GetGameObject();
     UILayoutElement *spLE = scrollPanelGo->AddComponent<UILayoutElement>();
     spLE->SetFlexibleSize( Vector2::One );
@@ -94,6 +95,7 @@ Explorer::Explorer()
 
     UIGridLayout *gridLayout = p_itemsContainer->AddComponent<UIGridLayout>();
     gridLayout->SetCellSize( Vector2i(80) );
+    gridLayout->SetPaddings(10);
     gridLayout->SetSpacing(10);
 
     SetCurrentPath( Paths::GetEngineAssetsDir() );

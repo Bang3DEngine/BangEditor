@@ -37,11 +37,15 @@ int main(int argc, char **argv)
         selectProjectWindow->Init();
         editorApplication.MainLoop();
 
-        projectToBeOpen = SelectProjectWindow::OpenProjectResult;
+        projectToBeOpen = SelectProjectWindow::SelectedProjectPath;
     }
     else { projectToBeOpen = Path(argv[1]); }
 
-    if (projectToBeOpen.IsEmpty()) { Application::Exit(0, true); }
+    if (projectToBeOpen.IsEmpty())
+    {
+        Debug_Log("No project selected.");
+        Application::Exit(0, true);
+    }
 
     if (!projectToBeOpen.IsFile())
     {

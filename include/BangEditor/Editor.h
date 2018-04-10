@@ -49,7 +49,7 @@ private:
     virtual ~Editor();
 
     void Init();
-    void _SelectGameObject(GameObject *selectedGameObject);
+    void SelectGameObject_(GameObject *selectedGameObject);
 
     static void OnPathSelected(const Path &path);
 
@@ -62,8 +62,8 @@ private:
     void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 
     friend class Explorer;
-    friend class EditorScene;
     friend class EditorSettings;
+    friend class EditorApplication;
 };
 
 NAMESPACE_BANG_EDITOR_END

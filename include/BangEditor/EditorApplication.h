@@ -15,6 +15,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class Editor;
 FORWARD class EditorScene;
 FORWARD class EditorPaths;
 
@@ -31,10 +32,14 @@ public:
     EditorPaths* GetEditorPaths() const;
 
 private:
+    Editor *m_editor = nullptr;
+
     Paths* CreatePaths() override;
 
+    Editor *GetEditor() const;
     static EditorApplication* GetInstance();
 
+    friend class Editor;
     friend class EditorPaths;
     friend class EditorBehaviourManager;
 };

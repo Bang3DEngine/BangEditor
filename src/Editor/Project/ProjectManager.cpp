@@ -44,7 +44,7 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
         EventEmitter<IProjectManagerListener>::PropagateToListeners(
                &IProjectManagerListener::OnProjectOpen, s_currentProject);
 
-    EditorSettings::SetLatestProjectFilepathOpen(
+    EditorSettings::AddRecentProjectFilepathOpen(
                             currentProject->GetProjectFilepath() );
 
     bool sceneHasBeenOpen = currentProject->OpenFirstFoundScene();

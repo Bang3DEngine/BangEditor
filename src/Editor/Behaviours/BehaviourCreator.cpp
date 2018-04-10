@@ -1,6 +1,7 @@
 #include "BangEditor/BehaviourCreator.h"
 
 #include "Bang/File.h"
+#include "Bang/Debug.h"
 #include "Bang/Extensions.h"
 
 #include "BangEditor/EditorPaths.h"

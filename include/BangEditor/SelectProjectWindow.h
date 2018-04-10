@@ -2,6 +2,7 @@
 #define SELECTPROJECTWINDOW_H
 
 #include "Bang/Bang.h"
+#include "Bang/Path.h"
 #include "Bang/Scene.h"
 #include "Bang/Window.h"
 #include "Bang/IFocusable.h"
@@ -19,7 +20,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 class SelectProjectWindow : public Window
 {
 public:
-    static Path OpenProjectResult;
+    static Path SelectedProjectPath;
 
     SelectProjectWindow();
     virtual ~SelectProjectWindow();
@@ -40,6 +41,19 @@ public:
     void OnClicked(IFocusable *focusable) override;
 
 private:
+    class RecentProjectListEntry : public GameObject
+    {
+        GAMEOBJECT(RecentProjectListEntry);
+
+    public:
+        RecentProjectListEntry();
+        RecentProjectListEntry(const Path &projectPath);
+        virtual ~RecentProjectListEntry();
+
+        Path m_projectPath = Path::Empty;
+    };
+
+    Path m_selectedRecentPath = Path::Empty;
     UIButton *p_newProjectButton          = nullptr;
     UIButton *p_openProjectButton         = nullptr;
     UIButton *p_openSelectedProjectButton = nullptr;
@@ -51,6 +65,7 @@ private:
     void OpenProject();
     void ConfirmOpenProject(const Path &projectFilepath);
 };
+
 
 NAMESPACE_BANG_EDITOR_END
 

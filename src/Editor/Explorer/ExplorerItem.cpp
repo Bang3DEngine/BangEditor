@@ -116,7 +116,7 @@ void ExplorerItem::SetPath(const Path &path)
 void ExplorerItem::SetSelected(bool selected)
 {
     m_selected = selected;
-    p_bg->SetTint(IsSelected() ? Color::LightBlue : Color::Zero);
+    p_bg->SetTint(IsSelected() ? Color::LightBlue.WithAlpha(0.8f) : Color::Zero);
 }
 
 bool ExplorerItem::IsSelected() const
@@ -175,7 +175,7 @@ void ExplorerItem::OnMouseEnter(IFocusable*)
 {
     if (!IsSelected())
     {
-        p_bg->SetTint(Color::VeryLightBlue);
+        p_bg->SetTint(Color::LightBlue.WithAlpha(0.6f));
     }
 }
 
