@@ -20,6 +20,7 @@ USING_NAMESPACE_BANG_EDITOR
 EditorWindow::EditorWindow()
 {
     m_shortcutManager = new ShortcutManager();
+    SetTitle("Bang Editor");
 }
 
 EditorWindow::~EditorWindow()

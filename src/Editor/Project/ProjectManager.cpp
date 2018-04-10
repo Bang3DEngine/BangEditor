@@ -32,7 +32,7 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
     ProjectManager::s_currentProject = new Project();
     Project *currentProject = ProjectManager::s_currentProject;
     currentProject->ImportXMLFromFile(projectFilepath);
-    currentProject->SetProjectFilepath( projectFilepath );
+    currentProject->SetProjectFilepath(projectFilepath);
 
     Paths::SetProjectRoot(currentProject->GetProjectDirectory());
 
@@ -47,8 +47,9 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
     EditorSettings::SetLatestProjectFilepathOpen(
                             currentProject->GetProjectFilepath() );
 
-    bool sceneOpen = currentProject->OpenFirstFoundScene();
-    if (!sceneOpen) { SceneOpenerSaver::GetInstance()->OnNewScene(); }
+    bool sceneHasBeenOpen = currentProject->OpenFirstFoundScene();
+    SceneOpenerSaver *sov = SceneOpenerSaver::GetInstance();
+    if (!sceneHasBeenOpen && sov) { sov->OnNewScene(); }
 
     return currentProject;
 }
@@ -115,6 +116,7 @@ void ProjectManager::ExportCurrentProject()
 
 bool ProjectManager::CloseCurrentProject()
 {
+    if (!SceneOpenerSaver::GetInstance()) { return true; }
     if (!SceneOpenerSaver::GetInstance()->CloseScene()) { return false; }
 
     if (ProjectManager::s_currentProject)

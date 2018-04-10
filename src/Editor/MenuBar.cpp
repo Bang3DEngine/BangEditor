@@ -46,7 +46,6 @@
 #include "Bang/UIHorizontalLayout.h"
 
 #include "BangEditor/Editor.h"
-#include "BangEditor/Project.h"
 #include "BangEditor/Explorer.h"
 #include "BangEditor/MenuItem.h"
 #include "BangEditor/EditorPaths.h"
@@ -54,7 +53,6 @@
 #include "BangEditor/GameBuilder.h"
 #include "BangEditor/EditorDialog.h"
 #include "BangEditor/EditorSettings.h"
-#include "BangEditor/ProjectManager.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/BehaviourCreator.h"
 #include "BangEditor/EditorSceneManager.h"
@@ -80,9 +78,6 @@ MenuBar::MenuBar()
     // File
     m_fileItem = AddItem();
     m_fileItem->GetText()->SetContent("File");
-    MenuItem *newProject = m_fileItem->AddItem("New Project...");
-    MenuItem *openProject = m_fileItem->AddItem("Open Project...");
-    m_fileItem->AddSeparator();
     MenuItem *newScene = m_fileItem->AddItem("New Scene");
     MenuItem *openScene = m_fileItem->AddItem("Open Scene");
     MenuItem *saveScene = m_fileItem->AddItem("Save Scene");
@@ -90,8 +85,6 @@ MenuBar::MenuBar()
     m_fileItem->AddSeparator();
     MenuItem *build = m_fileItem->AddItem("Build");
     MenuItem *buildAndRun = m_fileItem->AddItem("Build and run");
-    newProject->SetSelectedCallback(MenuBar::OnNewProject);
-    openProject->SetSelectedCallback(MenuBar::OnOpenProject);
     newScene->SetSelectedCallback(MenuBar::OnNewScene);
     saveScene->SetSelectedCallback(MenuBar::OnSaveScene);
     saveSceneAs->SetSelectedCallback(MenuBar::OnSaveSceneAs);
@@ -216,7 +209,6 @@ MenuBar::MenuBar()
     RegisterShortcut( Shortcut(Key::LCtrl,              Key::S, "SaveScene")   );
     RegisterShortcut( Shortcut(Key::LCtrl, Key::LShift, Key::S, "SaveSceneAs") );
     RegisterShortcut( Shortcut(Key::LCtrl,              Key::O, "OpenScene")   );
-    RegisterShortcut( Shortcut(Key::LCtrl, Key::LShift, Key::O, "OpenProject") );
 }
 
 MenuBar::~MenuBar()
@@ -233,7 +225,6 @@ void MenuBar::OnShortcutPressed(const Shortcut &shortcut)
     if (shortcut.GetName() == "SaveScene") { OnSaveScene(nullptr); }
     if (shortcut.GetName() == "SaveSceneAs") { OnSaveSceneAs(nullptr); }
     if (shortcut.GetName() == "OpenScene") { OnOpenScene(nullptr); }
-    if (shortcut.GetName() == "OpenProject") { OnOpenProject(nullptr); }
 }
 
 void MenuBar::Update()
@@ -286,38 +277,6 @@ MenuItem* MenuBar::AddItem()
 MenuItem* MenuBar::GetItem(int i)
 {
     return m_items[i];
-}
-
-void MenuBar::OnNewProject(MenuItem*)
-{
-    Path newProjectDirPath = Dialog::OpenDirectory("Create New Project...",
-                                                   EditorPaths::GetHome());
-    if (newProjectDirPath.IsDir())
-    {
-        String projectName = Dialog::GetString("Choose Project Name",
-                                               "Please, choose your project name:",
-                                               "NewProject");
-        if (!projectName.IsEmpty())
-        {
-            Project *proj = ProjectManager::CreateNewProject(newProjectDirPath,
-                                                             projectName);
-            MenuBar::OpenProject(proj->GetProjectFilepath());
-        }
-    }
-}
-void MenuBar::OnOpenProject(MenuItem*)
-{
-    Path projectFilepath = Dialog::OpenFilePath("Open Project...",
-                                                {Extensions::GetProjectExtension()},
-                                                EditorPaths::GetHome());
-    OpenProject(projectFilepath);
-}
-void MenuBar::OpenProject(const Path &projectFilepath)
-{
-    if (projectFilepath.IsFile())
-    {
-        ProjectManager::OpenProject(projectFilepath);
-    }
 }
 
 MenuBar *MenuBar::GetInstance()

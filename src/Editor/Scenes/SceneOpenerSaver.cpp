@@ -87,7 +87,8 @@ const Path &SceneOpenerSaver::GetOpenScenePath() const
 
 SceneOpenerSaver *SceneOpenerSaver::GetInstance()
 {
-    return EditorSceneManager::GetEditorScene()->GetSceneOpenerSaver();
+    EditorScene *edScene = EditorSceneManager::GetEditorScene();
+    return edScene ? edScene->GetSceneOpenerSaver() : nullptr;
 }
 
 bool SceneOpenerSaver::OnSaveScene(bool saveAs)

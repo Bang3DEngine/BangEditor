@@ -1,0 +1,58 @@
+#ifndef SELECTPROJECTWINDOW_H
+#define SELECTPROJECTWINDOW_H
+
+#include "Bang/Bang.h"
+#include "Bang/Scene.h"
+#include "Bang/Window.h"
+#include "Bang/IFocusable.h"
+#include "Bang/IFocusListener.h"
+
+#include "BangEditor/BangEditor.h"
+
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UIButton;
+FORWARD NAMESPACE_BANG_END
+
+USING_NAMESPACE_BANG
+NAMESPACE_BANG_EDITOR_BEGIN
+
+class SelectProjectWindow : public Window
+{
+public:
+    static Path OpenProjectResult;
+
+    SelectProjectWindow();
+    virtual ~SelectProjectWindow();
+
+    void Init();
+};
+
+// ==========================================================================
+
+class SelectProjectScene : public Scene,
+                           public IFocusListener
+{
+public:
+    SelectProjectScene();
+    virtual ~SelectProjectScene();
+
+    // IFocusListener
+    void OnClicked(IFocusable *focusable) override;
+
+private:
+    UIButton *p_newProjectButton          = nullptr;
+    UIButton *p_openProjectButton         = nullptr;
+    UIButton *p_openSelectedProjectButton = nullptr;
+
+    // GameObject
+    void Update() override;
+
+    void NewProject();
+    void OpenProject();
+    void ConfirmOpenProject(const Path &projectFilepath);
+};
+
+NAMESPACE_BANG_EDITOR_END
+
+#endif // SELECTPROJECTWINDOW_H
+

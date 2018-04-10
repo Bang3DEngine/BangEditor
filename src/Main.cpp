@@ -13,41 +13,49 @@
 #include "BangEditor/EditorSettings.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/SceneOpenerSaver.h"
+#include "BangEditor/SelectProjectWindow.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
 int main(int argc, char **argv)
 {
-    EditorApplication edApp;
+    EditorApplication editorApplication;
     const Path engPath = Paths::GetResolvedPath( Path("" BANG_ENGINE_ROOT) );
     const Path edtPath = Paths::GetResolvedPath( Path("" BANG_EDITOR_ROOT) );
     Debug_Log("BangEngineRoot: " << "" BANG_ENGINE_ROOT << " => " << engPath);
     Debug_Log("BangEditorRoot: " << "" BANG_EDITOR_ROOT << " => " << edtPath);
-    edApp.InitEditorApplication(engPath, edtPath);
+    editorApplication.InitEditorApplication(engPath, edtPath);
 
+    Path projectToBeOpen = Path::Empty;
+    if (argc < 2)
+    {
+        // Select project window
+        SelectProjectWindow *selectProjectWindow =
+                             WindowManager::CreateWindow<SelectProjectWindow>();
+        Window::SetActive(selectProjectWindow);
+        selectProjectWindow->Init();
+        editorApplication.MainLoop();
+
+        projectToBeOpen = SelectProjectWindow::OpenProjectResult;
+    }
+    else { projectToBeOpen = Path(argv[1]); }
+
+    if (projectToBeOpen.IsEmpty()) { Application::Exit(0, true); }
+
+    if (!projectToBeOpen.IsFile())
+    {
+        Debug_Error("Could not open project '" << projectToBeOpen << "'");
+        Application::Exit(1, true);
+    }
+
+
+    // Main window
     Window *mainWindow = WindowManager::CreateWindow<EditorWindow>();
     Window::SetActive(mainWindow);
-    mainWindow->SetTitle("Bang Editor");
-    edApp.OpenEditorScene();
+    editorApplication.OpenEditorScene();
 
-    // Open project (arg or latest one)
-    Path projectToOpenPath = (argc >= 2) ? 
-          Path(argv[1]) : EditorSettings::GetLatestProjectFilepathOpen();
+    ProjectManager::OpenProject(projectToBeOpen);
 
-    if (projectToOpenPath.IsFile())
-    {
-        ProjectManager::OpenProject(projectToOpenPath);
-    }
-    else  
-    {
-        if (argc >= 2) 
-        { 
-            Debug_Error("Can't find project '" << projectToOpenPath << "'."); 
-        }
-        SceneOpenerSaver::GetInstance()->OpenDefaultScene();
-    }
-
-
-    return edApp.MainLoop();
+    return editorApplication.MainLoop();
 }

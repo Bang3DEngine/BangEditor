@@ -51,7 +51,6 @@ private:
     static void OnShortcutPressed(const Shortcut &shortcut);
 
     static void OnNewProject  (MenuItem *item);
-    static void OnOpenProject (MenuItem *item);
     static void OnNewScene    (MenuItem *item);
     static void OnSaveScene   (MenuItem *item);
     static void OnSaveSceneAs (MenuItem *item);
