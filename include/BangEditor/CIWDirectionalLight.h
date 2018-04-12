@@ -7,6 +7,7 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UISlider;
+FORWARD class UIInputNumber;
 FORWARD class DirectionalLight;
 FORWARD NAMESPACE_BANG_END
 
@@ -22,7 +23,8 @@ public:
     virtual void UpdateFromReference() override;
 
 private:
-    UISlider *p_shadowDistanceInput = nullptr;
+    UISlider *p_shadowMapSizeInput = nullptr;
+    UIInputNumber *p_shadowDistanceInput = nullptr;
 
     DirectionalLight *GetDirectionalLight() const;
 

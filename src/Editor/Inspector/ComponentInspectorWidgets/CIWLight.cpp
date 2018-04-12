@@ -4,6 +4,7 @@
 #include "Bang/UISlider.h"
 #include "Bang/UIComboBox.h"
 #include "Bang/UIInputNumber.h"
+#include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/UIInputColor.h"
@@ -21,6 +22,7 @@ void CIWLight::InitInnerWidgets()
 
     p_intensityInput = GameObjectFactory::CreateUIInputNumber();
     p_intensityInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_intensityInput->SetMinMaxValues(0.0f, Math::Infinity<float>());
     AddWidget("Intensity", p_intensityInput->GetGameObject());
 
     p_colorInput = GameObject::Create<UIInputColor>();
@@ -38,6 +40,10 @@ void CIWLight::InitInnerWidgets()
     p_shadowTypeInput->AddItem("Soft", SCAST<int>( Light::ShadowType::SOFT ) );
     p_shadowTypeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Shadow type", p_shadowTypeInput->GetGameObject());
+
+    AddLabel("Shadow map");
+    p_shadowMapImg = GameObjectFactory::CreateUIImage();
+    AddWidget(p_shadowMapImg->GetGameObject(), 300);
 
     SetLabelsWidth(90);
 }
@@ -66,6 +72,10 @@ void CIWLight::UpdateFromReference()
         p_shadowTypeInput->SetSelectionByValue(
                     SCAST<int>(GetLight()->GetShadowType()) );
     }
+
+    Texture2D *shadowMapTex = GetLight()->GetShadowMapTexture();
+    p_shadowMapImg->SetEnabled(shadowMapTex != nullptr);
+    p_shadowMapImg->SetImageTexture(shadowMapTex);
 }
 
 Light *CIWLight::GetLight() const
