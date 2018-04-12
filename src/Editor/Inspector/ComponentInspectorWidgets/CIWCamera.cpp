@@ -3,10 +3,14 @@
 #include "Bang/Light.h"
 #include "Bang/Camera.h"
 #include "Bang/UISlider.h"
+#include "Bang/Resources.h"
+#include "Bang/Extensions.h"
 #include "Bang/UIComboBox.h"
 #include "Bang/UIInputNumber.h"
+#include "Bang/TextureCubeMap.h"
 #include "Bang/GameObjectFactory.h"
 
+#include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputColor.h"
 
 USING_NAMESPACE_BANG
@@ -47,6 +51,11 @@ void CIWCamera::InitInnerWidgets()
     p_clearColorInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Clear Color", p_clearColorInput);
 
+    p_textureCubeMapInput = GameObject::Create<UIInputFile>();
+    p_textureCubeMapInput->SetExtensions( {Extensions::GetTextureCubeMapExtension()} );
+    p_textureCubeMapInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    AddWidget("SkyBox", p_textureCubeMapInput);
+
     SetLabelsWidth(90);
 }
 
@@ -59,34 +68,33 @@ void CIWCamera::UpdateFromReference()
         p_zNearInput->SetValue( GetCamera()->GetZNear() );
     }
 
-    if (!p_zNearInput->HasFocus())
+    if (!p_zFarInput->HasFocus())
     {
         p_zFarInput->SetValue( GetCamera()->GetZFar() );
     }
 
-
-    if (!p_zNearInput->HasFocus())
+    if (!p_orthoHeightInput->HasFocus())
     {
         p_orthoHeightInput->SetValue( GetCamera()->GetOrthoHeight() );
     }
 
-
-    if (!p_zNearInput->HasFocus())
+    if (!p_fovInput->HasFocus())
     {
         p_fovInput->SetValue( GetCamera()->GetFovDegrees() );
     }
 
-
-    if (!p_zNearInput->HasFocus())
+    if (!p_projectionModeInput->HasFocus())
     {
         p_projectionModeInput->SetSelectionByValue( GetCamera()->GetProjectionMode() );
     }
 
-
-    if (!p_zNearInput->HasFocus())
+    if (!p_clearColorInput->HasFocus())
     {
         p_clearColorInput->SetColor( GetCamera()->GetClearColor() );
     }
+
+    TextureCubeMap *skyBoxTex = GetCamera()->GetSkyBoxTexture();
+    if (skyBoxTex) { p_textureCubeMapInput->SetPath(skyBoxTex->GetResourceFilepath()); }
 
     LimitValues();
 }
@@ -113,6 +121,8 @@ void CIWCamera::OnValueChanged(Object *object)
     GetCamera()->SetProjectionMode(SCAST<Camera::ProjectionMode>(
                                      p_projectionModeInput->GetSelectedValue()) );
     GetCamera()->SetClearColor( p_clearColorInput->GetColor() );
+    GetCamera()->SetSkyBoxTexture(
+        Resources::Load<TextureCubeMap>(p_textureCubeMapInput->GetPath()).Get() );
     LimitValues();
 }
 

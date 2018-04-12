@@ -81,7 +81,6 @@ SelectProjectScene::SelectProjectScene()
     logoContainer->SetParent(mainVLGo);
 
     UIImageRenderer *logo = GameObjectFactory::CreateUIImage();
-    logo->GetMaterial()->SetUvMultiply( Vector2(1,-1) );
     Texture2D *logoTex = IconManager::GetBang2048Icon().Get();
     logo->SetImageTexture(logoTex);
     GameObject *logoGo = logo->GetGameObject();

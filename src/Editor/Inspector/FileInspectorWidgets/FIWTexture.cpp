@@ -30,7 +30,6 @@ void FIWTexture::Init()
 
     SetTitle("Texture");
     SetName("FIWTexture");
-    SetLabelsWidth(60);
 
     p_filterModeComboBox = GameObjectFactory::CreateUIComboBox();
     p_filterModeComboBox->AddItem("Nearest",      int(GL::FilterMode::Nearest));
@@ -80,10 +79,6 @@ void FIWTexture::UpdateFromFileWhenChanged()
 {
     p_texture = Resources::Load<Texture2D>( GetPath() );
     if (!GetTexture()) { return; }
-
-    Path texImportPath = ImportFilesManager::GetImportFilepath(
-                                    GetTexture()->GetResourceFilepath() );
-    GetTexture()->ImportXMLFromFile(texImportPath);
 
     IValueChangedListener::SetReceiveEvents(false);
 

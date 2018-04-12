@@ -42,8 +42,6 @@ private:
 
     Texture2D *GetTexture() const;
 
-    void UpdateFromTextureFile();
-
     // FileInspectorWidget
     void UpdateFromFileWhenChanged() override;
 

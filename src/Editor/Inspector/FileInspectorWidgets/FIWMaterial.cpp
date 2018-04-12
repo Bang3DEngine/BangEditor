@@ -103,10 +103,7 @@ void FIWMaterial::UpdateFromFileWhenChanged()
         }
     }
 
-    if (!GetMaterial())
-    {
-        return;
-    }
+    if (!GetMaterial()) { return; }
 
     GetMaterial()->ImportXMLFromFile( GetMaterial()->GetResourceFilepath() );
 

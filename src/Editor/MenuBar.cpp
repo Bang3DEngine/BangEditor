@@ -103,6 +103,8 @@ MenuBar::MenuBar()
     m_assetsItem->GetText()->SetContent("Assets");
     MenuItem *createMaterial = m_assetsItem->AddItem("Material");
     createMaterial->SetSelectedCallback(MenuBar::OnCreateMaterial);
+    MenuItem *createTextureCubeMap = m_assetsItem->AddItem("Texture Cube Map");
+    createTextureCubeMap->SetSelectedCallback(MenuBar::OnCreateTextureCubeMap);
 
     // Components
     m_componentsItem = AddItem();
@@ -351,6 +353,11 @@ OnCreateAssetFile(const String &name, const String &extension)
 void MenuBar::OnCreateMaterial(MenuItem*)
 {
     OnCreateAssetFile<Material>("Material", Extensions::GetMaterialExtension());
+}
+
+void MenuBar::OnCreateTextureCubeMap(MenuItem *item)
+{
+    OnCreateAssetFile<TextureCubeMap>("CubeMap", Extensions::GetTextureCubeMapExtension());
 }
 
 template <class T>

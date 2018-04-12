@@ -102,7 +102,7 @@ file(GLOB_RECURSE EDITOR_SRC_FILES "${EDITOR_SRC_DIR}/*.cpp")
 #=================================================================
 # Executables ====================================================
 #=================================================================
-add_library(BangEditorObjects OBJECT ${EDITOR_SRC_FILES})
+add_library(BangEditorObjects OBJECT ${EDITOR_SRC_FILES} ${OTHER_FILES})
 
 set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
 

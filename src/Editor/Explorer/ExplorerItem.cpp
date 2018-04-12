@@ -45,7 +45,6 @@ ExplorerItem::ExplorerItem()
     iconRT->SetAnchorY( Vector2::Zero );
     iconRT->SetPivotPosition( Vector2::Zero );
     p_icon = iconGo->AddComponent<UIImageRenderer>();
-    p_icon->SetMaterial( MaterialFactory::GetUIImageInvY().Get() );
     p_icon->SetTint(Color::Zero);
 
     p_aspectRatioFitter = iconGo->AddComponent<UIAspectRatioFitter>();
