@@ -76,12 +76,12 @@ void FIWTextureCubeMap::UpdateFromFileWhenChanged()
     Texture2D *rightTex = tcm->GetDirTexture(GL::CubeMapDir::Right);
     Texture2D *frontTex = tcm->GetDirTexture(GL::CubeMapDir::Front);
     Texture2D *backTex  = tcm->GetDirTexture(GL::CubeMapDir::Back);
-    p_topTextureInput->SetPath(topTex     ? topTex->GetResourceFilepath() : Path::Empty);
-    p_botTextureInput->SetPath(botTex     ? botTex->GetResourceFilepath() : Path::Empty);
-    p_leftTextureInput->SetPath(leftTex   ? leftTex->GetResourceFilepath() : Path::Empty);
+    p_topTextureInput->SetPath(topTex     ? topTex->GetResourceFilepath()   : Path::Empty);
+    p_botTextureInput->SetPath(botTex     ? botTex->GetResourceFilepath()   : Path::Empty);
+    p_leftTextureInput->SetPath(leftTex   ? leftTex->GetResourceFilepath()  : Path::Empty);
     p_rightTextureInput->SetPath(rightTex ? rightTex->GetResourceFilepath() : Path::Empty);
     p_frontTextureInput->SetPath(frontTex ? frontTex->GetResourceFilepath() : Path::Empty);
-    p_backTextureInput->SetPath(backTex   ? backTex->GetResourceFilepath() : Path::Empty);
+    p_backTextureInput->SetPath(backTex   ? backTex->GetResourceFilepath()  : Path::Empty);
 
     IValueChangedListener::SetReceiveEvents(true);
 }

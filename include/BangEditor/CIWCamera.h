@@ -37,12 +37,13 @@ protected:
     virtual void OnValueChanged(Object *object) override;
 
 private:
-    UIInputColor *p_clearColorInput = nullptr;
     UIInputNumber *p_zNearInput = nullptr;
     UIInputNumber *p_zFarInput = nullptr;
     UIInputNumber *p_orthoHeightInput = nullptr;
     UISlider      *p_fovInput = nullptr;
     UIComboBox *p_projectionModeInput = nullptr;
+    UIComboBox *p_clearModeInput = nullptr;
+    UIInputColor *p_clearColorInput = nullptr;
     UIInputFile *p_textureCubeMapInput = nullptr;
 };
 
