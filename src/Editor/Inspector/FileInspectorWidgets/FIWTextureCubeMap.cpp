@@ -88,7 +88,6 @@ void FIWTextureCubeMap::UpdateFromFileWhenChanged()
 
 void FIWTextureCubeMap::OnValueChanged(Object *object)
 {
-    Debug_Log("JOALSDSAJKDLKASD");
     TextureCubeMap *tcm = GetTextureCubeMap();
     if (tcm)
     {
@@ -98,8 +97,8 @@ void FIWTextureCubeMap::OnValueChanged(Object *object)
         {
             if (inputFile->GetPath().IsFile())
             {
-                tcm->SetDirTexture(cmdir,
-                    Resources::Load<Texture2D>( inputFile->GetPath()).Get() );
+                RH<Texture2D> tex = Resources::Load<Texture2D>( inputFile->GetPath());
+                tcm->SetDirTexture(cmdir, tex.Get() );
             }
             else { tcm->SetDirTexture(cmdir, nullptr); }
 

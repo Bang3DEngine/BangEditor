@@ -14,6 +14,7 @@
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/HideInHierarchy.h"
+#include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditSceneGameObjects.h"
 #include "BangEditor/NotSelectableInEditor.h"
 
@@ -267,6 +268,21 @@ void EditorCamera::Update()
         UpdateRotationVariables();
         HandleLookAtFocus();
         UpdateRotationVariables();
+    }
+
+    // Copy clear mode stuff from current scene camera
+    Scene *scene = EditorSceneManager::GetOpenScene();
+    Camera *sceneCam = scene ? scene->GetComponentInChildren<Camera>(true) : nullptr;
+    if (sceneCam)
+    {
+        GetCamera()->SetClearMode(sceneCam->GetClearMode());
+        GetCamera()->SetClearColor(sceneCam->GetClearColor());
+        GetCamera()->SetSkyBoxTexture(sceneCam->GetSkyBoxTexture());
+    }
+    else
+    {
+        GetCamera()->SetClearMode(Camera::ClearMode::Color);
+        GetCamera()->SetClearColor(Color::LightBlue);
     }
 
     if (unwrapMouse) { Input::SetMouseWrapping(false); }

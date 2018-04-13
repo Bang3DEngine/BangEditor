@@ -135,6 +135,8 @@ target_compile_definitions(BangEditorObjects PRIVATE -DBANG_EDITOR_ROOT="${BANG_
 target_include_directories(Game              PRIVATE ${BANG_ENGINE_INCLUDE_DIRS} ${BANG_EDITOR_INCLUDE_DIR})
 target_include_directories(BangEditor        PRIVATE ${BANG_ENGINE_INCLUDE_DIRS} ${BANG_EDITOR_INCLUDE_DIR})
 target_include_directories(BangEditorObjects PRIVATE ${BANG_ENGINE_INCLUDE_DIRS} ${BANG_EDITOR_INCLUDE_DIR})
+target_link_libraries(BangEditor PRIVATE ${DEPENDENCIES_LIB_PATHS})
+target_link_libraries(Game PRIVATE ${DEPENDENCIES_LIB_PATHS})
 target_link_libraries(Game       PRIVATE BangLib)
 target_link_libraries(BangEditor PRIVATE BangLib)
 #=================================================================
