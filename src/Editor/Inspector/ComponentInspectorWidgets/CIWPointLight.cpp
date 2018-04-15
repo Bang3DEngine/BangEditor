@@ -2,6 +2,7 @@
 
 #include "Bang/PointLight.h"
 #include "Bang/UIInputNumber.h"
+#include "Bang/TextureCubeMap.h"
 #include "Bang/GameObjectFactory.h"
 
 USING_NAMESPACE_BANG
@@ -25,6 +26,14 @@ void CIWPointLight::UpdateFromReference()
     {
         p_rangeInput->SetValue( GetPointLight()->GetRange() );
     }
+
+    /*
+    TextureCubeMap *shadowMapTex = DCAST<TextureCubeMap*>(GetLight()->GetShadowMapTexture());
+    if (shadowMapTex)
+    {
+        shadowMapTex->ToImage(GL::CubeMapDir::Front).Export( Path("test.png") );
+    }
+    */
 }
 
 PointLight *CIWPointLight::GetPointLight() const

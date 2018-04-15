@@ -73,7 +73,7 @@ void CIWLight::UpdateFromReference()
                     SCAST<int>(GetLight()->GetShadowType()) );
     }
 
-    Texture2D *shadowMapTex = GetLight()->GetShadowMapTexture();
+    Texture2D *shadowMapTex = DCAST<Texture2D*>(GetLight()->GetShadowMapTexture());
     p_shadowMapImg->SetEnabled(shadowMapTex != nullptr);
     p_shadowMapImg->SetImageTexture(shadowMapTex);
 }

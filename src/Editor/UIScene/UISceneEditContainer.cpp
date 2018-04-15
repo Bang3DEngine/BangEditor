@@ -76,7 +76,7 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
     {
         // Get preview texture
         GBuffer *gbuffer = selectedCamera->GetGBuffer();
-        Texture2D *camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttColor);
+        Texture2D *camTexture = gbuffer->GetAttachmentTex2D(GBuffer::AttColor);
         camTexture->SetWrapMode( GL::WrapMode::Repeat );
         p_cameraPreviewImg->SetImageTexture(camTexture);
 

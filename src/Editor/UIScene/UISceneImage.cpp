@@ -69,25 +69,25 @@ void UISceneImage::SetSceneImageCamera(Camera *sceneCam)
         switch (GetRenderMode())
         {
             case RenderMode::Color:
-            camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttColor);
+            camTexture = gbuffer->GetAttachmentTex2D(GBuffer::AttColor);
             break;
 
             case RenderMode::Normal:
-            camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttNormal);
+            camTexture = gbuffer->GetAttachmentTex2D(GBuffer::AttNormal);
             break;
 
             case RenderMode::Diffuse:
-            camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttDiffuse);
+            camTexture = gbuffer->GetAttachmentTex2D(GBuffer::AttDiffuse);
             break;
 
             case RenderMode::Depth:
-            camTexture = gbuffer->GetAttachmentTexture(GBuffer::AttDepthStencil);
+            camTexture = gbuffer->GetAttachmentTex2D(GBuffer::AttDepthStencil);
             break;
 
             case RenderMode::Selection:
             {
                 SelectionFramebuffer *sfb = sceneCam->GetSelectionFramebuffer();
-                camTexture = sfb->GetAttachmentTexture(SelectionFramebuffer::AttColor);
+                camTexture = sfb->GetAttachmentTex2D(SelectionFramebuffer::AttColor);
             }
             break;
         }

@@ -233,6 +233,7 @@ void EditorCamera::OnStart()
     UpdateRotationVariables();
 }
 
+#include "Bang/PointLight.h"
 void EditorCamera::Update()
 {
     GameObject::Update();
@@ -283,6 +284,14 @@ void EditorCamera::Update()
     {
         GetCamera()->SetClearMode(Camera::ClearMode::Color);
         GetCamera()->SetClearColor(Color::LightBlue);
+    }
+
+    PointLight *pl = scene->GetComponentInChildren<PointLight>(true);
+    if (pl)
+    {
+        GetCamera()->SetClearMode(Camera::ClearMode::SkyBox);
+        GetCamera()->SetSkyBoxTexture(pl->GetShadowMapTexture());
+        //Debug_Peek( pl->GetShadowMapTexture()->GetGLId() );
     }
 
     if (unwrapMouse) { Input::SetMouseWrapping(false); }

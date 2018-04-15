@@ -70,18 +70,18 @@ void FIWTextureCubeMap::UpdateFromFileWhenChanged()
     IValueChangedListener::SetReceiveEvents(false);
 
     TextureCubeMap *tcm = GetTextureCubeMap();
-    Texture2D *topTex   = tcm->GetDirTexture(GL::CubeMapDir::Top);
-    Texture2D *botTex   = tcm->GetDirTexture(GL::CubeMapDir::Bot);
-    Texture2D *leftTex  = tcm->GetDirTexture(GL::CubeMapDir::Left);
-    Texture2D *rightTex = tcm->GetDirTexture(GL::CubeMapDir::Right);
-    Texture2D *frontTex = tcm->GetDirTexture(GL::CubeMapDir::Front);
-    Texture2D *backTex  = tcm->GetDirTexture(GL::CubeMapDir::Back);
-    p_topTextureInput->SetPath(topTex     ? topTex->GetResourceFilepath()   : Path::Empty);
-    p_botTextureInput->SetPath(botTex     ? botTex->GetResourceFilepath()   : Path::Empty);
-    p_leftTextureInput->SetPath(leftTex   ? leftTex->GetResourceFilepath()  : Path::Empty);
-    p_rightTextureInput->SetPath(rightTex ? rightTex->GetResourceFilepath() : Path::Empty);
-    p_frontTextureInput->SetPath(frontTex ? frontTex->GetResourceFilepath() : Path::Empty);
-    p_backTextureInput->SetPath(backTex   ? backTex->GetResourceFilepath()  : Path::Empty);
+    const RH<Imageb> topImg   = tcm->GetImageResource(GL::CubeMapDir::Top);
+    const RH<Imageb> botImg   = tcm->GetImageResource(GL::CubeMapDir::Bot);
+    const RH<Imageb> leftImg  = tcm->GetImageResource(GL::CubeMapDir::Left);
+    const RH<Imageb> rightImg = tcm->GetImageResource(GL::CubeMapDir::Right);
+    const RH<Imageb> frontImg = tcm->GetImageResource(GL::CubeMapDir::Front);
+    const RH<Imageb> backImg  = tcm->GetImageResource(GL::CubeMapDir::Back);
+    p_topTextureInput->SetPath(topImg     ? topImg.Get()->GetResourceFilepath()   : Path::Empty);
+    p_botTextureInput->SetPath(botImg     ? botImg.Get()->GetResourceFilepath()   : Path::Empty);
+    p_leftTextureInput->SetPath(leftImg   ? leftImg.Get()->GetResourceFilepath()  : Path::Empty);
+    p_rightTextureInput->SetPath(rightImg ? rightImg.Get()->GetResourceFilepath() : Path::Empty);
+    p_frontTextureInput->SetPath(frontImg ? frontImg.Get()->GetResourceFilepath() : Path::Empty);
+    p_backTextureInput->SetPath(backImg   ? backImg.Get()->GetResourceFilepath()  : Path::Empty);
 
     IValueChangedListener::SetReceiveEvents(true);
 }
@@ -97,10 +97,10 @@ void FIWTextureCubeMap::OnValueChanged(Object *object)
         {
             if (inputFile->GetPath().IsFile())
             {
-                RH<Texture2D> tex = Resources::Load<Texture2D>( inputFile->GetPath());
-                tcm->SetDirTexture(cmdir, tex.Get() );
+                RH<Imageb> img = Resources::Load<Imageb>( inputFile->GetPath() );
+                tcm->SetImageResource(cmdir, img.Get());
             }
-            else { tcm->SetDirTexture(cmdir, nullptr); }
+            else { tcm->SetImageResource(cmdir, nullptr); }
 
         };
 
