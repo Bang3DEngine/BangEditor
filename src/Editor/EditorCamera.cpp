@@ -286,6 +286,7 @@ void EditorCamera::Update()
         GetCamera()->SetClearColor(Color::LightBlue);
     }
 
+    /*
     PointLight *pl = scene->GetComponentInChildren<PointLight>(true);
     if (pl)
     {
@@ -293,6 +294,7 @@ void EditorCamera::Update()
         GetCamera()->SetSkyBoxTexture(pl->GetShadowMapTexture());
         //Debug_Peek( pl->GetShadowMapTexture()->GetGLId() );
     }
+    */
 
     if (unwrapMouse) { Input::SetMouseWrapping(false); }
 }

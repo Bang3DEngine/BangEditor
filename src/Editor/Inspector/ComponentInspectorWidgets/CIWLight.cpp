@@ -42,8 +42,8 @@ void CIWLight::InitInnerWidgets()
     AddWidget("Shadow type", p_shadowTypeInput->GetGameObject());
 
     AddLabel("Shadow map");
-    p_shadowMapImg = GameObjectFactory::CreateUIImage();
-    AddWidget(p_shadowMapImg->GetGameObject(), 300);
+    // p_shadowMapImg = GameObjectFactory::CreateUIImage();
+    // AddWidget(p_shadowMapImg->GetGameObject(), 300);
 
     SetLabelsWidth(90);
 }
@@ -73,9 +73,9 @@ void CIWLight::UpdateFromReference()
                     SCAST<int>(GetLight()->GetShadowType()) );
     }
 
-    Texture2D *shadowMapTex = DCAST<Texture2D*>(GetLight()->GetShadowMapTexture());
-    p_shadowMapImg->SetEnabled(shadowMapTex != nullptr);
-    p_shadowMapImg->SetImageTexture(shadowMapTex);
+    // Texture2D *shadowMapTex = DCAST<Texture2D*>(GetLight()->GetShadowMapTexture());
+    // p_shadowMapImg->SetEnabled(shadowMapTex != nullptr);
+    // p_shadowMapImg->SetImageTexture(shadowMapTex);
 }
 
 Light *CIWLight::GetLight() const

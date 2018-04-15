@@ -26,14 +26,6 @@ void CIWPointLight::UpdateFromReference()
     {
         p_rangeInput->SetValue( GetPointLight()->GetRange() );
     }
-
-    /*
-    TextureCubeMap *shadowMapTex = DCAST<TextureCubeMap*>(GetLight()->GetShadowMapTexture());
-    if (shadowMapTex)
-    {
-        shadowMapTex->ToImage(GL::CubeMapDir::Front).Export( Path("test.png") );
-    }
-    */
 }
 
 PointLight *CIWPointLight::GetPointLight() const
