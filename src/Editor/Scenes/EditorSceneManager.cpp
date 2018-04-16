@@ -56,7 +56,7 @@ EditorScene *EditorSceneManager::_GetEditorScene() const
 
 void EditorSceneManager::SetActiveScene(Scene *activeScene)
 {
-    GetActive()->SetActiveScene_(activeScene);
+    EditorSceneManager::GetActive()->SetActiveScene_(activeScene);
 }
 
 BehaviourManager *EditorSceneManager::CreateBehaviourManager() const
@@ -79,5 +79,5 @@ void EditorSceneManager::OnSceneLoaded(Scene *scene, const Path &sceneFilepath)
 EditorSceneManager *EditorSceneManager::GetActive()
 {
     SceneManager *sm = SceneManager::GetActive();
-    return sm ? Cast<EditorSceneManager*>(sm) : nullptr;
+    return sm ? SCAST<EditorSceneManager*>(sm) : nullptr;
 }

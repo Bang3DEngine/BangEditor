@@ -21,6 +21,9 @@ MeshFactory *EditorResources::CreateMeshFactory() const
 
 Array<Path> EditorResources::GetLookUpPaths() const
 {
-    return {Paths::GetProjectAssetsDir(), Paths::GetEngineAssetsDir()};
+    Array<Path> lookUpPaths = Resources::GetLookUpPaths();
+    lookUpPaths.PushBack(EditorPaths::GetEditorAssetsDir());
+    lookUpPaths.PushBack(EditorPaths::GetEditorAssetsDir().Append("Shaders"));
+    return lookUpPaths;
 }
 

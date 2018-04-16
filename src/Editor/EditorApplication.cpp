@@ -13,6 +13,7 @@
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorWindow.h"
 #include "BangEditor/ProjectManager.h"
+#include "BangEditor/EditorResources.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorBehaviourManager.h"
 
@@ -58,9 +59,14 @@ EditorApplication *EditorApplication::GetInstance()
     return SCAST<EditorApplication*>( Application::GetInstance() );
 }
 
-Paths *EditorApplication::CreatePaths()
+Paths *EditorApplication::CreatePaths() const
 {
     return new EditorPaths();
+}
+
+Resources *EditorApplication::CreateResources() const
+{
+    return new EditorResources();
 }
 
 Editor *EditorApplication::GetEditor() const

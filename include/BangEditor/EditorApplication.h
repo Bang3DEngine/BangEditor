@@ -34,7 +34,8 @@ public:
 private:
     Editor *m_editor = nullptr;
 
-    Paths* CreatePaths() override;
+    Paths* CreatePaths() const override;
+    Resources* CreateResources() const override;
 
     Editor *GetEditor() const;
     static EditorApplication* GetInstance();

@@ -3,6 +3,7 @@
 #include "Bang/UIButton.h"
 #include "Bang/Material.h"
 #include "Bang/Resources.h"
+#include "Bang/IconManager.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -29,13 +30,20 @@ UIInputColor::UIInputColor()
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetFlexibleWidth(1.0f);
 
-    p_colorImage = GameObjectFactory::CreateUIImage(Color::Black);
-    p_colorImage->SetMode(UIImageRenderer::Mode::SLICE_9);
-    p_colorImage->SetImageTexture( Resources::Load<Texture2D>(
-                                    EPATH("Images/RRect_9s.png") ).Get() );
-    UILayoutElement *colorImgLE = p_colorImage->GetGameObject()->
-                                       AddComponent<UILayoutElement>();
-    colorImgLE->SetPreferredWidth(20);
+    GameObject *colorImgCont = GameObjectFactory::CreateUIGameObject();
+    UIFocusable *colorImgFocusable = colorImgCont->AddComponent<UIFocusable>();
+    colorImgFocusable->SetCursorType(Cursor::Type::Hand);
+    UILayoutElement *colorImgLE = colorImgCont->AddComponent<UILayoutElement>();
+    colorImgLE->SetFlexibleWidth(1.0f);
+
+    p_bgCheckerboardImage = colorImgCont->AddComponent<UIImageRenderer>();
+    p_bgCheckerboardImage->SetImageTexture( IconManager::GetCheckerboard().Get() );
+    p_bgCheckerboardImage->GetMaterial()->SetUvMultiply( Vector2(1, 1) );
+
+    p_colorImage = GameObjectFactory::CreateUIImage();
+
+    m_colorPickerReporter = new ColorPickerReporter();
+    m_colorPickerReporter->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_searchColorButton = GameObjectFactory::CreateUIButton();
     p_searchColorButton->GetText()->SetContent("");
@@ -43,32 +51,27 @@ UIInputColor::UIInputColor()
                                   Vector2i(16) );
     p_searchColorButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
     {
-        // Color color = EditorDialog::GetAsset("Pick Color...", {}});
+        EditorDialog::GetColor("Pick Color...", GetColor(), m_colorPickerReporter);
     });
 
-    p_colorInputVector = GameObject::Create<UIInputVector>();
-    p_colorInputVector->SetSize(4);
-    p_colorInputVector->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    UILayoutElement *inputVectorLE = p_colorInputVector->AddComponent<UILayoutElement>();
-    inputVectorLE->SetFlexibleWidth(1.0f);
-
-    for (int i = 0; i < 4; ++i)
+    colorImgFocusable->AddClickedCallback([this](IFocusable*)
     {
-        p_colorInputVector->GetInputNumbers()[i]->SetMinMaxValues(0.0f, 1.0f);
-    }
+        p_searchColorButton->Click(false);
+    });
 
-    p_colorInputVector->SetParent(this);
-    p_colorImage->GetGameObject()->SetParent(this);
+    colorImgCont->SetParent(this);
     p_searchColorButton->GetGameObject()->SetParent(this);
+    p_colorImage->GetGameObject()->SetParent(colorImgCont);
 }
 
 UIInputColor::~UIInputColor()
 {
+    Object::DestroyObject(m_colorPickerReporter);
 }
 
 void UIInputColor::OnValueChanged(Object *object)
 {
-    SetColor( Color::FromVector4(p_colorInputVector->GetVector4()) );
+    SetColor( m_colorPickerReporter->GetPickedColor() );
 }
 
 void UIInputColor::SetColor(const Color &color)
@@ -76,9 +79,7 @@ void UIInputColor::SetColor(const Color &color)
     if (color != GetColor())
     {
         m_color = color;
-
         p_colorImage->SetTint( GetColor() );
-        p_colorInputVector->Set( GetColor().ToVector4() );
 
         EventEmitter<IValueChangedListener>::PropagateToListeners(
                      &IValueChangedListener::OnValueChanged, this);
@@ -93,6 +94,6 @@ const Color &UIInputColor::GetColor() const
 
 bool UIInputColor::HasFocus() const
 {
-    return p_colorInputVector->HasFocus();
+    return !m_colorPickerReporter->HasFinished();
 }
 

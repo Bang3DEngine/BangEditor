@@ -17,17 +17,15 @@ public:
     EditorWindow();
     virtual ~EditorWindow();
 
+    void Create(uint flags) override;
     virtual void Update() override;
     virtual void Render() override;
     void OnClosed() override;
 
-    void Create(uint flags) override;
-    virtual SceneManager* CreateSceneManager() const override;
-
 private:
     ShortcutManager *m_shortcutManager = nullptr;
 
-    virtual Resources *CreateResources() const override;
+    SceneManager *CreateSceneManager() const override;
 
     ShortcutManager *GetShortcutManager() const;
     static EditorWindow *GetActive();

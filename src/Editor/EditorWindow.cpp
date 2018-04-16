@@ -44,20 +44,15 @@ void EditorWindow::OnClosed()
     SceneOpenerSaver::GetInstance()->CloseScene();
 }
 
-void EditorWindow::Create(uint flags)
-{
-    Window::Create(flags);
-    Maximize();
-}
-
 SceneManager *EditorWindow::CreateSceneManager() const
 {
     return new EditorSceneManager();
 }
 
-Resources *EditorWindow::CreateResources() const
+void EditorWindow::Create(uint flags)
 {
-    return new EditorResources();
+    Window::Create(flags);
+    Maximize();
 }
 
 ShortcutManager *EditorWindow::GetShortcutManager() const

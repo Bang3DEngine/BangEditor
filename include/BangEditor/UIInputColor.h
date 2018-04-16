@@ -18,6 +18,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UIInputVector;
+FORWARD class ColorPickerReporter;
 
 class UIInputColor : public GameObject,
                      public IValueChangedListener,
@@ -40,10 +41,11 @@ protected:
 
 private:
     Color m_color = Color::Zero;
+    ColorPickerReporter *m_colorPickerReporter = nullptr;
 
     UIImageRenderer *p_colorImage = nullptr;
+    UIImageRenderer *p_bgCheckerboardImage = nullptr;
     UIButton *p_searchColorButton = nullptr;
-    UIInputVector *p_colorInputVector = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

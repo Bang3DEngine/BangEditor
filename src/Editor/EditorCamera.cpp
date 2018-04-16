@@ -286,15 +286,13 @@ void EditorCamera::Update()
         GetCamera()->SetClearColor(Color::LightBlue);
     }
 
-    /*
-    PointLight *pl = scene->GetComponentInChildren<PointLight>(true);
-    if (pl)
-    {
-        GetCamera()->SetClearMode(Camera::ClearMode::SkyBox);
-        GetCamera()->SetSkyBoxTexture(pl->GetShadowMapTexture());
-        //Debug_Peek( pl->GetShadowMapTexture()->GetGLId() );
-    }
-    */
+    // PointLight *pl = scene->GetComponentInChildren<PointLight>(true);
+    // if (pl)
+    // {
+    //     GetCamera()->SetClearMode(Camera::ClearMode::SkyBox);
+    //     GetCamera()->SetSkyBoxTexture(pl->GetShadowMapTexture());
+    //     //Debug_Peek( pl->GetShadowMapTexture()->GetGLId() );
+    // }
 
     if (unwrapMouse) { Input::SetMouseWrapping(false); }
 }
