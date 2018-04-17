@@ -20,12 +20,6 @@ void CIWDirectionalLight::InitInnerWidgets()
     p_shadowDistanceInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Shadow dist.", p_shadowDistanceInput->GetGameObject());
 
-    p_shadowMapSizeInput = GameObjectFactory::CreateUISlider();
-    p_shadowMapSizeInput->SetMinMaxValues(1.0f, 4096);
-    p_shadowMapSizeInput->GetInputNumber()->SetDecimalPlaces(0);
-    p_shadowMapSizeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    AddWidget("Shadow map size", p_shadowMapSizeInput->GetGameObject());
-
     SetLabelsWidth(110);
 }
 
@@ -36,11 +30,6 @@ void CIWDirectionalLight::UpdateFromReference()
     if (!p_shadowDistanceInput->HasFocus())
     {
         p_shadowDistanceInput->SetValue( GetDirectionalLight()->GetShadowDistance() );
-    }
-
-    if (!p_shadowMapSizeInput->HasFocus())
-    {
-        p_shadowMapSizeInput->SetValue( GetDirectionalLight()->GetShadowMapSize().x );
     }
 }
 
@@ -54,5 +43,4 @@ void CIWDirectionalLight::OnValueChanged(Object *object)
     CIWLight::OnValueChanged(object);
 
     GetDirectionalLight()->SetShadowDistance( p_shadowDistanceInput->GetValue() );
-    GetDirectionalLight()->SetShadowMapSize( Vector2i(p_shadowMapSizeInput->GetValue()) );
 }

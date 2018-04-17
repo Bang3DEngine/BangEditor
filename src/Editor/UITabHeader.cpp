@@ -36,6 +36,7 @@ UITabHeader::UITabHeader()
         EventEmitter<ITabHeaderListener>::PropagateToListeners(
                     &ITabHeaderListener::OnTabHeaderClicked, this);
     });
+    p_focusable->SetCursorType(Cursor::Type::Hand);
 
     titleGo->SetParent(this);
 

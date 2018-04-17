@@ -36,6 +36,9 @@ protected:
 	UIInputColor();
     virtual ~UIInputColor();
 
+    // GameObject
+    void Update() override;
+
     // IValueChangedListener
     void OnValueChanged(Object *object) override;
 

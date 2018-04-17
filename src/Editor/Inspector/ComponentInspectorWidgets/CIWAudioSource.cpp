@@ -45,7 +45,7 @@ void CIWAudioSource::InitInnerWidgets()
     p_playOnStartCheckbox = GameObjectFactory::CreateUICheckBox();
     p_playOnStartCheckbox->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
-    p_playStopButton = GameObjectFactory::CreateUIButton();
+    p_playStopButton = GameObjectFactory::CreateUIButton("Play");
     p_playStopButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
     {
         OnPlayClicked();

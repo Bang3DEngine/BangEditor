@@ -158,20 +158,18 @@ SelectProjectScene::SelectProjectScene()
 
     GameObjectFactory::CreateUIHSpacer()->SetParent(botHLGo);
 
-    p_newProjectButton  = GameObjectFactory::CreateUIButton();
-    p_newProjectButton->GetText()->SetContent("New project...");
+    p_newProjectButton  = GameObjectFactory::CreateUIButton("New project...");
     p_newProjectButton->GetGameObject()->SetParent(botHLGo);
     p_newProjectButton->GetFocusable()->
                         EventEmitter<IFocusListener>::RegisterListener(this);
 
-    p_openProjectButton = GameObjectFactory::CreateUIButton();
-    p_openProjectButton->GetText()->SetContent("Open project...");
+    p_openProjectButton = GameObjectFactory::CreateUIButton("Open project...");
     p_openProjectButton->GetGameObject()->SetParent(botHLGo);
     p_openProjectButton->GetFocusable()->
                         EventEmitter<IFocusListener>::RegisterListener(this);
 
-    p_openSelectedProjectButton = GameObjectFactory::CreateUIButton();
-    p_openSelectedProjectButton->GetText()->SetContent("Open selected project...");
+    p_openSelectedProjectButton = GameObjectFactory::CreateUIButton(
+                                                  "Open selected project...");
     p_openSelectedProjectButton->GetGameObject()->SetParent(botHLGo);
     p_openSelectedProjectButton->GetFocusable()->
                         EventEmitter<IFocusListener>::RegisterListener(this);

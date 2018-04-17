@@ -109,7 +109,10 @@ void CIWCamera::UpdateFromReference()
     }
 
     TextureCubeMap *skyBoxTex = GetCamera()->GetSkyBoxTexture();
-    if (skyBoxTex) { p_textureCubeMapInput->SetPath(skyBoxTex->GetResourceFilepath()); }
+    if (skyBoxTex)
+    {
+        p_textureCubeMapInput->SetPath(skyBoxTex->GetResourceFilepath());
+    }
 
     LimitValues();
 }
@@ -138,8 +141,11 @@ void CIWCamera::OnValueChanged(Object *object)
     GetCamera()->SetClearMode( SCAST<Camera::ClearMode>(
                                   p_clearModeInput->GetSelectedValue()) );
     GetCamera()->SetClearColor( p_clearColorInput->GetColor() );
-    GetCamera()->SetSkyBoxTexture(
-        Resources::Load<TextureCubeMap>(p_textureCubeMapInput->GetPath()).Get() );
+    Debug_Peek(p_textureCubeMapInput);
+    Debug_Peek(p_textureCubeMapInput->GetPath());
+    RH<TextureCubeMap> tcmRH = Resources::Load<TextureCubeMap>(
+                                        p_textureCubeMapInput->GetPath()).Get();
+    GetCamera()->SetSkyBoxTexture(tcmRH.Get());
     LimitValues();
 }
 

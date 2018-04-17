@@ -23,7 +23,6 @@ public:
     virtual void UpdateFromReference() override;
 
 private:
-    UISlider *p_shadowMapSizeInput = nullptr;
     UIInputNumber *p_shadowDistanceInput = nullptr;
 
     DirectionalLight *GetDirectionalLight() const;

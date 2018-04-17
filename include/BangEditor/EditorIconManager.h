@@ -27,6 +27,7 @@ public:
     static RH<Texture2D> GetLensLittleIcon();
     static RH<Texture2D> GetSquareIcon();
     static RH<Texture2D> GetAnchorIcon();
+    static RH<Texture2D> GetCubeMapIcon();
     static RH<Texture2D> GetWhiteSphereIcon();
     static RH<Texture2D> GetFolderIcon();
     static RH<Texture2D> GetLetterIcon();

@@ -37,10 +37,9 @@ UIInputFile::UIInputFile()
     pathInputTextLE->SetLayoutPriority(1);
     SetPath(Path::Empty);
 
-    p_searchButton = GameObjectFactory::CreateUIButton();
-    p_searchButton->GetText()->SetContent("");
-    p_searchButton->SetIcon( EditorIconManager::GetLensLittleIcon().Get(),
-                             Vector2i(10, 14) );
+    RH<Texture2D> lensIcon = EditorIconManager::GetLensLittleIcon().Get();
+    p_searchButton = GameObjectFactory::CreateUIButton("", lensIcon.Get());
+    p_searchButton->SetIcon(lensIcon.Get(), Vector2i(16));
     p_searchButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
     {
         Path openPath;

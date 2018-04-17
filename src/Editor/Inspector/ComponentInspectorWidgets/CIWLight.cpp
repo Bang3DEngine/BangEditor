@@ -41,11 +41,13 @@ void CIWLight::InitInnerWidgets()
     p_shadowTypeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Shadow type", p_shadowTypeInput->GetGameObject());
 
-    AddLabel("Shadow map");
-    // p_shadowMapImg = GameObjectFactory::CreateUIImage();
-    // AddWidget(p_shadowMapImg->GetGameObject(), 300);
+    p_shadowMapSizeInput = GameObjectFactory::CreateUISlider();
+    p_shadowMapSizeInput->SetMinMaxValues(1.0f, 4096);
+    p_shadowMapSizeInput->GetInputNumber()->SetDecimalPlaces(0);
+    p_shadowMapSizeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    AddWidget("Shadow map size", p_shadowMapSizeInput->GetGameObject());
 
-    SetLabelsWidth(90);
+    SetLabelsWidth(100);
 }
 
 void CIWLight::UpdateFromReference()
@@ -73,9 +75,10 @@ void CIWLight::UpdateFromReference()
                     SCAST<int>(GetLight()->GetShadowType()) );
     }
 
-    // Texture2D *shadowMapTex = DCAST<Texture2D*>(GetLight()->GetShadowMapTexture());
-    // p_shadowMapImg->SetEnabled(shadowMapTex != nullptr);
-    // p_shadowMapImg->SetImageTexture(shadowMapTex);
+    if (!p_shadowMapSizeInput->HasFocus())
+    {
+        p_shadowMapSizeInput->SetValue( GetLight()->GetShadowMapSize().x );
+    }
 }
 
 Light *CIWLight::GetLight() const
@@ -92,4 +95,5 @@ void CIWLight::OnValueChanged(Object *object)
     GetLight()->SetShadowBias( p_shadowBiasInput->GetValue() );
     GetLight()->SetShadowType( SCAST<Light::ShadowType>(
                                    p_shadowTypeInput->GetSelectedValue()) );
+    GetLight()->SetShadowMapSize( Vector2i(p_shadowMapSizeInput->GetValue()) );
 }

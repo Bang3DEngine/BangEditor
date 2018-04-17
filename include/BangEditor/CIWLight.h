@@ -38,9 +38,9 @@ protected:
 private:
     UIInputNumber *p_intensityInput = nullptr;
     UIInputColor *p_colorInput = nullptr;
-    UISlider *p_shadowBiasInput = nullptr;
     UIComboBox *p_shadowTypeInput = nullptr;
-    UIImageRenderer *p_shadowMapImg = nullptr;
+    UISlider *p_shadowBiasInput = nullptr;
+    UISlider *p_shadowMapSizeInput = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

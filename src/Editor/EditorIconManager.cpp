@@ -58,6 +58,10 @@ RH<Texture2D> EditorIconManager::GetIconForExtension(const String &ext)
     {
         return EditorIconManager::GetWhiteSphereIcon();
     }
+    else if ( Extensions::Equals(ext, Extensions::GetTextureCubeMapExtension()) )
+    {
+        return EditorIconManager::GetCubeMapIcon();
+    }
 
     return EditorIconManager::GetFileIcon();
 }
@@ -76,6 +80,8 @@ RH<Texture2D> EditorIconManager::GetSquareIcon()
 { return EditorIconManager::GetIconTexture("Square"); }
 RH<Texture2D> EditorIconManager::GetAnchorIcon()
 { return EditorIconManager::GetIconTexture("Anchor"); }
+RH<Texture2D> EditorIconManager::GetCubeMapIcon()
+{ return EditorIconManager::GetIconTexture("CubeMap"); }
 RH<Texture2D> EditorIconManager::GetWhiteSphereIcon()
 { return EditorIconManager::GetIconTexture("WhiteSphere"); }
 RH<Texture2D> EditorIconManager::GetFolderIcon()

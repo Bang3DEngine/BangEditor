@@ -113,8 +113,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
     UIHorizontalLayout *buttonsHL = buttonsGo->AddComponent<UIHorizontalLayout>();
     buttonsHL->SetSpacing(5);
 
-    UIButton *cancelButton = GameObjectFactory::CreateUIButton();
-    cancelButton->GetText()->SetContent("Cancel");
+    UIButton *cancelButton = GameObjectFactory::CreateUIButton("Cancel");
     cancelButton->GetFocusable()->AddClickedCallback([](IFocusable*)
     {
         EditorDialog::s_accepted = false;
@@ -123,8 +122,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
     });
 
 
-    UIButton *openButton = GameObjectFactory::CreateUIButton();
-    openButton->GetText()->SetContent("Open");
+    UIButton *openButton = GameObjectFactory::CreateUIButton("Open");
     openButton->GetFocusable()->AddClickedCallback([](IFocusable*)
     {
         EditorDialog::s_accepted = true;

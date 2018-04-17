@@ -24,15 +24,19 @@ UISceneToolbar::UISceneToolbar()
     UIHorizontalLayout *toolbarHL = AddComponent<UIHorizontalLayout>();
     toolbarHL->SetSpacing(6);
 
-    constexpr int ToolBarHeight = 15;
+    constexpr int ToolBarHeight = 20;
 
     UILayoutElement *toolbarLE = AddComponent<UILayoutElement>();
     toolbarLE->SetPreferredHeight(ToolBarHeight);
     toolbarLE->SetFlexibleWidth( 1.0f );
 
-    p_playButton = GameObjectFactory::CreateUIButton();
-    p_playButton->SetIcon(IconManager::GetRightArrowIcon().Get(),
-                          Vector2i(ToolBarHeight));
+    RH<Texture2D> rightArrowIcon       = IconManager::GetRightArrowIcon();
+    RH<Texture2D> doubleBarIcon        = EditorIconManager::GetDoubleBarIcon();
+    RH<Texture2D> squareIcon           = EditorIconManager::GetSquareIcon();
+    RH<Texture2D> rightArrowAndBarIcon =
+                                 EditorIconManager::GetRightArrowAndBarIcon();
+    p_playButton = GameObjectFactory::CreateUIButton("", rightArrowIcon.Get());
+    p_playButton->SetIcon(rightArrowIcon.Get(), Vector2i(ToolBarHeight));
     p_playButton->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
     p_playButton->GetIcon()->SetTint(Color::DarkGray);
     p_playButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
@@ -40,9 +44,8 @@ UISceneToolbar::UISceneToolbar()
         ScenePlayer::PlayScene();
     });
 
-    p_pauseButton = GameObjectFactory::CreateUIButton();
-    p_pauseButton->SetIcon(EditorIconManager::GetDoubleBarIcon().Get(),
-                           Vector2i(ToolBarHeight));
+    p_pauseButton = GameObjectFactory::CreateUIButton("", doubleBarIcon.Get());
+    p_pauseButton->SetIcon(doubleBarIcon.Get(), Vector2i(ToolBarHeight));
     p_pauseButton->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
     p_pauseButton->GetIcon()->SetTint(Color::DarkGray);
     p_pauseButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
@@ -50,9 +53,8 @@ UISceneToolbar::UISceneToolbar()
         ScenePlayer::PauseScene();
     });
 
-    p_stepButton = GameObjectFactory::CreateUIButton();
-    p_stepButton->SetIcon(EditorIconManager::GetRightArrowAndBarIcon().Get(),
-                          Vector2i(ToolBarHeight));
+    p_stepButton = GameObjectFactory::CreateUIButton("", rightArrowAndBarIcon.Get());
+    p_stepButton->SetIcon(rightArrowAndBarIcon.Get(), Vector2i(ToolBarHeight));
     p_stepButton->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
     p_stepButton->GetIcon()->SetTint(Color::DarkGray);
     p_stepButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
@@ -60,9 +62,8 @@ UISceneToolbar::UISceneToolbar()
         ScenePlayer::StepFrame();
     });
 
-    p_stopButton = GameObjectFactory::CreateUIButton();
-    p_stopButton->SetIcon(EditorIconManager::GetSquareIcon().Get(),
-                          Vector2i(ToolBarHeight));
+    p_stopButton = GameObjectFactory::CreateUIButton("", squareIcon.Get());
+    p_stopButton->SetIcon(squareIcon.Get(), Vector2i(ToolBarHeight));
     p_stopButton->GetIcon()->SetTint(Color::DarkGray);
     p_stopButton->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
     p_stopButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
