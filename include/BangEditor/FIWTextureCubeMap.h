@@ -34,17 +34,21 @@ private:
     UIInputFile *p_leftTextureInput  = nullptr;
     UIInputFile *p_frontTextureInput = nullptr;
     UIInputFile *p_backTextureInput  = nullptr;
+    UILabel *p_warningLabel = nullptr;
 
     FIWTextureCubeMap();
     virtual ~FIWTextureCubeMap();
 
     TextureCubeMap *GetTextureCubeMap() const;
 
+    void CheckValidity() const;
+
     // FileInspectorWidget
     void UpdateFromFileWhenChanged() override;
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;
+
 };
 
 NAMESPACE_BANG_EDITOR_END

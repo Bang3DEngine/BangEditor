@@ -1,8 +1,11 @@
 #include "BangEditor/FIWTextureCubeMap.h"
 
+#include "Bang/UILabel.h"
 #include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Extensions.h"
+#include "Bang/UITextRenderer.h"
+#include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/UIInputFile.h"
 
@@ -54,12 +57,59 @@ void FIWTextureCubeMap::Init()
     p_backTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Back texture", p_backTextureInput);
 
+    p_warningLabel = GameObjectFactory::CreateUILabel();
+    p_warningLabel->GetText()->SetContent("Please add all images so that cubemap "
+                                          "is fully configured.");
+    p_warningLabel->GetText()->SetWrapping(true);
+    AddWidget(p_warningLabel->GetGameObject(), 60);
+
     SetLabelsWidth(100);
 }
 
 TextureCubeMap *FIWTextureCubeMap::GetTextureCubeMap() const
 {
     return p_textureCubeMap.Get();
+}
+
+void FIWTextureCubeMap::CheckValidity() const
+{
+    TextureCubeMap *tcm = GetTextureCubeMap();
+    RH<Imageb> topImg   = tcm->GetImageResource(GL::CubeMapDir::Top);
+    RH<Imageb> botImg   = tcm->GetImageResource(GL::CubeMapDir::Bot);
+    RH<Imageb> leftImg  = tcm->GetImageResource(GL::CubeMapDir::Left);
+    RH<Imageb> rightImg = tcm->GetImageResource(GL::CubeMapDir::Right);
+    RH<Imageb> frontImg = tcm->GetImageResource(GL::CubeMapDir::Front);
+    RH<Imageb> backImg  = tcm->GetImageResource(GL::CubeMapDir::Back);
+
+    if (!topImg || !botImg || !leftImg || !rightImg || !frontImg || !backImg)
+    {
+        p_warningLabel->GetText()->SetTextColor(Color::Red);
+        p_warningLabel->GetText()->SetContent("Please set all images so that cubemap "
+                                              "is fully configured. Until then, "
+                                              "it will not work.");
+    }
+    else
+    {
+        bool allSizesCorrect = true;
+        Vector2i size = topImg.Get()->GetSize();
+        allSizesCorrect = (size.x == size.y) &&
+                          botImg.Get()->GetSize()   == size &&
+                          leftImg.Get()->GetSize()  == size &&
+                          rightImg.Get()->GetSize() == size &&
+                          frontImg.Get()->GetSize() == size &&
+                          backImg.Get()->GetSize()  == size;
+        if (!allSizesCorrect)
+        {
+            p_warningLabel->GetText()->SetTextColor(Color::Red);
+            p_warningLabel->GetText()->SetContent("All image sizes must be square "
+                                                  "and all sides must have the same size.");
+        }
+        else
+        {
+            p_warningLabel->GetText()->SetTextColor(Color::Black);
+            p_warningLabel->GetText()->SetContent("Cubemap correctly configured!");
+        }
+    }
 }
 
 void FIWTextureCubeMap::UpdateFromFileWhenChanged()
@@ -82,6 +132,8 @@ void FIWTextureCubeMap::UpdateFromFileWhenChanged()
     p_rightTextureInput->SetPath(rightImg ? rightImg.Get()->GetResourceFilepath() : Path::Empty);
     p_frontTextureInput->SetPath(frontImg ? frontImg.Get()->GetResourceFilepath() : Path::Empty);
     p_backTextureInput->SetPath(backImg   ? backImg.Get()->GetResourceFilepath()  : Path::Empty);
+
+    CheckValidity();
 
     IValueChangedListener::SetReceiveEvents(true);
 }
@@ -110,6 +162,8 @@ void FIWTextureCubeMap::OnValueChanged(Object *object)
         Refresh(p_rightTextureInput, tcm, GL::CubeMapDir::Right);
         Refresh(p_frontTextureInput, tcm, GL::CubeMapDir::Front);
         Refresh(p_backTextureInput,  tcm, GL::CubeMapDir::Back);
+
+        CheckValidity();
 
         const Path tcmImportPath = ImportFilesManager::GetImportFilepath(
                                                 tcm->GetResourceFilepath());
