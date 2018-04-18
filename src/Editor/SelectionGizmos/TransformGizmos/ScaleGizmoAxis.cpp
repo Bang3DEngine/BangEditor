@@ -192,6 +192,6 @@ void ScaleGizmoAxis::UpdatePoints(float localAxisLength)
 
 void ScaleGizmoAxis::SetColor(const Color &color)
 {
-    p_lineRenderer->GetMaterial()->SetDiffuseColor(color);
-    p_meshRenderer->GetMaterial()->SetDiffuseColor(color);
+    p_lineRenderer->GetMaterial()->SetAlbedoColor(color);
+    p_meshRenderer->GetMaterial()->SetAlbedoColor(color);
 }

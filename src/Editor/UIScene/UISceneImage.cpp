@@ -76,8 +76,8 @@ void UISceneImage::SetSceneImageCamera(Camera *sceneCam)
             camTexture = gbuffer->GetAttachmentTex2D(GBuffer::AttNormal);
             break;
 
-            case RenderMode::Diffuse:
-            camTexture = gbuffer->GetAttachmentTex2D(GBuffer::AttDiffuse);
+            case RenderMode::Albedo:
+            camTexture = gbuffer->GetAttachmentTex2D(GBuffer::AttAlbedo);
             break;
 
             case RenderMode::Depth:

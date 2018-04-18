@@ -301,5 +301,5 @@ void RotateGizmoAxis::UpdateCirclePoints()
 
 void RotateGizmoAxis::SetColor(const Color &color)
 {
-    p_circleRenderer->GetMaterial()->SetDiffuseColor(color);
+    p_circleRenderer->GetMaterial()->SetAlbedoColor(color);
 }

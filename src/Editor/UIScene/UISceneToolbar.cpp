@@ -33,8 +33,7 @@ UISceneToolbar::UISceneToolbar()
     RH<Texture2D> rightArrowIcon       = IconManager::GetRightArrowIcon();
     RH<Texture2D> doubleBarIcon        = EditorIconManager::GetDoubleBarIcon();
     RH<Texture2D> squareIcon           = EditorIconManager::GetSquareIcon();
-    RH<Texture2D> rightArrowAndBarIcon =
-                                 EditorIconManager::GetRightArrowAndBarIcon();
+    RH<Texture2D> rightArrowAndBarIcon = EditorIconManager::GetRightArrowAndBarIcon();
     p_playButton = GameObjectFactory::CreateUIButton("", rightArrowIcon.Get());
     p_playButton->SetIcon(rightArrowIcon.Get(), Vector2i(ToolBarHeight));
     p_playButton->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
@@ -73,9 +72,9 @@ UISceneToolbar::UISceneToolbar()
 
     p_renderModeInput = GameObjectFactory::CreateUIComboBox();
     p_renderModeInput->AddItem("Color",     SCAST<int>(UISceneImage::RenderMode::Color));
-    p_renderModeInput->AddItem("Diffuse",   SCAST<int>(UISceneImage::RenderMode::Diffuse));
+    p_renderModeInput->AddItem("Albedo",    SCAST<int>(UISceneImage::RenderMode::Albedo));
     p_renderModeInput->AddItem("Normal",    SCAST<int>(UISceneImage::RenderMode::Normal));
-    // p_renderModeInput->AddItem("Depth",     SCAST<int>(UISceneImage::RenderMode::Depth));
+    // p_renderModeInput->AddItem("Depth",  SCAST<int>(UISceneImage::RenderMode::Depth));
     p_renderModeInput->AddItem("Selection", SCAST<int>(UISceneImage::RenderMode::Selection));
     p_renderModeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 

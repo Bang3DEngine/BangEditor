@@ -131,7 +131,7 @@ void RectTransformAnchorSelectionGizmo::Render(RenderPass renderPass,
             color = Color::Yellow;
         break;
     }
-    p_anchorRenderer->GetMaterial()->SetDiffuseColor(color);
+    p_anchorRenderer->GetMaterial()->SetAlbedoColor(color);
 }
 
 void RectTransformAnchorSelectionGizmo::SetReferencedGameObject(

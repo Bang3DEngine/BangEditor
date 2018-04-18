@@ -35,9 +35,9 @@ private:
     UIComboBox *p_renderPassInput = nullptr;
     UIInputFile *p_texturePathInput = nullptr;
     UIInputVector *p_uvMultiplyInput = nullptr;
-    UIInputColor *p_diffuseColorInput = nullptr;
+    UIInputColor *p_albedoColorInput = nullptr;
     UICheckBox *p_receivesLightingCheckBox = nullptr;
-    UISlider *p_shininessSlider = nullptr;
+    UISlider *p_roughnessSlider = nullptr;
     UIInputFile *p_vertexShaderInput = nullptr;
     UIInputFile *p_fragmentShaderInput = nullptr;
 

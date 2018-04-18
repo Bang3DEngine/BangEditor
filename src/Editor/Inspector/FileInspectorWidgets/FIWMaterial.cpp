@@ -47,15 +47,15 @@ void FIWMaterial::Init()
     p_uvMultiplyInput->SetSize(2);
     p_uvMultiplyInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
-    p_diffuseColorInput = GameObject::Create<UIInputColor>();
-    p_diffuseColorInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_albedoColorInput = GameObject::Create<UIInputColor>();
+    p_albedoColorInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_receivesLightingCheckBox = GameObjectFactory::CreateUICheckBox();
     p_receivesLightingCheckBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
-    p_shininessSlider = GameObjectFactory::CreateUISlider();
-    p_shininessSlider->SetMinMaxValues(0.0f, 60.0f);
-    p_shininessSlider->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_roughnessSlider = GameObjectFactory::CreateUISlider();
+    p_roughnessSlider->SetMinMaxValues(0.0f, 1.0f);
+    p_roughnessSlider->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_renderPassInput = GameObjectFactory::CreateUIComboBox();
     p_renderPassInput->AddItem("Scene",              SCAST<int>(RenderPass::Scene) );
@@ -74,9 +74,9 @@ void FIWMaterial::Init()
     p_fragmentShaderInput->SetExtensions( Extensions::GetFragmentShaderExtensions() );
     p_fragmentShaderInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
-    AddWidget("Diff Color",   p_diffuseColorInput);
+    AddWidget("Albedo Color", p_albedoColorInput);
     AddWidget("Rec. light",   p_receivesLightingCheckBox->GetGameObject());
-    AddWidget("Shininess",    p_shininessSlider->GetGameObject());
+    AddWidget("Roughness",    p_roughnessSlider->GetGameObject());
     AddWidget("Texture",      p_texturePathInput);
     AddWidget("Uv Multiply",  p_uvMultiplyInput);
     AddWidget("Render pass",  p_renderPassInput->GetGameObject());
@@ -113,9 +113,9 @@ void FIWMaterial::UpdateFromFileWhenChanged()
     p_texturePathInput->SetPath( matTex ? matTex->GetResourceFilepath() : Path::Empty);
 
     p_uvMultiplyInput->Set( GetMaterial()->GetUvMultiply() );
-    p_diffuseColorInput->SetColor( GetMaterial()->GetDiffuseColor() );
+    p_albedoColorInput->SetColor( GetMaterial()->GetAlbedoColor() );
     p_receivesLightingCheckBox->SetChecked( GetMaterial()->GetReceivesLighting() );
-    p_shininessSlider->SetValue( GetMaterial()->GetShininess() );
+    p_roughnessSlider->SetValue( GetMaterial()->GetRoughness() );
     p_renderPassInput->SetSelectionByValue(
                 SCAST<int>(GetMaterial()->GetRenderPass()) );
 
@@ -146,9 +146,9 @@ void FIWMaterial::OnValueChanged(Object *)
     else { GetMaterial()->SetTexture(nullptr); }
 
     GetMaterial()->SetUvMultiply( p_uvMultiplyInput->GetVector2() );
-    GetMaterial()->SetDiffuseColor(p_diffuseColorInput->GetColor());
+    GetMaterial()->SetAlbedoColor(p_albedoColorInput->GetColor());
     GetMaterial()->SetReceivesLighting(p_receivesLightingCheckBox->IsChecked());
-    GetMaterial()->SetShininess(p_shininessSlider->GetValue());
+    GetMaterial()->SetRoughness(p_roughnessSlider->GetValue());
     GetMaterial()->SetRenderPass(
                 SCAST<RenderPass>(p_renderPassInput->GetSelectedValue()) );
 

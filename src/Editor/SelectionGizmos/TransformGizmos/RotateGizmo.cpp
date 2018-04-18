@@ -25,7 +25,7 @@ RotateGizmo::RotateGizmo()
     p_sphereRenderer = p_sphereGo->AddComponent<MeshRenderer>();
     p_sphereRenderer->SetMaterial(MaterialFactory::GetGizmosUnLightedOverlay().Get());
     p_sphereRenderer->SetMesh( MeshFactory::GetSphere().Get() );
-    p_sphereRenderer->GetMaterial()->SetDiffuseColor( Color(1, 1, 1, 0.25f) );
+    p_sphereRenderer->GetMaterial()->SetAlbedoColor( Color(1, 1, 1, 0.25f) );
     p_sphereRenderer->SetVisible(false);
     p_sphereGo->GetTransform()->SetLocalScale(0.97f);
 
@@ -34,7 +34,7 @@ RotateGizmo::RotateGizmo()
 
     p_sphereBoundsRenderer = p_sphereBoundsGo->AddComponent<LineRenderer>();
     p_sphereBoundsRenderer->SetMaterial(MaterialFactory::GetGizmosUnLightedOverlay().Get());
-    p_sphereBoundsRenderer->GetMaterial()->SetDiffuseColor(Color::Black);
+    p_sphereBoundsRenderer->GetMaterial()->SetAlbedoColor(Color::Black);
     CreateSphereBoundsPoints();
 
     p_sphereGo->SetParent(this);

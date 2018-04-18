@@ -135,7 +135,7 @@ void RectTransformCornerSelectionGizmo::Render(RenderPass renderPass,
             color = Color::Yellow;
         break;
     }
-    p_cornerRenderer->GetMaterial()->SetDiffuseColor(color);
+    p_cornerRenderer->GetMaterial()->SetAlbedoColor(color);
 
     SelectionGizmo::Render(renderPass, renderChildren);
 }

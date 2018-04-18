@@ -20,7 +20,7 @@ class UISceneImage : public GameObject
     GAMEOBJECT_EDITOR(UISceneImage);
 
 public:
-    enum class RenderMode { Color, Normal, Diffuse, Depth, Selection };
+    enum class RenderMode { Color, Normal, Albedo, Depth, Selection };
 
     UISceneImage();
     virtual ~UISceneImage();
