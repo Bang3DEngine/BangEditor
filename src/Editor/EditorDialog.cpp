@@ -217,8 +217,8 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
     Path edShadersPath = EditorPaths::GetEditorAssetsDir().Append("Shaders");
     RH<ShaderProgram> colorPanelImgSP;
     colorPanelImgSP.Set( ShaderProgramFactory::Get(
-                        EPATH("Shaders/UI/G_UIImageRenderer.vert"),
-                        edShadersPath.Append("G_UIInputColor.frag")) );
+                        EPATH("Shaders/UIImageRenderer.vert"),
+                        edShadersPath.Append("UIInputColor.frag")) );
     colorPanelImg->GetMaterial()->SetShaderProgram(colorPanelImgSP.Get());
 
     UISlider *hueSlider = GameObjectFactory::CreateUISlider();
@@ -231,8 +231,8 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
 
     RH<ShaderProgram> hueImgSP;
     hueImgSP.Set( ShaderProgramFactory::Get(
-                        EPATH("Shaders/UI/G_UIImageRenderer.vert"),
-                        edShadersPath.Append("G_UIInputColorOnlyHue.frag")) );
+                        EPATH("Shaders/UIImageRenderer.vert"),
+                        edShadersPath.Append("UIInputColorOnlyHue.frag")) );
     UIImageRenderer *hueSliderGuide = hueSlider->GetGuideRenderer();
     hueSliderGuide->GetMaterial()->SetShaderProgram(hueImgSP.Get());
     hueSliderGuide->GetGameObject()->GetRectTransform()->SetAnchors(-Vector2::One,
@@ -436,7 +436,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
 
             GLId prevBoundSP = GL::GetBoundId(p_colorImgSP->GetGLBindTarget());
             p_colorImgSP->Bind();
-            p_colorImgSP->Set("B_Hue", p_sliderHue->GetValue());
+            p_colorImgSP->SetFloat("B_Hue", p_sliderHue->GetValue());
             GL::Bind(p_colorImgSP->GetGLBindTarget(), prevBoundSP);
 
             p_colorPickerReporter->SetPickedColor( m_pickedColorRGB );
