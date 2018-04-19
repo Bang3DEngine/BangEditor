@@ -72,12 +72,12 @@ void EditorSceneManager::OnSceneLoaded(Scene *scene, const Path &sceneFilepath)
     }
     else // Retrieve editor scene
     {
-        p_editorScene = SCAST<EditorScene*>( GetLoadedScene() );
+        p_editorScene = DCAST<EditorScene*>( GetLoadedScene() );
     }
 }
 
 EditorSceneManager *EditorSceneManager::GetActive()
 {
     SceneManager *sm = SceneManager::GetActive();
-    return sm ? SCAST<EditorSceneManager*>(sm) : nullptr;
+    return sm ? DCAST<EditorSceneManager*>(sm) : nullptr;
 }
