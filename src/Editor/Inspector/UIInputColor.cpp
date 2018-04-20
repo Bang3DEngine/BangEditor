@@ -38,7 +38,7 @@ UIInputColor::UIInputColor()
 
     p_bgCheckerboardImage = colorImgCont->AddComponent<UIImageRenderer>();
     p_bgCheckerboardImage->SetImageTexture( IconManager::GetCheckerboard().Get() );
-    p_bgCheckerboardImage->GetMaterial()->SetUvMultiply( Vector2(1, 1) );
+    p_bgCheckerboardImage->GetMaterial()->SetAlbedoUvMultiply( Vector2(1, 1) );
 
     p_colorImage = GameObjectFactory::CreateUIImage();
 

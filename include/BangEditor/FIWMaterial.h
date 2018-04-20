@@ -33,9 +33,13 @@ private:
     RH<Material> m_materialRH;
 
     UIComboBox *p_renderPassInput = nullptr;
-    UIInputFile *p_texturePathInput = nullptr;
-    UIInputVector *p_uvMultiplyInput = nullptr;
     UIInputColor *p_albedoColorInput = nullptr;
+    UIInputFile *p_albedoTextureInput = nullptr;
+    UIInputVector *p_albedoUvMultiplyInput = nullptr;
+    UIInputVector *p_albedoUvOffsetInput   = nullptr;
+    UIInputFile *p_normalMapTextureInput = nullptr;
+    UIInputVector *p_normalMapUvMultiplyInput = nullptr;
+    UIInputVector *p_normalMapUvOffsetInput   = nullptr;
     UICheckBox *p_receivesLightingCheckBox = nullptr;
     UISlider *p_metalnessSlider = nullptr;
     UISlider *p_roughnessSlider = nullptr;

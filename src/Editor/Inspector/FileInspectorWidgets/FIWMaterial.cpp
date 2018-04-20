@@ -39,13 +39,29 @@ void FIWMaterial::Init()
     SetName("FIWMaterial");
     SetTitle("Material");
 
-    p_texturePathInput = GameObject::Create<UIInputFile>();
-    p_texturePathInput->SetExtensions( Extensions::GetImageExtensions() );
-    p_texturePathInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_albedoTextureInput = GameObject::Create<UIInputFile>();
+    p_albedoTextureInput->SetExtensions( Extensions::GetImageExtensions() );
+    p_albedoTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
-    p_uvMultiplyInput = GameObject::Create<UIInputVector>();
-    p_uvMultiplyInput->SetSize(2);
-    p_uvMultiplyInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_albedoUvMultiplyInput = GameObject::Create<UIInputVector>();
+    p_albedoUvMultiplyInput->SetSize(2);
+    p_albedoUvMultiplyInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+
+    p_albedoUvOffsetInput = GameObject::Create<UIInputVector>();
+    p_albedoUvOffsetInput->SetSize(2);
+    p_albedoUvOffsetInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+
+    p_normalMapTextureInput = GameObject::Create<UIInputFile>();
+    p_normalMapTextureInput->SetExtensions( Extensions::GetImageExtensions() );
+    p_normalMapTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+
+    p_normalMapUvMultiplyInput = GameObject::Create<UIInputVector>();
+    p_normalMapUvMultiplyInput->SetSize(2);
+    p_normalMapUvMultiplyInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+
+    p_normalMapUvOffsetInput = GameObject::Create<UIInputVector>();
+    p_normalMapUvOffsetInput->SetSize(2);
+    p_normalMapUvOffsetInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_albedoColorInput = GameObject::Create<UIInputColor>();
     p_albedoColorInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
@@ -78,17 +94,21 @@ void FIWMaterial::Init()
     p_fragmentShaderInput->SetExtensions( Extensions::GetFragmentShaderExtensions() );
     p_fragmentShaderInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
-    AddWidget("Albedo Color", p_albedoColorInput);
-    AddWidget("Rec. light",   p_receivesLightingCheckBox->GetGameObject());
-    AddWidget("Roughness",    p_roughnessSlider->GetGameObject());
-    AddWidget("Metalness",    p_metalnessSlider->GetGameObject());
-    AddWidget("Texture",      p_texturePathInput);
-    AddWidget("Uv Multiply",  p_uvMultiplyInput);
-    AddWidget("Render pass",  p_renderPassInput->GetGameObject());
-    AddWidget("Vert shader",  p_vertexShaderInput);
-    AddWidget("Frag shader",  p_fragmentShaderInput);
+    AddWidget("Albedo Color",           p_albedoColorInput);
+    AddWidget("Rec. light",             p_receivesLightingCheckBox->GetGameObject());
+    AddWidget("Roughness",              p_roughnessSlider->GetGameObject());
+    AddWidget("Metalness",              p_metalnessSlider->GetGameObject());
+    AddWidget("Albedo Tex.",            p_albedoTextureInput);
+    AddWidget("Albedo Uv Offset",       p_albedoUvOffsetInput);
+    AddWidget("Albedo Uv Mult.",        p_albedoUvMultiplyInput);
+    AddWidget("Normal Map Tex.",        p_normalMapTextureInput);
+    AddWidget("Normal Map Uv Offset",   p_normalMapUvOffsetInput);
+    AddWidget("Normal Map Uv Mult.",    p_normalMapUvMultiplyInput);
+    AddWidget("Render pass",            p_renderPassInput->GetGameObject());
+    AddWidget("Vert shader",            p_vertexShaderInput);
+    AddWidget("Frag shader",            p_fragmentShaderInput);
 
-    SetLabelsWidth(78);
+    SetLabelsWidth(130);
 }
 
 void FIWMaterial::UpdateFromFileWhenChanged()
@@ -114,10 +134,19 @@ void FIWMaterial::UpdateFromFileWhenChanged()
 
     IValueChangedListener::SetReceiveEvents(false);
 
-    Texture2D *matTex = GetMaterial()->GetTexture();
-    p_texturePathInput->SetPath( matTex ? matTex->GetResourceFilepath() : Path::Empty);
+    Texture2D *albedoTex = GetMaterial()->GetAlbedoTexture();
+    p_albedoTextureInput->SetPath( albedoTex ? albedoTex->GetResourceFilepath() :
+                                               Path::Empty);
+    p_albedoUvOffsetInput->Set( GetMaterial()->GetAlbedoUvOffset() );
+    p_albedoUvMultiplyInput->Set( GetMaterial()->GetAlbedoUvMultiply() );
 
-    p_uvMultiplyInput->Set( GetMaterial()->GetUvMultiply() );
+    Texture2D *normalMapTex = GetMaterial()->GetNormalMapTexture();
+    p_normalMapTextureInput->SetPath( normalMapTex ?
+                                      normalMapTex->GetResourceFilepath() :
+                                      Path::Empty);
+    p_normalMapUvOffsetInput->Set( GetMaterial()->GetNormalMapUvOffset() );
+    p_normalMapUvMultiplyInput->Set( GetMaterial()->GetNormalMapUvMultiply() );
+
     p_albedoColorInput->SetColor( GetMaterial()->GetAlbedoColor() );
     p_receivesLightingCheckBox->SetChecked( GetMaterial()->GetReceivesLighting() );
     p_roughnessSlider->SetValue( GetMaterial()->GetRoughness() );
@@ -143,16 +172,27 @@ void FIWMaterial::OnValueChanged(Object *)
 {
     if (!GetMaterial()) { return; }
 
-    Path texPath = p_texturePathInput->GetPath();
-    if (texPath.IsFile())
+    Path albedoTexPath = p_albedoTextureInput->GetPath();
+    if (albedoTexPath.IsFile())
     {
-        RH<Texture2D> tex = Resources::Load<Texture2D>(texPath);
-        GetMaterial()->SetTexture(tex.Get());
+        RH<Texture2D> tex = Resources::Load<Texture2D>(albedoTexPath);
+        GetMaterial()->SetAlbedoTexture(tex.Get());
     }
-    else { GetMaterial()->SetTexture(nullptr); }
+    else { GetMaterial()->SetAlbedoTexture(nullptr); }
 
-    GetMaterial()->SetUvMultiply( p_uvMultiplyInput->GetVector2() );
+    Path normalMapTexPath = p_normalMapTextureInput->GetPath();
+    if (normalMapTexPath.IsFile())
+    {
+        RH<Texture2D> tex = Resources::Load<Texture2D>(normalMapTexPath);
+        GetMaterial()->SetNormalMapTexture(tex.Get());
+    }
+    else { GetMaterial()->SetNormalMapTexture(nullptr); }
+
     GetMaterial()->SetAlbedoColor(p_albedoColorInput->GetColor());
+    GetMaterial()->SetAlbedoUvOffset( p_albedoUvOffsetInput->GetVector2() );
+    GetMaterial()->SetAlbedoUvMultiply( p_albedoUvMultiplyInput->GetVector2() );
+    GetMaterial()->SetNormalMapUvOffset( p_normalMapUvOffsetInput->GetVector2() );
+    GetMaterial()->SetNormalMapUvMultiply( p_normalMapUvMultiplyInput->GetVector2() );
     GetMaterial()->SetReceivesLighting(p_receivesLightingCheckBox->IsChecked());
     GetMaterial()->SetRoughness(p_roughnessSlider->GetValue());
     GetMaterial()->SetMetalness(p_metalnessSlider->GetValue());
