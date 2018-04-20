@@ -57,6 +57,10 @@ void FIWMaterial::Init()
     p_roughnessSlider->SetMinMaxValues(0.0f, 1.0f);
     p_roughnessSlider->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
+    p_metalnessSlider = GameObjectFactory::CreateUISlider();
+    p_metalnessSlider->SetMinMaxValues(0.0f, 1.0f);
+    p_metalnessSlider->EventEmitter<IValueChangedListener>::RegisterListener(this);
+
     p_renderPassInput = GameObjectFactory::CreateUIComboBox();
     p_renderPassInput->AddItem("Scene",              SCAST<int>(RenderPass::Scene) );
     p_renderPassInput->AddItem("Canvas",             SCAST<int>(RenderPass::Canvas) );
@@ -77,6 +81,7 @@ void FIWMaterial::Init()
     AddWidget("Albedo Color", p_albedoColorInput);
     AddWidget("Rec. light",   p_receivesLightingCheckBox->GetGameObject());
     AddWidget("Roughness",    p_roughnessSlider->GetGameObject());
+    AddWidget("Metalness",    p_metalnessSlider->GetGameObject());
     AddWidget("Texture",      p_texturePathInput);
     AddWidget("Uv Multiply",  p_uvMultiplyInput);
     AddWidget("Render pass",  p_renderPassInput->GetGameObject());
@@ -116,6 +121,7 @@ void FIWMaterial::UpdateFromFileWhenChanged()
     p_albedoColorInput->SetColor( GetMaterial()->GetAlbedoColor() );
     p_receivesLightingCheckBox->SetChecked( GetMaterial()->GetReceivesLighting() );
     p_roughnessSlider->SetValue( GetMaterial()->GetRoughness() );
+    p_metalnessSlider->SetValue( GetMaterial()->GetMetalness() );
     p_renderPassInput->SetSelectionByValue(
                 SCAST<int>(GetMaterial()->GetRenderPass()) );
 
@@ -149,6 +155,7 @@ void FIWMaterial::OnValueChanged(Object *)
     GetMaterial()->SetAlbedoColor(p_albedoColorInput->GetColor());
     GetMaterial()->SetReceivesLighting(p_receivesLightingCheckBox->IsChecked());
     GetMaterial()->SetRoughness(p_roughnessSlider->GetValue());
+    GetMaterial()->SetMetalness(p_metalnessSlider->GetValue());
     GetMaterial()->SetRenderPass(
                 SCAST<RenderPass>(p_renderPassInput->GetSelectedValue()) );
 

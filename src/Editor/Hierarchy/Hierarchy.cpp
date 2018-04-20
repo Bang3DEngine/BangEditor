@@ -210,7 +210,7 @@ void Hierarchy::OnCreatePrefab(HierarchyItem *item)
                           Append(item->GetReferencedGameObject()->GetName()).
                           AppendExtension(Extensions::GetPrefabExtension()).
                           GetDuplicatePath();
-    Resources::ExportXMLResource(prefabRH.Get(), exportFilepath);
+    Resources::CreateResourceXMLAndImportFile(prefabRH.Get(), exportFilepath);
 
     Explorer::GetInstance()->ForceCheckFileChanges();
 }
