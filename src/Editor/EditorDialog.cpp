@@ -400,8 +400,8 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
             else
             {
                 m_pickedColorRGB =  Color(p_sliderRGB_R->GetValue(),
-                                        p_sliderRGB_G->GetValue(),
-                                        p_sliderRGB_B->GetValue());
+                                          p_sliderRGB_G->GetValue(),
+                                          p_sliderRGB_B->GetValue());
 
                 // Correct for undeterminate hsv configs, keeping the previous
                 // known values

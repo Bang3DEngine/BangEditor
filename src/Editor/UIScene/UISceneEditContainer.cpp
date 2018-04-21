@@ -52,8 +52,8 @@ void UISceneEditContainer::HandleSelection()
     if (Input::GetMouseButtonDown(MouseButton::Left))
     {
         UICanvas *canvas = UICanvas::GetActive(this);
-        bool isOverSceneCont = canvas->IsMouseOver(this, true);
-        if (isOverSceneCont)
+        bool isOverScene = canvas->IsMouseOver(GetSceneImage(), true);
+        if (isOverScene)
         {
             Camera *cam = EditorCamera::GetInstance()->GetCamera();
             GameObject *selectedGameObject = Selection::GetOveredGameObject(cam);

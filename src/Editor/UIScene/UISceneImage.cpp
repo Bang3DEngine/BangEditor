@@ -13,8 +13,10 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/ShaderProgramFactory.h"
 #include "Bang/SelectionFramebuffer.h"
 
+#include "BangEditor/EditorPaths.h"
 #include "BangEditor/UISceneDebugStats.h"
 #include "BangEditor/EditorSceneManager.h"
 
@@ -22,7 +24,7 @@ USING_NAMESPACE_BANG_EDITOR
 
 UISceneImage::UISceneImage()
 {
-    SetName("SceneContainer");
+    SetName("SceneImage");
 
     GameObjectFactory::CreateUIGameObjectInto(this);
 
@@ -37,6 +39,10 @@ UISceneImage::UISceneImage()
     GameObject *sceneImgGo = GameObjectFactory::CreateUIGameObject();
     p_sceneImg  = sceneImgGo->AddComponent<UISceneImageRenderer>();
     p_sceneImg->SetMode(UIImageRenderer::Mode::TEXTURE);
+    p_sceneImg->GetMaterial()->SetShaderProgram(
+        ShaderProgramFactory::Get(EPATH("Shaders/UIImageRenderer.vert"),
+                                  EditorPaths::GetEditorAssetsDir().
+                                  Append("Shaders").Append("UISceneImage.frag")));
 
     UILayoutElement *imgLE = sceneImgGo->AddComponent<UILayoutElement>();
     imgLE->SetFlexibleSize( Vector2(1) );
@@ -65,32 +71,16 @@ void UISceneImage::SetSceneImageCamera(Camera *sceneCam)
     p_currentCamera = sceneCam;
     if (sceneCam)
     {
-        GBuffer *gbuffer =  sceneCam->GetGBuffer();
-        switch (GetRenderMode())
-        {
-            case RenderMode::Color:
-            camTexture = gbuffer->GetAttachmentTex2D(GBuffer::AttColor);
-            break;
+        GBuffer *camGBuffer =  sceneCam->GetGBuffer();
 
-            case RenderMode::Normal:
-            camTexture = gbuffer->GetAttachmentTex2D(GBuffer::AttNormal);
-            break;
+        ShaderProgram *sp = p_sceneImg->GetActiveMaterial()->GetShaderProgram();
+        GLId prevBoundSP = GL::GetBoundId(GL::BindTarget::ShaderProgram);
 
-            case RenderMode::Albedo:
-            camTexture = gbuffer->GetAttachmentTex2D(GBuffer::AttAlbedo);
-            break;
+        sp->Bind();
+        sp->SetInt("B_SceneRenderMode", SCAST<int>(GetRenderMode()), false);
+        camGBuffer->BindAttachmentsForReading(sp);
 
-            case RenderMode::Depth:
-            camTexture = gbuffer->GetAttachmentTex2D(GBuffer::AttDepthStencil);
-            break;
-
-            case RenderMode::Selection:
-            {
-                SelectionFramebuffer *sfb = sceneCam->GetSelectionFramebuffer();
-                camTexture = sfb->GetAttachmentTex2D(SelectionFramebuffer::AttColor);
-            }
-            break;
-        }
+        GL::Bind(GL::BindTarget::ShaderProgram, prevBoundSP);
     }
     p_sceneImg->SetImageTexture(camTexture);
 

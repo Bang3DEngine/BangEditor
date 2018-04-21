@@ -71,11 +71,15 @@ UISceneToolbar::UISceneToolbar()
     });
 
     p_renderModeInput = GameObjectFactory::CreateUIComboBox();
-    p_renderModeInput->AddItem("Color",     SCAST<int>(UISceneImage::RenderMode::Color));
-    p_renderModeInput->AddItem("Albedo",    SCAST<int>(UISceneImage::RenderMode::Albedo));
-    p_renderModeInput->AddItem("Normal",    SCAST<int>(UISceneImage::RenderMode::Normal));
-    // p_renderModeInput->AddItem("Depth",  SCAST<int>(UISceneImage::RenderMode::Depth));
-    p_renderModeInput->AddItem("Selection", SCAST<int>(UISceneImage::RenderMode::Selection));
+    p_renderModeInput->AddItem("Color",           SCAST<int>(UISceneImage::RenderMode::Color));
+    p_renderModeInput->AddItem("Albedo",          SCAST<int>(UISceneImage::RenderMode::Albedo));
+    p_renderModeInput->AddItem("Normal",          SCAST<int>(UISceneImage::RenderMode::Normal));
+    p_renderModeInput->AddItem("Roughness",       SCAST<int>(UISceneImage::RenderMode::Roughness));
+    p_renderModeInput->AddItem("Metalness",       SCAST<int>(UISceneImage::RenderMode::Metalness));
+    p_renderModeInput->AddItem("ReceivesLight",   SCAST<int>(UISceneImage::RenderMode::ReceivesLight));
+    p_renderModeInput->AddItem("ReceivesShadows", SCAST<int>(UISceneImage::RenderMode::ReceivesShadows));
+    p_renderModeInput->AddItem("Depth",           SCAST<int>(UISceneImage::RenderMode::Depth));
+    p_renderModeInput->AddItem("Selection",       SCAST<int>(UISceneImage::RenderMode::Selection));
     p_renderModeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_showDebugStatsCheckbox = GameObjectFactory::CreateUICheckBox();

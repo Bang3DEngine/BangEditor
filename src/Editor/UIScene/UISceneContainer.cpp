@@ -100,6 +100,11 @@ UISceneToolbar *UISceneContainer::GetSceneToolbar() const
     return p_sceneToolbar;
 }
 
+UISceneImage *UISceneContainer::GetSceneImage() const
+{
+    return p_sceneImage;
+}
+
 void UISceneContainer::OnRenderNeededSceneFinished()
 {
 }

@@ -33,6 +33,8 @@ protected:
 
 private:
     UICheckBox *p_visibleCheckBox = nullptr;
+    UICheckBox *p_castsShadowsCheckBox = nullptr;
+    UICheckBox *p_receivesShadowsCheckBox = nullptr;
     UIInputFile *p_materialInputFile = nullptr;
 };
 

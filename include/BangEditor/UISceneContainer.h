@@ -35,6 +35,7 @@ public:
 
 protected:
     UISceneToolbar* GetSceneToolbar() const;
+    UISceneImage* GetSceneImage() const;
 
 private:
     Scene *p_containedScene = nullptr;
