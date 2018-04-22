@@ -273,7 +273,7 @@ void EditorCamera::Update()
 
     // Copy clear mode stuff from current scene camera
     Scene *scene = EditorSceneManager::GetOpenScene();
-    Camera *sceneCam = scene ? scene->GetComponentInChildren<Camera>(true) : nullptr;
+    Camera *sceneCam = scene ? scene->GetCamera() : nullptr;
     if (sceneCam)
     {
         GetCamera()->SetClearMode(sceneCam->GetClearMode());
