@@ -20,6 +20,7 @@ public:
     static RH<Texture2D> GetIconForPath(const Path &path);
     static RH<Texture2D> GetIconForExtension(const String &extension);
 
+    static RH<Texture2D> GetRotateIcon();
     static RH<Texture2D> GetRightArrowAndBarIcon();
     static RH<Texture2D> GetDoubleBarIcon();
     static RH<Texture2D> GetBackArrowIcon();

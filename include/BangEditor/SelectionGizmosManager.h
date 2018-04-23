@@ -24,12 +24,14 @@ public:
     void OnBeginRender(Scene *scene);
     void OnEndRender(Scene *scene);
 
+    TransformGizmo *GetTransformGizmo() const;
+    ComponentsSelectionGizmo *GetComponentsSelectionGizmo() const;
+
+    static SelectionGizmosManager* GetInstance();
+
 private:
     TransformGizmo *p_transformGizmo = nullptr;
     ComponentsSelectionGizmo *p_componentsSelectionGizmo = nullptr;
-
-    TransformGizmo *GetTransformGizmo() const;
-    ComponentsSelectionGizmo *GetComponentsSelectionGizmo() const;
 
     // IEditorListener
     void OnGameObjectSelected(GameObject *selectedGameObject) override;

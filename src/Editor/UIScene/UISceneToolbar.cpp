@@ -1,5 +1,7 @@
 #include "BangEditor/UISceneToolbar.h"
 
+#include <functional>
+
 #include "Bang/UIButton.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIComboBox.h"
@@ -12,6 +14,7 @@
 
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneImage.h"
+#include "BangEditor/TransformGizmo.h"
 #include "BangEditor/EditorIconManager.h"
 
 USING_NAMESPACE_BANG
@@ -34,41 +37,45 @@ UISceneToolbar::UISceneToolbar()
     RH<Texture2D> doubleBarIcon        = EditorIconManager::GetDoubleBarIcon();
     RH<Texture2D> squareIcon           = EditorIconManager::GetSquareIcon();
     RH<Texture2D> rightArrowAndBarIcon = EditorIconManager::GetRightArrowAndBarIcon();
-    p_playButton = GameObjectFactory::CreateUIButton("", rightArrowIcon.Get());
-    p_playButton->SetIcon(rightArrowIcon.Get(), Vector2i(ToolBarHeight));
-    p_playButton->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
-    p_playButton->GetIcon()->SetTint(Color::DarkGray);
-    p_playButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
-    {
-        ScenePlayer::PlayScene();
-    });
+    RH<Texture2D> translateIcon        = EditorIconManager::GetHairCrossIcon();
+    RH<Texture2D> rotateIcon           = EditorIconManager::GetRotateIcon();
+    RH<Texture2D> scaleIcon            = EditorIconManager::GetAxesIcon();
+    RH<Texture2D> rectTransformIcon    = EditorIconManager::GetAnchoredRectIcon();
 
-    p_pauseButton = GameObjectFactory::CreateUIButton("", doubleBarIcon.Get());
-    p_pauseButton->SetIcon(doubleBarIcon.Get(), Vector2i(ToolBarHeight));
-    p_pauseButton->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
-    p_pauseButton->GetIcon()->SetTint(Color::DarkGray);
-    p_pauseButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
+    auto AddToolbarButton = [this](UIButton **button, Texture2D *icon,
+                                   std::function<void(IFocusable*)> callbackFunc)
     {
-        ScenePlayer::PauseScene();
-    });
+        (*button) = GameObjectFactory::CreateUIButton("", icon);
+        (*button)->SetIcon(icon, Vector2i(ToolBarHeight));
+        (*button)->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
+        (*button)->GetIcon()->SetTint(Color::DarkGray);
+        (*button)->GetFocusable()->AddClickedCallback(callbackFunc);
+        (*button)->GetGameObject()->SetParent(this);
+    };
 
-    p_stepButton = GameObjectFactory::CreateUIButton("", rightArrowAndBarIcon.Get());
-    p_stepButton->SetIcon(rightArrowAndBarIcon.Get(), Vector2i(ToolBarHeight));
-    p_stepButton->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
-    p_stepButton->GetIcon()->SetTint(Color::DarkGray);
-    p_stepButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
-    {
-        ScenePlayer::StepFrame();
-    });
+    AddToolbarButton(&p_translateButton, translateIcon.Get(),
+         [&](IFocusable*) { TransformGizmo::GetInstance()->SetTransformMode(
+                        TransformGizmo::TransformMode::Translate); });
+    AddToolbarButton(&p_rotateButton, rotateIcon.Get(),
+         [&](IFocusable*) { TransformGizmo::GetInstance()->SetTransformMode(
+                        TransformGizmo::TransformMode::Rotate); });
+    AddToolbarButton(&p_scaleButton, scaleIcon.Get(),
+         [&](IFocusable*) { TransformGizmo::GetInstance()->SetTransformMode(
+                        TransformGizmo::TransformMode::Scale); });
+    AddToolbarButton(&p_rectTransformButton, rectTransformIcon.Get(),
+         [&](IFocusable*) { TransformGizmo::GetInstance()->SetTransformMode(
+                        TransformGizmo::TransformMode::Rect); });
 
-    p_stopButton = GameObjectFactory::CreateUIButton("", squareIcon.Get());
-    p_stopButton->SetIcon(squareIcon.Get(), Vector2i(ToolBarHeight));
-    p_stopButton->GetIcon()->SetTint(Color::DarkGray);
-    p_stopButton->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
-    p_stopButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
-    {
-        ScenePlayer::StopScene();
-    });
+    GameObjectFactory::CreateUIHSpacer()->SetParent(this);
+
+    AddToolbarButton(&p_playButton, rightArrowIcon.Get(),
+                     [&](IFocusable*) { ScenePlayer::PlayScene(); });
+    AddToolbarButton(&p_pauseButton, doubleBarIcon.Get(),
+                     [&](IFocusable*) { ScenePlayer::PauseScene(); });
+    AddToolbarButton(&p_stepButton, rightArrowAndBarIcon.Get(),
+                     [&](IFocusable*) { ScenePlayer::StepFrame(); });
+    AddToolbarButton(&p_stopButton, squareIcon.Get(),
+                     [&](IFocusable*) { ScenePlayer::StopScene(); });
 
     p_renderModeInput = GameObjectFactory::CreateUIComboBox();
     p_renderModeInput->AddItem("Color",           SCAST<int>(UISceneImage::RenderMode::Color));
@@ -92,10 +99,6 @@ UISceneToolbar::UISceneToolbar()
     showDebugStatsText->SetTextSize(11);
     showDebugStatsText->SetContent("Stats");
 
-    p_playButton->GetGameObject()->SetParent(this);
-    p_pauseButton->GetGameObject()->SetParent(this);
-    p_stepButton->GetGameObject()->SetParent(this);
-    p_stopButton->GetGameObject()->SetParent(this);
     GameObjectFactory::CreateUISpacer(LayoutSizeType::Flexible, Vector2::One)->
                         SetParent(this);
     p_renderModeInput->GetGameObject()->SetParent(this);
@@ -107,6 +110,41 @@ UISceneToolbar::UISceneToolbar()
 
 UISceneToolbar::~UISceneToolbar()
 {
+}
+
+void UISceneToolbar::Update()
+{
+    GameObject::Update();
+
+    p_translateButton->SetBlocked(false);
+    p_rotateButton->SetBlocked(false);
+    p_scaleButton->SetBlocked(false);
+    p_rectTransformButton->SetBlocked(false);
+
+    GameObject *selGO = Editor::GetSelectedGameObject();
+    p_translateButton->GetGameObject()->SetVisible(selGO && selGO->GetTransform());
+    p_rotateButton->GetGameObject()->SetVisible(selGO && selGO->GetTransform());
+    p_scaleButton->GetGameObject()->SetVisible(selGO && selGO->GetTransform());
+    p_rectTransformButton->GetGameObject()->SetVisible(selGO && selGO->GetRectTransform());
+
+    switch (TransformGizmo::GetInstance()->GetTransformMode())
+    {
+        case TransformGizmo::TransformMode::Translate:
+            p_translateButton->SetBlocked(true);
+        break;
+
+        case TransformGizmo::TransformMode::Rotate:
+            p_rotateButton->SetBlocked(true);
+        break;
+
+        case TransformGizmo::TransformMode::Scale:
+            p_scaleButton->SetBlocked(true);
+        break;
+
+        case TransformGizmo::TransformMode::Rect:
+            p_rectTransformButton->SetBlocked(true);
+        break;
+    }
 }
 
 bool UISceneToolbar::IsShowDebugStatsChecked() const

@@ -12,6 +12,7 @@
 #include "BangEditor/TranslateGizmo.h"
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/NotSelectableInEditor.h"
+#include "BangEditor/SelectionGizmosManager.h"
 #include "BangEditor/RectTransformSelectionGizmo.h"
 
 USING_NAMESPACE_BANG
@@ -150,7 +151,22 @@ void TransformGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
     }
 }
 
+void TransformGizmo::SetTransformMode(TransformGizmo::TransformMode transformMode)
+{
+    m_transformMode = transformMode;
+}
+
 float TransformGizmo::GetScaleFactor() const
 {
     return 0.15f * SelectionGizmo::GetScaleFactor();
+}
+
+TransformGizmo::TransformMode TransformGizmo::GetTransformMode() const
+{
+    return m_transformMode;
+}
+
+TransformGizmo *TransformGizmo::GetInstance()
+{
+    return SelectionGizmosManager::GetInstance()->GetTransformGizmo();
 }

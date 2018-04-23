@@ -30,6 +30,8 @@ public:
 	UISceneToolbar();
 	virtual ~UISceneToolbar();
 
+    void Update() override;
+
     bool IsShowDebugStatsChecked() const;
     UIComboBox* GetRenderModeComboBox() const;
 
@@ -38,6 +40,11 @@ private:
     UIButton *p_pauseButton = nullptr;
     UIButton *p_stepButton  = nullptr;
     UIButton *p_stopButton  = nullptr;
+
+    UIButton *p_translateButton      = nullptr;
+    UIButton *p_rotateButton         = nullptr;
+    UIButton *p_scaleButton          = nullptr;
+    UIButton *p_rectTransformButton  = nullptr;
 
     UIComboBox *p_renderModeInput = nullptr;
     UICheckBox *p_showDebugStatsCheckbox = nullptr;

@@ -3,6 +3,7 @@
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/TransformGizmo.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/EditSceneGameObjects.h"
 #include "BangEditor/ComponentsSelectionGizmo.h"
 
 USING_NAMESPACE_BANG
@@ -46,6 +47,11 @@ void SelectionGizmosManager::OnEndRender(Scene*)
     GetTransformGizmo()->SetParent(nullptr);
     GetTransformGizmo()->OnEndRender(nullptr);
     GetComponentsSelectionGizmo()->SetParent(nullptr);
+}
+
+SelectionGizmosManager* SelectionGizmosManager::GetInstance()
+{
+    return EditSceneGameObjects::GetInstance()->GetSelectionGizmosManager();
 }
 
 void SelectionGizmosManager::OnGameObjectSelected(GameObject *selectedGameObject)

@@ -18,6 +18,8 @@ class TransformGizmo : public SelectionGizmo
     GAMEOBJECT_EDITOR(TransformGizmo);
 
 public:
+    enum class TransformMode { Translate, Rotate, Scale, Rect };
+
     // GameObject
     void Update() override;
 
@@ -27,10 +29,14 @@ public:
     // SelectionGizmo
     void SetReferencedGameObject(GameObject *referencedGameObject) override;
 
+    void SetTransformMode(TransformMode transformMode);
+
     float GetScaleFactor() const;
+    TransformMode GetTransformMode() const;
+
+    static TransformGizmo *GetInstance();
 
 private:
-    enum class TransformMode { Translate, Rotate, Scale, Rect };
     TransformMode m_transformMode = TransformMode::Translate;
 
     GameObject                  *p_worldGizmoContainer  = nullptr;

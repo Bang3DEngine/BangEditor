@@ -66,6 +66,8 @@ RH<Texture2D> EditorIconManager::GetIconForExtension(const String &ext)
     return EditorIconManager::GetFileIcon();
 }
 
+RH<Texture2D> EditorIconManager::GetRotateIcon()
+{ return EditorIconManager::GetIconTexture("Rotate"); }
 RH<Texture2D> EditorIconManager::GetRightArrowAndBarIcon()
 { return EditorIconManager::GetIconTexture("RightArrowAndBar"); }
 RH<Texture2D> EditorIconManager::GetDoubleBarIcon()
