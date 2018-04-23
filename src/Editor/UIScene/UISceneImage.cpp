@@ -78,7 +78,7 @@ void UISceneImage::SetSceneImageCamera(Camera *sceneCam)
 
         sp->Bind();
         sp->SetInt("B_SceneRenderMode", SCAST<int>(GetRenderMode()), false);
-        camGBuffer->BindAttachmentsForReading(sp);
+        camGBuffer->BindAttachmentsForReading(sp, false);
 
         GL::Bind(GL::BindTarget::ShaderProgram, prevBoundSP);
     }
