@@ -129,7 +129,6 @@ add_custom_target(COPY_EDITOR_PKG_DIRS
     #DEPENDS COPY_PKG_INCLUDES_EDITOR
     #DEPENDS REMOVE_LIBRARIES_BANG_EDITOR_PKG_DIR
     DEPENDS COPY_PKG_LIBRARIES_EDITOR
-    DEPENDS PKG_TAR
 )
 
 # Tar everything
@@ -143,7 +142,6 @@ add_custom_command(
 )
 
 add_custom_target(CREATE_EDITOR_PKG ALL DEPENDS PKG_TAR)
-
 
 #=================================================================
 #=================================================================

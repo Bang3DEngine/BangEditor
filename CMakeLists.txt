@@ -147,6 +147,9 @@ target_link_libraries(BangEditor PRIVATE ${DEPENDENCIES_LIB_PATHS})
 target_link_libraries(Game PRIVATE ${DEPENDENCIES_LIB_PATHS})
 target_link_libraries(Game       PRIVATE BangLib)
 target_link_libraries(BangEditor PRIVATE BangLib)
+add_clang_tidy(BangEditorObjects)
+add_clang_tidy(BangEngineObjects)
+
 #=================================================================
 #=================================================================
 #=================================================================

@@ -48,8 +48,6 @@ void RectTransformCornerSelectionGizmo::Update()
 
     GameObject *refGo = GetReferencedGameObject(); if (!refGo) { return; }
     RectTransform *refRT = refGo->GetRectTransform(); if (!refRT) { return; }
-    RectTransform *parentRT = refGo->GetParent()->GetRectTransform();
-    parentRT = parentRT ? parentRT : refRT;
 
     if (IsBeingGrabbed())
     {

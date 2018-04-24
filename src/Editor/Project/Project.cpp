@@ -29,7 +29,7 @@ Path Project::GetProjectDirectory() const
 
 Path Project::GetProjectAssetsFilepath() const
 {
-    return Path(GetProjectDirectory() + "/Assets");
+    return Path(GetProjectDirectory().Append("Assets"));
 }
 
 Path Project::GetProjectFilepath() const

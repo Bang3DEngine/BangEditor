@@ -59,7 +59,7 @@ Project* ProjectManager::CreateNewProject(const Path &projectDirPath,
 {
     if (!ProjectManager::CloseCurrentProject()) { return nullptr; }
 
-    Path projectDir(projectDirPath + "/" + projectName);
+    Path projectDir(projectDirPath.Append(projectName));
     if (!projectDir.Exists())
     {
         if (!File::CreateDirectory(projectDir))
@@ -75,8 +75,8 @@ Project* ProjectManager::CreateNewProject(const Path &projectDirPath,
         Debug_Warn("Directory '" << projectDir << "' already existed, using it.");
     }
 
-    Path projectFilepath(projectDir + "/" + projectName + "." +
-                             Extensions::GetProjectExtension());
+    Path projectFilepath(projectDir.Append(projectName).WithExtension(
+                             Extensions::GetProjectExtension()));
 
     ProjectManager::s_currentProject = CreateNewProjectFileOnly(projectFilepath);
     ProjectManager::s_currentProject->SetProjectFilepath(projectFilepath);

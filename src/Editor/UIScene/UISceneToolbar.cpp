@@ -42,8 +42,8 @@ UISceneToolbar::UISceneToolbar()
     RH<Texture2D> scaleIcon            = EditorIconManager::GetAxesIcon();
     RH<Texture2D> rectTransformIcon    = EditorIconManager::GetAnchoredRectIcon();
 
-    auto AddToolbarButton = [this](UIButton **button, Texture2D *icon,
-                                   std::function<void(IFocusable*)> callbackFunc)
+    auto AddToolbarButton = [&](UIButton **button, Texture2D *icon,
+                                std::function<void(IFocusable*)> callbackFunc)
     {
         (*button) = GameObjectFactory::CreateUIButton("", icon);
         (*button)->SetIcon(icon, Vector2i(ToolBarHeight));
