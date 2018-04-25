@@ -11,6 +11,7 @@ const int METALNESS        = 5;
 const int RECEIVES_LIGHT   = 6;
 const int RECEIVES_SHADOWS = 7;
 const int SELECTION        = 8;
+const int WORLD_POSITION   = 9;
 
 void main()
 {
@@ -31,6 +32,10 @@ void main()
 
         case DEPTH:
             color = vec3(1,0,1);
+        break;
+
+        case WORLD_POSITION:
+            color = B_ComputeWorldPosition();
         break;
 
         case ROUGHNESS:
@@ -54,6 +59,5 @@ void main()
         break;
     }
 
-    B_GIn_Normal = B_GIn_Misc = vec4(0);
-    B_GIn_Color = B_GIn_Albedo = vec4(color, 1);
+    B_GIn_Color = vec4(color, 1);
 }

@@ -22,7 +22,7 @@ class UISceneImage : public GameObject
 public:
     enum class RenderMode { Color = 0, Normal, Albedo, Depth,
                             Roughness, Metalness, ReceivesLight,
-                            ReceivesShadows, Selection };
+                            ReceivesShadows, Selection, WorldPosition };
 
     UISceneImage();
     virtual ~UISceneImage();
