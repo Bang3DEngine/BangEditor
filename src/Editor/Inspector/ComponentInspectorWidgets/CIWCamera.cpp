@@ -108,7 +108,7 @@ void CIWCamera::UpdateFromReference()
         p_clearColorInput->SetColor( GetCamera()->GetClearColor() );
     }
 
-    TextureCubeMap *skyBoxTex = GetCamera()->GetSpecularSkyBoxTexture();
+    TextureCubeMap *skyBoxTex = GetCamera()->GetSkyBoxTexture();
     if (skyBoxTex)
     {
         p_textureCubeMapInput->SetPath(skyBoxTex->GetResourceFilepath());
