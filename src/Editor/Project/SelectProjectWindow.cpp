@@ -10,7 +10,7 @@
 #include "Bang/UICanvas.h"
 #include "Bang/Extensions.h"
 #include "Bang/GameObject.h"
-#include "Bang/IconManager.h"
+#include "Bang/TextureFactory.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/WindowManager.h"
@@ -81,7 +81,7 @@ SelectProjectScene::SelectProjectScene()
     logoContainer->SetParent(mainVLGo);
 
     UIImageRenderer *logo = GameObjectFactory::CreateUIImage();
-    Texture2D *logoTex = IconManager::GetBang2048Icon().Get();
+    Texture2D *logoTex = TextureFactory::GetBang2048Icon().Get();
     logo->SetImageTexture(logoTex);
     GameObject *logoGo = logo->GetGameObject();
     logoGo->GetRectTransform()->SetAnchorX( Vector2(0) );

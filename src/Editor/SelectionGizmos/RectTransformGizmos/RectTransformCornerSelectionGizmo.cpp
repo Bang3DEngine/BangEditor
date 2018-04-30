@@ -11,7 +11,7 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/SelectionFramebuffer.h"
 
-#include "BangEditor/EditorIconManager.h"
+#include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -28,7 +28,7 @@ RectTransformCornerSelectionGizmo::RectTransformCornerSelectionGizmo()
     p_cornerGO = GameObjectFactory::CreateUIGameObjectNamed("CornerGO");
     p_cornerRenderer = p_cornerGO->AddComponent<UIImageRenderer>();
     p_cornerRenderer->GetMaterial()->SetRenderPass(RenderPass::Overlay);
-    p_cornerRenderer->SetImageTexture(EditorIconManager::GetCircleHardIcon().Get());
+    p_cornerRenderer->SetImageTexture(EditorTextureFactory::GetCircleHardIcon().Get());
 
     p_selectionGO = GameObjectFactory::CreateUIGameObjectNamed("SelectionGO");
     p_selectionRenderer = p_selectionGO->AddComponent<UIImageRenderer>();

@@ -11,7 +11,7 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/SelectionFramebuffer.h"
 
-#include "BangEditor/EditorIconManager.h"
+#include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -28,7 +28,7 @@ RectTransformAnchorSelectionGizmo::RectTransformAnchorSelectionGizmo()
     p_anchorGO = GameObjectFactory::CreateUIGameObjectNamed("AnchorGO");
     p_anchorRenderer = p_anchorGO->AddComponent<UIImageRenderer>();
     p_anchorRenderer->GetMaterial()->SetRenderPass(RenderPass::Overlay);
-    p_anchorRenderer->SetImageTexture(EditorIconManager::GetAnchorIcon().Get());
+    p_anchorRenderer->SetImageTexture(EditorTextureFactory::GetAnchorIcon().Get());
 
     p_selectionGO = GameObjectFactory::CreateUIGameObjectNamed("SelectionGO");
     p_selectionRenderer = p_selectionGO->AddComponent<UIImageRenderer>();

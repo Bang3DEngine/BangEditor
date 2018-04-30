@@ -2,7 +2,7 @@
 
 #include "Bang/UIList.h"
 #include "Bang/UICanvas.h"
-#include "Bang/IconManager.h"
+#include "Bang/TextureFactory.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/UIScrollPanel.h"
@@ -62,7 +62,7 @@ MenuItem::MenuItem(MenuItemType itemType)
         if (GetItemType() != MenuItemType::Top)
         {
             p_rightArrow = GameObjectFactory::CreateUIImage();
-            p_rightArrow->SetImageTexture( IconManager::GetRightArrowIcon().Get() );
+            p_rightArrow->SetImageTexture( TextureFactory::GetRightArrowIcon().Get() );
 
             UILayoutElement *rightArrowLE = p_rightArrow->GetGameObject()
                                             ->AddComponent<UILayoutElement>();

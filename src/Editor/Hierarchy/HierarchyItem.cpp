@@ -14,8 +14,8 @@
 #include "BangEditor/Hierarchy.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorClipboard.h"
-#include "BangEditor/EditorIconManager.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

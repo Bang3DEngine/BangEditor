@@ -28,7 +28,7 @@
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/EditorFileTracker.h"
-#include "BangEditor/EditorIconManager.h"
+#include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/ExplorerItemFactory.h"
 
@@ -71,7 +71,7 @@ Explorer::Explorer()
     spLE->SetFlexibleSize( Vector2::One );
 
     // Back button
-    RH<Texture2D> backButtonTex = EditorIconManager::GetBackArrowIcon();
+    RH<Texture2D> backButtonTex = EditorTextureFactory::GetBackArrowIcon();
     p_backButton = GameObjectFactory::CreateUIButton("", backButtonTex.Get());
     p_backButton->SetIcon(backButtonTex.Get(), Vector2i(20, 15), 0);
     p_backButton->GetText()->SetContent("");

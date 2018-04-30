@@ -11,7 +11,7 @@
 #include "Bang/UIHorizontalLayout.h"
 
 #include "BangEditor/EditorDialog.h"
-#include "BangEditor/EditorIconManager.h"
+#include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -37,7 +37,7 @@ UIInputFile::UIInputFile()
     pathInputTextLE->SetLayoutPriority(1);
     SetPath(Path::Empty);
 
-    RH<Texture2D> lensIcon = EditorIconManager::GetLensLittleIcon().Get();
+    RH<Texture2D> lensIcon = EditorTextureFactory::GetLensLittleIcon().Get();
     p_searchButton = GameObjectFactory::CreateUIButton("", lensIcon.Get());
     p_searchButton->SetIcon(lensIcon.Get(), Vector2i(16));
     p_searchButton->GetFocusable()->AddClickedCallback([this](IFocusable*)

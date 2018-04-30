@@ -1,5 +1,5 @@
-#ifndef EDITORICONMANAGER_H
-#define EDITORICONMANAGER_H
+#ifndef EDITORTEXTUREFACTORY_H
+#define EDITORTEXTUREFACTORY_H
 
 #include "Bang/Path.h"
 #include "Bang/ResourceHandle.h"
@@ -14,7 +14,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 
-class EditorIconManager
+class EditorTextureFactory
 {
 public:
     static RH<Texture2D> GetIconForPath(const Path &path);
@@ -47,8 +47,8 @@ public:
     static RH<Texture2D> GetComponentIcon(const String &componentName);
 
 private:
-    EditorIconManager() = default;
-    virtual ~EditorIconManager() = default;
+    EditorTextureFactory() = default;
+    virtual ~EditorTextureFactory() = default;
 
     static RH<Texture2D> GetIconTexture(const String &filename);
 
@@ -56,5 +56,5 @@ private:
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // EDITORICONMANAGER_H
+#endif // EDITORTEXTUREFACTORY_H
 

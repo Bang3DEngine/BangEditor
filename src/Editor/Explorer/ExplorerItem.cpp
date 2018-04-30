@@ -17,7 +17,7 @@
 #include "Bang/UIAspectRatioFitter.h"
 
 #include "BangEditor/Explorer.h"
-#include "BangEditor/EditorIconManager.h"
+#include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -98,7 +98,7 @@ void ExplorerItem::SetPath(const Path &path)
     {
         m_path = path;
 
-        RH<Texture2D> iconTex = EditorIconManager::GetIconForPath(GetPath());
+        RH<Texture2D> iconTex = EditorTextureFactory::GetIconForPath(GetPath());
         p_icon->SetImageTexture(iconTex.Get());
         p_icon->SetTint(Color::White);
 

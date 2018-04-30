@@ -3,7 +3,7 @@
 #include "Bang/UIButton.h"
 #include "Bang/Material.h"
 #include "Bang/Resources.h"
-#include "Bang/IconManager.h"
+#include "Bang/TextureFactory.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -13,7 +13,7 @@
 
 #include "BangEditor/EditorDialog.h"
 #include "BangEditor/UIInputVector.h"
-#include "BangEditor/EditorIconManager.h"
+#include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -37,7 +37,7 @@ UIInputColor::UIInputColor()
     colorImgLE->SetFlexibleWidth(1.0f);
 
     p_bgCheckerboardImage = colorImgCont->AddComponent<UIImageRenderer>();
-    p_bgCheckerboardImage->SetImageTexture( IconManager::GetCheckerboard().Get() );
+    p_bgCheckerboardImage->SetImageTexture( TextureFactory::GetCheckerboard().Get() );
     p_bgCheckerboardImage->GetMaterial()->SetAlbedoUvMultiply( Vector2(1, 1) );
 
     p_colorImage = GameObjectFactory::CreateUIImage();
@@ -45,7 +45,7 @@ UIInputColor::UIInputColor()
     m_colorPickerReporter = new ColorPickerReporter();
     m_colorPickerReporter->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
-    RH<Texture2D> lensIcon = EditorIconManager::GetLensLittleIcon().Get();
+    RH<Texture2D> lensIcon = EditorTextureFactory::GetLensLittleIcon().Get();
     p_searchColorButton = GameObjectFactory::CreateUIButton("", lensIcon.Get());
     p_searchColorButton->SetIcon(lensIcon.Get(), Vector2i(16));
     p_searchColorButton->GetFocusable()->AddClickedCallback([this](IFocusable*)

@@ -12,7 +12,7 @@
 #include "Bang/UIHorizontalLayout.h"
 
 #include "BangEditor/EditorClipboard.h"
-#include "BangEditor/EditorIconManager.h"
+#include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -128,9 +128,9 @@ RH<Texture2D> ComponentInspectorWidget::GetComponentIconTexture() const
     if (GetComponent())
     {
         String componentName = GetComponent()->GetClassName();
-        return EditorIconManager::GetComponentIcon(componentName);
+        return EditorTextureFactory::GetComponentIcon(componentName);
     }
-    return EditorIconManager::GetCubeIcon();
+    return EditorTextureFactory::GetCubeIcon();
 }
 
 void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)

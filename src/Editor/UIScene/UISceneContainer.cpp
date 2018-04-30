@@ -9,7 +9,7 @@
 #include "Bang/Texture2D.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIComboBox.h"
-#include "Bang/IconManager.h"
+#include "Bang/TextureFactory.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -22,7 +22,7 @@
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/UISceneToolbar.h"
-#include "BangEditor/EditorIconManager.h"
+#include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG

@@ -11,7 +11,7 @@
 #include "Bang/UIButton.h"
 #include "Bang/UISlider.h"
 #include "Bang/GameObject.h"
-#include "Bang/IconManager.h"
+#include "Bang/TextureFactory.h"
 #include "Bang/DialogWindow.h"
 #include "Bang/SceneManager.h"
 #include "Bang/UIScrollArea.h"
@@ -327,7 +327,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
     UILayoutElement *resultColorContLE = resultColorContainer ->GetGameObject()->
                                                AddComponent<UILayoutElement>();
     resultColorContLE->SetFlexibleHeight(1.0f);
-    resultColorContainer->SetImageTexture(IconManager::GetCheckerboard().Get());
+    resultColorContainer->SetImageTexture(TextureFactory::GetCheckerboard().Get());
     resultColorContainer->GetGameObject()->SetParent(controlsVLGo);
 
     GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Preferred,
@@ -351,7 +351,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
             focusable->SetCursorType( Cursor::Type::Hand );
 
             p_img = AddComponent<UIImageRenderer>();
-            p_img->SetImageTexture(IconManager::GetCircleIcon().Get());
+            p_img->SetImageTexture(TextureFactory::GetCircleIcon().Get());
             p_img->GetGameObject()->GetRectTransform()->SetMargins(-5);
             p_img->GetGameObject()->GetRectTransform()->SetAnchors(Vector2::Zero);
         }

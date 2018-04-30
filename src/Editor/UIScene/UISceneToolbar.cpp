@@ -5,7 +5,7 @@
 #include "Bang/UIButton.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIComboBox.h"
-#include "Bang/IconManager.h"
+#include "Bang/TextureFactory.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -15,7 +15,7 @@
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/TransformGizmo.h"
-#include "BangEditor/EditorIconManager.h"
+#include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -33,14 +33,14 @@ UISceneToolbar::UISceneToolbar()
     toolbarLE->SetPreferredHeight(ToolBarHeight);
     toolbarLE->SetFlexibleWidth( 1.0f );
 
-    RH<Texture2D> rightArrowIcon       = IconManager::GetRightArrowIcon();
-    RH<Texture2D> doubleBarIcon        = EditorIconManager::GetDoubleBarIcon();
-    RH<Texture2D> squareIcon           = EditorIconManager::GetSquareIcon();
-    RH<Texture2D> rightArrowAndBarIcon = EditorIconManager::GetRightArrowAndBarIcon();
-    RH<Texture2D> translateIcon        = EditorIconManager::GetHairCrossIcon();
-    RH<Texture2D> rotateIcon           = EditorIconManager::GetRotateIcon();
-    RH<Texture2D> scaleIcon            = EditorIconManager::GetAxesIcon();
-    RH<Texture2D> rectTransformIcon    = EditorIconManager::GetAnchoredRectIcon();
+    RH<Texture2D> rightArrowIcon       = TextureFactory::GetRightArrowIcon();
+    RH<Texture2D> doubleBarIcon        = EditorTextureFactory::GetDoubleBarIcon();
+    RH<Texture2D> squareIcon           = EditorTextureFactory::GetSquareIcon();
+    RH<Texture2D> rightArrowAndBarIcon = EditorTextureFactory::GetRightArrowAndBarIcon();
+    RH<Texture2D> translateIcon        = EditorTextureFactory::GetHairCrossIcon();
+    RH<Texture2D> rotateIcon           = EditorTextureFactory::GetRotateIcon();
+    RH<Texture2D> scaleIcon            = EditorTextureFactory::GetAxesIcon();
+    RH<Texture2D> rectTransformIcon    = EditorTextureFactory::GetAnchoredRectIcon();
 
     auto AddToolbarButton = [&](UIButton **button, Texture2D *icon,
                                 std::function<void(IFocusable*)> callbackFunc)
