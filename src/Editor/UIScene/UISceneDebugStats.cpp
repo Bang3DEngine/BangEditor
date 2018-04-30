@@ -54,6 +54,8 @@ void UISceneDebugStats::Update()
     fpsText += String::ToString(m_editorRenderFPSChrono.GetMeanFPS(), 2);
 
     p_debugStatsText->SetContent(fpsText);
+
+    // Debug_DLog(fpsText);
 }
 
 void UISceneDebugStats::OnEnabled()

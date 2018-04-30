@@ -28,8 +28,10 @@
 #include "Bang/UIContentSizeFitter.h"
 #include "Bang/ShaderProgramFactory.h"
 
+#include "BangEditor/UITabHeader.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/ExplorerItem.h"
+#include "BangEditor/UITabContainer.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -84,31 +86,103 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
 {
     GameObjectFactory::CreateUISceneInto(scene);
 
+    scene->GetCamera()->SetClearColor( Color::White.WithValue(0.7f) );
+
     UIVerticalLayout *vl = scene->AddComponent<UIVerticalLayout>();
     vl->SetPaddings(5);
     vl->SetSpacing(10);
 
-    UIScrollPanel *gridScrollPanel = GameObjectFactory::CreateUIScrollPanel();
-    gridScrollPanel->GetScrollArea()->GetBackground()->SetTint(Color::Zero);
+    auto CreateAssetContainerGameObject = [scene, &extensions]
+                                          (const List<Path> &assetPaths) ->
+                                          GameObject*
+    {
+        UIScrollPanel *gridScrollPanel = GameObjectFactory::CreateUIScrollPanel();
+        gridScrollPanel->GetScrollArea()->GetBackground()->SetTint(Color::Zero);
 
-    GameObject *gridScrollPanelGo = gridScrollPanel->GetGameObject();
-    UILayoutElement *spLE = gridScrollPanelGo->AddComponent<UILayoutElement>();
-    spLE->SetFlexibleSize( Vector2::One );
+        GameObject *gridScrollPanelGo = gridScrollPanel->GetGameObject();
+        UILayoutElement *spLE = gridScrollPanelGo->AddComponent<UILayoutElement>();
+        spLE->SetFlexibleSize( Vector2::One );
 
-    GameObject *gridLayoutGo = GameObjectFactory::CreateUIGameObject();
+        GameObject *gridLayoutGo = GameObjectFactory::CreateUIGameObject();
 
-    UIContentSizeFitter *csf = gridLayoutGo->AddComponent<UIContentSizeFitter>();
-    csf->SetHorizontalSizeType(LayoutSizeType::None);
-    csf->SetVerticalSizeType(LayoutSizeType::Preferred);
+        UIContentSizeFitter *csf = gridLayoutGo->AddComponent<UIContentSizeFitter>();
+        csf->SetHorizontalSizeType(LayoutSizeType::None);
+        csf->SetVerticalSizeType(LayoutSizeType::Preferred);
 
-    gridLayoutGo->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
-    UIGridLayout *gridLayout = gridLayoutGo->AddComponent<UIGridLayout>();
-    gridLayout->SetCellSize( Vector2i(80) );
-    gridLayout->SetSpacing(10);
+        gridLayoutGo->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
+        UIGridLayout *gridLayout = gridLayoutGo->AddComponent<UIGridLayout>();
+        gridLayout->SetCellSize( Vector2i(80) );
+        gridLayout->SetSpacing(10);
 
-    UILayoutElement *gridLE = gridLayoutGo->AddComponent<UILayoutElement>();
-    gridLE->SetFlexibleSize( Vector2::One );
+        UILayoutElement *gridLE = gridLayoutGo->AddComponent<UILayoutElement>();
+        gridLE->SetFlexibleSize( Vector2::One );
 
+        gridScrollPanelGo->SetParent(scene);
+        gridScrollPanel->GetScrollArea()->SetContainedGameObject(gridLayoutGo);
+        gridScrollPanel->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
+        gridScrollPanel->SetVerticalScrollBarSide(HorizontalSide::Right);
+        gridScrollPanel->SetHorizontalScrollEnabled(false);
+
+        // Add paths to grid layout
+        for (const Path &assetPath : assetPaths)
+        {
+            ExplorerItem *expItem = GameObject::Create<ExplorerItem>();
+            expItem->GetLabel()->GetText()->SetTextColor(Color::Black);
+            expItem->SetPath(assetPath);
+
+            if (assetPath.IsEmpty())
+            {
+                expItem->GetLabel()->GetText()->SetContent("None");
+            }
+
+            expItem->GetFocusable()->AddClickedCallback([expItem, gridLayoutGo]
+                                                        (IFocusable*)
+            {
+                // Save path, and select only the clicked one
+                EditorDialog::s_assetPathResult = expItem->GetPath();
+                for (GameObject *expItemGo : gridLayoutGo->GetChildren())
+                {
+                    ExplorerItem *expItem = DCAST<ExplorerItem*>(expItemGo);
+                    if (expItem) { expItem->SetSelected(false); }
+                }
+                expItem->SetSelected(true);
+            });
+
+            expItem->GetFocusable()->AddDoubleClickedCallback([](IFocusable*)
+            {
+                // Directly select
+                EditorDialog::s_accepted = true;
+                Dialog::EndCurrentDialog();
+            });
+            expItem->SetParent(gridLayoutGo);
+        }
+
+        return gridScrollPanel->GetGameObject();
+    };
+
+    // Add tabs
+    UITabContainer *tabContainer = GameObject::Create<UITabContainer>();
+
+    List<Path> engineAssetPaths =
+            Paths::GetEngineAssetsDir().GetFiles(Path::FindFlag::Recursive,
+                                            extensions);
+    engineAssetPaths.PushFront(Path::Empty);
+    GameObject *engineAssetsGo = CreateAssetContainerGameObject(engineAssetPaths);
+
+    List<Path> projectAssetPaths =
+            Paths::GetProjectAssetsDir().GetFiles(Path::FindFlag::Recursive,
+                                                  extensions);
+    projectAssetPaths.PushFront(Path::Empty);
+    GameObject *projectAssetsGo = CreateAssetContainerGameObject(projectAssetPaths);
+
+    UILayoutElement *tabContainerLE = tabContainer->AddComponent<UILayoutElement>();
+    tabContainerLE->SetFlexibleSize(Vector2::One);
+
+    tabContainer->AddTab("Project", projectAssetsGo);
+    tabContainer->AddTab("Engine", engineAssetsGo);
+    tabContainer->SetParent(scene);
+
+    // Buttons below
     GameObject *buttonsGo = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *buttonsHL = buttonsGo->AddComponent<UIHorizontalLayout>();
     buttonsHL->SetSpacing(5);
@@ -121,7 +195,6 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
         Dialog::EndCurrentDialog();
     });
 
-
     UIButton *openButton = GameObjectFactory::CreateUIButton("Open");
     openButton->GetFocusable()->AddClickedCallback([](IFocusable*)
     {
@@ -129,52 +202,11 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
         Dialog::EndCurrentDialog();
     });
 
-    gridScrollPanelGo->SetParent(scene);
-    gridScrollPanel->GetScrollArea()->SetContainedGameObject(gridLayoutGo);
-    gridScrollPanel->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
-    gridScrollPanel->SetVerticalScrollBarSide(HorizontalSide::Right);
-    gridScrollPanel->SetHorizontalScrollEnabled(false);
-
-    buttonsGo->SetParent(scene);
     GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Flexible, 1.0f)
                        ->SetParent(buttonsGo);
     cancelButton->GetGameObject()->SetParent(buttonsGo);
     openButton->GetGameObject()->SetParent(buttonsGo);
-
-    // Find asset paths with extensions, and add them to grid layout
-    List<Path> foundAssetPaths;
-    List<Path> engineAssetPaths =
-            Paths::GetEngineAssetsDir().GetFiles(Path::FindFlag::Recursive,
-                                            extensions);
-    List<Path> projectAssetPaths =
-            Paths::GetProjectAssetsDir().GetFiles(Path::FindFlag::Recursive,
-                                                  extensions);
-    foundAssetPaths.PushBack(engineAssetPaths);
-    foundAssetPaths.PushBack(projectAssetPaths);
-    foundAssetPaths.PushFront(Path::Empty);
-
-    for (const Path &assetPath : foundAssetPaths)
-    {
-        ExplorerItem *expItem = GameObject::Create<ExplorerItem>();
-        expItem->GetLabel()->GetText()->SetTextColor(Color::White);
-        expItem->SetPath(assetPath);
-
-        if (assetPath.IsEmpty())
-        {
-            expItem->GetLabel()->GetText()->SetContent("None");
-        }
-
-        expItem->GetFocusable()->AddClickedCallback([expItem](IFocusable*)
-        {
-            EditorDialog::s_assetPathResult = expItem->GetPath();
-        });
-        expItem->GetFocusable()->AddDoubleClickedCallback([](IFocusable*)
-        {
-            EditorDialog::s_accepted = true;
-            Dialog::EndCurrentDialog();
-        });
-        expItem->SetParent(gridLayoutGo);
-    }
+    buttonsGo->SetParent(scene);
 
     return scene;
 }

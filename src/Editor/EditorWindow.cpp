@@ -20,12 +20,20 @@ USING_NAMESPACE_BANG_EDITOR
 EditorWindow::EditorWindow()
 {
     m_shortcutManager = new ShortcutManager();
-    SetTitle("Bang Editor");
 }
 
 EditorWindow::~EditorWindow()
 {
     delete m_shortcutManager;
+}
+
+void EditorWindow::Create(uint flags)
+{
+    Window::Create(flags);
+    Maximize();
+    SetTitle("Bang Editor - <OpenGL " +
+                             String(GetGLMajorVersion()) + "." +
+                             String(GetGLMinorVersion()) + ">");
 }
 
 void EditorWindow::Update()
@@ -47,12 +55,6 @@ void EditorWindow::OnClosed()
 SceneManager *EditorWindow::CreateSceneManager() const
 {
     return new EditorSceneManager();
-}
-
-void EditorWindow::Create(uint flags)
-{
-    Window::Create(flags);
-    Maximize();
 }
 
 ShortcutManager *EditorWindow::GetShortcutManager() const
