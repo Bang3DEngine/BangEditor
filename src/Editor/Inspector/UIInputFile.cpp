@@ -6,12 +6,15 @@
 #include "Bang/Texture2D.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/TextureFactory.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 
+#include "BangEditor/Inspector.h"
 #include "BangEditor/EditorDialog.h"
 #include "BangEditor/EditorTextureFactory.h"
+#include "BangEditor/FileInspectorWidgetFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -51,8 +54,20 @@ UIInputFile::UIInputFile()
         if (accepted) { SetPath(openPath); }
     });
 
+    RH<Texture2D> rightArrowIcon = TextureFactory::GetRightArrowIcon().Get();
+    p_openFileInInspectorButton =
+                  GameObjectFactory::CreateUIButton("", rightArrowIcon.Get());
+    p_openFileInInspectorButton->SetIcon(rightArrowIcon.Get(), Vector2i(16));
+    p_openFileInInspectorButton->GetFocusable()->AddClickedCallback(
+                                                           [this](IFocusable*)
+    {
+        Inspector *inspector = Inspector::GetActive();
+        if (inspector) { inspector->OnExplorerPathSelected( GetPath() ); }
+    });
+
     p_pathInputText->GetGameObject()->SetParent(this);
     p_searchButton->GetGameObject()->SetParent(this);
+    p_openFileInInspectorButton->GetGameObject()->SetParent(this);
 }
 
 UIInputFile::~UIInputFile()

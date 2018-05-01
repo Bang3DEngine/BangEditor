@@ -51,6 +51,8 @@ public:
     void OnComponentAdded(Component *addedComponent, int index) override;
     void OnComponentRemoved(Component *removedComponent) override;
 
+    static Inspector* GetActive();
+
 private:
     List<InspectorWidget*> m_widgets;
     Map<Object*, InspectorWidget*> m_objToWidget;

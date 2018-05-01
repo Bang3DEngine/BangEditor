@@ -41,6 +41,7 @@ private:
 
     UIButton *p_searchButton = nullptr;
     UIInputText *p_pathInputText = nullptr;
+    UIButton *p_openFileInInspectorButton = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

@@ -22,6 +22,7 @@
 
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/InspectorWidget.h"
+#include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 #include "BangEditor/FileInspectorWidgetFactory.h"
 #include "BangEditor/ComponentInspectorWidgetFactory.h"
@@ -165,6 +166,13 @@ void Inspector::OnComponentRemoved(Component *removedComponent)
     ASSERT (m_objToWidget.ContainsKey(removedComponent));
     RemoveWidget(m_objToWidget.Get(removedComponent));
     m_objToWidget.Remove(removedComponent);
+}
+
+Inspector* Inspector::GetActive()
+{
+    EditorSceneManager *esm = EditorSceneManager::GetActive();
+    EditorScene *es = esm ? esm->GetEditorScene() : nullptr;
+    return es ? es->GetInspector() : nullptr;
 }
 
 GameObject *Inspector::GetWidgetsContainer() const
