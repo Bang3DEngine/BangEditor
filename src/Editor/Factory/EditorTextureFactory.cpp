@@ -6,6 +6,7 @@
 #include "Bang/TextureFactory.h"
 
 #include "BangEditor/EditorPaths.h"
+#include "BangEditor/MaterialPreviewFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -19,6 +20,11 @@ RH<Texture2D> EditorTextureFactory::GetIconForPath(const Path &path)
             Resources::SetPermanent(path, true);
             RH<Texture2D> tex = Resources::Load<Texture2D>(path);
             return tex;
+        }
+        else if ( Extensions::Has(path, {Extensions::GetMaterialExtension()}) )
+        {
+            RH<Material> material = Resources::Load<Material>(path);
+            return MaterialPreviewFactory::GetPreviewTextureFor(material.Get());
         }
         else
         {
@@ -53,10 +59,6 @@ RH<Texture2D> EditorTextureFactory::GetIconForExtension(const String &ext)
     else if ( Extensions::Equals(ext, Extensions::GetBehaviourExtensions()) )
     {
         return EditorTextureFactory::GetBracketsIcon();
-    }
-    else if ( Extensions::Equals(ext, Extensions::GetMaterialExtension()) )
-    {
-        return EditorTextureFactory::GetWhiteSphereIcon();
     }
     else if ( Extensions::Equals(ext, Extensions::GetTextureCubeMapExtension()) )
     {

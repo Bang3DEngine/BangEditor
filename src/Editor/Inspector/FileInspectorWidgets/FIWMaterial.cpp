@@ -12,14 +12,17 @@
 #include "Bang/UIComboBox.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/UIInputNumber.h"
+#include "Bang/TextureFactory.h"
+#include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/ImportFilesManager.h"
 #include "Bang/ShaderProgramFactory.h"
 
-#include "BangEditor/UIInputVector.h"
 #include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputColor.h"
+#include "BangEditor/UIInputVector.h"
+#include "BangEditor/MaterialPreviewFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -94,6 +97,10 @@ void FIWMaterial::Init()
     p_fragmentShaderInput->SetExtensions( Extensions::GetFragmentShaderExtensions() );
     p_fragmentShaderInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
+    GameObject *materialPreviewGo = GameObjectFactory::CreateUIGameObject();
+    p_materialPreviewImg = materialPreviewGo->AddComponent<UIImageRenderer>();
+    p_materialPreviewImg->SetImageTexture( TextureFactory::GetWhiteTexture().Get() );
+
     AddWidget("Albedo Color",           p_albedoColorInput);
     AddWidget("Rec. light",             p_receivesLightingCheckBox->GetGameObject());
     AddWidget("Roughness",              p_roughnessSlider->GetGameObject());
@@ -107,6 +114,8 @@ void FIWMaterial::Init()
     AddWidget("Render pass",            p_renderPassInput->GetGameObject());
     AddWidget("Vert shader",            p_vertexShaderInput);
     AddWidget("Frag shader",            p_fragmentShaderInput);
+    AddLabel("Material preview");
+    AddWidget(p_materialPreviewImg->GetGameObject(), 256);
 
     SetLabelsWidth(130);
 }
@@ -153,6 +162,9 @@ void FIWMaterial::UpdateFromFileWhenChanged()
     p_metalnessSlider->SetValue( GetMaterial()->GetMetalness() );
     p_renderPassInput->SetSelectionByValue(
                 SCAST<int>(GetMaterial()->GetRenderPass()) );
+
+    p_materialPreviewImg->SetImageTexture(
+            MaterialPreviewFactory::GetPreviewTextureFor(GetMaterial()).Get() );
 
     ShaderProgram *sp = GetMaterial()->GetShaderProgram();
     Shader *vs = sp ? sp->GetVertexShader() : nullptr;

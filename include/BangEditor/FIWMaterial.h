@@ -45,6 +45,7 @@ private:
     UISlider *p_roughnessSlider = nullptr;
     UIInputFile *p_vertexShaderInput = nullptr;
     UIInputFile *p_fragmentShaderInput = nullptr;
+    UIImageRenderer *p_materialPreviewImg = nullptr;
 
 	FIWMaterial();
     virtual ~FIWMaterial();

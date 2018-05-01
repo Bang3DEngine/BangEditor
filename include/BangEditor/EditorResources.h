@@ -8,13 +8,21 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class MaterialPreviewFactory;
+
 class EditorResources : public Resources
 {
 public:
 	EditorResources();
 	virtual ~EditorResources();
 
+    MaterialPreviewFactory *GetMaterialPreviewFactory() const;
+
+    static EditorResources *GetActive();
+
 private:
+    MaterialPreviewFactory *m_materialPreviewFactory = nullptr;
+
     virtual MeshFactory* CreateMeshFactory() const override;
 
     Array<Path> GetLookUpPaths() const override;

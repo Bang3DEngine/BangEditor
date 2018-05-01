@@ -2,16 +2,29 @@
 
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorMeshFactory.h"
+#include "BangEditor/MaterialPreviewFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
 EditorResources::EditorResources()
 {
+    m_materialPreviewFactory = new MaterialPreviewFactory();
 }
 
 EditorResources::~EditorResources()
 {
+    delete m_materialPreviewFactory;
+}
+
+MaterialPreviewFactory *EditorResources::GetMaterialPreviewFactory() const
+{
+    return m_materialPreviewFactory;
+}
+
+EditorResources *EditorResources::GetActive()
+{
+    return DCAST<EditorResources*>( Resources::GetActive() );
 }
 
 MeshFactory *EditorResources::CreateMeshFactory() const
