@@ -12,11 +12,15 @@
 #include "Bang/UIComboBox.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/UIInputNumber.h"
+#include "Bang/RectTransform.h"
 #include "Bang/TextureFactory.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/ImportFilesManager.h"
+#include "Bang/UIHorizontalLayout.h"
+#include "Bang/UIContentSizeFitter.h"
+#include "Bang/UIAspectRatioFitter.h"
 #include "Bang/ShaderProgramFactory.h"
 
 #include "BangEditor/UIInputFile.h"
@@ -98,24 +102,44 @@ void FIWMaterial::Init()
     p_fragmentShaderInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     GameObject *materialPreviewGo = GameObjectFactory::CreateUIGameObject();
+    materialPreviewGo->GetRectTransform()->SetAnchors(Vector2::Zero);
+    materialPreviewGo->GetRectTransform()->SetPivotPosition(Vector2::Zero);
+
+    // UILayoutElement *materialPreviewGoLE = materialPreviewGo->
+    //                                        AddComponent<UILayoutElement>();
+    // materialPreviewGoLE->SetFlexibleSize( Vector2::One );
+
     p_materialPreviewImg = materialPreviewGo->AddComponent<UIImageRenderer>();
     p_materialPreviewImg->SetImageTexture( TextureFactory::GetWhiteTexture().Get() );
 
-    AddWidget("Albedo Color",           p_albedoColorInput);
-    AddWidget("Rec. light",             p_receivesLightingCheckBox->GetGameObject());
-    AddWidget("Roughness",              p_roughnessSlider->GetGameObject());
-    AddWidget("Metalness",              p_metalnessSlider->GetGameObject());
-    AddWidget("Albedo Tex.",            p_albedoTextureInput);
-    AddWidget("Albedo Uv Offset",       p_albedoUvOffsetInput);
-    AddWidget("Albedo Uv Mult.",        p_albedoUvMultiplyInput);
-    AddWidget("Normal Map Tex.",        p_normalMapTextureInput);
-    AddWidget("Normal Map Uv Offset",   p_normalMapUvOffsetInput);
-    AddWidget("Normal Map Uv Mult.",    p_normalMapUvMultiplyInput);
-    AddWidget("Render pass",            p_renderPassInput->GetGameObject());
-    AddWidget("Vert shader",            p_vertexShaderInput);
-    AddWidget("Frag shader",            p_fragmentShaderInput);
-    AddLabel("Material preview");
-    AddWidget(p_materialPreviewImg->GetGameObject(), 256);
+    UIContentSizeFitter *previewContentSizeFitter =
+                     materialPreviewGo->AddComponent<UIContentSizeFitter>();
+    previewContentSizeFitter->SetVerticalSizeType(LayoutSizeType::Preferred);
+    previewContentSizeFitter->SetHorizontalSizeType(LayoutSizeType::Preferred);
+
+    UIAspectRatioFitter *previewAspectRatioSizeFitter =
+                     materialPreviewGo->AddComponent<UIAspectRatioFitter>();
+    previewAspectRatioSizeFitter->SetAspectRatio(1.0f);
+    previewAspectRatioSizeFitter->SetAspectRatioMode(AspectRatioMode::Keep);
+
+    AddWidget(materialPreviewGo,      256);
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
+    AddWidget("Rec. light",           p_receivesLightingCheckBox->GetGameObject());
+    AddWidget("Roughness",            p_roughnessSlider->GetGameObject());
+    AddWidget("Metalness",            p_metalnessSlider->GetGameObject());
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
+    AddWidget("Albedo Color",         p_albedoColorInput);
+    AddWidget("Albedo Tex.",          p_albedoTextureInput);
+    AddWidget("Albedo Uv Offset",     p_albedoUvOffsetInput);
+    AddWidget("Albedo Uv Mult.",      p_albedoUvMultiplyInput);
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
+    AddWidget("Normal Map Tex.",      p_normalMapTextureInput);
+    AddWidget("Normal Map Uv Offset", p_normalMapUvOffsetInput);
+    AddWidget("Normal Map Uv Mult.",  p_normalMapUvMultiplyInput);
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
+    AddWidget("Render pass",          p_renderPassInput->GetGameObject());
+    AddWidget("Vert shader",          p_vertexShaderInput);
+    AddWidget("Frag shader",          p_fragmentShaderInput);
 
     SetLabelsWidth(130);
 }

@@ -36,6 +36,8 @@ Hierarchy::Hierarchy()
     SetName("Hierarchy");
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
+    le->SetMinWidth(200);
+    le->SetPreferredWidth(400);
     le->SetFlexibleSize( Vector2::One );
 
     GameObjectFactory::CreateUIGameObjectInto(this);

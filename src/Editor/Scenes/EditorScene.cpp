@@ -98,15 +98,15 @@ void EditorScene::Init()
     // Tab containers creation
     p_leftTabContainer = GameObject::Create<UITabContainer>();
     UILayoutElement *leftTabContainerLE = p_leftTabContainer->AddComponent<UILayoutElement>();
-    leftTabContainerLE->SetFlexibleSize( Vector2(2.0f, 1.0f) );
+    leftTabContainerLE->SetFlexibleSize( Vector2(0.0f, 1.0f) );
 
     p_centerTabContainer = GameObject::Create<UITabContainer>();
     UILayoutElement *centerTabContainerLE = p_centerTabContainer->AddComponent<UILayoutElement>();
-    centerTabContainerLE->SetFlexibleSize( Vector2(6.0f, 1.0f) );
+    centerTabContainerLE->SetFlexibleSize( Vector2(3.0f, 1.0f) );
 
     p_rightTabContainer = GameObject::Create<UITabContainer>();
     UILayoutElement *rightTabContainerLE = p_rightTabContainer->AddComponent<UILayoutElement>();
-    rightTabContainerLE->SetFlexibleSize( Vector2(2.0f, 1.0f) );
+    rightTabContainerLE->SetFlexibleSize( Vector2(0.0f, 1.0f) );
 
     p_botTabContainer = GameObject::Create<UITabContainer>();
     UILayoutElement *botTabContainerLE = p_botTabContainer->AddComponent<UILayoutElement>();

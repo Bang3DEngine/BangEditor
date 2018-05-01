@@ -34,6 +34,8 @@ Inspector::Inspector()
     SetName("Inspector");
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
+    le->SetMinWidth(200);
+    le->SetPreferredWidth(400);
     le->SetFlexibleSize( Vector2::One );
 
     GameObjectFactory::CreateUIGameObjectInto(this);
@@ -51,9 +53,7 @@ Inspector::Inspector()
 
     UILayoutElement *scrollLE = scrollPanel->GetGameObject()->
                                 AddComponent<UILayoutElement>();
-    scrollLE->SetMinSize( Vector2i::Zero );
-    scrollLE->SetPreferredSize( Vector2i(100, 100) );
-    scrollLE->SetFlexibleSize( Vector2(1) );
+    scrollLE->SetFlexibleSize( Vector2::One );
 
     // GameObject *topSpacer = GameObjectFactory::CreateUISpacer(LayoutSizeType::Min,
     //                                                           Vector2i(0, 30));

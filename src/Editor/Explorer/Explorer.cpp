@@ -94,7 +94,7 @@ Explorer::Explorer()
     csf->SetVerticalSizeType(LayoutSizeType::Preferred);
 
     UIGridLayout *gridLayout = p_itemsContainer->AddComponent<UIGridLayout>();
-    gridLayout->SetCellSize( Vector2i(80) );
+    gridLayout->SetCellSize( Vector2i(128) );
     gridLayout->SetPaddings(10);
     gridLayout->SetSpacing(10);
 

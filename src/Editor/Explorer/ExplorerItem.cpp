@@ -41,8 +41,7 @@ ExplorerItem::ExplorerItem()
 
     GameObject *iconGo = GameObjectFactory::CreateUIGameObject();
     RectTransform *iconRT = iconGo->GetRectTransform();
-    iconRT->SetAnchorX( Vector2::Zero );
-    iconRT->SetAnchorY( Vector2::Zero );
+    iconRT->SetAnchors( Vector2::Zero );
     iconRT->SetPivotPosition( Vector2::Zero );
     p_icon = iconGo->AddComponent<UIImageRenderer>();
     p_icon->SetTint(Color::Zero);
