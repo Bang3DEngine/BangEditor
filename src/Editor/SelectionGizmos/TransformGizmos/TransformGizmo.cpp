@@ -1,5 +1,6 @@
 #include "BangEditor/TransformGizmo.h"
 
+#include "Bang/GL.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
 #include "Bang/Vector3.h"
@@ -113,6 +114,16 @@ void TransformGizmo::Update()
             p_rectTransformGizmo->SetEnabled(true);
             break;
     }
+}
+
+void TransformGizmo::Render(RenderPass rp, bool renderChildren)
+{
+    GL::Function prevDepthFunc = GL::GetDepthFunc();
+
+    GL::SetDepthFunc(GL::Function::Always);
+    GameObject::Render(rp, renderChildren);
+
+    GL::SetDepthFunc(prevDepthFunc);
 }
 
 void TransformGizmo::OnBeginRender(Scene *scene)

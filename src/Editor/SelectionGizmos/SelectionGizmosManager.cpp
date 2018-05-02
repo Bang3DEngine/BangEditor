@@ -46,10 +46,10 @@ void SelectionGizmosManager::Update()
 
 void SelectionGizmosManager::OnBeginRender(Scene *scene)
 {
-    GetTransformGizmo()->SetParent(scene);
-    GetTransformGizmo()->OnBeginRender(scene);
     GetGameObjectSelectionGizmo()->SetParent(scene);
     GetComponentsSelectionGizmo()->SetParent(scene);
+    GetTransformGizmo()->SetParent(scene);
+    GetTransformGizmo()->OnBeginRender(scene);
 }
 
 void SelectionGizmosManager::OnEndRender(Scene*)

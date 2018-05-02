@@ -22,6 +22,7 @@ public:
 
     // GameObject
     void Update() override;
+    void Render(RenderPass rp, bool renderChildren) override;
 
     void OnBeginRender(Scene *scene);
     void OnEndRender(Scene *scene);

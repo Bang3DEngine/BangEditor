@@ -1,6 +1,8 @@
 #include "BangEditor/GameObjectSelectionGizmo.h"
 
 #include "Bang/Gizmos.h"
+#include "Bang/GEngine.h"
+#include "Bang/SelectionFramebuffer.h"
 
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/NotSelectableInEditor.h"
@@ -28,13 +30,17 @@ void GameObjectSelectionGizmo::Render(RenderPass rp, bool renderChildren)
 
     if (!GetReferencedGameObject()) { return; }
 
-    if (rp == RenderPass::Overlay)
+    SelectionFramebuffer *sfb = GEngine::GetActiveSelectionFramebuffer();
+    if (!sfb || !GL::IsBound(sfb))
     {
-        Gizmos::Reset();
-        Gizmos::SetThickness(2.0f);
-        Gizmos::SetColor(Color::Orange);
-        Gizmos::SetReceivesLighting(false);
-        Gizmos::RenderOutline( GetReferencedGameObject() );
+        if (rp == RenderPass::Overlay)
+        {
+            Gizmos::Reset();
+            Gizmos::SetThickness(2.0f);
+            Gizmos::SetColor(Color::Orange);
+            Gizmos::SetReceivesLighting(false);
+            Gizmos::RenderOutline( GetReferencedGameObject() );
+        }
     }
 }
 

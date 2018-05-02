@@ -32,6 +32,12 @@ TranslateGizmoAxis::TranslateGizmoAxis()
     p_lineRenderer->SetMaterial(MaterialFactory::GetGizmosUnLightedOverlay().Get());
 
     p_arrowCap = GameObjectFactory::CreateGameObject(true);
+    for (MeshRenderer *mr : p_arrowCap->GetComponents<MeshRenderer>())
+    {
+        mr->SetMaterial(MaterialFactory::GetGizmosUnLightedOverlay().Get());
+        mr->GetMaterial()->SetRenderPass(RenderPass::Overlay);
+        mr->GetMaterial()->SetReceivesLighting(false);
+    }
     p_arrowCap->SetName("ArrowCap");
 
     p_meshRenderer = p_arrowCap->AddComponent<MeshRenderer>();
