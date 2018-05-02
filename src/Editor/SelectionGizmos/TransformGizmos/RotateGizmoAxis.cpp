@@ -31,12 +31,14 @@ RotateGizmoAxis::RotateGizmoAxis()
     p_circleRenderer->SetMaterial(MaterialFactory::GetGizmosUnLightedOverlay().Get());
     p_circleRenderer->SetLineWidth(2.0f);
 
+    m_selectionMesh = Resources::Create<Mesh>();
+
     p_selectionGo = GameObjectFactory::CreateGameObject(true);
     p_selectionRenderer = p_selectionGo->AddComponent<MeshRenderer>();
     p_selectionRenderer->SetMaterial(MaterialFactory::GetGizmosUnLightedOverlay().Get());
     p_selectionRenderer->SetCulling(false);
+    p_selectionRenderer->SetMesh(m_selectionMesh.Get());
 
-    m_selectionMesh = Resources::Create<Mesh>();
 
     p_selectionGo->SetParent(this);
 }
@@ -295,7 +297,7 @@ void RotateGizmoAxis::UpdateCirclePoints()
             selectionMeshPoints.PushBack(p1 + norm1_c - norm1_n);
         }
         sMesh->SetPositionsPool(selectionMeshPoints);
-        p_selectionRenderer->SetMesh(sMesh);
+        m_selectionMesh.Get()->UpdateGeometry();
     }
 }
 

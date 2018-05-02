@@ -6,6 +6,8 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class PointLight;
+FORWARD class AudioSource;
+FORWARD class DirectionalLight;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -29,6 +31,8 @@ public:
 private:
     void RenderCameraGizmo(Camera *cam);
     void RenderPointLightGizmo(PointLight *pointLight);
+    void RenderDirectionalLightGizmo(DirectionalLight *dirLight);
+    void RenderAudioSourceGizmo(AudioSource *audioSource);
 };
 
 NAMESPACE_BANG_EDITOR_END

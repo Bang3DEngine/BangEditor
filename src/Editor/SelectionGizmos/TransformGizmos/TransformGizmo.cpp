@@ -3,6 +3,8 @@
 #include "Bang/GL.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
+#include "Bang/GBuffer.h"
+#include "Bang/GEngine.h"
 #include "Bang/Vector3.h"
 #include "Bang/Transform.h"
 #include "Bang/RectTransform.h"
@@ -118,12 +120,13 @@ void TransformGizmo::Update()
 
 void TransformGizmo::Render(RenderPass rp, bool renderChildren)
 {
-    GL::Function prevDepthFunc = GL::GetDepthFunc();
+    GBuffer *gb = GEngine::GetActiveGBuffer();
+    gb->PushDepthStencilTexture();
+    gb->SetOverlayDepthStencil();
 
-    GL::SetDepthFunc(GL::Function::Always);
     GameObject::Render(rp, renderChildren);
 
-    GL::SetDepthFunc(prevDepthFunc);
+    gb->PopDepthStencilTexture();
 }
 
 void TransformGizmo::OnBeginRender(Scene *scene)
