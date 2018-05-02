@@ -10,6 +10,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class TransformGizmo;
+FORWARD class GameObjectSelectionGizmo;
 FORWARD class ComponentsSelectionGizmo;
 
 class SelectionGizmosManager : public IEditorListener,
@@ -26,11 +27,13 @@ public:
 
     TransformGizmo *GetTransformGizmo() const;
     ComponentsSelectionGizmo *GetComponentsSelectionGizmo() const;
+    GameObjectSelectionGizmo *GetGameObjectSelectionGizmo() const;
 
     static SelectionGizmosManager* GetInstance();
 
 private:
     TransformGizmo *p_transformGizmo = nullptr;
+    GameObjectSelectionGizmo *p_gameObjectSelectionGizmo = nullptr;
     ComponentsSelectionGizmo *p_componentsSelectionGizmo = nullptr;
 
     // IEditorListener
