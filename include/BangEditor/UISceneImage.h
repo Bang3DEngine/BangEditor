@@ -28,11 +28,13 @@ public:
     virtual ~UISceneImage();
 
     void Update() override;
+    void Render(RenderPass renderPass, bool renderChildren) override;
 
     void SetSceneImageCamera(Camera *cam);
     void SetRenderMode(RenderMode renderMode);
     void SetShowDebugStats(bool showDebugStats);
 
+    Camera *GetCamera() const;
     RenderMode GetRenderMode() const;
 
 private:
