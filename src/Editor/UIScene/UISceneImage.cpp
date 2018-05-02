@@ -100,6 +100,8 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
                 }
                 }
                 break;
+
+                default: break;
             }
 
         }
@@ -160,10 +162,10 @@ UISceneImage::RenderMode UISceneImage::GetRenderMode() const
 
 void UISceneImage::UISceneImageRenderer::OnRender()
 {
-    const bool wasBlendEnabled = GL::IsEnabledi(GL::Enablable::Blend, 0);
-    GL::Disablei(GL::Enablable::Blend, 0);
+    const bool wasBlendEnabled = GL::IsEnabled(GL::Enablable::Blend);
+    GL::Disable(GL::Enablable::Blend, 0);
 
     UIImageRenderer::OnRender();
 
-    GL::SetEnabledi(GL::Enablable::Blend, 0, wasBlendEnabled);
+    GL::SetEnabled(GL::Enablable::Blend, wasBlendEnabled, false);
 }
