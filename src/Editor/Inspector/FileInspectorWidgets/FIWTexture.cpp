@@ -63,9 +63,9 @@ void FIWTexture::Init()
     AddWidget("Filter Mode", p_filterModeComboBox->GetGameObject());
     AddWidget("Wrap Mode", p_wrapModeComboBox->GetGameObject());
     AddWidget("Alpha Cutoff", p_alphaCutoffInput->GetGameObject());
-
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddLabel("Texture");
-    AddWidget(imageGo, 200);
+    AddWidget(imageGo, 400);
 
     SetLabelsWidth(100);
 }
