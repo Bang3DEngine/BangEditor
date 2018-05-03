@@ -5,6 +5,7 @@
 #include "Bang/Resources.h"
 #include "Bang/ImportFilesManager.h"
 
+#include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/BehaviourTracker.h"
 #include "BangEditor/EditorSceneManager.h"
@@ -20,6 +21,7 @@ EditorFileTracker::EditorFileTracker()
     GetFileTracker()->SetCheckFrequencySeconds(3.0f);
     GetFileTracker()->TrackPath( Paths::GetEngineAssetsDir() );
     GetFileTracker()->TrackPath( Paths::GetProjectAssetsDir() );
+    GetFileTracker()->TrackPath( EditorPaths::GetEditorAssetsDir() );
 
     GetFileTracker()->
             EventEmitter<IFileTrackerListener>::RegisterListener(this);

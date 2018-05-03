@@ -12,6 +12,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class EditorFloor;
 FORWARD class EditorCamera;
 FORWARD class SelectionGizmosManager;
 
@@ -26,15 +27,16 @@ public:
     void OnBeginRender(Scene *scene);
     void OnEndRender(Scene *scene);
 
+    EditorFloor *GetEditorFloor() const;
     EditorCamera *GetEditorCamera() const;
     SelectionGizmosManager *GetSelectionGizmosManager() const;
 
     static EditSceneGameObjects *GetInstance();
 
 private:
+    EditorFloor *m_editorFloor = nullptr;
     EditorCamera *m_editorCamera = nullptr;
     SelectionGizmosManager *m_selectionGizmosManager = nullptr;
-
 
     friend class EditorCamera;
 };
