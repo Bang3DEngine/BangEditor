@@ -101,6 +101,20 @@ void FIWMaterial::Init()
     p_fragmentShaderInput->SetExtensions( Extensions::GetFragmentShaderExtensions() );
     p_fragmentShaderInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
+    p_lineWidthInput = GameObjectFactory::CreateUIInputNumber();
+    p_lineWidthInput->SetMinMaxValues(0.0f, Math::Infinity<float>());
+    p_lineWidthInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+
+    p_cullFaceInput = GameObjectFactory::CreateUIComboBox();
+    p_cullFaceInput->AddItem("None",         SCAST<int>(GL::CullFaceExt::None) );
+    p_cullFaceInput->AddItem("Back",         SCAST<int>(GL::CullFaceExt::Back) );
+    p_cullFaceInput->AddItem("Front",        SCAST<int>(GL::CullFaceExt::Front) );
+    p_cullFaceInput->AddItem("FrontAndBack", SCAST<int>(GL::CullFaceExt::FrontAndBack) );
+    p_cullFaceInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+
+    p_renderWireframe = GameObjectFactory::CreateUICheckBox();
+    p_renderWireframe->EventEmitter<IValueChangedListener>::RegisterListener(this);
+
     GameObject *materialPreviewGo = GameObjectFactory::CreateUIGameObject();
     materialPreviewGo->GetRectTransform()->SetAnchors(Vector2::Zero);
     materialPreviewGo->GetRectTransform()->SetPivotPosition(Vector2::Zero);
@@ -138,6 +152,11 @@ void FIWMaterial::Init()
     AddWidget("Normal Map Uv Mult.",  p_normalMapUvMultiplyInput);
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Render pass",          p_renderPassInput->GetGameObject());
+    AddWidget("Cull Face",            p_cullFaceInput->GetGameObject());
+    AddWidget("Render Wireframe",     p_renderWireframe->GetGameObject());
+    AddWidget("Line Width",           p_lineWidthInput->GetGameObject());
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Vert shader",          p_vertexShaderInput);
     AddWidget("Frag shader",          p_fragmentShaderInput);
 
@@ -187,6 +206,10 @@ void FIWMaterial::UpdateFromFileWhenChanged()
     p_renderPassInput->SetSelectionByValue(
                 SCAST<int>(GetMaterial()->GetRenderPass()) );
 
+    p_renderWireframe->SetChecked( GetMaterial()->IsRenderWireframe() );
+    p_cullFaceInput->SetSelectionByValue( SCAST<int>(GetMaterial()->GetCullFace()) );
+    p_lineWidthInput->SetValue( GetMaterial()->GetLineWidth() );
+
     p_materialPreviewImg->SetImageTexture(
             MaterialPreviewFactory::GetPreviewTextureFor(GetMaterial()).Get() );
 
@@ -234,6 +257,10 @@ void FIWMaterial::OnValueChanged(Object *)
     GetMaterial()->SetMetalness(p_metalnessSlider->GetValue());
     GetMaterial()->SetRenderPass(
                 SCAST<RenderPass>(p_renderPassInput->GetSelectedValue()) );
+    GetMaterial()->SetRenderWireframe( p_renderWireframe->IsChecked() );
+    GetMaterial()->SetCullFace(
+                SCAST<GL::CullFaceExt>(p_cullFaceInput->GetSelectedValue()) );
+    GetMaterial()->SetLineWidth( p_lineWidthInput->GetValue() );
 
     Path vsPath = p_vertexShaderInput->GetPath();
     Path fsPath = p_fragmentShaderInput->GetPath();

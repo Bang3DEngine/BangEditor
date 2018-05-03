@@ -11,6 +11,7 @@ FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UISlider;
 FORWARD class UICheckBox;
 FORWARD class UIComboBox;
+FORWARD class UIInputNumber;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -43,6 +44,9 @@ private:
     UICheckBox *p_receivesLightingCheckBox = nullptr;
     UISlider *p_metalnessSlider = nullptr;
     UISlider *p_roughnessSlider = nullptr;
+    UIInputNumber *p_lineWidthInput = nullptr;
+    UIComboBox *p_cullFaceInput = nullptr;
+    UICheckBox *p_renderWireframe = nullptr;
     UIInputFile *p_vertexShaderInput = nullptr;
     UIInputFile *p_fragmentShaderInput = nullptr;
     UIImageRenderer *p_materialPreviewImg = nullptr;

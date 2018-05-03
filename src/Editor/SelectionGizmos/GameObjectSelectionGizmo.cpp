@@ -1,6 +1,7 @@
 #include "BangEditor/GameObjectSelectionGizmo.h"
 
 #include "Bang/Gizmos.h"
+#include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
 #include "Bang/SelectionFramebuffer.h"
 
@@ -35,11 +36,17 @@ void GameObjectSelectionGizmo::Render(RenderPass rp, bool renderChildren)
     {
         if (rp == RenderPass::Overlay)
         {
+            GBuffer *gb = GEngine::GetActiveGBuffer();
+            gb->PushDepthStencilTexture();
+            gb->SetOverlayDepthStencil();
+
             Gizmos::Reset();
             Gizmos::SetThickness(2.0f);
             Gizmos::SetColor(Color::Orange);
             Gizmos::SetReceivesLighting(false);
             Gizmos::RenderOutline( GetReferencedGameObject() );
+
+            gb->PopDepthStencilTexture();
         }
     }
 }
