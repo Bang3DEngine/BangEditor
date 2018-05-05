@@ -22,6 +22,7 @@
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
+#include "Bang/UIDirLayoutMovableSeparator.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/Console.h"
@@ -74,17 +75,20 @@ void EditorScene::Init()
 
     GameObject *topHLGo = GameObjectFactory::CreateUIGameObject();
     topHLGo->AddComponent<UIHorizontalLayout>();
-    UILayoutElement *hlLe = topHLGo->AddComponent<UILayoutElement>();
-    hlLe->SetFlexibleSize(Vector2(1));
+    UILayoutElement *topHLLe = topHLGo->AddComponent<UILayoutElement>();
+    topHLLe->SetLayoutPriority(1);
+    topHLLe->SetFlexibleSize(Vector2(1, 1.5f));
     topHLGo->SetParent(m_mainEditorVL);
 
-    GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 20)->SetParent(m_mainEditorVL);
+    GameObjectFactory::CreateUIDirLayoutMovableVSeparator()->GetGameObject()->
+                       SetParent(m_mainEditorVL);
 
     GameObject *botHLGo = GameObjectFactory::CreateUIGameObjectNamed("BotHL");
     botHLGo->AddComponent<UIHorizontalLayout>();
     UILayoutElement *botHLLe = botHLGo->AddComponent<UILayoutElement>();
-    botHLLe->SetMinSize( Vector2i(1, 150) );
-    botHLLe->SetFlexibleSize( Vector2(1, 0.5f) );
+    botHLLe->SetLayoutPriority(1);
+    botHLLe->SetMinSize( Vector2i(1, 300) );
+    botHLLe->SetFlexibleSize( Vector2(1, 1) );
     botHLGo->SetParent(m_mainEditorVL);
 
     // Inspector, Hierarchy, etc. creation
@@ -98,26 +102,35 @@ void EditorScene::Init()
     // Tab containers creation
     p_leftTabContainer = GameObject::Create<UITabContainer>();
     UILayoutElement *leftTabContainerLE = p_leftTabContainer->AddComponent<UILayoutElement>();
+    leftTabContainerLE->SetMinSize( Vector2i(300) );
     leftTabContainerLE->SetFlexibleSize( Vector2(0.0f, 1.0f) );
 
     p_centerTabContainer = GameObject::Create<UITabContainer>();
     UILayoutElement *centerTabContainerLE = p_centerTabContainer->AddComponent<UILayoutElement>();
+    centerTabContainerLE->SetMinSize( Vector2i(500, 250) );
     centerTabContainerLE->SetFlexibleSize( Vector2(3.0f, 1.0f) );
 
     p_rightTabContainer = GameObject::Create<UITabContainer>();
     UILayoutElement *rightTabContainerLE = p_rightTabContainer->AddComponent<UILayoutElement>();
+    rightTabContainerLE->SetMinSize( Vector2i(400) );
     rightTabContainerLE->SetFlexibleSize( Vector2(0.0f, 1.0f) );
 
     p_botTabContainer = GameObject::Create<UITabContainer>();
     UILayoutElement *botTabContainerLE = p_botTabContainer->AddComponent<UILayoutElement>();
+    botTabContainerLE->SetMinSize( Vector2i(250) );
     botTabContainerLE->SetFlexibleSize( Vector2(1.0f, 1.0f) );
 
     p_leftTabContainer->SetParent(topHLGo);
-    GameObjectFactory::CreateUIVSeparator(LayoutSizeType::Min, 20)->SetParent(topHLGo);
+    GameObjectFactory::CreateUIDirLayoutMovableHSeparator()->GetGameObject()->
+                       SetParent(topHLGo);
     p_centerTabContainer->SetParent(topHLGo);
-    GameObjectFactory::CreateUIVSeparator(LayoutSizeType::Min, 20)->SetParent(topHLGo);
+    GameObjectFactory::CreateUIDirLayoutMovableHSeparator()->GetGameObject()->
+                       SetParent(topHLGo);
     p_rightTabContainer->SetParent(topHLGo);
+    GameObjectFactory::CreateUIDirLayoutMovableHSeparator()->GetGameObject()->
+                       SetParent(topHLGo);
     p_botTabContainer->SetParent(botHLGo);
+
     p_leftTabContainer->AddTab("Hierarchy", p_hierarchy);
     p_centerTabContainer->AddTab("Scene", p_sceneEditContainer);
     p_centerTabContainer->AddTab("Game",  p_scenePlayContainer);
