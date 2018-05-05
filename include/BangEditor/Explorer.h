@@ -4,6 +4,7 @@
 #include "Bang/Path.h"
 #include "Bang/UIButton.h"
 #include "Bang/FileTracker.h"
+#include "Bang/IValueChangedListener.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/ExplorerItem.h"
@@ -12,6 +13,8 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UILabel;
+FORWARD class UISlider;
+FORWARD class UIGridLayout;
 FORWARD class UIScrollPanel;
 FORWARD NAMESPACE_BANG_END
 
@@ -21,6 +24,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 class Explorer : public GameObject,
                  public IEditorListener,
                  public IFileTrackerListener,
+                 public IValueChangedListener,
                  public IExplorerItemListener,
                  public IProjectManagerListener
 {
@@ -68,10 +72,12 @@ private:
     List<ExplorerItem*> p_items;
     Map<Path, ExplorerItem*> m_pathsToItem;
 
-    UILabel *p_currentPathLabel = nullptr;
     UIButton *p_backButton = nullptr;
+    UISlider *p_iconSizeSlider = nullptr;
+    UILabel *p_currentPathLabel = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
     GameObject *p_itemsContainer = nullptr;
+    UIGridLayout *p_explorerGridLayout = nullptr;
 
     void AddItem(const Path &itemPath);
     void AddItem(ExplorerItem *explorerItem);
@@ -90,6 +96,9 @@ private:
     static void OnShortcutPressed(const Shortcut &shortcut);
 
     bool IsInsideRootPath(const Path &path) const;
+
+    // IValueChangedListener
+    void OnValueChanged(Object *object) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

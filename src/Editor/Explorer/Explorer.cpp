@@ -7,13 +7,16 @@
 #include "Bang/UILabel.h"
 #include "Bang/UIButton.h"
 #include "Bang/UICanvas.h"
+#include "Bang/UISlider.h"
 #include "Bang/Resources.h"
 #include "Bang/Extensions.h"
 #include "Bang/UIGridLayout.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UIInputNumber.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/TextureFactory.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIRendererCacher.h"
@@ -28,9 +31,9 @@
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/EditorFileTracker.h"
-#include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/ExplorerItemFactory.h"
+#include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -58,8 +61,9 @@ Explorer::Explorer()
     toolBarHL->SetPaddingRight(3);
     toolBarHL->SetSpacing(3);
 
+    constexpr int ToolBarHeight = 30;
     UILayoutElement *toolBarLE = toolBar->AddComponent<UILayoutElement>();
-    toolBarLE->SetMinHeight(30);
+    toolBarLE->SetMinHeight(ToolBarHeight);
     toolBarLE->SetFlexibleHeight(0);
 
     // Scroll Panel
@@ -93,15 +97,37 @@ Explorer::Explorer()
     csf->SetHorizontalSizeType(LayoutSizeType::None);
     csf->SetVerticalSizeType(LayoutSizeType::Preferred);
 
-    UIGridLayout *gridLayout = p_itemsContainer->AddComponent<UIGridLayout>();
-    gridLayout->SetCellSize( Vector2i(128) );
-    gridLayout->SetPaddings(10);
-    gridLayout->SetSpacing(10);
+    // Grid layout
+    p_explorerGridLayout = p_itemsContainer->AddComponent<UIGridLayout>();
+    p_explorerGridLayout->SetPaddings(10);
+    p_explorerGridLayout->SetSpacing(10);
 
-    SetCurrentPath( Paths::GetEngineAssetsDir() );
+    // Icon size slider
+    p_iconSizeSlider = GameObjectFactory::CreateUISlider();
+    p_iconSizeSlider->GetInputNumber()->SetDecimalPlaces(0);
+    p_iconSizeSlider->SetMinMaxValues(64, 256);
+    p_iconSizeSlider->GetInputNumber()->GetGameObject()->SetEnabled(false);
+    p_iconSizeSlider->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_iconSizeSlider->SetValue(128);
+
+    UIImageRenderer *eyeImg = GameObjectFactory::CreateUIImage();
+    eyeImg->SetImageTexture(EditorTextureFactory::GetEyeIcon().Get());
+    UILayoutElement *eyeImgLE = eyeImg->GetGameObject()->
+                                        AddComponent<UILayoutElement>();
+    eyeImgLE->SetPreferredSize( Vector2i(20, ToolBarHeight) );
+    eyeImgLE->SetFlexibleSize( Vector2(0,1) );
+
+    UILayoutElement *iconsSizeSliderLE =
+            p_iconSizeSlider->GetGameObject()->AddComponent<UILayoutElement>();
+    iconsSizeSliderLE->SetMinWidth(128);
+    iconsSizeSliderLE->SetFlexibleWidth(0.0f);
+    iconsSizeSliderLE->SetLayoutPriority(2);
 
     toolBar->SetParent(mainVLGo);
     p_backButton->GetGameObject()->SetParent(toolBar);
+    GameObjectFactory::CreateUIVSeparator(LayoutSizeType::Min, 15)->SetParent(toolBar);
+    eyeImg->GetGameObject()->SetParent(toolBar);
+    p_iconSizeSlider->GetGameObject()->SetParent(toolBar);
     dirBar->SetParent(toolBar);
     GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5)->SetParent(mainVLGo);
 
@@ -111,6 +137,8 @@ Explorer::Explorer()
     p_scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
     p_scrollPanel->SetVerticalScrollBarSide(HorizontalSide::Right);
     p_scrollPanel->SetHorizontalScrollEnabled(false);
+
+    SetCurrentPath( Paths::GetEngineAssetsDir() );
 
     Editor::GetInstance()->
             EventEmitter<IEditorListener>::RegisterListener(this);
@@ -462,6 +490,13 @@ void Explorer::OnShortcutPressed(const Shortcut &shortcut)
 bool Explorer::IsInsideRootPath(const Path &path) const
 {
     return path.GetAbsolute().BeginsWith( GetRootPath().GetAbsolute() );
+}
+
+void Explorer::OnValueChanged(Object*)
+{
+    p_explorerGridLayout->SetCellSize( Vector2i(p_iconSizeSlider->GetValue()) );
+    p_explorerGridLayout->ApplyLayout(Axis::Horizontal);
+    p_explorerGridLayout->ApplyLayout(Axis::Vertical);
 }
 
 Explorer *Explorer::GetInstance()
