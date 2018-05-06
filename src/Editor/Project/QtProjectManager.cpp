@@ -1,5 +1,6 @@
 #include "BangEditor/QtProjectManager.h"
 
+#include "Bang/File.h"
 #include "Bang/List.h"
 #include "Bang/Array.h"
 #include "Bang/Paths.h"
@@ -7,17 +8,15 @@
 #include "Bang/SystemUtils.h"
 
 #include "BangEditor/Project.h"
-#include "BangEditor/ProjectManager.h"
 #include "BangEditor/EditorWindow.h"
+#include "BangEditor/ProjectManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
 Path QtProjectManager::GetQtProjectDir()
 {
-    Project *p_proj = ProjectManager::GetCurrentProject();
-    if (!p_proj) { return Path::Empty; }
-    return p_proj->GetProjectDirectory().Append("Project");
+    return Paths::GetProjectDir().Append("QtProject");
 }
 
 Path QtProjectManager::GetQtProjectFilepath()
@@ -47,21 +46,20 @@ void QtProjectManager::CreateQtProjectFile()
 {
     Project *p_proj = ProjectManager::GetCurrentProject();
     Path projectDir = p_proj->GetProjectDirectory();
-    const Path &engineDir = Paths::GetEngineDir(); (void)(engineDir);
-    const Path &projAssetsDir = projectDir.Append("Assets"); (void)(projAssetsDir);
-/*
+    const Path &engineIncludeDir = Paths::GetEngineIncludeDir();
+    const Path &projAssetsDir = projectDir.Append("Assets");
     List<String> headers =
             projAssetsDir.GetFiles(true, {"h"}).To<List, String>();
     List<String> engineHeaders =
-            engineDir.GetFiles(true, {"h"}).To<List, String>();
+            engineIncludeDir.GetFiles(true, {"h"}).To<List, String>();
     List<String> sources =
             projAssetsDir.GetFiles(true, {"cpp"}).To<List, String>();
     List<String> engineSources =
-            engineDir.GetFiles(true, {"cpp"}).To<List, String>();
+            engineIncludeDir.GetFiles(true, {"cpp"}).To<List, String>();
     List<String> projIncPaths =
             projAssetsDir.GetSubDirectories(true).To<List, String>();
 
-    List<Path> engineIncPaths = { Paths::Engine().Append("include") };
+    List<Path> engineIncPaths = Paths::GetEngineIncludeDirs();
     List<String> engineIncPathsStr = engineIncPaths.To<List, String>();
 
     String headersString            = String::Join(headers,           "\n");
@@ -85,7 +83,6 @@ void QtProjectManager::CreateQtProjectFile()
 
     File::Write(qtProjDir.Append(".creator"), "[General]");
     File::Write(qtProjDir.Append(".config"), "");
-    */
 }
 
 void QtProjectManager::OpenBehaviourInQtCreator(const Path &behFilepath)
@@ -99,7 +96,14 @@ void QtProjectManager::OpenBehaviourInQtCreator(const Path &behFilepath)
         args.PushBack(qtProjFilepath.GetAbsolute());
     }
     args.PushBack(behFilepath.GetAbsolute());
-    SystemUtils::System("qtcreator", args);
+
+    bool ok = false;
+    SystemUtils::System("qtcreator", args, nullptr, &ok);
+
+    if (!ok)
+    {
+        SystemUtils::System("xdg-open", {behFilepath.GetAbsolute()});
+    }
 }
 
 QtProjectManager::QtProjectManager()

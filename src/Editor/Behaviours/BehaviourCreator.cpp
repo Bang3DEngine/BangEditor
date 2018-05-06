@@ -5,6 +5,7 @@
 #include "Bang/Extensions.h"
 
 #include "BangEditor/EditorPaths.h"
+#include "BangEditor/QtProjectManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -55,6 +56,8 @@ void BehaviourCreator::CreateNewBehaviour(const Path &dirPath,
 
     File::Write(headerPath, BehaviourCreator::GetNewBehaviourHeaderCode(behaviourName));
     File::Write(sourcePath, BehaviourCreator::GetNewBehaviourSourceCode(behaviourName));
+
+    QtProjectManager::CreateQtProjectFile();
 
     *behaviourHeaderPath = headerPath;
     *behaviourSourcePath = sourcePath;

@@ -13,6 +13,7 @@
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSettings.h"
+#include "BangEditor/QtProjectManager.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/EditorSceneManager.h"
 
@@ -50,6 +51,8 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
     bool sceneHasBeenOpen = currentProject->OpenFirstFoundScene();
     SceneOpenerSaver *sov = SceneOpenerSaver::GetInstance();
     if (!sceneHasBeenOpen && sov) { sov->OnNewScene(); }
+
+    QtProjectManager::CreateQtProjectFile();
 
     return currentProject;
 }

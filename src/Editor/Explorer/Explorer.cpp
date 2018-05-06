@@ -29,6 +29,7 @@
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/QtProjectManager.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/EditorFileTracker.h"
 #include "BangEditor/EditorSceneManager.h"
@@ -123,14 +124,14 @@ Explorer::Explorer()
     iconsSizeSliderLE->SetFlexibleWidth(0.0f);
     iconsSizeSliderLE->SetLayoutPriority(2);
 
-    toolBar->SetParent(mainVLGo);
     p_backButton->GetGameObject()->SetParent(toolBar);
     GameObjectFactory::CreateUIVSeparator(LayoutSizeType::Min, 15)->SetParent(toolBar);
     eyeImg->GetGameObject()->SetParent(toolBar);
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Min, 5)->SetParent(toolBar);
     p_iconSizeSlider->GetGameObject()->SetParent(toolBar);
     dirBar->SetParent(toolBar);
+    toolBar->SetParent(mainVLGo);
     GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5)->SetParent(mainVLGo);
-
     p_scrollPanel->GetGameObject()->SetParent(mainVLGo);
 
     p_scrollPanel->GetScrollArea()->SetContainedGameObject(p_itemsContainer);
@@ -461,10 +462,16 @@ void Explorer::OnItemDoubleClicked(IFocusable *itemFocusable)
     }
     else
     {
-        if (Editor::IsEditingScene() &&
-            itemPath.HasExtension(Extensions::GetSceneExtension()))
+        if (itemPath.HasExtension(Extensions::GetSceneExtension()))
         {
-            SceneOpenerSaver::GetInstance()->OpenSceneInEditor(itemPath);
+            if (Editor::IsEditingScene())
+            {
+                SceneOpenerSaver::GetInstance()->OpenSceneInEditor(itemPath);
+            }
+        }
+        else if (itemPath.HasExtension(Extensions::GetBehaviourExtensions()))
+        {
+            QtProjectManager::OpenBehaviourInQtCreator(itemPath);
         }
     }
 }
@@ -495,8 +502,6 @@ bool Explorer::IsInsideRootPath(const Path &path) const
 void Explorer::OnValueChanged(Object*)
 {
     p_explorerGridLayout->SetCellSize( Vector2i(p_iconSizeSlider->GetValue()) );
-    p_explorerGridLayout->ApplyLayout(Axis::Horizontal);
-    p_explorerGridLayout->ApplyLayout(Axis::Vertical);
 }
 
 Explorer *Explorer::GetInstance()
