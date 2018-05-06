@@ -6,6 +6,7 @@
 
 #include "BangEditor/FIWTexture.h"
 #include "BangEditor/FIWMaterial.h"
+#include "BangEditor/FIWBehaviour.h"
 #include "BangEditor/FIWTextureCubeMap.h"
 #include "BangEditor/FileInspectorWidget.h"
 
@@ -26,6 +27,10 @@ InspectorWidget *FileInspectorWidgetFactory::Create(const Path &path)
     else if (Extensions::Has(path, {Extensions::GetTextureCubeMapExtension()}))
     {
         fiw = GameObject::Create<FIWTextureCubeMap>();
+    }
+    else if (Extensions::Has(path, {Extensions::GetBehaviourExtensions()}))
+    {
+        fiw = GameObject::Create<FIWBehaviour>();
     }
 
     if (fiw)

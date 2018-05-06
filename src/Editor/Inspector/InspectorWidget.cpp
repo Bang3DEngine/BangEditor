@@ -10,6 +10,7 @@
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
+#include "Bang/UIContentSizeFitter.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -147,13 +148,19 @@ void InspectorWidget::AddWidgetInternal(const String &labelContent,
                                                    GetLabelsWidth());
     }
 
-    UILayoutElement *widgetContLE = widgetContainer->AddComponent<UILayoutElement>();
-    widgetContLE->SetPreferredHeight( height );
-    widgetContLE->SetFlexibleSize( Vector2::One );
-    widgetContLE->SetLayoutPriority(1);
+    if (height >= 0)
+    {
+        UILayoutElement *widgetContLE = widgetContainer->AddComponent<UILayoutElement>();
+        widgetContLE->SetPreferredHeight( height );
+        widgetContLE->SetFlexibleSize( Vector2::One );
+        widgetContLE->SetLayoutPriority(1);
+    }
 
     widgetContainer->SetParent( GetWidgetsContainer() );
-    if (label) { label->GetGameObject()->SetParent( widgetContainer ); }
+    if (label)
+    {
+        label->GetGameObject()->SetParent( widgetContainer );
+    }
     GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Flexible, 0.0001f)
                        ->SetParent( widgetContainer );
     widget->SetParent( widgetContainer );
