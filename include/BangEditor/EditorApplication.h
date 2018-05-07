@@ -17,7 +17,9 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class Editor;
 FORWARD class EditorScene;
+FORWARD class EditorDebug;
 FORWARD class EditorPaths;
+FORWARD class EditorResources;
 
 class EditorApplication : public Application
 {
@@ -34,6 +36,7 @@ public:
 private:
     Editor *m_editor = nullptr;
 
+    Debug* CreateDebug() const override;
     Paths* CreatePaths() const override;
     Resources* CreateResources() const override;
 

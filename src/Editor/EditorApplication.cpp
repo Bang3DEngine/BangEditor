@@ -9,6 +9,7 @@
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/Project.h"
+#include "BangEditor/EditorDebug.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorWindow.h"
@@ -57,6 +58,12 @@ void EditorApplication::OpenEditorScene()
 EditorApplication *EditorApplication::GetInstance()
 {
     return SCAST<EditorApplication*>( Application::GetInstance() );
+}
+
+
+Debug *EditorApplication::CreateDebug() const
+{
+    return new EditorDebug();
 }
 
 Paths *EditorApplication::CreatePaths() const

@@ -279,8 +279,8 @@ void EditorCamera::Update()
         GetCamera()->SetClearMode(sceneCam->GetClearMode());
         GetCamera()->SetClearColor(sceneCam->GetClearColor());
         GetCamera()->SetSkyBoxTexture(sceneCam->GetSkyBoxTexture());
-        // GetCamera()->SetSkyBoxTexture(sceneCam->GetSpecularSkyBoxTexture());
-        // GetCamera()->SetSkyBoxTexture(sceneCam->GetDiffuseSkyBoxTexture());
+        // GetCamera()->SetSkyBoxTexture(sceneCam->GetSpecularSkyBoxTexture(), false);
+        // GetCamera()->SetSkyBoxTexture(sceneCam->GetDiffuseSkyBoxTexture(), false);
     }
     else
     {
