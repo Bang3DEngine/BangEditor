@@ -144,7 +144,7 @@ target_include_directories(BangEditor        PRIVATE ${BANG_ENGINE_INCLUDE_DIRS}
 target_include_directories(BangEditorObjects PRIVATE ${BANG_ENGINE_INCLUDE_DIRS} ${BANG_EDITOR_INCLUDE_DIR})
 add_dependencies(BangEditorObjects BangLib BuildDependencies)
 target_link_libraries(BangEditor PRIVATE ${DEPENDENCIES_LIB_PATHS})
-target_link_libraries(Game PRIVATE ${DEPENDENCIES_LIB_PATHS})
+target_link_libraries(Game       PRIVATE ${DEPENDENCIES_LIB_PATHS})
 target_link_libraries(Game       PRIVATE BangLib)
 target_link_libraries(BangEditor PRIVATE BangLib)
 add_clang_tidy(BangEditorObjects)
