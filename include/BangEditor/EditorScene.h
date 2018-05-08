@@ -93,10 +93,11 @@ private:
     UISceneEditContainer *p_sceneEditContainer = nullptr;
     UIScenePlayContainer *p_scenePlayContainer = nullptr;
 
-    UITabContainer *p_leftTabContainer = nullptr;
-    UITabContainer *p_centerTabContainer = nullptr;
-    UITabContainer *p_rightTabContainer = nullptr;
-    UITabContainer *p_botTabContainer = nullptr;
+    UITabContainer *p_topLeftTabContainer = nullptr;
+    UITabContainer *p_topCenterTabContainer = nullptr;
+    UITabContainer *p_topRightTabContainer = nullptr;
+    UITabContainer *p_botLeftTabContainer = nullptr;
+    UITabContainer *p_botRightTabContainer = nullptr;
 
     MenuBar *m_menuBar = nullptr;
     GameObject *m_mainEditorVL = nullptr;

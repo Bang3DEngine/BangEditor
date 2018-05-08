@@ -2,14 +2,19 @@
 
 #include "Bang/Thread.h"
 #include "Bang/UIList.h"
+#include "Bang/UIButton.h"
 #include "Bang/Application.h"
 #include "Bang/UIScrollPanel.h"
+#include "Bang/TextureFactory.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIRendererCacher.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
+
+#include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -42,9 +47,20 @@ Console::Console()
     toolBarLE->SetMinHeight(ToolBarHeight);
     toolBarLE->SetFlexibleHeight(0);
 
+    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Flexible, 1.0f)->
+                       SetParent(toolBar);
+
+    UIButton *clearButton = GameObjectFactory::CreateUIButton("Clear");
+    clearButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
+    {
+        Clear();
+    });
+    clearButton->GetGameObject()->SetParent(toolBar);
+
     p_messageList = GameObjectFactory::CreateUIList();
     // p_messageList->GetScrollPanel()->SetForceHorizontalFit(false);
     p_messageList->GetScrollPanel()->SetForceHorizontalFit(true);
+    p_messageList->GetScrollPanel()->SetVerticalScrollBarSide(HorizontalSide::Right);
     UILayoutElement *listLE = p_messageList->GetGameObject()->
                               AddComponent<UILayoutElement>();
     listLE->SetFlexibleSize( Vector2(1) );
@@ -74,6 +90,12 @@ void Console::AddMessage(const ConsoleMessage &cMsg)
     m_messages.PushBack(cMsg);
 }
 
+void Console::Clear()
+{
+    m_messages.Clear();
+    p_messageList->Clear();
+}
+
 void Console::OnMessage(DebugMessageType msgType, const String &str,
                         int line, const String &fileName)
 {
@@ -99,10 +121,18 @@ ConsoleUIListEntry::ConsoleUIListEntry()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
-    hl->SetChildrenHorizontalStretch(Stretch::Full);
-    hl->SetChildrenVerticalStretch(Stretch::Full);
+    hl->SetChildrenHorizontalStretch(Stretch::None);
+    hl->SetChildrenVerticalStretch(Stretch::None);
+    hl->SetChildrenVerticalAlignment(VerticalAlignment::Top);
     hl->SetPaddings(5);
     hl->SetSpacing(10);
+
+    GameObject *typeIconGo = GameObjectFactory::CreateUIGameObject();
+    p_typeIconImg = typeIconGo->AddComponent<UIImageRenderer>();
+    p_typeIconImg->SetImageTexture( TextureFactory::GetWarningIcon().Get() );
+    UILayoutElement *iconLE = typeIconGo->AddComponent<UILayoutElement>();
+    iconLE->SetMinSize( Vector2i(20) );
+    iconLE->SetFlexibleSize( Vector2::Zero );
 
     GameObject *textGo = GameObjectFactory::CreateUIGameObject();
     p_msgText = textGo->AddComponent<UITextRenderer>();
@@ -110,7 +140,10 @@ ConsoleUIListEntry::ConsoleUIListEntry()
     p_msgText->SetHorizontalAlign(HorizontalAlignment::Left);
     p_msgText->SetWrapping(true);
     p_msgText->SetTextSize(12);
+    UILayoutElement *textLE = textGo->AddComponent<UILayoutElement>();
+    textLE->SetFlexibleSize( Vector2::One );
 
+    typeIconGo->SetParent(this);
     textGo->SetParent(this);
 }
 
@@ -122,4 +155,19 @@ void ConsoleUIListEntry::SetConsoleMessage(const ConsoleMessage &cMsg)
 {
     m_cMsg = cMsg;
     p_msgText->SetContent(cMsg.msgStr);
+
+    Texture2D *iconTex = nullptr;
+    switch (cMsg.msgType)
+    {
+        case DebugMessageType::LOG:
+            iconTex = TextureFactory::GetInfoIcon().Get();
+        break;
+        case DebugMessageType::WARN:
+            iconTex = TextureFactory::GetWarningIcon().Get();
+        break;
+        case DebugMessageType::ERROR:
+            iconTex = TextureFactory::GetErrorIcon().Get();
+        break;
+    }
+    p_typeIconImg->SetImageTexture(iconTex);
 }

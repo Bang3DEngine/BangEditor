@@ -40,6 +40,7 @@ private:
     virtual ~Console();
 
     void AddMessage(const ConsoleMessage &cMsg);
+    void Clear();
 
     // GameObject
     void Update() override;
@@ -63,6 +64,7 @@ public:
 private:
     ConsoleMessage m_cMsg;
     UITextRenderer *p_msgText = nullptr;
+    UIImageRenderer *p_typeIconImg = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

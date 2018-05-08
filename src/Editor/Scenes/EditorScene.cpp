@@ -100,44 +100,50 @@ void EditorScene::Init()
     p_explorer = GameObject::Create<Explorer>();
 
     // Tab containers creation
-    p_leftTabContainer = GameObject::Create<UITabContainer>();
-    UILayoutElement *leftTabContainerLE = p_leftTabContainer->AddComponent<UILayoutElement>();
-    leftTabContainerLE->SetMinSize( Vector2i(300) );
-    leftTabContainerLE->SetFlexibleSize( Vector2(0.0f, 1.0f) );
+    p_topLeftTabContainer = GameObject::Create<UITabContainer>();
+    UILayoutElement *topLeftTabContainerLE = p_topLeftTabContainer->AddComponent<UILayoutElement>();
+    topLeftTabContainerLE->SetMinSize( Vector2i(300) );
+    topLeftTabContainerLE->SetFlexibleSize( Vector2(0.0f, 1.0f) );
 
-    p_centerTabContainer = GameObject::Create<UITabContainer>();
-    UILayoutElement *centerTabContainerLE = p_centerTabContainer->AddComponent<UILayoutElement>();
-    centerTabContainerLE->SetMinSize( Vector2i(500, 250) );
-    centerTabContainerLE->SetFlexibleSize( Vector2(3.0f, 1.0f) );
+    p_topCenterTabContainer = GameObject::Create<UITabContainer>();
+    UILayoutElement *topCenterTabContainerLE = p_topCenterTabContainer->AddComponent<UILayoutElement>();
+    topCenterTabContainerLE->SetMinSize( Vector2i(500, 250) );
+    topCenterTabContainerLE->SetFlexibleSize( Vector2(3.0f, 1.0f) );
 
-    p_rightTabContainer = GameObject::Create<UITabContainer>();
-    UILayoutElement *rightTabContainerLE = p_rightTabContainer->AddComponent<UILayoutElement>();
-    rightTabContainerLE->SetMinSize( Vector2i(400) );
-    rightTabContainerLE->SetFlexibleSize( Vector2(0.0f, 1.0f) );
+    p_topRightTabContainer = GameObject::Create<UITabContainer>();
+    UILayoutElement *topRightTabContainerLE = p_topRightTabContainer->AddComponent<UILayoutElement>();
+    topRightTabContainerLE->SetMinSize( Vector2i(400) );
+    topRightTabContainerLE->SetFlexibleSize( Vector2(0.0f, 1.0f) );
 
-    p_botTabContainer = GameObject::Create<UITabContainer>();
-    UILayoutElement *botTabContainerLE = p_botTabContainer->AddComponent<UILayoutElement>();
-    botTabContainerLE->SetMinSize( Vector2i(250) );
-    botTabContainerLE->SetFlexibleSize( Vector2(1.0f, 1.0f) );
+    p_botLeftTabContainer = GameObject::Create<UITabContainer>();
+    UILayoutElement *botLeftTabContainerLE = p_botLeftTabContainer->AddComponent<UILayoutElement>();
+    botLeftTabContainerLE->SetMinSize( Vector2i(500, 250) );
+    botLeftTabContainerLE->SetFlexibleSize( Vector2(1.0f, 1.0f) );
 
-    p_leftTabContainer->SetParent(topHLGo);
+    p_botRightTabContainer = GameObject::Create<UITabContainer>();
+    UILayoutElement *botRightTabContainerLE = p_botRightTabContainer->AddComponent<UILayoutElement>();
+    botRightTabContainerLE->SetMinSize( Vector2i(250) );
+    botRightTabContainerLE->SetFlexibleSize( Vector2(0.35f, 1.0f) );
+
+    p_topLeftTabContainer->SetParent(topHLGo);
     GameObjectFactory::CreateUIDirLayoutMovableHSeparator()->GetGameObject()->
                        SetParent(topHLGo);
-    p_centerTabContainer->SetParent(topHLGo);
+    p_topCenterTabContainer->SetParent(topHLGo);
     GameObjectFactory::CreateUIDirLayoutMovableHSeparator()->GetGameObject()->
                        SetParent(topHLGo);
-    p_rightTabContainer->SetParent(topHLGo);
-    GameObjectFactory::CreateUIDirLayoutMovableHSeparator()->GetGameObject()->
-                       SetParent(topHLGo);
-    p_botTabContainer->SetParent(botHLGo);
+    p_topRightTabContainer->SetParent(topHLGo);
 
-    p_leftTabContainer->AddTab("Hierarchy", p_hierarchy);
-    p_centerTabContainer->AddTab("Scene", p_sceneEditContainer);
-    p_centerTabContainer->AddTab("Game",  p_scenePlayContainer);
-    p_rightTabContainer->AddTab("Inspector", p_inspector);
-    p_botTabContainer->AddTab("Explorer", p_explorer);
-    p_botTabContainer->AddTab("Console", p_console);
-    p_botTabContainer->SetCurrentTabChild(p_explorer);
+    p_botLeftTabContainer->SetParent(botHLGo);
+    GameObjectFactory::CreateUIDirLayoutMovableHSeparator()->GetGameObject()->
+                       SetParent(botHLGo);
+    p_botRightTabContainer->SetParent(botHLGo);
+
+    p_topLeftTabContainer->AddTab("Hierarchy", p_hierarchy);
+    p_topCenterTabContainer->AddTab("Scene", p_sceneEditContainer);
+    p_topCenterTabContainer->AddTab("Game",  p_scenePlayContainer);
+    p_topRightTabContainer->AddTab("Inspector", p_inspector);
+    p_botLeftTabContainer->AddTab("Explorer", p_explorer);
+    p_botRightTabContainer->AddTab("Console", p_console);
 
     // Editor cam creation
     Camera *cam = AddComponent<Camera>();
@@ -204,7 +210,7 @@ void EditorScene::Update()
             sceneTabName += " (*)";
         }
     }
-    p_centerTabContainer->SetTabTitle(p_sceneEditContainer, sceneTabName);
+    p_topCenterTabContainer->SetTabTitle(p_sceneEditContainer, sceneTabName);
 }
 
 void EditorScene::OnResize(int newWidth, int newHeight)
@@ -322,7 +328,7 @@ EditorClipboard *EditorScene::GetEditorClipboard() const
 
 UITabContainer *EditorScene::GetSceneTabContainer() const
 {
-    return p_centerTabContainer;
+    return p_topCenterTabContainer;
 }
 
 SceneOpenerSaver *EditorScene::GetSceneOpenerSaver() const
@@ -373,11 +379,11 @@ void EditorScene::OnPlayStateChanged(PlayState previousPlayState,
     switch (newPlayState)
     {
         case PlayState::Editing:
-            p_centerTabContainer->SetCurrentTabChild( p_sceneEditContainer );
+            p_topCenterTabContainer->SetCurrentTabChild( p_sceneEditContainer );
         break;
 
         case PlayState::Playing:
-            p_centerTabContainer->SetCurrentTabChild( p_scenePlayContainer );
+            p_topCenterTabContainer->SetCurrentTabChild( p_scenePlayContainer );
         break;
 
         default: break;
