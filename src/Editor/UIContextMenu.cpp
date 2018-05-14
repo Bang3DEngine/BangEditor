@@ -68,6 +68,7 @@ bool UIContextMenu::IsMenuBeingShown() const
 
 void UIContextMenu::AddButtonPart(GameObject *part)
 {
+    part->EventEmitter<IDestroyListener>::RegisterListener(this);
     m_parts.PushBack(part);
 }
 
@@ -79,8 +80,11 @@ void UIContextMenu::SetCreateContextMenuCallback(
 
 void UIContextMenu::OnDestroyed(EventEmitter<IDestroyListener> *object)
 {
-    ASSERT(p_menu && object == p_menu);
-    p_menu = nullptr;
+    m_parts.Remove( DCAST<GameObject*>(object) );
+    if (p_menu && object == p_menu)
+    {
+        p_menu = nullptr;
+    }
 }
 
 // ContextMenu

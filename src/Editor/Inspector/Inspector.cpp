@@ -135,13 +135,17 @@ void Inspector::OnDestroyed(EventEmitter<IDestroyListener>*)
 
 void Inspector::OnExplorerPathSelected(const Path &path)
 {
-    InspectorWidget *fiw = FileInspectorWidgetFactory::Create(path);
-    if (fiw || path.IsFile()) { Clear(); }
-    if (fiw)
+    if (m_currentOpenPath != path)
     {
-        p_titleSeparator->SetEnabled(true);
-        p_titleText->SetContent(path.GetNameExt());
-        AddWidget(fiw);
+        InspectorWidget *fiw = FileInspectorWidgetFactory::Create(path);
+        if (fiw || path.IsFile()) { Clear(); }
+        if (fiw)
+        {
+            p_titleSeparator->SetEnabled(true);
+            p_titleText->SetContent(path.GetNameExt());
+            m_currentOpenPath = path;
+            AddWidget(fiw);
+        }
     }
 }
 
@@ -206,7 +210,7 @@ void Inspector::AddWidget(InspectorWidget *widget, int _index)
 {
     int index = _index >= 0 ? _index : m_widgets.Size();
 
-    m_widgets.Insert(index, widget);
+    m_widgets.Insert(widget, index);
     Color bgColor = Color::LightGray.WithValue(0.9f);
     widget->SetBackgroundColor(bgColor);
     widget->SetParent( GetWidgetsContainer(), index );
@@ -243,4 +247,5 @@ void Inspector::Clear()
         GetCurrentGameObject()->EventEmitter<IComponentListener>::UnRegisterListener(this);
         p_currentGameObject = nullptr;
     }
+    m_currentOpenPath = Path::Empty;
 }

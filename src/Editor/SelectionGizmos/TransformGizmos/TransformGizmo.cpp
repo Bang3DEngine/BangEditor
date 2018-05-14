@@ -131,13 +131,13 @@ void TransformGizmo::Render(RenderPass rp, bool renderChildren)
 
 void TransformGizmo::OnBeginRender(Scene *scene)
 {
-    p_worldGizmoContainer->SetParent(this);
+    // p_worldGizmoContainer->SetParent(this);
     p_canvasGizmoContainer->SetParent(scene);
 }
 
 void TransformGizmo::OnEndRender(Scene *)
 {
-    p_worldGizmoContainer->SetParent(this);
+    // p_worldGizmoContainer->SetParent(this);
     p_canvasGizmoContainer->SetParent(this);
 }
 

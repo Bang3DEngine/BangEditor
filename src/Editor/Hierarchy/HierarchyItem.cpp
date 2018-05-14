@@ -5,6 +5,7 @@
 #include "Bang/UILabel.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/UIDragDroppable.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
@@ -25,7 +26,7 @@ HierarchyItem::HierarchyItem()
     SetName("HierarchyItem");
 
     GameObjectFactory::CreateUIGameObjectInto(this);
-    AddComponent<UIFocusable>();
+    UIFocusable *focusable = AddComponent<UIFocusable>();
 
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
@@ -76,6 +77,7 @@ void HierarchyItem::SetReferencedGameObject(GameObject *referencedGameObject)
         SetText( GetReferencedGameObject()->GetName() );
         GetReferencedGameObject()->
                         EventEmitter<INameListener>::RegisterListener(this);
+        SetName("HItem_" + GetReferencedGameObject()->GetName());
     }
 }
 

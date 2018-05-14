@@ -4,6 +4,7 @@
 #include "Bang/UILabel.h"
 #include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
+#include "Bang/TextureFactory.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -29,8 +30,7 @@ void InspectorWidget::Init()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     p_bgRenderer = AddComponent<UIImageRenderer>();
-    p_bgRenderer->SetImageTexture( Resources::Load<Texture2D>(
-                                        EPATH("Images/RRect_9s.png")).Get() );
+    p_bgRenderer->SetImageTexture( TextureFactory::Get9SliceRoundRectTexture().Get() );
     p_bgRenderer->SetMode(UIImageRenderer::Mode::SLICE_9);
     p_bgRenderer->SetTint(Color::Zero);
 

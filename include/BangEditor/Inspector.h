@@ -57,6 +57,7 @@ private:
     List<InspectorWidget*> m_widgets;
     Map<Object*, InspectorWidget*> m_objToWidget;
 
+    Path m_currentOpenPath = Path::Empty;
     GameObject *p_currentGameObject = nullptr;
     UIVerticalLayout *p_mainVL   = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;

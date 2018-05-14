@@ -63,6 +63,7 @@ Hierarchy::Hierarchy()
     GetUITree()->SetSelectionCallback(
                           [this](GOItem *item, UIList::Action action)
                           { this->TreeSelectionCallback(item, action); } );
+    GetUITree()->EventEmitter<IUITreeListener>::RegisterListener(this);
     treeGo->SetParent(rendererCacherContainer);
 
     Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
@@ -217,6 +218,21 @@ void Hierarchy::OnCreatePrefab(HierarchyItem *item)
     Explorer::GetInstance()->ForceCheckFileChanges();
 }
 
+void Hierarchy::OnItemMoved(GameObject *item,
+                            GameObject *oldParentItem, int oldIndexInsideParent,
+                            GameObject *newParentItem, int newIndexInsideParent)
+{
+    IUITreeListener::OnItemMoved(item, oldParentItem, oldIndexInsideParent,
+                                 newParentItem, newIndexInsideParent);
+
+    SetReceiveEvents(false);
+    GameObject *movedGo = GetGameObjectFromItem(item);
+    GameObject *newParent = GetGameObjectFromItem(newParentItem);
+    if (!newParent) { newParent = movedGo->GetScene(); }
+    movedGo->SetParent(newParent, newIndexInsideParent);
+    SetReceiveEvents(true);
+}
+
 void Hierarchy::OnSceneLoaded(Scene *scene, const Path&)
 {
     Clear();
@@ -312,7 +328,7 @@ HierarchyItem* Hierarchy::GetItemFromGameObject(GameObject *go) const
 GameObject *Hierarchy::GetGameObjectFromItem(GOItem *item) const
 {
     if (!item) { return nullptr; }
-    HierarchyItem *hItem = Cast<HierarchyItem*>(item);
+    HierarchyItem *hItem = SCAST<HierarchyItem*>(item);
     return hItem->GetReferencedGameObject();
 }
 

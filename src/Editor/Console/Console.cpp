@@ -86,8 +86,8 @@ void Console::AddMessage(const ConsoleMessage &cMsg)
     ConsoleUIListEntry *entryGo = GameObject::Create<ConsoleUIListEntry>();
     entryGo->SetConsoleMessage(cMsg);
     p_messageList->AddItem(entryGo);
-
     m_messages.PushBack(cMsg);
+    p_messageList->ScrollToEnd();
 }
 
 void Console::Clear()

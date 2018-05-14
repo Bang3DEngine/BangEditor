@@ -4,6 +4,7 @@
 #include "Bang/Map.h"
 #include "Bang/UIList.h"
 #include "Bang/SceneManager.h"
+#include "Bang/IUITreeListener.h"
 #include "Bang/IChildrenListener.h"
 
 #include "BangEditor/Editor.h"
@@ -23,7 +24,8 @@ class Hierarchy : public GameObject,
                   public IEditorListener,
                   public IDestroyListener,
                   public ISceneManagerListener,
-                  public IHierarchyItemListener
+                  public IHierarchyItemListener,
+                  public IUITreeListener
 {
     GAMEOBJECT_EDITOR(Hierarchy);
 
@@ -54,6 +56,12 @@ public:
     virtual void OnPaste(HierarchyItem *item) override;
     virtual void OnDuplicate(HierarchyItem *item) override;
     virtual void OnCreatePrefab(HierarchyItem *item) override;
+
+    // IUITreeListener
+    virtual void OnItemMoved(GameObject *item,
+                             GameObject *oldParentItem, int oldIndexInsideParent,
+                             GameObject *newParentItem, int newIndexInsideParent)
+                             override;
 
     // ISceneManagerListener
     void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
