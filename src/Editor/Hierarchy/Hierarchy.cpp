@@ -23,6 +23,7 @@
 
 #include "BangEditor/Explorer.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/UIContextMenu.h"
 #include "BangEditor/HierarchyItem.h"
 #include "BangEditor/EditorClipboard.h"
 #include "BangEditor/HideInHierarchy.h"
@@ -69,6 +70,14 @@ Hierarchy::Hierarchy()
     Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
     EditorSceneManager::GetActive()->
             EventEmitter<ISceneManagerListener>::RegisterListener(this);
+
+    UIFocusable *focusable = AddComponent<UIFocusable>();
+    p_contextMenu = AddComponent<UIContextMenu>();
+    p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
+    {
+        OnCreateContextMenu(menuRootItem);
+    });
+    p_contextMenu->AddButtonPart(this);
 
     ShortcutManager::RegisterShortcut(Shortcut(Key::F2, "Rename"),
                                       &Hierarchy::OnShortcutPressed);
@@ -141,7 +150,12 @@ void Hierarchy::OnGameObjectSelected(GameObject *selectedGameObject)
 void Hierarchy::OnCreateEmpty(HierarchyItem *item)
 {
     GameObject *empty = GameObjectFactory::CreateGameObjectNamed("Empty");
-    empty->SetParent( item->GetReferencedGameObject() );
+
+    GameObject *parent = nullptr;
+    if (item) { parent = item->GetReferencedGameObject(); }
+    else { parent = EditorSceneManager::GetOpenScene(); }
+
+    if (parent) { empty->SetParent(parent); }
 }
 
 void Hierarchy::OnRename(HierarchyItem *item)
@@ -173,26 +187,19 @@ void Hierarchy::OnPaste(HierarchyItem *item)
 {
     if (!EditorClipboard::HasCopiedGameObject()) { return; }
 
+    bool pastingDirectlyOverInspector = !item;
     GameObject *pastingOverGo = item ? item->GetReferencedGameObject() :
                                        EditorSceneManager::GetOpenScene();
+    if (!pastingOverGo) { return; }
 
-    int pastingOverIndex = pastingOverGo ?
-                              pastingOverGo->GetChildren().IndexOf(pastingOverGo) :
-                              -1;
+    int pastingOverIndex = pastingDirectlyOverInspector ?
+                 pastingOverGo->GetChildren().Size() :
+                (pastingOverGo->GetChildren().IndexOf(pastingOverGo + 1));
 
     GameObject *original = EditorClipboard::GetCopiedGameObject();
     GameObject *clone = original->Clone();
     clone->SetName( GameObjectFactory::GetGameObjectDuplicateName(original) );
-    clone->SetParent(pastingOverGo, pastingOverIndex+1);
-
-    // Collapse as clone
-    /*
-    Hierarchy *h = Hierarchy::GetInstance();
-    HierarchyItem *originalItem = h->GetItemFromGameObject(original);
-    HierarchyItem *cloneItem = h->GetItemFromGameObject(clone);
-    bool isOriginalCollapsed = h->GetUITree()->IsItemCollapsed(originalItem);
-    h->GetUITree()->SetItemCollapsed(cloneItem, isOriginalCollapsed);
-    */
+    clone->SetParent(pastingOverGo, pastingOverIndex);
 
     // Auto-select
     Editor::SelectGameObject(clone);
@@ -231,6 +238,23 @@ void Hierarchy::OnItemMoved(GameObject *item,
     if (!newParent) { newParent = movedGo->GetScene(); }
     movedGo->SetParent(newParent, newIndexInsideParent);
     SetReceiveEvents(true);
+}
+
+void Hierarchy::OnCreateContextMenu(MenuItem *menuRootItem)
+{
+    menuRootItem->SetFontSize(12);
+
+    MenuItem *createEmpty = menuRootItem->AddItem("Create Empty");
+    createEmpty->SetSelectedCallback([this](MenuItem*)
+    {
+        OnCreateEmpty(nullptr);
+    });
+
+    menuRootItem->AddSeparator();
+
+    MenuItem *paste = menuRootItem->AddItem("Paste");
+    paste->SetSelectedCallback([this](MenuItem*) { OnPaste(nullptr); });
+    paste->SetOverAndActionEnabled( EditorClipboard::HasCopiedGameObject() );
 }
 
 void Hierarchy::OnSceneLoaded(Scene *scene, const Path&)

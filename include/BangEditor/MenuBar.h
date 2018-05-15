@@ -28,6 +28,8 @@ public:
     MenuItem* AddItem();
     MenuItem* GetItem(int i);
 
+    static void CreateComponentsMenuInto(MenuItem *rootItem);
+
     static constexpr int GetFixedHeight() { return 18; }
 
 protected:

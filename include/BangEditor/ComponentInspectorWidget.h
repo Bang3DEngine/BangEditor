@@ -51,7 +51,9 @@ private:
     UITextRenderer *p_titleText = nullptr;
     UICheckBox *p_enabledCheckBox = nullptr;
 
+    // UIContextMenu
     virtual void OnCreateContextMenu(MenuItem *menuRootItem);
+
     void MoveComponent(Component *comp, int offset);
 
     virtual bool MustShowEnabledCheckbox() const;

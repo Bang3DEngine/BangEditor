@@ -77,16 +77,11 @@ MenuItem::MenuItem(MenuItemType itemType)
     childrenListGo->SetName("ChildrenList");
     childrenListGo->SetParent(this);
 
-    RectTransform *contRT = childrenListGo->GetRectTransform();
-    constexpr float OverlapEpsilon = 0.005f;
-    const bool isTop = (itemType == MenuItemType::Top);
-    contRT->SetAnchors(isTop ? Vector2(-1 + OverlapEpsilon, -1 + OverlapEpsilon) :
-                               Vector2( 1 - OverlapEpsilon,  1 - OverlapEpsilon));
-    contRT->SetPivotPosition(Vector2(-1, 1));
-
     UIContentSizeFitter *csf = childrenListGo->AddComponent<UIContentSizeFitter>();
     csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
     csf->SetVerticalSizeType(LayoutSizeType::Preferred);
+
+    AdjustToBeInsideScreen();
 
     childrenListGo->AddComponent<UILayoutIgnorer>();
     GetChildrenList()->SetSelectionCallback(&MenuItem::OnListSelectionCallback);
@@ -100,25 +95,77 @@ MenuItem::~MenuItem()
 
 }
 
+MenuItem* MenuItem::GetTopOrRootItem() const
+{
+    if (GetItemType() == MenuItemType::Root ||
+        GetItemType() == MenuItemType::Top) { return const_cast<MenuItem*>(this); }
+    return GetParentItem() ? GetParentItem()->GetTopOrRootItem() : nullptr;
+}
+
 bool MenuItem::IsSelected() const
 {
     switch (GetItemType())
     {
         case MenuItemType::Root: return true;
-        case MenuItemType::Top: return IsForcedShow();
+        case MenuItemType::Top:  return IsForcedShow();
         case MenuItemType::Normal:
         {
             MenuItem *parentItem = GetParentItem();
             if (!parentItem) { return false; }
-            return parentItem->GetChildrenList()->GetSelectedItem() == this;;
+            return parentItem->GetChildrenList()->GetSelectedItem() == this;
         }
     }
     return true;
 }
 
+void MenuItem::AdjustToBeInsideScreen()
+{
+    MenuItem *topOrRootRT = GetTopOrRootItem();
+    if (!topOrRootRT) { return; }
+
+    RectTransform *topRT = topOrRootRT->GetRectTransform();
+    AARect topRectNDC = topRT->GetViewportAARectNDC();
+    RectTransform *thisListRT = GetChildrenList()->GetGameObject()->GetRectTransform();
+
+    const bool isTop = (GetItemType() == MenuItemType::Top);
+    if (isTop)
+    {
+        const Vector2 OverlapEpsilon(0.005f);
+        thisListRT->SetAnchors(Vector2(-1,-1) + OverlapEpsilon);
+        thisListRT->SetPivotPosition(Vector2(-1, 1));
+    }
+    else
+    {
+        Vector2 anchors = Vector2::Zero;
+        Vector2 pivotPos = thisListRT->GetPivotPosition();
+        for (int axis = 0; axis < 2; ++axis) // X and Y
+        {
+            // Avoid side where it overflows. If it overflows both, just pick 1
+            if (topRectNDC.GetCenter()[axis] > 0.0f)
+            {
+                pivotPos[axis] = 1.0f;
+                anchors[axis] = -1;
+            }
+            else
+            {
+                pivotPos[axis] = -1.0f;
+                anchors[axis] = 1;
+            }
+        }
+        thisListRT->SetAnchors(anchors * Vector2(1,-1));
+        thisListRT->SetPivotPosition(pivotPos);
+    }
+
+    // TODO: Fix UIContentSizeFitter
+    GetChildrenList()->GetGameObject()->GetComponent<UIContentSizeFitter>()->ApplyLayout(Axis::Horizontal);
+    GetChildrenList()->GetGameObject()->GetComponent<UIContentSizeFitter>()->ApplyLayout(Axis::Vertical);
+}
+
 void MenuItem::Update()
 {
     GameObject::Update();
+
+    AdjustToBeInsideScreen();
 
     const bool mustDisplayChildren = MustDisplayChildren();
     GetChildrenList()->GetGameObject()->SetEnabled(mustDisplayChildren);

@@ -7,6 +7,7 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UILabel;
+FORWARD class MenuItem;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
 FORWARD class UILayoutElement;

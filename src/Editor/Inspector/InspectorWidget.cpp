@@ -169,7 +169,6 @@ void InspectorWidget::AddWidgetInternal(const String &labelContent,
     p_widgets.PushBack(widget);
 }
 
-
 void InspectorWidget::SetWidgetEnabled(GameObject *widget, bool enabled)
 {
     widget->GetParent()->SetEnabled( enabled );

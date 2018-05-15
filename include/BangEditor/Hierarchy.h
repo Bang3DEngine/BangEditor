@@ -63,6 +63,9 @@ public:
                              GameObject *newParentItem, int newIndexInsideParent)
                              override;
 
+    // UIContextMenu
+    void OnCreateContextMenu(MenuItem *menuRootItem);
+
     // ISceneManagerListener
     void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
 
@@ -73,6 +76,7 @@ public:
 
 private:
     UITree *p_tree = nullptr;
+    UIContextMenu *p_contextMenu = nullptr;
     Map<GameObject*, HierarchyItem*> m_gameObjectToItem;
 
     void TreeSelectionCallback(GOItem *item, UIList::Action action);

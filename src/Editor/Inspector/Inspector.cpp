@@ -8,6 +8,7 @@
 #include "Bang/Material.h"
 #include "Bang/Selection.h"
 #include "Bang/GLUniforms.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/SceneManager.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
@@ -20,7 +21,11 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIContentSizeFitter.h"
 
+#include "BangEditor/MenuBar.h"
+#include "BangEditor/MenuItem.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/UIContextMenu.h"
+#include "BangEditor/EditorClipboard.h"
 #include "BangEditor/InspectorWidget.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/ComponentInspectorWidget.h"
@@ -95,6 +100,14 @@ Inspector::Inspector()
     p_titleSeparator->SetParent(mainVLGo);
     scrollPanel->GetGameObject()->SetParent(mainVLGo);
 
+    UIFocusable *focusable = AddComponent<UIFocusable>();
+    p_contextMenu = AddComponent<UIContextMenu>();
+    p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
+    {
+        OnCreateContextMenu(menuRootItem);
+    });
+    p_contextMenu->AddButtonPart(this);
+
     // Add a bit of margin below...
     GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Min, 40)->SetParent(
                                                                GetWidgetsContainer());
@@ -131,6 +144,29 @@ void Inspector::OnSceneLoaded(Scene*, const Path &)
 void Inspector::OnDestroyed(EventEmitter<IDestroyListener>*)
 {
     Clear();
+}
+
+void Inspector::OnCreateContextMenu(MenuItem *menuRootItem)
+{
+    menuRootItem->SetFontSize(12);
+
+    if (GetCurrentGameObject())
+    {
+        MenuItem *addComp = menuRootItem->AddItem("Add Component");
+        MenuBar::CreateComponentsMenuInto(addComp);
+        addComp->SetSelectedCallback([this](MenuItem*){});
+
+        // menuRootItem->AddSeparator();
+
+        MenuItem *paste = menuRootItem->AddItem("Paste");
+        paste->SetSelectedCallback([this](MenuItem*)
+        {
+            Component *copiedComp = EditorClipboard::GetCopiedComponent();
+            Component *newComponent = copiedComp->Clone();
+            GetCurrentGameObject()->AddComponent(newComponent);
+        });
+        paste->SetOverAndActionEnabled( (EditorClipboard::HasCopiedComponent()) );
+    }
 }
 
 void Inspector::OnExplorerPathSelected(const Path &path)

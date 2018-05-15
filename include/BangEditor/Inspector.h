@@ -17,6 +17,8 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class MenuItem;
+FORWARD class UIContextMenu;
 FORWARD class InspectorWidget;
 
 class Inspector : public GameObject,
@@ -63,6 +65,7 @@ private:
     UIScrollPanel *p_scrollPanel = nullptr;
     UITextRenderer *p_titleText = nullptr;
     GameObject *p_titleSeparator = nullptr;
+    UIContextMenu *p_contextMenu = nullptr;
 
     GameObject* GetWidgetsContainer() const;
     UIVerticalLayout *GetMainVL() const;
@@ -73,6 +76,9 @@ private:
     void RemoveWidget(InspectorWidget *widget);
     void RemoveWidget(int index);
     void Clear();
+
+    // UIContextMenu
+    virtual void OnCreateContextMenu(MenuItem *menuRootItem);
 };
 
 NAMESPACE_BANG_EDITOR_END

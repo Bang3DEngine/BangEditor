@@ -32,7 +32,7 @@ void UIContextMenu::OnUpdate()
 
         for (GameObject *part : m_parts)
         {
-            if (UICanvas::GetActive(this)->IsMouseOver(part, true))
+            if (UICanvas::GetActive(this)->IsMouseOver(part, false))
             {
                 ShowMenu();
                 break;
@@ -58,6 +58,11 @@ void UIContextMenu::ShowMenu()
         }
         p_menu->EventEmitter<IDestroyListener>::RegisterListener(this);
         p_menu->SetParent( EditorSceneManager::GetEditorScene() );
+    }
+
+    if (p_menu->GetRootItem()->GetChildrenItems().IsEmpty())
+    {
+        GameObject::Destroy(p_menu);
     }
 }
 
@@ -99,8 +104,6 @@ ContextMenu::ContextMenu()
     Vector2 mousePosNDC = Input::GetMousePositionNDC();
     rt->SetAnchors( mousePosNDC );
     rt->TranslateLocal( Vector3(0, 0, -0.001f) );
-    rt->SetPivotPosition( Vector2(-1, 1) );
-    AdjustToBeInsideScreen();
 
     UIContentSizeFitter *csf = GetRootItem()->AddComponent<UIContentSizeFitter>();
     csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
@@ -114,37 +117,6 @@ ContextMenu::ContextMenu()
     m_justCreated = true;
 }
 
-void ContextMenu::AdjustToBeInsideScreen()
-{
-    RectTransform *rt = GetRootItem()->GetRectTransform();
-    RectTransform *listRT = GetRootItem()->GetChildrenList()->GetGameObject()->
-                            GetRectTransform();
-
-    Vector2 pivotPos = listRT->GetPivotPosition();
-
-    AARect allRect ( GetRootItem()->GetRectTransform()->GetViewportAARectNDC() );
-    List<GameObject*> menuChildren = GetRootItem()->GetChildrenRecursively();
-    for (GameObject *child : menuChildren)
-    {
-        RectTransform *crt = child->GetRectTransform();
-        if (crt) { allRect = AARect::Union(allRect,
-                                           AARect( crt->GetViewportAARectNDC() )); }
-    }
-
-    for (int axis = 0; axis < 2; ++axis) // X and Y
-    {
-        // Avoid side where it overflows.
-        // If it overflows both, just pick 1
-        bool overflowingMax = ((rt->GetAnchorMax() + allRect.GetSize())[axis] >  1.0f);
-        bool overflowingMin = ((rt->GetAnchorMin() - allRect.GetSize())[axis] < -1.0f);
-        if      (overflowingMax && overflowingMin) { pivotPos[axis] =  1.0f; }
-        else if (overflowingMax)                   { pivotPos[axis] =  1.0f; }
-        else if (overflowingMin)                   { pivotPos[axis] = -1.0f; }
-    }
-
-    listRT->SetPivotPosition(pivotPos);
-}
-
 void ContextMenu::Update()
 {
     GameObject::Update();
@@ -152,14 +124,12 @@ void ContextMenu::Update()
     if (Input::GetMouseButtonDown(MouseButton::Right) ||
         Input::GetMouseButtonDown(MouseButton::Left))
     {
-        if (!m_justCreated &&
-            !GetRootItem()->GetRectTransform()->IsMouseOver(true))
+        if (!m_justCreated && !GetRootItem()->GetRectTransform()->IsMouseOver(true))
         {
             GameObject::Destroy(this);
         }
     }
     m_justCreated = false;
-    AdjustToBeInsideScreen();
 }
 
 MenuItem *ContextMenu::GetRootItem() const

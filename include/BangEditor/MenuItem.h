@@ -80,7 +80,9 @@ private:
     UIImageRenderer *p_topBg = nullptr;
     UIImageRenderer *p_rightArrow = nullptr;
 
+    MenuItem *GetTopOrRootItem() const;
     bool IsSelected() const;
+    void AdjustToBeInsideScreen();
     static void OnListSelectionCallback(GameObject *item, UIList::Action action);
 };
 
