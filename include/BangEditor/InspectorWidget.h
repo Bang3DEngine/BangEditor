@@ -7,7 +7,6 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UILabel;
-FORWARD class MenuItem;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
 FORWARD class UILayoutElement;
@@ -15,6 +14,8 @@ FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
+
+FORWARD class MenuItem;
 
 class InspectorWidget : public GameObject
 {

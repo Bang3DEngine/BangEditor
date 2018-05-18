@@ -290,7 +290,7 @@ Hierarchy *Hierarchy::GetInstance()
 
 void Hierarchy::TreeSelectionCallback(GOItem *item, UIList::Action action)
 {
-    HierarchyItem *hItem = Cast<HierarchyItem*>(item);
+    HierarchyItem *hItem = SCAST<HierarchyItem*>(item);
     hItem->OnSelectionCallback(action);
 }
 

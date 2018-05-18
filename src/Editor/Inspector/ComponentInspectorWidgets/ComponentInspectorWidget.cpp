@@ -11,6 +11,7 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 
+#include "BangEditor/MenuItem.h"
 #include "BangEditor/EditorClipboard.h"
 #include "BangEditor/EditorTextureFactory.h"
 

@@ -23,17 +23,17 @@ class EditorCamera : public GameObject
 public:
     EditorCamera();
     virtual ~EditorCamera();
-
+    
     // GameObject
     void OnStart() override;
     void Update() override;
-
+    
     void AlignViewWithGameObject(GameObject *selected);
     void SwitchProjectionModeTo(bool mode3D);
     void StartLookAt(GameObject *lookAtFocus);
-
+    
     Camera *GetCamera() const;
-
+    
     static EditorCamera *GetInstance();
 
 private:

@@ -59,13 +59,13 @@ void RectTransformCornerSelectionGizmo::Update()
             m_startMarginRightTop = refRT->GetMarginRightTop();
         }
 
-        Vector2 startGrabMousePosLocal =
-                     refRT->FromViewportPointToLocalPoint(m_startGrabMousePos);
-        Vector2 mousePosLocal = refRT->FromViewportPointToLocalPoint(mousePos);
+        Vector2i startGrabMousePosLocal
+                     ( refRT->FromViewportPointToLocalPoint(m_startGrabMousePos) );
+        Vector2i mousePosLocal (refRT->FromViewportPointToLocalPoint(mousePos));
 
-        Vector2 displacement (mousePos - m_startGrabMousePos);
-        Vector2 displacementLocal = mousePosLocal - startGrabMousePosLocal;
-        Vector2 dispDir = displacementLocal.NormalizedSafe();
+        Vector2i displacement (mousePos - m_startGrabMousePos);
+        Vector2i displacementLocal = mousePosLocal - startGrabMousePosLocal;
+        Vector2i dispDir = displacementLocal.NormalizedSafe();
         displacement = dispDir * displacement.Length();
 
         Vector2i newMarginLeftBot  = m_startMarginLeftBot;

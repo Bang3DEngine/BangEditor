@@ -45,7 +45,7 @@ void CIWPostProcessEffect::UpdateFromReference()
 {
     PostProcessEffect *ppe = GetPostProcessEffect();
 
-    p_priorityInput->SetValue( ppe->GetPriority() );
+    p_priorityInput->SetValue( SCAST<float>( ppe->GetPriority() ) );
     p_fragmentShaderInput->SetPath( ppe->GetPostProcessShaderFilepath() );
     p_typeComboBox->SetSelectionByValue( SCAST<int>(ppe->GetType()) );
 }
@@ -63,7 +63,7 @@ void CIWPostProcessEffect::OnValueChanged(Object *object)
 
     ppe->SetType(
         SCAST<PostProcessEffect::Type>(p_typeComboBox->GetSelectedValue()) );
-    ppe->SetPriority( p_priorityInput->GetValue() );
+    ppe->SetPriority( SCAST<int>( p_priorityInput->GetValue() ) );
 
     if (p_fragmentShaderInput->GetPath().IsFile())
     {

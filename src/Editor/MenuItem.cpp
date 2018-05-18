@@ -48,7 +48,7 @@ MenuItem::MenuItem(MenuItemType itemType)
         p_text = textGo->AddComponent<UITextRenderer>();
         GetText()->SetContent("MenuItem");
         GetText()->SetTextColor(Color::Black);
-        GetText()->SetTextSize( GetFontSize() );
+        GetText()->SetTextSize( SCAST<int>(GetFontSize()) );
         GetText()->SetVerticalAlign(VerticalAlignment::Center);
         GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
 
@@ -231,7 +231,10 @@ void MenuItem::SetFontSize(uint fontSize)
     {
         m_fontSize = fontSize;
         List<UITextRenderer*> texts = GetComponentsInChildren<UITextRenderer>();
-        for (UITextRenderer *text : texts) { text->SetTextSize(GetFontSize()); }
+        for (UITextRenderer *text : texts) 
+        { 
+            text->SetTextSize( SCAST<int>(GetFontSize()) );
+        }
     }
 }
 
@@ -283,7 +286,7 @@ MenuItem *MenuItem::AddItem(const String &text)
 {
     MenuItem *newItem = GameObject::Create<MenuItem>(MenuItemType::Normal);
     newItem->GetText()->SetContent(text);
-    newItem->GetText()->SetTextSize(GetFontSize());
+    newItem->GetText()->SetTextSize( SCAST<int>(GetFontSize()) );
     newItem->SetName(text);
     newItem->p_parentItem = this;
     AddItem(newItem);
@@ -360,7 +363,7 @@ UITextRenderer *MenuItem::GetText() const { return p_text; }
 UIFocusable *MenuItem::GetFocusable() const { return p_focusable; }
 MenuItem::MenuItemType MenuItem::GetItemType() const { return m_itemType; }
 bool MenuItem::GetDestroyOnClose() const { return m_destroyOnClose; }
-float MenuItem::GetFontSize() const { return m_fontSize; }
+uint MenuItem::GetFontSize() const { return m_fontSize; }
 bool MenuItem::IsForcedShow() const { return m_forcedShow; }
 MenuItem *MenuItem::GetParentItem() const { return p_parentItem; }
 const List<MenuItem *> &MenuItem::GetChildrenItems() const { return p_childrenItems; }

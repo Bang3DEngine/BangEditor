@@ -451,8 +451,8 @@ ExplorerItem *Explorer::GetItemFromPath(const Path &path) const
 
 void Explorer::OnItemDoubleClicked(IFocusable *itemFocusable)
 {
-    GameObject *itemGo = Cast<UIFocusable*>(itemFocusable)->GetGameObject();
-    ExplorerItem *expItem = Cast<ExplorerItem*>(itemGo);
+    GameObject *itemGo = SCAST<UIFocusable*>(itemFocusable)->GetGameObject();
+    ExplorerItem *expItem = SCAST<ExplorerItem*>(itemGo);
     ASSERT(expItem);
 
     const Path itemPath = expItem->GetPath();
@@ -501,7 +501,8 @@ bool Explorer::IsInsideRootPath(const Path &path) const
 
 void Explorer::OnValueChanged(Object*)
 {
-    p_explorerGridLayout->SetCellSize( Vector2i(p_iconSizeSlider->GetValue()) );
+    p_explorerGridLayout->SetCellSize( 
+        Vector2i( SCAST<int>( p_iconSizeSlider->GetValue() ) ) );
 }
 
 Explorer *Explorer::GetInstance()

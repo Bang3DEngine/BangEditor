@@ -39,8 +39,8 @@ if (NOT DEFINED BANG_EDITOR_ROOT_DEFINE)
     file(RELATIVE_PATH BANG_EDITOR_ROOT_DEFINE ${EXECUTABLE_OUTPUT_PATH} ${BANG_EDITOR_ROOT})
 endif()
 
-include(${BANG_ENGINE_ROOT}/Build/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
-include(${BANG_ENGINE_ROOT}/Build/CMakeIncludes/CMakeMacros.cmake REQUIRED)
+include(${BANG_ENGINE_ROOT}/Compile/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
+include(${BANG_ENGINE_ROOT}/Compile/CMakeIncludes/CMakeMacros.cmake REQUIRED)
 #=================================================================
 #=================================================================
 #=================================================================
@@ -89,7 +89,7 @@ file(GLOB_RECURSE OTHER_FILES "${BANG_EDITOR_INCLUDE_DIR}/BangEditor/*.h"
                               "${BANG_EDITOR_ROOT}/Assets/Shaders/*.geom"
                               "${BANG_EDITOR_ROOT}/Assets/Shaders/*.vert"
                               "${BANG_EDITOR_ROOT}/Assets/Shaders/*.glsl"
-                              "${BANG_EDITOR_ROOT}/Build/BuildPackage/CMakeLists.txt")
+                              "${BANG_EDITOR_ROOT}/Compile/CompilePackage/CMakeLists.txt")
 add_misc_files(${OTHER_FILES})
 #=================================================================
 #=================================================================

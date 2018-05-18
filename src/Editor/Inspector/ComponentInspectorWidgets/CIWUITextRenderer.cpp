@@ -71,7 +71,7 @@ void CIWUITextRenderer::UpdateFromReference()
 
     if (!p_sizeInput->HasFocus())
     {
-        p_sizeInput->SetValue( GetUITextRenderer()->GetTextSize() );
+        p_sizeInput->SetValue( SCAST<float>( GetUITextRenderer()->GetTextSize() ) );
     }
 
     if (!p_colorInput->HasFocus())
@@ -98,7 +98,7 @@ void CIWUITextRenderer::OnValueChanged(Object *object)
     ComponentInspectorWidget::OnValueChanged(object);
 
     GetUITextRenderer()->SetContent( p_contentInput->GetText()->GetContent() );
-    GetUITextRenderer()->SetTextSize( p_sizeInput->GetValue() );
+    GetUITextRenderer()->SetTextSize( SCAST<int>(p_sizeInput->GetValue()) );
     GetUITextRenderer()->SetTextColor( p_colorInput->GetColor() );
     GetUITextRenderer()->SetFont( Resources::Load<Font>(p_fontFileInput->GetPath()).Get() );
     GetUITextRenderer()->SetHorizontalAlign(

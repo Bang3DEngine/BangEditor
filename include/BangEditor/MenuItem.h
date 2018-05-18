@@ -44,7 +44,7 @@ public:
     UIFocusable *GetFocusable() const;
     MenuItemType GetItemType() const;
     bool GetDestroyOnClose() const;
-    float GetFontSize() const;
+    uint GetFontSize() const;
     bool IsForcedShow() const;
     MenuItem *GetParentItem() const;
     const List<MenuItem*>& GetChildrenItems() const;

@@ -77,7 +77,8 @@ void CIWLight::UpdateFromReference()
 
     if (!p_shadowMapSizeInput->HasFocus())
     {
-        p_shadowMapSizeInput->SetValue( GetLight()->GetShadowMapSize().x );
+        p_shadowMapSizeInput->SetValue( 
+            SCAST<float>( GetLight()->GetShadowMapSize().x ) );
     }
 }
 
@@ -95,5 +96,6 @@ void CIWLight::OnValueChanged(Object *object)
     GetLight()->SetShadowBias( p_shadowBiasInput->GetValue() );
     GetLight()->SetShadowType( SCAST<Light::ShadowType>(
                                    p_shadowTypeInput->GetSelectedValue()) );
-    GetLight()->SetShadowMapSize( Vector2i(p_shadowMapSizeInput->GetValue()) );
+    GetLight()->SetShadowMapSize( 
+        Vector2i( SCAST<int>(p_shadowMapSizeInput->GetValue()) ) );
 }

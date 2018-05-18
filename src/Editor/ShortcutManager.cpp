@@ -103,7 +103,7 @@ bool Shortcut::IsTriggered(const Array<Key> &keys) const
     {
         if (GetKeys().Size() != keys.Size()) { return false; }
 
-        for (int i = 0; i < GetKeys().Size(); ++i)
+        for (uint i = 0; i < GetKeys().Size(); ++i)
         {
             if (GetKeys()[i] != keys[i]) { return false; }
         }
@@ -125,7 +125,7 @@ bool Shortcut::operator==(const Shortcut &rhs) const
 {
     if (GetKeys().Size() != rhs.GetKeys().Size()) { return false; }
 
-    for (int i = 0; i < GetKeys().Size(); ++i)
+    for (uint i = 0; i < GetKeys().Size(); ++i)
     {
         if (GetKeys()[i] != rhs.GetKeys()[i]) { return false; }
     }
@@ -134,7 +134,7 @@ bool Shortcut::operator==(const Shortcut &rhs) const
 
 bool Shortcut::operator<(const Shortcut &rhs) const
 {
-    for (int i = 0; i < Math::Min(GetKeys().Size(), rhs.GetKeys().Size()); ++i)
+    for (uint i = 0; i < Math::Min(GetKeys().Size(), rhs.GetKeys().Size()); ++i)
     {
         if (GetKeys()[i] < rhs.GetKeys()[i]) { return true; }
         else if (GetKeys()[i] > rhs.GetKeys()[i]) { return false; }

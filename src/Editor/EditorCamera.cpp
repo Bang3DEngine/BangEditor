@@ -60,7 +60,7 @@ void EditorCamera::AdjustSpeeds()
 
     m_mouseRotDegreesPerPixel.x = 360.0f / wWidth;
     m_mouseRotDegreesPerPixel.y = 360.0f / wHeight;
-
+    
     m_mousePanPerPixel = Vector2(0.01f);
     if (p_currentFocus)
     {
@@ -76,7 +76,7 @@ void EditorCamera::AdjustSpeeds()
             m_mousePanPerPixel.x = m_mousePanPerPixel.y * wHeight * ar / wWidth;
         }
     }
-
+    
     m_mousePanPerPixel.x = Math::Max(m_mousePanPerPixel.x, 0.05f);
     m_mousePanPerPixel.y = Math::Max(m_mousePanPerPixel.y, 0.05f);
 }
@@ -211,7 +211,7 @@ void EditorCamera::HandleLookAtFocus()
         p_currentFocus = nullptr;
     }
 }
-
+// 
 void EditorCamera::OnStart()
 {
     GameObject::OnStart();

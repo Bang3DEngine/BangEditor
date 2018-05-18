@@ -157,7 +157,8 @@ void ComponentsSelectionGizmo::RenderDirectionalLightGizmo(
     Gizmos::SetReceivesLighting(false);
     Gizmos::SetColor(dirLight->GetColor());
     Gizmos::SetRenderPass(RenderPass::Overlay);
-    for (float ang = 0.0f; ang <= 2 * Math::Pi; ang += Math::Pi / 4.0f)
+    for (float ang = 0.0f; ang <= 2 * Math::Pi; 
+         ang += SCAST<float>(Math::Pi / 4.0f) )
     {
         const Vector3 offx = right * Math::Cos(ang);
         const Vector3 offy = up * Math::Sin(ang);
