@@ -70,6 +70,9 @@ void FIWMaterial::Init()
     p_normalMapUvOffsetInput->SetSize(2);
     p_normalMapUvOffsetInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
+    p_normalMapMultiplyFactorInput = GameObjectFactory::CreateUIInputNumber();
+    p_normalMapMultiplyFactorInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+
     p_albedoColorInput = GameObject::Create<UIInputColor>();
     p_albedoColorInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
@@ -150,6 +153,7 @@ void FIWMaterial::Init()
     AddWidget("Normal Map Tex.",      p_normalMapTextureInput);
     AddWidget("Normal Map Uv Offset", p_normalMapUvOffsetInput);
     AddWidget("Normal Map Uv Mult.",  p_normalMapUvMultiplyInput);
+    AddWidget("Normal Map Factor",    p_normalMapMultiplyFactorInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Render pass",          p_renderPassInput->GetGameObject());
     AddWidget("Cull Face",            p_cullFaceInput->GetGameObject());
@@ -198,6 +202,7 @@ void FIWMaterial::UpdateFromFileWhenChanged()
                                       Path::Empty);
     p_normalMapUvOffsetInput->Set( GetMaterial()->GetNormalMapUvOffset() );
     p_normalMapUvMultiplyInput->Set( GetMaterial()->GetNormalMapUvMultiply() );
+    p_normalMapMultiplyFactorInput->SetValue( GetMaterial()->GetNormalMapMultiplyFactor() );
 
     p_albedoColorInput->SetColor( GetMaterial()->GetAlbedoColor() );
     p_receivesLightingCheckBox->SetChecked( GetMaterial()->GetReceivesLighting() );
@@ -252,6 +257,7 @@ void FIWMaterial::OnValueChanged(Object *)
     GetMaterial()->SetAlbedoUvMultiply( p_albedoUvMultiplyInput->GetVector2() );
     GetMaterial()->SetNormalMapUvOffset( p_normalMapUvOffsetInput->GetVector2() );
     GetMaterial()->SetNormalMapUvMultiply( p_normalMapUvMultiplyInput->GetVector2() );
+    GetMaterial()->SetNormalMapMultiplyFactor( p_normalMapMultiplyFactorInput->GetValue() );
     GetMaterial()->SetReceivesLighting(p_receivesLightingCheckBox->IsChecked());
     GetMaterial()->SetRoughness(p_roughnessSlider->GetValue());
     GetMaterial()->SetMetalness(p_metalnessSlider->GetValue());

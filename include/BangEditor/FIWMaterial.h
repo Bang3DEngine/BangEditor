@@ -41,6 +41,7 @@ private:
     UIInputFile *p_normalMapTextureInput = nullptr;
     UIInputVector *p_normalMapUvMultiplyInput = nullptr;
     UIInputVector *p_normalMapUvOffsetInput   = nullptr;
+    UIInputNumber *p_normalMapMultiplyFactorInput = nullptr;
     UICheckBox *p_receivesLightingCheckBox = nullptr;
     UISlider *p_metalnessSlider = nullptr;
     UISlider *p_roughnessSlider = nullptr;
