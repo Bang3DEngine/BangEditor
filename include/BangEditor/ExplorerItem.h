@@ -4,6 +4,7 @@
 #include "Bang/Path.h"
 #include "Bang/GameObject.h"
 #include "Bang/IFocusListener.h"
+#include "Bang/IDragDropListener.h"
 
 #include "BangEditor/UIContextMenu.h"
 
@@ -14,6 +15,7 @@ FORWARD class UILabel;
 FORWARD class IFocusable;
 FORWARD class UIFocusable;
 FORWARD class UIImageRenderer;
+FORWARD class UIDragDroppable;
 FORWARD class UIAspectRatioFitter;
 FORWARD NAMESPACE_BANG_END
 
@@ -21,16 +23,18 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class ExplorerItem;
 
-class IExplorerItemListener : public IEventListener
+class IExplorerItemListener : public virtual IEventListener
 {
 public:
     virtual void OnRename(ExplorerItem *item) = 0;
     virtual void OnRemove(ExplorerItem *item) = 0;
     virtual void OnDuplicate(ExplorerItem *item) = 0;
+    virtual void OnDropped(ExplorerItem *item) = 0;
 };
 
 class ExplorerItem : public GameObject,
                      public IFocusListener,
+                     public IDragDropListener,
                      public EventEmitter<IExplorerItemListener>
 {
     GAMEOBJECT_EDITOR(ExplorerItem);
@@ -53,6 +57,9 @@ public:
     // UIContextMenu callback
     virtual void OnCreateContextMenu(MenuItem *menuRootItem);
 
+    // IDragDropListener
+    void OnDrop(UIDragDroppable *dragDroppable) override;
+
 protected:
     ExplorerItem();
     virtual ~ExplorerItem();
@@ -66,6 +73,7 @@ private:
     UIImageRenderer *p_bg = nullptr;
     UIImageRenderer *p_icon = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
+    UIDragDroppable *p_dragDroppable = nullptr;
     UIAspectRatioFitter *p_aspectRatioFitter = nullptr;
 
     // IFocusListener

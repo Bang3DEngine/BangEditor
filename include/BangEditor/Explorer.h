@@ -63,6 +63,7 @@ public:
     virtual void OnRename(ExplorerItem *item) override;
     virtual void OnRemove(ExplorerItem *item) override;
     virtual void OnDuplicate(ExplorerItem *item) override;
+    virtual void OnDropped(ExplorerItem *item) override;
 
     static Explorer *GetInstance();
 

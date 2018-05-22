@@ -435,6 +435,12 @@ void Explorer::OnDuplicate(ExplorerItem *explorerItem)
     Explorer::SelectPath(newPathName);
 }
 
+void Explorer::OnDropped(ExplorerItem *item)
+{
+    (void) item;
+    ForceCheckFileChanges();
+}
+
 ExplorerItem *Explorer::GetSelectedItem() const
 {
     for (ExplorerItem *explorerItem : p_items)

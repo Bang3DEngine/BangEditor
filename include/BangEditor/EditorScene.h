@@ -38,6 +38,7 @@ FORWARD class EditorFileTracker;
 FORWARD class EditSceneGameObjects;
 FORWARD class UISceneEditContainer;
 FORWARD class UIScenePlayContainer;
+FORWARD class EditorDragDropManager;
 
 class EditorScene : public Scene,
                     public IScenePlayerListener,
@@ -70,6 +71,7 @@ public:
     UISceneEditContainer *GetSceneEditContainer() const;
     UIScenePlayContainer *GetScenePlayContainer() const;
     EditSceneGameObjects *GetEditSceneGameObjects() const;
+    EditorDragDropManager *GetEditorDragDropManager() const;
 
 protected:
     EditorScene();
@@ -83,6 +85,7 @@ private:
     EditorClipboard *m_editorClipboard = nullptr;
     SceneOpenerSaver *m_sceneOpenerSaver = nullptr;
     EditSceneGameObjects *m_editSceneGameObjects = nullptr;
+    EditorDragDropManager *m_editorDragDropManager = nullptr;
 
     Console *p_console     = nullptr;
     Explorer *p_explorer   = nullptr;
