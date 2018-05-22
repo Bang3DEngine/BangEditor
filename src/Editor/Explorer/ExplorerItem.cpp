@@ -7,8 +7,9 @@
 #include "Bang/UICanvas.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
-#include "Bang/MaterialFactory.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/MaterialFactory.h"
+#include "Bang/UIDragDroppable.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIVerticalLayout.h"
@@ -73,6 +74,9 @@ ExplorerItem::ExplorerItem()
     });
     p_contextMenu->AddButtonPart(this);
     p_contextMenu->AddButtonPart(bgGo);
+
+    p_dragDroppable = AddComponent<UIDragDroppable>();
+
 
     bgGo->SetParent(this);
     labelGo->SetParent(this);
@@ -162,6 +166,33 @@ void ExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
 
     MenuItem *remove = menuRootItem->AddItem("Remove");
     remove->SetSelectedCallback([this](MenuItem*) { Remove(); });
+}
+
+void ExplorerItem::OnDrop(UIDragDroppable *dd)
+{
+    if (ExplorerItem *expItem = DCAST<ExplorerItem*>(dd->GetGameObject()))
+    {
+        if (expItem != this &&
+            GetRectTransform()->IsMouseOver() &&
+            GetPath().IsDir())
+        {
+            Path newDir = GetPath();
+            Path droppedPath = expItem->GetPath();
+            File::Rename(droppedPath, newDir.Append(droppedPath.GetNameExt()));
+
+            // Move import file if any
+            if ( ImportFilesManager::HasImportFile(expItem->GetPath()) )
+            {
+                Path importDroppedPath =
+                        ImportFilesManager::GetImportFilepath(droppedPath);
+                File::Rename(importDroppedPath,
+                             newDir.Append(importDroppedPath.GetNameExt()));
+            }
+
+            EventEmitter<IExplorerItemListener>::PropagateToListeners(
+                           &IExplorerItemListener::OnDroppedToDirectory, expItem);
+        }
+    }
 }
 
 const Path &ExplorerItem::GetPath() const

@@ -43,6 +43,7 @@
 #include "BangEditor/EditSceneGameObjects.h"
 #include "BangEditor/UISceneEditContainer.h"
 #include "BangEditor/UIScenePlayContainer.h"
+#include "BangEditor/EditorDragDropManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -72,6 +73,7 @@ void EditorScene::Init()
     m_menuBar->SetParent(m_mainEditorVL);
 
     m_editSceneGameObjects = new EditSceneGameObjects();
+    m_editorDragDropManager = new EditorDragDropManager();
 
     GameObject *topHLGo = GameObjectFactory::CreateUIGameObject();
     topHLGo->AddComponent<UIHorizontalLayout>();
@@ -354,6 +356,11 @@ UIScenePlayContainer *EditorScene::GetScenePlayContainer() const
 EditSceneGameObjects *EditorScene::GetEditSceneGameObjects() const
 {
     return m_editSceneGameObjects;
+}
+
+EditorDragDropManager *EditorScene::GetEditorDragDropManager() const
+{
+    return m_editorDragDropManager;
 }
 
 void EditorScene::PushGLViewport()

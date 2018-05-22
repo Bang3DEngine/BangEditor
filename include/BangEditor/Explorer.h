@@ -63,6 +63,7 @@ public:
     virtual void OnRename(ExplorerItem *item) override;
     virtual void OnRemove(ExplorerItem *item) override;
     virtual void OnDuplicate(ExplorerItem *item) override;
+    virtual void OnDroppedToDirectory(ExplorerItem *item) override;
 
     static Explorer *GetInstance();
 
@@ -77,6 +78,7 @@ private:
     UILabel *p_currentPathLabel = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
     GameObject *p_itemsContainer = nullptr;
+    UIContextMenu *p_contextMenu = nullptr;
     UIGridLayout *p_explorerGridLayout = nullptr;
 
     void AddItem(const Path &itemPath);
@@ -99,6 +101,9 @@ private:
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;
+
+    // UIContextMenu
+    virtual void OnCreateContextMenu(MenuItem *menuRootItem);
 };
 
 NAMESPACE_BANG_EDITOR_END

@@ -46,7 +46,7 @@ private:
     GameObject *p_camContainer = nullptr;
 
     // WASD
-    float m_keysMoveAccel = 0.0f; // 1.0f;
+    float m_keysMoveAccel = 1.0f;
     float m_maxMoveSpeed  = 10.0f;
     float m_keysCurrentMoveSpeed = 0.0f;
 

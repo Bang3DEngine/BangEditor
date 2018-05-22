@@ -70,7 +70,7 @@ Explorer::Explorer()
     // Scroll Panel
     p_scrollPanel = GameObjectFactory::CreateUIScrollPanel();
     p_scrollPanel->GetScrollArea()->GetBackground()->SetTint(
-                                        Color::LightGray.WithValue(0.9f));
+                                        Color::LightGray.WithValue(0.75f));
     GameObject *scrollPanelGo = p_scrollPanel->GetGameObject();
     UILayoutElement *spLE = scrollPanelGo->AddComponent<UILayoutElement>();
     spLE->SetFlexibleSize( Vector2::One );
@@ -138,6 +138,14 @@ Explorer::Explorer()
     p_scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
     p_scrollPanel->SetVerticalScrollBarSide(HorizontalSide::Right);
     p_scrollPanel->SetHorizontalScrollEnabled(false);
+
+    UIFocusable *focusable = AddComponent<UIFocusable>();
+    p_contextMenu = AddComponent<UIContextMenu>();
+    p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
+    {
+        OnCreateContextMenu(menuRootItem);
+    });
+    p_contextMenu->AddButtonPart(this);
 
     SetCurrentPath( Paths::GetEngineAssetsDir() );
 
@@ -295,7 +303,7 @@ void Explorer::OnPathModified(const Path &)
 
 void Explorer::OnPathRemoved(const Path &removedPath)
 {
-    if (!removedPath.IsFile())
+    if (!removedPath.Exists())
     {
         RemoveItem(removedPath);
     }
@@ -435,6 +443,13 @@ void Explorer::OnDuplicate(ExplorerItem *explorerItem)
     Explorer::SelectPath(newPathName);
 }
 
+void Explorer::OnDroppedToDirectory(ExplorerItem *item)
+{
+    (void) item;
+    OnPathRemoved(item->GetPath());
+    ForceCheckFileChanges();
+}
+
 ExplorerItem *Explorer::GetSelectedItem() const
 {
     for (ExplorerItem *explorerItem : p_items)
@@ -502,6 +517,20 @@ bool Explorer::IsInsideRootPath(const Path &path) const
 void Explorer::OnValueChanged(Object*)
 {
     p_explorerGridLayout->SetCellSize( Vector2i(p_iconSizeSlider->GetValue()) );
+}
+
+void Explorer::OnCreateContextMenu(MenuItem *menuRootItem)
+{
+    menuRootItem->SetFontSize(12);
+
+    Path newDirPath = GetCurrentPath().Append("New_directory").GetDuplicatePath();
+    MenuItem *createDirItem = menuRootItem->AddItem("Create directory");
+    createDirItem->SetSelectedCallback([this, newDirPath](MenuItem*)
+    {
+        File::CreateDirectory(newDirPath);
+        ForceCheckFileChanges();
+        SelectPath(newDirPath);
+    });
 }
 
 Explorer *Explorer::GetInstance()
