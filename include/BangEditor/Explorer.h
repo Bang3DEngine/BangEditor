@@ -63,6 +63,7 @@ public:
     virtual void OnRename(ExplorerItem *item) override;
     virtual void OnRemove(ExplorerItem *item) override;
     virtual void OnDuplicate(ExplorerItem *item) override;
+    virtual void OnPastedOver(ExplorerItem *item) override;
     virtual void OnDroppedToDirectory(ExplorerItem *item) override;
 
     static Explorer *GetInstance();
@@ -86,9 +87,7 @@ private:
     void RemoveItem(const Path &itemPath);
     void GoDirectoryUp();
 
-    void RenamePath(ExplorerItem *explorerItem);
-    void RemovePath(ExplorerItem *explorerItem);
-    void DuplicatePath(ExplorerItem *explorerItem);
+    void DuplicatePathIntoDir(const Path &srcPath, const Path &dstDirPath);
 
     ExplorerItem *GetSelectedItem() const;
     ExplorerItem *GetItemFromPath(const Path &path) const;

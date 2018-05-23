@@ -67,6 +67,26 @@ void EditorClipboard::ClearCopiedGameObject()
     }
 }
 
+void EditorClipboard::CopyPath(const Path &path)
+{
+    EditorClipboard::GetInstance()->m_copiedPath = path;
+}
+
+const Path &EditorClipboard::GetCopiedPath()
+{
+    return EditorClipboard::GetInstance()->m_copiedPath;
+}
+
+bool EditorClipboard::HasCopiedPath()
+{
+    return !EditorClipboard::GetInstance()->m_copiedPath.IsEmpty();
+}
+
+void EditorClipboard::ClearCopiedPath()
+{
+    EditorClipboard::GetInstance()->m_copiedPath = Path::Empty;
+}
+
 EditorClipboard *EditorClipboard::GetInstance()
 {
     return EditorSceneManager::GetEditorScene()->GetEditorClipboard();

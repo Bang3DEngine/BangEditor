@@ -2,6 +2,7 @@
 #define EDITORCLIPBOARD_H
 
 #include "Bang/Bang.h"
+#include "Bang/Path.h"
 #include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
@@ -28,9 +29,15 @@ public:
     static bool HasCopiedGameObject();
     static void ClearCopiedGameObject();
 
+    static void CopyPath(const Path &path);
+    static const Path& GetCopiedPath();
+    static bool HasCopiedPath();
+    static void ClearCopiedPath();
+
 private:
     Component *m_copiedComponent = nullptr;
     GameObject *m_copiedGameObject = nullptr;
+    Path m_copiedPath = Path::Empty;
 
     static EditorClipboard *GetInstance();
 };

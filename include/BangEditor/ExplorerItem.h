@@ -29,6 +29,7 @@ public:
     virtual void OnRename(ExplorerItem *item) = 0;
     virtual void OnRemove(ExplorerItem *item) = 0;
     virtual void OnDuplicate(ExplorerItem *item) = 0;
+    virtual void OnPastedOver(ExplorerItem *item) = 0;
     virtual void OnDroppedToDirectory(ExplorerItem *item) = 0;
 };
 
@@ -54,6 +55,7 @@ public:
 
     void Rename();
     void Remove();
+    void Paste();
     void Duplicate();
 
     // UIContextMenu callback

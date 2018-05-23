@@ -31,9 +31,10 @@ void EditorBehaviourManager::Update()
 {
     BehaviourManager::Update();
 
-    UpdateCompileInformations();
+    /*
     if (Editor::IsEditingScene())
     {
+        UpdateCompileInformations();
         List<Path> behaviourPaths = GetBehaviourSourcesPaths();
         for (const Path &behaviourPath : behaviourPaths)
         {
@@ -43,6 +44,7 @@ void EditorBehaviourManager::Update()
             }
         }
     }
+    */
 }
 
 void EditorBehaviourManager::WaitForAsyncCompileJobs()

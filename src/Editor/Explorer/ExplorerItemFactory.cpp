@@ -92,7 +92,7 @@ List<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
     return expItems;
 }
 
-bool ExplorerItemFactory::CanHaveChildren(const Path &path)
+bool ExplorerItemFactory::CanHaveSubpaths(const Path &path)
 {
     return path.IsDir() ||
            path.HasExtension(Extensions::GetModelExtensions());

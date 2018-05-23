@@ -29,6 +29,7 @@
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorClipboard.h"
 #include "BangEditor/QtProjectManager.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/EditorFileTracker.h"
@@ -145,6 +146,10 @@ Explorer::Explorer()
     {
         OnCreateContextMenu(menuRootItem);
     });
+    focusable->AddClickedCallback([this](IFocusable*)
+    {
+        SelectPath(Path::Empty);
+    });
     p_contextMenu->AddButtonPart(this);
 
     SetCurrentPath( Paths::GetEngineAssetsDir() );
@@ -161,6 +166,10 @@ Explorer::Explorer()
     ShortcutManager::RegisterShortcut(Shortcut(Key::F2, "Rename"),
                                       &Explorer::OnShortcutPressed);
     ShortcutManager::RegisterShortcut(Shortcut(Key::Delete, "Delete"),
+                                      &Explorer::OnShortcutPressed);
+    ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::C, "Copy"),
+                                      &Explorer::OnShortcutPressed);
+    ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::V, "Paste"),
                                       &Explorer::OnShortcutPressed);
 }
 
@@ -359,6 +368,43 @@ void Explorer::GoDirectoryUp()
     SetCurrentPath( GetCurrentPath().GetDirectory() );
 }
 
+void DuplicateImportFiles(const Path &srcPath, const Path &dstPath)
+{
+    ASSERT(srcPath.Exists() && dstPath.Exists());
+    ASSERT(srcPath != dstPath);
+
+    if (srcPath.IsFile())
+    {
+        ImportFilesManager::DuplicateImportFile(srcPath, dstPath);
+    }
+    else // IsDir()
+    {
+        List<Path> srcSubPaths = srcPath.GetSubPaths(Path::FindFlag::Simple);
+        const Path& srcDir = srcPath;
+        const Path& dstDir = dstPath;
+        for (const Path &srcSubPath : srcSubPaths)
+        {
+            const Path srcRelSubPath = srcSubPath.GetRelativePath(srcDir);
+            const Path dstSubPath = dstDir.Append(srcRelSubPath);
+            if (dstSubPath.Exists())
+            {
+                DuplicateImportFiles(srcSubPath, dstSubPath);
+            }
+        }
+    }
+}
+
+void Explorer::DuplicatePathIntoDir(const Path &srcPath, const Path &dstDirPath)
+{
+    const Path dstPath = dstDirPath.Append( srcPath.GetNameExt() ).
+                         GetDuplicatePath();
+    File::Duplicate(srcPath, dstPath);
+    DuplicateImportFiles(srcPath, dstPath);
+
+    ForceCheckFileChanges();
+    Explorer::SelectPath(dstPath);
+}
+
 void Explorer::OnRename(ExplorerItem *explorerItem)
 {
     const Path &path = explorerItem->GetPath();
@@ -399,7 +445,7 @@ void Explorer::OnRename(ExplorerItem *explorerItem)
 
 void Explorer::OnRemove(ExplorerItem *explorerItem)
 {
-    const Path &path = explorerItem->GetPath();
+    const Path& path = explorerItem->GetPath();
     Dialog::YesNoCancel yesNoCancel =
         Dialog::GetYesNoCancel("Remove", "Are you sure you want to remove '" +
                                path.GetNameExt() + "' ?");
@@ -413,36 +459,23 @@ void Explorer::OnRemove(ExplorerItem *explorerItem)
     ForceCheckFileChanges();
 }
 
-void DuplicateImportFiles(const Path &oriPath, const Path &dupPath)
-{
-    ASSERT(oriPath.Exists() && dupPath.Exists());
-    ASSERT(oriPath != dupPath);
-
-    if (dupPath.IsFile())
-    {
-        ImportFilesManager::DuplicateImportFile(oriPath, dupPath);
-    }
-    else
-    {
-        Array<Path> oriSubPaths = oriPath.GetSubPaths(Path::FindFlag::Simple).To<Array>();
-        Array<Path> dupSubPaths = dupPath.GetSubPaths(Path::FindFlag::Simple).To<Array>();
-        for (uint i = 0; i < oriSubPaths.Size(); ++i)
-        {
-            DuplicateImportFiles(oriSubPaths[i], dupSubPaths[i]);
-        }
-    }
-}
-
 void Explorer::OnDuplicate(ExplorerItem *explorerItem)
 {
-    Path path = explorerItem->GetPath();
-    Path newPathName = path.GetDuplicatePath();
-    File::Duplicate(path, newPathName);
+    const Path& srcPath = explorerItem->GetPath();
+    const Path& dstDirPath = GetCurrentPath();
+    DuplicatePathIntoDir(srcPath, dstDirPath);
+}
 
-    DuplicateImportFiles(path, newPathName);
+void Explorer::OnPastedOver(ExplorerItem *item)
+{
+    ASSERT(EditorClipboard::HasCopiedPath());
 
-    ForceCheckFileChanges();
-    Explorer::SelectPath(newPathName);
+    const Path dstDirPath = (item->GetPath().IsDir() ? item->GetPath() :
+                                                       GetCurrentPath() );
+    ASSERT(dstDirPath.IsDir());
+
+    const Path& srcPath = EditorClipboard::GetCopiedPath();
+    DuplicatePathIntoDir(srcPath, dstDirPath);
 }
 
 void Explorer::OnDroppedToDirectory(ExplorerItem *item)
@@ -473,7 +506,7 @@ void Explorer::OnItemDoubleClicked(IFocusable *itemFocusable)
     ASSERT(expItem);
 
     const Path itemPath = expItem->GetPath();
-    if ( ExplorerItemFactory::CanHaveChildren(itemPath) )
+    if ( ExplorerItemFactory::CanHaveSubpaths(itemPath) )
     {
         Explorer::GetInstance()->SetCurrentPath(itemPath);
     }
@@ -508,6 +541,20 @@ void Explorer::OnShortcutPressed(const Shortcut &shortcut)
 
         if (shortcut.GetName() == "Delete")
         { selectedItem->Remove(); }
+
+        if (shortcut.GetName() == "Copy")
+        { EditorClipboard::CopyPath( selectedItem->GetPath() ); }
+    }
+
+    if (shortcut.GetName() == "Paste" && EditorClipboard::HasCopiedPath())
+    {
+        if (selectedItem) { selectedItem->Paste(); }
+        else
+        {
+            const Path &copiedPath = EditorClipboard::GetCopiedPath();
+            const Path newDir = exp->GetCurrentPath();
+            exp->DuplicatePathIntoDir(copiedPath, newDir);
+        }
     }
 }
 
@@ -525,13 +572,22 @@ void Explorer::OnCreateContextMenu(MenuItem *menuRootItem)
 {
     menuRootItem->SetFontSize(12);
 
-    Path newDirPath = GetCurrentPath().Append("New_directory").GetDuplicatePath();
     MenuItem *createDirItem = menuRootItem->AddItem("Create directory");
-    createDirItem->SetSelectedCallback([this, newDirPath](MenuItem*)
+    createDirItem->SetSelectedCallback([this](MenuItem*)
     {
+        Path newDirPath = GetCurrentPath().Append("New_directory").GetDuplicatePath();
         File::CreateDirectory(newDirPath);
         ForceCheckFileChanges();
         SelectPath(newDirPath);
+    });
+
+    MenuItem *pasteItem = menuRootItem->AddItem("Paste");
+    pasteItem->SetOverAndActionEnabled( EditorClipboard::HasCopiedPath() );
+    pasteItem->SetSelectedCallback([this](MenuItem*)
+    {
+        const Path &copiedPath = EditorClipboard::GetCopiedPath();
+        const Path newDir = GetCurrentPath();
+        DuplicatePathIntoDir(copiedPath, newDir);
     });
 }
 

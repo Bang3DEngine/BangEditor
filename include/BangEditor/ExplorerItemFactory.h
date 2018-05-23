@@ -16,7 +16,7 @@ public:
     static List<ExplorerItem*> CreateAndGetSubPathsExplorerItems(
                                                     const Path &path,
                                                     bool addBackItem);
-    static bool CanHaveChildren(const Path &path);
+    static bool CanHaveSubpaths(const Path &path);
 
 private:
 	ExplorerItemFactory();

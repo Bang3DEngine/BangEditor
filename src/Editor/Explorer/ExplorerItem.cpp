@@ -18,6 +18,7 @@
 #include "Bang/UIAspectRatioFitter.h"
 
 #include "BangEditor/Explorer.h"
+#include "BangEditor/EditorClipboard.h"
 #include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
@@ -159,6 +160,12 @@ void ExplorerItem::Remove()
                 &IExplorerItemListener::OnRemove, this);
 }
 
+void ExplorerItem::Paste()
+{
+    EventEmitter<IExplorerItemListener>::PropagateToListeners(
+                &IExplorerItemListener::OnPastedOver, this);
+}
+
 void ExplorerItem::Duplicate()
 {
     EventEmitter<IExplorerItemListener>::PropagateToListeners(
@@ -167,16 +174,33 @@ void ExplorerItem::Duplicate()
 
 void ExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
 {
-    menuRootItem->SetFontSize(12);
+    if ( GetPathString() != ".." )
+    {
+        menuRootItem->SetFontSize(12);
 
-    MenuItem *duplicate = menuRootItem->AddItem("Duplicate");
-    duplicate->SetSelectedCallback([this](MenuItem*) { Duplicate(); });
+        MenuItem *duplicate = menuRootItem->AddItem("Duplicate");
+        duplicate->SetSelectedCallback([this](MenuItem*) { Duplicate(); });
 
-    MenuItem *rename = menuRootItem->AddItem("Rename");
-    rename->SetSelectedCallback([this](MenuItem*) { Rename(); });
+        MenuItem *rename = menuRootItem->AddItem("Rename");
+        rename->SetSelectedCallback([this](MenuItem*) { Rename(); });
 
-    MenuItem *remove = menuRootItem->AddItem("Remove");
-    remove->SetSelectedCallback([this](MenuItem*) { Remove(); });
+        MenuItem *remove = menuRootItem->AddItem("Remove");
+        remove->SetSelectedCallback([this](MenuItem*) { Remove(); });
+
+        MenuItem *copy = menuRootItem->AddItem("Copy");
+        copy->SetSelectedCallback([this](MenuItem*)
+        {
+            EditorClipboard::CopyPath( GetPath() );
+        });
+
+        if (GetPath().IsDir())
+        {
+            MenuItem *pasteItem = menuRootItem->AddItem("Paste");
+            pasteItem->SetOverAndActionEnabled( EditorClipboard::HasCopiedPath() );
+            pasteItem->SetSelectedCallback([this](MenuItem*) { Paste(); });
+        }
+
+    }
 }
 
 void ExplorerItem::OnDrop(UIDragDroppable *dd)
