@@ -12,9 +12,10 @@ FORWARD class ExplorerItem;
 class ExplorerItemFactory
 {
 public:
-    static ExplorerItem *CreateExplorerItem(const Path &path);
-    static List<ExplorerItem*> CreateAndGetChildrenExplorerItems(
-                                                    const Path &path);
+    static ExplorerItem* CreateExplorerItem(const Path &path);
+    static List<ExplorerItem*> CreateAndGetSubPathsExplorerItems(
+                                                    const Path &path,
+                                                    bool addBackItem);
     static bool CanHaveChildren(const Path &path);
 
 private:

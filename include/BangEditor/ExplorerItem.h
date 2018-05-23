@@ -44,11 +44,13 @@ public:
 
     void SetPath(const Path &path);
     void SetSelected(bool selected);
+    void SetPathString(const String &string);
 
     bool IsSelected() const;
     UILabel *GetLabel() const;
     const Path& GetPath() const;
     UIFocusable* GetFocusable() const;
+    const String& GetPathString() const;
 
     void Rename();
     void Remove();
@@ -67,6 +69,7 @@ protected:
 private:
     bool m_selected = false;
     Path m_path = Path::Empty;
+    String m_pathString = "";
 
     UILabel *p_label = nullptr;
     UIFocusable *p_button = nullptr;

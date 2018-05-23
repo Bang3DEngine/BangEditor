@@ -111,7 +111,7 @@ void ExplorerItem::SetPath(const Path &path)
         }
         else { p_aspectRatioFitter->SetAspectRatio(1.0f); }
 
-        p_label->GetText()->SetContent(GetPath().GetNameExt());
+        SetPathString(GetPath().GetNameExt());
     }
 }
 
@@ -119,6 +119,12 @@ void ExplorerItem::SetSelected(bool selected)
 {
     m_selected = selected;
     p_bg->SetTint(IsSelected() ? Color::LightBlue.WithAlpha(0.8f) : Color::Zero);
+}
+
+void ExplorerItem::SetPathString(const String &string)
+{
+    m_pathString = string;
+    p_label->GetText()->SetContent( GetPathString() );
 }
 
 bool ExplorerItem::IsSelected() const
@@ -134,6 +140,11 @@ UILabel *ExplorerItem::GetLabel() const
 UIFocusable *ExplorerItem::GetFocusable() const
 {
     return p_button;
+}
+
+const String &ExplorerItem::GetPathString() const
+{
+    return m_pathString;
 }
 
 void ExplorerItem::Rename()

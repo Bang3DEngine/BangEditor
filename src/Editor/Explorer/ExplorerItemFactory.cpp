@@ -36,10 +36,20 @@ ExplorerItem *ExplorerItemFactory::CreateExplorerItem(const Path &path)
     return explorerItem;
 }
 
-List<ExplorerItem *> ExplorerItemFactory::CreateAndGetChildrenExplorerItems(
-                                                const Path &path)
+List<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
+                                                const Path &path,
+                                                bool addBackItem)
 {
-    List<ExplorerItem*> children;
+    List<ExplorerItem*> expItems;
+
+    if (addBackItem)
+    {
+        Path prevDirPath = path.GetDirectory();
+        ExplorerItem *prevDirExpItem =
+                        ExplorerItemFactory::CreateExplorerItem(prevDirPath);
+        prevDirExpItem->SetPathString("..");
+        expItems.PushBack(prevDirExpItem);
+    }
 
     if (path.IsDir())
     {
@@ -50,7 +60,7 @@ List<ExplorerItem *> ExplorerItemFactory::CreateAndGetChildrenExplorerItems(
         {
             ExplorerItem *childExpItem =
                             ExplorerItemFactory::CreateExplorerItem(subPath);
-            children.PushBack(childExpItem);
+            expItems.PushBack(childExpItem);
         }
     }
     else if (path.IsFile())
@@ -65,7 +75,7 @@ List<ExplorerItem *> ExplorerItemFactory::CreateAndGetChildrenExplorerItems(
                 Path meshPath = path.Append(meshName).AppendExtension("bmesh");
                 ExplorerItem *meshExplorerItem =
                         ExplorerItemFactory::CreateExplorerItem(meshPath);
-                children.PushBack( meshExplorerItem );
+                expItems.PushBack( meshExplorerItem );
             }
 
             for (const String& materialName : model.Get()->GetMaterialsNames())
@@ -74,12 +84,12 @@ List<ExplorerItem *> ExplorerItemFactory::CreateAndGetChildrenExplorerItems(
                         AppendExtension(Extensions::GetMaterialExtension());
                 ExplorerItem *materialExplorerItem =
                         ExplorerItemFactory::CreateExplorerItem(materialPath);
-                children.PushBack( materialExplorerItem );
+                expItems.PushBack( materialExplorerItem );
             }
         }
     }
 
-    return children;
+    return expItems;
 }
 
 bool ExplorerItemFactory::CanHaveChildren(const Path &path)

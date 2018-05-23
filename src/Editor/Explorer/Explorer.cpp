@@ -234,12 +234,14 @@ void Explorer::SetCurrentPath(const Path &path)
         m_currentPath = path;
         p_currentPathLabel->GetText()->SetContent(GetCurrentPath().GetAbsolute());
 
-        p_backButton->SetBlocked( GetCurrentPath() == GetRootPath() );
+        bool canGoBack = (GetCurrentPath() != GetRootPath());
+        p_backButton->SetBlocked(!canGoBack);
 
         Clear();
 
         List<ExplorerItem*> subExplorerItems =
-                ExplorerItemFactory::CreateAndGetChildrenExplorerItems(path);
+                ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(path,
+                                                                       canGoBack);
         for (ExplorerItem *expItem : subExplorerItems)
         {
             AddItem(expItem);
