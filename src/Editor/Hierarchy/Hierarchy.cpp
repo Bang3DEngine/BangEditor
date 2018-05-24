@@ -71,7 +71,7 @@ Hierarchy::Hierarchy()
     EditorSceneManager::GetActive()->
             EventEmitter<ISceneManagerListener>::RegisterListener(this);
 
-    UIFocusable *focusable = AddComponent<UIFocusable>();
+    AddComponent<UIFocusable>();
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
     {

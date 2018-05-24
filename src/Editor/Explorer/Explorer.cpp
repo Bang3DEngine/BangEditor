@@ -52,7 +52,7 @@ Explorer::Explorer()
     GameObject *rendererCacherContainer = rendCacher->GetContainer();
 
     GameObject *mainVLGo = rendererCacherContainer;
-    UIVerticalLayout *mainVL = mainVLGo->AddComponent<UIVerticalLayout>();
+    mainVLGo->AddComponent<UIVerticalLayout>();
 
     // Tool Bar
     GameObject *toolBar = GameObjectFactory::CreateUIGameObject();

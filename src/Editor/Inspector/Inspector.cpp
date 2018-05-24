@@ -100,7 +100,7 @@ Inspector::Inspector()
     p_titleSeparator->SetParent(mainVLGo);
     scrollPanel->GetGameObject()->SetParent(mainVLGo);
 
-    UIFocusable *focusable = AddComponent<UIFocusable>();
+    AddComponent<UIFocusable>();
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
     {

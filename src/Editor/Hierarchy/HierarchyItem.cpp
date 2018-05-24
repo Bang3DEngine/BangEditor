@@ -26,7 +26,7 @@ HierarchyItem::HierarchyItem()
     SetName("HierarchyItem");
 
     GameObjectFactory::CreateUIGameObjectInto(this);
-    UIFocusable *focusable = AddComponent<UIFocusable>();
+    AddComponent<UIFocusable>();
 
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
