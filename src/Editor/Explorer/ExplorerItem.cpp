@@ -219,7 +219,7 @@ void ExplorerItem::OnDrop(UIDragDroppable *dd)
             File::Rename(droppedPath, newDir.Append(droppedPath.GetNameExt()));
 
             // Move import file if any
-            if ( ImportFilesManager::HasImportFile(expItem->GetPath()) )
+            if ( ImportFilesManager::HasImportFile(droppedPath) )
             {
                 Path importDroppedPath =
                         ImportFilesManager::GetImportFilepath(droppedPath);

@@ -5,6 +5,7 @@
 #include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UIComboBox.h"
+#include "Bang/UICheckBox.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UITextRenderer.h"
@@ -49,6 +50,10 @@ void FIWTexture::Init()
     p_alphaCutoffInput->SetMinMaxValues(0.0f, 1.0f);
     p_alphaCutoffInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
+    p_SRGBCheckBoxInput = GameObjectFactory::CreateUICheckBox();
+    p_SRGBCheckBoxInput->SetChecked(true);
+    p_SRGBCheckBoxInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+
     GameObject *imageContainerGo = GameObjectFactory::CreateUIGameObject();
 
     GameObject *imageGo = GameObjectFactory::CreateUIGameObject();
@@ -63,6 +68,7 @@ void FIWTexture::Init()
     AddWidget("Filter Mode", p_filterModeComboBox->GetGameObject());
     AddWidget("Wrap Mode", p_wrapModeComboBox->GetGameObject());
     AddWidget("Alpha Cutoff", p_alphaCutoffInput->GetGameObject());
+    AddWidget("SRGB", p_SRGBCheckBoxInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddLabel("Texture");
     AddWidget(imageGo, 400);
@@ -87,6 +93,9 @@ void FIWTexture::UpdateFromFileWhenChanged()
     p_imageAspectRatioFitter->SetAspectRatio( GetTexture()->GetSize() );
     p_imageAspectRatioFitter->Invalidate();
 
+    p_SRGBCheckBoxInput->SetChecked(
+                GetTexture()->GetFormat() == GL::ColorFormat::SRGB ||
+                GetTexture()->GetFormat() == GL::ColorFormat::SRGBA );
     p_filterModeComboBox->SetSelectionByValue( int(GetTexture()->GetFilterMode()) );
     p_wrapModeComboBox->SetSelectionByValue( int(GetTexture()->GetWrapMode()) );
     p_alphaCutoffInput->SetValue( GetTexture()->GetAlphaCutoff() );
@@ -105,6 +114,11 @@ void FIWTexture::OnValueChanged(Object*)
         GetTexture()->SetWrapMode( SCAST<GL::WrapMode>(wrapMode) );
 
         GetTexture()->SetAlphaCutoff( p_alphaCutoffInput->GetValue() );
+
+        GL::ColorFormat newColorFormat = p_SRGBCheckBoxInput->IsChecked() ?
+                                                GL::ColorFormat::SRGBA :
+                                                GL::ColorFormat::RGBA8;
+        GetTexture()->SetFormat(newColorFormat);
 
         Path texImportPath = ImportFilesManager::GetImportFilepath(
                                 GetTexture()->GetResourceFilepath());

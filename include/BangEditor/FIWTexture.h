@@ -11,6 +11,7 @@ FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UISlider;
 FORWARD class Texture2D;
 FORWARD class UIComboBox;
+FORWARD class UICheckBox;
 FORWARD class UIImageRenderer;
 FORWARD class UIAspectRatioFitter;
 FORWARD NAMESPACE_BANG_END
@@ -33,6 +34,7 @@ private:
     UIComboBox *p_filterModeComboBox = nullptr;
     UIComboBox *p_wrapModeComboBox = nullptr;
     UISlider *p_alphaCutoffInput = nullptr;
+    UICheckBox *p_SRGBCheckBoxInput = nullptr;
 
     UIImageRenderer *p_textureImageRend = nullptr;
     UIAspectRatioFitter *p_imageAspectRatioFitter = nullptr;

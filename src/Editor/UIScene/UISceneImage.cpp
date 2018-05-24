@@ -121,13 +121,13 @@ void UISceneImage::SetSceneImageCamera(Camera *sceneCam)
         GBuffer *camGBuffer =  sceneCam->GetGBuffer();
 
         ShaderProgram *sp = p_sceneImg->GetActiveMaterial()->GetShaderProgram();
-        GLId prevBoundSP = GL::GetBoundId(GL::BindTarget::SHADER__PROGRAM);
+        GLId prevBoundSP = GL::GetBoundId(GL::BindTarget::SHADER_PROGRAM);
 
         sp->Bind();
         sp->SetInt("B_SceneRenderMode", SCAST<int>(GetRenderMode()), false);
         camGBuffer->BindAttachmentsForReading(sp, false);
 
-        GL::Bind(GL::BindTarget::SHADER__PROGRAM, prevBoundSP);
+        GL::Bind(GL::BindTarget::SHADER_PROGRAM, prevBoundSP);
     }
     p_sceneImg->SetImageTexture(camTexture);
 
