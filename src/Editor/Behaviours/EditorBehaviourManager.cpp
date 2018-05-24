@@ -171,7 +171,7 @@ bool EditorBehaviourManager::DeleteBehaviourInstance(const String &behaviourName
 
 bool EditorBehaviourManager::IsInstanceCreationAllowed() const
 {
-    return ScenePlayer::GetPlayState() != PlayState::Editing;
+    return ScenePlayer::GetPlayState() != PlayState::EDITING;
 }
 
 EditorBehaviourManager *EditorBehaviourManager::GetActive()
@@ -185,7 +185,7 @@ Compiler::Result EditorBehaviourManager::CompileBehaviourObject(const Path &beha
     Path outputObjPath = GetObjectOutputPath(behaviourPath);
     return EditorBehaviourManager::CompileBehaviourObject(behaviourPath,
                                                           outputObjPath,
-                                                          BinType::Debug);
+                                                          BinType::BIN_DEBUG);
 }
 Compiler::Result EditorBehaviourManager::CompileBehaviourObject(
                                         const Path &behaviourFilepath,
@@ -251,7 +251,7 @@ void EditorBehaviourManager::RemoveOrphanBehaviourLibraries()
     List<Path> behaviourFilepaths = GetBehaviourSourcesPaths();
     {
         List<Path> currentLibPaths = Paths::GetProjectLibrariesDir().
-                                     GetFiles(Path::FindFlag::Recursive);
+                                     GetFiles(Path::FindFlag::RECURSIVE);
         for (Path &libPath : currentLibPaths)
         {
             if (libPath.HasExtension("so")) { File::Remove(libPath); }
@@ -299,7 +299,7 @@ void EditorBehaviourManager::MergeIntoBehavioursLibrary()
     List<Path> behaviourObjs = GetCompiledObjectsPaths();
     Compiler::Result mergeResult = MergeBehaviourObjects(behaviourObjs,
                                                          outputLibPath,
-                                                         BinType::Debug);
+                                                         BinType::BIN_DEBUG);
     if (outputLibPath.IsFile())
     {
         Library *behavioursLibrary = new Library(outputLibPath);
@@ -320,8 +320,8 @@ Compiler::Result EditorBehaviourManager::MergeBehaviourObjects(
     File::CreateDirectory(outputLibFilepath.GetDirectory());
 
     Compiler::Job job = EditorBehaviourManager::CreateBaseJob(binaryType);
-    job.outputMode = Compiler::OutputType::SharedLib;
-    // job.libDirs.PushBack( Paths::GetEngineLibrariesDir( BinType::Debug ) );
+    job.outputMode = Compiler::OutputType::SHARED_LIB;
+    // job.libDirs.PushBack( Paths::GetEngineLibrariesDir( BinType::BIN_DEBUG ) );
     job.AddInputFiles(behaviourObjectFilepaths.To<Array>());
     job.outputFile = outputLibFilepath;
 
@@ -330,12 +330,12 @@ Compiler::Result EditorBehaviourManager::MergeBehaviourObjects(
 
 List<Path> EditorBehaviourManager::GetCompiledObjectsPaths()
 {
-    return Paths::GetProjectLibrariesDir().GetFiles(Path::FindFlag::Simple, {"o"});
+    return Paths::GetProjectLibrariesDir().GetFiles(Path::FindFlag::SIMPLE, {"o"});
 }
 List<Path> EditorBehaviourManager::GetBehaviourSourcesPaths()
 {
     List<Path> behaviourSources = Paths::GetProjectAssetsDir().
-                              GetFiles(Path::FindFlag::Recursive,
+                              GetFiles(Path::FindFlag::RECURSIVE,
                                        Extensions::GetSourceFileExtensions());
 
     // Sometimes we have intermediate files .cpp.hf62 or some things like that
@@ -370,7 +370,7 @@ Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType)
 
     job.flags =  {"-fPIC", "--std=c++11", "-Wl,-O0,--export-dynamic",
                  "-Wl,--whole-archive"};
-    if (binaryType == BinType::Debug)
+    if (binaryType == BinType::BIN_DEBUG)
     {
         job.flags.PushBack( List<String>({"-O0", "-g", "-Wl,-O0"}) );
     }
@@ -395,7 +395,7 @@ Compiler::Job EditorBehaviourManager::CreateCompileBehaviourJob(
                                             BinType binaryType)
 {
     Compiler::Job job = EditorBehaviourManager::CreateBaseJob(binaryType);
-    job.outputMode = Compiler::OutputType::Object;
+    job.outputMode = Compiler::OutputType::OBJECT;
     job.includePaths.PushBack( Paths::GetEngineIncludeDirs() );
     // job.includePaths.PushBack( EditorPaths::GetEditorIncludeDirs() );
     job.includePaths.PushBack( Paths::GetProjectIncludeDirs() );
@@ -407,7 +407,7 @@ Compiler::Job EditorBehaviourManager::CreateCompileBehaviourJob(
 
 void EditorBehaviourManager::UpdateCompileInformations()
 {
-    if (ScenePlayer::GetPlayState() != PlayState::Editing) { return; }
+    if (ScenePlayer::GetPlayState() != PlayState::EDITING) { return; }
 
     GetBehaviourTracker()->Update(false);
 

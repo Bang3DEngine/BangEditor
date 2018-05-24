@@ -31,9 +31,9 @@ void CIWPostProcessEffect::InitInnerWidgets()
 
     p_typeComboBox = GameObjectFactory::CreateUIComboBox();
     p_typeComboBox->AddItem("AfterScene",
-                            SCAST<int>(PostProcessEffect::Type::AfterScene));
+                            SCAST<int>(PostProcessEffect::Type::AFTER_SCENE));
     p_typeComboBox->AddItem("AfterCanvas",
-                            SCAST<int>(PostProcessEffect::Type::AfterCanvas));
+                            SCAST<int>(PostProcessEffect::Type::AFTER_CANVAS));
     p_typeComboBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     AddWidget("Priority", p_priorityInput->GetGameObject());

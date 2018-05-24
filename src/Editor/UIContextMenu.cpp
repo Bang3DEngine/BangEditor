@@ -25,7 +25,7 @@ void UIContextMenu::OnUpdate()
 {
     Component::OnUpdate();
 
-    if (Input::GetMouseButtonDown(MouseButton::Right))
+    if (Input::GetMouseButtonDown(MouseButton::RIGHT))
     {
         List<GameObject*> parts = m_parts;
         parts.PushBack(GetGameObject());
@@ -97,7 +97,7 @@ ContextMenu::ContextMenu()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
-    p_rootItem = GameObject::Create<MenuItem>( MenuItem::MenuItemType::Root );
+    p_rootItem = GameObject::Create<MenuItem>( MenuItem::MenuItemType::ROOT );
     GetRootItem()->SetDestroyOnClose(true);
 
     RectTransform *rt = GetRootItem()->GetRectTransform();
@@ -106,8 +106,8 @@ ContextMenu::ContextMenu()
     rt->TranslateLocal( Vector3(0, 0, -0.001f) );
 
     UIContentSizeFitter *csf = GetRootItem()->AddComponent<UIContentSizeFitter>();
-    csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
-    csf->SetVerticalSizeType(LayoutSizeType::Preferred);
+    csf->SetHorizontalSizeType(LayoutSizeType::PREFERRED);
+    csf->SetVerticalSizeType(LayoutSizeType::PREFERRED);
 
     GetRootItem()->AddComponent<UILayoutIgnorer>();
     GetRootItem()->EventEmitter<IDestroyListener>::RegisterListener(this);
@@ -121,8 +121,8 @@ void ContextMenu::Update()
 {
     GameObject::Update();
 
-    if (Input::GetMouseButtonDown(MouseButton::Right) ||
-        Input::GetMouseButtonDown(MouseButton::Left))
+    if (Input::GetMouseButtonDown(MouseButton::RIGHT) ||
+        Input::GetMouseButtonDown(MouseButton::LEFT))
     {
         if (!m_justCreated && !GetRootItem()->GetRectTransform()->IsMouseOver(true))
         {

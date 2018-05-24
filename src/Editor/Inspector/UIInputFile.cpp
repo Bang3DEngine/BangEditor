@@ -28,7 +28,7 @@ UIInputFile::UIInputFile()
     le->SetFlexibleWidth( 1.0f );
 
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
-    hl->SetChildrenVerticalStretch(Stretch::Full);
+    hl->SetChildrenVerticalStretch(Stretch::FULL);
     hl->SetSpacing(5);
 
     p_pathInputText = GameObjectFactory::CreateUIInputText();

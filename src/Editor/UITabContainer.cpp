@@ -23,8 +23,8 @@ UITabContainer::UITabContainer()
 
     p_headersBar = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *headerBarHL = p_headersBar->AddComponent<UIHorizontalLayout>();
-    headerBarHL->SetChildrenVerticalStretch(Stretch::None);
-    headerBarHL->SetChildrenVerticalAlignment(VerticalAlignment::Bot);
+    headerBarHL->SetChildrenVerticalStretch(Stretch::NONE);
+    headerBarHL->SetChildrenVerticalAlignment(VerticalAlignment::BOT);
 
     UILayoutElement *headerBarLE = p_headersBar->AddComponent<UILayoutElement>();
     headerBarLE->SetMinHeight(22);

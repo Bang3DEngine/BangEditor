@@ -17,7 +17,7 @@ USING_NAMESPACE_BANG_EDITOR
 
 ScenePlayer::ScenePlayer()
 {
-    ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::P, "Play"),
+    ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::P, "Play"),
                                       &ScenePlayer::OnShortcutPressed);
 }
 
@@ -69,15 +69,15 @@ PlayState ScenePlayer::GetPlayState()
 
 bool Editor::IsEditingScene()
 {
-    return ScenePlayer::GetPlayState() == PlayState::Editing;
+    return ScenePlayer::GetPlayState() == PlayState::EDITING;
 }
 
 void ScenePlayer::PlayScene()
 {
-    if (ScenePlayer::GetPlayState() != PlayState::Playing)
+    if (ScenePlayer::GetPlayState() != PlayState::PLAYING)
     {
         ScenePlayer *sp = ScenePlayer::GetInstance();
-        if (ScenePlayer::GetPlayState() == PlayState::Editing)
+        if (ScenePlayer::GetPlayState() == PlayState::EDITING)
         {
             sp->p_editOpenScene = EditorSceneManager::GetOpenScene();
 
@@ -89,7 +89,7 @@ void ScenePlayer::PlayScene()
                 Scene *openScene = EditorSceneManager::GetOpenScene();
                 if (openScene)
                 {
-                    ScenePlayer::SetPlayState(PlayState::JustBeforePlaying);
+                    ScenePlayer::SetPlayState(PlayState::JUST_BEFORE_PLAYING);
 
                     // Create new scene cloning the open scene into it
                     sp->p_playOpenScene = GameObjectFactory::CreateScene(false);
@@ -102,23 +102,23 @@ void ScenePlayer::PlayScene()
                     SceneManager::LoadSceneInstantly(sp->p_playOpenScene, false);
 
                     Time::SetDeltaTimeReferenceToNow();
-                    ScenePlayer::SetPlayState(PlayState::Playing);
+                    ScenePlayer::SetPlayState(PlayState::PLAYING);
                 }
             }
         }
-        else if (ScenePlayer::GetPlayState() == PlayState::Paused)
+        else if (ScenePlayer::GetPlayState() == PlayState::PAUSED)
         {
             AudioManager::ResumeAllSounds();
-            ScenePlayer::SetPlayState(PlayState::Playing);
+            ScenePlayer::SetPlayState(PlayState::PLAYING);
         }
     }
 }
 
 void ScenePlayer::PauseScene()
 {
-    if (ScenePlayer::GetPlayState() != PlayState::Paused)
+    if (ScenePlayer::GetPlayState() != PlayState::PAUSED)
     {
-        ScenePlayer::SetPlayState(PlayState::Paused);
+        ScenePlayer::SetPlayState(PlayState::PAUSED);
         AudioManager::PauseAllSounds();
     }
 }
@@ -132,13 +132,13 @@ void ScenePlayer::StepFrame()
 
 void ScenePlayer::StopScene()
 {
-    if (ScenePlayer::GetPlayState() != PlayState::Editing)
+    if (ScenePlayer::GetPlayState() != PlayState::EDITING)
     {
         ScenePlayer *sp = ScenePlayer::GetInstance();
         SceneManager::LoadSceneInstantly(sp->p_editOpenScene, false);
         if (sp->p_playOpenScene) { GameObject::Destroy(sp->p_playOpenScene); }
 
-        ScenePlayer::SetPlayState(PlayState::Editing);
+        ScenePlayer::SetPlayState(PlayState::EDITING);
     }
 }
 

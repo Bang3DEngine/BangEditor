@@ -48,7 +48,7 @@ int main(int argc, char **argv)
     mainWindow->SetTitle("Bang");
     mainWindow->Maximize();
 
-    List<Path> sceneFilepaths = gameAssetsDir.GetFiles(Path::FindFlag::Recursive,
+    List<Path> sceneFilepaths = gameAssetsDir.GetFiles(Path::FindFlag::RECURSIVE,
                                                 {Extensions::GetSceneExtension()});
     if (sceneFilepaths.IsEmpty())
     {
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
 
     // Find the behaviours library
     Path behavioursLibPath;
-    List<Path> libPaths = librariesDir.GetFiles(Path::FindFlag::Simple);
+    List<Path> libPaths = librariesDir.GetFiles(Path::FindFlag::SIMPLE);
     for (const Path &libPath : libPaths)
     {
         if (libPath.GetExtension().Contains("so"))

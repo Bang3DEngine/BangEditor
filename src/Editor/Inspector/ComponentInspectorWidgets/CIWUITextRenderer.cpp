@@ -31,14 +31,14 @@ void CIWUITextRenderer::InitInnerWidgets()
     p_colorInput = GameObject::Create<UIInputColor>();
 
     p_horizontalAlignmentInput = GameObjectFactory::CreateUIComboBox();
-    p_horizontalAlignmentInput->AddItem("Left",   int(HorizontalAlignment::Left));
-    p_horizontalAlignmentInput->AddItem("Center", int(HorizontalAlignment::Center));
-    p_horizontalAlignmentInput->AddItem("Right",  int(HorizontalAlignment::Right));
+    p_horizontalAlignmentInput->AddItem("Left",   int(HorizontalAlignment::LEFT));
+    p_horizontalAlignmentInput->AddItem("Center", int(HorizontalAlignment::CENTER));
+    p_horizontalAlignmentInput->AddItem("Right",  int(HorizontalAlignment::RIGHT));
 
     p_verticalAlignmentInput = GameObjectFactory::CreateUIComboBox();
-    p_verticalAlignmentInput->AddItem("Top",    int(VerticalAlignment::Top));
-    p_verticalAlignmentInput->AddItem("Center", int(VerticalAlignment::Center));
-    p_verticalAlignmentInput->AddItem("Bot",    int(VerticalAlignment::Bot));
+    p_verticalAlignmentInput->AddItem("Top",    int(VerticalAlignment::TOP));
+    p_verticalAlignmentInput->AddItem("Center", int(VerticalAlignment::CENTER));
+    p_verticalAlignmentInput->AddItem("Bot",    int(VerticalAlignment::BOT));
 
     p_fontFileInput = GameObject::Create<UIInputFile>();
     p_fontFileInput->SetExtensions( Extensions::GetTTFExtensions() );

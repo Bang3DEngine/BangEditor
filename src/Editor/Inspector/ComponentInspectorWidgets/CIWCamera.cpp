@@ -43,15 +43,15 @@ void CIWCamera::InitInnerWidgets()
 
     p_projectionModeInput = GameObjectFactory::CreateUIComboBox();
     p_projectionModeInput->AddItem("Orthographic",
-                                   SCAST<int>(Camera::ProjectionMode::Orthographic));
+                                   SCAST<int>(Camera::ProjectionMode::ORTHOGRAPHIC));
     p_projectionModeInput->AddItem("Perspective",
-                                   SCAST<int>(Camera::ProjectionMode::Perspective));
+                                   SCAST<int>(Camera::ProjectionMode::PERSPECTIVE));
     p_projectionModeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Projection Mode", p_projectionModeInput->GetGameObject());
 
     p_clearModeInput = GameObjectFactory::CreateUIComboBox();
-    p_clearModeInput->AddItem("Color",  SCAST<int>(Camera::ClearMode::Color));
-    p_clearModeInput->AddItem("SkyBox", SCAST<int>(Camera::ClearMode::SkyBox));
+    p_clearModeInput->AddItem("Color",  SCAST<int>(Camera::ClearMode::COLOR));
+    p_clearModeInput->AddItem("SkyBox", SCAST<int>(Camera::ClearMode::SKY_BOX));
     p_clearModeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Clear Mode", p_clearModeInput->GetGameObject());
 

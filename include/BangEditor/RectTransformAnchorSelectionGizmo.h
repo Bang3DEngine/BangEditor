@@ -18,7 +18,7 @@ class RectTransformAnchorSelectionGizmo : public SelectionGizmo
     GAMEOBJECT_EDITOR(RectTransformAnchorSelectionGizmo);
 
 public:
-    enum class AnchorSide { LeftBot, LeftTop, RightTop, RightBot };
+    enum class AnchorSide { LEFT_BOT, LEFT_TOP, RIGHT_TOP, RIGHT_BOT };
 
     // GameObject
     void Update() override;
@@ -33,7 +33,7 @@ private:
     static const int AnchorSize;
     static const int AnchorSelectionSize;
 
-    AnchorSide m_anchorSide = AnchorSide::LeftBot;
+    AnchorSide m_anchorSide = AnchorSide::LEFT_BOT;
     Vector2 m_startGrabMousePos = Vector2::Zero;
     Vector2 m_startLocalAnchorMin = Vector2::Zero;
     Vector2 m_startLocalAnchorMax = Vector2::Zero;

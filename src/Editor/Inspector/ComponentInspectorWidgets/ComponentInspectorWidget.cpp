@@ -83,7 +83,7 @@ GameObject *ComponentInspectorWidget::CreateTitleGameObject()
 
     GameObject *titleTextGo = GameObjectFactory::CreateUIGameObject();
     UITextRenderer *titleText = titleTextGo->AddComponent<UITextRenderer>();
-    titleText->SetHorizontalAlign(HorizontalAlignment::Left);
+    titleText->SetHorizontalAlign(HorizontalAlignment::LEFT);
     titleText->SetContent("InspectorWidget");
     titleText->SetTextSize(12);
     p_titleText = titleText;

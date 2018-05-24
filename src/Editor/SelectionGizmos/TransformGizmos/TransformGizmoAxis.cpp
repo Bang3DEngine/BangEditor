@@ -36,7 +36,7 @@ void TransformGizmoAxis::SetAxis(Axis3DExt axis)
     if (axis != GetAxis())
     {
         m_axis = axis;
-        SetColor(SelectionState::Idle);
+        SetColor(SelectionState::IDLE);
     }
 }
 Axis3DExt TransformGizmoAxis::GetAxis() const { return m_axis; }
@@ -55,15 +55,15 @@ void TransformGizmoAxis::SetColor(SelectionState state)
 {
     switch (state)
     {
-        case SelectionState::Idle:
+        case SelectionState::IDLE:
             SetColor( GetAxisColor( GetAxis() ) );
             break;
 
-        case SelectionState::Over:
+        case SelectionState::OVER:
             SetColor(Color::Orange);
             break;
 
-        case SelectionState::Grabbed:
+        case SelectionState::GRABBED:
             SetColor(Color::Yellow);
             break;
     }
@@ -72,5 +72,5 @@ void TransformGizmoAxis::SetColor(SelectionState state)
 void TransformGizmoAxis::OnDisabled()
 {
     SelectionGizmo::OnDisabled();
-    SetColor(SelectionState::Idle);
+    SetColor(SelectionState::IDLE);
 }

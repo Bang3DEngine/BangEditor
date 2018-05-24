@@ -74,12 +74,12 @@ TextureCubeMap *FIWTextureCubeMap::GetTextureCubeMap() const
 void FIWTextureCubeMap::CheckValidity() const
 {
     TextureCubeMap *tcm = GetTextureCubeMap();
-    RH<Imageb> topImg   = tcm->GetImageResource(GL::CubeMapDir::Top);
-    RH<Imageb> botImg   = tcm->GetImageResource(GL::CubeMapDir::Bot);
-    RH<Imageb> leftImg  = tcm->GetImageResource(GL::CubeMapDir::Left);
-    RH<Imageb> rightImg = tcm->GetImageResource(GL::CubeMapDir::Right);
-    RH<Imageb> frontImg = tcm->GetImageResource(GL::CubeMapDir::Front);
-    RH<Imageb> backImg  = tcm->GetImageResource(GL::CubeMapDir::Back);
+    RH<Imageb> topImg   = tcm->GetImageResource(GL::CubeMapDir::TOP);
+    RH<Imageb> botImg   = tcm->GetImageResource(GL::CubeMapDir::BOT);
+    RH<Imageb> leftImg  = tcm->GetImageResource(GL::CubeMapDir::LEFT);
+    RH<Imageb> rightImg = tcm->GetImageResource(GL::CubeMapDir::RIGHT);
+    RH<Imageb> frontImg = tcm->GetImageResource(GL::CubeMapDir::FRONT);
+    RH<Imageb> backImg  = tcm->GetImageResource(GL::CubeMapDir::BACK);
 
     if (!topImg || !botImg || !leftImg || !rightImg || !frontImg || !backImg)
     {
@@ -120,12 +120,12 @@ void FIWTextureCubeMap::UpdateFromFileWhenChanged()
     IValueChangedListener::SetReceiveEvents(false);
 
     TextureCubeMap *tcm = GetTextureCubeMap();
-    const RH<Imageb> topImg   = tcm->GetImageResource(GL::CubeMapDir::Top);
-    const RH<Imageb> botImg   = tcm->GetImageResource(GL::CubeMapDir::Bot);
-    const RH<Imageb> leftImg  = tcm->GetImageResource(GL::CubeMapDir::Left);
-    const RH<Imageb> rightImg = tcm->GetImageResource(GL::CubeMapDir::Right);
-    const RH<Imageb> frontImg = tcm->GetImageResource(GL::CubeMapDir::Front);
-    const RH<Imageb> backImg  = tcm->GetImageResource(GL::CubeMapDir::Back);
+    const RH<Imageb> topImg   = tcm->GetImageResource(GL::CubeMapDir::TOP);
+    const RH<Imageb> botImg   = tcm->GetImageResource(GL::CubeMapDir::BOT);
+    const RH<Imageb> leftImg  = tcm->GetImageResource(GL::CubeMapDir::LEFT);
+    const RH<Imageb> rightImg = tcm->GetImageResource(GL::CubeMapDir::RIGHT);
+    const RH<Imageb> frontImg = tcm->GetImageResource(GL::CubeMapDir::FRONT);
+    const RH<Imageb> backImg  = tcm->GetImageResource(GL::CubeMapDir::BACK);
     p_topTextureInput->SetPath(topImg     ? topImg.Get()->GetResourceFilepath()   : Path::Empty);
     p_botTextureInput->SetPath(botImg     ? botImg.Get()->GetResourceFilepath()   : Path::Empty);
     p_leftTextureInput->SetPath(leftImg   ? leftImg.Get()->GetResourceFilepath()  : Path::Empty);
@@ -156,12 +156,12 @@ void FIWTextureCubeMap::OnValueChanged(Object *object)
 
         };
 
-        Refresh(p_topTextureInput,   tcm, GL::CubeMapDir::Top);
-        Refresh(p_botTextureInput,   tcm, GL::CubeMapDir::Bot);
-        Refresh(p_leftTextureInput,  tcm, GL::CubeMapDir::Left);
-        Refresh(p_rightTextureInput, tcm, GL::CubeMapDir::Right);
-        Refresh(p_frontTextureInput, tcm, GL::CubeMapDir::Front);
-        Refresh(p_backTextureInput,  tcm, GL::CubeMapDir::Back);
+        Refresh(p_topTextureInput,   tcm, GL::CubeMapDir::TOP);
+        Refresh(p_botTextureInput,   tcm, GL::CubeMapDir::BOT);
+        Refresh(p_leftTextureInput,  tcm, GL::CubeMapDir::LEFT);
+        Refresh(p_rightTextureInput, tcm, GL::CubeMapDir::RIGHT);
+        Refresh(p_frontTextureInput, tcm, GL::CubeMapDir::FRONT);
+        Refresh(p_backTextureInput,  tcm, GL::CubeMapDir::BACK);
 
         CheckValidity();
 

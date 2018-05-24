@@ -73,9 +73,9 @@ Inspector::Inspector()
     UILayoutElement *goNameLE = goNameLabelGo->GetComponent<UILayoutElement>();
     goNameLE->SetFlexibleHeight(0.0f);
     p_titleText = goNameLabel->GetText();
-    p_titleText->SetHorizontalAlign(HorizontalAlignment::Left);
+    p_titleText->SetHorizontalAlign(HorizontalAlignment::LEFT);
 
-    p_titleSeparator = GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5);
+    p_titleSeparator = GameObjectFactory::CreateUIHSeparator(LayoutSizeType::MIN, 5);
     p_titleSeparator->SetEnabled(false);
 
     UIVerticalLayout *widgetsVL = widgetsVLGo->AddComponent<UIVerticalLayout>();
@@ -85,16 +85,16 @@ Inspector::Inspector()
     widgetsVL->SetPaddingRight(10);
 
     UIContentSizeFitter *vlCSF = widgetsVLGo->AddComponent<UIContentSizeFitter>();
-    vlCSF->SetVerticalSizeType(LayoutSizeType::Preferred);
+    vlCSF->SetVerticalSizeType(LayoutSizeType::PREFERRED);
 
     p_mainVL = widgetsVL;
     p_scrollPanel = scrollPanel;
 
     GetScrollPanel()->SetHorizontalScrollEnabled(false);
-    GetScrollPanel()->SetVerticalScrollBarSide(HorizontalSide::Right);
+    GetScrollPanel()->SetVerticalScrollBarSide(HorizontalSide::RIGHT);
     GetScrollPanel()->GetScrollArea()->SetContainedGameObject(
                                                 GetMainVL()->GetGameObject() );
-    GetScrollPanel()->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
+    GetScrollPanel()->SetVerticalShowScrollMode(ShowScrollMode::WHEN_NEEDED);
 
     goNameLabel->GetGameObject()->SetParent(mainVLGo);
     p_titleSeparator->SetParent(mainVLGo);
@@ -109,7 +109,7 @@ Inspector::Inspector()
     p_contextMenu->AddButtonPart(this);
 
     // Add a bit of margin below...
-    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Min, 40)->SetParent(
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 40)->SetParent(
                                                                GetWidgetsContainer());
 
     Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);

@@ -106,8 +106,8 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
         GameObject *gridLayoutGo = GameObjectFactory::CreateUIGameObject();
 
         UIContentSizeFitter *csf = gridLayoutGo->AddComponent<UIContentSizeFitter>();
-        csf->SetHorizontalSizeType(LayoutSizeType::None);
-        csf->SetVerticalSizeType(LayoutSizeType::Preferred);
+        csf->SetHorizontalSizeType(LayoutSizeType::NONE);
+        csf->SetVerticalSizeType(LayoutSizeType::PREFERRED);
 
         gridLayoutGo->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
         UIGridLayout *gridLayout = gridLayoutGo->AddComponent<UIGridLayout>();
@@ -119,8 +119,8 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
 
         gridScrollPanelGo->SetParent(scene);
         gridScrollPanel->GetScrollArea()->SetContainedGameObject(gridLayoutGo);
-        gridScrollPanel->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
-        gridScrollPanel->SetVerticalScrollBarSide(HorizontalSide::Right);
+        gridScrollPanel->SetVerticalShowScrollMode(ShowScrollMode::WHEN_NEEDED);
+        gridScrollPanel->SetVerticalScrollBarSide(HorizontalSide::RIGHT);
         gridScrollPanel->SetHorizontalScrollEnabled(false);
 
         // Add paths to grid layout
@@ -138,7 +138,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
             expItem->GetFocusable()->AddClickedCallback(
             [expItem, gridLayoutGo](IFocusable*, ClickType clickType)
             {
-                if (clickType == ClickType::Down)
+                if (clickType == ClickType::DOWN)
                 {
                     // Save path, and select only the clicked one
                     EditorDialog::s_assetPathResult = expItem->GetPath();
@@ -149,7 +149,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
                     }
                     expItem->SetSelected(true);
                 }
-                else if (clickType == ClickType::Double)
+                else if (clickType == ClickType::DOUBLE)
                 {
                     // Directly select
                     EditorDialog::s_accepted = true;
@@ -167,13 +167,13 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
     UITabContainer *tabContainer = GameObject::Create<UITabContainer>();
 
     List<Path> engineAssetPaths =
-            Paths::GetEngineAssetsDir().GetFiles(Path::FindFlag::Recursive,
+            Paths::GetEngineAssetsDir().GetFiles(Path::FindFlag::RECURSIVE,
                                             extensions);
     engineAssetPaths.PushFront(Path::Empty);
     GameObject *engineAssetsGo = CreateAssetContainerGameObject(engineAssetPaths);
 
     List<Path> projectAssetPaths =
-            Paths::GetProjectAssetsDir().GetFiles(Path::FindFlag::Recursive,
+            Paths::GetProjectAssetsDir().GetFiles(Path::FindFlag::RECURSIVE,
                                                   extensions);
     projectAssetPaths.PushFront(Path::Empty);
     GameObject *projectAssetsGo = CreateAssetContainerGameObject(projectAssetPaths);
@@ -205,7 +205,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
         Dialog::EndCurrentDialog();
     });
 
-    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Flexible, 1.0f)
+    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::FLEXIBLE, 1.0f)
                        ->SetParent(buttonsGo);
     cancelButton->GetGameObject()->SetParent(buttonsGo);
     openButton->GetGameObject()->SetParent(buttonsGo);
@@ -243,7 +243,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
     UIImageRenderer *colorPanelImg = GameObjectFactory::CreateUIImage();
     UIFocusable *colorPanelFocusable = colorPanelImg->GetGameObject()->
                                               AddComponent<UIFocusable>();
-    colorPanelFocusable->SetCursorType(Cursor::Type::Hand);
+    colorPanelFocusable->SetCursorType(Cursor::Type::HAND);
     UILayoutElement *colorPanelImgLE = colorPanelImg->GetGameObject()->
                                               AddComponent<UILayoutElement>();
     colorPanelImgLE->SetFlexibleSize( Vector2::One );
@@ -315,7 +315,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
     sliderB->GetGameObject()->GetParent()->SetParent(controlsVLGo);
     sliderA->GetGameObject()->GetParent()->SetParent(controlsVLGo);
 
-    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Preferred,
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::PREFERRED,
                                        10.0f)->SetParent(controlsVLGo);
 
     UILabel *resultLabel = GameObjectFactory::CreateUILabel();
@@ -323,7 +323,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
                  SetFlexibleHeight(0.0f);
     resultLabel->GetText()->SetContent("Result:");
     resultLabel->GetText()->SetTextColor(Color::Black);
-    resultLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
+    resultLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::LEFT);
     resultLabel->GetGameObject()->SetParent(controlsVLGo);
 
     UIImageRenderer *resultColorContainer = GameObjectFactory::CreateUIImage();
@@ -333,7 +333,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
     resultColorContainer->SetImageTexture(TextureFactory::GetCheckerboard().Get());
     resultColorContainer->GetGameObject()->SetParent(controlsVLGo);
 
-    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Preferred,
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::PREFERRED,
                                        35.0f)->SetParent(controlsVLGo);
 
     UIImageRenderer *resultColor = GameObjectFactory::CreateUIImage();
@@ -351,7 +351,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
             GameObjectFactory::CreateUIGameObjectInto(this);
 
             UIFocusable *focusable = AddComponent<UIFocusable>();
-            focusable->SetCursorType( Cursor::Type::Hand );
+            focusable->SetCursorType( Cursor::Type::HAND );
 
             p_img = AddComponent<UIImageRenderer>();
             p_img->SetImageTexture(TextureFactory::GetCircleIcon().Get());
@@ -370,12 +370,12 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
 
             RectTransform *parentRT = GetParent()->GetRectTransform();
             if ((parentRT->IsMouseOver() || GetRectTransform()->IsMouseOver()) &&
-                  Input::GetMouseButton(MouseButton::Left))
+                  Input::GetMouseButton(MouseButton::LEFT))
             {
                 m_colorPanelHasBeenPressed = true;
             }
 
-            if (Input::GetMouseButtonUp(MouseButton::Left))
+            if (Input::GetMouseButtonUp(MouseButton::LEFT))
             {
                 m_colorPanelHasBeenPressed = false;
             }

@@ -50,10 +50,10 @@ Hierarchy::Hierarchy()
     GetUITree()->GetUIList()->GetScrollPanel()->SetForceHorizontalFit(true);
 
     UIScrollPanel *scrollPanel = GetUITree()->GetUIList()->GetScrollPanel();
-    scrollPanel->SetVerticalScrollBarSide(HorizontalSide::Left);
+    scrollPanel->SetVerticalScrollBarSide(HorizontalSide::LEFT);
     scrollPanel->GetScrollArea()->GetBackground()->SetTint(Color::Zero);
-    scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::Always);
-    scrollPanel->SetHorizontalShowScrollMode(ShowScrollMode::Always);
+    scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::ALWAYS);
+    scrollPanel->SetHorizontalShowScrollMode(ShowScrollMode::ALWAYS);
     scrollPanel->SetVerticalScrollEnabled(true);
     scrollPanel->SetHorizontalScrollEnabled(true);
 
@@ -81,15 +81,15 @@ Hierarchy::Hierarchy()
 
     ShortcutManager::RegisterShortcut(Shortcut(Key::F2, "Rename"),
                                       &Hierarchy::OnShortcutPressed);
-    ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::C, "Copy"),
+    ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::C, "Copy"),
                                       &Hierarchy::OnShortcutPressed);
-    ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::X, "Cut"),
+    ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::X, "Cut"),
                                       &Hierarchy::OnShortcutPressed);
-    ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::V, "Paste"),
+    ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::V, "Paste"),
                                       &Hierarchy::OnShortcutPressed);
-    ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::D, "Duplicate"),
+    ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::D, "Duplicate"),
                                       &Hierarchy::OnShortcutPressed);
-    ShortcutManager::RegisterShortcut(Shortcut(Key::Delete, "Delete"),
+    ShortcutManager::RegisterShortcut(Shortcut(Key::DELETE, "Delete"),
                                       &Hierarchy::OnShortcutPressed);
 }
 

@@ -28,8 +28,8 @@ ComponentsSelectionGizmo::ComponentsSelectionGizmo()
 
     AddComponent<HideInHierarchy>();
     AddComponent<NotSelectableInEditor>();
-    GetHideFlags().SetOn(HideFlag::DontSerialize);
-    GetHideFlags().SetOn(HideFlag::DontClone);
+    GetHideFlags().SetOn(HideFlag::DONT_SERIALIZE);
+    GetHideFlags().SetOn(HideFlag::DONT_CLONE);
 }
 
 ComponentsSelectionGizmo::~ComponentsSelectionGizmo()
@@ -51,7 +51,7 @@ void ComponentsSelectionGizmo::Render(RenderPass rp, bool renderChildren)
     {
         if (!comp->IsActive()) { continue; }
 
-        if (rp == RenderPass::Overlay)
+        if (rp == RenderPass::OVERLAY)
         {
             if (Camera *cam = DCAST<Camera*>(comp))
             { RenderCameraGizmo(cam); }
@@ -86,9 +86,9 @@ void ComponentsSelectionGizmo::RenderCameraGizmo(Camera *cam)
     Gizmos::Reset();
     Gizmos::SetColor(Color::Green);
     Gizmos::SetReceivesLighting(false);
-    Gizmos::SetRenderPass(RenderPass::Overlay);
+    Gizmos::SetRenderPass(RenderPass::OVERLAY);
 
-    if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
+    if (cam->GetProjectionMode() == Camera::ProjectionMode::PERSPECTIVE)
     {
         Gizmos::RenderFrustum(camTransform->GetForward(),
                               camTransform->GetUp(),
@@ -123,7 +123,7 @@ void ComponentsSelectionGizmo::RenderPointLightGizmo(PointLight *pointLight)
     Gizmos::SetThickness(2.0f);
     Gizmos::SetReceivesLighting(false);
     Gizmos::SetColor(pointLight->GetColor());
-    Gizmos::SetRenderPass(RenderPass::Overlay);
+    Gizmos::SetRenderPass(RenderPass::OVERLAY);
     Transform *plTransform = pointLight->GetGameObject()->GetTransform();
     Gizmos::RenderSimpleSphere(plTransform->GetPosition(),
                                pointLight->GetRange(),
@@ -156,7 +156,7 @@ void ComponentsSelectionGizmo::RenderDirectionalLightGizmo(
     Gizmos::SetThickness(2.0f);
     Gizmos::SetReceivesLighting(false);
     Gizmos::SetColor(dirLight->GetColor());
-    Gizmos::SetRenderPass(RenderPass::Overlay);
+    Gizmos::SetRenderPass(RenderPass::OVERLAY);
     for (float ang = 0.0f; ang <= 2 * Math::Pi; ang += Math::Pi / 4.0f)
     {
         const Vector3 offx = right * Math::Cos(ang);
@@ -177,7 +177,7 @@ void ComponentsSelectionGizmo::RenderAudioSourceGizmo(AudioSource *audioSource)
     Gizmos::SetThickness(2.0f);
     Gizmos::SetColor(Color::White);
     Gizmos::SetReceivesLighting(false);
-    Gizmos::SetRenderPass(RenderPass::Overlay);
+    Gizmos::SetRenderPass(RenderPass::OVERLAY);
     Gizmos::RenderSimpleSphere(audioSource->GetGameObject()->
                                     GetTransform()->GetPosition(),
                                audioSource->GetRange(),

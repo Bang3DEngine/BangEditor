@@ -34,8 +34,8 @@ void GameBuilder::BuildGame()
 
     GameBuilder::BuildGame(gameExecPath.GetName(),
                            gameExecPath.GetDirectory(),
-                           // BinType::Debug,
-                           BinType::Release,
+                           // BinType::BIN_DEBUG,
+                           BinType::BIN_RELEASE,
                            true);
 }
 
@@ -45,7 +45,7 @@ void GameBuilder::BuildGame(const String &gameName,
                             bool compileBehaviours)
 {
     List<Path> sceneFiles = Paths::GetProjectAssetsDir()
-                                    .GetFiles(Path::FindFlag::Recursive,
+                                    .GetFiles(Path::FindFlag::RECURSIVE,
                                         {Extensions::GetSceneExtension()});
     if (sceneFiles.IsEmpty())
     {
@@ -91,7 +91,7 @@ bool GameBuilder::CompileGameExecutable(BinType binaryType)
 {/*
     const Path gameOutputFilepath = execDir.Append(buildGameDirectory).
                                     Append("Game");
-    String debugOrRelease = (binaryType == BinType::Debug) ? "Debug" : "Release";
+    String debugOrRelease = (binaryType == BinType::BIN_DEBUG) ? "Debug" : "Release";
     String cmd = "cd " + execDir.GetAbsolute()                 + " && " +
                  "mkdir -p " + buildGameDirectory              + " && " +
                  "cd "       + buildGameDirectory              + " && " +
@@ -173,7 +173,7 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
 
     // Compile every behaviour into its .o
     List<Path> behavioursSourceFiles = Paths::GetProjectAssetsDir()
-                                        .GetFiles(Path::FindFlag::Recursive,
+                                        .GetFiles(Path::FindFlag::RECURSIVE,
                                          Extensions::GetSourceFileExtensions());
 
     // Preprocess behaviours
@@ -202,7 +202,7 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
     }
 
     // Merge into .so
-    List<Path> behaviourObjectsPaths = dataLibsDir.GetFiles(Path::FindFlag::Simple,
+    List<Path> behaviourObjectsPaths = dataLibsDir.GetFiles(Path::FindFlag::SIMPLE,
                                                          {"o"});
     Path outputLibPath =
                 dataLibsDir.Append("Behaviours")

@@ -36,7 +36,7 @@ RotateGizmoAxis::RotateGizmoAxis()
     p_selectionGo = GameObjectFactory::CreateGameObject(true);
     p_selectionRenderer = p_selectionGo->AddComponent<MeshRenderer>();
     p_selectionRenderer->SetMaterial(MaterialFactory::GetGizmosUnLightedOverlay().Get());
-    p_selectionRenderer->GetMaterial()->SetCullFace(GL::CullFaceExt::None);
+    p_selectionRenderer->GetMaterial()->SetCullFace(GL::CullFaceExt::NONE);
     p_selectionRenderer->SetMesh(m_selectionMesh.Get());
 
 
@@ -151,7 +151,7 @@ void RotateGizmoAxis::Update()
                                                               newDirLocal);
 
                 // Apply Snapping if demanded with shift
-                if (Input::GetKey(Key::LShift))
+                if (Input::GetKey(Key::LSHIFT))
                 {
                     constexpr float SnappingDeg = 15.0f;
                     Vector3 deltaEulerDeg = deltaLocalRot.GetEulerAngles();

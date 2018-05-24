@@ -17,8 +17,8 @@ GameObjectSelectionGizmo::GameObjectSelectionGizmo()
 
     AddComponent<HideInHierarchy>();
     AddComponent<NotSelectableInEditor>();
-    GetHideFlags().SetOn(HideFlag::DontSerialize);
-    GetHideFlags().SetOn(HideFlag::DontClone);
+    GetHideFlags().SetOn(HideFlag::DONT_SERIALIZE);
+    GetHideFlags().SetOn(HideFlag::DONT_CLONE);
 }
 
 GameObjectSelectionGizmo::~GameObjectSelectionGizmo()
@@ -34,7 +34,7 @@ void GameObjectSelectionGizmo::Render(RenderPass rp, bool renderChildren)
     SelectionFramebuffer *sfb = GEngine::GetActiveSelectionFramebuffer();
     if (!sfb || !GL::IsBound(sfb))
     {
-        if (rp == RenderPass::Overlay)
+        if (rp == RenderPass::OVERLAY)
         {
             GBuffer *gb = GEngine::GetActiveGBuffer();
             gb->PushDepthStencilTexture();

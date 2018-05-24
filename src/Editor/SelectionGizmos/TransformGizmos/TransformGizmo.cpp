@@ -28,8 +28,8 @@ TransformGizmo::TransformGizmo()
     AddComponent<Transform>();
     AddComponent<HideInHierarchy>();
     AddComponent<NotSelectableInEditor>();
-    GetHideFlags().SetOn(HideFlag::DontSerialize);
-    GetHideFlags().SetOn(HideFlag::DontClone);
+    GetHideFlags().SetOn(HideFlag::DONT_SERIALIZE);
+    GetHideFlags().SetOn(HideFlag::DONT_CLONE);
 
     p_worldGizmoContainer = GameObjectFactory::CreateGameObject(true);
     p_worldGizmoContainer->AddComponent<HideInHierarchy>();
@@ -68,14 +68,14 @@ void TransformGizmo::Update()
     GameObject *refGo = GetReferencedGameObject();
     if (!refGo || !refGo->GetTransform()) { return; }
 
-    if      (Input::GetKeyDown(Key::W)) { m_transformMode = TransformMode::Translate; }
-    else if (Input::GetKeyDown(Key::E)) { m_transformMode = TransformMode::Rotate; }
-    else if (Input::GetKeyDown(Key::R)) { m_transformMode = TransformMode::Scale; }
-    else if (Input::GetKeyDown(Key::T)) { m_transformMode = TransformMode::Rect; }
+    if      (Input::GetKeyDown(Key::W)) { m_transformMode = TransformMode::TRANSLATE; }
+    else if (Input::GetKeyDown(Key::E)) { m_transformMode = TransformMode::ROTATE; }
+    else if (Input::GetKeyDown(Key::R)) { m_transformMode = TransformMode::SCALE; }
+    else if (Input::GetKeyDown(Key::T)) { m_transformMode = TransformMode::RECT; }
 
     switch (m_transformMode)
     {
-        case TransformMode::Rect:
+        case TransformMode::RECT:
             GetTransform()->SetLocalPosition(Vector3::Zero);
             GetTransform()->SetLocalRotation(Quaternion::Identity);
             GetTransform()->SetLocalScale(Vector3::One);
@@ -88,28 +88,28 @@ void TransformGizmo::Update()
 
     switch (m_transformMode)
     {
-        case TransformMode::Translate:
+        case TransformMode::TRANSLATE:
             p_translateGizmo->SetEnabled(true);
             p_rotateGizmo->SetEnabled(false);
             p_scaleGizmo->SetEnabled(false);
             p_rectTransformGizmo->SetEnabled(false);
             break;
 
-        case TransformMode::Rotate:
+        case TransformMode::ROTATE:
             p_translateGizmo->SetEnabled(false);
             p_rotateGizmo->SetEnabled(true);
             p_scaleGizmo->SetEnabled(false);
             p_rectTransformGizmo->SetEnabled(false);
             break;
 
-        case TransformMode::Scale:
+        case TransformMode::SCALE:
             p_translateGizmo->SetEnabled(false);
             p_rotateGizmo->SetEnabled(false);
             p_scaleGizmo->SetEnabled(true);
             p_rectTransformGizmo->SetEnabled(false);
             break;
 
-        case TransformMode::Rect:
+        case TransformMode::RECT:
             p_translateGizmo->SetEnabled(false);
             p_rotateGizmo->SetEnabled(false);
             p_scaleGizmo->SetEnabled(false);
@@ -155,11 +155,11 @@ void TransformGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
     {
         if (referencedGameObject->HasComponent<RectTransform>())
         {
-            m_transformMode = TransformMode::Rect;
+            m_transformMode = TransformMode::RECT;
         }
-        else if (m_transformMode == TransformMode::Rect)
+        else if (m_transformMode == TransformMode::RECT)
         {
-            m_transformMode = TransformMode::Translate;
+            m_transformMode = TransformMode::TRANSLATE;
         }
         Update(); // To avoid a bit of flickering
     }

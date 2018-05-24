@@ -141,9 +141,9 @@ MenuBar::MenuBar()
     createUIImageGO->SetSelectedCallback(MenuBar::OnCreateUIImageGO);
 
     // Shortcuts
-    RegisterShortcut( Shortcut(Key::LCtrl,              Key::S, "SaveScene")   );
-    RegisterShortcut( Shortcut(Key::LCtrl, Key::LShift, Key::S, "SaveSceneAs") );
-    RegisterShortcut( Shortcut(Key::LCtrl,              Key::O, "OpenScene")   );
+    RegisterShortcut( Shortcut(Key::LCTRL,              Key::S, "SaveScene")   );
+    RegisterShortcut( Shortcut(Key::LCTRL, Key::LSHIFT, Key::S, "SaveSceneAs") );
+    RegisterShortcut( Shortcut(Key::LCTRL,              Key::O, "OpenScene")   );
 }
 
 MenuBar::~MenuBar()
@@ -203,7 +203,7 @@ void MenuBar::Update()
 
 MenuItem* MenuBar::AddItem()
 {
-    MenuItem *item = GameObject::Create<MenuItem>( MenuItem::MenuItemType::Top );
+    MenuItem *item = GameObject::Create<MenuItem>( MenuItem::MenuItemType::TOP );
     item->SetParent(this);
     m_items.PushBack(item);
     return item;

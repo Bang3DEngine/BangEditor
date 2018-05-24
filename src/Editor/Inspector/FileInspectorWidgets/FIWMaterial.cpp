@@ -88,12 +88,12 @@ void FIWMaterial::Init()
     p_metalnessSlider->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_renderPassInput = GameObjectFactory::CreateUIComboBox();
-    p_renderPassInput->AddItem("Scene",              SCAST<int>(RenderPass::Scene) );
-    p_renderPassInput->AddItem("Canvas",             SCAST<int>(RenderPass::Canvas) );
-    p_renderPassInput->AddItem("Overlay",            SCAST<int>(RenderPass::Overlay) );
-    p_renderPassInput->AddItem("ScenePostProcess",   SCAST<int>(RenderPass::ScenePostProcess) );
-    p_renderPassInput->AddItem("CanvasPostProcess",  SCAST<int>(RenderPass::CanvasPostProcess) );
-    p_renderPassInput->AddItem("OverlayPostProcess", SCAST<int>(RenderPass::OverlayPostProcess) );
+    p_renderPassInput->AddItem("Scene",              SCAST<int>(RenderPass::SCENE) );
+    p_renderPassInput->AddItem("Canvas",             SCAST<int>(RenderPass::CANVAS) );
+    p_renderPassInput->AddItem("Overlay",            SCAST<int>(RenderPass::OVERLAY) );
+    p_renderPassInput->AddItem("ScenePostProcess",   SCAST<int>(RenderPass::SCENE_POSTPROCESS) );
+    p_renderPassInput->AddItem("CanvasPostProcess",  SCAST<int>(RenderPass::CANVAS_POSTPROCESS) );
+    p_renderPassInput->AddItem("OverlayPostProcess", SCAST<int>(RenderPass::OVERLAY_POSTPROCESS) );
     p_renderPassInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_vertexShaderInput = GameObject::Create<UIInputFile>();
@@ -109,10 +109,10 @@ void FIWMaterial::Init()
     p_lineWidthInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_cullFaceInput = GameObjectFactory::CreateUIComboBox();
-    p_cullFaceInput->AddItem("None",         SCAST<int>(GL::CullFaceExt::None) );
-    p_cullFaceInput->AddItem("Back",         SCAST<int>(GL::CullFaceExt::Back) );
-    p_cullFaceInput->AddItem("Front",        SCAST<int>(GL::CullFaceExt::Front) );
-    p_cullFaceInput->AddItem("FrontAndBack", SCAST<int>(GL::CullFaceExt::FrontAndBack) );
+    p_cullFaceInput->AddItem("None",         SCAST<int>(GL::CullFaceExt::NONE) );
+    p_cullFaceInput->AddItem("Back",         SCAST<int>(GL::CullFaceExt::BACK) );
+    p_cullFaceInput->AddItem("Front",        SCAST<int>(GL::CullFaceExt::FRONT) );
+    p_cullFaceInput->AddItem("FrontAndBack", SCAST<int>(GL::CullFaceExt::FRONT_AND_BACK) );
     p_cullFaceInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_renderWireframe = GameObjectFactory::CreateUICheckBox();
@@ -131,13 +131,13 @@ void FIWMaterial::Init()
 
     UIContentSizeFitter *previewContentSizeFitter =
                      materialPreviewGo->AddComponent<UIContentSizeFitter>();
-    previewContentSizeFitter->SetVerticalSizeType(LayoutSizeType::Preferred);
-    previewContentSizeFitter->SetHorizontalSizeType(LayoutSizeType::Preferred);
+    previewContentSizeFitter->SetVerticalSizeType(LayoutSizeType::PREFERRED);
+    previewContentSizeFitter->SetHorizontalSizeType(LayoutSizeType::PREFERRED);
 
     UIAspectRatioFitter *previewAspectRatioSizeFitter =
                      materialPreviewGo->AddComponent<UIAspectRatioFitter>();
     previewAspectRatioSizeFitter->SetAspectRatio(1.0f);
-    previewAspectRatioSizeFitter->SetAspectRatioMode(AspectRatioMode::Keep);
+    previewAspectRatioSizeFitter->SetAspectRatioMode(AspectRatioMode::KEEP);
 
     AddWidget(materialPreviewGo,      256);
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);

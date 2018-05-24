@@ -21,7 +21,7 @@ class MenuItem : public GameObject
     GAMEOBJECT(MenuItem);
 
 public:
-    enum class MenuItemType { Root, Top, Normal };
+    enum class MenuItemType { ROOT, TOP, NORMAL };
 
     // GameObject
     void Update() override;
@@ -57,7 +57,7 @@ public:
     void SetSelectedCallback(ItemSelectedCallback selectedCallback);
 
 protected:
-    MenuItem(MenuItemType itemType = MenuItemType::Normal);
+    MenuItem(MenuItemType itemType = MenuItemType::NORMAL);
     virtual ~MenuItem();
 
 private:

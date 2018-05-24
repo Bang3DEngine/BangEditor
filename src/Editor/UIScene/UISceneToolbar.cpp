@@ -52,23 +52,23 @@ UISceneToolbar::UISceneToolbar()
         (*button)->GetFocusable()->AddClickedCallback(
                     [callbackFunc](IFocusable*, ClickType clickType)
         {
-            if (clickType == ClickType::Down) { callbackFunc(); }
+            if (clickType == ClickType::DOWN) { callbackFunc(); }
         });
         (*button)->GetGameObject()->SetParent(this);
     };
 
     AddToolbarButton(&p_translateButton, translateIcon.Get(),
                      [&]() { TransformGizmo::GetInstance()->SetTransformMode(
-                             TransformGizmo::TransformMode::Translate); });
+                             TransformGizmo::TransformMode::TRANSLATE); });
     AddToolbarButton(&p_rotateButton, rotateIcon.Get(),
                      [&]() { TransformGizmo::GetInstance()->SetTransformMode(
-                             TransformGizmo::TransformMode::Rotate); });
+                             TransformGizmo::TransformMode::ROTATE); });
     AddToolbarButton(&p_scaleButton, scaleIcon.Get(),
                      [&]() { TransformGizmo::GetInstance()->SetTransformMode(
-                             TransformGizmo::TransformMode::Scale); });
+                             TransformGizmo::TransformMode::SCALE); });
     AddToolbarButton(&p_rectTransformButton, rectTransformIcon.Get(),
                      [&]() { TransformGizmo::GetInstance()->SetTransformMode(
-                             TransformGizmo::TransformMode::Rect); });
+                             TransformGizmo::TransformMode::RECT); });
 
     GameObjectFactory::CreateUIHSpacer()->SetParent(this);
 
@@ -82,16 +82,16 @@ UISceneToolbar::UISceneToolbar()
                      [&]() { ScenePlayer::StopScene(); });
 
     p_renderModeInput = GameObjectFactory::CreateUIComboBox();
-    p_renderModeInput->AddItem("Color",            SCAST<int>(UISceneImage::RenderMode::Color));
-    p_renderModeInput->AddItem("Albedo",           SCAST<int>(UISceneImage::RenderMode::Albedo));
-    p_renderModeInput->AddItem("Normal",           SCAST<int>(UISceneImage::RenderMode::Normal));
-    p_renderModeInput->AddItem("World Position",   SCAST<int>(UISceneImage::RenderMode::WorldPosition));
-    p_renderModeInput->AddItem("Roughness",        SCAST<int>(UISceneImage::RenderMode::Roughness));
-    p_renderModeInput->AddItem("Metalness",        SCAST<int>(UISceneImage::RenderMode::Metalness));
-    p_renderModeInput->AddItem("Receives Light",   SCAST<int>(UISceneImage::RenderMode::ReceivesLight));
-    p_renderModeInput->AddItem("Receives Shadows", SCAST<int>(UISceneImage::RenderMode::ReceivesShadows));
-    p_renderModeInput->AddItem("Depth",            SCAST<int>(UISceneImage::RenderMode::Depth));
-    p_renderModeInput->AddItem("Selection",        SCAST<int>(UISceneImage::RenderMode::Selection));
+    p_renderModeInput->AddItem("Color",            SCAST<int>(UISceneImage::RenderMode::COLOR));
+    p_renderModeInput->AddItem("Albedo",           SCAST<int>(UISceneImage::RenderMode::ALBEDO));
+    p_renderModeInput->AddItem("Normal",           SCAST<int>(UISceneImage::RenderMode::NORMAL));
+    p_renderModeInput->AddItem("World Position",   SCAST<int>(UISceneImage::RenderMode::WORLD_POSITION));
+    p_renderModeInput->AddItem("Roughness",        SCAST<int>(UISceneImage::RenderMode::ROUGHNESS));
+    p_renderModeInput->AddItem("Metalness",        SCAST<int>(UISceneImage::RenderMode::METALNESS));
+    p_renderModeInput->AddItem("Receives Light",   SCAST<int>(UISceneImage::RenderMode::RECEIVES_LIGHT));
+    p_renderModeInput->AddItem("Receives Shadows", SCAST<int>(UISceneImage::RenderMode::RECEIVES_SHADOWS));
+    p_renderModeInput->AddItem("Depth",            SCAST<int>(UISceneImage::RenderMode::DEPTH));
+    p_renderModeInput->AddItem("Selection",        SCAST<int>(UISceneImage::RenderMode::SELECTION));
     p_renderModeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_showDebugStatsCheckbox = GameObjectFactory::CreateUICheckBox();
@@ -104,7 +104,7 @@ UISceneToolbar::UISceneToolbar()
     showDebugStatsText->SetTextSize(11);
     showDebugStatsText->SetContent("Stats");
 
-    GameObjectFactory::CreateUISpacer(LayoutSizeType::Flexible, Vector2::One)->
+    GameObjectFactory::CreateUISpacer(LayoutSizeType::FLEXIBLE, Vector2::One)->
                         SetParent(this);
     p_renderModeInput->GetGameObject()->SetParent(this);
     showDebugStatsTextGo->SetParent(this);
@@ -134,19 +134,19 @@ void UISceneToolbar::Update()
 
     switch (TransformGizmo::GetInstance()->GetTransformMode())
     {
-        case TransformGizmo::TransformMode::Translate:
+        case TransformGizmo::TransformMode::TRANSLATE:
             p_translateButton->SetBlocked(true);
         break;
 
-        case TransformGizmo::TransformMode::Rotate:
+        case TransformGizmo::TransformMode::ROTATE:
             p_rotateButton->SetBlocked(true);
         break;
 
-        case TransformGizmo::TransformMode::Scale:
+        case TransformGizmo::TransformMode::SCALE:
             p_scaleButton->SetBlocked(true);
         break;
 
-        case TransformGizmo::TransformMode::Rect:
+        case TransformGizmo::TransformMode::RECT:
             p_rectTransformButton->SetBlocked(true);
         break;
     }
@@ -191,9 +191,9 @@ void UISceneToolbar::OnPlayStateChanged(PlayState,
 {
     switch (newPlayState)
     {
-        case PlayState::Editing:   OnStopScene();      break;
-        case PlayState::Paused:    OnPauseScene();     break;
-        case PlayState::Playing:   OnPlayScene();      break;
+        case PlayState::EDITING:   OnStopScene();      break;
+        case PlayState::PAUSED:    OnPauseScene();     break;
+        case PlayState::PLAYING:   OnPlayScene();      break;
         default: break;
     }
 }

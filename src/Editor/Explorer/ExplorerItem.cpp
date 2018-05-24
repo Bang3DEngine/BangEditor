@@ -49,7 +49,7 @@ ExplorerItem::ExplorerItem()
     p_icon->SetTint(Color::Zero);
 
     p_aspectRatioFitter = iconGo->AddComponent<UIAspectRatioFitter>();
-    p_aspectRatioFitter->SetAspectRatioMode(AspectRatioMode::Keep);
+    p_aspectRatioFitter->SetAspectRatioMode(AspectRatioMode::KEEP);
 
     p_label = GameObjectFactory::CreateUILabel();
     GameObject *labelGo = p_label->GetGameObject();
@@ -61,8 +61,8 @@ ExplorerItem::ExplorerItem()
     p_label->GetText()->SetTextSize(11);
     p_label->GetText()->SetContent("");
     p_label->GetText()->SetWrapping(true);
-    p_label->GetText()->SetVerticalAlign(VerticalAlignment::Top);
-    p_label->GetText()->SetHorizontalAlign(HorizontalAlignment::Center);
+    p_label->GetText()->SetVerticalAlign(VerticalAlignment::TOP);
+    p_label->GetText()->SetHorizontalAlign(HorizontalAlignment::CENTER);
     p_label->SetSelectable(false);
 
     p_focusable = AddComponent<UIFocusable>();
@@ -93,7 +93,7 @@ ExplorerItem::~ExplorerItem()
 
 void ExplorerItem::OnClicked(IFocusable *, ClickType clickType)
 {
-    if (clickType == ClickType::Full)
+    if (clickType == ClickType::FULL)
     {
 
     }

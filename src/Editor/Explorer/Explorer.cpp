@@ -86,7 +86,7 @@ Explorer::Explorer()
     // Direction label
     p_currentPathLabel = GameObjectFactory::CreateUILabel();
     p_currentPathLabel->GetText()->SetTextSize(11);
-    p_currentPathLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::Right);
+    p_currentPathLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::RIGHT);
 
     GameObject *dirBar = p_currentPathLabel->GetGameObject();
 
@@ -95,8 +95,8 @@ Explorer::Explorer()
     p_itemsContainer->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
 
     UIContentSizeFitter *csf = p_itemsContainer->AddComponent<UIContentSizeFitter>();
-    csf->SetHorizontalSizeType(LayoutSizeType::None);
-    csf->SetVerticalSizeType(LayoutSizeType::Preferred);
+    csf->SetHorizontalSizeType(LayoutSizeType::NONE);
+    csf->SetVerticalSizeType(LayoutSizeType::PREFERRED);
 
     // Grid layout
     p_explorerGridLayout = p_itemsContainer->AddComponent<UIGridLayout>();
@@ -125,18 +125,18 @@ Explorer::Explorer()
     iconsSizeSliderLE->SetLayoutPriority(2);
 
     p_backButton->GetGameObject()->SetParent(toolBar);
-    GameObjectFactory::CreateUIVSeparator(LayoutSizeType::Min, 15)->SetParent(toolBar);
+    GameObjectFactory::CreateUIVSeparator(LayoutSizeType::MIN, 15)->SetParent(toolBar);
     eyeImg->GetGameObject()->SetParent(toolBar);
-    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::Min, 5)->SetParent(toolBar);
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 5)->SetParent(toolBar);
     p_iconSizeSlider->GetGameObject()->SetParent(toolBar);
     dirBar->SetParent(toolBar);
     toolBar->SetParent(mainVLGo);
-    GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5)->SetParent(mainVLGo);
+    GameObjectFactory::CreateUIHSeparator(LayoutSizeType::MIN, 5)->SetParent(mainVLGo);
     p_scrollPanel->GetGameObject()->SetParent(mainVLGo);
 
     p_scrollPanel->GetScrollArea()->SetContainedGameObject(p_itemsContainer);
-    p_scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
-    p_scrollPanel->SetVerticalScrollBarSide(HorizontalSide::Right);
+    p_scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::WHEN_NEEDED);
+    p_scrollPanel->SetVerticalScrollBarSide(HorizontalSide::RIGHT);
     p_scrollPanel->SetHorizontalScrollEnabled(false);
 
     UIFocusable *focusable = AddComponent<UIFocusable>();
@@ -149,7 +149,7 @@ Explorer::Explorer()
 
     focusable->AddClickedCallback([this](IFocusable*, ClickType clickType)
     {
-        if (clickType == ClickType::Full)
+        if (clickType == ClickType::FULL)
         {
             SelectPath(Path::Empty);
         }
@@ -164,15 +164,15 @@ Explorer::Explorer()
     EditorFileTracker::GetInstance()->GetFileTracker()->
             EventEmitter<IFileTrackerListener>::RegisterListener(this);
 
-    ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::D, "Duplicate"),
+    ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::D, "Duplicate"),
             [this](const Shortcut &shortcut){ OnShortcutPressed(shortcut); } );
     ShortcutManager::RegisterShortcut(Shortcut(Key::F2, "Rename"),
             [this](const Shortcut &shortcut){ OnShortcutPressed(shortcut); } );
-    ShortcutManager::RegisterShortcut(Shortcut(Key::Delete, "Delete"),
+    ShortcutManager::RegisterShortcut(Shortcut(Key::DELETE, "Delete"),
             [this](const Shortcut &shortcut){ OnShortcutPressed(shortcut); } );
-    ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::C, "Copy"),
+    ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::C, "Copy"),
             [this](const Shortcut &shortcut){ OnShortcutPressed(shortcut); } );
-    ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::V, "Paste"),
+    ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::V, "Paste"),
             [this](const Shortcut &shortcut){ OnShortcutPressed(shortcut); } );
 }
 
@@ -185,7 +185,7 @@ void Explorer::Update()
     GameObject::Update();
 
     #ifdef DEBUG
-    if (Input::GetKey(Key::P) && Input::GetKey(Key::Num0))
+    if (Input::GetKey(Key::P) && Input::GetKey(Key::NUM0))
     {
         SetRootPath(EditorPaths::GetEngineAssetsDir());
     }
@@ -332,12 +332,12 @@ void Explorer::AddItem(ExplorerItem *explorerItem)
     explorerItem->GetFocusable()->AddClickedCallback(
                 [this, explorerItem](IFocusable* focusable, ClickType clickType)
     {
-        if (clickType == ClickType::Full)
+        if (clickType == ClickType::FULL)
         {
             SelectPath(explorerItem->GetPath());
         }
 
-        if (clickType == ClickType::Double)
+        if (clickType == ClickType::DOUBLE)
         {
             OnItemDoubleClicked(focusable);
         }
@@ -378,7 +378,7 @@ void DuplicateImportFiles(const Path &srcPath, const Path &dstPath)
     }
     else // IsDir()
     {
-        List<Path> srcSubPaths = srcPath.GetSubPaths(Path::FindFlag::Simple);
+        List<Path> srcSubPaths = srcPath.GetSubPaths(Path::FindFlag::SIMPLE);
         const Path& srcDir = srcPath;
         const Path& dstDir = dstPath;
         for (const Path &srcSubPath : srcSubPaths)
@@ -449,7 +449,7 @@ void Explorer::OnRemove(ExplorerItem *explorerItem)
         Dialog::GetYesNoCancel("Remove", "Are you sure you want to remove '" +
                                path.GetNameExt() + "' ?");
 
-    if (yesNoCancel == Dialog::YesNoCancel::Yes)
+    if (yesNoCancel == Dialog::YesNoCancel::YES)
     {
         File::Remove( path );
         File::Remove( ImportFilesManager::GetImportFilepath(path) );

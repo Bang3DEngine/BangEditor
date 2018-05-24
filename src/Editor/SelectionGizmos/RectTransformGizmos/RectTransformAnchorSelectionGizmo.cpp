@@ -27,12 +27,12 @@ RectTransformAnchorSelectionGizmo::RectTransformAnchorSelectionGizmo()
 
     p_anchorGO = GameObjectFactory::CreateUIGameObjectNamed("AnchorGO");
     p_anchorRenderer = p_anchorGO->AddComponent<UIImageRenderer>();
-    p_anchorRenderer->GetMaterial()->SetRenderPass(RenderPass::Overlay);
+    p_anchorRenderer->GetMaterial()->SetRenderPass(RenderPass::OVERLAY);
     p_anchorRenderer->SetImageTexture(EditorTextureFactory::GetAnchorIcon().Get());
 
     p_selectionGO = GameObjectFactory::CreateUIGameObjectNamed("SelectionGO");
     p_selectionRenderer = p_selectionGO->AddComponent<UIImageRenderer>();
-    p_selectionRenderer->GetMaterial()->SetRenderPass(RenderPass::Overlay);
+    p_selectionRenderer->GetMaterial()->SetRenderPass(RenderPass::OVERLAY);
 
     p_anchorGO->SetParent(this);
     p_selectionGO->SetParent(this);
@@ -71,28 +71,28 @@ void RectTransformAnchorSelectionGizmo::Update()
 
         switch (m_anchorSide)
         {
-            case AnchorSide::LeftBot:
+            case AnchorSide::LEFT_BOT:
                 newAnchorMinLocal.x += displacementLocal.x;
                 newAnchorMinLocal.y += displacementLocal.y;
             break;
 
-            case AnchorSide::LeftTop:
+            case AnchorSide::LEFT_TOP:
                 newAnchorMinLocal.x += displacementLocal.x;
                 newAnchorMaxLocal.y += displacementLocal.y;
             break;
 
-            case AnchorSide::RightTop:
+            case AnchorSide::RIGHT_TOP:
                 newAnchorMaxLocal.x += displacementLocal.x;
                 newAnchorMaxLocal.y += displacementLocal.y;
             break;
 
-            case AnchorSide::RightBot:
+            case AnchorSide::RIGHT_BOT:
                 newAnchorMaxLocal.x += displacementLocal.x;
                 newAnchorMinLocal.y += displacementLocal.y;
             break;
         }
 
-        if (Input::GetKey(Key::LShift))
+        if (Input::GetKey(Key::LSHIFT))
         {
             constexpr float Snapping = 10.0f;
             newAnchorMinLocal = Vector2::Round(newAnchorMinLocal * Snapping) / Snapping;
@@ -119,15 +119,15 @@ void RectTransformAnchorSelectionGizmo::Render(RenderPass renderPass,
     Color color;
     switch (GetSelectionState())
     {
-        case SelectionGizmo::SelectionState::Idle:
+        case SelectionGizmo::SelectionState::IDLE:
             color = Color::White;
         break;
 
-        case SelectionGizmo::SelectionState::Over:
+        case SelectionGizmo::SelectionState::OVER:
             color = Color::Orange;
         break;
 
-        case SelectionGizmo::SelectionState::Grabbed:
+        case SelectionGizmo::SelectionState::GRABBED:
             color = Color::Yellow;
         break;
     }
@@ -156,25 +156,25 @@ void RectTransformAnchorSelectionGizmo::UpdateBasedOnAnchorSide()
     Vector2 localAnchor;
     switch (m_anchorSide)
     {
-        case AnchorSide::LeftBot:
+        case AnchorSide::LEFT_BOT:
             localAnchor.x = refRT->GetAnchorMin().x;
             localAnchor.y = refRT->GetAnchorMin().y;
             localAnchorRot = 225.0f;
         break;
 
-        case AnchorSide::LeftTop:
+        case AnchorSide::LEFT_TOP:
             localAnchor.x = refRT->GetAnchorMin().x;
             localAnchor.y = refRT->GetAnchorMax().y;
             localAnchorRot = -45.0f;
         break;
 
-        case AnchorSide::RightTop:
+        case AnchorSide::RIGHT_TOP:
             localAnchor.x = refRT->GetAnchorMax().x;
             localAnchor.y = refRT->GetAnchorMax().y;
             localAnchorRot = 45.0f;
         break;
 
-        case AnchorSide::RightBot:
+        case AnchorSide::RIGHT_BOT:
             localAnchor.x = refRT->GetAnchorMax().x;
             localAnchor.y = refRT->GetAnchorMin().y;
             localAnchorRot = 135.0f;

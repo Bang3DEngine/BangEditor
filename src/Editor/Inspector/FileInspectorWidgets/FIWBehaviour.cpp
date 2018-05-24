@@ -31,13 +31,13 @@ void FIWBehaviour::Init()
     p_codeText->SetTextSize(12);
     p_codeText->SetWrapping(false);
     p_codeText->SetTextColor(Color::Black);
-    p_codeText->SetVerticalAlign(VerticalAlignment::Top);
-    p_codeText->SetHorizontalAlign(HorizontalAlignment::Left);
+    p_codeText->SetVerticalAlign(VerticalAlignment::TOP);
+    p_codeText->SetHorizontalAlign(HorizontalAlignment::LEFT);
 
     GameObject *codeContainer = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *codeContHL = codeContainer->AddComponent<UIHorizontalLayout>();
-    codeContHL->SetChildrenHorizontalStretch(Stretch::Full);
-    codeContHL->SetChildrenVerticalStretch(Stretch::Full);
+    codeContHL->SetChildrenHorizontalStretch(Stretch::FULL);
+    codeContHL->SetChildrenVerticalStretch(Stretch::FULL);
     codeContHL->SetPaddings(10);
     codeTextGo->SetParent(codeContainer);
 
@@ -45,8 +45,8 @@ void FIWBehaviour::Init()
     codeContainer->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
 
     UIContentSizeFitter *csf = codeContainer->AddComponent<UIContentSizeFitter>();
-    csf->SetHorizontalSizeType(LayoutSizeType::Preferred);
-    csf->SetVerticalSizeType(LayoutSizeType::Preferred);
+    csf->SetHorizontalSizeType(LayoutSizeType::PREFERRED);
+    csf->SetVerticalSizeType(LayoutSizeType::PREFERRED);
 
     UIScrollPanel *codeScrollPanel = GameObjectFactory::CreateUIScrollPanel();
     codeScrollPanel->GetScrollArea()->SetContainedGameObject(codeContainer);

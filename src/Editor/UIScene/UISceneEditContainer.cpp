@@ -49,7 +49,7 @@ void UISceneEditContainer::Update()
 
 void UISceneEditContainer::HandleSelection()
 {
-    if (Input::GetMouseButtonDown(MouseButton::Left))
+    if (Input::GetMouseButtonDown(MouseButton::LEFT))
     {
         UICanvas *canvas = UICanvas::GetActive(this);
         bool isOverScene = canvas->IsMouseOver(GetSceneImage(), true);
@@ -77,7 +77,7 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
         // Get preview texture
         GBuffer *gbuffer = selectedCamera->GetGBuffer();
         Texture2D *camTexture = gbuffer->GetAttachmentTex2D(GBuffer::AttColor);
-        camTexture->SetWrapMode( GL::WrapMode::Repeat );
+        camTexture->SetWrapMode( GL::WrapMode::REPEAT );
         p_cameraPreviewImg->SetImageTexture(camTexture);
 
         // Set preview size

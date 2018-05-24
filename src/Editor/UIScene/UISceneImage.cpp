@@ -71,14 +71,14 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
 
     switch (GetRenderMode())
     {
-        case UISceneImage::RenderMode::Depth:
-        case UISceneImage::RenderMode::Selection:
+        case UISceneImage::RenderMode::DEPTH:
+        case UISceneImage::RenderMode::SELECTION:
         {
             Camera *sceneCam = GetCamera();
             ShaderProgram *sp = p_sceneImg->GetMaterial()->GetShaderProgram();
             switch (GetRenderMode())
             {
-                case UISceneImage::RenderMode::Depth:
+                case UISceneImage::RenderMode::DEPTH:
                 {
                 GBuffer *gb = sceneCam ? sceneCam->GetGBuffer() : nullptr;
                 if (gb && sp)
@@ -89,7 +89,7 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
                 }
                 break;
 
-                case UISceneImage::RenderMode::Selection:
+                case UISceneImage::RenderMode::SELECTION:
                 {
                 SelectionFramebuffer *sfb = sceneCam->GetSelectionFramebuffer();
                 if (sfb)
@@ -121,17 +121,17 @@ void UISceneImage::SetSceneImageCamera(Camera *sceneCam)
         GBuffer *camGBuffer =  sceneCam->GetGBuffer();
 
         ShaderProgram *sp = p_sceneImg->GetActiveMaterial()->GetShaderProgram();
-        GLId prevBoundSP = GL::GetBoundId(GL::BindTarget::ShaderProgram);
+        GLId prevBoundSP = GL::GetBoundId(GL::BindTarget::SHADER__PROGRAM);
 
         sp->Bind();
         sp->SetInt("B_SceneRenderMode", SCAST<int>(GetRenderMode()), false);
         camGBuffer->BindAttachmentsForReading(sp, false);
 
-        GL::Bind(GL::BindTarget::ShaderProgram, prevBoundSP);
+        GL::Bind(GL::BindTarget::SHADER__PROGRAM, prevBoundSP);
     }
     p_sceneImg->SetImageTexture(camTexture);
 
-    if (camTexture) { camTexture->SetWrapMode(GL::WrapMode::Repeat); }
+    if (camTexture) { camTexture->SetWrapMode(GL::WrapMode::REPEAT); }
     p_sceneImg->SetTint(camTexture ? Color::White : Color::Black);
 }
 
@@ -161,10 +161,10 @@ UISceneImage::RenderMode UISceneImage::GetRenderMode() const
 
 void UISceneImage::UISceneImageRenderer::OnRender()
 {
-    const bool wasBlendEnabled = GL::IsEnabled(GL::Enablable::Blend);
-    GL::Disable(GL::Enablable::Blend, 0);
+    const bool wasBlendEnabled = GL::IsEnabled(GL::Enablable::BLEND);
+    GL::Disable(GL::Enablable::BLEND, 0);
 
     UIImageRenderer::OnRender();
 
-    GL::SetEnabled(GL::Enablable::Blend, wasBlendEnabled, false);
+    GL::SetEnabled(GL::Enablable::BLEND, wasBlendEnabled, false);
 }

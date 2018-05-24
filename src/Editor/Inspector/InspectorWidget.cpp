@@ -44,11 +44,11 @@ void InspectorWidget::Init()
     GameObject *titleGo = CreateTitleGameObject();
 
     GameObject *topSeparator =
-            GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Min, 5, 1.0f);
+            GameObjectFactory::CreateUIHSeparator(LayoutSizeType::MIN, 5, 1.0f);
 
     GameObject *widgetsGo = GameObjectFactory::CreateUIGameObject();
     UIVerticalLayout *widgetsVL = widgetsGo->AddComponent<UIVerticalLayout>();
-    widgetsVL->SetChildrenHorizontalStretch(Stretch::Full);
+    widgetsVL->SetChildrenHorizontalStretch(Stretch::FULL);
     widgetsVL->SetPaddings(4);
     widgetsVL->SetSpacing(3);
     UILayoutElement *widgetsLE = widgetsGo->AddComponent<UILayoutElement>();
@@ -139,7 +139,7 @@ void InspectorWidget::AddWidgetInternal(const String &labelContent,
 {
     GameObject *widgetContainer = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *widgetContHL = widgetContainer->AddComponent<UIHorizontalLayout>();
-    widgetContHL->SetChildrenVerticalStretch(Stretch::Full);
+    widgetContHL->SetChildrenVerticalStretch(Stretch::FULL);
 
     UILabel *label = nullptr;
     if (addLabel)
@@ -161,7 +161,7 @@ void InspectorWidget::AddWidgetInternal(const String &labelContent,
     {
         label->GetGameObject()->SetParent( widgetContainer );
     }
-    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Flexible, 0.0001f)
+    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::FLEXIBLE, 0.0001f)
                        ->SetParent( widgetContainer );
     widget->SetParent( widgetContainer );
 
@@ -184,7 +184,7 @@ UILabel *InspectorWidget::CreateWidgetLabel(const String &content,
     UILabel *label = GameObjectFactory::CreateUILabel();
     label->GetText()->SetContent(content);
     label->GetText()->SetTextSize(12);
-    label->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
+    label->GetText()->SetHorizontalAlign(HorizontalAlignment::LEFT);
     label->SetSelectable(false);
 
     UILayoutElement *labelLE =
@@ -212,7 +212,7 @@ GameObject *InspectorWidget::CreateTitleGameObject()
 {
     GameObject *titleGo = GameObjectFactory::CreateUIGameObject();
     UITextRenderer *titleText = titleGo->AddComponent<UITextRenderer>();
-    titleText->SetHorizontalAlign(HorizontalAlignment::Left);
+    titleText->SetHorizontalAlign(HorizontalAlignment::LEFT);
     titleText->SetContent("InspectorWidget");
     titleText->SetTextSize(13);
     p_titleText = titleText;

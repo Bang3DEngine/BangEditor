@@ -149,7 +149,7 @@ void EditorScene::Init()
 
     // Editor cam creation
     Camera *cam = AddComponent<Camera>();
-    cam->AddRenderPass(RenderPass::Overlay);
+    cam->AddRenderPass(RenderPass::OVERLAY);
     SetCamera(cam);
     GetCamera()->SetClearColor(Color::LightGray);
     GetCamera()->SetRenderSelectionBuffer(false);
@@ -189,7 +189,7 @@ void EditorScene::Update()
     {
         BindOpenScene();
 
-        bool updateOpenScene = (ScenePlayer::GetPlayState() == PlayState::Playing);
+        bool updateOpenScene = (ScenePlayer::GetPlayState() == PlayState::PLAYING);
         SceneManager::OnNewFrame(openScene, updateOpenScene);
 
         GetEditSceneGameObjects()->Update();
@@ -385,11 +385,11 @@ void EditorScene::OnPlayStateChanged(PlayState previousPlayState,
     // Change tab when play/stop
     switch (newPlayState)
     {
-        case PlayState::Editing:
+        case PlayState::EDITING:
             p_topCenterTabContainer->SetCurrentTabChild( p_sceneEditContainer );
         break;
 
-        case PlayState::Playing:
+        case PlayState::PLAYING:
             p_topCenterTabContainer->SetCurrentTabChild( p_scenePlayContainer );
         break;
 

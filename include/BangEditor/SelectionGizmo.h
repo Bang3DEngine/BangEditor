@@ -17,7 +17,7 @@ class SelectionGizmo : public GameObject,
                        public IDestroyListener
 {
 public:
-    enum class SelectionState { Idle, Over, Grabbed };
+    enum class SelectionState { IDLE, OVER, GRABBED };
 
     SelectionGizmo() = default;
     virtual ~SelectionGizmo() = default;
@@ -44,7 +44,7 @@ public:
 private:
     GameObject *p_referencedGameObject = nullptr;
 
-    SelectionState m_selectionState = SelectionState::Idle;
+    SelectionState m_selectionState = SelectionState::IDLE;
     bool m_grabHasJustChanged = false;
 };
 

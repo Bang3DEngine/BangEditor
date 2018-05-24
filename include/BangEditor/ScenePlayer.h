@@ -16,7 +16,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-enum class PlayState { JustBeforePlaying, Playing, Paused, Editing };
+enum class PlayState { JUST_BEFORE_PLAYING, PLAYING, PAUSED, EDITING };
 
 class IScenePlayerListener : public virtual IEventListener
 {

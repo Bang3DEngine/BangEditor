@@ -20,9 +20,9 @@ class UISceneImage : public GameObject
     GAMEOBJECT_EDITOR(UISceneImage);
 
 public:
-    enum class RenderMode { Color = 0, Normal, Albedo, Depth,
-                            Roughness, Metalness, ReceivesLight,
-                            ReceivesShadows, Selection, WorldPosition };
+    enum class RenderMode { COLOR = 0, NORMAL, ALBEDO, DEPTH,
+                            ROUGHNESS, METALNESS, RECEIVES_LIGHT,
+                            RECEIVES_SHADOWS, SELECTION, WORLD_POSITION };
 
     UISceneImage();
     virtual ~UISceneImage();
@@ -42,7 +42,7 @@ private:
     { public:  void OnRender() override; };
 
     Camera *p_currentCamera = nullptr;
-    RenderMode m_renderMode = RenderMode::Color;
+    RenderMode m_renderMode = RenderMode::COLOR;
 
     UISceneImageRenderer *p_sceneImg = nullptr;
     UISceneDebugStats *p_sceneDebugStats = nullptr;

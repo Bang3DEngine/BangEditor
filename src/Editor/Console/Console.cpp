@@ -47,7 +47,7 @@ Console::Console()
     toolBarLE->SetMinHeight(ToolBarHeight);
     toolBarLE->SetFlexibleHeight(0);
 
-    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::Flexible, 1.0f)->
+    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::FLEXIBLE, 1.0f)->
                        SetParent(toolBar);
 
     UIButton *clearButton = GameObjectFactory::CreateUIButton("Clear");
@@ -57,7 +57,7 @@ Console::Console()
     p_messageList = GameObjectFactory::CreateUIList();
     // p_messageList->GetScrollPanel()->SetForceHorizontalFit(false);
     p_messageList->GetScrollPanel()->SetForceHorizontalFit(true);
-    p_messageList->GetScrollPanel()->SetVerticalScrollBarSide(HorizontalSide::Right);
+    p_messageList->GetScrollPanel()->SetVerticalScrollBarSide(HorizontalSide::RIGHT);
     UILayoutElement *listLE = p_messageList->GetGameObject()->
                               AddComponent<UILayoutElement>();
     listLE->SetFlexibleSize( Vector2(1) );
@@ -118,9 +118,9 @@ ConsoleUIListEntry::ConsoleUIListEntry()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
-    hl->SetChildrenHorizontalStretch(Stretch::None);
-    hl->SetChildrenVerticalStretch(Stretch::None);
-    hl->SetChildrenVerticalAlignment(VerticalAlignment::Top);
+    hl->SetChildrenHorizontalStretch(Stretch::NONE);
+    hl->SetChildrenVerticalStretch(Stretch::NONE);
+    hl->SetChildrenVerticalAlignment(VerticalAlignment::TOP);
     hl->SetPaddings(5);
     hl->SetSpacing(10);
 
@@ -133,8 +133,8 @@ ConsoleUIListEntry::ConsoleUIListEntry()
 
     GameObject *textGo = GameObjectFactory::CreateUIGameObject();
     p_msgText = textGo->AddComponent<UITextRenderer>();
-    p_msgText->SetVerticalAlign(VerticalAlignment::Top);
-    p_msgText->SetHorizontalAlign(HorizontalAlignment::Left);
+    p_msgText->SetVerticalAlign(VerticalAlignment::TOP);
+    p_msgText->SetHorizontalAlign(HorizontalAlignment::LEFT);
     p_msgText->SetWrapping(true);
     p_msgText->SetTextSize(12);
     UILayoutElement *textLE = textGo->AddComponent<UILayoutElement>();

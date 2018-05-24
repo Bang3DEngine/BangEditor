@@ -25,21 +25,21 @@ UITabHeader::UITabHeader()
 
     GameObject *titleGo = GameObjectFactory::CreateUIGameObject();
     p_titleText = titleGo->AddComponent<UITextRenderer>();
-    p_titleText->SetHorizontalAlign(HorizontalAlignment::Left);
-    p_titleText->SetVerticalAlign(VerticalAlignment::Bot);
+    p_titleText->SetHorizontalAlign(HorizontalAlignment::LEFT);
+    p_titleText->SetVerticalAlign(VerticalAlignment::BOT);
     p_titleText->SetTextSize(12);
     p_titleText->SetContent( GetTitle() );
 
     p_focusable = AddComponent<UIFocusable>();
     p_focusable->AddClickedCallback([this](IFocusable*, ClickType clickType)
     {
-        if (clickType == ClickType::Full)
+        if (clickType == ClickType::FULL)
         {
             EventEmitter<ITabHeaderListener>::PropagateToListeners(
                         &ITabHeaderListener::OnTabHeaderClicked, this);
         }
     });
-    p_focusable->SetCursorType(Cursor::Type::Hand);
+    p_focusable->SetCursorType(Cursor::Type::HAND);
 
     titleGo->SetParent(this);
 

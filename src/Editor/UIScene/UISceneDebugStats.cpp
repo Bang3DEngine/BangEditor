@@ -29,8 +29,8 @@ UISceneDebugStats::UISceneDebugStats()
     m_editorRenderFPSChrono.SetMeanSamples(MeanFPSSamples);
 
     p_debugStatsText = debugStatsTextGo->AddComponent<UITextRenderer>();
-    p_debugStatsText->SetHorizontalAlign(HorizontalAlignment::Left);
-    p_debugStatsText->SetVerticalAlign(VerticalAlignment::Top);
+    p_debugStatsText->SetHorizontalAlign(HorizontalAlignment::LEFT);
+    p_debugStatsText->SetVerticalAlign(VerticalAlignment::TOP);
     p_debugStatsText->SetTextColor(Color::Black);
     p_debugStatsText->SetWrapping(true);
     p_debugStatsText->SetTextSize(11);

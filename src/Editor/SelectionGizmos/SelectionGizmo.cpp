@@ -27,14 +27,14 @@ void SelectionGizmo::Update()
     }
 
     bool prevGrab = IsBeingGrabbed();
-    if ( Input::GetMouseButtonDown(MouseButton::Left) )
+    if ( Input::GetMouseButtonDown(MouseButton::LEFT) )
     {
-        if (isMouseOver) { m_selectionState = SelectionState::Grabbed; }
+        if (isMouseOver) { m_selectionState = SelectionState::GRABBED; }
     }
-    else if ( !Input::GetMouseButton(MouseButton::Left) )
+    else if ( !Input::GetMouseButton(MouseButton::LEFT) )
     {
-        m_selectionState = isMouseOver ? SelectionState::Over :
-                                         SelectionState::Idle;
+        m_selectionState = isMouseOver ? SelectionState::OVER :
+                                         SelectionState::IDLE;
     }
     m_grabHasJustChanged = (IsBeingGrabbed() != prevGrab);
 }
@@ -86,7 +86,7 @@ SelectionGizmo::SelectionState SelectionGizmo::GetSelectionState() const
 
 bool SelectionGizmo::IsBeingGrabbed() const
 {
-    return GetSelectionState() == SelectionState::Grabbed;
+    return GetSelectionState() == SelectionState::GRABBED;
 }
 
 bool SelectionGizmo::GrabHasJustChanged() const
@@ -103,6 +103,6 @@ void SelectionGizmo::OnDestroyed(EventEmitter<IDestroyListener> *object)
 void SelectionGizmo::OnDisabled()
 {
     GameObject::OnDisabled();
-    m_selectionState = SelectionState::Idle;
+    m_selectionState = SelectionState::IDLE;
     m_grabHasJustChanged = false;
 }

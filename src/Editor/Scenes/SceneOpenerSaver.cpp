@@ -115,7 +115,7 @@ bool SceneOpenerSaver::OnSaveScene(bool saveAs)
             saveScenePath != GetOpenScenePath())
         {
             Dialog::YesNoCancel yesNoCancel = Overwrite(saveScenePath);
-            saveScene = (yesNoCancel == Dialog::Yes);
+            saveScene = (yesNoCancel == Dialog::YES);
         }
 
         if (saveScene)
@@ -147,11 +147,11 @@ bool SceneOpenerSaver::CloseScene()
                                        "Current scene is not saved."
                                        " Do you want to save it ?");
 
-        if (saveSceneYNC == Dialog::Yes)
+        if (saveSceneYNC == Dialog::YES)
         {
             if (!OnSaveScene()) { return false; }
         }
-        else if (saveSceneYNC == Dialog::Cancel) { return false; }
+        else if (saveSceneYNC == Dialog::CANCEL) { return false; }
     }
 
     if (previousScene) { GameObject::Destroy(previousScene); }
@@ -175,13 +175,13 @@ void SceneOpenerSaver::OnPlayStateChanged(PlayState, PlayState newPlayState)
 {
     switch (newPlayState)
     {
-        case PlayState::JustBeforePlaying:
+        case PlayState::JUST_BEFORE_PLAYING:
             m_previousLoadedScenePath = m_currentLoadedScenePath;
             m_previousOpenScenePath = m_currentOpenScenePath;
         break;
 
-        case PlayState::Playing:
-        case PlayState::Editing:
+        case PlayState::PLAYING:
+        case PlayState::EDITING:
             m_currentLoadedScenePath = m_previousLoadedScenePath;
             m_currentOpenScenePath = m_previousOpenScenePath;
         break;

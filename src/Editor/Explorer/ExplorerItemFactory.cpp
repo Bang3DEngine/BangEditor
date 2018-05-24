@@ -53,7 +53,7 @@ List<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
 
     if (path.IsDir())
     {
-        List<Path> subPaths = path.GetSubPaths(Path::FindFlag::Simple);
+        List<Path> subPaths = path.GetSubPaths(Path::FindFlag::SIMPLE);
         Paths::SortPathsByExtension(&subPaths);
         Paths::SortPathsByName(&subPaths);
         for (const Path &subPath : subPaths)

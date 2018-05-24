@@ -35,7 +35,7 @@ TranslateGizmoAxis::TranslateGizmoAxis()
     for (MeshRenderer *mr : p_arrowCap->GetComponents<MeshRenderer>())
     {
         mr->SetMaterial(MaterialFactory::GetGizmosUnLightedOverlay().Get());
-        mr->GetMaterial()->SetRenderPass(RenderPass::Overlay);
+        mr->GetMaterial()->SetRenderPass(RenderPass::OVERLAY);
         mr->GetMaterial()->SetReceivesLighting(false);
     }
     p_arrowCap->SetName("ArrowCap");
@@ -104,7 +104,7 @@ void TranslateGizmoAxis::Update()
             {
                 mousePoint -= m_startGrabPoint;
 
-                if (Input::GetKey(Key::LShift))
+                if (Input::GetKey(Key::LSHIFT))
                 {
                     constexpr float SnappingDist = 1.0f;
                     float dl = mousePoint.Length();

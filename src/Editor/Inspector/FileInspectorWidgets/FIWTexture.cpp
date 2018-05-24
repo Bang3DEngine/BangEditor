@@ -32,17 +32,17 @@ void FIWTexture::Init()
     SetName("FIWTexture");
 
     p_filterModeComboBox = GameObjectFactory::CreateUIComboBox();
-    p_filterModeComboBox->AddItem("Nearest",      int(GL::FilterMode::Nearest));
-    p_filterModeComboBox->AddItem("Bilinear",     int(GL::FilterMode::Bilinear));
-    p_filterModeComboBox->AddItem("Trilinear_NN", int(GL::FilterMode::Trilinear_NN));
-    p_filterModeComboBox->AddItem("Trilinear_NL", int(GL::FilterMode::Trilinear_NL));
-    p_filterModeComboBox->AddItem("Trilinear_LN", int(GL::FilterMode::Trilinear_LN));
-    p_filterModeComboBox->AddItem("Trilinear_LL", int(GL::FilterMode::Trilinear_LL));
+    p_filterModeComboBox->AddItem("Nearest",      int(GL::FilterMode::NEAREST));
+    p_filterModeComboBox->AddItem("Bilinear",     int(GL::FilterMode::BILINEAR));
+    p_filterModeComboBox->AddItem("Trilinear_NN", int(GL::FilterMode::TRILINEAR_NN));
+    p_filterModeComboBox->AddItem("Trilinear_NL", int(GL::FilterMode::TRILINEAR_NL));
+    p_filterModeComboBox->AddItem("Trilinear_LN", int(GL::FilterMode::TRILINEAR_LN));
+    p_filterModeComboBox->AddItem("Trilinear_LL", int(GL::FilterMode::TRILINEAR_LL));
     p_filterModeComboBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_wrapModeComboBox = GameObjectFactory::CreateUIComboBox();
-    p_wrapModeComboBox->AddItem("Clamp", int(GL::WrapMode::ClampToEdge));
-    p_wrapModeComboBox->AddItem("Repeat", int(GL::WrapMode::Repeat));
+    p_wrapModeComboBox->AddItem("Clamp", int(GL::WrapMode::CLAMP_TO_EDGE));
+    p_wrapModeComboBox->AddItem("Repeat", int(GL::WrapMode::REPEAT));
     p_wrapModeComboBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_alphaCutoffInput = GameObjectFactory::CreateUISlider();
@@ -56,7 +56,7 @@ void FIWTexture::Init()
     imageGo->GetRectTransform()->SetAnchorY( Vector2(1, 1) );
     imageGo->GetRectTransform()->SetPivotPosition( Vector2(0, 1) );
     p_imageAspectRatioFitter = imageGo->AddComponent<UIAspectRatioFitter>();
-    p_imageAspectRatioFitter->SetAspectRatioMode(AspectRatioMode::Keep);
+    p_imageAspectRatioFitter->SetAspectRatioMode(AspectRatioMode::KEEP);
     p_textureImageRend = imageGo->AddComponent<UIImageRenderer>();
     imageGo->SetParent(imageContainerGo);
 

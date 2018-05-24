@@ -40,7 +40,7 @@ HierarchyItem::HierarchyItem()
     textGo->SetName("HierarchyItemText");
     p_textRenderer = textGo->AddComponent<UITextRenderer>();
     p_textRenderer->SetTextSize(12);
-    p_textRenderer->SetHorizontalAlign(HorizontalAlignment::Left);
+    p_textRenderer->SetHorizontalAlign(HorizontalAlignment::LEFT);
     SetText("HierarchyItem");
 
     textGo->SetParent(this);
@@ -195,16 +195,16 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
     bool selectGameObject = false;
     switch (action)
     {
-        case UIList::Action::SelectionIn:
+        case UIList::Action::SELECTION_IN:
             selectGameObject = true;
         break;
 
-        case UIList::Action::ClickedRight:
+        case UIList::Action::CLICKED_RIGHT:
             selectGameObject = true;
             p_contextMenu->ShowMenu();
         break;
 
-        case UIList::Action::DoubleClickedLeft:
+        case UIList::Action::DOUBLE_CLICKED_LEFT:
         {
             Hierarchy *h = Hierarchy::GetInstance();
             UITree *t = h->GetUITree();

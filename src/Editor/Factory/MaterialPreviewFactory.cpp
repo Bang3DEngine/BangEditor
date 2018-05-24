@@ -70,7 +70,7 @@ void MaterialPreviewFactory::CreatePreviewScene()
     camGo->SetParent(scene);
 
     Camera *camera = camGo->AddComponent<Camera>();
-    camera->SetClearMode(Camera::ClearMode::SkyBox);
+    camera->SetClearMode(Camera::ClearMode::SKY_BOX);
     camera->SetSkyBoxTexture( TextureFactory::GetDefaultTextureCubeMap().Get() );
     scene->SetCamera(camera);
 
@@ -101,7 +101,7 @@ void MaterialPreviewFactory::FillTextureWithPreview(Texture2D *texture,
     // Now we will fill the texture with the proper texture
     // Save OpenGL state
     const AARecti prevVP     = GL::GetViewportRect();
-    const GLId prevBoundTex  = GL::GetBoundId(GL::BindTarget::Texture2D);
+    const GLId prevBoundTex  = GL::GetBoundId(GL::BindTarget::TEXTURE_2D);
 
     // Prepare to draw scene
     if (!m_previewScene) { CreatePreviewScene(); }
@@ -111,7 +111,7 @@ void MaterialPreviewFactory::FillTextureWithPreview(Texture2D *texture,
 
     const uint previewTextureSize = 256;
     p_previewCamera->GetGBuffer()->SetAttachmentTexture(texture,
-                                                        GL::Attachment::Color0);
+                                                        GL::Attachment::COLOR0);
     p_previewCamera->GetGBuffer()->Resize(previewTextureSize, previewTextureSize);
     p_previewMeshRenderer->SetMaterial(material);
 
@@ -119,14 +119,14 @@ void MaterialPreviewFactory::FillTextureWithPreview(Texture2D *texture,
     GEngine::GetActive()->Render(m_previewScene, p_previewCamera);
 
     texture->Bind();
-    texture->SetFilterMode(GL::FilterMode::Bilinear);
+    texture->SetFilterMode(GL::FilterMode::BILINEAR);
     // texture->GenerateMipMaps();
     // texture->SetFilterMode(GL::FilterMode::Trilinear_LL);
     texture->PropagateTextureChanged();
 
     // Restore OpenGL state
     GL::SetViewport(prevVP);
-    GL::Bind(GL::BindTarget::Texture2D, prevBoundTex);
+    GL::Bind(GL::BindTarget::TEXTURE_2D, prevBoundTex);
 }
 
 void MaterialPreviewFactory::OnMaterialChanged(Material *changedMaterial)

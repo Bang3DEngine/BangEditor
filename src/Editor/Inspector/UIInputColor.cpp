@@ -24,7 +24,7 @@ UIInputColor::UIInputColor()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
-    hl->SetChildrenVerticalStretch(Stretch::Full);
+    hl->SetChildrenVerticalStretch(Stretch::FULL);
     hl->SetSpacing(5);
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
@@ -32,7 +32,7 @@ UIInputColor::UIInputColor()
 
     GameObject *colorImgCont = GameObjectFactory::CreateUIGameObject();
     UIFocusable *colorImgFocusable = colorImgCont->AddComponent<UIFocusable>();
-    colorImgFocusable->SetCursorType(Cursor::Type::Hand);
+    colorImgFocusable->SetCursorType(Cursor::Type::HAND);
     UILayoutElement *colorImgLE = colorImgCont->AddComponent<UILayoutElement>();
     colorImgLE->SetFlexibleWidth(1.0f);
 

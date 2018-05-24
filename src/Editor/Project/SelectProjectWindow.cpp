@@ -89,7 +89,7 @@ SelectProjectScene::SelectProjectScene()
     logoGo->GetRectTransform()->SetPivotPosition( Vector2(0,0) );
     UIAspectRatioFitter *logoARF = logoGo->AddComponent<UIAspectRatioFitter>();
     logoARF->SetAspectRatio( logoTex->GetSize() );
-    logoARF->SetAspectRatioMode(AspectRatioMode::Keep);
+    logoARF->SetAspectRatioMode(AspectRatioMode::KEEP);
     logo->GetGameObject()->SetParent(logoContainer);
 
     GameObjectFactory::CreateUIHSeparator()->SetParent(mainVLGo);
@@ -101,7 +101,7 @@ SelectProjectScene::SelectProjectScene()
     recentPLLabel->GetText()->SetContent("Recent projects:");
     recentPLLabel->GetText()->SetTextColor(Color::White);
     recentPLLabel->GetText()->SetTextSize(16);
-    recentPLLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::Left);
+    recentPLLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::LEFT);
     recentPLLabel->GetGameObject()->SetParent(mainVLGo);
 
     GameObject *recentPLContainer =
@@ -118,11 +118,11 @@ SelectProjectScene::SelectProjectScene()
         RecentProjectListEntry *entry = SCAST<RecentProjectListEntry*>(item);
         switch (action)
         {
-            case UIList::Action::ClickedLeft:
+            case UIList::Action::CLICKED_LEFT:
                 m_selectedRecentPath = entry->m_projectPath;
             break;
 
-            case UIList::Action::DoubleClickedLeft:
+            case UIList::Action::DOUBLE_CLICKED_LEFT:
                 ConfirmOpenProject(entry->m_projectPath);
             break;
 
@@ -133,10 +133,10 @@ SelectProjectScene::SelectProjectScene()
     recentProjectsListGo->SetParent(recentPLContainer);
     UIScrollPanel *rplSP = recentProjectsList->GetScrollPanel();
     rplSP->SetForceHorizontalFit(true);
-    rplSP->SetHorizontalScrollBarSide(VerticalSide::Bot);
-    rplSP->SetVerticalScrollBarSide(HorizontalSide::Right);
-    rplSP->SetVerticalShowScrollMode(ShowScrollMode::WhenNeeded);
-    rplSP->SetHorizontalShowScrollMode(ShowScrollMode::WhenNeeded);
+    rplSP->SetHorizontalScrollBarSide(VerticalSide::BOT);
+    rplSP->SetVerticalScrollBarSide(HorizontalSide::RIGHT);
+    rplSP->SetVerticalShowScrollMode(ShowScrollMode::WHEN_NEEDED);
+    rplSP->SetHorizontalShowScrollMode(ShowScrollMode::WHEN_NEEDED);
     recentProjectsList->Clear();
     const Array<Path> &recentProjects = EditorSettings::GetRecentProjectFilepathsOpen();
     for (const Path &recentProjectPath : recentProjects)
@@ -244,7 +244,7 @@ SelectProjectScene::RecentProjectListEntry::
     text->SetContent( projectPath.GetAbsolute() );
     text->SetTextSize(12);
     text->SetTextColor(Color::Black);
-    text->SetHorizontalAlign(HorizontalAlignment::Left);
+    text->SetHorizontalAlign(HorizontalAlignment::LEFT);
 
     container->SetParent(this);
 }

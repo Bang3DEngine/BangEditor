@@ -38,7 +38,7 @@ UISceneContainer::UISceneContainer()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
-    vl->SetChildrenHorizontalStretch(Stretch::Full);
+    vl->SetChildrenHorizontalStretch(Stretch::FULL);
     vl->SetPaddings(2);
     vl->SetSpacing(3);
 
