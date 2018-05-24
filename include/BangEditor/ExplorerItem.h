@@ -41,8 +41,6 @@ class ExplorerItem : public GameObject,
     GAMEOBJECT_EDITOR(ExplorerItem);
 
 public:
-    void Update() override;
-
     void SetPath(const Path &path);
     void SetSelected(bool selected);
     void SetPathString(const String &string);
@@ -74,14 +72,15 @@ private:
     String m_pathString = "";
 
     UILabel *p_label = nullptr;
-    UIFocusable *p_button = nullptr;
     UIImageRenderer *p_bg = nullptr;
     UIImageRenderer *p_icon = nullptr;
+    UIFocusable *p_focusable = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
     UIDragDroppable *p_dragDroppable = nullptr;
     UIAspectRatioFitter *p_aspectRatioFitter = nullptr;
 
     // IFocusListener
+    virtual void OnClicked(IFocusable*, ClickType clickType) override;
     virtual void OnMouseEnter(IFocusable*) override;
     virtual void OnMouseExit(IFocusable*) override;
 };

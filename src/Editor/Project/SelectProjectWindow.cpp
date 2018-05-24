@@ -160,19 +160,19 @@ SelectProjectScene::SelectProjectScene()
 
     p_newProjectButton  = GameObjectFactory::CreateUIButton("New project...");
     p_newProjectButton->GetGameObject()->SetParent(botHLGo);
-    p_newProjectButton->GetFocusable()->
-                        EventEmitter<IFocusListener>::RegisterListener(this);
+    p_newProjectButton->AddClickedCallback([this]() { NewProject(); });
 
     p_openProjectButton = GameObjectFactory::CreateUIButton("Open project...");
     p_openProjectButton->GetGameObject()->SetParent(botHLGo);
-    p_openProjectButton->GetFocusable()->
-                        EventEmitter<IFocusListener>::RegisterListener(this);
+    p_openProjectButton->AddClickedCallback([this]() { OpenProject(); });
 
     p_openSelectedProjectButton = GameObjectFactory::CreateUIButton(
                                                   "Open selected project...");
     p_openSelectedProjectButton->GetGameObject()->SetParent(botHLGo);
-    p_openSelectedProjectButton->GetFocusable()->
-                        EventEmitter<IFocusListener>::RegisterListener(this);
+    p_openSelectedProjectButton->AddClickedCallback([this]()
+    {
+        ConfirmOpenProject(m_selectedRecentPath);
+    });
 }
 
 SelectProjectScene::~SelectProjectScene()
@@ -220,22 +220,6 @@ void SelectProjectScene::ConfirmOpenProject(const Path &projectFilepath)
 {
     SelectProjectWindow::SelectedProjectPath = projectFilepath;
     WindowManager::GetInstance()->DestroyWindow( Window::GetActive() );
-}
-
-void SelectProjectScene::OnClicked(IFocusable *focusable)
-{
-    if (focusable == p_newProjectButton->GetFocusable())
-    {
-        NewProject();
-    }
-    else if (focusable == p_openProjectButton->GetFocusable())
-    {
-        OpenProject();
-    }
-    else if (focusable == p_openSelectedProjectButton->GetFocusable())
-    {
-        ConfirmOpenProject(m_selectedRecentPath);
-    }
 }
 
 // ===========================================================================

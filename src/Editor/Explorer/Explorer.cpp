@@ -81,8 +81,7 @@ Explorer::Explorer()
     p_backButton = GameObjectFactory::CreateUIButton("", backButtonTex.Get());
     p_backButton->SetIcon(backButtonTex.Get(), Vector2i(20, 15), 0);
     p_backButton->GetText()->SetContent("");
-    p_backButton->GetFocusable()->AddClickedCallback( [this](IFocusable*)
-    { GoDirectoryUp(); });
+    p_backButton->AddClickedCallback( [this]() { GoDirectoryUp(); });
 
     // Direction label
     p_currentPathLabel = GameObjectFactory::CreateUILabel();
@@ -146,11 +145,15 @@ Explorer::Explorer()
     {
         OnCreateContextMenu(menuRootItem);
     });
-    focusable->AddClickedCallback([this](IFocusable*)
-    {
-        SelectPath(Path::Empty);
-    });
     p_contextMenu->AddButtonPart(this);
+
+    focusable->AddClickedCallback([this](IFocusable*, ClickType clickType)
+    {
+        if (clickType == ClickType::Full)
+        {
+            SelectPath(Path::Empty);
+        }
+    });
 
     SetCurrentPath( Paths::GetEngineAssetsDir() );
 
@@ -162,15 +165,15 @@ Explorer::Explorer()
             EventEmitter<IFileTrackerListener>::RegisterListener(this);
 
     ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::D, "Duplicate"),
-                                      &Explorer::OnShortcutPressed);
+            [this](const Shortcut &shortcut){ OnShortcutPressed(shortcut); } );
     ShortcutManager::RegisterShortcut(Shortcut(Key::F2, "Rename"),
-                                      &Explorer::OnShortcutPressed);
+            [this](const Shortcut &shortcut){ OnShortcutPressed(shortcut); } );
     ShortcutManager::RegisterShortcut(Shortcut(Key::Delete, "Delete"),
-                                      &Explorer::OnShortcutPressed);
+            [this](const Shortcut &shortcut){ OnShortcutPressed(shortcut); } );
     ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::C, "Copy"),
-                                      &Explorer::OnShortcutPressed);
+            [this](const Shortcut &shortcut){ OnShortcutPressed(shortcut); } );
     ShortcutManager::RegisterShortcut(Shortcut(Key::LCtrl, Key::V, "Paste"),
-                                      &Explorer::OnShortcutPressed);
+            [this](const Shortcut &shortcut){ OnShortcutPressed(shortcut); } );
 }
 
 Explorer::~Explorer()
@@ -180,20 +183,6 @@ Explorer::~Explorer()
 void Explorer::Update()
 {
     GameObject::Update();
-
-    if (Input::GetMouseButtonDown(MouseButton::Left) ||
-        Input::GetMouseButtonDown(MouseButton::Right))
-    {
-        UICanvas *canvas = UICanvas::GetActive(this);
-        for (ExplorerItem *explorerItem : p_items)
-        {
-            if (canvas->IsMouseOver(explorerItem, true))
-            {
-                SelectPath(explorerItem->GetPath());
-                break;
-            }
-        }
-    }
 
     #ifdef DEBUG
     if (Input::GetKey(Key::P) && Input::GetKey(Key::Num0))
@@ -340,9 +329,19 @@ void Explorer::AddItem(ExplorerItem *explorerItem)
 
     explorerItem->SetParent(p_itemsContainer);
 
-    explorerItem->GetFocusable()->AddDoubleClickedCallback(
-                                        &Explorer::OnItemDoubleClicked);
+    explorerItem->GetFocusable()->AddClickedCallback(
+                [this, explorerItem](IFocusable* focusable, ClickType clickType)
+    {
+        if (clickType == ClickType::Full)
+        {
+            SelectPath(explorerItem->GetPath());
+        }
 
+        if (clickType == ClickType::Double)
+        {
+            OnItemDoubleClicked(focusable);
+        }
+    });
     explorerItem->EventEmitter<IExplorerItemListener>::RegisterListener(this);
 
     p_items.PushBack(explorerItem);
@@ -501,14 +500,14 @@ ExplorerItem *Explorer::GetItemFromPath(const Path &path) const
 
 void Explorer::OnItemDoubleClicked(IFocusable *itemFocusable)
 {
-    GameObject *itemGo = Cast<UIFocusable*>(itemFocusable)->GetGameObject();
-    ExplorerItem *expItem = Cast<ExplorerItem*>(itemGo);
+    GameObject *itemGo = DCAST<UIFocusable*>(itemFocusable)->GetGameObject();
+    ExplorerItem *expItem = DCAST<ExplorerItem*>(itemGo);
     ASSERT(expItem);
 
     const Path itemPath = expItem->GetPath();
     if ( ExplorerItemFactory::CanHaveSubpaths(itemPath) )
     {
-        Explorer::GetInstance()->SetCurrentPath(itemPath);
+        SetCurrentPath(itemPath);
     }
     else
     {
@@ -528,9 +527,7 @@ void Explorer::OnItemDoubleClicked(IFocusable *itemFocusable)
 
 void Explorer::OnShortcutPressed(const Shortcut &shortcut)
 {
-    Explorer *exp = Explorer::GetInstance();
-
-    ExplorerItem *selectedItem = exp->GetSelectedItem();
+    ExplorerItem *selectedItem = GetSelectedItem();
     if (selectedItem)
     {
         if (shortcut.GetName() == "Rename")
@@ -552,8 +549,8 @@ void Explorer::OnShortcutPressed(const Shortcut &shortcut)
         else
         {
             const Path &copiedPath = EditorClipboard::GetCopiedPath();
-            const Path newDir = exp->GetCurrentPath();
-            exp->DuplicatePathIntoDir(copiedPath, newDir);
+            const Path newDir = GetCurrentPath();
+            DuplicatePathIntoDir(copiedPath, newDir);
         }
     }
 }

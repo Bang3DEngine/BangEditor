@@ -38,12 +38,11 @@ UIInputFile::UIInputFile()
                                        AddComponent<UILayoutElement>();
     pathInputTextLE->SetFlexibleSize( Vector2(9999.9f) );
     pathInputTextLE->SetLayoutPriority(1);
-    SetPath(Path::Empty);
 
     RH<Texture2D> lensIcon = EditorTextureFactory::GetLensLittleIcon().Get();
     p_searchButton = GameObjectFactory::CreateUIButton("", lensIcon.Get());
     p_searchButton->SetIcon(lensIcon.Get(), Vector2i(16));
-    p_searchButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
+    p_searchButton->AddClickedCallback([this]()
     {
         Path openPath;
         bool accepted;
@@ -58,8 +57,7 @@ UIInputFile::UIInputFile()
     p_openFileInInspectorButton =
                   GameObjectFactory::CreateUIButton("", rightArrowIcon.Get());
     p_openFileInInspectorButton->SetIcon(rightArrowIcon.Get(), Vector2i(16));
-    p_openFileInInspectorButton->GetFocusable()->AddClickedCallback(
-                                                           [this](IFocusable*)
+    p_openFileInInspectorButton->AddClickedCallback( [this]()
     {
         Inspector *inspector = Inspector::GetActive();
         if (inspector) { inspector->OnExplorerPathSelected( GetPath() ); }
@@ -68,6 +66,8 @@ UIInputFile::UIInputFile()
     p_pathInputText->GetGameObject()->SetParent(this);
     p_searchButton->GetGameObject()->SetParent(this);
     p_openFileInInspectorButton->GetGameObject()->SetParent(this);
+
+    SetPath(Path::Empty);
 }
 
 UIInputFile::~UIInputFile()
@@ -82,6 +82,8 @@ void UIInputFile::SetPath(const Path &path)
 
         String textContent = GetPath().IsFile() ? GetPath().GetNameExt() : "None";
         GetInputText()->GetText()->SetContent(textContent);
+
+        p_openFileInInspectorButton->SetBlocked( !GetPath().Exists() );
 
         EventEmitter<IValueChangedListener>::PropagateToListeners(
                 &IValueChangedListener::OnValueChanged, this);

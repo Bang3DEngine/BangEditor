@@ -48,14 +48,14 @@ UIInputColor::UIInputColor()
     RH<Texture2D> lensIcon = EditorTextureFactory::GetLensLittleIcon().Get();
     p_searchColorButton = GameObjectFactory::CreateUIButton("", lensIcon.Get());
     p_searchColorButton->SetIcon(lensIcon.Get(), Vector2i(16));
-    p_searchColorButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
+    p_searchColorButton->AddClickedCallback([this]()
     {
         EditorDialog::GetColor("Pick Color...", GetColor(), m_colorPickerReporter);
     });
 
-    colorImgFocusable->AddClickedCallback([this](IFocusable*)
+    colorImgFocusable->AddClickedCallback([this](IFocusable*, ClickType clickType)
     {
-        p_searchColorButton->Click(false);
+        p_searchColorButton->Click(clickType);
     });
 
     colorImgCont->SetParent(this);

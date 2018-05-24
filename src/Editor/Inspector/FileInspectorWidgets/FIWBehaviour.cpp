@@ -55,7 +55,7 @@ void FIWBehaviour::Init()
     spLE->SetFlexibleSize( Vector2::One );
 
     p_openButton = GameObjectFactory::CreateUIButton("Open in editor");
-    p_openButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
+    p_openButton->AddClickedCallback([this]()
     {
         QtProjectManager::OpenBehaviourInQtCreator(GetPath());
     });

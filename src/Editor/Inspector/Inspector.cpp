@@ -173,14 +173,17 @@ void Inspector::OnExplorerPathSelected(const Path &path)
 {
     if (m_currentOpenPath != path)
     {
-        InspectorWidget *fiw = FileInspectorWidgetFactory::Create(path);
-        if (fiw || path.IsFile()) { Clear(); }
-        if (fiw)
+        if (!path.IsDir())
         {
-            p_titleSeparator->SetEnabled(true);
-            p_titleText->SetContent(path.GetNameExt());
-            m_currentOpenPath = path;
-            AddWidget(fiw);
+            InspectorWidget *fiw = FileInspectorWidgetFactory::Create(path);
+            if (fiw || path.IsFile()) { Clear(); }
+            if (fiw)
+            {
+                p_titleSeparator->SetEnabled(true);
+                p_titleText->SetContent(path.GetNameExt());
+                m_currentOpenPath = path;
+                AddWidget(fiw);
+            }
         }
     }
 }
@@ -255,8 +258,8 @@ void Inspector::AddWidget(InspectorWidget *widget, int _index)
 void Inspector::RemoveWidget(InspectorWidget *widget)
 {
     m_widgets.Remove(widget);
+    GameObject::Destroy(widget); // Order dependent. Before setting parent to null!
     widget->SetParent(nullptr);
-    GameObject::Destroy(widget);
 }
 
 void Inspector::RemoveWidget(int index)

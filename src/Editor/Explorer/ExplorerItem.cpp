@@ -65,8 +65,8 @@ ExplorerItem::ExplorerItem()
     p_label->GetText()->SetHorizontalAlign(HorizontalAlignment::Center);
     p_label->SetSelectable(false);
 
-    p_button = AddComponent<UIFocusable>();
-    p_button->EventEmitter<IFocusListener>::RegisterListener(this);
+    p_focusable = AddComponent<UIFocusable>();
+    GetFocusable()->EventEmitter<IFocusListener>::RegisterListener(this);
 
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
@@ -91,9 +91,12 @@ ExplorerItem::~ExplorerItem()
 {
 }
 
-void ExplorerItem::Update()
+void ExplorerItem::OnClicked(IFocusable *, ClickType clickType)
 {
-    GameObject::Update();
+    if (clickType == ClickType::Full)
+    {
+
+    }
 }
 
 void ExplorerItem::SetPath(const Path &path)
@@ -140,7 +143,7 @@ UILabel *ExplorerItem::GetLabel() const
 
 UIFocusable *ExplorerItem::GetFocusable() const
 {
-    return p_button;
+    return p_focusable;
 }
 
 const String &ExplorerItem::GetPathString() const

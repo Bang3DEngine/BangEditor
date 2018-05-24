@@ -105,7 +105,7 @@ void FIWMaterial::Init()
     p_fragmentShaderInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_lineWidthInput = GameObjectFactory::CreateUIInputNumber();
-    p_lineWidthInput->SetMinMaxValues(0.0f, Math::Infinity<float>());
+    p_lineWidthInput->SetMinMaxValues(1.0f, Math::Infinity<float>());
     p_lineWidthInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
     p_cullFaceInput = GameObjectFactory::CreateUIComboBox();

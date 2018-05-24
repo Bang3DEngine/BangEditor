@@ -31,10 +31,13 @@ UITabHeader::UITabHeader()
     p_titleText->SetContent( GetTitle() );
 
     p_focusable = AddComponent<UIFocusable>();
-    p_focusable->AddClickedCallback([this](IFocusable*)
+    p_focusable->AddClickedCallback([this](IFocusable*, ClickType clickType)
     {
-        EventEmitter<ITabHeaderListener>::PropagateToListeners(
-                    &ITabHeaderListener::OnTabHeaderClicked, this);
+        if (clickType == ClickType::Full)
+        {
+            EventEmitter<ITabHeaderListener>::PropagateToListeners(
+                        &ITabHeaderListener::OnTabHeaderClicked, this);
+        }
     });
     p_focusable->SetCursorType(Cursor::Type::Hand);
 

@@ -30,15 +30,11 @@ public:
 
 // ==========================================================================
 
-class SelectProjectScene : public Scene,
-                           public IFocusListener
+class SelectProjectScene : public Scene
 {
 public:
     SelectProjectScene();
     virtual ~SelectProjectScene();
-
-    // IFocusListener
-    void OnClicked(IFocusable *focusable) override;
 
 private:
     class RecentProjectListEntry : public GameObject

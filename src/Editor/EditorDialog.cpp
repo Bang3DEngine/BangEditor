@@ -135,25 +135,28 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
                 expItem->GetLabel()->GetText()->SetContent("None");
             }
 
-            expItem->GetFocusable()->AddClickedCallback([expItem, gridLayoutGo]
-                                                        (IFocusable*)
+            expItem->GetFocusable()->AddClickedCallback(
+            [expItem, gridLayoutGo](IFocusable*, ClickType clickType)
             {
-                // Save path, and select only the clicked one
-                EditorDialog::s_assetPathResult = expItem->GetPath();
-                for (GameObject *expItemGo : gridLayoutGo->GetChildren())
+                if (clickType == ClickType::Down)
                 {
-                    ExplorerItem *expItem = DCAST<ExplorerItem*>(expItemGo);
-                    if (expItem) { expItem->SetSelected(false); }
+                    // Save path, and select only the clicked one
+                    EditorDialog::s_assetPathResult = expItem->GetPath();
+                    for (GameObject *expItemGo : gridLayoutGo->GetChildren())
+                    {
+                        ExplorerItem *expItem = DCAST<ExplorerItem*>(expItemGo);
+                        if (expItem) { expItem->SetSelected(false); }
+                    }
+                    expItem->SetSelected(true);
                 }
-                expItem->SetSelected(true);
+                else if (clickType == ClickType::Double)
+                {
+                    // Directly select
+                    EditorDialog::s_accepted = true;
+                    Dialog::EndCurrentDialog();
+                }
             });
 
-            expItem->GetFocusable()->AddDoubleClickedCallback([](IFocusable*)
-            {
-                // Directly select
-                EditorDialog::s_accepted = true;
-                Dialog::EndCurrentDialog();
-            });
             expItem->SetParent(gridLayoutGo);
         }
 
@@ -188,7 +191,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
     buttonsHL->SetSpacing(5);
 
     UIButton *cancelButton = GameObjectFactory::CreateUIButton("Cancel");
-    cancelButton->GetFocusable()->AddClickedCallback([](IFocusable*)
+    cancelButton->AddClickedCallback([]()
     {
         EditorDialog::s_accepted = false;
         EditorDialog::s_assetPathResult = Path::Empty;
@@ -196,7 +199,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
     });
 
     UIButton *openButton = GameObjectFactory::CreateUIButton("Open");
-    openButton->GetFocusable()->AddClickedCallback([](IFocusable*)
+    openButton->AddClickedCallback([]()
     {
         EditorDialog::s_accepted = true;
         Dialog::EndCurrentDialog();

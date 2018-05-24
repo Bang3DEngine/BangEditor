@@ -151,6 +151,8 @@ void EditorCamera::HandleKeyMovement(Vector3 *moveStep, bool *hasMoved)
     m_keysCurrentMoveSpeed += m_keysMoveAccel;
     m_keysCurrentMoveSpeed = Math::Min(m_keysCurrentMoveSpeed, m_maxMoveSpeed);
 
+    if (Input::GetKey(Key::LCtrl) || Input::GetKey(Key::LShift)) { return; }
+
     Vector3 m = Vector3::Zero;
     if (Input::GetKey(Key::W))
     {

@@ -51,10 +51,7 @@ Console::Console()
                        SetParent(toolBar);
 
     UIButton *clearButton = GameObjectFactory::CreateUIButton("Clear");
-    clearButton->GetFocusable()->AddClickedCallback([this](IFocusable*)
-    {
-        Clear();
-    });
+    clearButton->AddClickedCallback([this]() { Clear(); });
     clearButton->GetGameObject()->SetParent(toolBar);
 
     p_messageList = GameObjectFactory::CreateUIList();

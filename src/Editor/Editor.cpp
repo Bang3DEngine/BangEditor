@@ -72,7 +72,8 @@ void Editor::SelectGameObject_(GameObject *selectedGameObject)
 void Editor::OnPathSelected(const Path &path)
 {
     Editor *ed = Editor::GetInstance(); ASSERT(ed);
-    Editor::SelectGameObject(nullptr);
+    if (path.IsFile()) { Editor::SelectGameObject(nullptr); }
+
     ed->EventEmitter<IEditorListener>::PropagateToListeners(
                 &IEditorListener::OnExplorerPathSelected, path);
 }

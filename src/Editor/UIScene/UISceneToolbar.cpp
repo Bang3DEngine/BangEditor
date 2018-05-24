@@ -43,39 +43,43 @@ UISceneToolbar::UISceneToolbar()
     RH<Texture2D> rectTransformIcon    = EditorTextureFactory::GetAnchoredRectIcon();
 
     auto AddToolbarButton = [&](UIButton **button, Texture2D *icon,
-                                std::function<void(IFocusable*)> callbackFunc)
+                                std::function<void()> callbackFunc)
     {
         (*button) = GameObjectFactory::CreateUIButton("", icon);
         (*button)->SetIcon(icon, Vector2i(ToolBarHeight));
         (*button)->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
         (*button)->GetIcon()->SetTint(Color::DarkGray);
-        (*button)->GetFocusable()->AddClickedCallback(callbackFunc);
+        (*button)->GetFocusable()->AddClickedCallback(
+                    [callbackFunc](IFocusable*, ClickType clickType)
+        {
+            if (clickType == ClickType::Down) { callbackFunc(); }
+        });
         (*button)->GetGameObject()->SetParent(this);
     };
 
     AddToolbarButton(&p_translateButton, translateIcon.Get(),
-         [&](IFocusable*) { TransformGizmo::GetInstance()->SetTransformMode(
-                        TransformGizmo::TransformMode::Translate); });
+                     [&]() { TransformGizmo::GetInstance()->SetTransformMode(
+                             TransformGizmo::TransformMode::Translate); });
     AddToolbarButton(&p_rotateButton, rotateIcon.Get(),
-         [&](IFocusable*) { TransformGizmo::GetInstance()->SetTransformMode(
-                        TransformGizmo::TransformMode::Rotate); });
+                     [&]() { TransformGizmo::GetInstance()->SetTransformMode(
+                             TransformGizmo::TransformMode::Rotate); });
     AddToolbarButton(&p_scaleButton, scaleIcon.Get(),
-         [&](IFocusable*) { TransformGizmo::GetInstance()->SetTransformMode(
-                        TransformGizmo::TransformMode::Scale); });
+                     [&]() { TransformGizmo::GetInstance()->SetTransformMode(
+                             TransformGizmo::TransformMode::Scale); });
     AddToolbarButton(&p_rectTransformButton, rectTransformIcon.Get(),
-         [&](IFocusable*) { TransformGizmo::GetInstance()->SetTransformMode(
-                        TransformGizmo::TransformMode::Rect); });
+                     [&]() { TransformGizmo::GetInstance()->SetTransformMode(
+                             TransformGizmo::TransformMode::Rect); });
 
     GameObjectFactory::CreateUIHSpacer()->SetParent(this);
 
     AddToolbarButton(&p_playButton, rightArrowIcon.Get(),
-                     [&](IFocusable*) { ScenePlayer::PlayScene(); });
+                     [&]() { ScenePlayer::PlayScene(); });
     AddToolbarButton(&p_pauseButton, doubleBarIcon.Get(),
-                     [&](IFocusable*) { ScenePlayer::PauseScene(); });
+                     [&]() { ScenePlayer::PauseScene(); });
     AddToolbarButton(&p_stepButton, rightArrowAndBarIcon.Get(),
-                     [&](IFocusable*) { ScenePlayer::StepFrame(); });
+                     [&]() { ScenePlayer::StepFrame(); });
     AddToolbarButton(&p_stopButton, squareIcon.Get(),
-                     [&](IFocusable*) { ScenePlayer::StopScene(); });
+                     [&]() { ScenePlayer::StopScene(); });
 
     p_renderModeInput = GameObjectFactory::CreateUIComboBox();
     p_renderModeInput->AddItem("Color",            SCAST<int>(UISceneImage::RenderMode::Color));
