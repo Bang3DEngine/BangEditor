@@ -2,8 +2,10 @@
 
 #include "Bang/Thread.h"
 #include "Bang/UIList.h"
+#include "Bang/Window.h"
 #include "Bang/UIButton.h"
 #include "Bang/Application.h"
+#include "Bang/WindowManager.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/TextureFactory.h"
 #include "Bang/UITextRenderer.h"

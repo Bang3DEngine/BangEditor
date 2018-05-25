@@ -58,7 +58,7 @@ SelectProjectScene::SelectProjectScene()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     GameObject *cameraGo = GameObjectFactory::CreateGameObject(true);
-    Camera *camera = cameraGo->AddComponent<Camera>();
+    Camera *camera = GameObjectFactory::CreateUICameraInto(cameraGo);
     camera->GetGameObject()->SetParent(this);
     SetCamera(camera);
 

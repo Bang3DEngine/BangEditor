@@ -148,11 +148,8 @@ void EditorScene::Init()
     p_botRightTabContainer->AddTab("Console", p_console);
 
     // Editor cam creation
-    Camera *cam = AddComponent<Camera>();
-    cam->AddRenderPass(RenderPass::OVERLAY);
+    Camera *cam = GameObjectFactory::CreateUICameraInto(this);
     SetCamera(cam);
-    GetCamera()->SetClearColor(Color::LightGray);
-    GetCamera()->SetRenderSelectionBuffer(false);
 
     ScenePlayer::GetInstance()->EventEmitter<IScenePlayerListener>::RegisterListener(this);
     SceneManager::GetActive()->EventEmitter<ISceneManagerListener>::RegisterListener(this);
