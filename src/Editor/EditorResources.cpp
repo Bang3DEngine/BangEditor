@@ -22,9 +22,9 @@ MaterialPreviewFactory *EditorResources::GetMaterialPreviewFactory() const
     return m_materialPreviewFactory;
 }
 
-EditorResources *EditorResources::GetActive()
+EditorResources *EditorResources::GetInstance()
 {
-    return DCAST<EditorResources*>( Resources::GetActive() );
+    return DCAST<EditorResources*>( Resources::GetInstance() );
 }
 
 MeshFactory *EditorResources::CreateMeshFactory() const

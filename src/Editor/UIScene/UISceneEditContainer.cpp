@@ -103,7 +103,7 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
         // Render in the size of sceneEditContainer, since we have a miniature,
         // but the canvas must be the same as in the scenePlayContainer size!!!
         Scene *openScene = EditorSceneManager::GetOpenScene();
-        GEngine::GetActive()->Render(openScene, selectedCamera);
+        GEngine::GetInstance()->Render(openScene, selectedCamera);
     }
     p_cameraPreviewImg->SetVisible( selectedCamera != nullptr );
 }

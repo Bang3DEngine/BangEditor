@@ -64,7 +64,7 @@ void UISceneContainer::RenderIfNeeded()
         Camera *cam = GetSceneCamera(GetContainedScene());
         if (cam)
         {
-            GEngine::GetActive()->Render(GetContainedScene(), cam);
+            GEngine::GetInstance()->Render(GetContainedScene(), cam);
             OnRenderNeededSceneFinished();
         }
     }

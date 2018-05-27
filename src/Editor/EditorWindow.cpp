@@ -17,7 +17,7 @@
 
 USING_NAMESPACE_BANG_EDITOR
 
-EditorWindow::EditorWindow()
+EditorWindow::EditorWindow() : Window()
 {
     m_shortcutManager = new ShortcutManager();
 }

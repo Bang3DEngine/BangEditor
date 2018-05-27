@@ -92,7 +92,7 @@ void MaterialPreviewFactory::CreatePreviewScene()
 
 MaterialPreviewFactory *MaterialPreviewFactory::GetActive()
 {
-    return EditorResources::GetActive()->GetMaterialPreviewFactory();
+    return EditorResources::GetInstance()->GetMaterialPreviewFactory();
 }
 
 void MaterialPreviewFactory::FillTextureWithPreview(Texture2D *texture,
@@ -116,7 +116,7 @@ void MaterialPreviewFactory::FillTextureWithPreview(Texture2D *texture,
     p_previewMeshRenderer->SetMaterial(material);
 
     GL::SetViewport(0, 0, previewTextureSize, previewTextureSize);
-    GEngine::GetActive()->Render(m_previewScene, p_previewCamera);
+    GEngine::GetInstance()->Render(m_previewScene, p_previewCamera);
 
     texture->Bind();
     texture->SetFilterMode(GL::FilterMode::BILINEAR);

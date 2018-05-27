@@ -18,7 +18,7 @@ public:
 
     MaterialPreviewFactory *GetMaterialPreviewFactory() const;
 
-    static EditorResources *GetActive();
+    static EditorResources *GetInstance();
 
 private:
     MaterialPreviewFactory *m_materialPreviewFactory = nullptr;
