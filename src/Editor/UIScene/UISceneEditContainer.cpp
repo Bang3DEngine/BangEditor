@@ -47,6 +47,11 @@ void UISceneEditContainer::Update()
     SetScene( EditorSceneManager::GetOpenScene() );
 }
 
+void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
+{
+    GameObject::Render(rp, renderChildren);
+}
+
 void UISceneEditContainer::HandleSelection()
 {
     if (Input::GetMouseButtonDown(MouseButton::LEFT))
@@ -74,11 +79,14 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
     // Camera preview handling
     if (selectedCamera)
     {
+        GLId prevBoundDrawFB = GL::GetBoundId(GL::BindTarget::DRAW_FRAMEBUFFER);
+        GLId prevBoundReadFB = GL::GetBoundId(GL::BindTarget::READ_FRAMEBUFFER);
+
         // Get preview texture
         GBuffer *gbuffer = selectedCamera->GetGBuffer();
-        Texture2D *camTexture = gbuffer->GetAttachmentTex2D(GBuffer::AttColor);
-        camTexture->SetWrapMode( GL::WrapMode::REPEAT );
-        p_cameraPreviewImg->SetImageTexture(camTexture);
+        Texture2D *camColorTexture = gbuffer->GetLastDrawnColorTexture();
+        camColorTexture->SetWrapMode( GL::WrapMode::REPEAT );
+        p_cameraPreviewImg->SetImageTexture(camColorTexture);
 
         // Set preview size
         RectTransform *rt = GetRectTransform();
@@ -98,12 +106,16 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
            rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMin() + marginsBotLeft),
            rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMax()));
 
+        gbuffer->Bind();
         gbuffer->Resize(previewRectPx.GetWidth(), previewRectPx.GetHeight());
 
         // Render in the size of sceneEditContainer, since we have a miniature,
         // but the canvas must be the same as in the scenePlayContainer size!!!
         Scene *openScene = EditorSceneManager::GetOpenScene();
         GEngine::GetInstance()->Render(openScene, selectedCamera);
+
+        GL::Bind(GL::BindTarget::DRAW_FRAMEBUFFER, prevBoundDrawFB);
+        GL::Bind(GL::BindTarget::READ_FRAMEBUFFER, prevBoundReadFB);
     }
     p_cameraPreviewImg->SetVisible( selectedCamera != nullptr );
 }

@@ -26,6 +26,7 @@ public:
 
     // GameObject
     void Update() override;
+    void Render(RenderPass rp, bool renderChildren) override;
 
     void HandleSelection();
 

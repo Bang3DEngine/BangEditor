@@ -67,20 +67,18 @@ void UISceneImage::Update()
 
 void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
 {
-    GameObject::Render(renderPass, renderChildren);
-
+    Camera *sceneCam = GetCamera();
+    GBuffer *gb = sceneCam ? sceneCam->GetGBuffer() : nullptr;
+    ShaderProgram *sp = p_sceneImg->GetMaterial()->GetShaderProgram();
     switch (GetRenderMode())
     {
         case UISceneImage::RenderMode::DEPTH:
         case UISceneImage::RenderMode::SELECTION:
         {
-            Camera *sceneCam = GetCamera();
-            ShaderProgram *sp = p_sceneImg->GetMaterial()->GetShaderProgram();
             switch (GetRenderMode())
             {
                 case UISceneImage::RenderMode::DEPTH:
                 {
-                GBuffer *gb = sceneCam ? sceneCam->GetGBuffer() : nullptr;
                 if (gb && sp)
                 {
                     Texture2D *depthTex = gb->GetSceneDepthStencilTexture();
@@ -109,30 +107,35 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
         default: break;
     }
 
+    if (gb)
+    {
+        GLId prevBoundSP = GL::GetBoundId(GL::BindTarget::SHADER_PROGRAM);
+        sp->Bind();
+        gb->BindAttachmentsForReading(sp);
+        GL::Bind(GL::BindTarget::SHADER_PROGRAM, prevBoundSP);
+    }
+
+    GameObject::Render(renderPass, renderChildren);
+
 }
 
 void UISceneImage::SetSceneImageCamera(Camera *sceneCam)
 {
-    Texture2D *camTexture = nullptr;
     p_currentCamera = sceneCam;
 
     if (sceneCam)
     {
-        GBuffer *camGBuffer =  sceneCam->GetGBuffer();
+        GBuffer *camGBuffer = sceneCam->GetGBuffer();
 
         ShaderProgram *sp = p_sceneImg->GetActiveMaterial()->GetShaderProgram();
         GLId prevBoundSP = GL::GetBoundId(GL::BindTarget::SHADER_PROGRAM);
 
         sp->Bind();
         sp->SetInt("B_SceneRenderMode", SCAST<int>(GetRenderMode()), false);
-        camGBuffer->BindAttachmentsForReading(sp, false);
+        camGBuffer->BindAttachmentsForReading(sp);
 
         GL::Bind(GL::BindTarget::SHADER_PROGRAM, prevBoundSP);
     }
-    p_sceneImg->SetImageTexture(camTexture);
-
-    if (camTexture) { camTexture->SetWrapMode(GL::WrapMode::REPEAT); }
-    p_sceneImg->SetTint(camTexture ? Color::White : Color::Black);
 }
 
 void UISceneImage::SetRenderMode(UISceneImage::RenderMode renderMode)
