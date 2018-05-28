@@ -98,10 +98,10 @@ MaterialPreviewFactory *MaterialPreviewFactory::GetActive()
 void MaterialPreviewFactory::FillTextureWithPreview(Texture2D *texture,
                                                     Material *material)
 {
-    // Now we will fill the texture with the proper texture
-    // Save OpenGL state
-    const AARecti prevVP     = GL::GetViewportRect();
-    const GLId prevBoundTex  = GL::GetBoundId(GL::BindTarget::TEXTURE_2D);
+    // Now we will fill the texture with the proper preview
+    GL::Push(GL::Pushable::VIEWPORT);
+    GL::Push(GL::BindTarget::TEXTURE_2D);
+    GL::Push(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
 
     // Prepare to draw scene
     if (!m_previewScene) { CreatePreviewScene(); }
@@ -125,8 +125,9 @@ void MaterialPreviewFactory::FillTextureWithPreview(Texture2D *texture,
     texture->PropagateTextureChanged();
 
     // Restore OpenGL state
-    GL::SetViewport(prevVP);
-    GL::Bind(GL::BindTarget::TEXTURE_2D, prevBoundTex);
+    GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
+    GL::Pop(GL::BindTarget::TEXTURE_2D);
+    GL::Pop(GL::Pushable::VIEWPORT);
 }
 
 void MaterialPreviewFactory::OnMaterialChanged(Material *changedMaterial)

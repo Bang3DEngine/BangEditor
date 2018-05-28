@@ -109,10 +109,12 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
 
     if (gb)
     {
-        GLId prevBoundSP = GL::GetBoundId(GL::BindTarget::SHADER_PROGRAM);
+        GL::Push(GL::BindTarget::SHADER_PROGRAM);
+
         sp->Bind();
         gb->BindAttachmentsForReading(sp);
-        GL::Bind(GL::BindTarget::SHADER_PROGRAM, prevBoundSP);
+
+        GL::Pop(GL::BindTarget::SHADER_PROGRAM);
     }
 
     GameObject::Render(renderPass, renderChildren);
@@ -128,13 +130,14 @@ void UISceneImage::SetSceneImageCamera(Camera *sceneCam)
         GBuffer *camGBuffer = sceneCam->GetGBuffer();
 
         ShaderProgram *sp = p_sceneImg->GetActiveMaterial()->GetShaderProgram();
-        GLId prevBoundSP = GL::GetBoundId(GL::BindTarget::SHADER_PROGRAM);
+
+        GL::Push(GL::BindTarget::SHADER_PROGRAM);
 
         sp->Bind();
         sp->SetInt("B_SceneRenderMode", SCAST<int>(GetRenderMode()), false);
         camGBuffer->BindAttachmentsForReading(sp);
 
-        GL::Bind(GL::BindTarget::SHADER_PROGRAM, prevBoundSP);
+        GL::Pop(GL::BindTarget::SHADER_PROGRAM);
     }
 }
 

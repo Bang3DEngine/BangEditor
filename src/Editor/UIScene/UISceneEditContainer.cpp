@@ -79,8 +79,7 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
     // Camera preview handling
     if (selectedCamera)
     {
-        GLId prevBoundDrawFB = GL::GetBoundId(GL::BindTarget::DRAW_FRAMEBUFFER);
-        GLId prevBoundReadFB = GL::GetBoundId(GL::BindTarget::READ_FRAMEBUFFER);
+        GL::Push(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
 
         // Get preview texture
         GBuffer *gbuffer = selectedCamera->GetGBuffer();
@@ -114,8 +113,7 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
         Scene *openScene = EditorSceneManager::GetOpenScene();
         GEngine::GetInstance()->Render(openScene, selectedCamera);
 
-        GL::Bind(GL::BindTarget::DRAW_FRAMEBUFFER, prevBoundDrawFB);
-        GL::Bind(GL::BindTarget::READ_FRAMEBUFFER, prevBoundReadFB);
+        GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
     }
     p_cameraPreviewImg->SetVisible( selectedCamera != nullptr );
 }
