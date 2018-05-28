@@ -4,6 +4,7 @@
 #include "Bang/Bang.h"
 #include "Bang/Material.h"
 #include "Bang/Texture2D.h"
+#include "Bang/Framebuffer.h"
 #include "Bang/IMaterialChangedListener.h"
 
 #include "BangEditor/BangEditor.h"
@@ -20,8 +21,10 @@ NAMESPACE_BANG_EDITOR_BEGIN
 class MaterialPreviewFactory : public IMaterialChangedListener
 {
 public:
-    MaterialPreviewFactory() = default;
+    MaterialPreviewFactory();
     virtual ~MaterialPreviewFactory();
+
+    void Init();
 
     static RH<Texture2D> GetPreviewTextureFor(Material *material);
     RH<Texture2D> GetPreviewTextureFor_(Material *material);
@@ -37,6 +40,7 @@ private:
     Scene *m_previewScene = nullptr;
     Camera *p_previewCamera = nullptr;
     MeshRenderer *p_previewMeshRenderer = nullptr;
+    Framebuffer *m_auxiliarFBToCopyTextures = nullptr;
 
     void FillTextureWithPreview(Texture2D *texture, Material *material);
     virtual void OnMaterialChanged(Material *changedMaterial) override;

@@ -27,6 +27,12 @@ EditorResources *EditorResources::GetInstance()
     return DCAST<EditorResources*>( Resources::GetInstance() );
 }
 
+void EditorResources::Init()
+{
+    Resources::Init();
+    m_materialPreviewFactory->Init();
+}
+
 MeshFactory *EditorResources::CreateMeshFactory() const
 {
     return new EditorMeshFactory();

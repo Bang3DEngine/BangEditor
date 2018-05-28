@@ -22,8 +22,14 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
+MaterialPreviewFactory::MaterialPreviewFactory()
+{
+}
+
 MaterialPreviewFactory::~MaterialPreviewFactory()
 {
+    delete m_auxiliarFBToCopyTextures;
+
     if (m_previewScene) { GameObject::Destroy(m_previewScene); }
 
     for (RH<Material> mat : m_materials)
@@ -31,6 +37,13 @@ MaterialPreviewFactory::~MaterialPreviewFactory()
         mat.Get()->EventEmitter<IMaterialChangedListener>::
                    UnRegisterListener(this);
     }
+}
+
+void MaterialPreviewFactory::Init()
+{
+    m_auxiliarFBToCopyTextures = new Framebuffer();
+    m_auxiliarFBToCopyTextures->CreateAttachmentTex2D(GL::Attachment::COLOR0,
+                                                      GL::ColorFormat::RGBA8);
 }
 
 RH<Texture2D> MaterialPreviewFactory::GetPreviewTextureFor(Material *material)
@@ -110,13 +123,27 @@ void MaterialPreviewFactory::FillTextureWithPreview(Texture2D *texture,
     ASSERT(p_previewMeshRenderer);
 
     const uint previewTextureSize = 256;
-    p_previewCamera->GetGBuffer()->SetAttachmentTexture(texture,
-                                                        GL::Attachment::COLOR0);
+    m_auxiliarFBToCopyTextures->SetAttachmentTexture(texture,
+                                                     GL::Attachment::COLOR0);
+    m_auxiliarFBToCopyTextures->Resize(previewTextureSize, previewTextureSize);
+
     p_previewCamera->GetGBuffer()->Resize(previewTextureSize, previewTextureSize);
     p_previewMeshRenderer->SetMaterial(material);
 
+
     GL::SetViewport(0, 0, previewTextureSize, previewTextureSize);
     GEngine::GetInstance()->Render(m_previewScene, p_previewCamera);
+
+    GL::Bind(GL::BindTarget::READ_FRAMEBUFFER, p_previewCamera->GetGBuffer()->GetGLId());
+    GL::Bind(GL::BindTarget::DRAW_FRAMEBUFFER, m_auxiliarFBToCopyTextures->GetGLId());
+
+    GL::ReadBuffer(p_previewCamera->GetGBuffer()->GetLastDrawnColorAttachment());
+    GL::DrawBuffers( {GL::Attachment::COLOR0} );
+
+    GL::BlitFramebuffer(GL::GetViewportRect(),
+                        GL::GetViewportRect(),
+                        GL::FilterMode::NEAREST,
+                        GL::BufferBit::COLOR);
 
     texture->Bind();
     texture->SetFilterMode(GL::FilterMode::BILINEAR);

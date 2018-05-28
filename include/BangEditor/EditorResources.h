@@ -20,6 +20,8 @@ public:
 
     static EditorResources *GetInstance();
 
+    virtual void Init() override;
+
 private:
     MaterialPreviewFactory *m_materialPreviewFactory = nullptr;
 
