@@ -469,10 +469,12 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
 
             p_resultImg->SetTint(m_pickedColorRGB);
 
-            GLId prevBoundSP = GL::GetBoundId(p_colorImgSP->GetGLBindTarget());
+            GL::Push(GL::BindTarget::SHADER_PROGRAM);
+
             p_colorImgSP->Bind();
             p_colorImgSP->SetFloat("B_Hue", p_sliderHue->GetValue());
-            GL::Bind(p_colorImgSP->GetGLBindTarget(), prevBoundSP);
+
+            GL::Pop(GL::BindTarget::SHADER_PROGRAM);
 
             p_colorPickerReporter->SetPickedColor( m_pickedColorRGB );
             SetReceiveEvents(true);
