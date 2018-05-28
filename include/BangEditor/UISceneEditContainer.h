@@ -31,6 +31,7 @@ public:
     void HandleSelection();
 
 private:
+    bool m_needToRenderPreviewImg = false;
     UIImageRenderer *p_cameraPreviewImg = nullptr;
 
     void RenderCameraPreviewIfSelected();

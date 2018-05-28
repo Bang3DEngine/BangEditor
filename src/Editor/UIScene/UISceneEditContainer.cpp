@@ -49,6 +49,12 @@ void UISceneEditContainer::Update()
 
 void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
 {
+    if (m_needToRenderPreviewImg)
+    {
+        RenderCameraPreviewIfSelected();
+        m_needToRenderPreviewImg = false;
+    }
+
     GameObject::Render(rp, renderChildren);
 }
 
@@ -76,16 +82,13 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
     GameObject *selectedGO = Editor::GetSelectedGameObject();
     Camera *selectedCamera = selectedGO ? selectedGO->GetComponent<Camera>() :
                                           nullptr;
+
     // Camera preview handling
     if (selectedCamera)
     {
         GL::Push(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
 
-        // Get preview texture
         GBuffer *gbuffer = selectedCamera->GetGBuffer();
-        Texture2D *camColorTexture = gbuffer->GetLastDrawnColorTexture();
-        camColorTexture->SetWrapMode( GL::WrapMode::REPEAT );
-        p_cameraPreviewImg->SetImageTexture(camColorTexture);
 
         // Set preview size
         RectTransform *rt = GetRectTransform();
@@ -113,7 +116,12 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
         Scene *openScene = EditorSceneManager::GetOpenScene();
         GEngine::GetInstance()->Render(openScene, selectedCamera);
 
+        Texture2D *camColorTexture = gbuffer->GetLastDrawnColorTexture();
+        camColorTexture->SetWrapMode( GL::WrapMode::REPEAT );
+        p_cameraPreviewImg->SetImageTexture( gbuffer->GetLastDrawnColorTexture() );
+
         GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
+
     }
     p_cameraPreviewImg->SetVisible( selectedCamera != nullptr );
 }
@@ -132,7 +140,7 @@ bool UISceneEditContainer::NeedsToRenderScene(Scene *scene)
 
 void UISceneEditContainer::OnRenderNeededSceneFinished()
 {
-    RenderCameraPreviewIfSelected();
+    m_needToRenderPreviewImg = true;
 }
 
 void UISceneEditContainer::OnPlayStateChanged(PlayState, PlayState)
