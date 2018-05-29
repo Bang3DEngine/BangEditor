@@ -2,6 +2,7 @@
 #define MATERIALPREVIEWFACTORY_H
 
 #include "Bang/Bang.h"
+#include "Bang/UMap.h"
 #include "Bang/Material.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Framebuffer.h"
@@ -34,7 +35,7 @@ public:
     static MaterialPreviewFactory *GetActive();
 
 private:
-    Map<GUID, RH<Texture2D>> m_previewsMap;
+    UMap<GUID, RH<Texture2D>> m_previewsMap;
     Array<RH<Material>> m_materials;
 
     Scene *m_previewScene = nullptr;

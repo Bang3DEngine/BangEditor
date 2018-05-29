@@ -1,8 +1,11 @@
 #ifndef SHORTCUTMANAGER_H
 #define SHORTCUTMANAGER_H
 
-#include "Bang/Set.h"
+#include <unordered_set>
+
 #include "Bang/List.h"
+#include "Bang/UMap.h"
+#include "Bang/USet.h"
 #include "Bang/Input.h"
 #include "Bang/String.h"
 
@@ -11,6 +14,7 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+// Shortcut
 class Shortcut
 {
 public:
@@ -32,9 +36,29 @@ private:
     Array<Key> m_keys;
 };
 
+NAMESPACE_BANG_EDITOR_END
 
+// Shortcut Hash
+namespace std
+{
+    template <>
+    struct hash<BangEditor::Shortcut>
+    {
+        std::size_t operator()(const BangEditor::Shortcut& shortcut) const
+        {
+            std::size_t hashInt = 0;
+            for (const Key &k : shortcut.GetKeys())
+            {
+                hashInt = hashInt ^ SCAST<int>(k);
+            }
+            return hashInt;
+        }
+    };
+}
 
+NAMESPACE_BANG_EDITOR_BEGIN
 
+// ShortcutManager
 class ShortcutManager
 {
 public:
@@ -44,8 +68,8 @@ public:
                                  ShortcutCallback callback);
 
 private:
-    Set<Shortcut> m_shortcutsTriggeredWithCurrentKeys;
-    Map<Shortcut, Array<ShortcutCallback>> m_shortcuts;
+    USet<Shortcut> m_shortcutsTriggeredWithCurrentKeys;
+    UMap<Shortcut, Array<ShortcutCallback>> m_shortcuts;
     Array<Key> m_pressedKeys;
 
     ShortcutManager();

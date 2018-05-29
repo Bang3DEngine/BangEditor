@@ -1,7 +1,7 @@
 #ifndef HIERARCHY_H
 #define HIERARCHY_H
 
-#include "Bang/Map.h"
+#include "Bang/UMap.h"
 #include "Bang/UIList.h"
 #include "Bang/SceneManager.h"
 #include "Bang/IUITreeListener.h"
@@ -77,7 +77,7 @@ public:
 private:
     UITree *p_tree = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
-    Map<GameObject*, HierarchyItem*> m_gameObjectToItem;
+    UMap<GameObject*, HierarchyItem*> m_gameObjectToItem;
 
     void TreeSelectionCallback(GOItem *item, UIList::Action action);
     void AddGameObject(GameObject *go);

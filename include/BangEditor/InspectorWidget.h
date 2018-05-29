@@ -1,6 +1,7 @@
 #ifndef INSPECTORWIDGET_H
 #define INSPECTORWIDGET_H
 
+#include "Bang/UMap.h"
 #include "Bang/GameObject.h"
 
 #include "BangEditor/BangEditor.h"
@@ -57,8 +58,8 @@ protected:
 private:
     int m_labelsWidth = -1;
     List<GameObject*> p_widgets;
-    Map<GameObject*, UILabel*> m_widgetToLabel;
-    Map<UILabel*, UILayoutElement*> m_labelToLabelLE;
+    UMap<GameObject*, UILabel*> m_widgetToLabel;
+    UMap<UILabel*, UILayoutElement*> m_labelToLabelLE;
 
     UITextRenderer *p_titleText = nullptr;
     UIImageRenderer *p_bgRenderer = nullptr;

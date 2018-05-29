@@ -1,6 +1,7 @@
 #ifndef EXPLORER_H
 #define EXPLORER_H
 
+#include "Bang/UMap.h"
 #include "Bang/Path.h"
 #include "Bang/UIButton.h"
 #include "Bang/FileTracker.h"
@@ -72,7 +73,7 @@ private:
     Path m_rootPath = Path::Empty;
     Path m_currentPath = Path::Empty;
     List<ExplorerItem*> p_items;
-    Map<Path, ExplorerItem*> m_pathsToItem;
+    UMap<Path, ExplorerItem*> m_pathsToItem;
 
     UIButton *p_backButton = nullptr;
     UISlider *p_iconSizeSlider = nullptr;

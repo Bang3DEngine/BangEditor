@@ -2,6 +2,7 @@
 #define UITABCONTAINER_H
 
 #include "Bang/List.h"
+#include "Bang/UMap.h"
 #include "Bang/GameObject.h"
 
 #include "BangEditor/UITabHeader.h"
@@ -32,8 +33,8 @@ public:
 private:
     int m_currentTabIndex = -1;
     List<GameObject*> p_childrenInTabs;
-    Map<GameObject*, UITabHeader*> m_childrenToHeader;
-    Map<UITabHeader*, GameObject*> m_headerToChildren;
+    UMap<GameObject*, UITabHeader*> m_childrenToHeader;
+    UMap<UITabHeader*, GameObject*> m_headerToChildren;
 
     GameObject *p_headersBar = nullptr;
     GameObject *p_hiddenTabsContainer = nullptr;

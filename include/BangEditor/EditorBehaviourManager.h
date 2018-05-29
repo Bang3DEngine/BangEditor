@@ -51,9 +51,9 @@ private:
     ThreadPool m_compileThreadPool;
     BehaviourTracker m_behaviourTracker;
 
-    Set<Path> m_compiledBehaviours;
-    Set<Path> m_behavioursBeingCompiled;
-    Set<Path> m_successfullyCompiledBehaviours;
+    USet<Path> m_compiledBehaviours;
+    USet<Path> m_behavioursBeingCompiled;
+    USet<Path> m_successfullyCompiledBehaviours;
 
     mutable Mutex m_mutex;
     std::queue<Compiler::Result> m_compileResults;

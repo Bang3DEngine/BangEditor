@@ -1,7 +1,7 @@
 #ifndef BEHAVIOURTRACKER_H
 #define BEHAVIOURTRACKER_H
 
-#include "Bang/Set.h"
+#include "Bang/USet.h"
 #include "Bang/List.h"
 #include "Bang/Path.h"
 #include "Bang/FileTracker.h"
@@ -33,7 +33,7 @@ public:
 private:
     FileTracker m_fileTracker;
     Path m_previousProjectPath = Path::Empty;
-    Set<Path> m_changedPathsFromLastUpdate;
+    USet<Path> m_changedPathsFromLastUpdate;
 };
 
 NAMESPACE_BANG_EDITOR_END

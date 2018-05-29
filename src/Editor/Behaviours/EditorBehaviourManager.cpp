@@ -413,7 +413,7 @@ void EditorBehaviourManager::UpdateCompileInformations()
 
     GetMutex()->Lock();
     const List<Path> behaviourPaths = GetBehaviourSourcesPaths();
-    Set<Path> modifiedBehaviours;
+    USet<Path> modifiedBehaviours;
     for (const Path &behaviourPath : behaviourPaths)
     {
         if ( GetBehaviourTracker()->HasBeenModified(behaviourPath) )

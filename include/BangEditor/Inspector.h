@@ -1,6 +1,7 @@
 ﻿#ifndef INSPECTOR_H
 #define INSPECTOR_H
 
+#include "Bang/UMap.h"
 #include "Bang/SceneManager.h"
 #include "Bang/IDestroyListener.h"
 #include "Bang/IComponentListener.h"
@@ -57,7 +58,7 @@ public:
 
 private:
     List<InspectorWidget*> m_widgets;
-    Map<Object*, InspectorWidget*> m_objToWidget;
+    UMap<Object*, InspectorWidget*> m_objToWidget;
 
     Path m_currentOpenPath = Path::Empty;
     GameObject *p_currentGameObject = nullptr;
