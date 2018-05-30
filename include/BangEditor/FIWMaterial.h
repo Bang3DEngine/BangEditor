@@ -20,6 +20,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class UIInputFile;
 FORWARD class UIInputColor;
 FORWARD class UIInputVector;
+FORWARD class UIInputTexture;
 
 class FIWMaterial : public FileInspectorWidget,
                     public IValueChangedListener
@@ -35,10 +36,10 @@ private:
 
     UIComboBox *p_renderPassInput = nullptr;
     UIInputColor *p_albedoColorInput = nullptr;
-    UIInputFile *p_albedoTextureInput = nullptr;
+    UIInputTexture *p_albedoTextureInput = nullptr;
     UIInputVector *p_albedoUvMultiplyInput = nullptr;
     UIInputVector *p_albedoUvOffsetInput   = nullptr;
-    UIInputFile *p_normalMapTextureInput = nullptr;
+    UIInputTexture *p_normalMapTextureInput = nullptr;
     UIInputVector *p_normalMapUvMultiplyInput = nullptr;
     UIInputVector *p_normalMapUvOffsetInput   = nullptr;
     UIInputNumber *p_normalMapMultiplyFactorInput = nullptr;

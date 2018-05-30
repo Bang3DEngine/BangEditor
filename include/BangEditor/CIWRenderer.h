@@ -14,6 +14,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UIInputFile;
+FORWARD class UIInputMaterial;
 
 class CIWRenderer : public ComponentInspectorWidget
 {
@@ -35,7 +36,7 @@ private:
     UICheckBox *p_visibleCheckBox = nullptr;
     UICheckBox *p_castsShadowsCheckBox = nullptr;
     UICheckBox *p_receivesShadowsCheckBox = nullptr;
-    UIInputFile *p_materialInputFile = nullptr;
+    UIInputMaterial *p_materialInputFile = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

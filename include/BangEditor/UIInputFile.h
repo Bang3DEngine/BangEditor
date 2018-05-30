@@ -24,7 +24,7 @@ class UIInputFile : public GameObject,
     GAMEOBJECT_EDITOR(UIInputFile);
 
 public:
-    void SetPath(const Path &path);
+    virtual void SetPath(const Path &path);
     void SetExtensions(const Array<String> &extensions);
 
     Path GetPath() const;

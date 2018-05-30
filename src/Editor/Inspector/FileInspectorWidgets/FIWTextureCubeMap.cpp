@@ -7,7 +7,7 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
-#include "BangEditor/UIInputFile.h"
+#include "BangEditor/UIInputTexture.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -27,32 +27,32 @@ void FIWTextureCubeMap::Init()
     SetTitle("Texture Cube Map");
     SetName("FIWTextureCubeMap");
 
-    p_topTextureInput = GameObject::Create<UIInputFile>();
+    p_topTextureInput = GameObject::Create<UIInputTexture>();
     p_topTextureInput->SetExtensions( Extensions::GetImageExtensions() );
     p_topTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Top texture", p_topTextureInput);
 
-    p_botTextureInput = GameObject::Create<UIInputFile>();
+    p_botTextureInput = GameObject::Create<UIInputTexture>();
     p_botTextureInput->SetExtensions( Extensions::GetImageExtensions() );
     p_botTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Bot texture", p_botTextureInput);
 
-    p_leftTextureInput = GameObject::Create<UIInputFile>();
+    p_leftTextureInput = GameObject::Create<UIInputTexture>();
     p_leftTextureInput->SetExtensions( Extensions::GetImageExtensions() );
     p_leftTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Left texture", p_leftTextureInput);
 
-    p_rightTextureInput = GameObject::Create<UIInputFile>();
+    p_rightTextureInput = GameObject::Create<UIInputTexture>();
     p_rightTextureInput->SetExtensions( Extensions::GetImageExtensions() );
     p_rightTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Right texture", p_rightTextureInput);
 
-    p_frontTextureInput = GameObject::Create<UIInputFile>();
+    p_frontTextureInput = GameObject::Create<UIInputTexture>();
     p_frontTextureInput->SetExtensions( Extensions::GetImageExtensions() );
     p_frontTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Front texture", p_frontTextureInput);
 
-    p_backTextureInput = GameObject::Create<UIInputFile>();
+    p_backTextureInput = GameObject::Create<UIInputTexture>();
     p_backTextureInput->SetExtensions( Extensions::GetImageExtensions() );
     p_backTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Back texture", p_backTextureInput);

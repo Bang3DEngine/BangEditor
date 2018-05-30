@@ -9,6 +9,7 @@
 
 #include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputColor.h"
+#include "BangEditor/UIInputTexture.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -30,7 +31,7 @@ void CIWUIImageRenderer::InitInnerWidgets()
 
     p_tintInput = GameObject::Create<UIInputColor>();
 
-    p_imageInput = GameObject::Create<UIInputFile>();
+    p_imageInput = GameObject::Create<UIInputTexture>();
     p_imageInput->SetExtensions( Extensions::GetImageExtensions() );
 
     p_tintInput->EventEmitter<IValueChangedListener>::RegisterListener(this);

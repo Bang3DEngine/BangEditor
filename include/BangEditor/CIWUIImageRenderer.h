@@ -8,8 +8,8 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputFile;
 FORWARD class UIInputColor;
+FORWARD class UIInputTexture;
 
 class CIWUIImageRenderer : public ComponentInspectorWidget
 {
@@ -27,8 +27,8 @@ protected:
     void OnValueChanged(Object *object) override;
 
 private:
-    UIInputFile *p_imageInput = nullptr;
     UIInputColor *p_tintInput = nullptr;
+    UIInputTexture *p_imageInput = nullptr;
 
 	CIWUIImageRenderer();
 	virtual ~CIWUIImageRenderer();

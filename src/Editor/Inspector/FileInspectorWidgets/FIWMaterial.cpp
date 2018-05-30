@@ -26,6 +26,7 @@
 #include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputColor.h"
 #include "BangEditor/UIInputVector.h"
+#include "BangEditor/UIInputTexture.h"
 #include "BangEditor/MaterialPreviewFactory.h"
 
 USING_NAMESPACE_BANG
@@ -46,7 +47,7 @@ void FIWMaterial::Init()
     SetName("FIWMaterial");
     SetTitle("Material");
 
-    p_albedoTextureInput = GameObject::Create<UIInputFile>();
+    p_albedoTextureInput = GameObject::Create<UIInputTexture>();
     p_albedoTextureInput->SetExtensions( Extensions::GetImageExtensions() );
     p_albedoTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
@@ -58,7 +59,7 @@ void FIWMaterial::Init()
     p_albedoUvOffsetInput->SetSize(2);
     p_albedoUvOffsetInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
-    p_normalMapTextureInput = GameObject::Create<UIInputFile>();
+    p_normalMapTextureInput = GameObject::Create<UIInputTexture>();
     p_normalMapTextureInput->SetExtensions( Extensions::GetImageExtensions() );
     p_normalMapTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
@@ -159,7 +160,6 @@ void FIWMaterial::Init()
     AddWidget("Cull Face",            p_cullFaceInput->GetGameObject());
     AddWidget("Render Wireframe",     p_renderWireframe->GetGameObject());
     AddWidget("Line Width",           p_lineWidthInput->GetGameObject());
-    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Vert shader",          p_vertexShaderInput);
     AddWidget("Frag shader",          p_fragmentShaderInput);

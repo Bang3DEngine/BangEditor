@@ -15,7 +15,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputFile;
+FORWARD class UIInputTexture;
 
 class FIWTextureCubeMap : public FileInspectorWidget,
                           public IValueChangedListener
@@ -28,12 +28,12 @@ public:
 
 private:
     RH<TextureCubeMap> p_textureCubeMap;
-    UIInputFile *p_topTextureInput   = nullptr;
-    UIInputFile *p_botTextureInput   = nullptr;
-    UIInputFile *p_rightTextureInput = nullptr;
-    UIInputFile *p_leftTextureInput  = nullptr;
-    UIInputFile *p_frontTextureInput = nullptr;
-    UIInputFile *p_backTextureInput  = nullptr;
+    UIInputTexture *p_topTextureInput   = nullptr;
+    UIInputTexture *p_botTextureInput   = nullptr;
+    UIInputTexture *p_rightTextureInput = nullptr;
+    UIInputTexture *p_leftTextureInput  = nullptr;
+    UIInputTexture *p_frontTextureInput = nullptr;
+    UIInputTexture *p_backTextureInput  = nullptr;
     UILabel *p_warningLabel = nullptr;
 
     FIWTextureCubeMap();

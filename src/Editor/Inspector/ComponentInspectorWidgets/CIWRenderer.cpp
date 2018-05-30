@@ -9,7 +9,7 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
-#include "BangEditor/UIInputFile.h"
+#include "BangEditor/UIInputMaterial.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -39,7 +39,7 @@ void CIWRenderer::InitInnerWidgets()
     p_receivesShadowsCheckBox = GameObjectFactory::CreateUICheckBox();
     p_receivesShadowsCheckBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
 
-    p_materialInputFile = GameObject::Create<UIInputFile>();
+    p_materialInputFile = GameObject::Create<UIInputMaterial>();
     p_materialInputFile->SetExtensions({Extensions::GetMaterialExtension()});
     p_materialInputFile->EventEmitter<IValueChangedListener>::RegisterListener(this);
     AddWidget("Visible", p_visibleCheckBox->GetGameObject());
