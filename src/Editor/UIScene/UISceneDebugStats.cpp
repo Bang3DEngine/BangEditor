@@ -55,7 +55,7 @@ void UISceneDebugStats::Update()
 
     p_debugStatsText->SetContent(fpsText);
 
-    // Debug_DLog(fpsText);
+    // std::cerr << fpsText << std::endl;
 }
 
 void UISceneDebugStats::OnEnabled()

@@ -152,7 +152,7 @@ void RectTransformAnchorSelectionGizmo::UpdateBasedOnAnchorSide()
     GameObject *refGo    = GetReferencedGameObject(); if (!refGo) { return; }
     RectTransform *refRT = refGo->GetRectTransform(); if (!refRT) { return; }
 
-    float localAnchorRot;
+    float localAnchorRot = 0.0f;
     Vector2 localAnchor;
     switch (m_anchorSide)
     {

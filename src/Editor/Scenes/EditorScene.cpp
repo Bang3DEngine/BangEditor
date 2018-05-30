@@ -149,6 +149,11 @@ void EditorScene::Init()
 
     // Editor cam creation
     Camera *cam = GameObjectFactory::CreateUICameraInto(this);
+    cam->RemoveRenderPass(RenderPass::SCENE);
+    cam->RemoveRenderPass(RenderPass::SCENE_POSTPROCESS);
+    cam->RemoveRenderPass(RenderPass::CANVAS_POSTPROCESS);
+    cam->RemoveRenderPass(RenderPass::OVERLAY);
+    cam->RemoveRenderPass(RenderPass::OVERLAY_POSTPROCESS);
     SetCamera(cam);
 
     ScenePlayer::GetInstance()->EventEmitter<IScenePlayerListener>::RegisterListener(this);
