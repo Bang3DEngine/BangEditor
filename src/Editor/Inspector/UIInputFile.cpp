@@ -95,9 +95,9 @@ void UIInputFile::OnDragUpdate(UIDragDroppable *dragDroppable)
         bool acceptedFileType = draggedPath.HasExtension(GetExtensions());
 
         Color backgroundColor = (acceptedFileType ? Color::Green : Color::Red);
-        RectTransform *pathInputRT = p_pathInputText->GetGameObject()->
-                                     GetRectTransform();
-        if (acceptedFileType && pathInputRT->IsMouseOver(false))
+
+        UICanvas *canvas = UICanvas::GetActive(this);
+        if (acceptedFileType && canvas->IsMouseOver(p_pathInputText))
         {
             backgroundColor = backgroundColor.WithSaturation(0.3f);
         }
@@ -112,9 +112,9 @@ void UIInputFile::OnDrop(UIDragDroppable *dragDroppable)
 {
     IDragDropListener::OnDrop(dragDroppable);
 
+    UICanvas *canvas = UICanvas::GetActive(this);
     ExplorerItem *expItem = DCAST<ExplorerItem*>(dragDroppable->GetGameObject());
-    if (expItem &&
-        p_pathInputText->GetGameObject()->GetRectTransform()->IsMouseOver(true))
+    if (expItem && canvas->IsMouseOver(p_pathInputText))
     {
         Path draggedPath = expItem->GetPath();
         bool acceptedFileType = draggedPath.HasExtension(GetExtensions());

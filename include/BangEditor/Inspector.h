@@ -67,6 +67,7 @@ private:
     UITextRenderer *p_titleText = nullptr;
     GameObject *p_titleSeparator = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
+    UIImageRenderer *p_blockLayer = nullptr;
 
     GameObject* GetWidgetsContainer() const;
     UIVerticalLayout *GetMainVL() const;
@@ -76,6 +77,7 @@ private:
     void AddWidget(InspectorWidget *widget, int index = -1);
     void RemoveWidget(InspectorWidget *widget);
     void RemoveWidget(int index);
+    void SetCurrentWidgetBlocked(bool blocked);
     void Clear();
 
     // UIContextMenu

@@ -19,6 +19,7 @@
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/UIRendererCacher.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/IDragDropListener.h"
 #include "Bang/UIContentSizeFitter.h"
 
 #include "BangEditor/MenuBar.h"
@@ -99,6 +100,10 @@ Inspector::Inspector()
     goNameLabel->GetGameObject()->SetParent(mainVLGo);
     p_titleSeparator->SetParent(mainVLGo);
     scrollPanel->GetGameObject()->SetParent(mainVLGo);
+
+    p_blockLayer = GameObjectFactory::CreateUIImage(Color::Black.WithAlpha(0.3f));
+    p_blockLayer->GetGameObject()->AddComponent<UIFocusable>();
+    p_blockLayer->GetGameObject()->SetParent(this);
 
     AddComponent<UIFocusable>();
     p_contextMenu = AddComponent<UIContextMenu>();
@@ -183,6 +188,10 @@ void Inspector::OnExplorerPathSelected(const Path &path)
                 p_titleText->SetContent(path.GetNameExt());
                 m_currentOpenPath = path;
                 AddWidget(fiw);
+
+                bool isEngineFile = m_currentOpenPath.BeginsWith(
+                                                Paths::GetEngineDir());
+                SetCurrentWidgetBlocked(isEngineFile);
             }
         }
     }
@@ -269,6 +278,34 @@ void Inspector::RemoveWidget(int index)
     RemoveWidget( *it );
 }
 
+void Inspector::SetCurrentWidgetBlocked(bool blocked)
+{
+    p_blockLayer->GetGameObject()->SetEnabled( blocked );
+
+    List<Object*> childrenAndChildrenComps;
+
+    List<GameObject*> children = GetWidgetsContainer()->GetChildrenRecursively();
+    for (GameObject *child : children)
+    {
+        childrenAndChildrenComps.PushBack(child);
+        childrenAndChildrenComps.PushBack(child->GetComponents());
+    }
+
+    for (Object *obj : childrenAndChildrenComps)
+    {
+        // if (IFocusListener *focusListener = DCAST<IFocusListener*>(obj))
+        // {
+        //     focusListener->SetReceiveEvents(!blocked);
+        // }
+        //
+        // if (IDragDropListener *ddListener = DCAST<IDragDropListener*>(obj))
+        // {
+        //     ddListener->SetReceiveEvents(!blocked);
+        // }
+    }
+
+}
+
 void Inspector::Clear()
 {
     p_titleText->SetContent("");
@@ -287,4 +324,5 @@ void Inspector::Clear()
         p_currentGameObject = nullptr;
     }
     m_currentOpenPath = Path::Empty;
+    SetCurrentWidgetBlocked(false);
 }
