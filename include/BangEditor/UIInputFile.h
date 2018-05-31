@@ -5,6 +5,7 @@
 #include "Bang/Array.h"
 #include "Bang/GameObject.h"
 #include "Bang/IEventEmitter.h"
+#include "Bang/IDragDropListener.h"
 #include "Bang/IValueChangedListener.h"
 
 #include "BangEditor/BangEditor.h"
@@ -19,7 +20,8 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class UIInputFile : public GameObject,
-                    public EventEmitter<IValueChangedListener>
+                    public EventEmitter<IValueChangedListener>,
+                    public IDragDropListener
 {
     GAMEOBJECT_EDITOR(UIInputFile);
 
@@ -34,6 +36,11 @@ public:
 protected:
 	UIInputFile();
     virtual ~UIInputFile();
+
+    // IDragDropListener
+    virtual void OnDragStarted(UIDragDroppable *dragDroppable) override;
+    virtual void OnDragUpdate(UIDragDroppable *dragDroppable) override;
+    virtual void OnDrop(UIDragDroppable *dragDroppable) override;
 
 private:
     Path m_path = Path("undef"); // Set to empty in constructor

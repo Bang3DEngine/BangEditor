@@ -3,16 +3,21 @@
 #include "Bang/Dialog.h"
 #include "Bang/UILabel.h"
 #include "Bang/UIButton.h"
+#include "Bang/UICanvas.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UIInputText.h"
+#include "Bang/RectTransform.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/TextureFactory.h"
+#include "Bang/UIImageRenderer.h"
+#include "Bang/UIDragDroppable.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 
 #include "BangEditor/Inspector.h"
 #include "BangEditor/EditorDialog.h"
+#include "BangEditor/ExplorerItem.h"
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/FileInspectorWidgetFactory.h"
 
@@ -72,6 +77,46 @@ UIInputFile::UIInputFile()
 
 UIInputFile::~UIInputFile()
 {
+}
+
+void UIInputFile::OnDragStarted(UIDragDroppable *dragDroppable)
+{
+    IDragDropListener::OnDragStarted(dragDroppable);
+
+    ExplorerItem *expItem = DCAST<ExplorerItem*>(dragDroppable->GetGameObject());
+    if (expItem)
+    {
+        Path draggedPath = expItem->GetPath();
+        bool acceptedFileType = draggedPath.HasExtension(GetExtensions());
+        Color backgroundColor = (acceptedFileType ? Color::Green : Color::Red);
+        Color textColor = (acceptedFileType ? Color::Black : Color::White);
+        p_pathInputText->GetText()->SetTextColor(textColor);
+        p_pathInputText->GetBackground()->SetTint(backgroundColor);
+    }
+}
+
+void UIInputFile::OnDragUpdate(UIDragDroppable *dragDroppable)
+{
+    IDragDropListener::OnDragUpdate(dragDroppable);
+}
+
+void UIInputFile::OnDrop(UIDragDroppable *dragDroppable)
+{
+    IDragDropListener::OnDrop(dragDroppable);
+
+    ExplorerItem *expItem = DCAST<ExplorerItem*>(dragDroppable->GetGameObject());
+    if (expItem &&
+        p_pathInputText->GetGameObject()->GetRectTransform()->IsMouseOver(true))
+    {
+        Path draggedPath = expItem->GetPath();
+        bool acceptedFileType = draggedPath.HasExtension(GetExtensions());
+        if (acceptedFileType)
+        {
+            SetPath(draggedPath);
+        }
+    }
+    p_pathInputText->GetText()->SetTextColor(Color::Black);
+    p_pathInputText->GetBackground()->SetTint(Color::White);
 }
 
 void UIInputFile::SetPath(const Path &path)
