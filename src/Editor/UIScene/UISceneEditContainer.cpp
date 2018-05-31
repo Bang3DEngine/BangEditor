@@ -7,16 +7,22 @@
 #include "Bang/GEngine.h"
 #include "Bang/Material.h"
 #include "Bang/UICanvas.h"
+#include "Bang/Resources.h"
 #include "Bang/Selection.h"
+#include "Bang/Extensions.h"
+#include "Bang/MeshRenderer.h"
 #include "Bang/RectTransform.h"
+#include "Bang/UIDragDroppable.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutIgnorer.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/SelectionFramebuffer.h"
 
 #include "BangEditor/EditorCamera.h"
+#include "BangEditor/ExplorerItem.h"
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/NotSelectableInEditor.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -46,9 +52,8 @@ void UISceneEditContainer::Update()
     GameObject::Update();
     SetScene( EditorSceneManager::GetOpenScene() );
 
-    UICanvas *canvas = UICanvas::GetActive(this);
     bool renderSelectionFramebuffer = (IsVisible() &&
-                                       canvas->IsMouseOver(GetSceneImage()));
+                    GetSceneImage()->GetRectTransform()->IsMouseOver(false));
     EditorCamera::GetInstance()->GetCamera()->
                   SetRenderSelectionBuffer(renderSelectionFramebuffer);
 }
@@ -147,6 +152,118 @@ bool UISceneEditContainer::NeedsToRenderScene(Scene *scene)
 void UISceneEditContainer::OnRenderNeededSceneFinished()
 {
     m_needToRenderPreviewImg = true;
+}
+
+GameObject* UISceneEditContainer::GetCurrentOveredGameObject() const
+{
+    Camera *edCam = EditorCamera::GetInstance()->GetCamera();
+
+    Vector2 mouseVPPoint(Input::GetMousePosition());
+    RectTransform *sceneImgRT = GetSceneImage()->GetRectTransform();
+    Vector2 mousePoint(sceneImgRT->FromViewportPointToLocalPoint(mouseVPPoint));
+
+    GameObject *overedGameObject =
+                    Selection::GetOveredGameObject(edCam, Vector2i(mousePoint));
+
+    if (overedGameObject &&
+        overedGameObject->HasComponent<NotSelectableInEditor>())
+    {
+        overedGameObject = nullptr;
+    }
+
+    return overedGameObject;
+}
+
+void UISceneEditContainer::ApplyDraggedMaterialToOveredGameObject()
+{
+    GameObject *overedGameObject = GetCurrentOveredGameObject();
+    if (overedGameObject)
+    {
+        List<MeshRenderer*> mrs = overedGameObject->GetComponents<MeshRenderer>();
+        for (MeshRenderer *mr : mrs)
+        {
+            RH<Material> prevMat = RH<Material>(mr->GetActiveMaterial());
+            mr->SetMaterial( m_currentMaterialBeingDragged.Get() );
+            m_meshRenderersToPreviousMaterials.Add(mr, prevMat);
+        }
+    }
+}
+
+void UISceneEditContainer::RestoreDraggedMaterialToPreviousGameObjectOvered()
+{
+    List<MeshRenderer*> restoredMeshRenderers;
+    for (const auto &pair : m_meshRenderersToPreviousMaterials)
+    {
+        MeshRenderer *mr = pair.first;
+        RH<Material> previousMat = pair.second;
+        mr->SetMaterial( previousMat.Get() );
+        restoredMeshRenderers.PushBack(mr);
+    }
+
+    for (MeshRenderer *mr : restoredMeshRenderers)
+    {
+        m_meshRenderersToPreviousMaterials.Remove(mr);
+    }
+}
+
+void UISceneEditContainer::OnDragStarted(UIDragDroppable *dragDroppable)
+{
+    IDragDropListener::OnDragStarted(dragDroppable);
+
+    ExplorerItem *expItem = DCAST<ExplorerItem*>(dragDroppable->GetGameObject());
+    if (expItem)
+    {
+        Path draggedPath = expItem->GetPath();
+        if (draggedPath.HasExtension( Extensions::GetMaterialExtension() ))
+        {
+            m_currentMaterialBeingDragged = Resources::Load<Material>(draggedPath);
+            p_lastOveredGameObject = GetCurrentOveredGameObject();
+
+            ApplyDraggedMaterialToOveredGameObject();
+        }
+    }
+}
+
+void UISceneEditContainer::OnDragUpdate(UIDragDroppable *dragDroppable)
+{
+    IDragDropListener::OnDragUpdate(dragDroppable);
+
+    if (m_currentMaterialBeingDragged)
+    {
+        GameObject *currentOveredGameObject = GetCurrentOveredGameObject();
+        if (currentOveredGameObject != p_lastOveredGameObject)
+        {
+            RestoreDraggedMaterialToPreviousGameObjectOvered();
+
+            p_lastOveredGameObject = currentOveredGameObject;
+            ApplyDraggedMaterialToOveredGameObject();
+        }
+    }
+}
+
+void UISceneEditContainer::OnDrop(UIDragDroppable *dragDroppable)
+{
+    IDragDropListener::OnDrop(dragDroppable);
+
+    m_currentMaterialBeingDragged.Set(nullptr);
+    m_meshRenderersToPreviousMaterials.Clear();
+}
+
+void UISceneEditContainer::OnDestroyed(EventEmitter<IDestroyListener> *object)
+{
+    UISceneContainer::OnDestroyed(object);
+
+    GameObject *go = DCAST<GameObject*>(object);
+    if (go && p_lastOveredGameObject)
+    {
+        p_lastOveredGameObject = nullptr;
+    }
+
+    MeshRenderer *mr = DCAST<MeshRenderer*>(mr);
+    if (mr)
+    {
+        m_meshRenderersToPreviousMaterials.Remove(mr);
+    }
 }
 
 void UISceneEditContainer::OnPlayStateChanged(PlayState, PlayState)

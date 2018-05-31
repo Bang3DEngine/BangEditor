@@ -43,6 +43,8 @@ ScaleGizmoAxis::ScaleGizmoAxis()
     p_meshRenderer->SetMaterial(MaterialFactory::GetGizmosUnLightedOverlay().Get());
     p_meshRenderer->GetMaterial()->SetReceivesLighting(false);
     p_meshRenderer->SetMesh( MeshFactory::GetCube().Get() );
+    p_meshRenderer->SetCastsShadows(false);
+    p_meshRenderer->SetReceivesShadows(false);
     p_arrowCap->GetTransform()->SetLocalScale( Vector3( ArrowCapScale ) );
 
     p_selectionGo = GameObjectFactory::CreateGameObject(true);
@@ -51,6 +53,8 @@ ScaleGizmoAxis::ScaleGizmoAxis()
     p_selectionRenderer = p_selectionGo->AddComponent<MeshRenderer>();
     p_selectionRenderer->SetMaterial(MaterialFactory::GetGizmosUnLightedOverlay().Get());
     p_selectionRenderer->SetMesh( MeshFactory::GetCube().Get() );
+    p_selectionRenderer->SetCastsShadows(false);
+    p_selectionRenderer->SetReceivesShadows(false);
 
     p_arrowCap->SetParent(this);
     p_selectionGo->SetParent(this);

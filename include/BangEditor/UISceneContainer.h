@@ -37,6 +37,9 @@ protected:
     UISceneToolbar* GetSceneToolbar() const;
     UISceneImage* GetSceneImage() const;
 
+    // IDestroyListener
+    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
+
 private:
     Scene *p_containedScene = nullptr;
 
@@ -52,9 +55,6 @@ private:
 
     // IValueChangedListener
     void OnValueChanged(Object *object) override;
-
-    // IDestroyListener
-    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
 };
 
 NAMESPACE_BANG_EDITOR_END
