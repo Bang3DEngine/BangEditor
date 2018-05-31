@@ -3,8 +3,8 @@
 
 #include "Bang/Component.h"
 #include "Bang/GameObject.h"
-#include "Bang/IEventEmitter.h"
-#include "Bang/IEventListener.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.h"
 
 #include "BangEditor/MenuItem.h"
 
@@ -17,7 +17,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class ContextMenu;
 
 class UIContextMenu : public Component,
-                      public IDestroyListener
+                      public EventListener<IDestroyListener>
 {
     COMPONENT(UIContextMenu)
 
@@ -48,7 +48,7 @@ private:
 
 // ContextMenu
 class ContextMenu : public GameObject,
-             public IDestroyListener
+                    public EventListener<IDestroyListener>
 {
     GAMEOBJECT_EDITOR(ContextMenu);
 

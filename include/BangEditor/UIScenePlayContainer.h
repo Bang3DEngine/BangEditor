@@ -3,6 +3,7 @@
 
 #include "Bang/Bang.h"
 #include "Bang/SceneManager.h"
+#include "Bang/EventListener.h"
 
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneContainer.h"
@@ -11,8 +12,8 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class UIScenePlayContainer : public UISceneContainer,
-                             public IScenePlayerListener,
-                             public ISceneManagerListener
+                             public EventListener<IScenePlayerListener>,
+                             public EventListener<ISceneManagerListener>
 {
     GAMEOBJECT_EDITOR(UIScenePlayContainer);
 

@@ -3,6 +3,7 @@
 
 #include "Bang/Path.h"
 #include "Bang/Dialog.h"
+#include "Bang/EventListener.h"
 
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/EditorSceneManager.h"
@@ -10,8 +11,8 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class SceneOpenerSaver : public ISceneManagerListener,
-                         public IScenePlayerListener
+class SceneOpenerSaver : public EventListener<ISceneManagerListener>,
+                         public EventListener<IScenePlayerListener>
 {
 public:
     SceneOpenerSaver();

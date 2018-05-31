@@ -23,7 +23,7 @@ FORWARD class UIInputVector;
 FORWARD class UIInputTexture;
 
 class FIWMaterial : public FileInspectorWidget,
-                    public IValueChangedListener
+                    public EventListener<IValueChangedListener>
 {
     GAMEOBJECT_EDITOR(FIWMaterial);
 

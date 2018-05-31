@@ -17,7 +17,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class ComponentInspectorWidget : public InspectorWidget,
-                                 public IValueChangedListener
+                                 public EventListener<IValueChangedListener>
 {
     GAMEOBJECT_EDITOR(InspectorWidget);
 

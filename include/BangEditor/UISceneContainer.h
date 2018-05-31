@@ -2,6 +2,7 @@
 #define UISCENECONTAINER_H
 
 #include "Bang/GameObject.h"
+#include "Bang/EventListener.h"
 #include "Bang/ITransformListener.h"
 #include "Bang/IValueChangedListener.h"
 
@@ -18,9 +19,9 @@ FORWARD class UISceneImage;
 FORWARD class UISceneToolbar;
 
 class UISceneContainer : public GameObject,
-                         public IDestroyListener,
-                         public IValueChangedListener,
-                         public ITransformListener
+                         public EventListener<IDestroyListener>,
+                         public EventListener<IValueChangedListener>,
+                         public EventListener<ITransformListener>
 {
 public:
     UISceneContainer();

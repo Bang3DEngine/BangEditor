@@ -2,7 +2,8 @@
 #define UISCENETOOLBAR_H
 
 #include "Bang/GameObject.h"
-#include "Bang/IEventEmitter.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.h"
 #include "Bang/IValueChangedListener.h"
 
 #include "BangEditor/BangEditor.h"
@@ -21,8 +22,8 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class UISceneToolbar : public GameObject,
                        public EventEmitter<IValueChangedListener>,
-                       public IScenePlayerListener,
-                       public IValueChangedListener
+                       public EventListener<IScenePlayerListener>,
+                       public EventListener<IValueChangedListener>
 {
     GAMEOBJECT_EDITOR(UISceneToolbar);
 

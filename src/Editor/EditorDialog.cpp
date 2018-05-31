@@ -400,7 +400,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
     handle->SetParent(colorPanelImg->GetGameObject());
 
     class Controller : public GameObject,
-                       public IValueChangedListener
+                       public EventListener<IValueChangedListener>
     {
     public:
         Color m_pickedColorRGB;
@@ -418,7 +418,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
 
         void OnValueChanged(Object *object) override
         {
-            SetReceiveEvents(false);
+            EventListener<IValueChangedListener>::SetReceiveEvents(false);
 
             if (object == p_sliderHue)
             {
@@ -477,7 +477,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
             GL::Pop(GL::BindTarget::SHADER_PROGRAM);
 
             p_colorPickerReporter->SetPickedColor( m_pickedColorRGB );
-            SetReceiveEvents(true);
+            EventListener<IValueChangedListener>::SetReceiveEvents(true);
         }
 
         void OnDestroy() override

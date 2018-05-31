@@ -1,6 +1,7 @@
 #ifndef EXPLORERITEM_H
 #define EXPLORERITEM_H
 
+#include "Bang/Bang.h"
 #include "Bang/Path.h"
 #include "Bang/GameObject.h"
 #include "Bang/IFocusListener.h"
@@ -23,7 +24,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class ExplorerItem;
 
-class IExplorerItemListener : public virtual IEventListener
+class IExplorerItemListener
 {
 public:
     virtual void OnRename(ExplorerItem *item) = 0;
@@ -34,8 +35,8 @@ public:
 };
 
 class ExplorerItem : public GameObject,
-                     public IFocusListener,
-                     public IDragDropListener,
+                     public EventListener<IFocusListener>,
+                     public EventListener<IDragDropListener>,
                      public EventEmitter<IExplorerItemListener>
 {
     GAMEOBJECT_EDITOR(ExplorerItem);

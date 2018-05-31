@@ -232,12 +232,12 @@ void Hierarchy::OnItemMoved(GameObject *item,
     IUITreeListener::OnItemMoved(item, oldParentItem, oldIndexInsideParent,
                                  newParentItem, newIndexInsideParent);
 
-    SetReceiveEvents(false);
+    EventListener<IUITreeListener>::SetReceiveEvents(false);
     GameObject *movedGo = GetGameObjectFromItem(item);
     GameObject *newParent = GetGameObjectFromItem(newParentItem);
     if (!newParent) { newParent = movedGo->GetScene(); }
     movedGo->SetParent(newParent, newIndexInsideParent);
-    SetReceiveEvents(true);
+    EventListener<IUITreeListener>::SetReceiveEvents(true);
 }
 
 void Hierarchy::OnCreateContextMenu(MenuItem *menuRootItem)

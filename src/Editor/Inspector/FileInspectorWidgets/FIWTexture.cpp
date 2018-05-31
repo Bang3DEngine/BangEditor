@@ -86,7 +86,7 @@ void FIWTexture::UpdateFromFileWhenChanged()
     p_texture = Resources::Load<Texture2D>( GetPath() );
     if (!GetTexture()) { return; }
 
-    IValueChangedListener::SetReceiveEvents(false);
+    EventListener<IValueChangedListener>::SetReceiveEvents(false);
 
     p_textureImageRend->SetImageTexture( GetTexture() );
     p_textureImageRend->SetTint(Color::White);
@@ -100,7 +100,7 @@ void FIWTexture::UpdateFromFileWhenChanged()
     p_wrapModeComboBox->SetSelectionByValue( int(GetTexture()->GetWrapMode()) );
     p_alphaCutoffInput->SetValue( GetTexture()->GetAlphaCutoff() );
 
-    IValueChangedListener::SetReceiveEvents(true);
+    EventListener<IValueChangedListener>::SetReceiveEvents(true);
 }
 
 void FIWTexture::OnValueChanged(Object*)

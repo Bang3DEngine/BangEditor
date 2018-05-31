@@ -54,7 +54,7 @@ void CIWRenderer::UpdateFromReference()
 {
     ComponentInspectorWidget::UpdateFromReference();
 
-    IValueChangedListener::SetReceiveEvents(false);
+    EventListener<IValueChangedListener>::SetReceiveEvents(false);
 
     p_visibleCheckBox->SetChecked( GetRenderer()->IsVisible() );
     p_castsShadowsCheckBox->SetChecked( GetRenderer()->GetCastsShadows() );
@@ -64,7 +64,7 @@ void CIWRenderer::UpdateFromReference()
     Path matPath = mat ? mat->GetResourceFilepath() : Path::Empty;
     p_materialInputFile->SetPath(matPath);
 
-    IValueChangedListener::SetReceiveEvents(true);
+    EventListener<IValueChangedListener>::SetReceiveEvents(true);
 }
 
 Renderer *CIWRenderer::GetRenderer() const

@@ -4,6 +4,7 @@
 #include "Bang/Bang.h"
 #include "Bang/Material.h"
 #include "Bang/SceneManager.h"
+#include "Bang/EventListener.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/IDestroyListener.h"
 #include "Bang/IDragDropListener.h"
@@ -20,9 +21,9 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class UISceneEditContainer : public UISceneContainer,
-                             public IScenePlayerListener,
-                             public ISceneManagerListener,
-                             public IDragDropListener
+                             public EventListener<IScenePlayerListener>,
+                             public EventListener<ISceneManagerListener>,
+                             public EventListener<IDragDropListener>
 {
     GAMEOBJECT_EDITOR(UISceneEditContainer);
 

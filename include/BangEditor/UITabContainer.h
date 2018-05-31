@@ -4,6 +4,7 @@
 #include "Bang/List.h"
 #include "Bang/UMap.h"
 #include "Bang/GameObject.h"
+#include "Bang/EventListener.h"
 
 #include "BangEditor/UITabHeader.h"
 
@@ -13,7 +14,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class UITabHeader;
 
 class UITabContainer : public GameObject,
-                       public ITabHeaderListener
+                       public EventListener<ITabHeaderListener>
 {
     GAMEOBJECT_EDITOR(UITabContainer);
 

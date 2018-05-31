@@ -41,8 +41,8 @@ FORWARD class UIScenePlayContainer;
 FORWARD class EditorDragDropManager;
 
 class EditorScene : public Scene,
-                    public IScenePlayerListener,
-                    public ISceneManagerListener
+                    public EventListener<IScenePlayerListener>,
+                    public EventListener<ISceneManagerListener>
 {
     GAMEOBJECT_EDITOR(EditorScene);
 

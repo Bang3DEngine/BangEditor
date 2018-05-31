@@ -188,7 +188,7 @@ void FIWMaterial::UpdateFromFileWhenChanged()
 
     GetMaterial()->ImportXMLFromFile( GetMaterial()->GetResourceFilepath() );
 
-    IValueChangedListener::SetReceiveEvents(false);
+    EventListener<IValueChangedListener>::SetReceiveEvents(false);
 
     Texture2D *albedoTex = GetMaterial()->GetAlbedoTexture();
     p_albedoTextureInput->SetPath( albedoTex ? albedoTex->GetResourceFilepath() :
@@ -224,7 +224,7 @@ void FIWMaterial::UpdateFromFileWhenChanged()
     p_vertexShaderInput->SetPath  ( vs ? vs->GetResourceFilepath() : Path::Empty );
     p_fragmentShaderInput->SetPath( fs ? fs->GetResourceFilepath() : Path::Empty );
 
-    IValueChangedListener::SetReceiveEvents(true);
+    EventListener<IValueChangedListener>::SetReceiveEvents(true);
 }
 
 Material *FIWMaterial::GetMaterial() const

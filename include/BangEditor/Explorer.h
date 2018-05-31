@@ -23,11 +23,11 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class Explorer : public GameObject,
-                 public IEditorListener,
-                 public IFileTrackerListener,
-                 public IValueChangedListener,
-                 public IExplorerItemListener,
-                 public IProjectManagerListener
+                 public EventListener<IEditorListener>,
+                 public EventListener<IFileTrackerListener>,
+                 public EventListener<IValueChangedListener>,
+                 public EventListener<IExplorerItemListener>,
+                 public EventListener<IProjectManagerListener>
 {
     GAMEOBJECT_EDITOR(Explorer);
 

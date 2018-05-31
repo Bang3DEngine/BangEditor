@@ -20,7 +20,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class FIWTexture : public FileInspectorWidget,
-                   public IValueChangedListener
+                   public EventListener<IValueChangedListener>
 {
     GAMEOBJECT_EDITOR(FIWTexture);
 

@@ -2,6 +2,7 @@
 #define EDITORSCENEMANAGER_H
 
 #include "Bang/SceneManager.h"
+#include "Bang/EventListener.h"
 
 #include "BangEditor/BangEditor.h"
 
@@ -16,7 +17,7 @@ FORWARD class EditorScene;
 FORWARD class EditorBehaviourManager;
 
 class EditorSceneManager : public SceneManager,
-                           public ISceneManagerListener
+                           public EventListener<ISceneManagerListener>
 {
 public:
     EditorSceneManager();

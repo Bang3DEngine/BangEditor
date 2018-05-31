@@ -2,6 +2,7 @@
 #define SELECTIONGIZMOSMANAGER_H
 
 #include "Bang/Bang.h"
+#include "Bang/EventListener.h"
 #include "Bang/IDestroyListener.h"
 
 #include "BangEditor/Editor.h"
@@ -13,8 +14,8 @@ FORWARD class TransformGizmo;
 FORWARD class GameObjectSelectionGizmo;
 FORWARD class ComponentsSelectionGizmo;
 
-class SelectionGizmosManager : public IEditorListener,
-                               public IDestroyListener
+class SelectionGizmosManager : public EventListener<IEditorListener>,
+                               public EventListener<IDestroyListener>
 {
 public:
     SelectionGizmosManager();

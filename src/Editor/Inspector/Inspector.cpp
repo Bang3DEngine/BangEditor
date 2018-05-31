@@ -293,15 +293,17 @@ void Inspector::SetCurrentWidgetBlocked(bool blocked)
 
     for (Object *obj : childrenAndChildrenComps)
     {
-        // if (IFocusListener *focusListener = DCAST<IFocusListener*>(obj))
-        // {
-        //     focusListener->SetReceiveEvents(!blocked);
-        // }
-        //
-        // if (IDragDropListener *ddListener = DCAST<IDragDropListener*>(obj))
-        // {
-        //     ddListener->SetReceiveEvents(!blocked);
-        // }
+        if (EventListener<IFocusListener> *focusListener =
+                DCAST<EventListener<IFocusListener>*>(obj))
+        {
+            focusListener->SetReceiveEvents(!blocked);
+        }
+
+        if (EventListener<IDragDropListener> *ddListener =
+                DCAST<EventListener<IDragDropListener>*>(obj))
+        {
+            ddListener->SetReceiveEvents(!blocked);
+        }
     }
 
 }

@@ -5,13 +5,14 @@
 #include "Bang/List.h"
 #include "Bang/Path.h"
 #include "Bang/FileTracker.h"
+#include "Bang/EventListener.h"
 
 #include "BangEditor/ProjectManager.h"
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class BehaviourTracker : public IFileTrackerListener
+class BehaviourTracker : public EventListener<IFileTrackerListener>
 {
 public:
     BehaviourTracker();

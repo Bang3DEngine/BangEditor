@@ -18,7 +18,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class UIInputTexture;
 
 class FIWTextureCubeMap : public FileInspectorWidget,
-                          public IValueChangedListener
+                          public EventListener<IValueChangedListener>
 {
     GAMEOBJECT_EDITOR(FIWTextureCubeMap);
 

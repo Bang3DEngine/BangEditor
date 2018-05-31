@@ -117,7 +117,7 @@ void FIWTextureCubeMap::UpdateFromFileWhenChanged()
     p_textureCubeMap = Resources::Load<TextureCubeMap>( GetPath() );
     if (!GetTextureCubeMap()) { return; }
 
-    IValueChangedListener::SetReceiveEvents(false);
+    EventListener<IValueChangedListener>::SetReceiveEvents(false);
 
     TextureCubeMap *tcm = GetTextureCubeMap();
     const RH<Imageb> topImg   = tcm->GetImageResource(GL::CubeMapDir::TOP);
@@ -135,7 +135,7 @@ void FIWTextureCubeMap::UpdateFromFileWhenChanged()
 
     CheckValidity();
 
-    IValueChangedListener::SetReceiveEvents(true);
+    EventListener<IValueChangedListener>::SetReceiveEvents(true);
 }
 
 void FIWTextureCubeMap::OnValueChanged(Object *object)

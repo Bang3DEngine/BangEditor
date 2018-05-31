@@ -6,7 +6,6 @@
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
 #include "Bang/IEventEmitter.h"
-#include "Bang/IEventListener.h"
 #include "Bang/IDestroyListener.h"
 
 #include "BangEditor/BangEditor.h"
@@ -20,18 +19,16 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class EditorSettings;
 
-class IEditorListener : public virtual IEventListener
+class IEditorListener
 {
-    EVENTLISTENER(IEditorListener)
-
 public:
     virtual void OnGameObjectSelected(GameObject *selectedGameObject) { }
     virtual void OnExplorerPathSelected(const Path &selectedPath) { }
 };
 
 class Editor : public EventEmitter<IEditorListener>,
-               public ISceneManagerListener,
-               public IDestroyListener
+               public EventListener<ISceneManagerListener>,
+               public EventListener<IDestroyListener>
 {
 public:
     static GameObject *GetSelectedGameObject();

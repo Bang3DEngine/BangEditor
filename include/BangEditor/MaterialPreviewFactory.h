@@ -19,7 +19,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class MaterialPreviewFactory : public IMaterialChangedListener
+class MaterialPreviewFactory : public EventListener<IMaterialChangedListener>
 {
 public:
     MaterialPreviewFactory();

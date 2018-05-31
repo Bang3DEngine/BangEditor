@@ -21,7 +21,7 @@ FORWARD class UIInputVector;
 FORWARD class ColorPickerReporter;
 
 class UIInputColor : public GameObject,
-                     public IValueChangedListener,
+                     public EventListener<IValueChangedListener>,
                      public EventEmitter<IValueChangedListener>
 {
     GAMEOBJECT_EDITOR(UIInputColor);

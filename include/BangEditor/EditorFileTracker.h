@@ -3,6 +3,7 @@
 
 #include "Bang/Bang.h"
 #include "Bang/FileTracker.h"
+#include "Bang/EventListener.h"
 
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ProjectManager.h"
@@ -16,8 +17,8 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class BehaviourTracker;
 
-class EditorFileTracker : public IFileTrackerListener,
-                          public IProjectManagerListener
+class EditorFileTracker : public EventListener<IFileTrackerListener>,
+                          public EventListener<IProjectManagerListener>
 {
 public:
 	EditorFileTracker();

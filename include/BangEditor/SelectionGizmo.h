@@ -2,6 +2,7 @@
 #define SELECTIONGIZMO_H
 
 #include "Bang/GameObject.h"
+#include "Bang/EventListener.h"
 #include "Bang/IDestroyListener.h"
 
 #include "BangEditor/BangEditor.h"
@@ -14,7 +15,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class SelectionGizmo : public GameObject,
-                       public IDestroyListener
+                       public EventListener<IDestroyListener>
 {
 public:
     enum class SelectionState { IDLE, OVER, GRABBED };

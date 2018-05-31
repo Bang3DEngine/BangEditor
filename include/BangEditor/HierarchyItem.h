@@ -1,6 +1,7 @@
 #ifndef HIERARCHYITEM_H
 #define HIERARCHYITEM_H
 
+#include "Bang/Bang.h"
 #include "Bang/UIList.h"
 #include "Bang/GameObject.h"
 #include "Bang/IEventEmitter.h"
@@ -18,10 +19,8 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class HierarchyItem;
 
-class IHierarchyItemListener : public virtual IEventListener
+class IHierarchyItemListener
 {
-    EVENTLISTENER(IHierarchyItemListener)
-
 public:
     virtual void OnCreateEmpty(HierarchyItem *item) = 0;
     virtual void OnRename(HierarchyItem *item) = 0;
@@ -34,7 +33,7 @@ public:
 };
 
 class HierarchyItem : public GameObject,
-                      public INameListener,
+                      public EventListener<INameListener>,
                       public EventEmitter<IHierarchyItemListener>
 {
     GAMEOBJECT_EDITOR(HierarchyItem);

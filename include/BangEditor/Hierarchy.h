@@ -21,11 +21,11 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class HierarchyItem;
 
 class Hierarchy : public GameObject,
-                  public IEditorListener,
-                  public IDestroyListener,
-                  public ISceneManagerListener,
-                  public IHierarchyItemListener,
-                  public IUITreeListener
+                  public EventListener<IEditorListener>,
+                  public EventListener<IDestroyListener>,
+                  public EventListener<ISceneManagerListener>,
+                  public EventListener<IHierarchyItemListener>,
+                  public EventListener<IUITreeListener>
 {
     GAMEOBJECT_EDITOR(Hierarchy);
 

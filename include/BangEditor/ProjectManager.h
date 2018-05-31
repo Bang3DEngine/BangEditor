@@ -1,8 +1,8 @@
 #ifndef PROJECTMANAGER_H
 #define PROJECTMANAGER_H
 
-#include "Bang/IEventEmitter.h"
-#include "Bang/IEventListener.h"
+#include "Bang/Bang.h"
+#include "Bang/EventEmitter.h"
 
 #include "BangEditor/BangEditor.h"
 
@@ -11,7 +11,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class Project;
 
-class IProjectManagerListener : public IEventListener
+class IProjectManagerListener
 {
 public:
     virtual void OnProjectOpen(const Project *project) { (void)project; }

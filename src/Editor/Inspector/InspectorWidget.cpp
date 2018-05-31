@@ -4,6 +4,7 @@
 #include "Bang/UILabel.h"
 #include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
+#include "Bang/EventListener.h"
 #include "Bang/TextureFactory.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -12,6 +13,7 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIContentSizeFitter.h"
+#include "Bang/IValueChangedListener.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -62,9 +64,9 @@ void InspectorWidget::Init()
     topSeparator->SetParent(this);
     widgetsGo->SetParent(this);
 
-    IEventListener::SetReceiveEvents(false);
+    // IEventListener::SetReceiveEvents(false);
     InitInnerWidgets();
-    IEventListener::SetReceiveEvents(true);
+    // IEventListener::SetReceiveEvents(true);
 }
 
 void InspectorWidget::InitInnerWidgets()
@@ -105,9 +107,9 @@ void InspectorWidget::Update()
 {
     GameObject::Update();
 
-    IEventListener::SetReceiveEvents(false);
+    // EventListener<IValueChangedListener>::SetReceiveEvents(false);
     UpdateFromReference();
-    IEventListener::SetReceiveEvents(true);
+    // EventListener<IValueChangedListener>::SetReceiveEvents(true);
 }
 
 void InspectorWidget::UpdateFromReference()

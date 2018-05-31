@@ -23,10 +23,10 @@ FORWARD class UIContextMenu;
 FORWARD class InspectorWidget;
 
 class Inspector : public GameObject,
-                  public IEditorListener,
-                  public IDestroyListener,
-                  public IComponentListener,
-                  public ISceneManagerListener
+                  public EventListener<IEditorListener>,
+                  public EventListener<IDestroyListener>,
+                  public EventListener<IComponentListener>,
+                  public EventListener<ISceneManagerListener>
 {
     GAMEOBJECT_EDITOR(Inspector);
 

@@ -18,10 +18,8 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 enum class PlayState { JUST_BEFORE_PLAYING, PLAYING, PAUSED, EDITING };
 
-class IScenePlayerListener : public virtual IEventListener
+class IScenePlayerListener
 {
-    EVENTLISTENER(IScenePlayerListener)
-
 public:
     virtual void OnPlayStateChanged(PlayState previousPlayState,
                                     PlayState newPlayState)

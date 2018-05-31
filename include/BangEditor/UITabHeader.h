@@ -1,6 +1,7 @@
 #ifndef UITABHEADER_H
 #define UITABHEADER_H
 
+#include "Bang/Bang.h"
 #include "Bang/String.h"
 #include "Bang/GameObject.h"
 
@@ -16,7 +17,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UITabHeader;
-class ITabHeaderListener : public IEventListener
+class ITabHeaderListener
 {
 public:
     virtual void OnTabHeaderClicked(UITabHeader *header) = 0;

@@ -69,7 +69,7 @@ void HierarchyItem::SetReferencedGameObject(GameObject *referencedGameObject)
         {
             GetReferencedGameObject()->
                     EventEmitter<INameListener>::UnRegisterListener(
-                                                SCAST<INameListener*>(this) );
+                                SCAST<EventListener<INameListener>*>(this) );
         }
 
         p_refGameObject = referencedGameObject;

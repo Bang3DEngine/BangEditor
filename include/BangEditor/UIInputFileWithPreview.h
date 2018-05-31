@@ -18,7 +18,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class UIInputFileWithPreview : public UIInputFile,
-                               public IFocusListener
+                               public EventListener<IFocusListener>
 {
 public:
 	UIInputFileWithPreview();

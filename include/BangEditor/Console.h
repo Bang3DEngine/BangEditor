@@ -28,7 +28,7 @@ public:
 
 // Console
 class Console : public GameObject,
-                public IDebugListener
+                public EventListener<IDebugListener>
 {
     GAMEOBJECT_EDITOR(Console);
 

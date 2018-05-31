@@ -17,7 +17,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class UIInputVector : public GameObject,
-                      public IValueChangedListener,
+                      public EventListener<IValueChangedListener>,
                       public EventEmitter<IValueChangedListener>
 {
     GAMEOBJECT_EDITOR(UIInputVector);

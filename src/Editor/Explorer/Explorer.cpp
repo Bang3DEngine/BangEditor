@@ -354,7 +354,8 @@ void Explorer::RemoveItem(const Path &itemPath)
     if (explorerItem)
     {
         explorerItem->EventEmitter<IExplorerItemListener>::
-                UnRegisterListener(DCAST<IExplorerItemListener*>(this));
+                        UnRegisterListener(
+                            DCAST<EventListener<IExplorerItemListener>*>(this));
 
         p_items.Remove(explorerItem);
         m_pathsToItem.Remove(itemPath);
