@@ -21,7 +21,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class UIInputFile : public GameObject,
                     public EventEmitter<IValueChangedListener>,
-                    public IDragDropListener
+                    public EventListener<IDragDropListener>
 {
     GAMEOBJECT_EDITOR(UIInputFile);
 

@@ -21,6 +21,8 @@ FORWARD class HierarchyItem;
 
 class IHierarchyItemListener
 {
+    EVENTLISTENER_NS(IHierarchyItemListener);
+
 public:
     virtual void OnCreateEmpty(HierarchyItem *item) = 0;
     virtual void OnRename(HierarchyItem *item) = 0;

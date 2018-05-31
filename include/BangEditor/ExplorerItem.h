@@ -26,6 +26,8 @@ FORWARD class ExplorerItem;
 
 class IExplorerItemListener
 {
+    EVENTLISTENER_NS(IExplorerItemListener);
+
 public:
     virtual void OnRename(ExplorerItem *item) = 0;
     virtual void OnRemove(ExplorerItem *item) = 0;

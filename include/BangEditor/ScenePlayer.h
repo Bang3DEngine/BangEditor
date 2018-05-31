@@ -20,6 +20,8 @@ enum class PlayState { JUST_BEFORE_PLAYING, PLAYING, PAUSED, EDITING };
 
 class IScenePlayerListener
 {
+    EVENTLISTENER_NS(IScenePlayerListener);
+
 public:
     virtual void OnPlayStateChanged(PlayState previousPlayState,
                                     PlayState newPlayState)

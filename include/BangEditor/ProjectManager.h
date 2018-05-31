@@ -3,6 +3,7 @@
 
 #include "Bang/Bang.h"
 #include "Bang/EventEmitter.h"
+#include "Bang/EventListener.h"
 
 #include "BangEditor/BangEditor.h"
 
@@ -13,6 +14,8 @@ FORWARD class Project;
 
 class IProjectManagerListener
 {
+    EVENTLISTENER_NS(IProjectManagerListener);
+
 public:
     virtual void OnProjectOpen(const Project *project) { (void)project; }
     virtual void OnProjectClosed(const Project *project) { (void)project; }

@@ -12,6 +12,8 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class IEditorDragDropManagerListener
 {
+    EVENTLISTENER(IEditorDragDropManagerListener);
+
 public:
     virtual void OnExplorerDragStart(const Path &path) { (void)path; }
     virtual void OnExplorerDragUpdate(const Path &path) { (void)path; }
@@ -21,7 +23,7 @@ public:
 
 
 class EditorDragDropManager : public GameObject,
-                              public IDragDropListener,
+                              public EventListener<IDragDropListener>,
                               public EventEmitter<IEditorDragDropManagerListener>
 {
     GAMEOBJECT_EDITOR(EditorDragDropManager);

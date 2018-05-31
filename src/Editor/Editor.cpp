@@ -64,8 +64,8 @@ void Editor::SelectGameObject_(GameObject *selectedGameObject)
 
         // Propagate event
         EventEmitter<IEditorListener>::
-            PropagateToListeners(&IEditorListener::OnGameObjectSelected,
-                                 selectedGameObject);
+            PropagateToListeners(&EventListener<IEditorListener>::OnGameObjectSelected,
+                                 GetSelectedGameObject());
     }
 }
 

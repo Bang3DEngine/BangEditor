@@ -19,6 +19,8 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class UITabHeader;
 class ITabHeaderListener
 {
+    EVENTLISTENER_NS(ITabHeaderListener);
+
 public:
     virtual void OnTabHeaderClicked(UITabHeader *header) = 0;
 };

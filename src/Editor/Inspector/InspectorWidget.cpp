@@ -64,9 +64,9 @@ void InspectorWidget::Init()
     topSeparator->SetParent(this);
     widgetsGo->SetParent(this);
 
-    // IEventListener::SetReceiveEvents(false);
+    SetReceiveEventsCommon(false);
     InitInnerWidgets();
-    // IEventListener::SetReceiveEvents(true);
+    SetReceiveEventsCommon(true);
 }
 
 void InspectorWidget::InitInnerWidgets()
@@ -107,9 +107,9 @@ void InspectorWidget::Update()
 {
     GameObject::Update();
 
-    // EventListener<IValueChangedListener>::SetReceiveEvents(false);
+    SetReceiveEventsCommon(false);
     UpdateFromReference();
-    // EventListener<IValueChangedListener>::SetReceiveEvents(true);
+    SetReceiveEventsCommon(true);
 }
 
 void InspectorWidget::UpdateFromReference()
