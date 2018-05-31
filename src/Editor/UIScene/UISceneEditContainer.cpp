@@ -45,6 +45,12 @@ void UISceneEditContainer::Update()
 {
     GameObject::Update();
     SetScene( EditorSceneManager::GetOpenScene() );
+
+    UICanvas *canvas = UICanvas::GetActive(this);
+    bool renderSelectionFramebuffer = (IsVisible() &&
+                                       canvas->IsMouseOver(GetSceneImage()));
+    EditorCamera::GetInstance()->GetCamera()->
+                  SetRenderSelectionBuffer(renderSelectionFramebuffer);
 }
 
 void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
