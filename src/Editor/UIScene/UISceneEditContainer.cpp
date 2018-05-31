@@ -222,6 +222,12 @@ void UISceneEditContainer::OnDragStarted(UIDragDroppable *dragDroppable)
             ApplyDraggedMaterialToOveredGameObject();
         }
     }
+
+    if (m_currentMaterialBeingDragged)
+    {
+        Camera *edCam = EditorCamera::GetInstance()->GetCamera();
+        edCam->RemoveRenderPass(RenderPass::OVERLAY);
+    }
 }
 
 void UISceneEditContainer::OnDragUpdate(UIDragDroppable *dragDroppable)
@@ -247,6 +253,9 @@ void UISceneEditContainer::OnDrop(UIDragDroppable *dragDroppable)
 
     m_currentMaterialBeingDragged.Set(nullptr);
     m_meshRenderersToPreviousMaterials.Clear();
+
+    Camera *edCam = EditorCamera::GetInstance()->GetCamera();
+    edCam->AddRenderPass(RenderPass::OVERLAY);
 }
 
 void UISceneEditContainer::OnDestroyed(EventEmitter<IDestroyListener> *object)
