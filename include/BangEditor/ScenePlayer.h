@@ -3,8 +3,8 @@
 
 #include "Bang/Bang.h"
 #include "Bang/Path.h"
-#include "Bang/IEventEmitter.h"
-#include "Bang/IEventListener.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.h"
 
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ShortcutManager.h"

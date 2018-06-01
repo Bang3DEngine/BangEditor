@@ -5,7 +5,7 @@
 #include "Bang/Color.h"
 #include "Bang/Object.h"
 #include "Bang/String.h"
-#include "Bang/IEventEmitter.h"
+#include "Bang/EventEmitter.h"
 #include "Bang/IValueChangedListener.h"
 
 #include "BangEditor/BangEditor.h"

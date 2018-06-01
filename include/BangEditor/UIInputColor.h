@@ -3,7 +3,7 @@
 
 #include "Bang/Vector4.h"
 #include "Bang/GameObject.h"
-#include "Bang/IEventEmitter.h"
+#include "Bang/EventEmitter.h"
 #include "Bang/IValueChangedListener.h"
 
 #include "BangEditor/BangEditor.h"

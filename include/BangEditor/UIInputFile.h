@@ -4,7 +4,7 @@
 #include "Bang/Path.h"
 #include "Bang/Array.h"
 #include "Bang/GameObject.h"
-#include "Bang/IEventEmitter.h"
+#include "Bang/EventEmitter.h"
 #include "Bang/IDragDropListener.h"
 #include "Bang/IValueChangedListener.h"
 

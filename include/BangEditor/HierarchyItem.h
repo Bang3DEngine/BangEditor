@@ -4,7 +4,7 @@
 #include "Bang/Bang.h"
 #include "Bang/UIList.h"
 #include "Bang/GameObject.h"
-#include "Bang/IEventEmitter.h"
+#include "Bang/EventEmitter.h"
 
 #include "BangEditor/UIContextMenu.h"
 

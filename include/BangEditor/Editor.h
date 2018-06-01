@@ -5,7 +5,7 @@
 #include "Bang/Object.h"
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
-#include "Bang/IEventEmitter.h"
+#include "Bang/EventEmitter.h"
 #include "Bang/IDestroyListener.h"
 
 #include "BangEditor/BangEditor.h"
