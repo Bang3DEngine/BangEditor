@@ -65,7 +65,7 @@ UIInputFile::UIInputFile()
     p_openFileInInspectorButton->AddClickedCallback( [this]()
     {
         Inspector *inspector = Inspector::GetActive();
-        if (inspector) { inspector->OnExplorerPathSelected( GetPath() ); }
+        if (inspector) { inspector->ShowPath( GetPath() ); }
     });
 
     p_pathInputText->GetGameObject()->SetParent(this);

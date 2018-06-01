@@ -38,7 +38,8 @@ private:
     virtual ~Editor();
 
     void Init();
-    void SelectGameObject_(GameObject *selectedGameObject);
+    void SelectGameObject_(GameObject *selectedGameObject,
+                           bool registerUndo = true);
 
     static void OnPathSelected(const Path &path);
 
@@ -53,6 +54,7 @@ private:
     friend class Explorer;
     friend class EditorSettings;
     friend class EditorApplication;
+    friend class UndoRedoGameObjectSelection;
 };
 
 NAMESPACE_BANG_EDITOR_END

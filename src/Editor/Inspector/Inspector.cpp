@@ -14,12 +14,12 @@
 #include "Bang/RectTransform.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/IEventsDragDrop.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/UIRendererCacher.h"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/IEventsDragDrop.h"
 #include "Bang/UIContentSizeFitter.h"
 
 #include "BangEditor/MenuBar.h"
@@ -28,6 +28,7 @@
 #include "BangEditor/UIContextMenu.h"
 #include "BangEditor/EditorClipboard.h"
 #include "BangEditor/InspectorWidget.h"
+#include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 #include "BangEditor/FileInspectorWidgetFactory.h"
@@ -137,6 +138,54 @@ void Inspector::Update()
     GameObject::Update();
 }
 
+void Inspector::ShowPath(const Path &path)
+{
+    if (m_currentOpenPath != path)
+    {
+        if (!path.IsDir())
+        {
+            InspectorWidget *fiw = FileInspectorWidgetFactory::Create(path);
+            if (fiw || path.IsFile()) { Clear(); }
+            if (fiw)
+            {
+                p_titleSeparator->SetEnabled(true);
+                p_titleText->SetContent(path.GetNameExt());
+                m_currentOpenPath = path;
+                AddWidget(fiw);
+
+                bool isEngineFile = m_currentOpenPath.BeginsWith(
+                                                Paths::GetEngineDir());
+                SetCurrentWidgetBlocked(isEngineFile);
+            }
+        }
+    }
+}
+
+void Inspector::ShowGameObject(GameObject *go)
+{
+    Clear();
+    if(!go || go->IsWaitingToBeDestroyed()) { return; }
+
+    p_currentGameObject = go;
+    GetCurrentGameObject()->EventEmitter<IEventsComponent>::RegisterListener(this);
+
+    p_titleSeparator->SetEnabled(true);
+    p_titleText->SetContent(go->GetName());
+    GetCurrentGameObject()->EventEmitter<IEventsDestroy>::RegisterListener(this);
+
+    int i = 0;
+    for (Component *comp : go->GetComponents())
+    {
+        OnComponentAdded(comp, i);
+        ++i;
+    }
+}
+
+const Path &Inspector::GetCurrentPath() const
+{
+    return m_currentOpenPath;
+}
+
 GameObject *Inspector::GetCurrentGameObject() const
 {
     return p_currentGameObject;
@@ -177,30 +226,12 @@ void Inspector::OnCreateContextMenu(MenuItem *menuRootItem)
 
 void Inspector::OnExplorerPathSelected(const Path &path)
 {
-    if (m_currentOpenPath != path)
-    {
-        if (!path.IsDir())
-        {
-            InspectorWidget *fiw = FileInspectorWidgetFactory::Create(path);
-            if (fiw || path.IsFile()) { Clear(); }
-            if (fiw)
-            {
-                p_titleSeparator->SetEnabled(true);
-                p_titleText->SetContent(path.GetNameExt());
-                m_currentOpenPath = path;
-                AddWidget(fiw);
-
-                bool isEngineFile = m_currentOpenPath.BeginsWith(
-                                                Paths::GetEngineDir());
-                SetCurrentWidgetBlocked(isEngineFile);
-            }
-        }
-    }
+    ShowPath(path);
 }
 
 void Inspector::OnGameObjectSelected(GameObject *selectedGameObject)
 {
-    SetGameObject(selectedGameObject);
+    ShowGameObject(selectedGameObject);
 }
 
 void Inspector::OnComponentAdded(Component *addedComponent, int index)
@@ -234,26 +265,6 @@ GameObject *Inspector::GetWidgetsContainer() const
 }
 UIVerticalLayout *Inspector::GetMainVL() const { return p_mainVL; }
 UIScrollPanel* Inspector::GetScrollPanel() const { return p_scrollPanel; }
-
-void Inspector::SetGameObject(GameObject *go)
-{
-    Clear();
-    if(!go || go->IsWaitingToBeDestroyed()) { return; }
-
-    p_currentGameObject = go;
-    GetCurrentGameObject()->EventEmitter<IEventsComponent>::RegisterListener(this);
-
-    p_titleSeparator->SetEnabled(true);
-    p_titleText->SetContent(go->GetName());
-    GetCurrentGameObject()->EventEmitter<IEventsDestroy>::RegisterListener(this);
-
-    int i = 0;
-    for (Component *comp : go->GetComponents())
-    {
-        OnComponentAdded(comp, i);
-        ++i;
-    }
-}
 
 void Inspector::AddWidget(InspectorWidget *widget, int _index)
 {

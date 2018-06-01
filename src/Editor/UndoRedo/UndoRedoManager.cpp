@@ -11,14 +11,14 @@ USING_NAMESPACE_BANG_EDITOR
 UndoRedoManager::UndoRedoManager()
 {
     ShortcutManager::RegisterShortcut(
-        Shortcut(Key::LCTRL, Key::Z, "Undo"),
+        Shortcut(Key::LCTRL, Key::Z, "Undo", true),
         [this](const Shortcut&)
         {
             OnUndoRedoPressed(true);
         });
 
     ShortcutManager::RegisterShortcut(
-        Shortcut(Key::LCTRL, Key::LSHIFT, Key::Z, "Redo"),
+        Shortcut(Key::LCTRL, Key::LSHIFT, Key::Z, "Redo", true),
         [this](const Shortcut&)
         {
             OnUndoRedoPressed(false);

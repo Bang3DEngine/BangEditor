@@ -19,9 +19,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class ComponentInspectorWidget : public InspectorWidget,
-                                 public EventListener<IEventsValueChanged>,
-                                 public EventListener<IEventsFocus>,
-                                 public EventListener<IEventsComponent>
+                                 public EventListener<IEventsValueChanged>
 {
     GAMEOBJECT_EDITOR(InspectorWidget);
 
@@ -66,21 +64,6 @@ private:
     void MoveComponent(Component *comp, int offset);
 
     virtual bool MustShowEnabledCheckbox() const;
-    void UpdateTrackChildrenFocusEmitters(GameObject *child,
-                                          bool track,
-                                          bool recursive);
-
-    // IEventsChildren
-    void OnChildAdded(GameObject *addedChild, GameObject *parent) override;
-    void OnChildRemoved(GameObject *removedChild, GameObject *parent) override;
-
-    // IEventsComponent
-    void OnComponentAdded(Component *addedComponent, int index) override;
-    void OnComponentRemoved(Component *removedComponent) override;
-
-    // IEventsFocus
-    void OnFocusTaken(EventEmitter<IEventsFocus> *focusEmitter) override;
-    void OnFocusLost(EventEmitter<IEventsFocus> *focusEmitter) override;
 
     // IEventsValueChanged
     virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;

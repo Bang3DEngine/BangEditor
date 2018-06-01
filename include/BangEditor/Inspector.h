@@ -38,21 +38,11 @@ public:
     void OnStart() override;
     void Update() override;
 
+    void ShowPath(const Path &path);
+    void ShowGameObject(GameObject *gameObject);
+
+    const Path &GetCurrentPath() const;
     GameObject *GetCurrentGameObject() const;
-
-    // IEventsSceneManager
-    void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
-
-    // IEventsDestroy
-    void OnDestroyed(EventEmitter<IEventsDestroy> *destroyedObject) override;
-
-    // IEditorListener
-    void OnExplorerPathSelected(const Path &path) override;
-    void OnGameObjectSelected(GameObject *selectedGameObject) override;
-
-    // IEventsComponent
-    void OnComponentAdded(Component *addedComponent, int index) override;
-    void OnComponentRemoved(Component *removedComponent) override;
 
     static Inspector* GetActive();
 
@@ -73,7 +63,6 @@ private:
     UIVerticalLayout *GetMainVL() const;
     UIScrollPanel* GetScrollPanel() const;
 
-    void SetGameObject(GameObject *go);
     void AddWidget(InspectorWidget *widget, int index = -1);
     void RemoveWidget(InspectorWidget *widget);
     void RemoveWidget(int index);
@@ -82,6 +71,20 @@ private:
 
     // UIContextMenu
     virtual void OnCreateContextMenu(MenuItem *menuRootItem);
+
+    // IEventsSceneManager
+    void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
+
+    // IEventsDestroy
+    void OnDestroyed(EventEmitter<IEventsDestroy> *destroyedObject) override;
+
+    // IEditorListener
+    void OnExplorerPathSelected(const Path &path) override;
+    void OnGameObjectSelected(GameObject *selectedGameObject) override;
+
+    // IEventsComponent
+    void OnComponentAdded(Component *addedComponent, int index) override;
+    void OnComponentRemoved(Component *removedComponent) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

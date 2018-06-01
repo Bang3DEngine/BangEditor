@@ -4,9 +4,11 @@
 #include "Bang/IEventsSceneManager.h"
 
 #include "BangEditor/EditorSettings.h"
+#include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/EditorApplication.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/NotSelectableInEditor.h"
+#include "BangEditor/UndoRedoGameObjectSelection.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -48,25 +50,36 @@ void Editor::OnDestroyed(EventEmitter<IEventsDestroy> *object)
     }
 }
 
-void Editor::SelectGameObject_(GameObject *selectedGameObject)
+void Editor::SelectGameObject_(GameObject *selectedGameObject, bool registerUndo)
 {
     bool isSelectable = !selectedGameObject ||
          (!selectedGameObject->GetComponent<NotSelectableInEditor>() &&
           !selectedGameObject->GetComponentInParent<NotSelectableInEditor>());
 
-    if (selectedGameObject != GetSelectedGameObject() && isSelectable)
+    if (selectedGameObject != GetSelectedGameObject())
     {
-        p_selectedGameObject = selectedGameObject;
-        if (GetSelectedGameObject())
+        if (registerUndo)
         {
-            GetSelectedGameObject()->
-                    EventEmitter<IEventsDestroy>::RegisterListener(this);
+            UndoRedoGameObjectSelection *undoRedo =
+                    new UndoRedoGameObjectSelection(GetSelectedGameObject(),
+                                                    selectedGameObject);
+            UndoRedoManager::PushAction(undoRedo);
         }
 
-        // Propagate event
-        EventEmitter<IEventsEditor>::
-            PropagateToListeners(&EventListener<IEventsEditor>::OnGameObjectSelected,
-                                 GetSelectedGameObject());
+        if (isSelectable)
+        {
+            p_selectedGameObject = selectedGameObject;
+            if (GetSelectedGameObject())
+            {
+                GetSelectedGameObject()->
+                        EventEmitter<IEventsDestroy>::RegisterListener(this);
+            }
+
+            // Propagate event
+            EventEmitter<IEventsEditor>::
+                PropagateToListeners(&EventListener<IEventsEditor>::OnGameObjectSelected,
+                                     GetSelectedGameObject());
+        }
     }
 }
 

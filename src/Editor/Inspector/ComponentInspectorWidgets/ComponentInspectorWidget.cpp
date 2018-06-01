@@ -21,7 +21,6 @@ USING_NAMESPACE_BANG_EDITOR
 
 ComponentInspectorWidget::ComponentInspectorWidget()
 {
-    UpdateTrackChildrenFocusEmitters(this, true, true);
 }
 
 ComponentInspectorWidget::~ComponentInspectorWidget()
@@ -225,54 +224,6 @@ bool ComponentInspectorWidget::MustShowEnabledCheckbox() const
     return true;
 }
 
-void ComponentInspectorWidget::UpdateTrackChildrenFocusEmitters(GameObject *rootChild,
-                                                                bool track,
-                                                                bool recursive)
-{
-    if (recursive)
-    {
-        List<GameObject*> children = rootChild->GetChildrenRecursively();
-        children.PushFront(rootChild);
-        for (GameObject *child : children)
-        {
-            UpdateTrackChildrenFocusEmitters(child, track, false);
-        }
-    }
-    else
-    {
-        if (auto *focusable = DCAST<EventEmitter<IEventsFocus>*>(rootChild))
-        {
-            focusable->EventEmitter<IEventsFocus>::UnRegisterListener(this);
-            if (track)
-            {
-                focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
-            }
-        }
-
-        rootChild->EventEmitter<IEventsChildren>::UnRegisterListener(this);
-        rootChild->EventEmitter<IEventsComponent>::UnRegisterListener(this);
-
-        if (track)
-        {
-            rootChild->EventEmitter<IEventsChildren>::RegisterListener(this);
-            rootChild->EventEmitter<IEventsComponent>::RegisterListener(this);
-        }
-
-        for (Component *comp : rootChild->GetComponents())
-        {
-            if (auto *focusable = DCAST<EventEmitter<IEventsFocus>*>(comp))
-            {
-                focusable->EventEmitter<IEventsFocus>::UnRegisterListener(this);
-
-                if (track)
-                {
-                    focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
-                }
-            }
-        }
-    }
-}
-
 void ComponentInspectorWidget::PushCurrentStateToUndoRedoIfAnyChange()
 {
     if (GetComponent())
@@ -288,44 +239,3 @@ void ComponentInspectorWidget::PushCurrentStateToUndoRedoIfAnyChange()
         }
     }
 }
-
-void ComponentInspectorWidget::OnChildAdded(GameObject *addedChild,
-                                            GameObject *parent)
-{
-    InspectorWidget::OnChildAdded(addedChild, parent);
-    UpdateTrackChildrenFocusEmitters(addedChild, true, true);
-}
-
-void ComponentInspectorWidget::OnChildRemoved(GameObject *removedChild,
-                                              GameObject *parent)
-{
-    InspectorWidget::OnChildRemoved(removedChild, parent);
-    UpdateTrackChildrenFocusEmitters(removedChild, false, true);
-}
-
-void ComponentInspectorWidget::OnComponentAdded(Component *addedComponent,
-                                                int index)
-{
-    EventListener<IEventsComponent>::OnComponentAdded(addedComponent, index);
-    UpdateTrackChildrenFocusEmitters(addedComponent->GetGameObject(),
-                                     true, false);
-}
-
-void ComponentInspectorWidget::OnComponentRemoved(Component *removedComponent)
-{
-    EventListener<IEventsComponent>::OnComponentRemoved(removedComponent);
-    UpdateTrackChildrenFocusEmitters(removedComponent->GetGameObject(),
-                                     false, false);
-}
-
-void ComponentInspectorWidget::OnFocusTaken(EventEmitter<IEventsFocus> *focusEmitter)
-{
-    EventListener<IEventsFocus>::OnFocusTaken(focusEmitter);
-}
-
-void ComponentInspectorWidget::OnFocusLost(EventEmitter<IEventsFocus> *focusEmitter)
-{
-    EventListener<IEventsFocus>::OnFocusLost(focusEmitter);
-
-}
-
