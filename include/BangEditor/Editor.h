@@ -52,6 +52,7 @@ private:
     void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
     friend class Explorer;
+    friend class Hierarchy;
     friend class EditorSettings;
     friend class EditorApplication;
     friend class UndoRedoGameObjectSelection;

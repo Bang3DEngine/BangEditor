@@ -82,6 +82,7 @@ private:
     void TreeSelectionCallback(GOItem *item, UIList::Action action);
     void AddGameObject(GameObject *go);
     void RemoveGameObject(GameObject *go);
+    void RemoveGameObjectItem(HierarchyItem *item);
 
     GOItem *GetSelectedGameObject() const;
     GOItem *GetSelectedItem() const;

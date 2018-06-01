@@ -21,7 +21,7 @@ public:
     static UndoRedoManager* GetInstance();
 
 private:
-    static constexpr int UndoListSize = 1000;
+    static constexpr int UndoListSize = 10000;
 
     List<UndoRedoAction*> m_undoActions;
     List<UndoRedoAction*> m_redoActions;

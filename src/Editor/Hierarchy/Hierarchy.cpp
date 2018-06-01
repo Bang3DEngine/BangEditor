@@ -27,7 +27,9 @@
 #include "BangEditor/HierarchyItem.h"
 #include "BangEditor/EditorClipboard.h"
 #include "BangEditor/HideInHierarchy.h"
+#include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/UndoRedoHierarchyRemoveGameObject.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -117,7 +119,7 @@ void Hierarchy::OnChildRemoved(GameObject *removedChild, GameObject*)
 {
     if (m_gameObjectToItem.ContainsKey(removedChild))
     {
-        RemoveGameObject(removedChild);
+        RemoveGameObjectItem( GetItemFromGameObject(removedChild) );
     }
 }
 
@@ -169,7 +171,7 @@ void Hierarchy::OnRename(HierarchyItem *item)
 
 void Hierarchy::OnRemove(HierarchyItem *item)
 {
-    GameObject::Destroy( item->GetReferencedGameObject() );
+    RemoveGameObject( item->GetReferencedGameObject() );
 }
 
 void Hierarchy::OnCopy(HierarchyItem *item)
@@ -274,7 +276,7 @@ void Hierarchy::OnSceneLoaded(Scene *scene, const Path&)
 void Hierarchy::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     GameObject *destroyedGo = DCAST<GameObject*>(object);
-    if (destroyedGo) { RemoveGameObject(destroyedGo); }
+    if (destroyedGo) { RemoveGameObjectItem( GetItemFromGameObject(destroyedGo) ); }
 }
 
 void Hierarchy::Clear()
@@ -332,11 +334,22 @@ void Hierarchy::AddGameObject(GameObject *go)
 
 void Hierarchy::RemoveGameObject(GameObject *go)
 {
-    HierarchyItem *goItem = GetItemFromGameObject(go);
-    if (goItem)
+    UndoRedoHierarchyRemoveGameObject *undoRedo =
+            new UndoRedoHierarchyRemoveGameObject(go);
+    UndoRedoManager::PushAction(undoRedo);
+
+    // Fake remove to let undo/redo keep the reference to it...
+    go->SetParent(nullptr);
+}
+
+void Hierarchy::RemoveGameObjectItem(HierarchyItem *item)
+{
+    if (item)
     {
-        GetUITree()->RemoveItem(goItem);
+        GameObject *go = item->GetReferencedGameObject();
+        GetUITree()->RemoveItem(item);
         m_gameObjectToItem.Remove(go);
+        Editor::GetInstance()->SelectGameObject_(nullptr, false);
     }
 }
 
