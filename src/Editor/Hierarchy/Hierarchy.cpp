@@ -29,6 +29,7 @@
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/UndoRedoHierarchyMoveGameObject.h"
 #include "BangEditor/UndoRedoHierarchyRemoveGameObject.h"
 
 USING_NAMESPACE_BANG
@@ -227,16 +228,27 @@ void Hierarchy::OnCreatePrefab(HierarchyItem *item)
     Explorer::GetInstance()->ForceCheckFileChanges();
 }
 
-void Hierarchy::OnItemMoved(GameObject *item,
-                            GameObject *oldParentItem, int oldIndexInsideParent,
-                            GameObject *newParentItem, int newIndexInsideParent)
+void Hierarchy::OnItemMoved(GOItem *item,
+                            GOItem *oldParentItem, int oldIndexInsideParent,
+                            GOItem *newParentItem, int newIndexInsideParent)
 {
     IEventsUITree::OnItemMoved(item, oldParentItem, oldIndexInsideParent,
                                  newParentItem, newIndexInsideParent);
 
+    GameObject *go = GetGameObjectFromItem(item);
+    GameObject *oldParent = GetGameObjectFromItem(oldParentItem);
+    GameObject *newParent = GetGameObjectFromItem(newParentItem);
+    if (!oldParent) { oldParent = go->GetScene(); }
+    if (!newParent) { newParent = go->GetScene(); }
+
+    UndoRedoHierarchyMoveGameObject *undoRedo =
+         new UndoRedoHierarchyMoveGameObject(go,
+                                             oldParent, oldIndexInsideParent,
+                                             newParent, newIndexInsideParent);
+    UndoRedoManager::PushAction(undoRedo);
+
     EventListener<IEventsUITree>::SetReceiveEvents(false);
     GameObject *movedGo = GetGameObjectFromItem(item);
-    GameObject *newParent = GetGameObjectFromItem(newParentItem);
     if (!newParent) { newParent = movedGo->GetScene(); }
     movedGo->SetParent(newParent, newIndexInsideParent);
     EventListener<IEventsUITree>::SetReceiveEvents(true);

@@ -58,9 +58,9 @@ public:
     virtual void OnCreatePrefab(HierarchyItem *item) override;
 
     // IUITreeListener
-    virtual void OnItemMoved(GameObject *item,
-                             GameObject *oldParentItem, int oldIndexInsideParent,
-                             GameObject *newParentItem, int newIndexInsideParent)
+    virtual void OnItemMoved(GOItem *item,
+                             GOItem *oldParentItem, int oldIndexInsideParent,
+                             GOItem *newParentItem, int newIndexInsideParent)
                              override;
 
     // UIContextMenu
