@@ -128,9 +128,9 @@ void CIWCamera::LimitValues()
     p_zFarInput->SetMinMaxValues(GetCamera()->GetZNear(), Math::Infinity<float>());
 }
 
-void CIWCamera::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void CIWCamera::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
-    ComponentInspectorWidget::OnValueChanged(object);
+    ComponentInspectorWidget::OnValueChangedCIW(object);
 
     GetCamera()->SetZNear( p_zNearInput->GetValue() );
     GetCamera()->SetZFar( p_zFarInput->GetValue() );

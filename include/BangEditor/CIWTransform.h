@@ -29,8 +29,8 @@ protected:
 
     virtual bool CanBeRemovedFromContextMenu() const override;
 
-    // IEventsValueChanged
-    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
+    // ComponentInspectorWidget
+    void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
     UIInputVector *p_posIV   = nullptr;

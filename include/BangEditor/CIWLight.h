@@ -32,8 +32,8 @@ protected:
 
     Light *GetLight() const;
 
-    // IEventsValueChanged
-    virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
+    // ComponentInspectorWidget
+    virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
     UIInputNumber *p_intensityInput = nullptr;

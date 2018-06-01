@@ -93,9 +93,9 @@ UITextRenderer *CIWUITextRenderer::GetUITextRenderer() const
     return SCAST<UITextRenderer*>( GetComponent() );
 }
 
-void CIWUITextRenderer::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void CIWUITextRenderer::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
-    ComponentInspectorWidget::OnValueChanged(object);
+    ComponentInspectorWidget::OnValueChangedCIW(object);
 
     GetUITextRenderer()->SetContent( p_contentInput->GetText()->GetContent() );
     GetUITextRenderer()->SetTextSize( p_sizeInput->GetValue() );

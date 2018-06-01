@@ -23,8 +23,8 @@ public:
 protected:
     UIImageRenderer *GetUIImageRenderer() const;
 
-    // IEventsValueChanged
-    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
+    // ComponentInspectorWidget
+    void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
     UIInputColor *p_tintInput = nullptr;

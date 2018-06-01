@@ -30,8 +30,8 @@ public:
 protected:
     UITextRenderer *GetUITextRenderer() const;
 
-    // IEventsValueChanged
-    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
+    // ComponentInspectorWidget
+    void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
     UIInputText *p_contentInput = nullptr;

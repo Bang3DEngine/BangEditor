@@ -38,9 +38,9 @@ DirectionalLight *CIWDirectionalLight::GetDirectionalLight() const
     return SCAST<DirectionalLight*>( GetLight() );
 }
 
-void CIWDirectionalLight::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void CIWDirectionalLight::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
-    CIWLight::OnValueChanged(object);
+    CIWLight::OnValueChangedCIW(object);
 
     GetDirectionalLight()->SetShadowDistance( p_shadowDistanceInput->GetValue() );
 }

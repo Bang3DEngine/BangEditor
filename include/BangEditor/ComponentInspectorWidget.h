@@ -2,6 +2,8 @@
 #define COMPONENTINSPECTORWIDGET_H
 
 #include "Bang/Bang.h"
+#include "Bang/XMLNode.h"
+#include "Bang/IEventsFocus.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/IEventsValueChanged.h"
 
@@ -17,7 +19,9 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class ComponentInspectorWidget : public InspectorWidget,
-                                 public EventListener<IEventsValueChanged>
+                                 public EventListener<IEventsValueChanged>,
+                                 public EventListener<IEventsFocus>,
+                                 public EventListener<IEventsComponent>
 {
     GAMEOBJECT_EDITOR(InspectorWidget);
 
@@ -39,13 +43,17 @@ protected:
     virtual GameObject *CreateTitleGameObject() override;
 
     virtual bool CanBeRemovedFromContextMenu() const;
-    virtual void OnValueChanged(
-                    EventEmitter<IEventsValueChanged> *object) override;
+
     virtual RH<Texture2D> GetComponentIconTexture() const;
+
+    void PushCurrentStateToUndoRedoIfAnyChange();
+
+    virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object);
 
 private:
     Component *p_component = nullptr;
 
+    XMLNode m_undoXMLBefore;
     UIContextMenu *p_contextMenu = nullptr;
 
     UIImageRenderer *p_icon = nullptr;
@@ -58,6 +66,24 @@ private:
     void MoveComponent(Component *comp, int offset);
 
     virtual bool MustShowEnabledCheckbox() const;
+    void UpdateTrackChildrenFocusEmitters(GameObject *child,
+                                          bool track,
+                                          bool recursive);
+
+    // IEventsChildren
+    void OnChildAdded(GameObject *addedChild, GameObject *parent) override;
+    void OnChildRemoved(GameObject *removedChild, GameObject *parent) override;
+
+    // IEventsComponent
+    void OnComponentAdded(Component *addedComponent, int index) override;
+    void OnComponentRemoved(Component *removedComponent) override;
+
+    // IEventsFocus
+    void OnFocusTaken(EventEmitter<IEventsFocus> *focusEmitter) override;
+    void OnFocusLost(EventEmitter<IEventsFocus> *focusEmitter) override;
+
+    // IEventsValueChanged
+    virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
     friend class ComponentInspectorWidgetFactory;
 };

@@ -38,9 +38,9 @@ void CIWMeshRenderer::UpdateFromReference()
     p_meshInputFile->SetPath(meshPath);
 }
 
-void CIWMeshRenderer::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void CIWMeshRenderer::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
-    CIWRenderer::OnValueChanged(object);
+    CIWRenderer::OnValueChangedCIW(object);
 
     if (object == p_meshInputFile)
     {

@@ -89,9 +89,9 @@ void CIWAudioSource::OnPlayClicked()
     }
 }
 
-void CIWAudioSource::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void CIWAudioSource::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
-    ComponentInspectorWidget::OnValueChanged(object);
+    ComponentInspectorWidget::OnValueChangedCIW(object);
 
     if (object == p_audioClipFileInput)
     {

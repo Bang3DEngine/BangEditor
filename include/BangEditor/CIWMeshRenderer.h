@@ -30,8 +30,8 @@ private:
     CIWMeshRenderer() = default;
     virtual ~CIWMeshRenderer() = default;
 
-    // IEventsValueChanged
-    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
+    // ComponentInspectorWidget
+    void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

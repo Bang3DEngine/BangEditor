@@ -28,8 +28,8 @@ protected:
 
     RectTransform *GetRectTransform() const;
 
-    // IEventsValueChanged
-    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
+    // ComponentInspectorWidget
+    void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 
     // ComponentWidget
     bool MustShowEnabledCheckbox() const override;

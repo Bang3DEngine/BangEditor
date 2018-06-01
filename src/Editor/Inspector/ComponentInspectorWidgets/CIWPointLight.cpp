@@ -33,9 +33,9 @@ PointLight *CIWPointLight::GetPointLight() const
     return SCAST<PointLight*>( GetLight() );
 }
 
-void CIWPointLight::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void CIWPointLight::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
-    CIWLight::OnValueChanged(object);
+    CIWLight::OnValueChangedCIW(object);
 
     GetPointLight()->SetRange( p_rangeInput->GetValue() );
 }

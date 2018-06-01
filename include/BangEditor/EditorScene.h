@@ -32,6 +32,7 @@ FORWARD class ScenePlayer;
 FORWARD class ProjectManager;
 FORWARD class UITabContainer;
 FORWARD class EditorClipboard;
+FORWARD class UndoRedoManager;
 FORWARD class SceneOpenerSaver;
 FORWARD class UISceneContainer;
 FORWARD class EditorApplication;
@@ -65,6 +66,7 @@ public:
     ScenePlayer *GetScenePlayer() const;
     ProjectManager *GetProjectManager() const;
     EditorClipboard *GetEditorClipboard() const;
+    UndoRedoManager *GetUndoRedoManager() const;
     UITabContainer *GetSceneTabContainer() const;
     SceneOpenerSaver *GetSceneOpenerSaver() const;
     EditorFileTracker *GetEditorFileTracker() const;
@@ -89,6 +91,7 @@ private:
     Explorer *p_explorer   = nullptr;
     Inspector *p_inspector = nullptr;
     Hierarchy *p_hierarchy = nullptr;
+    UndoRedoManager *m_undoRedoManager = nullptr;
 
     Scene *p_openScene = nullptr;
     UISceneEditContainer *p_sceneEditContainer = nullptr;

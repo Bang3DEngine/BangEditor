@@ -72,9 +72,9 @@ Renderer *CIWRenderer::GetRenderer() const
     return SCAST<Renderer*>( GetComponent() );
 }
 
-void CIWRenderer::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void CIWRenderer::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
-    ComponentInspectorWidget::OnValueChanged(object);
+    ComponentInspectorWidget::OnValueChangedCIW(object);
 
     if (object == p_visibleCheckBox)
     {

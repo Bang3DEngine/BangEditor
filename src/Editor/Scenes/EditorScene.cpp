@@ -34,6 +34,7 @@
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/UITabContainer.h"
+#include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/EditorClipboard.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/UISceneContainer.h"
@@ -154,6 +155,8 @@ void EditorScene::Init()
     cam->RemoveRenderPass(RenderPass::OVERLAY_POSTPROCESS);
     SetCamera(cam);
 
+    m_undoRedoManager = new UndoRedoManager();
+
     ScenePlayer::GetInstance()->EventEmitter<IEventsScenePlayer>::RegisterListener(this);
     SceneManager::GetActive()->EventEmitter<IEventsSceneManager>::RegisterListener(this);
 
@@ -164,6 +167,7 @@ EditorScene::~EditorScene()
 {
     delete m_scenePlayer;
     delete m_projectManager;
+    delete m_undoRedoManager;
     delete m_sceneOpenerSaver;
     delete m_editorFileTracker;
     delete m_editSceneGameObjects;
@@ -326,6 +330,11 @@ ProjectManager *EditorScene::GetProjectManager() const
 EditorClipboard *EditorScene::GetEditorClipboard() const
 {
     return m_editorClipboard;
+}
+
+UndoRedoManager *EditorScene::GetUndoRedoManager() const
+{
+    return m_undoRedoManager;
 }
 
 UITabContainer *EditorScene::GetSceneTabContainer() const

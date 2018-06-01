@@ -70,9 +70,9 @@ Transform *CIWTransform::GetTransform() const
     return SCAST<Transform*>( GetComponent() );
 }
 
-void CIWTransform::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void CIWTransform::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
-    ComponentInspectorWidget::OnValueChanged(object);
+    ComponentInspectorWidget::OnValueChangedCIW(object);
 
     GetTransform()->SetLocalPosition(p_posIV->GetVector3());
     GetTransform()->SetLocalEuler(p_rotIV->GetVector3());

@@ -77,9 +77,9 @@ RectTransform *CIWRectTransform::GetRectTransform() const
     return SCAST<RectTransform*>( GetComponent() );
 }
 
-void CIWRectTransform::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void CIWRectTransform::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
-    CIWTransform::OnValueChanged(object);
+    CIWTransform::OnValueChangedCIW(object);
 
     GetRectTransform()->SetAnchorMin(p_anchorMinInput->GetVector2());
     GetRectTransform()->SetAnchorMax(p_anchorMaxInput->GetVector2());

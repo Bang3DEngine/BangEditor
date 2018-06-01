@@ -42,9 +42,9 @@ void CIWBehaviourContainer::UpdateFromReference()
     }
 }
 
-void CIWBehaviourContainer::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void CIWBehaviourContainer::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
-    ComponentInspectorWidget::OnValueChanged(object);
+    ComponentInspectorWidget::OnValueChangedCIW(object);
 
     GetBehaviourContainer()->SetSourceFilepath( p_sourceInputFile->GetPath() );
 }

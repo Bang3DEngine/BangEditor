@@ -86,9 +86,9 @@ Light *CIWLight::GetLight() const
     return SCAST<Light*>( GetComponent() );
 }
 
-void CIWLight::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void CIWLight::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
-    ComponentInspectorWidget::OnValueChanged(object);
+    ComponentInspectorWidget::OnValueChangedCIW(object);
 
     GetLight()->SetIntensity( p_intensityInput->GetValue() );
     GetLight()->SetColor( p_colorInput->GetColor() );

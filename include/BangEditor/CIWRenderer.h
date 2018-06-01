@@ -29,8 +29,8 @@ protected:
 
     Renderer *GetRenderer() const;
 
-    // IEventsValueChanged
-    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
+    // ComponentInspectorWidget
+    void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
     UICheckBox *p_visibleCheckBox = nullptr;

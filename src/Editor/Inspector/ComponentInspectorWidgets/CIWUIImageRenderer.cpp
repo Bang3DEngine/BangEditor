@@ -61,9 +61,9 @@ UIImageRenderer *CIWUIImageRenderer::GetUIImageRenderer() const
     return SCAST<UIImageRenderer*>( GetComponent() );
 }
 
-void CIWUIImageRenderer::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void CIWUIImageRenderer::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
-    ComponentInspectorWidget::OnValueChanged(object);
+    ComponentInspectorWidget::OnValueChangedCIW(object);
 
     GetUIImageRenderer()->SetTint( p_tintInput->GetColor() );
     GetUIImageRenderer()->SetImageTexture( p_imageInput->GetPath() );

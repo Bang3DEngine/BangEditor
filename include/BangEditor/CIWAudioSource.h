@@ -39,8 +39,8 @@ private:
 
     void OnPlayClicked();
 
-    // IEventsValueChanged
-    virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
+    // ComponentInspectorWidget
+    virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 
     AudioSource *GetAudioSource() const;
 

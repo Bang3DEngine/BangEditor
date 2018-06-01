@@ -55,9 +55,9 @@ PostProcessEffect *CIWPostProcessEffect::GetPostProcessEffect() const
     return SCAST<PostProcessEffect*>( GetComponent() );
 }
 
-void CIWPostProcessEffect::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void CIWPostProcessEffect::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
-    ComponentInspectorWidget::OnValueChanged(object);
+    ComponentInspectorWidget::OnValueChangedCIW(object);
 
     PostProcessEffect *ppe = GetPostProcessEffect();
 
