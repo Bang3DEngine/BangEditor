@@ -86,7 +86,10 @@ void Editor::SelectGameObject_(GameObject *selectedGameObject, bool registerUndo
 void Editor::OnPathSelected(const Path &path)
 {
     Editor *ed = Editor::GetInstance(); ASSERT(ed);
-    if (path.IsFile()) { Editor::SelectGameObject(nullptr); }
+    if (path.IsFile())
+    {
+        ed->SelectGameObject_(nullptr, false);
+    }
 
     ed->EventEmitter<IEventsEditor>::PropagateToListeners(
                 &IEventsEditor::OnExplorerPathSelected, path);

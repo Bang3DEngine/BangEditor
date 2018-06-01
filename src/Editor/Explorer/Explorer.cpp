@@ -30,6 +30,7 @@
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorClipboard.h"
+#include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/QtProjectManager.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/EditorFileTracker.h"
@@ -37,6 +38,7 @@
 #include "BangEditor/ExplorerItemFactory.h"
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/IEventsProjectManager.h"
+#include "BangEditor/UndoRedoExplorerSelect.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -200,17 +202,32 @@ void Explorer::ForceCheckFileChanges()
 
 void Explorer::SelectPath(const Path &path)
 {
-    for (ExplorerItem *explorerItem : p_items)
-    {
-        explorerItem->SetSelected(false);
-    }
+    SelectPath_(path, true);
+}
 
-    if (path.GetDirectory().Exists()) { SetCurrentPath(path.GetDirectory()); }
-    ExplorerItem *explorerItem = GetItemFromPath(path);
-    if (explorerItem)
+void Explorer::SelectPath_(const Path &path, bool registerUndo)
+{
+    if (path != GetSelectedPath())
     {
-        explorerItem->SetSelected(true);
-        Editor::OnPathSelected(explorerItem->GetPath());
+        if (registerUndo)
+        {
+            UndoRedoExplorerSelect *undoRedo = new UndoRedoExplorerSelect(
+                        GetSelectedPath(), path);
+            UndoRedoManager::PushAction(undoRedo);
+        }
+
+        for (ExplorerItem *explorerItem : p_items)
+        {
+            explorerItem->SetSelected(false);
+        }
+
+        if (path.GetDirectory().Exists()) { SetCurrentPath(path.GetDirectory()); }
+        ExplorerItem *explorerItem = GetItemFromPath(path);
+        if (explorerItem)
+        {
+            explorerItem->SetSelected(true);
+            Editor::OnPathSelected(explorerItem->GetPath());
+        }
     }
 }
 
@@ -314,7 +331,7 @@ void Explorer::OnGameObjectSelected(GameObject *selectedGameObject)
 {
     if (selectedGameObject)
     {
-        SelectPath(Path::Empty);
+        SelectPath_(Path::Empty, false);
     }
 }
 

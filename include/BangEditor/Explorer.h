@@ -88,6 +88,8 @@ private:
     void RemoveItem(const Path &itemPath);
     void GoDirectoryUp();
 
+    void SelectPath_(const Path &path, bool registerUndo);
+
     void DuplicatePathIntoDir(const Path &srcPath, const Path &dstDirPath);
 
     ExplorerItem *GetSelectedItem() const;
@@ -103,6 +105,8 @@ private:
 
     // UIContextMenu
     virtual void OnCreateContextMenu(MenuItem *menuRootItem);
+
+    friend class UndoRedoExplorerSelect;
 };
 
 NAMESPACE_BANG_EDITOR_END

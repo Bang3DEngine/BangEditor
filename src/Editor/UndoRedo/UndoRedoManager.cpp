@@ -31,9 +31,19 @@ UndoRedoManager::~UndoRedoManager()
 
 void UndoRedoManager::PushAction(UndoRedoAction *action)
 {
-    UndoRedoManager *urm = UndoRedoManager::GetInstance(); ASSERT(urm);
+    UndoRedoManager *urm = UndoRedoManager::GetInstance();
+    ASSERT(urm);
+    ASSERT(!urm->m_undoingOrRedoing);
+
     urm->m_undoActions.PushFront(action);
     urm->m_redoActions.Clear();
+
+    if (urm->m_undoActions.Size() > UndoListSize)
+    {
+        delete urm->m_undoActions.Back();
+        urm->m_undoActions.PopBack();
+    }
+
     // Debug_Peek(urm->m_undoActions);
     // Debug_Peek(urm->m_redoActions);
 }
@@ -52,12 +62,15 @@ void UndoRedoManager::OnUndoRedoPressed(bool undo)
     if (undo && m_undoActions.Size() >= 1)
     {
         UndoRedoAction *action = m_undoActions.Front();
+
+        m_undoingOrRedoing = true;
         action->Undo();
+        m_undoingOrRedoing = false;
 
         m_undoActions.PopFront();
         m_redoActions.PushFront(action);
 
-        if (m_redoActions.Size() >= UndoListSize)
+        if (m_redoActions.Size() > UndoListSize)
         {
             delete m_redoActions.Back();
             m_redoActions.PopBack();
@@ -66,16 +79,13 @@ void UndoRedoManager::OnUndoRedoPressed(bool undo)
     else if (redo && m_redoActions.Size() >= 1)
     {
         UndoRedoAction *action = m_redoActions.Front();
+
+        m_undoingOrRedoing = true;
         action->Redo();
+        m_undoingOrRedoing = false;
 
         m_redoActions.PopFront();
         m_undoActions.PushFront(action);
-
-        if (m_undoActions.Size() >= UndoListSize)
-        {
-            delete m_undoActions.Back();
-            m_undoActions.PopBack();
-        }
     }
 }
 

@@ -21,9 +21,13 @@ public:
     static UndoRedoManager* GetInstance();
 
 private:
-    const int UndoListSize = 1000;
+    static constexpr int UndoListSize = 1000;
+
     List<UndoRedoAction*> m_undoActions;
     List<UndoRedoAction*> m_redoActions;
+
+    // Only for debugging
+    bool m_undoingOrRedoing = false;
 
     void OnUndoRedoPressed(bool undo);
 };
