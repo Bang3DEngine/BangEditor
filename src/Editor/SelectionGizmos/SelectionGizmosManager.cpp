@@ -26,7 +26,7 @@ SelectionGizmosManager::SelectionGizmosManager()
     p_componentsSelectionGizmo = csg;
     GetComponentsSelectionGizmo()->SetReferencedGameObject(nullptr);
 
-    Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
+    Editor::GetInstance()->EventEmitter<IEventsEditor>::RegisterListener(this);
 }
 
 SelectionGizmosManager::~SelectionGizmosManager()
@@ -76,7 +76,7 @@ void SelectionGizmosManager::OnGameObjectSelected(GameObject *selectedGameObject
     GetGameObjectSelectionGizmo()->SetEnabled( selectedGameObject != nullptr );
 }
 
-void SelectionGizmosManager::OnDestroyed(EventEmitter<IDestroyListener> *object)
+void SelectionGizmosManager::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
 }
 

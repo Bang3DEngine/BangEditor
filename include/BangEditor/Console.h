@@ -28,7 +28,7 @@ public:
 
 // Console
 class Console : public GameObject,
-                public EventListener<IDebugListener>
+                public EventListener<IEventsDebug>
 {
     GAMEOBJECT_EDITOR(Console);
 
@@ -45,7 +45,7 @@ private:
     // GameObject
     void Update() override;
 
-    // IDebugListener
+    // IEventsDebug
     void OnMessage(DebugMessageType msgType, const String &str,
                    int line, const String &fileName) override;
 };

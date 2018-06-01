@@ -1,7 +1,7 @@
 #ifndef CIWLIGHT_H
 #define CIWLIGHT_H
 
-#include "Bang/IValueChangedListener.h"
+#include "Bang/IEventsValueChanged.h"
 
 #include "BangEditor/ComponentInspectorWidget.h"
 
@@ -32,8 +32,8 @@ protected:
 
     Light *GetLight() const;
 
-    // IValueChangedListener
-    virtual void OnValueChanged(Object *object) override;
+    // IEventsValueChanged
+    virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
     UIInputNumber *p_intensityInput = nullptr;

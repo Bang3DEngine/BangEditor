@@ -6,7 +6,7 @@
 #include "Bang/Scene.h"
 #include "Bang/Window.h"
 #include "Bang/IFocusable.h"
-#include "Bang/IFocusListener.h"
+#include "Bang/IEventsFocus.h"
 
 #include "BangEditor/BangEditor.h"
 

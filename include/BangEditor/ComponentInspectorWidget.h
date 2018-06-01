@@ -3,7 +3,7 @@
 
 #include "Bang/Bang.h"
 #include "Bang/ResourceHandle.h"
-#include "Bang/IValueChangedListener.h"
+#include "Bang/IEventsValueChanged.h"
 
 #include "BangEditor/UIContextMenu.h"
 #include "BangEditor/InspectorWidget.h"
@@ -17,7 +17,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class ComponentInspectorWidget : public InspectorWidget,
-                                 public EventListener<IValueChangedListener>
+                                 public EventListener<IEventsValueChanged>
 {
     GAMEOBJECT_EDITOR(InspectorWidget);
 
@@ -39,7 +39,8 @@ protected:
     virtual GameObject *CreateTitleGameObject() override;
 
     virtual bool CanBeRemovedFromContextMenu() const;
-    virtual void OnValueChanged(Object *object) override;
+    virtual void OnValueChanged(
+                    EventEmitter<IEventsValueChanged> *object) override;
     virtual RH<Texture2D> GetComponentIconTexture() const;
 
 private:

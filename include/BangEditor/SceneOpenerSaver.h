@@ -6,13 +6,14 @@
 #include "Bang/EventListener.h"
 
 #include "BangEditor/ScenePlayer.h"
+#include "BangEditor/IEventsScenePlayer.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class SceneOpenerSaver : public EventListener<ISceneManagerListener>,
-                         public EventListener<IScenePlayerListener>
+class SceneOpenerSaver : public EventListener<IEventsSceneManager>,
+                         public EventListener<IEventsScenePlayer>
 {
 public:
     SceneOpenerSaver();
@@ -28,7 +29,7 @@ public:
 
     bool OpenSceneInEditor(const Path &scenePath);
 
-    // ISceneManagerListener
+    // IEventsSceneManager
     void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
 
     const Path& GetOpenScenePath() const;
@@ -51,7 +52,7 @@ private:
 
     Path GetDialogStartPath() const;
 
-    // IScenePlayerListener
+    // IEventsScenePlayer
     void OnPlayStateChanged(PlayState previousPlayState,
                             PlayState newPlayState) override;
 };

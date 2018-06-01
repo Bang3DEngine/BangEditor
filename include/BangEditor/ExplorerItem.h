@@ -4,10 +4,11 @@
 #include "Bang/Bang.h"
 #include "Bang/Path.h"
 #include "Bang/GameObject.h"
-#include "Bang/IFocusListener.h"
-#include "Bang/IDragDropListener.h"
+#include "Bang/IEventsFocus.h"
+#include "Bang/IEventsDragDrop.h"
 
 #include "BangEditor/UIContextMenu.h"
+#include "BangEditor/IEventsExplorerItem.h"
 
 USING_NAMESPACE_BANG
 
@@ -22,24 +23,10 @@ FORWARD NAMESPACE_BANG_END
 
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class ExplorerItem;
-
-class IExplorerItemListener
-{
-    EVENTLISTENER_NS(IExplorerItemListener);
-
-public:
-    virtual void OnRename(ExplorerItem *item) = 0;
-    virtual void OnRemove(ExplorerItem *item) = 0;
-    virtual void OnDuplicate(ExplorerItem *item) = 0;
-    virtual void OnPastedOver(ExplorerItem *item) = 0;
-    virtual void OnDroppedToDirectory(ExplorerItem *item) = 0;
-};
-
 class ExplorerItem : public GameObject,
-                     public EventListener<IFocusListener>,
-                     public EventListener<IDragDropListener>,
-                     public EventEmitter<IExplorerItemListener>
+                     public EventListener<IEventsFocus>,
+                     public EventListener<IEventsDragDrop>,
+                     public EventEmitter<IEventsExplorerItem>
 {
     GAMEOBJECT_EDITOR(ExplorerItem);
 
@@ -62,8 +49,8 @@ public:
     // UIContextMenu callback
     virtual void OnCreateContextMenu(MenuItem *menuRootItem);
 
-    // IDragDropListener
-    void OnDrop(UIDragDroppable *dragDroppable) override;
+    // IEventsDragDrop
+    void OnDrop(EventEmitter<IEventsDragDrop> *dragDroppable) override;
 
 protected:
     ExplorerItem();
@@ -82,10 +69,11 @@ private:
     UIDragDroppable *p_dragDroppable = nullptr;
     UIAspectRatioFitter *p_aspectRatioFitter = nullptr;
 
-    // IFocusListener
-    virtual void OnClicked(IFocusable*, ClickType clickType) override;
-    virtual void OnMouseEnter(IFocusable*) override;
-    virtual void OnMouseExit(IFocusable*) override;
+    // IEventsFocus
+    virtual void OnClicked(EventEmitter<IEventsFocus>*,
+                           ClickType clickType) override;
+    virtual void OnMouseEnter(EventEmitter<IEventsFocus>*) override;
+    virtual void OnMouseExit(EventEmitter<IEventsFocus>*) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

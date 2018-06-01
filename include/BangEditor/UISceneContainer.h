@@ -3,8 +3,8 @@
 
 #include "Bang/GameObject.h"
 #include "Bang/EventListener.h"
-#include "Bang/ITransformListener.h"
-#include "Bang/IValueChangedListener.h"
+#include "Bang/IEventsTransform.h"
+#include "Bang/IEventsValueChanged.h"
 
 #include "BangEditor/BangEditor.h"
 
@@ -19,9 +19,9 @@ FORWARD class UISceneImage;
 FORWARD class UISceneToolbar;
 
 class UISceneContainer : public GameObject,
-                         public EventListener<IDestroyListener>,
-                         public EventListener<IValueChangedListener>,
-                         public EventListener<ITransformListener>
+                         public EventListener<IEventsDestroy>,
+                         public EventListener<IEventsValueChanged>,
+                         public EventListener<IEventsTransform>
 {
 public:
     UISceneContainer();
@@ -38,8 +38,8 @@ protected:
     UISceneToolbar* GetSceneToolbar() const;
     UISceneImage* GetSceneImage() const;
 
-    // IDestroyListener
-    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
+    // IEventsDestroy
+    void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
 private:
     Scene *p_containedScene = nullptr;
@@ -51,11 +51,11 @@ private:
     virtual bool NeedsToRenderScene(Scene *scene) = 0;
     virtual void OnRenderNeededSceneFinished();
 
-    // ITransformListener
+    // IEventsTransform
     void OnTransformChanged() override;
 
-    // IValueChangedListener
-    void OnValueChanged(Object *object) override;
+    // IEventsValueChanged
+    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

@@ -12,9 +12,9 @@ USING_NAMESPACE_BANG_EDITOR
 UIScenePlayContainer::UIScenePlayContainer()
 {
     ScenePlayer::GetInstance()->
-            EventEmitter<IScenePlayerListener>::RegisterListener(this);
+            EventEmitter<IEventsScenePlayer>::RegisterListener(this);
     SceneManager::GetActive()->
-            EventEmitter<ISceneManagerListener>::RegisterListener(this);
+            EventEmitter<IEventsSceneManager>::RegisterListener(this);
 }
 
 UIScenePlayContainer::~UIScenePlayContainer()

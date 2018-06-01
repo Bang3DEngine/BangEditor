@@ -17,7 +17,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class ContextMenu;
 
 class UIContextMenu : public Component,
-                      public EventListener<IDestroyListener>
+                      public EventListener<IEventsDestroy>
 {
     COMPONENT(UIContextMenu)
 
@@ -41,14 +41,14 @@ private:
 
     CreateContextMenuCallback m_createContextMenuCallback;
 
-    // IDestroyListener
-    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
+    // IEventsDestroy
+    void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 };
 
 
 // ContextMenu
 class ContextMenu : public GameObject,
-                    public EventListener<IDestroyListener>
+                    public EventListener<IEventsDestroy>
 {
     GAMEOBJECT_EDITOR(ContextMenu);
 
@@ -59,7 +59,7 @@ public:
 
     MenuItem *GetRootItem() const;
 
-    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
+    void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
 private:
     MenuItem *p_rootItem = nullptr;

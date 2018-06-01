@@ -66,7 +66,7 @@ ExplorerItem::ExplorerItem()
     p_label->SetSelectable(false);
 
     p_focusable = AddComponent<UIFocusable>();
-    GetFocusable()->EventEmitter<IFocusListener>::RegisterListener(this);
+    GetFocusable()->EventEmitter<IEventsFocus>::RegisterListener(this);
 
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
@@ -91,7 +91,7 @@ ExplorerItem::~ExplorerItem()
 {
 }
 
-void ExplorerItem::OnClicked(IFocusable *, ClickType clickType)
+void ExplorerItem::OnClicked(EventEmitter<IEventsFocus>*, ClickType clickType)
 {
     if (clickType == ClickType::FULL)
     {
@@ -153,26 +153,26 @@ const String &ExplorerItem::GetPathString() const
 
 void ExplorerItem::Rename()
 {
-    EventEmitter<IExplorerItemListener>::PropagateToListeners(
-                &IExplorerItemListener::OnRename, this);
+    EventEmitter<IEventsExplorerItem>::PropagateToListeners(
+                &IEventsExplorerItem::OnRename, this);
 }
 
 void ExplorerItem::Remove()
 {
-    EventEmitter<IExplorerItemListener>::PropagateToListeners(
-                &IExplorerItemListener::OnRemove, this);
+    EventEmitter<IEventsExplorerItem>::PropagateToListeners(
+                &IEventsExplorerItem::OnRemove, this);
 }
 
 void ExplorerItem::Paste()
 {
-    EventEmitter<IExplorerItemListener>::PropagateToListeners(
-                &IExplorerItemListener::OnPastedOver, this);
+    EventEmitter<IEventsExplorerItem>::PropagateToListeners(
+                &IEventsExplorerItem::OnPastedOver, this);
 }
 
 void ExplorerItem::Duplicate()
 {
-    EventEmitter<IExplorerItemListener>::PropagateToListeners(
-                &IExplorerItemListener::OnDuplicate, this);
+    EventEmitter<IEventsExplorerItem>::PropagateToListeners(
+                &IEventsExplorerItem::OnDuplicate, this);
 }
 
 void ExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
@@ -206,8 +206,9 @@ void ExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
     }
 }
 
-void ExplorerItem::OnDrop(UIDragDroppable *dd)
+void ExplorerItem::OnDrop(EventEmitter<IEventsDragDrop> *dd_)
 {
+    UIDragDroppable *dd = DCAST<UIDragDroppable*>(dd_);
     if (ExplorerItem *expItem = DCAST<ExplorerItem*>(dd->GetGameObject()))
     {
         if (expItem != this &&
@@ -227,8 +228,8 @@ void ExplorerItem::OnDrop(UIDragDroppable *dd)
                              newDir.Append(importDroppedPath.GetNameExt()));
             }
 
-            EventEmitter<IExplorerItemListener>::PropagateToListeners(
-                           &IExplorerItemListener::OnDroppedToDirectory, expItem);
+            EventEmitter<IEventsExplorerItem>::PropagateToListeners(
+                           &IEventsExplorerItem::OnDroppedToDirectory, expItem);
         }
     }
 }
@@ -238,7 +239,7 @@ const Path &ExplorerItem::GetPath() const
     return m_path;
 }
 
-void ExplorerItem::OnMouseEnter(IFocusable*)
+void ExplorerItem::OnMouseEnter(EventEmitter<IEventsFocus>*)
 {
     if (!IsSelected())
     {
@@ -246,7 +247,7 @@ void ExplorerItem::OnMouseEnter(IFocusable*)
     }
 }
 
-void ExplorerItem::OnMouseExit(IFocusable*)
+void ExplorerItem::OnMouseExit(EventEmitter<IEventsFocus>*)
 {
     if (!IsSelected())
     {

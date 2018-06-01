@@ -4,7 +4,7 @@
 #include "Bang/Array.h"
 #include "Bang/GameObject.h"
 #include "Bang/EventEmitter.h"
-#include "Bang/IValueChangedListener.h"
+#include "Bang/IEventsValueChanged.h"
 
 #include "BangEditor/BangEditor.h"
 
@@ -17,8 +17,8 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class UIInputVector : public GameObject,
-                      public EventListener<IValueChangedListener>,
-                      public EventEmitter<IValueChangedListener>
+                      public EventListener<IEventsValueChanged>,
+                      public EventEmitter<IEventsValueChanged>
 {
     GAMEOBJECT_EDITOR(UIInputVector);
 
@@ -39,7 +39,7 @@ public:
 
     bool HasFocus() const;
 
-    void OnValueChanged(Object *object) override;
+    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
 protected:
     UIInputVector();

@@ -42,8 +42,8 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
     ImportFilesManager::LoadImportFilepathGUIDs(assetsDir);
 
     ProjectManager::GetInstance()->
-        EventEmitter<IProjectManagerListener>::PropagateToListeners(
-               &IProjectManagerListener::OnProjectOpen, s_currentProject);
+        EventEmitter<IEventsProjectManager>::PropagateToListeners(
+               &IEventsProjectManager::OnProjectOpen, s_currentProject);
 
     EditorSettings::AddRecentProjectFilepathOpen(
                             currentProject->GetProjectFilepath() );
@@ -125,8 +125,8 @@ bool ProjectManager::CloseCurrentProject()
     if (ProjectManager::s_currentProject)
     {
         ProjectManager::GetInstance()->
-            EventEmitter<IProjectManagerListener>::PropagateToListeners(
-                   &IProjectManagerListener::OnProjectClosed, s_currentProject);
+            EventEmitter<IEventsProjectManager>::PropagateToListeners(
+                   &IEventsProjectManager::OnProjectClosed, s_currentProject);
 
         delete s_currentProject;
         ProjectManager::s_currentProject = nullptr;

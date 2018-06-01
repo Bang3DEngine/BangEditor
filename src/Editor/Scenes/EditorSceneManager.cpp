@@ -17,7 +17,7 @@ USING_NAMESPACE_BANG_EDITOR
 
 EditorSceneManager::EditorSceneManager()
 {
-    EventEmitter<ISceneManagerListener>::RegisterListener(this);
+    EventEmitter<IEventsSceneManager>::RegisterListener(this);
 }
 
 EditorSceneManager::~EditorSceneManager()

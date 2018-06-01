@@ -39,20 +39,20 @@ void FIWTexture::Init()
     p_filterModeComboBox->AddItem("Trilinear_NL", int(GL::FilterMode::TRILINEAR_NL));
     p_filterModeComboBox->AddItem("Trilinear_LN", int(GL::FilterMode::TRILINEAR_LN));
     p_filterModeComboBox->AddItem("Trilinear_LL", int(GL::FilterMode::TRILINEAR_LL));
-    p_filterModeComboBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_filterModeComboBox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_wrapModeComboBox = GameObjectFactory::CreateUIComboBox();
     p_wrapModeComboBox->AddItem("Clamp", int(GL::WrapMode::CLAMP_TO_EDGE));
     p_wrapModeComboBox->AddItem("Repeat", int(GL::WrapMode::REPEAT));
-    p_wrapModeComboBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_wrapModeComboBox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_alphaCutoffInput = GameObjectFactory::CreateUISlider();
     p_alphaCutoffInput->SetMinMaxValues(0.0f, 1.0f);
-    p_alphaCutoffInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_alphaCutoffInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_SRGBCheckBoxInput = GameObjectFactory::CreateUICheckBox();
     p_SRGBCheckBoxInput->SetChecked(true);
-    p_SRGBCheckBoxInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_SRGBCheckBoxInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     GameObject *imageContainerGo = GameObjectFactory::CreateUIGameObject();
 
@@ -86,7 +86,7 @@ void FIWTexture::UpdateFromFileWhenChanged()
     p_texture = Resources::Load<Texture2D>( GetPath() );
     if (!GetTexture()) { return; }
 
-    EventListener<IValueChangedListener>::SetReceiveEvents(false);
+    EventListener<IEventsValueChanged>::SetReceiveEvents(false);
 
     p_textureImageRend->SetImageTexture( GetTexture() );
     p_textureImageRend->SetTint(Color::White);
@@ -100,10 +100,10 @@ void FIWTexture::UpdateFromFileWhenChanged()
     p_wrapModeComboBox->SetSelectionByValue( int(GetTexture()->GetWrapMode()) );
     p_alphaCutoffInput->SetValue( GetTexture()->GetAlphaCutoff() );
 
-    EventListener<IValueChangedListener>::SetReceiveEvents(true);
+    EventListener<IEventsValueChanged>::SetReceiveEvents(true);
 }
 
-void FIWTexture::OnValueChanged(Object*)
+void FIWTexture::OnValueChanged(EventEmitter<IEventsValueChanged>*)
 {
     if (GetTexture())
     {

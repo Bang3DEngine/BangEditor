@@ -3,6 +3,7 @@
 #include "Bang/Debug.h"
 #include "Bang/Paths.h"
 #include "Bang/CodePreprocessor.h"
+#include "Bang/IEventsFileTracker.h"
 
 #include "BangEditor/EditorPaths.h"
 
@@ -11,7 +12,7 @@ USING_NAMESPACE_BANG_EDITOR
 
 BehaviourTracker::BehaviourTracker()
 {
-    m_fileTracker.EventEmitter<IFileTrackerListener>::RegisterListener(this);
+    m_fileTracker.EventEmitter<IEventsFileTracker>::RegisterListener(this);
     m_fileTracker.SetCheckFrequencySeconds(4.0);
 }
 

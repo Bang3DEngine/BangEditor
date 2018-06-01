@@ -17,7 +17,7 @@ void CIWDirectionalLight::InitInnerWidgets()
 
     p_shadowDistanceInput = GameObjectFactory::CreateUIInputNumber();
     p_shadowDistanceInput->SetMinMaxValues(1.0f, 2000.0f);
-    p_shadowDistanceInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_shadowDistanceInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Shadow dist.", p_shadowDistanceInput->GetGameObject());
 
     SetLabelsWidth(110);
@@ -38,7 +38,7 @@ DirectionalLight *CIWDirectionalLight::GetDirectionalLight() const
     return SCAST<DirectionalLight*>( GetLight() );
 }
 
-void CIWDirectionalLight::OnValueChanged(Object *object)
+void CIWDirectionalLight::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     CIWLight::OnValueChanged(object);
 

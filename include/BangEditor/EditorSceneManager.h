@@ -17,7 +17,7 @@ FORWARD class EditorScene;
 FORWARD class EditorBehaviourManager;
 
 class EditorSceneManager : public SceneManager,
-                           public EventListener<ISceneManagerListener>
+                           public EventListener<IEventsSceneManager>
 {
 public:
     EditorSceneManager();

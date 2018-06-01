@@ -6,7 +6,7 @@
 #include "Bang/Object.h"
 #include "Bang/String.h"
 #include "Bang/EventEmitter.h"
-#include "Bang/IValueChangedListener.h"
+#include "Bang/IEventsValueChanged.h"
 
 #include "BangEditor/BangEditor.h"
 
@@ -47,7 +47,7 @@ private:
 
 
 class ColorPickerReporter : public Object,
-                            public EventEmitter<IValueChangedListener>
+                            public EventEmitter<IEventsValueChanged>
 {
     SERIALIZABLE(ColorPickerReporter);
 

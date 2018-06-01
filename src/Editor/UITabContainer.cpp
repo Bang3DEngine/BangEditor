@@ -79,7 +79,7 @@ void UITabContainer::AddTab(const String &title, GameObject *tabbedChild)
         m_childrenToHeader.Add(tabbedChild, tabHeader);
         m_headerToChildren.Add(tabHeader, tabbedChild);
 
-        tabHeader->EventEmitter<ITabHeaderListener>::RegisterListener(this);
+        tabHeader->EventEmitter<IEventsTabHeader>::RegisterListener(this);
 
         tabbedChild->SetParent( GetHiddenTabsContainer() );
         if (!GetCurrentTabChild())

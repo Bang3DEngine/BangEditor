@@ -14,7 +14,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class UITabHeader;
 
 class UITabContainer : public GameObject,
-                       public EventListener<ITabHeaderListener>
+                       public EventListener<IEventsTabHeader>
 {
     GAMEOBJECT_EDITOR(UITabContainer);
 
@@ -41,7 +41,7 @@ private:
     GameObject *p_hiddenTabsContainer = nullptr;
     GameObject *p_currentTabContainer = nullptr;
 
-    // ITabHeaderListener
+    // IEventsTabHeader
     void OnTabHeaderClicked(UITabHeader *header) override;
 
     GameObject* GetHiddenTabsContainer() const;

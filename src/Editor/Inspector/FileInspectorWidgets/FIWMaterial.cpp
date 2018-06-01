@@ -49,44 +49,44 @@ void FIWMaterial::Init()
 
     p_albedoTextureInput = GameObject::Create<UIInputTexture>();
     p_albedoTextureInput->SetExtensions( Extensions::GetImageExtensions() );
-    p_albedoTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_albedoTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_albedoUvMultiplyInput = GameObject::Create<UIInputVector>();
     p_albedoUvMultiplyInput->SetSize(2);
-    p_albedoUvMultiplyInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_albedoUvMultiplyInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_albedoUvOffsetInput = GameObject::Create<UIInputVector>();
     p_albedoUvOffsetInput->SetSize(2);
-    p_albedoUvOffsetInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_albedoUvOffsetInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_normalMapTextureInput = GameObject::Create<UIInputTexture>();
     p_normalMapTextureInput->SetExtensions( Extensions::GetImageExtensions() );
-    p_normalMapTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_normalMapTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_normalMapUvMultiplyInput = GameObject::Create<UIInputVector>();
     p_normalMapUvMultiplyInput->SetSize(2);
-    p_normalMapUvMultiplyInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_normalMapUvMultiplyInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_normalMapUvOffsetInput = GameObject::Create<UIInputVector>();
     p_normalMapUvOffsetInput->SetSize(2);
-    p_normalMapUvOffsetInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_normalMapUvOffsetInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_normalMapMultiplyFactorInput = GameObjectFactory::CreateUIInputNumber();
-    p_normalMapMultiplyFactorInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_normalMapMultiplyFactorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_albedoColorInput = GameObject::Create<UIInputColor>();
-    p_albedoColorInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_albedoColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_receivesLightingCheckBox = GameObjectFactory::CreateUICheckBox();
-    p_receivesLightingCheckBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_receivesLightingCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_roughnessSlider = GameObjectFactory::CreateUISlider();
     p_roughnessSlider->SetMinMaxValues(0.0f, 1.0f);
-    p_roughnessSlider->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_roughnessSlider->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_metalnessSlider = GameObjectFactory::CreateUISlider();
     p_metalnessSlider->SetMinMaxValues(0.0f, 1.0f);
-    p_metalnessSlider->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_metalnessSlider->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_renderPassInput = GameObjectFactory::CreateUIComboBox();
     p_renderPassInput->AddItem("Scene",              SCAST<int>(RenderPass::SCENE) );
@@ -95,29 +95,29 @@ void FIWMaterial::Init()
     p_renderPassInput->AddItem("ScenePostProcess",   SCAST<int>(RenderPass::SCENE_POSTPROCESS) );
     p_renderPassInput->AddItem("CanvasPostProcess",  SCAST<int>(RenderPass::CANVAS_POSTPROCESS) );
     p_renderPassInput->AddItem("OverlayPostProcess", SCAST<int>(RenderPass::OVERLAY_POSTPROCESS) );
-    p_renderPassInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_renderPassInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_vertexShaderInput = GameObject::Create<UIInputFile>();
     p_vertexShaderInput->SetExtensions( Extensions::GetVertexShaderExtensions() );
-    p_vertexShaderInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_vertexShaderInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_fragmentShaderInput = GameObject::Create<UIInputFile>();
     p_fragmentShaderInput->SetExtensions( Extensions::GetFragmentShaderExtensions() );
-    p_fragmentShaderInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_fragmentShaderInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_lineWidthInput = GameObjectFactory::CreateUIInputNumber();
     p_lineWidthInput->SetMinMaxValues(1.0f, Math::Infinity<float>());
-    p_lineWidthInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_lineWidthInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_cullFaceInput = GameObjectFactory::CreateUIComboBox();
     p_cullFaceInput->AddItem("None",         SCAST<int>(GL::CullFaceExt::NONE) );
     p_cullFaceInput->AddItem("Back",         SCAST<int>(GL::CullFaceExt::BACK) );
     p_cullFaceInput->AddItem("Front",        SCAST<int>(GL::CullFaceExt::FRONT) );
     p_cullFaceInput->AddItem("FrontAndBack", SCAST<int>(GL::CullFaceExt::FRONT_AND_BACK) );
-    p_cullFaceInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_cullFaceInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_renderWireframe = GameObjectFactory::CreateUICheckBox();
-    p_renderWireframe->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_renderWireframe->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     GameObject *materialPreviewGo = GameObjectFactory::CreateUIGameObject();
     materialPreviewGo->GetRectTransform()->SetAnchors(Vector2::Zero);
@@ -188,7 +188,7 @@ void FIWMaterial::UpdateFromFileWhenChanged()
 
     GetMaterial()->ImportXMLFromFile( GetMaterial()->GetResourceFilepath() );
 
-    EventListener<IValueChangedListener>::SetReceiveEvents(false);
+    EventListener<IEventsValueChanged>::SetReceiveEvents(false);
 
     Texture2D *albedoTex = GetMaterial()->GetAlbedoTexture();
     p_albedoTextureInput->SetPath( albedoTex ? albedoTex->GetResourceFilepath() :
@@ -224,7 +224,7 @@ void FIWMaterial::UpdateFromFileWhenChanged()
     p_vertexShaderInput->SetPath  ( vs ? vs->GetResourceFilepath() : Path::Empty );
     p_fragmentShaderInput->SetPath( fs ? fs->GetResourceFilepath() : Path::Empty );
 
-    EventListener<IValueChangedListener>::SetReceiveEvents(true);
+    EventListener<IEventsValueChanged>::SetReceiveEvents(true);
 }
 
 Material *FIWMaterial::GetMaterial() const
@@ -232,7 +232,7 @@ Material *FIWMaterial::GetMaterial() const
     return m_materialRH.Get();
 }
 
-void FIWMaterial::OnValueChanged(Object *)
+void FIWMaterial::OnValueChanged(EventEmitter<IEventsValueChanged>*)
 {
     if (!GetMaterial()) { return; }
 

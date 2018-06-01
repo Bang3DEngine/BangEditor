@@ -29,9 +29,9 @@ void CIWTransform::InitInnerWidgets()
     p_rotIV   = GameObject::Create<UIInputVector>(3);
     p_scaleIV = GameObject::Create<UIInputVector>(3);
 
-    p_posIV->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_rotIV->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_scaleIV->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_posIV->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_rotIV->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_scaleIV->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     AddWidget("Position", p_posIV);
     AddWidget("Rotation", p_rotIV);
@@ -70,7 +70,7 @@ Transform *CIWTransform::GetTransform() const
     return SCAST<Transform*>( GetComponent() );
 }
 
-void CIWTransform::OnValueChanged(Object *object)
+void CIWTransform::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChanged(object);
 

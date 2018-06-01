@@ -34,8 +34,8 @@ void CIWUIImageRenderer::InitInnerWidgets()
     p_imageInput = GameObject::Create<UIInputTexture>();
     p_imageInput->SetExtensions( Extensions::GetImageExtensions() );
 
-    p_tintInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_imageInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_tintInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_imageInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     AddWidget("Image", p_imageInput);
     AddWidget("Tint",  p_tintInput);
@@ -61,7 +61,7 @@ UIImageRenderer *CIWUIImageRenderer::GetUIImageRenderer() const
     return SCAST<UIImageRenderer*>( GetComponent() );
 }
 
-void CIWUIImageRenderer::OnValueChanged(Object *object)
+void CIWUIImageRenderer::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChanged(object);
 

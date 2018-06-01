@@ -36,6 +36,7 @@
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/ExplorerItemFactory.h"
 #include "BangEditor/EditorTextureFactory.h"
+#include "BangEditor/IEventsProjectManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -108,7 +109,7 @@ Explorer::Explorer()
     p_iconSizeSlider->GetInputNumber()->SetDecimalPlaces(0);
     p_iconSizeSlider->SetMinMaxValues(64, 256);
     p_iconSizeSlider->GetInputNumber()->GetGameObject()->SetEnabled(false);
-    p_iconSizeSlider->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_iconSizeSlider->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     p_iconSizeSlider->SetValue(128);
 
     UIImageRenderer *eyeImg = GameObjectFactory::CreateUIImage();
@@ -158,11 +159,11 @@ Explorer::Explorer()
     SetCurrentPath( Paths::GetEngineAssetsDir() );
 
     Editor::GetInstance()->
-            EventEmitter<IEditorListener>::RegisterListener(this);
+            EventEmitter<IEventsEditor>::RegisterListener(this);
     ProjectManager::GetInstance()->
-            EventEmitter<IProjectManagerListener>::RegisterListener(this);
+            EventEmitter<IEventsProjectManager>::RegisterListener(this);
     EditorFileTracker::GetInstance()->GetFileTracker()->
-            EventEmitter<IFileTrackerListener>::RegisterListener(this);
+            EventEmitter<IEventsFileTracker>::RegisterListener(this);
 
     ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::D, "Duplicate"),
             [this](const Shortcut &shortcut){ OnShortcutPressed(shortcut); } );
@@ -276,14 +277,14 @@ void Explorer::Clear()
 
 void Explorer::OnProjectOpen(const Project *project)
 {
-    IProjectManagerListener::OnProjectOpen(project);
+    IEventsProjectManager::OnProjectOpen(project);
     SetRootPath(Paths::GetProjectAssetsDir());
     SetCurrentPath(Paths::GetProjectAssetsDir());
 }
 
 void Explorer::OnProjectClosed(const Project *project)
 {
-    IProjectManagerListener::OnProjectClosed(project);
+    IEventsProjectManager::OnProjectClosed(project);
     SetCurrentPath(Paths::GetEngineAssetsDir());
 }
 
@@ -342,7 +343,7 @@ void Explorer::AddItem(ExplorerItem *explorerItem)
             OnItemDoubleClicked(focusable);
         }
     });
-    explorerItem->EventEmitter<IExplorerItemListener>::RegisterListener(this);
+    explorerItem->EventEmitter<IEventsExplorerItem>::RegisterListener(this);
 
     p_items.PushBack(explorerItem);
     m_pathsToItem.Add(itemPath, explorerItem);
@@ -353,9 +354,9 @@ void Explorer::RemoveItem(const Path &itemPath)
     ExplorerItem *explorerItem = GetItemFromPath(itemPath);
     if (explorerItem)
     {
-        explorerItem->EventEmitter<IExplorerItemListener>::
+        explorerItem->EventEmitter<IEventsExplorerItem>::
                         UnRegisterListener(
-                            DCAST<EventListener<IExplorerItemListener>*>(this));
+                            DCAST<EventListener<IEventsExplorerItem>*>(this));
 
         p_items.Remove(explorerItem);
         m_pathsToItem.Remove(itemPath);
@@ -561,7 +562,7 @@ bool Explorer::IsInsideRootPath(const Path &path) const
     return path.GetAbsolute().BeginsWith( GetRootPath().GetAbsolute() );
 }
 
-void Explorer::OnValueChanged(Object*)
+void Explorer::OnValueChanged(EventEmitter<IEventsValueChanged>*)
 {
     p_explorerGridLayout->SetCellSize( Vector2i(p_iconSizeSlider->GetValue()) );
 }

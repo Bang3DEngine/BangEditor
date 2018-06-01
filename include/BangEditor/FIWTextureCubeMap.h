@@ -4,7 +4,7 @@
 #include "Bang/Path.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/TextureCubeMap.h"
-#include "Bang/IValueChangedListener.h"
+#include "Bang/IEventsValueChanged.h"
 
 #include "BangEditor/FileInspectorWidget.h"
 
@@ -18,7 +18,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class UIInputTexture;
 
 class FIWTextureCubeMap : public FileInspectorWidget,
-                          public EventListener<IValueChangedListener>
+                          public EventListener<IEventsValueChanged>
 {
     GAMEOBJECT_EDITOR(FIWTextureCubeMap);
 
@@ -46,8 +46,8 @@ private:
     // FileInspectorWidget
     void UpdateFromFileWhenChanged() override;
 
-    // IValueChangedListener
-    void OnValueChanged(Object *object) override;
+    // IEventsValueChanged
+    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
 };
 

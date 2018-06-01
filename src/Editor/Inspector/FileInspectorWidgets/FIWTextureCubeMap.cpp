@@ -29,32 +29,32 @@ void FIWTextureCubeMap::Init()
 
     p_topTextureInput = GameObject::Create<UIInputTexture>();
     p_topTextureInput->SetExtensions( Extensions::GetImageExtensions() );
-    p_topTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_topTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Top texture", p_topTextureInput);
 
     p_botTextureInput = GameObject::Create<UIInputTexture>();
     p_botTextureInput->SetExtensions( Extensions::GetImageExtensions() );
-    p_botTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_botTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Bot texture", p_botTextureInput);
 
     p_leftTextureInput = GameObject::Create<UIInputTexture>();
     p_leftTextureInput->SetExtensions( Extensions::GetImageExtensions() );
-    p_leftTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_leftTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Left texture", p_leftTextureInput);
 
     p_rightTextureInput = GameObject::Create<UIInputTexture>();
     p_rightTextureInput->SetExtensions( Extensions::GetImageExtensions() );
-    p_rightTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_rightTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Right texture", p_rightTextureInput);
 
     p_frontTextureInput = GameObject::Create<UIInputTexture>();
     p_frontTextureInput->SetExtensions( Extensions::GetImageExtensions() );
-    p_frontTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_frontTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Front texture", p_frontTextureInput);
 
     p_backTextureInput = GameObject::Create<UIInputTexture>();
     p_backTextureInput->SetExtensions( Extensions::GetImageExtensions() );
-    p_backTextureInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_backTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Back texture", p_backTextureInput);
 
     p_warningLabel = GameObjectFactory::CreateUILabel();
@@ -117,7 +117,7 @@ void FIWTextureCubeMap::UpdateFromFileWhenChanged()
     p_textureCubeMap = Resources::Load<TextureCubeMap>( GetPath() );
     if (!GetTextureCubeMap()) { return; }
 
-    EventListener<IValueChangedListener>::SetReceiveEvents(false);
+    EventListener<IEventsValueChanged>::SetReceiveEvents(false);
 
     TextureCubeMap *tcm = GetTextureCubeMap();
     const RH<Imageb> topImg   = tcm->GetImageResource(GL::CubeMapDir::TOP);
@@ -135,10 +135,10 @@ void FIWTextureCubeMap::UpdateFromFileWhenChanged()
 
     CheckValidity();
 
-    EventListener<IValueChangedListener>::SetReceiveEvents(true);
+    EventListener<IEventsValueChanged>::SetReceiveEvents(true);
 }
 
-void FIWTextureCubeMap::OnValueChanged(Object *object)
+void FIWTextureCubeMap::OnValueChanged(EventEmitter<IEventsValueChanged>*)
 {
     TextureCubeMap *tcm = GetTextureCubeMap();
     if (tcm)

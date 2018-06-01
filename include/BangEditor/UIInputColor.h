@@ -4,7 +4,7 @@
 #include "Bang/Vector4.h"
 #include "Bang/GameObject.h"
 #include "Bang/EventEmitter.h"
-#include "Bang/IValueChangedListener.h"
+#include "Bang/IEventsValueChanged.h"
 
 #include "BangEditor/BangEditor.h"
 
@@ -21,8 +21,8 @@ FORWARD class UIInputVector;
 FORWARD class ColorPickerReporter;
 
 class UIInputColor : public GameObject,
-                     public EventListener<IValueChangedListener>,
-                     public EventEmitter<IValueChangedListener>
+                     public EventListener<IEventsValueChanged>,
+                     public EventEmitter<IEventsValueChanged>
 {
     GAMEOBJECT_EDITOR(UIInputColor);
 
@@ -39,8 +39,8 @@ protected:
     // GameObject
     void Update() override;
 
-    // IValueChangedListener
-    void OnValueChanged(Object *object) override;
+    // IEventsValueChanged
+    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
     Color m_color = Color::Zero;

@@ -26,8 +26,8 @@ private:
 
     PointLight *GetPointLight() const;
 
-    // IValueChangedListener
-    void OnValueChanged(Object *object) override;
+    // IEventsValueChanged
+    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
     CIWPointLight() = default;
     virtual ~CIWPointLight() = default;

@@ -4,7 +4,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventListener.h"
-#include "Bang/IValueChangedListener.h"
+#include "Bang/IEventsValueChanged.h"
 
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ScenePlayer.h"
@@ -21,9 +21,9 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class UISceneToolbar : public GameObject,
-                       public EventEmitter<IValueChangedListener>,
-                       public EventListener<IScenePlayerListener>,
-                       public EventListener<IValueChangedListener>
+                       public EventEmitter<IEventsValueChanged>,
+                       public EventListener<IEventsScenePlayer>,
+                       public EventListener<IEventsValueChanged>
 {
     GAMEOBJECT_EDITOR(UISceneToolbar);
 
@@ -56,12 +56,12 @@ private:
 
     void SetRenderMode();
 
-    // IScenePlayerListener
+    // IEventsScenePlayer
     void OnPlayStateChanged(PlayState previousPlayState,
                             PlayState newPlayState) override;
 
-    // IValueChangedListener
-    void OnValueChanged(Object *object) override;
+    // IEventsValueChanged
+    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

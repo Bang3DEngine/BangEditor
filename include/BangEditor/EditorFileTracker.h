@@ -17,8 +17,8 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class BehaviourTracker;
 
-class EditorFileTracker : public EventListener<IFileTrackerListener>,
-                          public EventListener<IProjectManagerListener>
+class EditorFileTracker : public EventListener<IEventsFileTracker>,
+                          public EventListener<IEventsProjectManager>
 {
 public:
 	EditorFileTracker();
@@ -40,7 +40,7 @@ private:
     void OnPathModified(const Path &modifiedPath) override;
     void OnPathRemoved(const Path &removedPath) override;
 
-    // IProjectManagerListener
+    // IEventsProjectManager
     void OnProjectOpen(const Project *project) override;
     void OnProjectClosed(const Project *project) override;
 };

@@ -3,7 +3,7 @@
 
 #include "Bang/Path.h"
 #include "Bang/ResourceHandle.h"
-#include "Bang/IValueChangedListener.h"
+#include "Bang/IEventsValueChanged.h"
 
 #include "BangEditor/FileInspectorWidget.h"
 
@@ -20,7 +20,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class FIWTexture : public FileInspectorWidget,
-                   public EventListener<IValueChangedListener>
+                   public EventListener<IEventsValueChanged>
 {
     GAMEOBJECT_EDITOR(FIWTexture);
 
@@ -47,8 +47,8 @@ private:
     // FileInspectorWidget
     void UpdateFromFileWhenChanged() override;
 
-    // IValueChangedListener
-    void OnValueChanged(Object *object) override;
+    // IEventsValueChanged
+    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
     friend class FileInspectorWidgetFactory;
 };

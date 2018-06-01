@@ -5,7 +5,7 @@
 #include "Bang/Path.h"
 #include "Bang/UIButton.h"
 #include "Bang/FileTracker.h"
-#include "Bang/IValueChangedListener.h"
+#include "Bang/IEventsValueChanged.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/ExplorerItem.h"
@@ -23,11 +23,11 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class Explorer : public GameObject,
-                 public EventListener<IEditorListener>,
-                 public EventListener<IFileTrackerListener>,
-                 public EventListener<IValueChangedListener>,
-                 public EventListener<IExplorerItemListener>,
-                 public EventListener<IProjectManagerListener>
+                 public EventListener<IEventsEditor>,
+                 public EventListener<IEventsFileTracker>,
+                 public EventListener<IEventsValueChanged>,
+                 public EventListener<IEventsExplorerItem>,
+                 public EventListener<IEventsProjectManager>
 {
     GAMEOBJECT_EDITOR(Explorer);
 
@@ -48,7 +48,7 @@ public:
 
     void Clear();
 
-    // IProjectManagerListener
+    // IEventsProjectManager
     void OnProjectOpen(const Project *project) override;
     void OnProjectClosed(const Project *project) override;
 
@@ -60,7 +60,7 @@ public:
     // IEditorListener
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
 
-    // IExplorerItemListener
+    // IEventsExplorerItem
     virtual void OnRename(ExplorerItem *item) override;
     virtual void OnRemove(ExplorerItem *item) override;
     virtual void OnDuplicate(ExplorerItem *item) override;
@@ -98,8 +98,8 @@ private:
 
     bool IsInsideRootPath(const Path &path) const;
 
-    // IValueChangedListener
-    void OnValueChanged(Object *object) override;
+    // IEventsValueChanged
+    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
     // UIContextMenu
     virtual void OnCreateContextMenu(MenuItem *menuRootItem);

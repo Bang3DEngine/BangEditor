@@ -13,7 +13,7 @@ void CIWPointLight::InitInnerWidgets()
     CIWLight::InitInnerWidgets();
 
     p_rangeInput = GameObjectFactory::CreateUIInputNumber();
-    p_rangeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_rangeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     p_rangeInput->SetMinMaxValues(0.0f, Math::Infinity<float>());
     AddWidget("Range", p_rangeInput->GetGameObject());
 }
@@ -33,7 +33,7 @@ PointLight *CIWPointLight::GetPointLight() const
     return SCAST<PointLight*>( GetLight() );
 }
 
-void CIWPointLight::OnValueChanged(Object *object)
+void CIWPointLight::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     CIWLight::OnValueChanged(object);
 

@@ -34,7 +34,7 @@ MaterialPreviewFactory::~MaterialPreviewFactory()
 
     for (RH<Material> mat : m_materials)
     {
-        mat.Get()->EventEmitter<IMaterialChangedListener>::
+        mat.Get()->EventEmitter<IEventsMaterialChanged>::
                    UnRegisterListener(this);
     }
 }
@@ -65,7 +65,7 @@ RH<Texture2D> MaterialPreviewFactory::GetPreviewTextureFor_(Material *material)
         FillTextureWithPreview(previewTex, material);
 
         // Add to preview map
-        material->EventEmitter<IMaterialChangedListener>::RegisterListener(this);
+        material->EventEmitter<IEventsMaterialChanged>::RegisterListener(this);
         m_previewsMap.Add(material->GetGUID(), previewTexRH);
         m_materials.PushBack( RH<Material>(material) );
     }

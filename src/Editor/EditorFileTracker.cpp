@@ -3,6 +3,7 @@
 #include "Bang/File.h"
 #include "Bang/Paths.h"
 #include "Bang/Resources.h"
+#include "Bang/IEventsFileTracker.h"
 #include "Bang/ImportFilesManager.h"
 
 #include "BangEditor/EditorPaths.h"
@@ -24,9 +25,9 @@ EditorFileTracker::EditorFileTracker()
     GetFileTracker()->TrackPath( EditorPaths::GetEditorAssetsDir() );
 
     GetFileTracker()->
-            EventEmitter<IFileTrackerListener>::RegisterListener(this);
+            EventEmitter<IEventsFileTracker>::RegisterListener(this);
     ProjectManager::GetInstance()->
-           EventEmitter<IProjectManagerListener>::RegisterListener(this);
+           EventEmitter<IEventsProjectManager>::RegisterListener(this);
 }
 
 EditorFileTracker::~EditorFileTracker()

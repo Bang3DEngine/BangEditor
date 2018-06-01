@@ -21,20 +21,20 @@ void CIWPostProcessEffect::InitInnerWidgets()
     SetTitle("PostProcessEffect");
 
     p_priorityInput = GameObjectFactory::CreateUIInputNumber();
-    p_priorityInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_priorityInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     p_priorityInput->SetDecimalPlaces(0);
 
     p_fragmentShaderInput = GameObject::Create<UIInputFile>();
     p_fragmentShaderInput->SetExtensions(
                             Extensions::GetFragmentShaderExtensions() );
-    p_fragmentShaderInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_fragmentShaderInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_typeComboBox = GameObjectFactory::CreateUIComboBox();
     p_typeComboBox->AddItem("AfterScene",
                             SCAST<int>(PostProcessEffect::Type::AFTER_SCENE));
     p_typeComboBox->AddItem("AfterCanvas",
                             SCAST<int>(PostProcessEffect::Type::AFTER_CANVAS));
-    p_typeComboBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_typeComboBox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     AddWidget("Priority", p_priorityInput->GetGameObject());
     AddWidget("Shader", p_fragmentShaderInput);
@@ -55,7 +55,7 @@ PostProcessEffect *CIWPostProcessEffect::GetPostProcessEffect() const
     return SCAST<PostProcessEffect*>( GetComponent() );
 }
 
-void CIWPostProcessEffect::OnValueChanged(Object *object)
+void CIWPostProcessEffect::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChanged(object);
 

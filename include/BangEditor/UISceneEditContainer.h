@@ -6,8 +6,8 @@
 #include "Bang/SceneManager.h"
 #include "Bang/EventListener.h"
 #include "Bang/ResourceHandle.h"
-#include "Bang/IDestroyListener.h"
-#include "Bang/IDragDropListener.h"
+#include "Bang/IEventsDestroy.h"
+#include "Bang/IEventsDragDrop.h"
 
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneContainer.h"
@@ -21,9 +21,9 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class UISceneEditContainer : public UISceneContainer,
-                             public EventListener<IScenePlayerListener>,
-                             public EventListener<ISceneManagerListener>,
-                             public EventListener<IDragDropListener>
+                             public EventListener<IEventsScenePlayer>,
+                             public EventListener<IEventsSceneManager>,
+                             public EventListener<IEventsDragDrop>
 {
     GAMEOBJECT_EDITOR(UISceneEditContainer);
 
@@ -55,19 +55,19 @@ private:
     void ApplyDraggedMaterialToOveredGameObject();
     void RestoreDraggedMaterialToPreviousGameObjectOvered();
 
-    // IDestroyListener
-    virtual void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
+    // IEventsDestroy
+    virtual void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
-    // IDragDropListener
-    virtual void OnDragStarted(UIDragDroppable *dragDroppable) override;
-    virtual void OnDragUpdate(UIDragDroppable *dragDroppable) override;
-    virtual void OnDrop(UIDragDroppable *dragDroppable) override;
+    // IEventsDragDrop
+    virtual void OnDragStarted(EventEmitter<IEventsDragDrop> *dragDroppable) override;
+    virtual void OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDroppable) override;
+    virtual void OnDrop(EventEmitter<IEventsDragDrop> *dragDroppable) override;
 
-    // IScenePlayerListener
+    // IEventsScenePlayer
     void OnPlayStateChanged(PlayState previousPlayState,
                             PlayState newPlayState) override;
 
-    // ISceneManagerListener
+    // IEventsSceneManager
     void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
 };
 

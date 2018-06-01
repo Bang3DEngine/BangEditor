@@ -1,7 +1,7 @@
 #ifndef CIWTRANSFORM_H
 #define CIWTRANSFORM_H
 
-#include "Bang/IValueChangedListener.h"
+#include "Bang/IEventsValueChanged.h"
 
 #include "BangEditor/ComponentInspectorWidget.h"
 
@@ -29,8 +29,8 @@ protected:
 
     virtual bool CanBeRemovedFromContextMenu() const override;
 
-    // IValueChangedListener
-    void OnValueChanged(Object *object) override;
+    // IEventsValueChanged
+    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
     UIInputVector *p_posIV   = nullptr;

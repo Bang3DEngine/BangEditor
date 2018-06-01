@@ -6,9 +6,10 @@
 #include "Bang/GameObject.h"
 #include "Bang/SceneManager.h"
 #include "Bang/EventEmitter.h"
-#include "Bang/IDestroyListener.h"
+#include "Bang/IEventsDestroy.h"
 
 #include "BangEditor/BangEditor.h"
+#include "BangEditor/IEventsEditor.h"
 
 NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
@@ -17,20 +18,9 @@ NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class EditorSettings;
-
-class IEditorListener
-{
-    EVENTLISTENER_NS(IEditorListener);
-
-public:
-    virtual void OnGameObjectSelected(GameObject *selectedGameObject) { }
-    virtual void OnExplorerPathSelected(const Path &selectedPath) { }
-};
-
-class Editor : public EventEmitter<IEditorListener>,
-               public EventListener<ISceneManagerListener>,
-               public EventListener<IDestroyListener>
+class Editor : public EventEmitter<IEventsEditor>,
+               public EventListener<IEventsSceneManager>,
+               public EventListener<IEventsDestroy>
 {
 public:
     static GameObject *GetSelectedGameObject();
@@ -54,11 +44,11 @@ private:
 
     EditorSettings* GetEditorSettings() const;
 
-    // ISceneManagerListener
+    // IEventsSceneManager
     void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
 
-    // IDestroyListener
-    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
+    // IEventsDestroy
+    void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
     friend class Explorer;
     friend class EditorSettings;

@@ -67,7 +67,7 @@ Console::Console()
     toolBar->SetParent(mainVLGo);
     p_messageList->GetGameObject()->SetParent(mainVLGo);
 
-    Debug::GetInstance()->EventEmitter<IDebugListener>::RegisterListener(this);
+    Debug::GetInstance()->EventEmitter<IEventsDebug>::RegisterListener(this);
 }
 
 Console::~Console()

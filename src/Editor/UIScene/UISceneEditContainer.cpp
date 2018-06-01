@@ -30,9 +30,9 @@ USING_NAMESPACE_BANG_EDITOR
 UISceneEditContainer::UISceneEditContainer()
 {
     ScenePlayer::GetInstance()->
-            EventEmitter<IScenePlayerListener>::RegisterListener(this);
+            EventEmitter<IEventsScenePlayer>::RegisterListener(this);
     SceneManager::GetActive()->
-            EventEmitter<ISceneManagerListener>::RegisterListener(this);
+            EventEmitter<IEventsSceneManager>::RegisterListener(this);
 
     GameObject *cameraPreviewGo = GameObjectFactory::CreateUIGameObject();
     p_cameraPreviewImg = cameraPreviewGo->AddComponent<UIImageRenderer>();
@@ -206,10 +206,11 @@ void UISceneEditContainer::RestoreDraggedMaterialToPreviousGameObjectOvered()
     }
 }
 
-void UISceneEditContainer::OnDragStarted(UIDragDroppable *dragDroppable)
+void UISceneEditContainer::OnDragStarted(EventEmitter<IEventsDragDrop> *dd_)
 {
-    IDragDropListener::OnDragStarted(dragDroppable);
+    IEventsDragDrop::OnDragStarted(dd_);
 
+    UIDragDroppable *dragDroppable = DCAST<UIDragDroppable*>(dd_);
     ExplorerItem *expItem = DCAST<ExplorerItem*>(dragDroppable->GetGameObject());
     if (expItem)
     {
@@ -230,9 +231,9 @@ void UISceneEditContainer::OnDragStarted(UIDragDroppable *dragDroppable)
     }
 }
 
-void UISceneEditContainer::OnDragUpdate(UIDragDroppable *dragDroppable)
+void UISceneEditContainer::OnDragUpdate(EventEmitter<IEventsDragDrop> *dd_)
 {
-    IDragDropListener::OnDragUpdate(dragDroppable);
+    IEventsDragDrop::OnDragUpdate(dd_);
 
     if (m_currentMaterialBeingDragged)
     {
@@ -247,9 +248,9 @@ void UISceneEditContainer::OnDragUpdate(UIDragDroppable *dragDroppable)
     }
 }
 
-void UISceneEditContainer::OnDrop(UIDragDroppable *dragDroppable)
+void UISceneEditContainer::OnDrop(EventEmitter<IEventsDragDrop> *dd_)
 {
-    IDragDropListener::OnDrop(dragDroppable);
+    IEventsDragDrop::OnDrop(dd_);
 
     m_currentMaterialBeingDragged.Set(nullptr);
     m_meshRenderersToPreviousMaterials.Clear();
@@ -258,7 +259,7 @@ void UISceneEditContainer::OnDrop(UIDragDroppable *dragDroppable)
     edCam->AddRenderPass(RenderPass::OVERLAY);
 }
 
-void UISceneEditContainer::OnDestroyed(EventEmitter<IDestroyListener> *object)
+void UISceneEditContainer::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     UISceneContainer::OnDestroyed(object);
 

@@ -340,7 +340,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
     resultColor->GetGameObject()->SetParent(resultColorContainer->GetGameObject());
 
     class Handle : public GameObject,
-                   public EventEmitter<IValueChangedListener>
+                   public EventEmitter<IEventsValueChanged>
     {
     public:
         UIImageRenderer *p_img = nullptr;
@@ -389,8 +389,8 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
                                                    -Vector2::One, Vector2::One);
                 p_img->GetGameObject()->GetRectTransform()->
                                          SetAnchors(mouseCoordsAnchor);
-                EventEmitter<IValueChangedListener>::PropagateToListeners(
-                            &IValueChangedListener::OnValueChanged, this);
+                EventEmitter<IEventsValueChanged>::PropagateToListeners(
+                            &IEventsValueChanged::OnValueChanged, this);
             }
         }
 
@@ -400,7 +400,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
     handle->SetParent(colorPanelImg->GetGameObject());
 
     class Controller : public GameObject,
-                       public EventListener<IValueChangedListener>
+                       public EventListener<IEventsValueChanged>
     {
     public:
         Color m_pickedColorRGB;
@@ -416,9 +416,9 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
         UIImageRenderer *p_resultImg;
         ColorPickerReporter *p_colorPickerReporter;
 
-        void OnValueChanged(Object *object) override
+        void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override
         {
-            EventListener<IValueChangedListener>::SetReceiveEvents(false);
+            EventListener<IEventsValueChanged>::SetReceiveEvents(false);
 
             if (object == p_sliderHue)
             {
@@ -477,7 +477,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
             GL::Pop(GL::BindTarget::SHADER_PROGRAM);
 
             p_colorPickerReporter->SetPickedColor( m_pickedColorRGB );
-            EventListener<IValueChangedListener>::SetReceiveEvents(true);
+            EventListener<IEventsValueChanged>::SetReceiveEvents(true);
         }
 
         void OnDestroy() override
@@ -499,12 +499,12 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
     controller->m_pickedColorRGB      = initialColor;
     controller->m_pickedColorHSV      = initialColor.ToHSV();
     controller->p_colorPickerReporter = colorPickerReporter;
-    hueSlider->EventEmitter<IValueChangedListener>::RegisterListener(controller);
-    handle->EventEmitter<IValueChangedListener>::RegisterListener(controller);
-    sliderR->EventEmitter<IValueChangedListener>::RegisterListener(controller);
-    sliderG->EventEmitter<IValueChangedListener>::RegisterListener(controller);
-    sliderB->EventEmitter<IValueChangedListener>::RegisterListener(controller);
-    sliderA->EventEmitter<IValueChangedListener>::RegisterListener(controller);
+    hueSlider->EventEmitter<IEventsValueChanged>::RegisterListener(controller);
+    handle->EventEmitter<IEventsValueChanged>::RegisterListener(controller);
+    sliderR->EventEmitter<IEventsValueChanged>::RegisterListener(controller);
+    sliderG->EventEmitter<IEventsValueChanged>::RegisterListener(controller);
+    sliderB->EventEmitter<IEventsValueChanged>::RegisterListener(controller);
+    sliderA->EventEmitter<IEventsValueChanged>::RegisterListener(controller);
     controller->OnValueChanged(controller->p_sliderRGB_R); // Update controls
     controller->SetParent(scene);
 
@@ -518,8 +518,8 @@ void ColorPickerReporter::SetPickedColor(const Color &color)
     if (color != GetPickedColor())
     {
         m_pickedColor = color;
-        EventEmitter<IValueChangedListener>::PropagateToListeners(
-                    &IValueChangedListener::OnValueChanged, this);
+        EventEmitter<IEventsValueChanged>::PropagateToListeners(
+                    &IEventsValueChanged::OnValueChanged, this);
     }
 }
 

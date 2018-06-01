@@ -31,17 +31,17 @@ void CIWRenderer::InitInnerWidgets()
     SetTitle("Renderer");
 
     p_visibleCheckBox = GameObjectFactory::CreateUICheckBox();
-    p_visibleCheckBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_visibleCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_castsShadowsCheckBox = GameObjectFactory::CreateUICheckBox();
-    p_castsShadowsCheckBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_castsShadowsCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_receivesShadowsCheckBox = GameObjectFactory::CreateUICheckBox();
-    p_receivesShadowsCheckBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_receivesShadowsCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_materialInputFile = GameObject::Create<UIInputMaterial>();
     p_materialInputFile->SetExtensions({Extensions::GetMaterialExtension()});
-    p_materialInputFile->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_materialInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Visible", p_visibleCheckBox->GetGameObject());
     AddWidget("Casts Shadows", p_castsShadowsCheckBox->GetGameObject());
     AddWidget("Receives Shadows", p_receivesShadowsCheckBox->GetGameObject());
@@ -54,7 +54,7 @@ void CIWRenderer::UpdateFromReference()
 {
     ComponentInspectorWidget::UpdateFromReference();
 
-    EventListener<IValueChangedListener>::SetReceiveEvents(false);
+    EventListener<IEventsValueChanged>::SetReceiveEvents(false);
 
     p_visibleCheckBox->SetChecked( GetRenderer()->IsVisible() );
     p_castsShadowsCheckBox->SetChecked( GetRenderer()->GetCastsShadows() );
@@ -64,7 +64,7 @@ void CIWRenderer::UpdateFromReference()
     Path matPath = mat ? mat->GetResourceFilepath() : Path::Empty;
     p_materialInputFile->SetPath(matPath);
 
-    EventListener<IValueChangedListener>::SetReceiveEvents(true);
+    EventListener<IEventsValueChanged>::SetReceiveEvents(true);
 }
 
 Renderer *CIWRenderer::GetRenderer() const
@@ -72,7 +72,7 @@ Renderer *CIWRenderer::GetRenderer() const
     return SCAST<Renderer*>( GetComponent() );
 }
 
-void CIWRenderer::OnValueChanged(Object *object)
+void CIWRenderer::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChanged(object);
 

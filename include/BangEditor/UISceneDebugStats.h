@@ -26,7 +26,7 @@ public:
     // GameObject
     void Update() override;
 
-    // IObjectListener
+    // IEventsObject
     void OnEnabled() override;
 
 private:

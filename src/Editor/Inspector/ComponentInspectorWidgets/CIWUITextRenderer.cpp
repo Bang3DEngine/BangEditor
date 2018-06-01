@@ -43,12 +43,12 @@ void CIWUITextRenderer::InitInnerWidgets()
     p_fontFileInput = GameObject::Create<UIInputFile>();
     p_fontFileInput->SetExtensions( Extensions::GetTTFExtensions() );
 
-    p_colorInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_contentInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_sizeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_horizontalAlignmentInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_verticalAlignmentInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_fontFileInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_colorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_contentInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_sizeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_horizontalAlignmentInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_verticalAlignmentInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_fontFileInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     AddWidget("Content", p_contentInput->GetGameObject());
     AddWidget("Size",    p_sizeInput->GetGameObject());
@@ -93,7 +93,7 @@ UITextRenderer *CIWUITextRenderer::GetUITextRenderer() const
     return SCAST<UITextRenderer*>( GetComponent() );
 }
 
-void CIWUITextRenderer::OnValueChanged(Object *object)
+void CIWUITextRenderer::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChanged(object);
 

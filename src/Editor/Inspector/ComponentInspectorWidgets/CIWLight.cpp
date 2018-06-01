@@ -21,30 +21,30 @@ void CIWLight::InitInnerWidgets()
     SetTitle("Light");
 
     p_intensityInput = GameObjectFactory::CreateUIInputNumber();
-    p_intensityInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_intensityInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     p_intensityInput->SetMinMaxValues(0.0f, Math::Infinity<float>());
     AddWidget("Intensity", p_intensityInput->GetGameObject());
 
     p_colorInput = GameObject::Create<UIInputColor>();
-    p_colorInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_colorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Color", p_colorInput);
 
     p_shadowBiasInput = GameObjectFactory::CreateUISlider();
     p_shadowBiasInput->SetMinMaxValues(0.0f, 0.1f);
-    p_shadowBiasInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_shadowBiasInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Shadow bias", p_shadowBiasInput->GetGameObject());
 
     p_shadowTypeInput = GameObjectFactory::CreateUIComboBox();
     p_shadowTypeInput->AddItem("None", SCAST<int>( Light::ShadowType::NONE ) );
     p_shadowTypeInput->AddItem("Hard", SCAST<int>( Light::ShadowType::HARD ) );
     p_shadowTypeInput->AddItem("Soft", SCAST<int>( Light::ShadowType::SOFT ) );
-    p_shadowTypeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_shadowTypeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Shadow type", p_shadowTypeInput->GetGameObject());
 
     p_shadowMapSizeInput = GameObjectFactory::CreateUISlider();
     p_shadowMapSizeInput->SetMinMaxValues(1.0f, 4096);
     p_shadowMapSizeInput->GetInputNumber()->SetDecimalPlaces(0);
-    p_shadowMapSizeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_shadowMapSizeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Shadow map size", p_shadowMapSizeInput->GetGameObject());
 
     SetLabelsWidth(100);
@@ -86,7 +86,7 @@ Light *CIWLight::GetLight() const
     return SCAST<Light*>( GetComponent() );
 }
 
-void CIWLight::OnValueChanged(Object *object)
+void CIWLight::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChanged(object);
 

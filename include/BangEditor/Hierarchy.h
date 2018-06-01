@@ -4,8 +4,8 @@
 #include "Bang/UMap.h"
 #include "Bang/UIList.h"
 #include "Bang/SceneManager.h"
-#include "Bang/IUITreeListener.h"
-#include "Bang/IChildrenListener.h"
+#include "Bang/IEventsUITree.h"
+#include "Bang/IEventsChildren.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/HierarchyItem.h"
@@ -21,11 +21,11 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class HierarchyItem;
 
 class Hierarchy : public GameObject,
-                  public EventListener<IEditorListener>,
-                  public EventListener<IDestroyListener>,
-                  public EventListener<ISceneManagerListener>,
-                  public EventListener<IHierarchyItemListener>,
-                  public EventListener<IUITreeListener>
+                  public EventListener<IEventsEditor>,
+                  public EventListener<IEventsDestroy>,
+                  public EventListener<IEventsSceneManager>,
+                  public EventListener<IEventsHierarchyItem>,
+                  public EventListener<IEventsUITree>
 {
     GAMEOBJECT_EDITOR(Hierarchy);
 
@@ -40,14 +40,14 @@ public:
     // Object
     void Update() override;
 
-    // IChildrenListener
+    // IEventsChildren
     void OnChildAdded(GameObject *parent, GameObject *addedChild) override;
     void OnChildRemoved(GameObject *parent, GameObject *removedChild) override;
 
     // IEditorListener
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
 
-    // IHierarchyItemListener
+    // IEventsHierarchyItem
     virtual void OnCreateEmpty(HierarchyItem *item) override;
     virtual void OnRename(HierarchyItem *item) override;
     virtual void OnRemove(HierarchyItem *item) override;
@@ -66,11 +66,11 @@ public:
     // UIContextMenu
     void OnCreateContextMenu(MenuItem *menuRootItem);
 
-    // ISceneManagerListener
+    // IEventsSceneManager
     void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
 
-    // IDestroyListener
-    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
+    // IEventsDestroy
+    void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
     static Hierarchy *GetInstance();
 

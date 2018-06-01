@@ -6,22 +6,12 @@
 #include "Bang/EventListener.h"
 
 #include "BangEditor/BangEditor.h"
+#include "BangEditor/IEventsProjectManager.h"
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class Project;
-
-class IProjectManagerListener
-{
-    EVENTLISTENER_NS(IProjectManagerListener);
-
-public:
-    virtual void OnProjectOpen(const Project *project) { (void)project; }
-    virtual void OnProjectClosed(const Project *project) { (void)project; }
-};
-
-class ProjectManager : public EventEmitter<IProjectManagerListener>
+class ProjectManager : public EventEmitter<IEventsProjectManager>
 {
 public:
     ProjectManager();

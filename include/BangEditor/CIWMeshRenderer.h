@@ -30,8 +30,8 @@ private:
     CIWMeshRenderer() = default;
     virtual ~CIWMeshRenderer() = default;
 
-    // IValueChangedListener
-    void OnValueChanged(Object *object) override;
+    // IEventsValueChanged
+    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

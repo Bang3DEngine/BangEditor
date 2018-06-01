@@ -13,7 +13,7 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIContentSizeFitter.h"
-#include "Bang/IValueChangedListener.h"
+#include "Bang/IEventsValueChanged.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

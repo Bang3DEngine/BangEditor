@@ -92,11 +92,11 @@ UISceneToolbar::UISceneToolbar()
     p_renderModeInput->AddItem("Receives Shadows", SCAST<int>(UISceneImage::RenderMode::RECEIVES_SHADOWS));
     p_renderModeInput->AddItem("Depth",            SCAST<int>(UISceneImage::RenderMode::DEPTH));
     p_renderModeInput->AddItem("Selection",        SCAST<int>(UISceneImage::RenderMode::SELECTION));
-    p_renderModeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_renderModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_showDebugStatsCheckbox = GameObjectFactory::CreateUICheckBox();
     p_showDebugStatsCheckbox->SetChecked(false);
-    p_showDebugStatsCheckbox->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_showDebugStatsCheckbox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     GameObject *showDebugStatsTextGo = GameObjectFactory::CreateUIGameObject();
     UITextRenderer*showDebugStatsText =
@@ -110,7 +110,7 @@ UISceneToolbar::UISceneToolbar()
     showDebugStatsTextGo->SetParent(this);
     p_showDebugStatsCheckbox->GetGameObject()->SetParent(this);
 
-    ScenePlayer::GetInstance()->EventEmitter<IScenePlayerListener>::RegisterListener(this);
+    ScenePlayer::GetInstance()->EventEmitter<IEventsScenePlayer>::RegisterListener(this);
 }
 
 UISceneToolbar::~UISceneToolbar()
@@ -198,8 +198,8 @@ void UISceneToolbar::OnPlayStateChanged(PlayState,
     }
 }
 
-void UISceneToolbar::OnValueChanged(Object *object)
+void UISceneToolbar::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
-    EventEmitter<IValueChangedListener>::PropagateToListeners(
-                    &IValueChangedListener::OnValueChanged, object);
+    EventEmitter<IEventsValueChanged>::PropagateToListeners(
+                    &IEventsValueChanged::OnValueChanged, object);
 }

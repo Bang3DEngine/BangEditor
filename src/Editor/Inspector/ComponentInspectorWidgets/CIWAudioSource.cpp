@@ -25,25 +25,25 @@ void CIWAudioSource::InitInnerWidgets()
 
     p_audioClipFileInput = GameObject::Create<UIInputFile>();
     p_audioClipFileInput->SetExtensions( Extensions::GetAudioClipExtensions() );
-    p_audioClipFileInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_audioClipFileInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_rangeInput = GameObjectFactory::CreateUIInputNumber();
-    p_rangeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_rangeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     p_rangeInput->SetMinMaxValues(0.0f, Math::Infinity<float>());
 
     p_volumeSlider = GameObjectFactory::CreateUISlider();
     p_volumeSlider->SetMinMaxValues(0.0f, 5.0f);
-    p_volumeSlider->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_volumeSlider->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_pitchSlider = GameObjectFactory::CreateUISlider();
     p_pitchSlider->SetMinMaxValues(0.0f, 5.0f);
-    p_pitchSlider->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_pitchSlider->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_loopingCheckbox = GameObjectFactory::CreateUICheckBox();
-    p_loopingCheckbox->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_loopingCheckbox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_playOnStartCheckbox = GameObjectFactory::CreateUICheckBox();
-    p_playOnStartCheckbox->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_playOnStartCheckbox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_playStopButton = GameObjectFactory::CreateUIButton("Play");
     p_playStopButton->AddClickedCallback([this]() { OnPlayClicked(); });
@@ -89,7 +89,7 @@ void CIWAudioSource::OnPlayClicked()
     }
 }
 
-void CIWAudioSource::OnValueChanged(Object *object)
+void CIWAudioSource::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChanged(object);
 

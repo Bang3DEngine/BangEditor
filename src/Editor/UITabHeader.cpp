@@ -35,8 +35,8 @@ UITabHeader::UITabHeader()
     {
         if (clickType == ClickType::FULL)
         {
-            EventEmitter<ITabHeaderListener>::PropagateToListeners(
-                        &ITabHeaderListener::OnTabHeaderClicked, this);
+            EventEmitter<IEventsTabHeader>::PropagateToListeners(
+                        &IEventsTabHeader::OnTabHeaderClicked, this);
         }
     });
     p_focusable->SetCursorType(Cursor::Type::HAND);

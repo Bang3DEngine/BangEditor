@@ -3,7 +3,7 @@
 
 #include "Bang/Bang.h"
 #include "Bang/Texture2D.h"
-#include "Bang/IFocusListener.h"
+#include "Bang/IEventsFocus.h"
 #include "Bang/ResourceHandle.h"
 
 #include "BangEditor/BangEditor.h"
@@ -18,7 +18,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class UIInputFileWithPreview : public UIInputFile,
-                               public EventListener<IFocusListener>
+                               public EventListener<IEventsFocus>
 {
 public:
 	UIInputFileWithPreview();
@@ -32,8 +32,8 @@ private:
     UIImageRenderer *p_bigPreviewImg = nullptr;
 
     // IFocusable
-    virtual void OnMouseEnter(IFocusable *focusable) override;
-    virtual void OnMouseExit(IFocusable *focusable)  override;
+    virtual void OnMouseEnter(EventEmitter<IEventsFocus> *focusable) override;
+    virtual void OnMouseExit(EventEmitter<IEventsFocus> *focusable)  override;
 };
 
 NAMESPACE_BANG_EDITOR_END

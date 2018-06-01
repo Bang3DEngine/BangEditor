@@ -43,7 +43,7 @@ UIInputColor::UIInputColor()
     p_colorImage = GameObjectFactory::CreateUIImage();
 
     m_colorPickerReporter = new ColorPickerReporter();
-    m_colorPickerReporter->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    m_colorPickerReporter->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     RH<Texture2D> lensIcon = EditorTextureFactory::GetLensLittleIcon().Get();
     p_searchColorButton = GameObjectFactory::CreateUIButton("", lensIcon.Get());
@@ -74,7 +74,7 @@ void UIInputColor::Update()
     SetColor( m_colorPickerReporter->GetPickedColor() );
 }
 
-void UIInputColor::OnValueChanged(Object *object)
+void UIInputColor::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     // Dont do anything here, since this is being called from the
     // color picker window loop, and nasty things can happen
@@ -88,8 +88,8 @@ void UIInputColor::SetColor(const Color &color)
         p_colorImage->SetTint( GetColor() );
         m_colorPickerReporter->SetPickedColor( GetColor() );
 
-        EventEmitter<IValueChangedListener>::PropagateToListeners(
-                     &IValueChangedListener::OnValueChanged, this);
+        EventEmitter<IEventsValueChanged>::PropagateToListeners(
+                     &IEventsValueChanged::OnValueChanged, this);
     }
 
 }

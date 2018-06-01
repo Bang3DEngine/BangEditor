@@ -99,7 +99,7 @@ GameObject *ComponentInspectorWidget::CreateTitleGameObject()
 
     p_enabledCheckBox = GameObjectFactory::CreateUICheckBox();
     GameObject *enabledCheckBoxGo = p_enabledCheckBox->GetGameObject();
-    p_enabledCheckBox->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_enabledCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     enabledCheckBoxGo->SetEnabled( MustShowEnabledCheckbox() );
 
     iconGo->SetParent(titleHLGo);
@@ -115,7 +115,8 @@ bool ComponentInspectorWidget::CanBeRemovedFromContextMenu() const
     return true;
 }
 
-void ComponentInspectorWidget::OnValueChanged(Object *object)
+void ComponentInspectorWidget::OnValueChanged(
+                            EventEmitter<IEventsValueChanged> *object)
 {
     if (object == p_enabledCheckBox)
     {

@@ -52,8 +52,8 @@ void ScenePlayer::SetPlayState(PlayState playState)
         ScenePlayer *sp = ScenePlayer::GetInstance();
         sp->m_currentPlayState = playState;
 
-        sp->EventEmitter<IScenePlayerListener>::PropagateToListeners(
-                    &IScenePlayerListener::OnPlayStateChanged,
+        sp->EventEmitter<IEventsScenePlayer>::PropagateToListeners(
+                    &IEventsScenePlayer::OnPlayStateChanged,
                     previousPlayState,
                     sp->m_currentPlayState);
 

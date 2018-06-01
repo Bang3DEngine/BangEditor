@@ -3,7 +3,7 @@
 
 #include "Bang/Bang.h"
 #include "Bang/EventListener.h"
-#include "Bang/IDestroyListener.h"
+#include "Bang/IEventsDestroy.h"
 
 #include "BangEditor/Editor.h"
 
@@ -14,8 +14,8 @@ FORWARD class TransformGizmo;
 FORWARD class GameObjectSelectionGizmo;
 FORWARD class ComponentsSelectionGizmo;
 
-class SelectionGizmosManager : public EventListener<IEditorListener>,
-                               public EventListener<IDestroyListener>
+class SelectionGizmosManager : public EventListener<IEventsEditor>,
+                               public EventListener<IEventsDestroy>
 {
 public:
     SelectionGizmosManager();
@@ -40,8 +40,8 @@ private:
     // IEditorListener
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
 
-    // IDestroyListener
-    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
+    // IEventsDestroy
+    void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

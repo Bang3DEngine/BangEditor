@@ -1,7 +1,7 @@
 #ifndef CIWTEXTRENDERER_H
 #define CIWTEXTRENDERER_H
 
-#include "Bang/IValueChangedListener.h"
+#include "Bang/IEventsValueChanged.h"
 
 #include "BangEditor/ComponentInspectorWidget.h"
 
@@ -30,8 +30,8 @@ public:
 protected:
     UITextRenderer *GetUITextRenderer() const;
 
-    // IValueChangedListener
-    void OnValueChanged(Object *object) override;
+    // IEventsValueChanged
+    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
     UIInputText *p_contentInput = nullptr;

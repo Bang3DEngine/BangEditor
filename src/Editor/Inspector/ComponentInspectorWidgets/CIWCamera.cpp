@@ -24,21 +24,21 @@ void CIWCamera::InitInnerWidgets()
     SetTitle("Camera");
 
     p_zNearInput = GameObjectFactory::CreateUIInputNumber();
-    p_zNearInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_zNearInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("ZNear", p_zNearInput->GetGameObject());
 
     p_zFarInput = GameObjectFactory::CreateUIInputNumber();
-    p_zFarInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_zFarInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("ZFar", p_zFarInput->GetGameObject());
 
     p_orthoHeightInput = GameObjectFactory::CreateUIInputNumber();
-    p_orthoHeightInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_orthoHeightInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     p_orthoHeightInput->SetMinMaxValues(0.0f, Math::Infinity<float>());
     AddWidget("Ortho Height", p_orthoHeightInput->GetGameObject());
 
     p_fovInput = GameObjectFactory::CreateUISlider();
     p_fovInput->SetMinMaxValues(0.1f, 180.0f);
-    p_fovInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_fovInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("FOV", p_fovInput->GetGameObject());
 
     p_projectionModeInput = GameObjectFactory::CreateUIComboBox();
@@ -46,22 +46,22 @@ void CIWCamera::InitInnerWidgets()
                                    SCAST<int>(Camera::ProjectionMode::ORTHOGRAPHIC));
     p_projectionModeInput->AddItem("Perspective",
                                    SCAST<int>(Camera::ProjectionMode::PERSPECTIVE));
-    p_projectionModeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_projectionModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Projection Mode", p_projectionModeInput->GetGameObject());
 
     p_clearModeInput = GameObjectFactory::CreateUIComboBox();
     p_clearModeInput->AddItem("Color",  SCAST<int>(Camera::ClearMode::COLOR));
     p_clearModeInput->AddItem("SkyBox", SCAST<int>(Camera::ClearMode::SKY_BOX));
-    p_clearModeInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_clearModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Clear Mode", p_clearModeInput->GetGameObject());
 
     p_clearColorInput = GameObject::Create<UIInputColor>();
-    p_clearColorInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_clearColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Clear Color", p_clearColorInput);
 
     p_textureCubeMapInput = GameObject::Create<UIInputFile>();
     p_textureCubeMapInput->SetExtensions( {Extensions::GetTextureCubeMapExtension()} );
-    p_textureCubeMapInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_textureCubeMapInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("SkyBox", p_textureCubeMapInput);
 
     SetLabelsWidth(90);
@@ -128,7 +128,7 @@ void CIWCamera::LimitValues()
     p_zFarInput->SetMinMaxValues(GetCamera()->GetZNear(), Math::Infinity<float>());
 }
 
-void CIWCamera::OnValueChanged(Object *object)
+void CIWCamera::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChanged(object);
 

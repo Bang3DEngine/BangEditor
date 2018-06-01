@@ -34,7 +34,7 @@ UIInputVector::UIInputVector()
 
     for (int i = 0; i < 4; ++i)
     {
-        m_inputNumbers[i]->EventEmitter<IValueChangedListener>::RegisterListener(this);
+        m_inputNumbers[i]->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     }
 
     m_inputNumbers[0]->GetGameObject()->SetParent(this);
@@ -107,9 +107,9 @@ bool UIInputVector::HasFocus() const
            m_inputNumbers[2]->HasFocus() || m_inputNumbers[3]->HasFocus();
 }
 
-void UIInputVector::OnValueChanged(Object *object)
+void UIInputVector::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
-    EventEmitter<IValueChangedListener>::
-        PropagateToListeners(&IValueChangedListener::OnValueChanged, object);
+    EventEmitter<IEventsValueChanged>::
+        PropagateToListeners(&IEventsValueChanged::OnValueChanged, object);
 }
 

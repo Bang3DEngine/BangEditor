@@ -1,7 +1,7 @@
 #ifndef CIWRECTTRANSFORM_H
 #define CIWRECTTRANSFORM_H
 
-#include "Bang/IValueChangedListener.h"
+#include "Bang/IEventsValueChanged.h"
 
 #include "BangEditor/CIWTransform.h"
 
@@ -28,8 +28,8 @@ protected:
 
     RectTransform *GetRectTransform() const;
 
-    // IValueChangedListener
-    void OnValueChanged(Object *object) override;
+    // IEventsValueChanged
+    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
     // ComponentWidget
     bool MustShowEnabledCheckbox() const override;

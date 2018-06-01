@@ -3,8 +3,8 @@
 
 #include "Bang/UMap.h"
 #include "Bang/SceneManager.h"
-#include "Bang/IDestroyListener.h"
-#include "Bang/IComponentListener.h"
+#include "Bang/IEventsDestroy.h"
+#include "Bang/IEventsComponent.h"
 
 #include "BangEditor/Editor.h"
 
@@ -23,10 +23,10 @@ FORWARD class UIContextMenu;
 FORWARD class InspectorWidget;
 
 class Inspector : public GameObject,
-                  public EventListener<IEditorListener>,
-                  public EventListener<IDestroyListener>,
-                  public EventListener<IComponentListener>,
-                  public EventListener<ISceneManagerListener>
+                  public EventListener<IEventsEditor>,
+                  public EventListener<IEventsDestroy>,
+                  public EventListener<IEventsComponent>,
+                  public EventListener<IEventsSceneManager>
 {
     GAMEOBJECT_EDITOR(Inspector);
 
@@ -40,17 +40,17 @@ public:
 
     GameObject *GetCurrentGameObject() const;
 
-    // ISceneManagerListener
+    // IEventsSceneManager
     void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
 
-    // IDestroyListener
-    void OnDestroyed(EventEmitter<IDestroyListener> *destroyedObject) override;
+    // IEventsDestroy
+    void OnDestroyed(EventEmitter<IEventsDestroy> *destroyedObject) override;
 
     // IEditorListener
     void OnExplorerPathSelected(const Path &path) override;
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
 
-    // IComponentListener
+    // IEventsComponent
     void OnComponentAdded(Component *addedComponent, int index) override;
     void OnComponentRemoved(Component *removedComponent) override;
 

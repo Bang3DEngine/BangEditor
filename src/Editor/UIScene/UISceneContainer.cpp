@@ -48,9 +48,9 @@ UISceneContainer::UISceneContainer()
     GetSceneToolbar()->SetParent(this);
     p_sceneImage->SetParent(this);
 
-    GetSceneToolbar()->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    GetSceneToolbar()->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     p_sceneImage->GetRectTransform()->
-                  EventEmitter<ITransformListener>::RegisterListener(this);
+                  EventEmitter<IEventsTransform>::RegisterListener(this);
 }
 
 UISceneContainer::~UISceneContainer()
@@ -74,13 +74,13 @@ void UISceneContainer::SetScene(Scene *scene)
 {
     if (GetContainedScene())
     {
-        GetContainedScene()->EventEmitter<IDestroyListener>::UnRegisterListener(this);
+        GetContainedScene()->EventEmitter<IEventsDestroy>::UnRegisterListener(this);
     }
 
     p_containedScene = scene;
     if (GetContainedScene())
     {
-        GetContainedScene()->EventEmitter<IDestroyListener>::RegisterListener(this);
+        GetContainedScene()->EventEmitter<IEventsDestroy>::RegisterListener(this);
         p_sceneImage->SetSceneImageCamera( GetSceneCamera(GetContainedScene()) );
     }
 }
@@ -115,7 +115,7 @@ void UISceneContainer::OnTransformChanged()
     if (containerScene) { containerScene->InvalidateCanvas(); }
 }
 
-void UISceneContainer::OnValueChanged(Object*)
+void UISceneContainer::OnValueChanged(EventEmitter<IEventsValueChanged>*)
 {
     p_sceneImage->SetShowDebugStats( GetSceneToolbar()->IsShowDebugStatsChecked() );
 
@@ -124,7 +124,7 @@ void UISceneContainer::OnValueChanged(Object*)
     p_sceneImage->SetRenderMode(renderMode);
 }
 
-void UISceneContainer::OnDestroyed(EventEmitter<IDestroyListener>*)
+void UISceneContainer::OnDestroyed(EventEmitter<IEventsDestroy>*)
 {
     SetScene(nullptr);
 }

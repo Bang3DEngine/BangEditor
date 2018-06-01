@@ -32,9 +32,9 @@ protected:
 
     Camera *GetCamera() const;
 
-    // IValueChangedListener
+    // IEventsValueChanged
     void LimitValues();
-    virtual void OnValueChanged(Object *object) override;
+    virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
     UIInputNumber *p_zNearInput = nullptr;

@@ -1,7 +1,7 @@
 #ifndef CIWRENDERER_H
 #define CIWRENDERER_H
 
-#include "Bang/IValueChangedListener.h"
+#include "Bang/IEventsValueChanged.h"
 
 #include "BangEditor/ComponentInspectorWidget.h"
 
@@ -29,8 +29,8 @@ protected:
 
     Renderer *GetRenderer() const;
 
-    // IValueChangedListener
-    void OnValueChanged(Object *object) override;
+    // IEventsValueChanged
+    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
     UICheckBox *p_visibleCheckBox = nullptr;

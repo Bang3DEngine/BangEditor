@@ -43,7 +43,6 @@
 #include "BangEditor/EditSceneGameObjects.h"
 #include "BangEditor/UISceneEditContainer.h"
 #include "BangEditor/UIScenePlayContainer.h"
-#include "BangEditor/EditorDragDropManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -73,7 +72,6 @@ void EditorScene::Init()
     m_menuBar->SetParent(m_mainEditorVL);
 
     m_editSceneGameObjects = new EditSceneGameObjects();
-    m_editorDragDropManager = new EditorDragDropManager();
 
     GameObject *topHLGo = GameObjectFactory::CreateUIGameObject();
     topHLGo->AddComponent<UIHorizontalLayout>();
@@ -156,8 +154,8 @@ void EditorScene::Init()
     cam->RemoveRenderPass(RenderPass::OVERLAY_POSTPROCESS);
     SetCamera(cam);
 
-    ScenePlayer::GetInstance()->EventEmitter<IScenePlayerListener>::RegisterListener(this);
-    SceneManager::GetActive()->EventEmitter<ISceneManagerListener>::RegisterListener(this);
+    ScenePlayer::GetInstance()->EventEmitter<IEventsScenePlayer>::RegisterListener(this);
+    SceneManager::GetActive()->EventEmitter<IEventsSceneManager>::RegisterListener(this);
 
     ScenePlayer::StopScene();
 }
@@ -270,7 +268,7 @@ void EditorScene::SetOpenScene(Scene *openScene)
         p_openScene = openScene;
         if (GetOpenScene())
         {
-            GetOpenScene()->EventEmitter<IDestroyListener>::RegisterListener(this);
+            GetOpenScene()->EventEmitter<IEventsDestroy>::RegisterListener(this);
 
             BindOpenScene();
             GetOpenScene()->SetFirstFoundCamera();
@@ -360,11 +358,6 @@ EditSceneGameObjects *EditorScene::GetEditSceneGameObjects() const
     return m_editSceneGameObjects;
 }
 
-EditorDragDropManager *EditorScene::GetEditorDragDropManager() const
-{
-    return m_editorDragDropManager;
-}
-
 void EditorScene::PushGLViewport()
 {
     m_viewportsStack.push(GL::GetViewportRect());
@@ -399,7 +392,7 @@ void EditorScene::OnPlayStateChanged(PlayState previousPlayState,
     }
 }
 
-void EditorScene::OnDestroyed(EventEmitter<IDestroyListener> *object)
+void EditorScene::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     Scene::OnDestroyed(object);
 

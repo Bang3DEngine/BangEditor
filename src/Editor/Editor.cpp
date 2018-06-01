@@ -1,6 +1,7 @@
 #include "BangEditor/Editor.h"
 
 #include "Bang/AudioManager.h"
+#include "Bang/IEventsSceneManager.h"
 
 #include "BangEditor/EditorSettings.h"
 #include "BangEditor/EditorApplication.h"
@@ -24,7 +25,7 @@ Editor::~Editor()
 void Editor::Init()
 {
     SceneManager::GetActive()->
-                  EventEmitter<ISceneManagerListener>::RegisterListener(this);
+                  EventEmitter<IEventsSceneManager>::RegisterListener(this);
 }
 
 GameObject *Editor::GetSelectedGameObject()
@@ -39,7 +40,7 @@ void Editor::SelectGameObject(GameObject *selectedGameObject)
     if (ed) { ed->SelectGameObject_(selectedGameObject); }
 }
 
-void Editor::OnDestroyed(EventEmitter<IDestroyListener> *object)
+void Editor::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     if (GetSelectedGameObject() == object)
     {
@@ -59,12 +60,12 @@ void Editor::SelectGameObject_(GameObject *selectedGameObject)
         if (GetSelectedGameObject())
         {
             GetSelectedGameObject()->
-                    EventEmitter<IDestroyListener>::RegisterListener(this);
+                    EventEmitter<IEventsDestroy>::RegisterListener(this);
         }
 
         // Propagate event
-        EventEmitter<IEditorListener>::
-            PropagateToListeners(&EventListener<IEditorListener>::OnGameObjectSelected,
+        EventEmitter<IEventsEditor>::
+            PropagateToListeners(&EventListener<IEventsEditor>::OnGameObjectSelected,
                                  GetSelectedGameObject());
     }
 }
@@ -74,8 +75,8 @@ void Editor::OnPathSelected(const Path &path)
     Editor *ed = Editor::GetInstance(); ASSERT(ed);
     if (path.IsFile()) { Editor::SelectGameObject(nullptr); }
 
-    ed->EventEmitter<IEditorListener>::PropagateToListeners(
-                &IEditorListener::OnExplorerPathSelected, path);
+    ed->EventEmitter<IEventsEditor>::PropagateToListeners(
+                &IEventsEditor::OnExplorerPathSelected, path);
 }
 
 EditorSettings *Editor::GetEditorSettings() const

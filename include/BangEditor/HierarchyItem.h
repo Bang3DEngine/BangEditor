@@ -7,6 +7,7 @@
 #include "Bang/EventEmitter.h"
 
 #include "BangEditor/UIContextMenu.h"
+#include "BangEditor/IEventsHierarchyItem.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UITree;
@@ -17,26 +18,9 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class HierarchyItem;
-
-class IHierarchyItemListener
-{
-    EVENTLISTENER_NS(IHierarchyItemListener);
-
-public:
-    virtual void OnCreateEmpty(HierarchyItem *item) = 0;
-    virtual void OnRename(HierarchyItem *item) = 0;
-    virtual void OnRemove(HierarchyItem *item) = 0;
-    virtual void OnCopy(HierarchyItem *item) = 0;
-    virtual void OnCut(HierarchyItem *item) = 0;
-    virtual void OnPaste(HierarchyItem *item) = 0;
-    virtual void OnDuplicate(HierarchyItem *item) = 0;
-    virtual void OnCreatePrefab(HierarchyItem *item) = 0;
-};
-
 class HierarchyItem : public GameObject,
-                      public EventListener<INameListener>,
-                      public EventEmitter<IHierarchyItemListener>
+                      public EventListener<IEventsName>,
+                      public EventEmitter<IEventsHierarchyItem>
 {
     GAMEOBJECT_EDITOR(HierarchyItem);
 
@@ -60,7 +44,7 @@ public:
     void Duplicate();
     void CreatePrefab();
 
-    // INameListener
+    // IEventsName
     void OnNameChanged(GameObject *go, const String &oldName,
                        const String &newName) override;
 

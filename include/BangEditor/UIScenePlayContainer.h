@@ -12,8 +12,8 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class UIScenePlayContainer : public UISceneContainer,
-                             public EventListener<IScenePlayerListener>,
-                             public EventListener<ISceneManagerListener>
+                             public EventListener<IEventsScenePlayer>,
+                             public EventListener<IEventsSceneManager>
 {
     GAMEOBJECT_EDITOR(UIScenePlayContainer);
 
@@ -28,11 +28,11 @@ private:
     Camera* GetSceneCamera(Scene *scene) override;
     bool NeedsToRenderScene(Scene *scene) override;
 
-    // IScenePlayerListener
+    // IEventsScenePlayer
     void OnPlayStateChanged(PlayState previousPlayState,
                             PlayState newPlayState) override;
 
-    // ISceneManagerListener
+    // IEventsSceneManager
     void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
 };
 

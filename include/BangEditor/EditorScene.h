@@ -6,10 +6,11 @@
 #include "Bang/Scene.h"
 #include "Bang/AARect.h"
 #include "Bang/SceneManager.h"
-#include "Bang/IDestroyListener.h"
+#include "Bang/IEventsDestroy.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/ScenePlayer.h"
+#include "BangEditor/IEventsScenePlayer.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
@@ -38,11 +39,10 @@ FORWARD class EditorFileTracker;
 FORWARD class EditSceneGameObjects;
 FORWARD class UISceneEditContainer;
 FORWARD class UIScenePlayContainer;
-FORWARD class EditorDragDropManager;
 
 class EditorScene : public Scene,
-                    public EventListener<IScenePlayerListener>,
-                    public EventListener<ISceneManagerListener>
+                    public EventListener<IEventsScenePlayer>,
+                    public EventListener<IEventsSceneManager>
 {
     GAMEOBJECT_EDITOR(EditorScene);
 
@@ -71,7 +71,6 @@ public:
     UISceneEditContainer *GetSceneEditContainer() const;
     UIScenePlayContainer *GetScenePlayContainer() const;
     EditSceneGameObjects *GetEditSceneGameObjects() const;
-    EditorDragDropManager *GetEditorDragDropManager() const;
 
 protected:
     EditorScene();
@@ -85,7 +84,6 @@ private:
     EditorClipboard *m_editorClipboard = nullptr;
     SceneOpenerSaver *m_sceneOpenerSaver = nullptr;
     EditSceneGameObjects *m_editSceneGameObjects = nullptr;
-    EditorDragDropManager *m_editorDragDropManager = nullptr;
 
     Console *p_console     = nullptr;
     Explorer *p_explorer   = nullptr;
@@ -119,15 +117,15 @@ private:
 
     void SetOpenScene(Scene *openScene);
 
-    // ISceneManagerListener
+    // IEventsSceneManager
     void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
 
-    // IScenePlayerListener
+    // IEventsScenePlayer
     void OnPlayStateChanged(PlayState previousPlayState,
                             PlayState newPlayState) override;
 
-    // IDestroyListener
-    void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
+    // IEventsDestroy
+    void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
     friend class EditorApplication;
     friend class EditorSceneManager;

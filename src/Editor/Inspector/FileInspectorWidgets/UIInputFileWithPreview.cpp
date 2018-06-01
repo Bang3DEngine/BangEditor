@@ -32,7 +32,7 @@ UIInputFileWithPreview::UIInputFileWithPreview()
     bigPreviewImgGo->GetRectTransform()->TranslateLocal( Vector3(0, 0, -0.1f) );
 
     UIFocusable *previewFocusable = previewImgGo->AddComponent<UIFocusable>();
-    previewFocusable->EventEmitter<IFocusListener>::RegisterListener(this);
+    previewFocusable->EventEmitter<IEventsFocus>::RegisterListener(this);
 
     bigPreviewImgGo->SetParent(hlGo);
     bigPreviewImgGo->SetVisible(false);
@@ -61,14 +61,14 @@ void UIInputFileWithPreview::SetPath(const Path &path)
     }
 }
 
-void UIInputFileWithPreview::OnMouseEnter(IFocusable *focusable)
+void UIInputFileWithPreview::OnMouseEnter(EventEmitter<IEventsFocus> *focusable)
 {
-    IFocusListener::OnMouseEnter(focusable);
+    IEventsFocus::OnMouseEnter(focusable);
     p_bigPreviewImg->GetGameObject()->SetVisible(true);
 }
 
-void UIInputFileWithPreview::OnMouseExit(IFocusable *focusable)
+void UIInputFileWithPreview::OnMouseExit(EventEmitter<IEventsFocus> *focusable)
 {
-    IFocusListener::OnMouseExit(focusable);
+    IEventsFocus::OnMouseExit(focusable);
     p_bigPreviewImg->GetGameObject()->SetVisible(false);
 }

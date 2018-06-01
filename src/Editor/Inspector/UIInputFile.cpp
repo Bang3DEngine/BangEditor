@@ -79,15 +79,16 @@ UIInputFile::~UIInputFile()
 {
 }
 
-void UIInputFile::OnDragStarted(UIDragDroppable *dragDroppable)
+void UIInputFile::OnDragStarted(EventEmitter<IEventsDragDrop> *dd_)
 {
-    IDragDropListener::OnDragStarted(dragDroppable);
+    IEventsDragDrop::OnDragStarted(dd_);
 }
 
-void UIInputFile::OnDragUpdate(UIDragDroppable *dragDroppable)
+void UIInputFile::OnDragUpdate(EventEmitter<IEventsDragDrop> *dd_)
 {
-    IDragDropListener::OnDragUpdate(dragDroppable);
+    IEventsDragDrop::OnDragUpdate(dd_);
 
+    UIDragDroppable *dragDroppable = DCAST<UIDragDroppable*>(dd_);
     ExplorerItem *expItem = DCAST<ExplorerItem*>(dragDroppable->GetGameObject());
     if (expItem)
     {
@@ -108,11 +109,12 @@ void UIInputFile::OnDragUpdate(UIDragDroppable *dragDroppable)
     }
 }
 
-void UIInputFile::OnDrop(UIDragDroppable *dragDroppable)
+void UIInputFile::OnDrop(EventEmitter<IEventsDragDrop> *dd_)
 {
-    IDragDropListener::OnDrop(dragDroppable);
+    IEventsDragDrop::OnDrop(dd_);
 
     UICanvas *canvas = UICanvas::GetActive(this);
+    UIDragDroppable *dragDroppable = DCAST<UIDragDroppable*>(dd_);
     ExplorerItem *expItem = DCAST<ExplorerItem*>(dragDroppable->GetGameObject());
     if (expItem && canvas->IsMouseOver(p_pathInputText))
     {
@@ -138,8 +140,8 @@ void UIInputFile::SetPath(const Path &path)
 
         p_openFileInInspectorButton->SetBlocked( !GetPath().Exists() );
 
-        EventEmitter<IValueChangedListener>::PropagateToListeners(
-                &IValueChangedListener::OnValueChanged, this);
+        EventEmitter<IEventsValueChanged>::PropagateToListeners(
+                &IEventsValueChanged::OnValueChanged, this);
     }
 }
 

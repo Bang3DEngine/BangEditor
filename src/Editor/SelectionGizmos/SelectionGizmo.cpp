@@ -46,14 +46,14 @@ void SelectionGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
         if (GetReferencedGameObject())
         {
             GetReferencedGameObject()->
-                    EventEmitter<IDestroyListener>::UnRegisterListener(this);
+                    EventEmitter<IEventsDestroy>::UnRegisterListener(this);
         }
 
         p_referencedGameObject = referencedGameObject;
         if (GetReferencedGameObject())
         {
             GetReferencedGameObject()->
-                    EventEmitter<IDestroyListener>::RegisterListener(this);
+                    EventEmitter<IEventsDestroy>::RegisterListener(this);
         }
     }
 }
@@ -94,7 +94,7 @@ bool SelectionGizmo::GrabHasJustChanged() const
     return m_grabHasJustChanged;
 }
 
-void SelectionGizmo::OnDestroyed(EventEmitter<IDestroyListener> *object)
+void SelectionGizmo::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     ASSERT( !GetReferencedGameObject() || object == GetReferencedGameObject() );
     SetReferencedGameObject(nullptr);

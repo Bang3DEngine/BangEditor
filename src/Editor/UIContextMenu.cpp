@@ -56,7 +56,7 @@ void UIContextMenu::ShowMenu()
         {
             m_createContextMenuCallback(p_menu->GetRootItem());
         }
-        p_menu->EventEmitter<IDestroyListener>::RegisterListener(this);
+        p_menu->EventEmitter<IEventsDestroy>::RegisterListener(this);
         p_menu->SetParent( EditorSceneManager::GetEditorScene() );
     }
 
@@ -73,7 +73,7 @@ bool UIContextMenu::IsMenuBeingShown() const
 
 void UIContextMenu::AddButtonPart(GameObject *part)
 {
-    part->EventEmitter<IDestroyListener>::RegisterListener(this);
+    part->EventEmitter<IEventsDestroy>::RegisterListener(this);
     m_parts.PushBack(part);
 }
 
@@ -83,7 +83,7 @@ void UIContextMenu::SetCreateContextMenuCallback(
     m_createContextMenuCallback = createCallback;
 }
 
-void UIContextMenu::OnDestroyed(EventEmitter<IDestroyListener> *object)
+void UIContextMenu::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     m_parts.Remove( DCAST<GameObject*>(object) );
     if (p_menu && object == p_menu)
@@ -110,7 +110,7 @@ ContextMenu::ContextMenu()
     csf->SetVerticalSizeType(LayoutSizeType::PREFERRED);
 
     GetRootItem()->AddComponent<UILayoutIgnorer>();
-    GetRootItem()->EventEmitter<IDestroyListener>::RegisterListener(this);
+    GetRootItem()->EventEmitter<IEventsDestroy>::RegisterListener(this);
     GetRootItem()->SetDestroyOnClose(true);
     GetRootItem()->SetParent(this);
 
@@ -137,7 +137,7 @@ MenuItem *ContextMenu::GetRootItem() const
     return p_rootItem;
 }
 
-void ContextMenu::OnDestroyed(EventEmitter<IDestroyListener> *object)
+void ContextMenu::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     ASSERT(object == p_rootItem);
     GameObject::Destroy(this);

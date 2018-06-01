@@ -6,8 +6,10 @@
 #include "Bang/EventEmitter.h"
 #include "Bang/EventListener.h"
 
+#include "BangEditor/PlayState.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ShortcutManager.h"
+#include "BangEditor/IEventsScenePlayer.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
@@ -16,19 +18,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-enum class PlayState { JUST_BEFORE_PLAYING, PLAYING, PAUSED, EDITING };
-
-class IScenePlayerListener
-{
-    EVENTLISTENER_NS(IScenePlayerListener);
-
-public:
-    virtual void OnPlayStateChanged(PlayState previousPlayState,
-                                    PlayState newPlayState)
-    { (void)(previousPlayState); (void)(newPlayState); }
-};
-
-class ScenePlayer : public EventEmitter<IScenePlayerListener>
+class ScenePlayer : public EventEmitter<IEventsScenePlayer>
 {
 public:
     static void PlayScene();

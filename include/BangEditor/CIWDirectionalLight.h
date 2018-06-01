@@ -27,8 +27,8 @@ private:
 
     DirectionalLight *GetDirectionalLight() const;
 
-    // IValueChangedListener
-    void OnValueChanged(Object *object) override;
+    // IEventsValueChanged
+    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
     CIWDirectionalLight() = default;
     virtual ~CIWDirectionalLight() = default;

@@ -12,7 +12,7 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class BehaviourTracker : public EventListener<IFileTrackerListener>
+class BehaviourTracker : public EventListener<IEventsFileTracker>
 {
 public:
     BehaviourTracker();

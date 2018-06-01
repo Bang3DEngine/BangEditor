@@ -24,7 +24,7 @@ void CIWBehaviourContainer::InitInnerWidgets()
 
     p_sourceInputFile = GameObject::Create<UIInputFile>();
     p_sourceInputFile->SetExtensions(Extensions::GetSourceFileExtensions());
-    p_sourceInputFile->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_sourceInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Source", p_sourceInputFile);
 
     SetLabelsWidth(60);
@@ -42,7 +42,7 @@ void CIWBehaviourContainer::UpdateFromReference()
     }
 }
 
-void CIWBehaviourContainer::OnValueChanged(Object *object)
+void CIWBehaviourContainer::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChanged(object);
 

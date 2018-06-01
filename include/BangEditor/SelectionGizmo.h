@@ -3,7 +3,7 @@
 
 #include "Bang/GameObject.h"
 #include "Bang/EventListener.h"
-#include "Bang/IDestroyListener.h"
+#include "Bang/IEventsDestroy.h"
 
 #include "BangEditor/BangEditor.h"
 
@@ -15,7 +15,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class SelectionGizmo : public GameObject,
-                       public EventListener<IDestroyListener>
+                       public EventListener<IEventsDestroy>
 {
 public:
     enum class SelectionState { IDLE, OVER, GRABBED };
@@ -36,11 +36,11 @@ public:
     bool IsBeingGrabbed() const;
     bool GrabHasJustChanged() const;
 
-    // IObjectListener
+    // IEventsObject
     void OnDisabled() override;
 
-    // IDestroyListener
-    virtual void OnDestroyed(EventEmitter<IDestroyListener> *object) override;
+    // IEventsDestroy
+    virtual void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
 private:
     GameObject *p_referencedGameObject = nullptr;

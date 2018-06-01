@@ -22,11 +22,11 @@ void CIWRectTransform::InitInnerWidgets()
     p_marginRightTopInput = GameObject::Create<UIInputVector>(2);
     p_pivotPositionInput  = GameObject::Create<UIInputVector>(2);
 
-    p_anchorMinInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_anchorMaxInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_marginLeftBotInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_marginRightTopInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
-    p_pivotPositionInput->EventEmitter<IValueChangedListener>::RegisterListener(this);
+    p_anchorMinInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_anchorMaxInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_marginLeftBotInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_marginRightTopInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_pivotPositionInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     AddWidget("Anchor Min",       p_anchorMinInput);
     AddWidget("Anchor Max",       p_anchorMaxInput);
@@ -77,7 +77,7 @@ RectTransform *CIWRectTransform::GetRectTransform() const
     return SCAST<RectTransform*>( GetComponent() );
 }
 
-void CIWRectTransform::OnValueChanged(Object *object)
+void CIWRectTransform::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     CIWTransform::OnValueChanged(object);
 

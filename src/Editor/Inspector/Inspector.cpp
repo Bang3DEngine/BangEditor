@@ -19,7 +19,7 @@
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/UIRendererCacher.h"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/IDragDropListener.h"
+#include "Bang/IEventsDragDrop.h"
 #include "Bang/UIContentSizeFitter.h"
 
 #include "BangEditor/MenuBar.h"
@@ -114,11 +114,12 @@ Inspector::Inspector()
     p_contextMenu->AddButtonPart(this);
 
     // Add a bit of margin below...
-    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 40)->SetParent(
-                                                               GetWidgetsContainer());
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 40)->
+                        SetParent(GetWidgetsContainer());
 
-    Editor::GetInstance()->EventEmitter<IEditorListener>::RegisterListener(this);
-    SceneManager::GetActive()->EventEmitter<ISceneManagerListener>::RegisterListener(this);
+    Editor::GetInstance()->EventEmitter<IEventsEditor>::RegisterListener(this);
+    SceneManager::GetActive()->EventEmitter<IEventsSceneManager>::
+                               RegisterListener(this);
 }
 
 Inspector::~Inspector()
@@ -146,7 +147,7 @@ void Inspector::OnSceneLoaded(Scene*, const Path &)
     Clear();
 }
 
-void Inspector::OnDestroyed(EventEmitter<IDestroyListener>*)
+void Inspector::OnDestroyed(EventEmitter<IEventsDestroy>*)
 {
     Clear();
 }
@@ -240,11 +241,11 @@ void Inspector::SetGameObject(GameObject *go)
     if(!go || go->IsWaitingToBeDestroyed()) { return; }
 
     p_currentGameObject = go;
-    GetCurrentGameObject()->EventEmitter<IComponentListener>::RegisterListener(this);
+    GetCurrentGameObject()->EventEmitter<IEventsComponent>::RegisterListener(this);
 
     p_titleSeparator->SetEnabled(true);
     p_titleText->SetContent(go->GetName());
-    GetCurrentGameObject()->EventEmitter<IDestroyListener>::RegisterListener(this);
+    GetCurrentGameObject()->EventEmitter<IEventsDestroy>::RegisterListener(this);
 
     int i = 0;
     for (Component *comp : go->GetComponents())
@@ -293,14 +294,14 @@ void Inspector::SetCurrentWidgetBlocked(bool blocked)
 
     for (Object *obj : childrenAndChildrenComps)
     {
-        if (EventListener<IFocusListener> *focusListener =
-                DCAST<EventListener<IFocusListener>*>(obj))
+        if (EventListener<IEventsFocus> *focusListener =
+                DCAST<EventListener<IEventsFocus>*>(obj))
         {
             focusListener->SetReceiveEvents(!blocked);
         }
 
-        if (EventListener<IDragDropListener> *ddListener =
-                DCAST<EventListener<IDragDropListener>*>(obj))
+        if (EventListener<IEventsDragDrop> *ddListener =
+                DCAST<EventListener<IEventsDragDrop>*>(obj))
         {
             ddListener->SetReceiveEvents(!blocked);
         }
@@ -321,8 +322,8 @@ void Inspector::Clear()
 
     if (GetCurrentGameObject())
     {
-        GetCurrentGameObject()->EventEmitter<IDestroyListener>::UnRegisterListener(this);
-        GetCurrentGameObject()->EventEmitter<IComponentListener>::UnRegisterListener(this);
+        GetCurrentGameObject()->EventEmitter<IEventsDestroy>::UnRegisterListener(this);
+        GetCurrentGameObject()->EventEmitter<IEventsComponent>::UnRegisterListener(this);
         p_currentGameObject = nullptr;
     }
     m_currentOpenPath = Path::Empty;

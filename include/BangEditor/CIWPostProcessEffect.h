@@ -32,8 +32,8 @@ private:
 
     PostProcessEffect* GetPostProcessEffect() const;
 
-    // IValueChangedListener
-    virtual void OnValueChanged(Object *object) override;
+    // IEventsValueChanged
+    virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
     CIWPostProcessEffect() = default;
     virtual ~CIWPostProcessEffect() = default;
