@@ -4,6 +4,7 @@
 #include "Bang/Path.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/IEventsValueChanged.h"
+#include "Bang/IEventsTextureChanged.h"
 
 #include "BangEditor/FileInspectorWidget.h"
 
@@ -20,6 +21,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class FIWTexture : public FileInspectorWidget,
+                   public EventListener<IEventsTextureChanged>,
                    public EventListener<IEventsValueChanged>
 {
     GAMEOBJECT_EDITOR(FIWTexture);
@@ -43,9 +45,13 @@ private:
 	virtual ~FIWTexture();
 
     Texture2D *GetTexture() const;
+    void UpdateInputsFromTexture();
 
     // FileInspectorWidget
     void UpdateFromFileWhenChanged() override;
+
+    // IEventsTextureChanged
+    void OnTextureChanged(const Texture *changedTexture) override;
 
     // IEventsValueChanged
     void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;

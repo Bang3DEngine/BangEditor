@@ -51,7 +51,7 @@ void Editor::SelectGameObject_(GameObject *selectedGameObject, bool registerUndo
 
     if (selectedGameObject != GetSelectedGameObject())
     {
-        if (registerUndo && isSelectable)
+        if (false && registerUndo && isSelectable)
         {
             UndoRedoManager::PushAction(
                         new UndoRedoGameObjectSelection(GetSelectedGameObject(),

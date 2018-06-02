@@ -18,14 +18,16 @@ public:
 
     static void Clear();
     static void PushAction(UndoRedoAction *action);
+    static void PushActionsInSameStep(
+                        const Array<UndoRedoAction*> &actionsInSameStep);
 
     static UndoRedoManager* GetInstance();
 
 private:
     static constexpr int UndoListSize = 10000;
 
-    List<UndoRedoAction*> m_undoActions;
-    List<UndoRedoAction*> m_redoActions;
+    List< Array<UndoRedoAction*> > m_undoActions;
+    List< Array<UndoRedoAction*> > m_redoActions;
 
     // Only for debugging
     bool m_undoingOrRedoing = false;

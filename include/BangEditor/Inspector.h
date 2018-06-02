@@ -38,6 +38,7 @@ public:
     void OnStart() override;
     void Update() override;
 
+    void ShowSerializable(Serializable *serializable);
     void ShowPath(const Path &path);
     void ShowGameObject(GameObject *gameObject);
 

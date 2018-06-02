@@ -139,6 +139,34 @@ void Inspector::Update()
     GameObject::Update();
 }
 
+void Inspector::ShowSerializable(Serializable *serializable)
+{
+    if (!serializable)
+    {
+        Clear();
+    }
+    else if (Resource *res = DCAST<Resource*>(serializable))
+    {
+        Path resPath = res->GetResourceFilepath();
+        if (resPath.IsFile())
+        {
+            ShowPath(resPath);
+        }
+    }
+    else if (GameObject *gameObject = DCAST<GameObject*>(serializable))
+    {
+        ShowGameObject(gameObject);
+    }
+    else if (Component *comp = DCAST<Component*>(serializable))
+    {
+        ShowGameObject(comp->GetGameObject());
+    }
+    else
+    {
+        Clear();
+    }
+}
+
 void Inspector::ShowPath(const Path &path)
 {
     if (m_currentOpenPath != path)

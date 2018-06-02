@@ -4,6 +4,7 @@
 #include "Bang/Path.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/IEventsValueChanged.h"
+#include "Bang/IEventsMaterialChanged.h"
 
 #include "BangEditor/FileInspectorWidget.h"
 
@@ -23,6 +24,7 @@ FORWARD class UIInputVector;
 FORWARD class UIInputTexture;
 
 class FIWMaterial : public FileInspectorWidget,
+                    public EventListener<IEventsMaterialChanged>,
                     public EventListener<IEventsValueChanged>
 {
     GAMEOBJECT_EDITOR(FIWMaterial);
@@ -57,9 +59,13 @@ private:
     virtual ~FIWMaterial();
 
     Material *GetMaterial() const;
+    void UpdateInputsFromMaterial();
 
     // FileInspectorWidget
     void UpdateFromFileWhenChanged() override;
+
+    // IEventsMaterialChanged
+    void OnMaterialChanged(Material *changedMaterial) override;
 
     // IEventsValueChanged
     void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;

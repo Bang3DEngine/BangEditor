@@ -38,7 +38,7 @@ public:
     void Update() override;
 
     void ForceCheckFileChanges();
-    void SelectPath(const Path &path);
+    void SelectPath(const Path &path, bool registerUndo = true);
     void SetRootPath(const Path &rootPath);
     void SetCurrentPath(const Path &path);
 
@@ -87,8 +87,6 @@ private:
     void AddItem(ExplorerItem *explorerItem);
     void RemoveItem(const Path &itemPath);
     void GoDirectoryUp();
-
-    void SelectPath_(const Path &path, bool registerUndo);
 
     void DuplicatePathIntoDir(const Path &srcPath, const Path &dstDirPath);
 

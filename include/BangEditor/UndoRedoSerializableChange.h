@@ -26,6 +26,8 @@ private:
     Serializable *p_serializable = nullptr;
     XMLNode m_xmlBefore;
     XMLNode m_xmlAfter;
+
+    void SelectSerializableOrShowInInspectorIfPossible() const;
 };
 
 NAMESPACE_BANG_EDITOR_END

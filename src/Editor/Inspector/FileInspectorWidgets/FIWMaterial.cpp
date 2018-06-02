@@ -169,9 +169,10 @@ void FIWMaterial::Init()
 
 void FIWMaterial::UpdateFromFileWhenChanged()
 {
+    RH<Material> newMaterial;
     if (GetPath().IsFile()) // Typical material in path
     {
-        m_materialRH = Resources::Load<Material>( GetPath() );
+        newMaterial = Resources::Load<Material>( GetPath() );
     }
     else if (GetPath().GetDirectory().IsFile())
     {
@@ -180,14 +181,45 @@ void FIWMaterial::UpdateFromFileWhenChanged()
         if (containingAsset.HasExtension(Extensions::GetModelExtensions()))
         {
             RH<Model> model = Resources::Load<Model>(containingAsset);
-            m_materialRH = model.Get()->GetMaterialByName(GetPath().GetName());
+            newMaterial = model.Get()->GetMaterialByName(GetPath().GetName());
+        }
+    }
+
+    if (newMaterial.Get() != GetMaterial())
+    {
+        if (GetMaterial())
+        {
+            GetMaterial()->EventEmitter<IEventsMaterialChanged>::
+                           UnRegisterListener(this);
+        }
+
+        m_materialRH = newMaterial;
+        if (GetMaterial())
+        {
+            GetMaterial()->EventEmitter<IEventsMaterialChanged>::
+                           RegisterListener(this);
         }
     }
 
     if (!GetMaterial()) { return; }
 
     GetMaterial()->ImportXMLFromFile( GetMaterial()->GetResourceFilepath() );
+    UpdateInputsFromMaterial();
+}
 
+void FIWMaterial::OnMaterialChanged(Material *changedMaterial)
+{
+    ASSERT(changedMaterial == GetMaterial());
+    UpdateInputsFromMaterial();
+}
+
+Material *FIWMaterial::GetMaterial() const
+{
+    return m_materialRH.Get();
+}
+
+void FIWMaterial::UpdateInputsFromMaterial()
+{
     EventListener<IEventsValueChanged>::SetReceiveEvents(false);
 
     Texture2D *albedoTex = GetMaterial()->GetAlbedoTexture();
@@ -227,14 +259,14 @@ void FIWMaterial::UpdateFromFileWhenChanged()
     EventListener<IEventsValueChanged>::SetReceiveEvents(true);
 }
 
-Material *FIWMaterial::GetMaterial() const
-{
-    return m_materialRH.Get();
-}
-
 void FIWMaterial::OnValueChanged(EventEmitter<IEventsValueChanged>*)
 {
     if (!GetMaterial()) { return; }
+
+    GUID matGUID = GetMaterial()->GetGUID();
+    Path importPath = ImportFilesManager::GetImportFilepath(matGUID);
+    PushBeginUndoRedoFileChange(importPath);
+    PushBeginUndoRedoSerializableChange(GetMaterial());
 
     Path albedoTexPath = p_albedoTextureInput->GetPath();
     if (albedoTexPath.IsFile())
@@ -273,10 +305,10 @@ void FIWMaterial::OnValueChanged(EventEmitter<IEventsValueChanged>*)
     GetMaterial()->SetShaderProgram( ShaderProgramFactory::Get(vsPath,
                                                                fsPath) );
 
-    GUID matGUID = GetMaterial()->GetGUID();
-    Path importPath = ImportFilesManager::GetImportFilepath(matGUID);
     if (importPath.IsFile())
     {
         GetMaterial()->ExportXMLToFile(importPath);
     }
+
+    PushEndUndoRedoSerializableChangeAndFileChangeTogether();
 }

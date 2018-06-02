@@ -29,6 +29,6 @@ void UndoRedoExplorerSelect::Redo()
 void UndoRedoExplorerSelect::RestorePath(const Path &path)
 {
     Explorer *explorer = Explorer::GetInstance();
-    explorer->SelectPath_(path, false);
+    explorer->SelectPath(path, false);
 }
 

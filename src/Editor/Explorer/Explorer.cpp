@@ -200,12 +200,7 @@ void Explorer::ForceCheckFileChanges()
     EditorFileTracker::GetInstance()->GetFileTracker()->Update(true);
 }
 
-void Explorer::SelectPath(const Path &path)
-{
-    SelectPath_(path, true);
-}
-
-void Explorer::SelectPath_(const Path &path, bool registerUndo)
+void Explorer::SelectPath(const Path &path, bool registerUndo)
 {
     if (path != GetSelectedPath())
     {
@@ -330,7 +325,7 @@ void Explorer::OnGameObjectSelected(GameObject *selectedGameObject)
 {
     if (selectedGameObject)
     {
-        SelectPath_(Path::Empty, false);
+        SelectPath(Path::Empty, false);
     }
 }
 

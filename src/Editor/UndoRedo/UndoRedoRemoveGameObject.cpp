@@ -2,6 +2,8 @@
 
 #include "Bang/GameObject.h"
 
+#include "BangEditor/Editor.h"
+
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
@@ -24,6 +26,7 @@ UndoRedoRemoveGameObject::~UndoRedoRemoveGameObject()
 void UndoRedoRemoveGameObject::Undo()
 {
     p_removedGameObject->SetParent(p_previousParent, m_indexInPreviousParent);
+    Editor::SelectGameObject(p_removedGameObject, false);
 }
 
 void UndoRedoRemoveGameObject::Redo()

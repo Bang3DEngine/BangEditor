@@ -15,7 +15,7 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 
-#include "BangEditor/Inspector.h"
+#include "BangEditor/Explorer.h"
 #include "BangEditor/EditorDialog.h"
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/EditorTextureFactory.h"
@@ -64,8 +64,7 @@ UIInputFile::UIInputFile()
     p_openFileInInspectorButton->SetIcon(rightArrowIcon.Get(), Vector2i(16));
     p_openFileInInspectorButton->AddClickedCallback( [this]()
     {
-        Inspector *inspector = Inspector::GetActive();
-        if (inspector) { inspector->ShowPath( GetPath() ); }
+        Explorer::GetInstance()->SelectPath( GetPath(), true );
     });
 
     p_pathInputText->GetGameObject()->SetParent(this);

@@ -81,11 +81,8 @@ Texture2D *FIWTexture::GetTexture() const
     return p_texture.Get();
 }
 
-void FIWTexture::UpdateFromFileWhenChanged()
+void FIWTexture::UpdateInputsFromTexture()
 {
-    p_texture = Resources::Load<Texture2D>( GetPath() );
-    if (!GetTexture()) { return; }
-
     EventListener<IEventsValueChanged>::SetReceiveEvents(false);
 
     p_textureImageRend->SetImageTexture( GetTexture() );
@@ -103,10 +100,28 @@ void FIWTexture::UpdateFromFileWhenChanged()
     EventListener<IEventsValueChanged>::SetReceiveEvents(true);
 }
 
+void FIWTexture::UpdateFromFileWhenChanged()
+{
+    p_texture = Resources::Load<Texture2D>( GetPath() );
+    if (!GetTexture()) { return; }
+    UpdateInputsFromTexture();
+}
+
+void FIWTexture::OnTextureChanged(const Texture *changedTexture)
+{
+    ASSERT(changedTexture == GetTexture());
+    UpdateInputsFromTexture();
+}
+
 void FIWTexture::OnValueChanged(EventEmitter<IEventsValueChanged>*)
 {
     if (GetTexture())
     {
+        Path texImportPath = ImportFilesManager::GetImportFilepath(
+                                        GetTexture()->GetResourceFilepath());
+        PushBeginUndoRedoFileChange(texImportPath);
+        PushBeginUndoRedoSerializableChange(GetTexture());
+
         int filterMode = p_filterModeComboBox->GetSelectedValue();
         GetTexture()->SetFilterMode( SCAST<GL::FilterMode>(filterMode) );
 
@@ -120,12 +135,11 @@ void FIWTexture::OnValueChanged(EventEmitter<IEventsValueChanged>*)
                                                 GL::ColorFormat::RGBA8;
         GetTexture()->SetFormat(newColorFormat);
 
-        Path texImportPath = ImportFilesManager::GetImportFilepath(
-                                GetTexture()->GetResourceFilepath());
         if (texImportPath.IsFile())
         {
             GetTexture()->ExportXMLToFile(texImportPath);
         }
+        PushEndUndoRedoSerializableChangeAndFileChangeTogether();
     }
 }
 

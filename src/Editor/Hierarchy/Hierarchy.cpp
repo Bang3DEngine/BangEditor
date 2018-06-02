@@ -254,6 +254,7 @@ void Hierarchy::OnItemMoved(GOItem *item,
     GameObject *movedGo = GetGameObjectFromItem(item);
     if (!newParent) { newParent = movedGo->GetScene(); }
     movedGo->SetParent(newParent, newIndexInsideParent);
+    Editor::SelectGameObject(movedGo, false);
     EventListener<IEventsUITree>::SetReceiveEvents(true);
 }
 

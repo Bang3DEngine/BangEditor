@@ -2,6 +2,8 @@
 
 #include "Bang/GameObject.h"
 
+#include "BangEditor/Editor.h"
+
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
@@ -28,4 +30,5 @@ void UndoRedoCreateGameObject::Undo()
 void UndoRedoCreateGameObject::Redo()
 {
     p_createdGameObject->SetParent(p_parent, m_indexInParent);
+    Editor::SelectGameObject(p_createdGameObject, false);
 }

@@ -35,30 +35,47 @@ void UndoRedoManager::Clear()
     UndoRedoManager *urm = UndoRedoManager::GetInstance();
     ASSERT(urm);
 
-    for (UndoRedoAction *action : urm->m_undoActions)
+    for (const Array<UndoRedoAction*> &actions : urm->m_undoActions)
     {
-        delete action;
+        for (UndoRedoAction *action : actions)
+        {
+            delete action;
+        }
     }
-    for (UndoRedoAction *action : urm->m_redoActions)
+
+    for (const Array<UndoRedoAction*> &actions : urm->m_redoActions)
     {
-        delete action;
+        for (UndoRedoAction *action : actions)
+        {
+            delete action;
+        }
     }
+
     urm->m_undoActions.Clear();
     urm->m_redoActions.Clear();
 }
 
 void UndoRedoManager::PushAction(UndoRedoAction *action)
 {
+    PushActionsInSameStep( {action} );
+}
+
+void UndoRedoManager::PushActionsInSameStep(
+                            const Array<UndoRedoAction*> &actionsInSameStep)
+{
     UndoRedoManager *urm = UndoRedoManager::GetInstance();
     ASSERT(urm);
     ASSERT(!urm->m_undoingOrRedoing);
 
-    urm->m_undoActions.PushFront(action);
+    urm->m_undoActions.PushFront(actionsInSameStep);
     urm->m_redoActions.Clear();
 
     if (urm->m_undoActions.Size() > UndoListSize)
     {
-        delete urm->m_undoActions.Back();
+        for (UndoRedoAction *action : urm->m_undoActions.Back())
+        {
+            delete action;
+        }
         urm->m_undoActions.PopBack();
     }
 
@@ -85,31 +102,40 @@ void UndoRedoManager::OnUndoRedoPressed(bool undo)
     // Debug_Peek(m_undoActions);
     if (undo && m_undoActions.Size() >= 1)
     {
-        UndoRedoAction *action = m_undoActions.Front();
+        const Array<UndoRedoAction*> &actions = m_undoActions.Front();
 
         m_undoingOrRedoing = true;
-        action->Undo();
+        for (UndoRedoAction *action : actions)
+        {
+            action->Undo();
+        }
         m_undoingOrRedoing = false;
 
+        m_redoActions.PushFront(actions);
         m_undoActions.PopFront();
-        m_redoActions.PushFront(action);
 
         if (m_redoActions.Size() > UndoListSize)
         {
-            delete m_redoActions.Back();
+            for (UndoRedoAction *action : m_redoActions.Back())
+            {
+                delete action;
+            }
             m_redoActions.PopBack();
         }
     }
     else if (redo && m_redoActions.Size() >= 1)
     {
-        UndoRedoAction *action = m_redoActions.Front();
+        const Array<UndoRedoAction*> &actions = m_redoActions.Front();
 
         m_undoingOrRedoing = true;
-        action->Redo();
+        for (UndoRedoAction *action : actions)
+        {
+            action->Redo();
+        }
         m_undoingOrRedoing = false;
 
+        m_undoActions.PushFront(actions);
         m_redoActions.PopFront();
-        m_undoActions.PushFront(action);
     }
 }
 
