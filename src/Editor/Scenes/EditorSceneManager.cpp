@@ -29,13 +29,13 @@ EditorSceneManager::~EditorSceneManager()
 Scene *EditorSceneManager::GetOpenScene()
 {
     EditorSceneManager *esm = EditorSceneManager::GetActive();
-    return esm ? esm->_GetOpenScene() : nullptr;
+    return esm ? esm->GetOpenScene_() : nullptr;
 }
 
 EditorScene *EditorSceneManager::GetEditorScene()
 {
     EditorSceneManager *esm = EditorSceneManager::GetActive();
-    return esm ? esm->_GetEditorScene() : nullptr;
+    return esm ? esm->GetEditorScene_() : nullptr;
 }
 
 EditorBehaviourManager* EditorSceneManager::GetEditorBehaviourManager() const
@@ -43,13 +43,13 @@ EditorBehaviourManager* EditorSceneManager::GetEditorBehaviourManager() const
     return DCAST<EditorBehaviourManager*>( SceneManager::GetBehaviourManager() );
 }
 
-Scene *EditorSceneManager::_GetOpenScene() const
+Scene *EditorSceneManager::GetOpenScene_() const
 {
     EditorScene *edScene = GetEditorScene();
     return edScene ? edScene->GetOpenScene() : nullptr;
 }
 
-EditorScene *EditorSceneManager::_GetEditorScene() const
+EditorScene *EditorSceneManager::GetEditorScene_() const
 {
     return p_editorScene;
 }
@@ -66,9 +66,9 @@ BehaviourManager *EditorSceneManager::CreateBehaviourManager() const
 
 void EditorSceneManager::OnSceneLoaded(Scene *scene, const Path &sceneFilepath)
 {
-    if (_GetEditorScene())
+    if (GetEditorScene_())
     {
-        _GetEditorScene()->SetOpenScene( GetLoadedScene() );
+        GetEditorScene_()->SetOpenScene( GetLoadedScene() );
     }
     else // Retrieve editor scene
     {

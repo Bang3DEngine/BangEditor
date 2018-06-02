@@ -36,18 +36,11 @@ GameObject *Editor::GetSelectedGameObject()
     return ed ? ed->p_selectedGameObject : nullptr;
 }
 
-void Editor::SelectGameObject(GameObject *selectedGameObject)
+void Editor::SelectGameObject(GameObject *selectedGameObject, bool registerUndo)
 {
     Editor *ed = Editor::GetInstance();
-    if (ed) { ed->SelectGameObject_(selectedGameObject); }
-}
-
-void Editor::OnDestroyed(EventEmitter<IEventsDestroy> *object)
-{
-    if (GetSelectedGameObject() == object)
-    {
-        SelectGameObject_(nullptr);
-    }
+    ASSERT(ed);
+    ed->SelectGameObject_(selectedGameObject, registerUndo);
 }
 
 void Editor::SelectGameObject_(GameObject *selectedGameObject, bool registerUndo)
@@ -60,10 +53,9 @@ void Editor::SelectGameObject_(GameObject *selectedGameObject, bool registerUndo
     {
         if (registerUndo && isSelectable)
         {
-            UndoRedoGameObjectSelection *undoRedo =
-                    new UndoRedoGameObjectSelection(GetSelectedGameObject(),
-                                                    selectedGameObject);
-            UndoRedoManager::PushAction(undoRedo);
+            UndoRedoManager::PushAction(
+                        new UndoRedoGameObjectSelection(GetSelectedGameObject(),
+                                                        selectedGameObject));
         }
 
         if (isSelectable)
@@ -83,14 +75,23 @@ void Editor::SelectGameObject_(GameObject *selectedGameObject, bool registerUndo
     }
 }
 
+void Editor::OnDestroyed(EventEmitter<IEventsDestroy> *object)
+{
+    if (GetSelectedGameObject() == object)
+    {
+        Editor::SelectGameObject(nullptr, false);
+    }
+}
+
 void Editor::OnPathSelected(const Path &path)
 {
-    Editor *ed = Editor::GetInstance(); ASSERT(ed);
     if (path.IsFile())
     {
-        ed->SelectGameObject_(nullptr, false);
+        Editor::SelectGameObject(nullptr, false);
     }
 
+    Editor *ed = Editor::GetInstance();
+    ASSERT(ed);
     ed->EventEmitter<IEventsEditor>::PropagateToListeners(
                 &IEventsEditor::OnExplorerPathSelected, path);
 }
@@ -102,7 +103,7 @@ EditorSettings *Editor::GetEditorSettings() const
 
 void Editor::OnSceneLoaded(Scene*, const Path &)
 {
-    SelectGameObject(nullptr);
+    Editor::SelectGameObject(nullptr, false);
 }
 
 Editor *Editor::GetInstance()

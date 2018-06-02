@@ -29,8 +29,9 @@
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/EditorSceneManager.h"
-#include "BangEditor/UndoRedoHierarchyMoveGameObject.h"
-#include "BangEditor/UndoRedoHierarchyRemoveGameObject.h"
+#include "BangEditor/UndoRedoMoveGameObject.h"
+#include "BangEditor/UndoRedoCreateGameObject.h"
+#include "BangEditor/UndoRedoRemoveGameObject.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -182,8 +183,10 @@ void Hierarchy::OnCopy(HierarchyItem *item)
 
 void Hierarchy::OnCut(HierarchyItem *item)
 {
-    EditorClipboard::CopyGameObject( item->GetReferencedGameObject() );
-    GameObject::Destroy(item->GetReferencedGameObject());
+    GameObject *cutGo = item->GetReferencedGameObject();
+    UndoRedoManager::PushAction( new UndoRedoRemoveGameObject(cutGo) );
+    EditorClipboard::CopyGameObject(cutGo);
+    cutGo->SetParent(nullptr);
 }
 
 void Hierarchy::OnPaste(HierarchyItem *item)
@@ -204,8 +207,10 @@ void Hierarchy::OnPaste(HierarchyItem *item)
     clone->SetName( GameObjectFactory::GetGameObjectDuplicateName(original) );
     clone->SetParent(pastingOverGo, pastingOverIndex);
 
+    UndoRedoManager::PushAction( new UndoRedoCreateGameObject(clone) );
+
     // Auto-select
-    Editor::SelectGameObject(clone);
+    Editor::SelectGameObject(clone, false);
 }
 
 void Hierarchy::OnDuplicate(HierarchyItem *item)
@@ -241,11 +246,9 @@ void Hierarchy::OnItemMoved(GOItem *item,
     if (!oldParent) { oldParent = go->GetScene(); }
     if (!newParent) { newParent = go->GetScene(); }
 
-    UndoRedoHierarchyMoveGameObject *undoRedo =
-         new UndoRedoHierarchyMoveGameObject(go,
-                                             oldParent, oldIndexInsideParent,
-                                             newParent, newIndexInsideParent);
-    UndoRedoManager::PushAction(undoRedo);
+    UndoRedoManager::PushAction(
+                new UndoRedoMoveGameObject(go, oldParent, oldIndexInsideParent,
+                                           newParent, newIndexInsideParent) );
 
     EventListener<IEventsUITree>::SetReceiveEvents(false);
     GameObject *movedGo = GetGameObjectFromItem(item);
@@ -346,9 +349,7 @@ void Hierarchy::AddGameObject(GameObject *go)
 
 void Hierarchy::RemoveGameObject(GameObject *go)
 {
-    UndoRedoHierarchyRemoveGameObject *undoRedo =
-            new UndoRedoHierarchyRemoveGameObject(go);
-    UndoRedoManager::PushAction(undoRedo);
+    UndoRedoManager::PushAction( new UndoRedoRemoveGameObject(go) );
 
     // Fake remove to let undo/redo keep the reference to it...
     go->SetParent(nullptr);
@@ -361,7 +362,7 @@ void Hierarchy::RemoveGameObjectItem(HierarchyItem *item)
         GameObject *go = item->GetReferencedGameObject();
         GetUITree()->RemoveItem(item);
         m_gameObjectToItem.Remove(go);
-        Editor::GetInstance()->SelectGameObject_(nullptr, false);
+        Editor::SelectGameObject(nullptr, false);
     }
 }
 

@@ -1,5 +1,5 @@
-#ifndef UNDOREDOHIERARCHYREMOVEGAMEOBJECT_H
-#define UNDOREDOHIERARCHYREMOVEGAMEOBJECT_H
+#ifndef UNDOREDOREMOVEGAMEOBJECT_H
+#define UNDOREDOREMOVEGAMEOBJECT_H
 
 #include "Bang/Bang.h"
 
@@ -9,11 +9,11 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class UndoRedoHierarchyRemoveGameObject : public UndoRedoAction
+class UndoRedoRemoveGameObject : public UndoRedoAction
 {
 public:
-    UndoRedoHierarchyRemoveGameObject(GameObject *removedGameObject);
-    virtual ~UndoRedoHierarchyRemoveGameObject();
+    UndoRedoRemoveGameObject(GameObject *removedGameObject);
+    virtual ~UndoRedoRemoveGameObject();
 
     void Undo() override;
     void Redo() override;
@@ -26,5 +26,5 @@ private:
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // UNDOREDOHIERARCHYREMOVEGAMEOBJECT_H
+#endif // UNDOREDOREMOVEGAMEOBJECT_H
 

@@ -19,11 +19,11 @@ UndoRedoGameObjectSelection::~UndoRedoGameObjectSelection()
 
 void UndoRedoGameObjectSelection::Undo()
 {
-    Editor::GetInstance()->SelectGameObject_(p_previousSelectedGameObject, false);
+    Editor::GetInstance()->SelectGameObject(p_previousSelectedGameObject, false);
 }
 
 void UndoRedoGameObjectSelection::Redo()
 {
-    Editor::GetInstance()->SelectGameObject_(p_newSelectedGameObject, false);
+    Editor::GetInstance()->SelectGameObject(p_newSelectedGameObject, false);
 }
 

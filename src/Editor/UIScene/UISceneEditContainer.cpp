@@ -81,9 +81,9 @@ void UISceneEditContainer::HandleSelection()
             GameObject *selectedGameObject = Selection::GetOveredGameObject(cam);
             if (selectedGameObject)
             {
-                Editor::SelectGameObject(selectedGameObject);
+                Editor::SelectGameObject(selectedGameObject, true);
             }
-            else { Editor::SelectGameObject(nullptr); }
+            else { Editor::SelectGameObject(nullptr, true); }
         }
     }
 }

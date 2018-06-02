@@ -32,6 +32,7 @@
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 #include "BangEditor/FileInspectorWidgetFactory.h"
+#include "BangEditor/UndoRedoSerializableChange.h"
 #include "BangEditor/ComponentInspectorWidgetFactory.h"
 
 USING_NAMESPACE_BANG
@@ -205,20 +206,37 @@ void Inspector::OnCreateContextMenu(MenuItem *menuRootItem)
 {
     menuRootItem->SetFontSize(12);
 
-    if (GetCurrentGameObject())
+    GameObject *currentGameObject = GetCurrentGameObject();
+    if (currentGameObject)
     {
-        MenuItem *addComp = menuRootItem->AddItem("Add Component");
-        MenuBar::CreateComponentsMenuInto(addComp);
-        addComp->SetSelectedCallback([this](MenuItem*){});
+        {
+            XMLNode undoXMLBefore = currentGameObject->GetXMLInfo();
+
+            MenuItem *addComp = menuRootItem->AddItem("Add Component");
+            MenuBar::CreateComponentsMenuInto(addComp);
+            addComp->SetSelectedCallback([this](MenuItem*){});
+
+            XMLNode currentXML = currentGameObject->GetXMLInfo();
+            UndoRedoManager::PushAction(
+                    new UndoRedoSerializableChange(currentGameObject,
+                                                   undoXMLBefore, currentXML) );
+        }
 
         // menuRootItem->AddSeparator();
 
         MenuItem *paste = menuRootItem->AddItem("Paste");
-        paste->SetSelectedCallback([this](MenuItem*)
+        paste->SetSelectedCallback([this, currentGameObject](MenuItem*)
         {
+            XMLNode undoXMLBefore = currentGameObject->GetXMLInfo();
+
             Component *copiedComp = EditorClipboard::GetCopiedComponent();
             Component *newComponent = copiedComp->Clone();
             GetCurrentGameObject()->AddComponent(newComponent);
+
+            XMLNode currentXML = currentGameObject->GetXMLInfo();
+            UndoRedoManager::PushAction(
+                new UndoRedoSerializableChange(currentGameObject,
+                                               undoXMLBefore, currentXML) );
         });
         paste->SetOverAndActionEnabled( (EditorClipboard::HasCopiedComponent()) );
     }

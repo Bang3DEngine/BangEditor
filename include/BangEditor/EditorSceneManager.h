@@ -31,8 +31,8 @@ public:
 protected:
     EditorScene *p_editorScene = nullptr;
 
-    Scene *_GetOpenScene() const;
-    EditorScene *_GetEditorScene() const;
+    Scene *GetOpenScene_() const;
+    EditorScene *GetEditorScene_() const;
 
     static void SetActiveScene(Scene *activeScene);
 

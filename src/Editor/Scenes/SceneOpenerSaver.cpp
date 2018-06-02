@@ -10,6 +10,7 @@
 #include "BangEditor/MenuBar.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/UndoRedoManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -216,6 +217,7 @@ bool SceneOpenerSaver::OpenSceneInEditor(const Path &scenePath)
 
     if (CloseScene())
     {
+        UndoRedoManager::Clear();
         SceneManager::LoadScene(scenePath, false);
         m_currentOpenScenePath = scenePath;
         m_isCurrentSceneSaved = true;

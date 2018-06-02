@@ -1,12 +1,11 @@
-#include "BangEditor/UndoRedoHierarchyRemoveGameObject.h"
+#include "BangEditor/UndoRedoRemoveGameObject.h"
 
 #include "Bang/GameObject.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-UndoRedoHierarchyRemoveGameObject::
-            UndoRedoHierarchyRemoveGameObject(GameObject *removedGameObject)
+UndoRedoRemoveGameObject::UndoRedoRemoveGameObject(GameObject *removedGameObject)
 {
     p_removedGameObject = removedGameObject;
     p_previousParent = p_removedGameObject->GetParent();
@@ -14,7 +13,7 @@ UndoRedoHierarchyRemoveGameObject::
                               IndexOf(p_removedGameObject);
 }
 
-UndoRedoHierarchyRemoveGameObject::~UndoRedoHierarchyRemoveGameObject()
+UndoRedoRemoveGameObject::~UndoRedoRemoveGameObject()
 {
     if (!p_removedGameObject->GetParent())
     {
@@ -22,12 +21,12 @@ UndoRedoHierarchyRemoveGameObject::~UndoRedoHierarchyRemoveGameObject()
     }
 }
 
-void UndoRedoHierarchyRemoveGameObject::Undo()
+void UndoRedoRemoveGameObject::Undo()
 {
     p_removedGameObject->SetParent(p_previousParent, m_indexInPreviousParent);
 }
 
-void UndoRedoHierarchyRemoveGameObject::Redo()
+void UndoRedoRemoveGameObject::Redo()
 {
     p_removedGameObject->SetParent(nullptr);
 }

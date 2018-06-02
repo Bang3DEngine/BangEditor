@@ -130,14 +130,18 @@ void ComponentInspectorWidget::OnValueChangedCIW(
 void ComponentInspectorWidget::OnValueChanged(
                             EventEmitter<IEventsValueChanged> *object)
 {
+    XMLNode undoXMLBefore;
     if (GetComponent())
     {
-        m_undoXMLBefore = GetComponent()->GetXMLInfo();
+        undoXMLBefore = GetComponent()->GetXMLInfo();
     }
 
     OnValueChangedCIW(object);
 
-    PushCurrentStateToUndoRedoIfAnyChange();
+    if (GetComponent())
+    {
+        PushCurrentStateToUndoRedoIfAnyChangeForComponent(undoXMLBefore);
+    }
 }
 
 RH<Texture2D> ComponentInspectorWidget::GetComponentIconTexture() const
@@ -150,6 +154,30 @@ RH<Texture2D> ComponentInspectorWidget::GetComponentIconTexture() const
     return EditorTextureFactory::GetCubeIcon();
 }
 
+void ComponentInspectorWidget::PushCurrentStateToUndoRedoIfAnyChangeForComponent(
+                                                const XMLNode &undoXMLBefore)
+{
+    XMLNode currentXML = GetComponent()->GetXMLInfo();
+    if (currentXML.ToString() != undoXMLBefore.ToString())
+    {
+        UndoRedoManager::PushAction( new UndoRedoSerializableChange(GetComponent(),
+                                                                    undoXMLBefore,
+                                                                    currentXML) );
+    }
+}
+
+void ComponentInspectorWidget::PushCurrentStateToUndoRedoIfAnyChangeForGameObject(
+                                                const XMLNode &undoXMLBefore)
+{
+    GameObject *go = GetComponent()->GetGameObject();
+    XMLNode currentXML = go->GetXMLInfo();
+    if (currentXML.ToString() != undoXMLBefore.ToString())
+    {
+        UndoRedoManager::PushAction(
+                new UndoRedoSerializableChange(go, undoXMLBefore, currentXML) );
+    }
+}
+
 void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
 {
     menuRootItem->SetFontSize(12);
@@ -157,36 +185,46 @@ void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
     MenuItem *remove = menuRootItem->AddItem("Remove");
     remove->SetSelectedCallback([this](MenuItem*)
     {
+        XMLNode undoXMLBefore = GetComponent()->GetGameObject()->GetXMLInfo();
         GameObject *go = GetComponent()->GetGameObject();
         go->RemoveComponent(GetComponent());
+        PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoXMLBefore);
     });
     menuRootItem->AddSeparator();
 
     MenuItem *copy = menuRootItem->AddItem("Copy");
     copy->SetSelectedCallback([this](MenuItem*)
-    { EditorClipboard::CopyComponent( GetComponent() ); });
+    {
+        EditorClipboard::CopyComponent( GetComponent() );
+    });
 
     MenuItem *cut = menuRootItem->AddItem("Cut");
     cut->SetSelectedCallback([this](MenuItem*)
     {
+        XMLNode undoXMLBefore = GetComponent()->GetGameObject()->GetXMLInfo();
         EditorClipboard::CopyComponent( GetComponent() );
         Component::Destroy( GetComponent() );
+        PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoXMLBefore);
     });
 
     MenuItem *paste = menuRootItem->AddItem("Paste");
     paste->SetSelectedCallback([this](MenuItem*)
     {
+        XMLNode undoXMLBefore = GetComponent()->GetGameObject()->GetXMLInfo();
         Component *copiedComp = EditorClipboard::GetCopiedComponent();
         Component *newComponent = copiedComp->Clone();
         GetInspectedGameObject()->AddComponent(newComponent);
+        PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoXMLBefore);
     });
     paste->SetOverAndActionEnabled( (EditorClipboard::HasCopiedComponent()) );
 
     MenuItem *pasteValues = menuRootItem->AddItem("Paste values");
     pasteValues->SetSelectedCallback([this](MenuItem*)
     {
+        XMLNode undoXMLBefore = GetComponent()->GetXMLInfo();
         Component *copiedComp = EditorClipboard::GetCopiedComponent();
         copiedComp->CloneInto( GetComponent() );
+        PushCurrentStateToUndoRedoIfAnyChangeForComponent(undoXMLBefore);
     });
     pasteValues->SetOverAndActionEnabled( (EditorClipboard::HasCopiedComponent()) );
 
@@ -195,13 +233,17 @@ void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
     MenuItem *moveUp = menuRootItem->AddItem("Move Up");
     moveUp->SetSelectedCallback([this](MenuItem*)
     {
+        XMLNode undoXMLBefore = GetComponent()->GetGameObject()->GetXMLInfo();
         MoveComponent(GetComponent(), -1);
+        PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoXMLBefore);
     });
 
     MenuItem *moveDown = menuRootItem->AddItem("Move Down");
     moveDown->SetSelectedCallback([this](MenuItem*)
     {
+        XMLNode undoXMLBefore = GetComponent()->GetGameObject()->GetXMLInfo();
         MoveComponent(GetComponent(), 1);
+        PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoXMLBefore);
     });
     menuRootItem->AddSeparator();
 
@@ -222,20 +264,4 @@ void ComponentInspectorWidget::MoveComponent(Component *comp, int offset)
 bool ComponentInspectorWidget::MustShowEnabledCheckbox() const
 {
     return true;
-}
-
-void ComponentInspectorWidget::PushCurrentStateToUndoRedoIfAnyChange()
-{
-    if (GetComponent())
-    {
-        XMLNode currentXML = GetComponent()->GetXMLInfo();
-        if (currentXML.ToString() != m_undoXMLBefore.ToString())
-        {
-            UndoRedoSerializableChange *undoRedo =
-                    new UndoRedoSerializableChange(GetComponent(),
-                                                   m_undoXMLBefore,
-                                                   currentXML);
-            UndoRedoManager::PushAction(undoRedo);
-        }
-    }
 }

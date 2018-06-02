@@ -154,10 +154,9 @@ void TransformGizmo::OnGrabEnd()
     Transform *transform = GetReferencedGameObject()->GetTransform();
     XMLNode newUndoXML = transform->GetXMLInfo();
 
-    UndoRedoSerializableChange *undoRedo =
-         new UndoRedoSerializableChange(transform,
-                                        m_transformUndoXMLBefore, newUndoXML);
-    UndoRedoManager::PushAction(undoRedo);
+    UndoRedoManager::PushAction(
+        new UndoRedoSerializableChange(transform, m_transformUndoXMLBefore,
+                                       newUndoXML) );
 }
 
 void TransformGizmo::SetReferencedGameObject(GameObject *referencedGameObject)

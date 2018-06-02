@@ -3,6 +3,7 @@
 #include "Bang/Input.h"
 
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/ScenePlayer.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
@@ -27,6 +28,23 @@ UndoRedoManager::UndoRedoManager()
 
 UndoRedoManager::~UndoRedoManager()
 {
+}
+
+void UndoRedoManager::Clear()
+{
+    UndoRedoManager *urm = UndoRedoManager::GetInstance();
+    ASSERT(urm);
+
+    for (UndoRedoAction *action : urm->m_undoActions)
+    {
+        delete action;
+    }
+    for (UndoRedoAction *action : urm->m_redoActions)
+    {
+        delete action;
+    }
+    urm->m_undoActions.Clear();
+    urm->m_redoActions.Clear();
 }
 
 void UndoRedoManager::PushAction(UndoRedoAction *action)
@@ -57,8 +75,14 @@ UndoRedoManager *UndoRedoManager::GetInstance()
 
 void UndoRedoManager::OnUndoRedoPressed(bool undo)
 {
+    if (ScenePlayer::GetPlayState() != PlayState::EDITING)
+    {
+        return;
+    }
+
     const bool redo = !undo;
 
+    // Debug_Peek(m_undoActions);
     if (undo && m_undoActions.Size() >= 1)
     {
         UndoRedoAction *action = m_undoActions.Front();

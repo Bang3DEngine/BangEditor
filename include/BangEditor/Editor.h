@@ -24,7 +24,8 @@ class Editor : public EventEmitter<IEventsEditor>,
 {
 public:
     static GameObject *GetSelectedGameObject();
-    static void SelectGameObject(GameObject *selectedGameObject);
+    static void SelectGameObject(GameObject *selectedGameObject,
+                                 bool registerUndo = true);
 
     static bool IsEditingScene();
 
@@ -38,12 +39,12 @@ private:
     virtual ~Editor();
 
     void Init();
-    void SelectGameObject_(GameObject *selectedGameObject,
-                           bool registerUndo = true);
 
     static void OnPathSelected(const Path &path);
 
     EditorSettings* GetEditorSettings() const;
+
+    void SelectGameObject_(GameObject *selectedGameObject, bool registerUndo);
 
     // IEventsSceneManager
     void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
@@ -52,7 +53,6 @@ private:
     void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
     friend class Explorer;
-    friend class Hierarchy;
     friend class EditorSettings;
     friend class EditorApplication;
     friend class UndoRedoGameObjectSelection;

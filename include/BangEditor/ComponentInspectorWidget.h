@@ -33,6 +33,11 @@ protected:
 
     virtual void SetComponent(Component *comp);
 
+    void PushCurrentStateToUndoRedoIfAnyChangeForComponent(
+                                                const XMLNode &undoXMLBefore);
+    void PushCurrentStateToUndoRedoIfAnyChangeForGameObject(
+                                                const XMLNode &undoXMLBefore);
+
 protected:
     Component *GetComponent() const;
     GameObject *GetInspectedGameObject() const;
@@ -43,8 +48,6 @@ protected:
     virtual bool CanBeRemovedFromContextMenu() const;
 
     virtual RH<Texture2D> GetComponentIconTexture() const;
-
-    void PushCurrentStateToUndoRedoIfAnyChange();
 
     virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object);
 

@@ -16,6 +16,7 @@ public:
 	UndoRedoManager();
 	virtual ~UndoRedoManager();
 
+    static void Clear();
     static void PushAction(UndoRedoAction *action);
 
     static UndoRedoManager* GetInstance();

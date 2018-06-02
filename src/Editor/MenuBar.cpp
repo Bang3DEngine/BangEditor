@@ -53,9 +53,13 @@
 #include "BangEditor/GameBuilder.h"
 #include "BangEditor/EditorDialog.h"
 #include "BangEditor/EditorSettings.h"
+#include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/BehaviourCreator.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/UndoRedoMoveGameObject.h"
+#include "BangEditor/UndoRedoCreateGameObject.h"
+#include "BangEditor/UndoRedoSerializableChange.h"
 
 USING_NAMESPACE_BANG_EDITOR
 
@@ -368,13 +372,21 @@ void MenuBar::OnCreateTextureCubeMap(MenuItem *item)
 template <class T>
 T* OnAddComponent()
 {
+    T *comp = nullptr;
     GameObject *selectedGameObject = Editor::GetSelectedGameObject();
     if (selectedGameObject)
     {
-        return selectedGameObject->AddComponent<T>();
+        XMLNode undoXMLBefore = selectedGameObject->GetXMLInfo();
+
+        comp = selectedGameObject->AddComponent<T>();
+
+        XMLNode currentXML = selectedGameObject->GetXMLInfo();
+        UndoRedoManager::PushAction(
+                    new UndoRedoSerializableChange(selectedGameObject,
+                                                   undoXMLBefore, currentXML));
     }
 
-    return nullptr;
+    return comp;
 }
 
 void MenuBar::OnAddAudioListener(MenuItem*)
@@ -565,10 +577,9 @@ void MenuBar::OnAddPostProcessEffect(MenuItem*)
 
 void MenuBar::OnCreateEmpty(MenuItem *)
 {
-    Scene *openScene = EditorSceneManager::GetOpenScene();
     GameObject *go = GameObjectFactory::CreateGameObject();
     go->SetName("Empty");
-    go->SetParent(openScene);
+    MenuBar::OnEndCreateGameObjectFromMenuBar(go);
 }
 
 void MenuBar::OnCreateCone(MenuItem*)
@@ -642,14 +653,17 @@ void MenuBar::OnCreatePlane(MenuItem*)
                 GameObjectFactory::CreatePlaneGameObject() );
 }
 
-void MenuBar::OnEndCreateGameObjectFromMenuBar(GameObject *primitive)
+void MenuBar::OnEndCreateGameObjectFromMenuBar(GameObject *go)
 {
     GameObject *parentGo = Editor::GetSelectedGameObject();
     if (!parentGo) { parentGo = EditorSceneManager::GetOpenScene(); }
     if (parentGo)
     {
-        primitive->SetParent(parentGo);
-        Editor::SelectGameObject(primitive);
+        go->SetParent(parentGo);
+
+        UndoRedoManager::PushAction( new UndoRedoCreateGameObject(go) );
+
+        Editor::GetInstance()->SelectGameObject(go, false);
     }
 }
 
@@ -660,13 +674,16 @@ void MenuBar::OnEndCreateUIGameObjectFromMenuBar(GameObject *uiGo)
     if (parentGo)
     {
         uiGo->SetParent(parentGo);
+
         if (!UICanvas::GetActive(uiGo))
         {
             UICanvas *createdCanvas = OnCreateUICanvasGO(nullptr);
             GameObject *createdCanvasGo = createdCanvas->GetGameObject();
             uiGo->SetParent( createdCanvasGo );
+
+            UndoRedoManager::PushAction( new UndoRedoCreateGameObject(uiGo) );
         }
-        Editor::SelectGameObject(uiGo);
+        Editor::GetInstance()->SelectGameObject(uiGo, false);
     }
 }
 
