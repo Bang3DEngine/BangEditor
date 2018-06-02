@@ -10,14 +10,23 @@ USING_NAMESPACE_BANG_EDITOR
 UndoRedoRemoveGameObject::UndoRedoRemoveGameObject(GameObject *removedGameObject)
 {
     p_removedGameObject = removedGameObject;
+    if (p_removedGameObject)
+    {
+        p_removedGameObject->EventEmitter<IEventsDestroy>::RegisterListener(this);
+    }
+
     p_previousParent = p_removedGameObject->GetParent();
     m_indexInPreviousParent = p_previousParent->GetChildren().
                               IndexOf(p_removedGameObject);
+    if (p_previousParent)
+    {
+        p_previousParent->EventEmitter<IEventsDestroy>::RegisterListener(this);
+    }
 }
 
 UndoRedoRemoveGameObject::~UndoRedoRemoveGameObject()
 {
-    if (!p_removedGameObject->GetParent())
+    if (p_removedGameObject && !p_removedGameObject->GetParent())
     {
         GameObject::Destroy( p_removedGameObject );
     }
@@ -25,11 +34,23 @@ UndoRedoRemoveGameObject::~UndoRedoRemoveGameObject()
 
 void UndoRedoRemoveGameObject::Undo()
 {
-    p_removedGameObject->SetParent(p_previousParent, m_indexInPreviousParent);
-    Editor::SelectGameObject(p_removedGameObject, false);
+    if (p_removedGameObject)
+    {
+        p_removedGameObject->SetParent(p_previousParent, m_indexInPreviousParent);
+        Editor::SelectGameObject(p_removedGameObject, false);
+    }
 }
 
 void UndoRedoRemoveGameObject::Redo()
 {
-    p_removedGameObject->SetParent(nullptr);
+    if (p_removedGameObject)
+    {
+        p_removedGameObject->SetParent(nullptr);
+    }
+}
+
+void UndoRedoRemoveGameObject::OnDestroyed(EventEmitter<IEventsDestroy> *object)
+{
+    p_removedGameObject = nullptr;
+    p_previousParent = nullptr;
 }

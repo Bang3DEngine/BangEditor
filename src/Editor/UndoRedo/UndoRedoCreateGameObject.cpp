@@ -12,11 +12,14 @@ UndoRedoCreateGameObject::UndoRedoCreateGameObject(GameObject *createdGameObject
     p_createdGameObject = createdGameObject;
     p_parent = createdGameObject->GetParent();
     m_indexInParent = p_parent->GetChildren().IndexOf(createdGameObject);
+
+    p_parent->EventEmitter<IEventsDestroy>::RegisterListener(this);
+    p_createdGameObject->EventEmitter<IEventsDestroy>::RegisterListener(this);
 }
 
 UndoRedoCreateGameObject::~UndoRedoCreateGameObject()
 {
-    if (p_createdGameObject->GetParent() == nullptr)
+    if (p_createdGameObject && p_createdGameObject->GetParent() == nullptr)
     {
         GameObject::Destroy(p_createdGameObject);
     }
@@ -24,11 +27,24 @@ UndoRedoCreateGameObject::~UndoRedoCreateGameObject()
 
 void UndoRedoCreateGameObject::Undo()
 {
-    p_createdGameObject->SetParent(nullptr);
+    if (p_createdGameObject)
+    {
+        p_createdGameObject->SetParent(nullptr);
+    }
 }
 
 void UndoRedoCreateGameObject::Redo()
 {
-    p_createdGameObject->SetParent(p_parent, m_indexInParent);
-    Editor::SelectGameObject(p_createdGameObject, false);
+    if (p_createdGameObject)
+    {
+        p_createdGameObject->SetParent(p_parent, m_indexInParent);
+        Editor::SelectGameObject(p_createdGameObject, false);
+    }
+}
+
+void UndoRedoCreateGameObject::OnDestroyed(EventEmitter<IEventsDestroy> *object)
+{
+    ASSERT(object == p_createdGameObject || object == p_parent);
+    p_createdGameObject = nullptr;
+    p_parent = nullptr;
 }

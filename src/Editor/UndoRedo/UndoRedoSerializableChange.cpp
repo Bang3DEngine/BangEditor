@@ -15,6 +15,11 @@ UndoRedoSerializableChange::UndoRedoSerializableChange(Serializable *serializabl
     p_serializable = serializable;
     m_xmlBefore = xmlBefore;
     m_xmlAfter = xmlAfter;
+
+    if (auto *destroyable = DCAST<EventEmitter<IEventsDestroy>*>(p_serializable))
+    {
+        destroyable->EventEmitter<IEventsDestroy>::RegisterListener(this);
+    }
 }
 
 UndoRedoSerializableChange::~UndoRedoSerializableChange()
@@ -23,14 +28,25 @@ UndoRedoSerializableChange::~UndoRedoSerializableChange()
 
 void UndoRedoSerializableChange::Undo()
 {
-    p_serializable->ImportXML(m_xmlBefore);
-    SelectSerializableOrShowInInspectorIfPossible();
+    if (p_serializable)
+    {
+        p_serializable->ImportXML(m_xmlBefore);
+        SelectSerializableOrShowInInspectorIfPossible();
+    }
 }
 
 void UndoRedoSerializableChange::Redo()
 {
-    p_serializable->ImportXML(m_xmlAfter);
-    SelectSerializableOrShowInInspectorIfPossible();
+    if (p_serializable)
+    {
+        p_serializable->ImportXML(m_xmlAfter);
+        SelectSerializableOrShowInInspectorIfPossible();
+    }
+}
+
+void UndoRedoSerializableChange::OnDestroyed(EventEmitter<IEventsDestroy> *object)
+{
+    p_serializable = nullptr;
 }
 
 void UndoRedoSerializableChange::SelectSerializableOrShowInInspectorIfPossible() const

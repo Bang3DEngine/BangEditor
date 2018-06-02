@@ -4,6 +4,9 @@
 #include "Bang/Bang.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Serializable.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.h"
+#include "Bang/IEventsDestroy.h"
 
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UndoRedoAction.h"
@@ -11,7 +14,8 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class UndoRedoSerializableChange : public UndoRedoAction
+class UndoRedoSerializableChange : public UndoRedoAction,
+                                   public EventListener<IEventsDestroy>
 {
 public:
     UndoRedoSerializableChange(Serializable *serializable,
@@ -26,6 +30,9 @@ private:
     Serializable *p_serializable = nullptr;
     XMLNode m_xmlBefore;
     XMLNode m_xmlAfter;
+
+    // IEventsDestroy
+    void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
     void SelectSerializableOrShowInInspectorIfPossible() const;
 };
