@@ -34,8 +34,7 @@ MaterialPreviewFactory::~MaterialPreviewFactory()
 
     for (RH<Material> mat : m_materials)
     {
-        mat.Get()->EventEmitter<IEventsMaterialChanged>::
-                   UnRegisterListener(this);
+        mat.Get()->EventEmitter<IEventsResource>::UnRegisterListener(this);
     }
 }
 
@@ -65,7 +64,7 @@ RH<Texture2D> MaterialPreviewFactory::GetPreviewTextureFor_(Material *material)
         FillTextureWithPreview(previewTex, material);
 
         // Add to preview map
-        material->EventEmitter<IEventsMaterialChanged>::RegisterListener(this);
+        material->EventEmitter<IEventsResource>::RegisterListener(this);
         m_previewsMap.Add(material->GetGUID(), previewTexRH);
         m_materials.PushBack( RH<Material>(material) );
     }
@@ -149,7 +148,7 @@ void MaterialPreviewFactory::FillTextureWithPreview(Texture2D *texture,
     texture->SetFilterMode(GL::FilterMode::BILINEAR);
     // texture->GenerateMipMaps();
     // texture->SetFilterMode(GL::FilterMode::Trilinear_LL);
-    texture->PropagateTextureChanged();
+    texture->PropagateResourceChanged();
 
     // Restore OpenGL state
     GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
@@ -157,14 +156,15 @@ void MaterialPreviewFactory::FillTextureWithPreview(Texture2D *texture,
     GL::Pop(GL::Pushable::VIEWPORT);
 }
 
-void MaterialPreviewFactory::OnMaterialChanged(Material *changedMaterial)
+void MaterialPreviewFactory::OnResourceChanged(Resource *changedResource)
 {
-    ASSERT(m_previewsMap.ContainsKey(changedMaterial->GetGUID()));
+    ASSERT(m_previewsMap.ContainsKey(changedResource->GetGUID()));
 
     SetReceiveEvents(false);
 
-    Texture2D *matPreviewTex = m_previewsMap.Get(changedMaterial->GetGUID()).Get();
-    FillTextureWithPreview(matPreviewTex, changedMaterial); // Update preview
+    Material *changedMat = SCAST<Material*>(changedResource);
+    Texture2D *matPreviewTex = m_previewsMap.Get(changedMat->GetGUID()).Get();
+    FillTextureWithPreview(matPreviewTex, changedMat); // Update preview
 
     SetReceiveEvents(true);
 }

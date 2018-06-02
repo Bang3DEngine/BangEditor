@@ -2,11 +2,11 @@
 #define FIWTEXTURE_H
 
 #include "Bang/Path.h"
+#include "Bang/Texture2D.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/IEventsValueChanged.h"
-#include "Bang/IEventsTextureChanged.h"
 
-#include "BangEditor/FileInspectorWidget.h"
+#include "BangEditor/FIWResource.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UISlider;
@@ -20,9 +20,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class FIWTexture : public FileInspectorWidget,
-                   public EventListener<IEventsTextureChanged>,
-                   public EventListener<IEventsValueChanged>
+class FIWTexture : public FIWResource<Texture2D>
 {
     GAMEOBJECT_EDITOR(FIWTexture);
 
@@ -31,8 +29,6 @@ public:
     void Init() override;
 
 private:
-    RH<Texture2D> p_texture;
-
     UIComboBox *p_filterModeComboBox = nullptr;
     UIComboBox *p_wrapModeComboBox = nullptr;
     UISlider *p_alphaCutoffInput = nullptr;
@@ -45,16 +41,13 @@ private:
 	virtual ~FIWTexture();
 
     Texture2D *GetTexture() const;
-    void UpdateInputsFromTexture();
 
-    // FileInspectorWidget
-    void UpdateFromFileWhenChanged() override;
+    // FIWResource
+    void UpdateInputsFromResource() override;
 
-    // IEventsTextureChanged
-    void OnTextureChanged(const Texture *changedTexture) override;
-
-    // IEventsValueChanged
-    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
+    // FIWResource
+    void OnValueChangedFIWResource(EventEmitter<IEventsValueChanged> *object)
+                                                                    override;
 
     friend class FileInspectorWidgetFactory;
 };

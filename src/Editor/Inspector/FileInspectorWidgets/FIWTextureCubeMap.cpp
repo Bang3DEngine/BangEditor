@@ -68,7 +68,7 @@ void FIWTextureCubeMap::Init()
 
 TextureCubeMap *FIWTextureCubeMap::GetTextureCubeMap() const
 {
-    return p_textureCubeMap.Get();
+    return SCAST<TextureCubeMap*>(GetResource().Get());
 }
 
 void FIWTextureCubeMap::CheckValidity() const
@@ -112,13 +112,8 @@ void FIWTextureCubeMap::CheckValidity() const
     }
 }
 
-void FIWTextureCubeMap::UpdateFromFileWhenChanged()
+void FIWTextureCubeMap::UpdateInputsFromResource()
 {
-    p_textureCubeMap = Resources::Load<TextureCubeMap>( GetPath() );
-    if (!GetTextureCubeMap()) { return; }
-
-    EventListener<IEventsValueChanged>::SetReceiveEvents(false);
-
     TextureCubeMap *tcm = GetTextureCubeMap();
     const RH<Imageb> topImg   = tcm->GetImageResource(GL::CubeMapDir::TOP);
     const RH<Imageb> botImg   = tcm->GetImageResource(GL::CubeMapDir::BOT);
@@ -134,43 +129,33 @@ void FIWTextureCubeMap::UpdateFromFileWhenChanged()
     p_backTextureInput->SetPath(backImg   ? backImg.Get()->GetResourceFilepath()  : Path::Empty);
 
     CheckValidity();
-
-    EventListener<IEventsValueChanged>::SetReceiveEvents(true);
 }
 
-void FIWTextureCubeMap::OnValueChanged(EventEmitter<IEventsValueChanged>*)
+void FIWTextureCubeMap::OnValueChangedFIWResource(
+                                        EventEmitter<IEventsValueChanged>*)
 {
     TextureCubeMap *tcm = GetTextureCubeMap();
-    if (tcm)
+
+    auto Refresh = [this](UIInputFile *inputFile,
+                          TextureCubeMap *tcm,
+                          GL::CubeMapDir cmdir)
     {
-        auto Refresh = [this](UIInputFile *inputFile,
-                              TextureCubeMap *tcm,
-                              GL::CubeMapDir cmdir)
+        if (inputFile->GetPath().IsFile())
         {
-            if (inputFile->GetPath().IsFile())
-            {
-                RH<Imageb> img = Resources::Load<Imageb>( inputFile->GetPath() );
-                tcm->SetImageResource(cmdir, img.Get());
-            }
-            else { tcm->SetImageResource(cmdir, nullptr); }
-
-        };
-
-        Refresh(p_topTextureInput,   tcm, GL::CubeMapDir::TOP);
-        Refresh(p_botTextureInput,   tcm, GL::CubeMapDir::BOT);
-        Refresh(p_leftTextureInput,  tcm, GL::CubeMapDir::LEFT);
-        Refresh(p_rightTextureInput, tcm, GL::CubeMapDir::RIGHT);
-        Refresh(p_frontTextureInput, tcm, GL::CubeMapDir::FRONT);
-        Refresh(p_backTextureInput,  tcm, GL::CubeMapDir::BACK);
-
-        CheckValidity();
-
-        const Path tcmImportPath = ImportFilesManager::GetImportFilepath(
-                                                tcm->GetResourceFilepath());
-        if (tcmImportPath.IsFile())
-        {
-            tcm->ExportXMLToFile(tcmImportPath);
+            RH<Imageb> img = Resources::Load<Imageb>( inputFile->GetPath() );
+            tcm->SetImageResource(cmdir, img.Get());
         }
-    }
+        else { tcm->SetImageResource(cmdir, nullptr); }
+
+    };
+
+    Refresh(p_topTextureInput,   tcm, GL::CubeMapDir::TOP);
+    Refresh(p_botTextureInput,   tcm, GL::CubeMapDir::BOT);
+    Refresh(p_leftTextureInput,  tcm, GL::CubeMapDir::LEFT);
+    Refresh(p_rightTextureInput, tcm, GL::CubeMapDir::RIGHT);
+    Refresh(p_frontTextureInput, tcm, GL::CubeMapDir::FRONT);
+    Refresh(p_backTextureInput,  tcm, GL::CubeMapDir::BACK);
+
+    CheckValidity();
 }
 

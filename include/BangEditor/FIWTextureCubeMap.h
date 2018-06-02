@@ -6,7 +6,7 @@
 #include "Bang/TextureCubeMap.h"
 #include "Bang/IEventsValueChanged.h"
 
-#include "BangEditor/FileInspectorWidget.h"
+#include "BangEditor/FIWResource.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Texture2D;
@@ -17,8 +17,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UIInputTexture;
 
-class FIWTextureCubeMap : public FileInspectorWidget,
-                          public EventListener<IEventsValueChanged>
+class FIWTextureCubeMap : public FIWResource<TextureCubeMap>
 {
     GAMEOBJECT_EDITOR(FIWTextureCubeMap);
 
@@ -27,7 +26,6 @@ public:
     void Init() override;
 
 private:
-    RH<TextureCubeMap> p_textureCubeMap;
     UIInputTexture *p_topTextureInput   = nullptr;
     UIInputTexture *p_botTextureInput   = nullptr;
     UIInputTexture *p_rightTextureInput = nullptr;
@@ -43,11 +41,12 @@ private:
 
     void CheckValidity() const;
 
-    // FileInspectorWidget
-    void UpdateFromFileWhenChanged() override;
+    // FIWResource
+    void UpdateInputsFromResource() override;
 
-    // IEventsValueChanged
-    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
+    // FIWResource
+    void OnValueChangedFIWResource(EventEmitter<IEventsValueChanged> *object)
+                                                                    override;
 
 };
 

@@ -78,13 +78,11 @@ void FIWTexture::Init()
 
 Texture2D *FIWTexture::GetTexture() const
 {
-    return p_texture.Get();
+    return SCAST<Texture2D*>(GetResource().Get());
 }
 
-void FIWTexture::UpdateInputsFromTexture()
+void FIWTexture::UpdateInputsFromResource()
 {
-    EventListener<IEventsValueChanged>::SetReceiveEvents(false);
-
     p_textureImageRend->SetImageTexture( GetTexture() );
     p_textureImageRend->SetTint(Color::White);
     p_imageAspectRatioFitter->SetAspectRatio( GetTexture()->GetSize() );
@@ -96,50 +94,24 @@ void FIWTexture::UpdateInputsFromTexture()
     p_filterModeComboBox->SetSelectionByValue( int(GetTexture()->GetFilterMode()) );
     p_wrapModeComboBox->SetSelectionByValue( int(GetTexture()->GetWrapMode()) );
     p_alphaCutoffInput->SetValue( GetTexture()->GetAlphaCutoff() );
-
-    EventListener<IEventsValueChanged>::SetReceiveEvents(true);
 }
 
-void FIWTexture::UpdateFromFileWhenChanged()
+void FIWTexture::OnValueChangedFIWResource(EventEmitter<IEventsValueChanged>*)
 {
-    p_texture = Resources::Load<Texture2D>( GetPath() );
-    if (!GetTexture()) { return; }
-    UpdateInputsFromTexture();
-}
+    Path texImportPath = ImportFilesManager::GetImportFilepath(
+                                    GetTexture()->GetResourceFilepath());
 
-void FIWTexture::OnTextureChanged(const Texture *changedTexture)
-{
-    ASSERT(changedTexture == GetTexture());
-    UpdateInputsFromTexture();
-}
+    int filterMode = p_filterModeComboBox->GetSelectedValue();
+    GetTexture()->SetFilterMode( SCAST<GL::FilterMode>(filterMode) );
 
-void FIWTexture::OnValueChanged(EventEmitter<IEventsValueChanged>*)
-{
-    if (GetTexture())
-    {
-        Path texImportPath = ImportFilesManager::GetImportFilepath(
-                                        GetTexture()->GetResourceFilepath());
-        PushBeginUndoRedoFileChange(texImportPath);
-        PushBeginUndoRedoSerializableChange(GetTexture());
+    int wrapMode = p_wrapModeComboBox->GetSelectedValue();
+    GetTexture()->SetWrapMode( SCAST<GL::WrapMode>(wrapMode) );
 
-        int filterMode = p_filterModeComboBox->GetSelectedValue();
-        GetTexture()->SetFilterMode( SCAST<GL::FilterMode>(filterMode) );
+    GetTexture()->SetAlphaCutoff( p_alphaCutoffInput->GetValue() );
 
-        int wrapMode = p_wrapModeComboBox->GetSelectedValue();
-        GetTexture()->SetWrapMode( SCAST<GL::WrapMode>(wrapMode) );
-
-        GetTexture()->SetAlphaCutoff( p_alphaCutoffInput->GetValue() );
-
-        GL::ColorFormat newColorFormat = p_SRGBCheckBoxInput->IsChecked() ?
-                                                GL::ColorFormat::SRGBA :
-                                                GL::ColorFormat::RGBA8;
-        GetTexture()->SetFormat(newColorFormat);
-
-        if (texImportPath.IsFile())
-        {
-            GetTexture()->ExportXMLToFile(texImportPath);
-        }
-        PushEndUndoRedoSerializableChangeAndFileChangeTogether();
-    }
+    GL::ColorFormat newColorFormat = p_SRGBCheckBoxInput->IsChecked() ?
+                                                  GL::ColorFormat::SRGBA :
+                                                  GL::ColorFormat::RGBA8;
+    GetTexture()->SetFormat(newColorFormat);
 }
 

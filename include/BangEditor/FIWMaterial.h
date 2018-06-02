@@ -2,11 +2,11 @@
 #define FIWMATERIAL_H
 
 #include "Bang/Path.h"
+#include "Bang/Material.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/IEventsValueChanged.h"
-#include "Bang/IEventsMaterialChanged.h"
 
-#include "BangEditor/FileInspectorWidget.h"
+#include "BangEditor/FIWResource.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UISlider;
@@ -23,9 +23,7 @@ FORWARD class UIInputColor;
 FORWARD class UIInputVector;
 FORWARD class UIInputTexture;
 
-class FIWMaterial : public FileInspectorWidget,
-                    public EventListener<IEventsMaterialChanged>,
-                    public EventListener<IEventsValueChanged>
+class FIWMaterial : public FIWResource<Material>
 {
     GAMEOBJECT_EDITOR(FIWMaterial);
 
@@ -59,16 +57,12 @@ private:
     virtual ~FIWMaterial();
 
     Material *GetMaterial() const;
-    void UpdateInputsFromMaterial();
 
-    // FileInspectorWidget
-    void UpdateFromFileWhenChanged() override;
+    // FIWResource
+    void UpdateInputsFromResource() override;
 
-    // IEventsMaterialChanged
-    void OnMaterialChanged(Material *changedMaterial) override;
-
-    // IEventsValueChanged
-    void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
+    // FIWResource
+    void OnValueChangedFIWResource(EventEmitter<IEventsValueChanged> *object) override;
 
     friend class FileInspectorWidgetFactory;
 };

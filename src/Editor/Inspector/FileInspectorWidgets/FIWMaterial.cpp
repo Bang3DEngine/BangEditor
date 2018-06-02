@@ -167,61 +167,13 @@ void FIWMaterial::Init()
     SetLabelsWidth(130);
 }
 
-void FIWMaterial::UpdateFromFileWhenChanged()
-{
-    RH<Material> newMaterial;
-    if (GetPath().IsFile()) // Typical material in path
-    {
-        newMaterial = Resources::Load<Material>( GetPath() );
-    }
-    else if (GetPath().GetDirectory().IsFile())
-    {
-        // Material inside other asset but without file (for example, inside a model)
-        Path containingAsset = GetPath().GetDirectory();
-        if (containingAsset.HasExtension(Extensions::GetModelExtensions()))
-        {
-            RH<Model> model = Resources::Load<Model>(containingAsset);
-            newMaterial = model.Get()->GetMaterialByName(GetPath().GetName());
-        }
-    }
-
-    if (newMaterial.Get() != GetMaterial())
-    {
-        if (GetMaterial())
-        {
-            GetMaterial()->EventEmitter<IEventsMaterialChanged>::
-                           UnRegisterListener(this);
-        }
-
-        m_materialRH = newMaterial;
-        if (GetMaterial())
-        {
-            GetMaterial()->EventEmitter<IEventsMaterialChanged>::
-                           RegisterListener(this);
-        }
-    }
-
-    if (!GetMaterial()) { return; }
-
-    GetMaterial()->ImportXMLFromFile( GetMaterial()->GetResourceFilepath() );
-    UpdateInputsFromMaterial();
-}
-
-void FIWMaterial::OnMaterialChanged(Material *changedMaterial)
-{
-    ASSERT(changedMaterial == GetMaterial());
-    UpdateInputsFromMaterial();
-}
-
 Material *FIWMaterial::GetMaterial() const
 {
-    return m_materialRH.Get();
+    return SCAST<Material*>(GetResource().Get());
 }
 
-void FIWMaterial::UpdateInputsFromMaterial()
+void FIWMaterial::UpdateInputsFromResource()
 {
-    EventListener<IEventsValueChanged>::SetReceiveEvents(false);
-
     Texture2D *albedoTex = GetMaterial()->GetAlbedoTexture();
     p_albedoTextureInput->SetPath( albedoTex ? albedoTex->GetResourceFilepath() :
                                                Path::Empty);
@@ -255,18 +207,14 @@ void FIWMaterial::UpdateInputsFromMaterial()
     Shader *fs = sp ? sp->GetFragmentShader() : nullptr;
     p_vertexShaderInput->SetPath  ( vs ? vs->GetResourceFilepath() : Path::Empty );
     p_fragmentShaderInput->SetPath( fs ? fs->GetResourceFilepath() : Path::Empty );
-
-    EventListener<IEventsValueChanged>::SetReceiveEvents(true);
 }
 
-void FIWMaterial::OnValueChanged(EventEmitter<IEventsValueChanged>*)
+void FIWMaterial::OnValueChangedFIWResource(EventEmitter<IEventsValueChanged>*)
 {
     if (!GetMaterial()) { return; }
 
     GUID matGUID = GetMaterial()->GetGUID();
     Path importPath = ImportFilesManager::GetImportFilepath(matGUID);
-    PushBeginUndoRedoFileChange(importPath);
-    PushBeginUndoRedoSerializableChange(GetMaterial());
 
     Path albedoTexPath = p_albedoTextureInput->GetPath();
     if (albedoTexPath.IsFile())
@@ -302,13 +250,5 @@ void FIWMaterial::OnValueChanged(EventEmitter<IEventsValueChanged>*)
 
     Path vsPath = p_vertexShaderInput->GetPath();
     Path fsPath = p_fragmentShaderInput->GetPath();
-    GetMaterial()->SetShaderProgram( ShaderProgramFactory::Get(vsPath,
-                                                               fsPath) );
-
-    if (importPath.IsFile())
-    {
-        GetMaterial()->ExportXMLToFile(importPath);
-    }
-
-    PushEndUndoRedoSerializableChangeAndFileChangeTogether();
+    GetMaterial()->SetShaderProgram( ShaderProgramFactory::Get(vsPath, fsPath) );
 }

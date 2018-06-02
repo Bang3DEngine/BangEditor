@@ -6,7 +6,7 @@
 #include "Bang/Material.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Framebuffer.h"
-#include "Bang/IEventsMaterialChanged.h"
+#include "Bang/IEventsResource.h"
 
 #include "BangEditor/BangEditor.h"
 
@@ -19,7 +19,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class MaterialPreviewFactory : public EventListener<IEventsMaterialChanged>
+class MaterialPreviewFactory : public EventListener<IEventsResource>
 {
 public:
     MaterialPreviewFactory();
@@ -44,7 +44,9 @@ private:
     Framebuffer *m_auxiliarFBToCopyTextures = nullptr;
 
     void FillTextureWithPreview(Texture2D *texture, Material *material);
-    virtual void OnMaterialChanged(Material *changedMaterial) override;
+
+    // IEventsResource
+    void OnResourceChanged(Resource *changedResource) override;
 };
 
 NAMESPACE_BANG_EDITOR_END
