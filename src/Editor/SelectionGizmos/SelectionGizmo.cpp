@@ -37,6 +37,13 @@ void SelectionGizmo::Update()
                                          SelectionState::IDLE;
     }
     m_grabHasJustChanged = (IsBeingGrabbed() != prevGrab);
+
+    // Grab event
+    if (GrabHasJustChanged())
+    {
+        if (IsBeingGrabbed()) { OnGrabBegin(); }
+        else { OnGrabEnd(); }
+    }
 }
 
 void SelectionGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
@@ -92,6 +99,16 @@ bool SelectionGizmo::IsBeingGrabbed() const
 bool SelectionGizmo::GrabHasJustChanged() const
 {
     return m_grabHasJustChanged;
+}
+
+void SelectionGizmo::OnGrabBegin()
+{
+    // Empty
+}
+
+void SelectionGizmo::OnGrabEnd()
+{
+   // Empty
 }
 
 void SelectionGizmo::OnDestroyed(EventEmitter<IEventsDestroy> *object)

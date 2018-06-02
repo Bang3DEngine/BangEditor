@@ -14,8 +14,10 @@
 #include "BangEditor/RotateGizmo.h"
 #include "BangEditor/TranslateGizmo.h"
 #include "BangEditor/HideInHierarchy.h"
+#include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/SelectionGizmosManager.h"
+#include "BangEditor/UndoRedoSerializableChange.h"
 #include "BangEditor/RectTransformSelectionGizmo.h"
 
 USING_NAMESPACE_BANG
@@ -139,6 +141,23 @@ void TransformGizmo::OnEndRender(Scene *)
 {
     // p_worldGizmoContainer->SetParent(this);
     p_canvasGizmoContainer->SetParent(this);
+}
+
+void TransformGizmo::OnGrabBegin()
+{
+    m_transformUndoXMLBefore = GetReferencedGameObject()->
+                               GetTransform()->GetXMLInfo();
+}
+
+void TransformGizmo::OnGrabEnd()
+{
+    Transform *transform = GetReferencedGameObject()->GetTransform();
+    XMLNode newUndoXML = transform->GetXMLInfo();
+
+    UndoRedoSerializableChange *undoRedo =
+         new UndoRedoSerializableChange(transform,
+                                        m_transformUndoXMLBefore, newUndoXML);
+    UndoRedoManager::PushAction(undoRedo);
 }
 
 void TransformGizmo::SetReferencedGameObject(GameObject *referencedGameObject)

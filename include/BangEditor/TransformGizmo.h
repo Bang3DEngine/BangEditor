@@ -28,6 +28,8 @@ public:
     void OnEndRender(Scene *scene);
 
     // SelectionGizmo
+    void OnGrabBegin() override;
+    void OnGrabEnd() override;
     void SetReferencedGameObject(GameObject *referencedGameObject) override;
 
     void SetTransformMode(TransformMode transformMode);
@@ -38,6 +40,7 @@ public:
     static TransformGizmo *GetInstance();
 
 private:
+    XMLNode m_transformUndoXMLBefore;
     TransformMode m_transformMode = TransformMode::TRANSLATE;
 
     GameObject                  *p_worldGizmoContainer  = nullptr;

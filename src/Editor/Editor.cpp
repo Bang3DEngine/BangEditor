@@ -58,7 +58,7 @@ void Editor::SelectGameObject_(GameObject *selectedGameObject, bool registerUndo
 
     if (selectedGameObject != GetSelectedGameObject())
     {
-        if (registerUndo)
+        if (registerUndo && isSelectable)
         {
             UndoRedoGameObjectSelection *undoRedo =
                     new UndoRedoGameObjectSelection(GetSelectedGameObject(),

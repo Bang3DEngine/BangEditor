@@ -1,6 +1,7 @@
 #ifndef SELECTIONGIZMO_H
 #define SELECTIONGIZMO_H
 
+#include "Bang/XMLNode.h"
 #include "Bang/GameObject.h"
 #include "Bang/EventListener.h"
 #include "Bang/IEventsDestroy.h"
@@ -35,6 +36,9 @@ public:
     SelectionState GetSelectionState() const;
     bool IsBeingGrabbed() const;
     bool GrabHasJustChanged() const;
+
+    virtual void OnGrabBegin();
+    virtual void OnGrabEnd();
 
     // IEventsObject
     void OnDisabled() override;
