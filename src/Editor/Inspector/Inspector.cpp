@@ -182,8 +182,7 @@ void Inspector::ShowPath(const Path &path)
                 m_currentOpenPath = path;
                 AddWidget(fiw);
 
-                bool isEngineFile = m_currentOpenPath.BeginsWith(
-                                                Paths::GetEngineDir());
+                bool isEngineFile = Paths::IsEnginePath(m_currentOpenPath);
                 SetCurrentWidgetBlocked(isEngineFile);
             }
         }

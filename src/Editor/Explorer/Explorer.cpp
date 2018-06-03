@@ -570,7 +570,7 @@ void Explorer::OnShortcutPressed(const Shortcut &shortcut)
 
 bool Explorer::IsInsideRootPath(const Path &path) const
 {
-    return path.GetAbsolute().BeginsWith( GetRootPath().GetAbsolute() );
+    return path.IsSubPathOf( GetRootPath() );
 }
 
 void Explorer::OnValueChanged(EventEmitter<IEventsValueChanged>*)
