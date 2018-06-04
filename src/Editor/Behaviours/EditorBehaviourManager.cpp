@@ -191,7 +191,7 @@ Compiler::Result EditorBehaviourManager::CompileBehaviourObject(
                                         BinType binaryType)
 {
     EditorBehaviourManager::RemoveBehaviourLibrariesOf(outputObjectFilepath.GetName());
-    File::CreateDirectory(outputObjectFilepath.GetDirectory());
+    File::CreateDir(outputObjectFilepath.GetDirectory());
 
     Compiler::Job job =
          EditorBehaviourManager::CreateCompileBehaviourJob(behaviourFilepath,
@@ -315,7 +315,7 @@ Compiler::Result EditorBehaviourManager::MergeBehaviourObjects(
                                     BinType binaryType)
 {
     EditorBehaviourManager::RemoveOrphanBehaviourLibraries();
-    File::CreateDirectory(outputLibFilepath.GetDirectory());
+    File::CreateDir(outputLibFilepath.GetDirectory());
 
     Compiler::Job job = EditorBehaviourManager::CreateBaseJob(binaryType);
     job.outputMode = Compiler::OutputType::SharedLib;

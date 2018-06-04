@@ -70,7 +70,7 @@ void QtProjectManager::CreateQtProjectFile()
     String engineIncludePathsString = String::Join(engineIncPathsStr, "\n");
 
     Path qtProjDir = QtProjectManager::GetQtProjectDir();
-    File::CreateDirectory(qtProjDir);
+    File::CreateDir(qtProjDir);
     File::Write(qtProjDir.Append(".files"),
                 headersString       + "\n" +
                 sourcesString       + "\n" +

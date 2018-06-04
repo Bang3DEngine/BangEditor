@@ -30,7 +30,7 @@ Path GameBuilder::GetExecutablePath()
 void GameBuilder::BuildGame()
 {
     Path gameExecPath = GameBuilder::GetExecutablePath();
-    File::CreateDirectory(gameExecPath.GetDirectory());
+    File::CreateDir(gameExecPath.GetDirectory());
 
     GameBuilder::BuildGame(gameExecPath.GetName(),
                            gameExecPath.GetDirectory(),
@@ -137,12 +137,12 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
 {
     Path dataDir = executableDir.Append("Data");
     File::Remove(dataDir);
-    if (!File::CreateDirectory(dataDir)) { return false; }
+    if (!File::CreateDir(dataDir)) { return false; }
 
     // Copy the Engine needed directories into the Data directory
     Path bangDataDir = dataDir.Append("Bang");
     Path bangAssetsDataDir = bangDataDir.Append("Assets");
-    if (!File::CreateDirectory(bangDataDir)) { return false; }
+    if (!File::CreateDir(bangDataDir)) { return false; }
     if (!File::DuplicateDir(Paths::GetEngineAssetsDir(), bangAssetsDataDir))
     {
         Debug_Error("Could not duplicate engine assets directory '" <<
@@ -169,7 +169,7 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
 {
     // Create Libraries directory
     Path dataLibsDir = Path(executableDir).Append("Data").Append("Libraries");
-    File::CreateDirectory(dataLibsDir);
+    File::CreateDir(dataLibsDir);
 
     // Compile every behaviour into its .o
     List<Path> behavioursSourceFiles = Paths::GetProjectAssetsDir()

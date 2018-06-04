@@ -21,8 +21,9 @@ USING_NAMESPACE_BANG_EDITOR
 int main(int argc, char **argv)
 {
     EditorApplication editorApplication;
-    const Path engPath = Paths::GetResolvedPath( Path("./Bang") );
-    const Path edtPath = Paths::GetResolvedPath( Path(".") );
+    const Path edtPath = Paths::GetResolvedPath(
+        Paths::GetExecutablePath().GetDirectory().GetDirectory() );
+    const Path engPath = Paths::GetResolvedPath( edtPath.Append("Bang") );
     Debug_Log("BangEngineRoot: " << engPath);
     Debug_Log("BangEditorRoot: " << edtPath);
     editorApplication.InitEditorApplication(engPath, edtPath);

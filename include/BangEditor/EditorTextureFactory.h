@@ -50,7 +50,7 @@ private:
     EditorTextureFactory() = default;
     virtual ~EditorTextureFactory() = default;
 
-    static RH<Texture2D> GetIconTexture(const String &filename);
+    static RH<Texture2D> GetTexture(const String &filename);
 
 };
 

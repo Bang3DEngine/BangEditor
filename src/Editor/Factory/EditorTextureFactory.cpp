@@ -69,51 +69,51 @@ RH<Texture2D> EditorTextureFactory::GetIconForExtension(const String &ext)
 }
 
 RH<Texture2D> EditorTextureFactory::GetRotateIcon()
-{ return EditorTextureFactory::GetIconTexture("Rotate"); }
+{ return EditorTextureFactory::GetTexture("Rotate"); }
 RH<Texture2D> EditorTextureFactory::GetRightArrowAndBarIcon()
-{ return EditorTextureFactory::GetIconTexture("RightArrowAndBar"); }
+{ return EditorTextureFactory::GetTexture("RightArrowAndBar"); }
 RH<Texture2D> EditorTextureFactory::GetDoubleBarIcon()
-{ return EditorTextureFactory::GetIconTexture("DoubleBar"); }
+{ return EditorTextureFactory::GetTexture("DoubleBar"); }
 RH<Texture2D> EditorTextureFactory::GetBackArrowIcon()
-{ return EditorTextureFactory::GetIconTexture("BackArrow"); }
+{ return EditorTextureFactory::GetTexture("BackArrow"); }
 RH<Texture2D> EditorTextureFactory::GetLensIcon()
-{ return EditorTextureFactory::GetIconTexture("Lens"); }
+{ return EditorTextureFactory::GetTexture("Lens"); }
 RH<Texture2D> EditorTextureFactory::GetLensLittleIcon()
-{ return EditorTextureFactory::GetIconTexture("LensLittle"); }
+{ return EditorTextureFactory::GetTexture("LensLittle"); }
 RH<Texture2D> EditorTextureFactory::GetSquareIcon()
-{ return EditorTextureFactory::GetIconTexture("Square"); }
+{ return EditorTextureFactory::GetTexture("Square"); }
 RH<Texture2D> EditorTextureFactory::GetAnchorIcon()
-{ return EditorTextureFactory::GetIconTexture("Anchor"); }
+{ return EditorTextureFactory::GetTexture("Anchor"); }
 RH<Texture2D> EditorTextureFactory::GetCubeMapIcon()
-{ return EditorTextureFactory::GetIconTexture("CubeMap"); }
+{ return EditorTextureFactory::GetTexture("CubeMap"); }
 RH<Texture2D> EditorTextureFactory::GetWhiteSphereIcon()
-{ return EditorTextureFactory::GetIconTexture("WhiteSphere"); }
+{ return EditorTextureFactory::GetTexture("WhiteSphere"); }
 RH<Texture2D> EditorTextureFactory::GetFolderIcon()
-{ return EditorTextureFactory::GetIconTexture("Folder"); }
+{ return EditorTextureFactory::GetTexture("Folder"); }
 RH<Texture2D> EditorTextureFactory::GetLetterIcon()
-{ return EditorTextureFactory::GetIconTexture("Letter"); }
+{ return EditorTextureFactory::GetTexture("Letter"); }
 RH<Texture2D> EditorTextureFactory::GetPillIcon()
-{ return EditorTextureFactory::GetIconTexture("Pill"); }
+{ return EditorTextureFactory::GetTexture("Pill"); }
 RH<Texture2D> EditorTextureFactory::GetCubeIcon()
-{ return EditorTextureFactory::GetIconTexture("Cube"); }
+{ return EditorTextureFactory::GetTexture("Cube"); }
 RH<Texture2D> EditorTextureFactory::GetBracketsIcon()
-{ return EditorTextureFactory::GetIconTexture("Brackets"); }
+{ return EditorTextureFactory::GetTexture("Brackets"); }
 RH<Texture2D> EditorTextureFactory::GetFileIcon()
-{ return EditorTextureFactory::GetIconTexture("File"); }
+{ return EditorTextureFactory::GetTexture("File"); }
 RH<Texture2D> EditorTextureFactory::GetSceneIcon()
-{ return EditorTextureFactory::GetIconTexture("Scene"); }
+{ return EditorTextureFactory::GetTexture("Scene"); }
 RH<Texture2D> EditorTextureFactory::GetAxesIcon()
-{ return EditorTextureFactory::GetIconTexture("Axes"); }
+{ return EditorTextureFactory::GetTexture("Axes"); }
 RH<Texture2D> EditorTextureFactory::GetHairCrossIcon()
-{ return EditorTextureFactory::GetIconTexture("HairCross"); }
+{ return EditorTextureFactory::GetTexture("HairCross"); }
 RH<Texture2D> EditorTextureFactory::GetCircleIcon()
-{ return EditorTextureFactory::GetIconTexture("Circle"); }
+{ return EditorTextureFactory::GetTexture("Circle"); }
 RH<Texture2D> EditorTextureFactory::GetCircleHardIcon()
-{ return EditorTextureFactory::GetIconTexture("CircleHard"); }
+{ return EditorTextureFactory::GetTexture("CircleHard"); }
 RH<Texture2D> EditorTextureFactory::GetEyeIcon()
-{ return EditorTextureFactory::GetIconTexture("Eye"); }
+{ return EditorTextureFactory::GetTexture("Eye"); }
 RH<Texture2D> EditorTextureFactory::GetAnchoredRectIcon()
-{ return EditorTextureFactory::GetIconTexture("AnchoredRect"); }
+{ return EditorTextureFactory::GetTexture("AnchoredRect"); }
 
 RH<Texture2D> EditorTextureFactory::GetComponentIcon(const String &componentName)
 {
@@ -128,9 +128,9 @@ RH<Texture2D> EditorTextureFactory::GetComponentIcon(const String &componentName
     return EditorTextureFactory::GetCubeIcon();
 }
 
-RH<Texture2D> EditorTextureFactory::GetIconTexture(const String &filename)
+RH<Texture2D> EditorTextureFactory::GetTexture(const String &filename)
 {
-    return TextureFactory::GetIconTexture(filename,
+    return TextureFactory::GetTexture(filename,
                                        EditorPaths::GetEditorAssetsDir().
                                        Append("Icons"));
 }

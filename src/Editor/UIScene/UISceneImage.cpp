@@ -35,12 +35,13 @@ UISceneImage::UISceneImage()
 
     UIVerticalLayout *vl = AddComponent<UIVerticalLayout>(); (void)(vl);
 
+    const Path engShadersDir = Paths::GetEngineAssetsDir().Append("Shaders");
     GameObject *sceneImgGo = GameObjectFactory::CreateUIGameObject();
     p_sceneImg  = sceneImgGo->AddComponent<UISceneImageRenderer>();
     p_sceneImg->SetMode(UIImageRenderer::Mode::TEXTURE);
     p_sceneImg->GetMaterial()->SetShaderProgram(
         ShaderProgramFactory::Get(
-                        EPATH("Shaders/UIImageRenderer.vert"),
+                        engShadersDir.Append("UIImageRenderer.vert"),
                         EditorPaths::GetEditorAssetsDir().
                             Append("Shaders").Append("UISceneImage.frag")));
 
