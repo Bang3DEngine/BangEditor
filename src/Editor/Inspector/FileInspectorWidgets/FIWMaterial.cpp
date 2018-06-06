@@ -90,6 +90,7 @@ void FIWMaterial::Init()
 
     p_renderPassInput = GameObjectFactory::CreateUIComboBox();
     p_renderPassInput->AddItem("Scene",              SCAST<int>(RenderPass::SCENE) );
+    p_renderPassInput->AddItem("Transparent",        SCAST<int>(RenderPass::SCENE_TRANSPARENT) );
     p_renderPassInput->AddItem("Canvas",             SCAST<int>(RenderPass::CANVAS) );
     p_renderPassInput->AddItem("Overlay",            SCAST<int>(RenderPass::OVERLAY) );
     p_renderPassInput->AddItem("ScenePostProcess",   SCAST<int>(RenderPass::SCENE_POSTPROCESS) );
@@ -142,6 +143,8 @@ void FIWMaterial::Init()
 
     AddWidget(materialPreviewGo,      256);
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
+    AddWidget("Render pass",          p_renderPassInput->GetGameObject());
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Rec. light",           p_receivesLightingCheckBox->GetGameObject());
     AddWidget("Roughness",            p_roughnessSlider->GetGameObject());
     AddWidget("Metalness",            p_metalnessSlider->GetGameObject());
@@ -156,7 +159,6 @@ void FIWMaterial::Init()
     AddWidget("Normal Map Uv Mult.",  p_normalMapUvMultiplyInput);
     AddWidget("Normal Map Factor",    p_normalMapMultiplyFactorInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
-    AddWidget("Render pass",          p_renderPassInput->GetGameObject());
     AddWidget("Cull Face",            p_cullFaceInput->GetGameObject());
     AddWidget("Render Wireframe",     p_renderWireframe->GetGameObject());
     AddWidget("Line Width",           p_lineWidthInput->GetGameObject());
@@ -209,12 +211,9 @@ void FIWMaterial::UpdateInputsFromResource()
     p_fragmentShaderInput->SetPath( fs ? fs->GetResourceFilepath() : Path::Empty );
 }
 
-void FIWMaterial::OnValueChangedFIWResource(EventEmitter<IEventsValueChanged>*)
+void FIWMaterial::OnValueChangedFIWResource(EventEmitter<IEventsValueChanged> *obj)
 {
     if (!GetMaterial()) { return; }
-
-    GUID matGUID = GetMaterial()->GetGUID();
-    Path importPath = ImportFilesManager::GetImportFilepath(matGUID);
 
     Path albedoTexPath = p_albedoTextureInput->GetPath();
     if (albedoTexPath.IsFile())
@@ -241,8 +240,14 @@ void FIWMaterial::OnValueChangedFIWResource(EventEmitter<IEventsValueChanged>*)
     GetMaterial()->SetReceivesLighting(p_receivesLightingCheckBox->IsChecked());
     GetMaterial()->SetRoughness(p_roughnessSlider->GetValue());
     GetMaterial()->SetMetalness(p_metalnessSlider->GetValue());
-    GetMaterial()->SetRenderPass(
-                SCAST<RenderPass>(p_renderPassInput->GetSelectedValue()) );
+
+    if (obj == p_renderPassInput)
+    {
+        RenderPass rp = SCAST<RenderPass>(p_renderPassInput->GetSelectedValue());
+        GetMaterial()->SetRenderPass(rp);
+        GetMaterial()->SetShaderProgram( ShaderProgramFactory::GetDefault(rp) );
+    }
+
     GetMaterial()->SetRenderWireframe( p_renderWireframe->IsChecked() );
     GetMaterial()->SetCullFace(
                 SCAST<GL::CullFaceExt>(p_cullFaceInput->GetSelectedValue()) );
