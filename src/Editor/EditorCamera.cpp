@@ -16,6 +16,7 @@
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditSceneGameObjects.h"
+#include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/NotSelectableInEditor.h"
 
 USING_NAMESPACE_BANG
@@ -40,17 +41,19 @@ EditorCamera::EditorCamera()
 
     p_cam = p_camContainer->AddComponent<Camera>();
     p_cam->SetProjectionMode(Camera::ProjectionMode::PERSPECTIVE);
-    p_cam->SetRenderSelectionBuffer(true);
     p_cam->AddRenderPass(RenderPass::OVERLAY);
 
     p_camt = p_camContainer->GetTransform();
     p_cam->SetZNear(EditorCamera::InitialZNear);
     p_cam->SetZFar(EditorCamera::InitialZFar);
     p_cam->SetFovDegrees(EditorCamera::InitialFOVDegrees);
+
+    m_selectionFramebuffer = new SelectionFramebuffer(1,1);
 }
 
 EditorCamera::~EditorCamera()
 {
+    delete m_selectionFramebuffer;
 }
 
 void EditorCamera::AdjustSpeeds()
@@ -235,6 +238,7 @@ void EditorCamera::OnStart()
     UpdateRotationVariables();
 }
 
+#include "Bang/GBuffer.h"
 #include "Bang/PointLight.h"
 void EditorCamera::Update()
 {
@@ -301,6 +305,14 @@ void EditorCamera::Update()
     if (unwrapMouse) { Input::SetMouseWrapping(false); }
 }
 
+void EditorCamera::BindSelectionFramebuffer()
+{
+    Vector2i vpSize = GL::GetViewportSize();
+    GetSelectionFramebuffer()->Resize(vpSize.x, vpSize.y);
+    GetSelectionFramebuffer()->Bind();
+    GL::ClearColorStencilDepthBuffers();
+}
+
 void EditorCamera::AlignViewWithGameObject(GameObject *selected)
 {
     p_currentFocus = nullptr;
@@ -309,11 +321,6 @@ void EditorCamera::AlignViewWithGameObject(GameObject *selected)
     Vector3 up = Vector3::Up;
     GetTransform()->LookInDirection(selected->GetTransform()->GetForward(), up);
     UpdateRotationVariables();
-}
-
-Camera *EditorCamera::GetCamera() const
-{
-    return p_camContainer->GetComponent<Camera>();
 }
 
 void EditorCamera::SwitchProjectionModeTo(bool mode3D)
@@ -332,6 +339,16 @@ void EditorCamera::SwitchProjectionModeTo(bool mode3D)
         p_cam->SetZNear(-999999.9f);
         p_cam->SetZFar(999999.9f);
     }
+}
+
+SelectionFramebuffer* EditorCamera::GetSelectionFramebuffer() const
+{
+    return m_selectionFramebuffer;
+}
+
+Camera *EditorCamera::GetCamera() const
+{
+    return p_camContainer->GetComponent<Camera>();
 }
 
 EditorCamera *EditorCamera::GetInstance()

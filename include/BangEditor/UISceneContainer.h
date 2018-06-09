@@ -34,10 +34,10 @@ public:
     Scene *GetContainedScene() const;
     AARect GetSceneImageRectNDC() const;
 
-protected:
     UISceneToolbar* GetSceneToolbar() const;
     UISceneImage* GetSceneImage() const;
 
+protected:
     // IEventsDestroy
     void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 

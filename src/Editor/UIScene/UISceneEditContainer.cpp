@@ -8,7 +8,6 @@
 #include "Bang/Material.h"
 #include "Bang/UICanvas.h"
 #include "Bang/Resources.h"
-#include "Bang/Selection.h"
 #include "Bang/Extensions.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/RectTransform.h"
@@ -16,12 +15,13 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutIgnorer.h"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/SelectionFramebuffer.h"
 
+#include "BangEditor/Selection.h"
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/NotSelectableInEditor.h"
 
 USING_NAMESPACE_BANG
@@ -52,10 +52,12 @@ void UISceneEditContainer::Update()
     GameObject::Update();
     SetScene( EditorSceneManager::GetOpenScene() );
 
-    bool renderSelectionFramebuffer = (IsVisible() &&
-                    GetSceneImage()->GetRectTransform()->IsMouseOver(false));
-    EditorCamera::GetInstance()->GetCamera()->
-                  SetRenderSelectionBuffer(renderSelectionFramebuffer);
+    if ( NeedsToRenderSelectionFramebuffer() )
+    {
+        Scene *openScene = EditorSceneManager::GetOpenScene();
+        SelectionFramebuffer *sfb = GetSelectionFramebuffer();
+        sfb->PrepareNewFrameForRender(openScene);
+    }
 }
 
 void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
@@ -65,6 +67,31 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
         RenderCameraPreviewIfSelected();
         m_needToRenderPreviewImg = false;
     }
+
+    GEngine *ge = GEngine::GetInstance();
+    ge->PushActiveRenderingCamera();
+
+    if ( NeedsToRenderSelectionFramebuffer() )
+    {
+        EditorCamera *edCam = EditorCamera::GetInstance();
+        SelectionFramebuffer *sfb = GetSelectionFramebuffer();
+        Scene *openScene = EditorSceneManager::GetOpenScene();
+        GEngine *ge = GEngine::GetInstance();
+        if (sfb && ge && edCam && openScene)
+        {
+            GL::Push(GL::Pushable::VIEWPORT);
+
+            GL::SetViewport( AARecti( GetRectTransform()->GetViewportAARect() ) );
+            edCam->GetCamera()->Bind();
+            edCam->BindSelectionFramebuffer();
+            sfb->PrepareNewFrameForRender(openScene);
+            sfb->RenderForSelectionBuffer(openScene);
+
+            GL::Pop(GL::Pushable::VIEWPORT);
+        }
+    }
+
+    ge->PopActiveRenderingCamera();
 
     GameObject::Render(rp, renderChildren);
 }
@@ -77,8 +104,7 @@ void UISceneEditContainer::HandleSelection()
         bool isOverScene = canvas->IsMouseOver(GetSceneImage(), true);
         if (isOverScene)
         {
-            Camera *cam = EditorCamera::GetInstance()->GetCamera();
-            GameObject *selectedGameObject = Selection::GetOveredGameObject(cam);
+            GameObject *selectedGameObject = Selection::GetOveredGameObject();
             if (selectedGameObject)
             {
                 Editor::SelectGameObject(selectedGameObject, true);
@@ -154,23 +180,23 @@ void UISceneEditContainer::OnRenderNeededSceneFinished()
     m_needToRenderPreviewImg = true;
 }
 
+SelectionFramebuffer *UISceneEditContainer::GetSelectionFramebuffer() const
+{
+    EditorCamera *edCam = EditorCamera::GetInstance();
+    return (edCam ? edCam->GetSelectionFramebuffer() : nullptr);
+}
+
+bool UISceneEditContainer::NeedsToRenderSelectionFramebuffer() const
+{
+    return (IsVisible() &&
+            GetSceneImage()->GetRectTransform()->IsMouseOver(false));
+}
+
 GameObject* UISceneEditContainer::GetCurrentOveredGameObject() const
 {
-    Camera *edCam = EditorCamera::GetInstance()->GetCamera();
-
-    Vector2 mouseVPPoint(Input::GetMousePosition());
-    RectTransform *sceneImgRT = GetSceneImage()->GetRectTransform();
-    Vector2 mousePoint(sceneImgRT->FromViewportPointToLocalPoint(mouseVPPoint));
-
     GameObject *overedGameObject =
-                    Selection::GetOveredGameObject(edCam, Vector2i(mousePoint));
-
-    if (overedGameObject &&
-        overedGameObject->HasComponent<NotSelectableInEditor>())
-    {
-        overedGameObject = nullptr;
-    }
-
+                  Selection::GetOveredGameObject( Input::GetMousePosition() );
+    ASSERT(!overedGameObject->HasComponent<NotSelectableInEditor>());
     return overedGameObject;
 }
 

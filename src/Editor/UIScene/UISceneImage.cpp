@@ -14,11 +14,12 @@
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/ShaderProgramFactory.h"
-#include "Bang/SelectionFramebuffer.h"
 
 #include "BangEditor/EditorPaths.h"
+#include "BangEditor/EditorCamera.h"
 #include "BangEditor/UISceneDebugStats.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/SelectionFramebuffer.h"
 
 USING_NAMESPACE_BANG_EDITOR
 
@@ -89,7 +90,8 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
 
                 case UISceneImage::RenderMode::SELECTION:
                 {
-                SelectionFramebuffer *sfb = sceneCam->GetSelectionFramebuffer();
+                EditorCamera *edCam = EditorCamera::GetInstance();
+                SelectionFramebuffer *sfb = edCam->GetSelectionFramebuffer();
                 if (sfb)
                 {
                     Texture2D *selectionTex = sfb->GetColorTexture().Get();
@@ -167,10 +169,11 @@ UISceneImage::RenderMode UISceneImage::GetRenderMode() const
 
 void UISceneImage::UISceneImageRenderer::OnRender()
 {
-    const bool wasBlendEnabled = GL::IsEnabled(GL::Enablable::BLEND);
-    GL::Disable(GL::Enablable::BLEND, 0);
+    GL::Push(GL::Pushable::BLEND_STATES);
+
+    GL::Disable(GL::Enablable::BLEND);
 
     UIImageRenderer::OnRender();
 
-    GL::SetEnabled(GL::Enablable::BLEND, wasBlendEnabled, false);
+    GL::Pop(GL::Pushable::BLEND_STATES);
 }

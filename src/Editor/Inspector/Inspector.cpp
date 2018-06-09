@@ -6,7 +6,6 @@
 #include "Bang/XMLNode.h"
 #include "Bang/UILabel.h"
 #include "Bang/Material.h"
-#include "Bang/Selection.h"
 #include "Bang/GLUniforms.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/SceneManager.h"
@@ -24,6 +23,7 @@
 
 #include "BangEditor/MenuBar.h"
 #include "BangEditor/MenuItem.h"
+#include "BangEditor/Selection.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/UIContextMenu.h"
 #include "BangEditor/EditorClipboard.h"

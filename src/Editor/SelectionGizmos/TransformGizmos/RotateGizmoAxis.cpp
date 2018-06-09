@@ -16,8 +16,8 @@
 #include "Bang/DebugRenderer.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/SelectionFramebuffer.h"
 
+#include "BangEditor/Selection.h"
 #include "BangEditor/TransformGizmo.h"
 
 USING_NAMESPACE_BANG
@@ -175,8 +175,7 @@ void RotateGizmoAxis::Update()
 
 void RotateGizmoAxis::Render(RenderPass renderPass, bool renderChildren)
 {
-    bool selection = GL::IsBound( GEngine::GetActiveSelectionFramebuffer() );
-    p_selectionGo->SetEnabled(selection);
+    p_selectionGo->SetEnabled( Selection::IsBeingRendered() );
 
     UpdateCirclePoints();
 

@@ -11,7 +11,6 @@
 #include "Bang/Geometry.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
-#include "Bang/Selection.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/LineRenderer.h"
@@ -19,7 +18,8 @@
 #include "Bang/DebugRenderer.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/SelectionFramebuffer.h"
+
+#include "BangEditor/Selection.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -124,8 +124,7 @@ void TranslateGizmoAxis::Update()
 
 void TranslateGizmoAxis::Render(RenderPass renderPass, bool renderChildren)
 {
-    bool selection = GL::IsBound( GEngine::GetActiveSelectionFramebuffer() );
-    p_selectionGo->SetEnabled(selection);
+    p_selectionGo->SetEnabled( Selection::IsBeingRendered() );
     TransformGizmoAxis::Render(renderPass, renderChildren);
 }
 

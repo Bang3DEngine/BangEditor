@@ -9,8 +9,8 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/SelectionFramebuffer.h"
 
+#include "BangEditor/Selection.h"
 #include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
@@ -111,8 +111,7 @@ void RectTransformAnchorSelectionGizmo::Render(RenderPass renderPass,
 {
     UpdateBasedOnAnchorSide();
 
-    bool selection = GL::IsBound( GEngine::GetActiveSelectionFramebuffer() );
-    p_selectionRenderer->SetEnabled(selection);
+    p_selectionRenderer->SetEnabled( Selection::IsBeingRendered() );
 
     SelectionGizmo::Render(renderPass, renderChildren);
 

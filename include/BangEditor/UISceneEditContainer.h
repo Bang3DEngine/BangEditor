@@ -20,6 +20,8 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class SelectionFramebuffer;
+
 class UISceneEditContainer : public UISceneContainer,
                              public EventListener<IEventsScenePlayer>,
                              public EventListener<IEventsSceneManager>,
@@ -49,6 +51,9 @@ private:
     Camera* GetSceneCamera(Scene *scene) override;
     bool NeedsToRenderScene(Scene *scene) override;
     void OnRenderNeededSceneFinished() override;
+
+    SelectionFramebuffer *GetSelectionFramebuffer() const;
+    bool NeedsToRenderSelectionFramebuffer() const;
 
     // Material drag related
     GameObject* GetCurrentOveredGameObject() const;

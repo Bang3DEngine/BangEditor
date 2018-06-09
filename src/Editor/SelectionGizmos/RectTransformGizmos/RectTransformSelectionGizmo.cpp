@@ -8,8 +8,8 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/SelectionFramebuffer.h"
 
+#include "BangEditor/Selection.h"
 #include "BangEditor/RectTransformAnchorSelectionGizmo.h"
 #include "BangEditor/RectTransformCornerSelectionGizmo.h"
 
@@ -72,8 +72,7 @@ void RectTransformSelectionGizmo::Update()
 
 void RectTransformSelectionGizmo::Render(RenderPass renderPass, bool renderChildren)
 {
-    bool selection = GL::IsBound( GEngine::GetActiveSelectionFramebuffer() );
-    p_selectionGo->SetEnabled(selection);
+    p_selectionGo->SetEnabled( Selection::IsBeingRendered() );
 
     if (renderPass == RenderPass::OVERLAY)
     {

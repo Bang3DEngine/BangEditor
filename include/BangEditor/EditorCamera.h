@@ -16,6 +16,8 @@ NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class SelectionFramebuffer;
+
 class EditorCamera : public GameObject
 {
     GAMEOBJECT_EDITOR(EditorCamera);
@@ -28,10 +30,13 @@ public:
     void OnStart() override;
     void Update() override;
 
+    void BindSelectionFramebuffer();
+
     void AlignViewWithGameObject(GameObject *selected);
     void SwitchProjectionModeTo(bool mode3D);
     void StartLookAt(GameObject *lookAtFocus);
 
+    SelectionFramebuffer *GetSelectionFramebuffer() const;
     Camera *GetCamera() const;
 
     static EditorCamera *GetInstance();
@@ -44,6 +49,7 @@ private:
     Camera *p_cam              = nullptr;
     Transform *p_camt          = nullptr;
     GameObject *p_camContainer = nullptr;
+    SelectionFramebuffer *m_selectionFramebuffer = nullptr;
 
     // WASD
     float m_keysMoveAccel = 1.0f;

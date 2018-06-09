@@ -3,9 +3,9 @@
 #include "Bang/Input.h"
 #include "Bang/Camera.h"
 #include "Bang/Transform.h"
-#include "Bang/Selection.h"
 #include "Bang/GameObject.h"
 
+#include "BangEditor/Selection.h"
 #include "BangEditor/EditorCamera.h"
 
 USING_NAMESPACE_BANG
@@ -16,10 +16,8 @@ void SelectionGizmo::Update()
     GameObject::Update();
 
     // Update selectionState
-    Camera *editorCamera = GetEditorCamera();
-
     bool isMouseOver = false;
-    GameObject *overedGameObject = Selection::GetOveredGameObject(editorCamera);
+    GameObject *overedGameObject = Selection::GetOveredGameObject();
     if (overedGameObject)
     {
         isMouseOver = (overedGameObject == this);

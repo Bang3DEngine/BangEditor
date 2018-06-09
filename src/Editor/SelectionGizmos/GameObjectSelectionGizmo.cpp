@@ -3,9 +3,10 @@
 #include "Bang/Gizmos.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
-#include "Bang/SelectionFramebuffer.h"
 
+#include "BangEditor/EditorCamera.h"
 #include "BangEditor/HideInHierarchy.h"
+#include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/NotSelectableInEditor.h"
 
 USING_NAMESPACE_BANG
@@ -31,7 +32,7 @@ void GameObjectSelectionGizmo::Render(RenderPass rp, bool renderChildren)
 
     if (!GetReferencedGameObject()) { return; }
 
-    SelectionFramebuffer *sfb = GEngine::GetActiveSelectionFramebuffer();
+    SelectionFramebuffer *sfb = EditorCamera::GetInstance()->GetSelectionFramebuffer();
     if (!sfb || !GL::IsBound(sfb))
     {
         if (rp == RenderPass::OVERLAY)

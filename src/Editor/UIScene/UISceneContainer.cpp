@@ -17,13 +17,13 @@
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
-#include "Bang/SelectionFramebuffer.h"
 
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/UISceneToolbar.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorTextureFactory.h"
+#include "BangEditor/SelectionFramebuffer.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -64,8 +64,13 @@ void UISceneContainer::RenderIfNeeded()
         Camera *cam = GetSceneCamera(GetContainedScene());
         if (cam)
         {
+            GL::Push(GL::Pushable::VIEWPORT);
+
+            GL::SetViewport( AARecti(GetRectTransform()->GetViewportAARect()) );
             GEngine::GetInstance()->Render(GetContainedScene(), cam);
             OnRenderNeededSceneFinished();
+
+            GL::Pop(GL::Pushable::VIEWPORT);
         }
     }
 }
