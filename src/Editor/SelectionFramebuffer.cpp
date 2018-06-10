@@ -65,7 +65,6 @@ void SelectionFramebuffer::PrepareNewFrameForRender(const GameObject *go)
         m_id_To_GameObject[id] = go;
 
         go->EventEmitter<IEventsDestroy>::RegisterListener(this);
-
         ++id;
     }
 }
@@ -74,15 +73,10 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Scene *scene)
 {
     GEngine *ge = GEngine::GetInstance();
 
-    ge->PushActiveRenderingCamera();
     GL::Push(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
     GL::Push(GL::Pushable::BLEND_STATES);
     GL::Push(GL::Pushable::DEPTH_STATES);
 
-    EditorCamera *edCamGo = EditorCamera::GetInstance();
-    Camera *edCam = edCamGo->GetCamera();
-
-    ge->SetActiveRenderingCamera(edCam);
     ge->SetRenderRoutine([this](Renderer *rend)
     {
         RenderForSelectionBuffer(rend);
@@ -108,7 +102,6 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Scene *scene)
     GL::Pop(GL::Pushable::DEPTH_STATES);
     GL::Pop(GL::Pushable::BLEND_STATES);
     GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
-    ge->PopActiveRenderingCamera();
 }
 
 void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
@@ -195,11 +188,11 @@ void SelectionFramebuffer::OnAfterRender(Renderer *renderer,
 
 Color SelectionFramebuffer::MapIdToColor(IdType id)
 {
-    constexpr IdType C = 5;
+    constexpr IdType C = 255;
     Color color (double(   id                % C),
                  double(  (id / C)           % C),
                  double( ((id / C) / C)      % C),
-                 1.0f // double((((id / C) / C) / C) % C)
+                 double((((id / C) / C) / C) % C)
                 );
    return color / double(C);
 }
@@ -207,11 +200,11 @@ Color SelectionFramebuffer::MapIdToColor(IdType id)
 typename SelectionFramebuffer::IdType
 SelectionFramebuffer::MapColorToId(const Color &color)
 {
-    constexpr IdType C = 5;
+    constexpr IdType C = 255;
     return   IdType(color.r * C)
            + IdType(color.g * C * C)
            + IdType(color.b * C * C * C)
-           ; // + IdType(color.a * C * C * C * C);
+           + IdType(color.a * C * C * C * C);
 }
 
 RH<Texture2D> SelectionFramebuffer::GetColorTexture() const

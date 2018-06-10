@@ -16,6 +16,7 @@
 #include "Bang/SceneManager.h"
 #include "Bang/DirectionalLight.h"
 
+#include "BangEditor/Selection.h"
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/NotSelectableInEditor.h"
 
@@ -51,7 +52,7 @@ void ComponentsSelectionGizmo::Render(RenderPass rp, bool renderChildren)
     {
         if (!comp->IsActive()) { continue; }
 
-        if (rp == RenderPass::OVERLAY)
+        if (rp == RenderPass::OVERLAY && !Selection::IsBeingRendered())
         {
             if (Camera *cam = DCAST<Camera*>(comp))
             { RenderCameraGizmo(cam); }

@@ -23,6 +23,7 @@
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/NotSelectableInEditor.h"
+#include "BangEditor/SelectionGizmosManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -51,13 +52,6 @@ void UISceneEditContainer::Update()
 {
     GameObject::Update();
     SetScene( EditorSceneManager::GetOpenScene() );
-
-    if ( NeedsToRenderSelectionFramebuffer() )
-    {
-        Scene *openScene = EditorSceneManager::GetOpenScene();
-        SelectionFramebuffer *sfb = GetSelectionFramebuffer();
-        sfb->PrepareNewFrameForRender(openScene);
-    }
 }
 
 void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
@@ -80,9 +74,13 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
         GEngine *ge = GEngine::GetInstance();
         if (sfb && ge && edCamGo && openScene)
         {
-            GL::Push(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
+            SelectionGizmosManager *sgm = SelectionGizmosManager::GetInstance();
+            sgm->OnBeginRender(openScene);
+            ge->PushActiveRenderingCamera();
+            ge->SetActiveRenderingCamera(edCam);
 
-            AARecti imgRect( GetSceneImage()->GetRectTransform()->GetViewportAARect() );
+            RectTransform *sceneImgRT = GetSceneImage()->GetRectTransform();
+            AARecti imgRect( sceneImgRT->GetViewportAARect() );
             Vector2i renderSize = imgRect.GetSize();
             edCam->SetRenderSize(renderSize);
             edCamGo->GetSelectionFramebuffer()->Resize(renderSize);
@@ -94,7 +92,8 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
 
             edCam->UnBind();
 
-            GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
+            ge->PopActiveRenderingCamera();
+            sgm->OnEndRender(openScene);
         }
     }
 
