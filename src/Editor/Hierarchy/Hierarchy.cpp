@@ -258,12 +258,12 @@ void Hierarchy::OnItemMoved(GOItem *item,
                 new UndoRedoMoveGameObject(go, oldParent, oldIndexInsideParent,
                                            newParent, newIndexInsideParent) );
 
-    EventListener<IEventsUITree>::SetReceiveEvents(false);
+    IEventListenerCommon::SetReceiveEventsCommon(false);
     GameObject *movedGo = GetGameObjectFromItem(item);
     if (!newParent) { newParent = movedGo->GetScene(); }
     movedGo->SetParent(newParent, newIndexInsideParent);
     Editor::SelectGameObject(movedGo, false);
-    EventListener<IEventsUITree>::SetReceiveEvents(true);
+    IEventListenerCommon::SetReceiveEventsCommon(true);
 }
 
 void Hierarchy::OnCreateContextMenu(MenuItem *menuRootItem)
