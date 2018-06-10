@@ -75,7 +75,15 @@ Hierarchy::Hierarchy()
     EditorSceneManager::GetActive()->
             EventEmitter<IEventsSceneManager>::RegisterListener(this);
 
-    AddComponent<UIFocusable>();
+    UIFocusable *focusable = AddComponent<UIFocusable>();
+    focusable->AddClickedCallback([](IFocusable*, ClickType clickType)
+    {
+        if (clickType == ClickType::FULL)
+        {
+            Editor::SelectGameObject(nullptr);
+        }
+    });
+
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
     {

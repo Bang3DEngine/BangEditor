@@ -53,7 +53,7 @@ Vector3 TransformGizmoAxis::GetAxisVectorWorld() const
 
 void TransformGizmoAxis::SetColor(SelectionState state)
 {
-    constexpr float DotRange = 0.25f;
+    constexpr float DotRange = 0.2f;
 
     float alpha = 1.0f;
     if (ApplyAlignmentAlpha())
