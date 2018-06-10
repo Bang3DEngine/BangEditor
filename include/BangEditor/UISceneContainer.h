@@ -32,7 +32,7 @@ public:
     void SetScene(Scene *scene);
 
     Scene *GetContainedScene() const;
-    AARect GetSceneImageRectNDC() const;
+    AARect GetSceneImageAARectNDC() const;
 
     UISceneToolbar* GetSceneToolbar() const;
     UISceneImage* GetSceneImage() const;

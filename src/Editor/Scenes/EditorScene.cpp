@@ -295,7 +295,7 @@ Scene *EditorScene::GetOpenScene() const
 
 AARect EditorScene::GetOpenSceneWindowRectNDC() const
 {
-    return p_sceneEditContainer->GetSceneImageRectNDC();
+    return p_sceneEditContainer->GetSceneImageAARectNDC();
 }
 
 void EditorScene::BindOpenScene()

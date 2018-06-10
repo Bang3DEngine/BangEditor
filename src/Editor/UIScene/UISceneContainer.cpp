@@ -66,7 +66,10 @@ void UISceneContainer::RenderIfNeeded()
         {
             GL::Push(GL::Pushable::VIEWPORT);
 
-            GL::SetViewport( AARecti(GetRectTransform()->GetViewportAARect()) );
+            cam->SetRenderSize( Vector2i(GetSceneImage()->GetRectTransform()->
+                                         GetViewportAARect().GetSize()) );
+            //cam->SetRenderSize( AARecti(GetRectTransform()->GetViewportAARect()).
+            //                    GetSize() );
             GEngine::GetInstance()->Render(GetContainedScene(), cam);
             OnRenderNeededSceneFinished();
 
@@ -95,7 +98,7 @@ Scene *UISceneContainer::GetContainedScene() const
     return p_containedScene;
 }
 
-AARect UISceneContainer::GetSceneImageRectNDC() const
+AARect UISceneContainer::GetSceneImageAARectNDC() const
 {
     return AARect(p_sceneImage->GetRectTransform()->GetViewportAARectNDC());
 }

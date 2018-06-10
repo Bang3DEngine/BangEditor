@@ -73,21 +73,28 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
 
     if ( NeedsToRenderSelectionFramebuffer() )
     {
-        EditorCamera *edCam = EditorCamera::GetInstance();
+        EditorCamera *edCamGo = EditorCamera::GetInstance();
+        Camera *edCam = edCamGo->GetCamera();
         SelectionFramebuffer *sfb = GetSelectionFramebuffer();
         Scene *openScene = EditorSceneManager::GetOpenScene();
         GEngine *ge = GEngine::GetInstance();
-        if (sfb && ge && edCam && openScene)
+        if (sfb && ge && edCamGo && openScene)
         {
-            GL::Push(GL::Pushable::VIEWPORT);
+            GL::Push(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
 
-            GL::SetViewport( AARecti( GetRectTransform()->GetViewportAARect() ) );
-            edCam->GetCamera()->Bind();
-            edCam->BindSelectionFramebuffer();
+            AARecti imgRect( GetSceneImage()->GetRectTransform()->GetViewportAARect() );
+            Vector2i renderSize = imgRect.GetSize();
+            edCam->SetRenderSize(renderSize);
+            edCamGo->GetSelectionFramebuffer()->Resize(renderSize);
+
+            edCam->Bind();
+
             sfb->PrepareNewFrameForRender(openScene);
             sfb->RenderForSelectionBuffer(openScene);
 
-            GL::Pop(GL::Pushable::VIEWPORT);
+            edCam->UnBind();
+
+            GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
         }
     }
 

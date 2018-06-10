@@ -3,6 +3,7 @@
 
 #include "Bang/UMap.h"
 #include "Bang/Framebuffer.h"
+#include "Bang/IEventsGizmos.h"
 #include "Bang/IEventsDestroy.h"
 
 #include "BangEditor/BangEditor.h"
@@ -18,6 +19,7 @@ FORWARD NAMESPACE_BANG_END
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class SelectionFramebuffer : public Framebuffer,
+                             public EventListener<IEventsGizmos>,
                              public EventListener<IEventsDestroy>
 {
 public:
@@ -26,7 +28,6 @@ public:
     SelectionFramebuffer(int width, int height);
     virtual ~SelectionFramebuffer();
 
-    void SetNextRenderSelectable(GameObject *go);
     void PrepareNewFrameForRender(const GameObject *go);
     void RenderForSelectionBuffer(Scene *scene);
 
@@ -45,12 +46,17 @@ private:
     mutable UMap<GameObject*, IdType> m_gameObject_To_Id;
     mutable UMap<IdType, GameObject*> m_id_To_GameObject;
 
+    void SetNextRenderSelectable(GameObject *go);
     void RenderForSelectionBuffer(Renderer *renderer);
 
     static Color MapIdToColor(IdType id);
     static IdType MapColorToId(const Color &color);
 
     Color GetSelectionColor(GameObject *go) const;
+
+    // IEventsGizmos
+    void OnBeforeRender(Renderer *renderer, GameObject *selectable) override;
+    void OnAfterRender(Renderer *renderer, GameObject *selectable) override;
 
     friend class Gizmos;
     friend class GEngine;

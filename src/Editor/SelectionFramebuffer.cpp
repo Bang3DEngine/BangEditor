@@ -4,6 +4,7 @@
 #include "Bang/Paths.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
+#include "Bang/Gizmos.h"
 #include "Bang/GEngine.h"
 #include "Bang/Vector3.h"
 #include "Bang/Material.h"
@@ -38,6 +39,8 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     UnBind();
 
     p_colorTexture.Set(GetAttachmentTex2D(AttColor));
+
+    Gizmos::GetInstance()->EventEmitter<IEventsGizmos>::RegisterListener(this);
 }
 
 SelectionFramebuffer::~SelectionFramebuffer()
@@ -61,75 +64,51 @@ void SelectionFramebuffer::PrepareNewFrameForRender(const GameObject *go)
         m_gameObject_To_Id[go] = id;
         m_id_To_GameObject[id] = go;
 
-        if (Input::GetKeyDown(Key::X))
-        {
-            Debug_Log(go << ": " << MapIdToColor(id));
-        }
-
         go->EventEmitter<IEventsDestroy>::RegisterListener(this);
 
         ++id;
     }
-    if (Input::GetKeyDown(Key::X)) { Debug_Log("============"); }
 }
 
 void SelectionFramebuffer::RenderForSelectionBuffer(Scene *scene)
 {
     GEngine *ge = GEngine::GetInstance();
 
+    ge->PushActiveRenderingCamera();
     GL::Push(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
     GL::Push(GL::Pushable::BLEND_STATES);
     GL::Push(GL::Pushable::DEPTH_STATES);
 
-    // Selection rendering
-    List<Renderer*> sceneRends;
-    List<GameObject*> gos = scene->GetChildrenRecursively();
-    for (GameObject *go : gos)
-    {
-        if (go->IsActive() && !go->HasComponent<NotSelectableInEditor>())
-        {
-            List<Renderer*> goRends = go->GetComponents<Renderer>();
-            for (Renderer *rend : goRends)
-            {
-                if (rend->IsActive() && rend->IsVisible())
-                {
-                    sceneRends.PushBack(rend);
-                }
-            }
-        }
-    }
+    EditorCamera *edCamGo = EditorCamera::GetInstance();
+    Camera *edCam = edCamGo->GetCamera();
 
-    auto RenderScenePassForSFB = [&sceneRends, this, ge](RenderPass renderPass)
+    ge->SetActiveRenderingCamera(edCam);
+    ge->SetRenderRoutine([this](Renderer *rend)
     {
-        for (Renderer *rend : sceneRends)
-        {
-            if (Material *mat = rend->GetActiveMaterial())
-            {
-                if (mat->GetRenderPass() == renderPass)
-                {
-                    RenderForSelectionBuffer(rend);
-                }
-            }
-        }
-    };
+        RenderForSelectionBuffer(rend);
+    });
+
+    GL::Disable(GL::Enablable::BLEND);
 
     Bind();
     SetAllDrawBuffers();
-    GL::Disable(GL::Enablable::BLEND);
 
-    RenderScenePassForSFB(RenderPass::SCENE);
-    RenderScenePassForSFB(RenderPass::SCENE_TRANSPARENT);
+    GL::ClearColorStencilDepthBuffers();
+    ge->RenderWithPass(scene, RenderPass::SCENE);
+    ge->RenderWithPass(scene, RenderPass::SCENE_TRANSPARENT);
     GL::ClearStencilDepthBuffers();
     GL::SetDepthFunc(GL::Function::LEQUAL);
-    RenderScenePassForSFB(RenderPass::CANVAS);
+    ge->RenderWithPass(scene, RenderPass::CANVAS);
     GL::ClearDepthBuffer();
-    // RenderScenePassForSFB(RenderPass::OVERLAY);
+    ge->RenderWithPass(scene, RenderPass::OVERLAY);
 
     UnBind();
 
+    ge->SetRenderRoutine(nullptr);
     GL::Pop(GL::Pushable::DEPTH_STATES);
     GL::Pop(GL::Pushable::BLEND_STATES);
     GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
+    ge->PopActiveRenderingCamera();
 }
 
 void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
@@ -172,34 +151,8 @@ GetGameObjectInViewportPoint(const Vector2i &vpPoint)
     Color colorUnderMouse = ReadColor(vpPoint.x, vpPoint.y, AttColor);
     IdType id = MapColorToId(colorUnderMouse);
 
-    if (Input::GetKeyDown(Key::X))
-    {
-        Texture2D *tex = GetAttachmentTex2D(AttColor);
-        Imageb img;
-        img = tex->ToImage<Byte>();
-        for (int y = 0; y < img.GetHeight(); ++y)
-        {
-            for (int x = 0; x < img.GetWidth(); ++x)
-            {
-                if (rand()%10000 == 0) { Debug_Log(img.GetPixel(x,y)); };
-                img.SetPixel(x, y, img.GetPixel(x,y).WithAlpha(1.0f));
-            }
-        }
-        // img.Create(tex->GetWidth(), tex->GetHeight());
-        // for (int y = 0; y < img.GetHeight(); ++y)
-        // {
-        //     for (int x = 0; x < img.GetWidth(); ++x)
-        //     {
-        //         img.SetPixel(x, y, ReadColor(x,y,AttColor));
-        //     }
-        // }
-        img.Export(Paths::GetExecutableDir().Append("test.png"));
-    }
-
-    // Debug_Log(vpPoint << ", " << colorUnderMouse << ", " << id);
     if (colorUnderMouse != Color::Zero && m_id_To_GameObject.ContainsKey(id))
     {
-        // Debug_Log(GetAttachmentTex2D(AttColor)->GetSize());
         return m_id_To_GameObject[id];
     }
     return nullptr;
@@ -223,6 +176,22 @@ Color SelectionFramebuffer::GetSelectionColor(GameObject *go) const
 {
     return MapIdToColor(m_gameObject_To_Id[go]);
 }
+
+void SelectionFramebuffer::OnBeforeRender(Renderer *renderer,
+                                          GameObject *selectable)
+{
+    (void) renderer;
+    SetNextRenderSelectable(selectable);
+}
+
+void SelectionFramebuffer::OnAfterRender(Renderer *renderer,
+                                         GameObject *selectable)
+{
+    (void) renderer;
+    (void) selectable;
+    SetNextRenderSelectable(nullptr);
+}
+
 
 Color SelectionFramebuffer::MapIdToColor(IdType id)
 {

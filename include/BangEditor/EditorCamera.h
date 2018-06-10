@@ -30,8 +30,6 @@ public:
     void OnStart() override;
     void Update() override;
 
-    void BindSelectionFramebuffer();
-
     void AlignViewWithGameObject(GameObject *selected);
     void SwitchProjectionModeTo(bool mode3D);
     void StartLookAt(GameObject *lookAtFocus);

@@ -305,14 +305,6 @@ void EditorCamera::Update()
     if (unwrapMouse) { Input::SetMouseWrapping(false); }
 }
 
-void EditorCamera::BindSelectionFramebuffer()
-{
-    Vector2i vpSize = GL::GetViewportSize();
-    GetSelectionFramebuffer()->Resize(vpSize.x, vpSize.y);
-    GetSelectionFramebuffer()->Bind();
-    GL::ClearColorStencilDepthBuffers();
-}
-
 void EditorCamera::AlignViewWithGameObject(GameObject *selected)
 {
     p_currentFocus = nullptr;
