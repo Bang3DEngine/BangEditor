@@ -12,7 +12,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class TransformGizmo;
 FORWARD class GameObjectSelectionGizmo;
-FORWARD class ComponentsSelectionGizmo;
+FORWARD class ComponentsGizmos;
 
 class SelectionGizmosManager : public EventListener<IEventsEditor>,
                                public EventListener<IEventsDestroy>
@@ -27,15 +27,15 @@ public:
     void OnEndRender(Scene *scene);
 
     TransformGizmo *GetTransformGizmo() const;
-    ComponentsSelectionGizmo *GetComponentsSelectionGizmo() const;
+    ComponentsGizmos *GetComponentsGizmos() const;
     GameObjectSelectionGizmo *GetGameObjectSelectionGizmo() const;
 
     static SelectionGizmosManager* GetInstance();
 
 private:
     TransformGizmo *p_transformGizmo = nullptr;
+    ComponentsGizmos *p_componentsGizmos = nullptr;
     GameObjectSelectionGizmo *p_gameObjectSelectionGizmo = nullptr;
-    ComponentsSelectionGizmo *p_componentsSelectionGizmo = nullptr;
 
     // IEditorListener
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
