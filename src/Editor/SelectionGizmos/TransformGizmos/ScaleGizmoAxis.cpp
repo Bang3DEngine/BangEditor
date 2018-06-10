@@ -192,6 +192,11 @@ void ScaleGizmoAxis::UpdatePoints(float localAxisLength)
                                                      (1.0f + baseScale) * 0.5f);
 }
 
+bool ScaleGizmoAxis::ApplyAlignmentAlpha() const
+{
+    return (GetAxis() != Axis3DExt::XYZ);
+}
+
 void ScaleGizmoAxis::SetColor(const Color &color)
 {
     p_lineRenderer->GetMaterial()->SetAlbedoColor(color);

@@ -94,6 +94,7 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Scene *scene)
     GL::SetDepthFunc(GL::Function::LEQUAL);
     ge->RenderWithPass(scene, RenderPass::CANVAS);
     GL::ClearDepthBuffer();
+    GL::SetDepthMask(false);
     ge->RenderWithPass(scene, RenderPass::OVERLAY);
 
     UnBind();

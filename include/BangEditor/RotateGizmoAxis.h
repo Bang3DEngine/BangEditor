@@ -42,6 +42,8 @@ private:
     void UpdateCirclePoints();
     static Quaternion GetQuaternionAxised(const Quaternion &q, Axis3DExt axis);
 
+    // TransformGizmoAxis
+    bool ApplyAlignmentAlpha() const override;
     void SetColor(const Color &color) override;
 
 };

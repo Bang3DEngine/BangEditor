@@ -31,6 +31,8 @@ protected:
     TransformGizmoAxis();
     virtual ~TransformGizmoAxis();
 
+    virtual bool ApplyAlignmentAlpha() const;
+
 private:
     using SelectionState = SelectionGizmo::SelectionState;
 

@@ -194,6 +194,11 @@ Quaternion RotateGizmoAxis::GetQuaternionAxised(const Quaternion &q,
                                  qAngleAxis.NormalizedSafe());
 }
 
+bool RotateGizmoAxis::ApplyAlignmentAlpha() const
+{
+    return false;
+}
+
 void RotateGizmoAxis::SetAxis(Axis3DExt axis)
 {
     TransformGizmoAxis::SetAxis(axis);

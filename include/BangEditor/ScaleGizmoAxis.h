@@ -42,6 +42,9 @@ private:
     virtual ~ScaleGizmoAxis();
 
     void UpdatePoints(float localAxisLength);
+
+    // TransformGizmoAxis
+    bool ApplyAlignmentAlpha() const override;
     void SetColor(const Color &color) override;
 };
 

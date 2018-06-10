@@ -53,18 +53,44 @@ Vector3 TransformGizmoAxis::GetAxisVectorWorld() const
 
 void TransformGizmoAxis::SetColor(SelectionState state)
 {
+    constexpr float DotRange = 0.25f;
+
+    float alpha = 1.0f;
+    if (ApplyAlignmentAlpha())
+    {
+        float dot = 1.0f;
+        GameObject *refGo = GetReferencedGameObject();
+        EditorCamera *edCam = EditorCamera::GetInstance();
+        if (edCam && refGo)
+        {
+            Vector3 refGoPos = refGo->GetTransform()->GetPosition();
+            Vector3 edCamPos = edCam->GetTransform()->GetPosition();
+            Vector3 edCamToRefGoDir = (refGoPos - edCamPos).NormalizedSafe();
+            if (edCamToRefGoDir.Length() > 0)
+            {
+                dot = Math::Abs( Vector3::Dot(GetAxisVectorWorld(), edCamToRefGoDir) );
+            }
+        }
+
+        if ((1.0f-dot) <= DotRange)
+        {
+            alpha = ((1.0f-dot) / DotRange);
+        }
+    }
+    SetVisible( (alpha >= 0.1f) );
+
     switch (state)
     {
         case SelectionState::IDLE:
-            SetColor( GetAxisColor( GetAxis() ) );
+            SetColor( GetAxisColor( GetAxis() ).WithAlpha(alpha) );
             break;
 
         case SelectionState::OVER:
-            SetColor(Color::Orange);
+            SetColor( Color::Orange );
             break;
 
         case SelectionState::GRABBED:
-            SetColor(Color::Yellow);
+            SetColor( Color::Yellow );
             break;
     }
 }
@@ -73,4 +99,9 @@ void TransformGizmoAxis::OnDisabled()
 {
     SelectionGizmo::OnDisabled();
     SetColor(SelectionState::IDLE);
+}
+
+bool TransformGizmoAxis::ApplyAlignmentAlpha() const
+{
+    return true;
 }
