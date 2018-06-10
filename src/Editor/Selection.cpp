@@ -31,6 +31,12 @@ GameObject *Selection::GetOveredGameObject()
     return GetOveredGameObject(vpPoint);
 }
 
+SelectionFramebuffer *Selection::GetSelectionFramebuffer()
+{
+    EditorCamera *edCam = EditorCamera::GetInstance();
+    return edCam ? edCam->GetSelectionFramebuffer() : nullptr;
+}
+
 GameObject *Selection::GetOveredGameObject(const Vector2i &vpPoint)
 {
     EditorCamera *edCam = EditorCamera::GetInstance();

@@ -18,6 +18,7 @@ class Selection
 public:
     static bool IsBeingRendered();
     static Bang::GameObject *GetOveredGameObject();
+    static SelectionFramebuffer *GetSelectionFramebuffer();
     static Bang::GameObject *GetOveredGameObject(const Bang::Vector2i &vpPoint);
     Selection() = delete;
 };

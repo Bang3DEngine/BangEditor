@@ -4,7 +4,6 @@
 #include "Bang/Paths.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
-#include "Bang/Gizmos.h"
 #include "Bang/GEngine.h"
 #include "Bang/Vector3.h"
 #include "Bang/Material.h"
@@ -39,8 +38,6 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     UnBind();
 
     p_colorTexture.Set(GetAttachmentTex2D(AttColor));
-
-    Gizmos::GetInstance()->EventEmitter<IEventsGizmos>::RegisterListener(this);
 }
 
 SelectionFramebuffer::~SelectionFramebuffer()
@@ -170,22 +167,6 @@ Color SelectionFramebuffer::GetSelectionColor(GameObject *go) const
 {
     return MapIdToColor(m_gameObject_To_Id[go]);
 }
-
-void SelectionFramebuffer::OnBeforeRender(Renderer *renderer,
-                                          GameObject *selectable)
-{
-    (void) renderer;
-    SetNextRenderSelectable(selectable);
-}
-
-void SelectionFramebuffer::OnAfterRender(Renderer *renderer,
-                                         GameObject *selectable)
-{
-    (void) renderer;
-    (void) selectable;
-    SetNextRenderSelectable(nullptr);
-}
-
 
 Color SelectionFramebuffer::MapIdToColor(IdType id)
 {
