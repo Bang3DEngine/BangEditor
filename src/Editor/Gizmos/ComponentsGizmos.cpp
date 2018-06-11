@@ -47,9 +47,9 @@ void ComponentsGizmos::Render(RenderPass rp, bool renderChildren)
 
     if (rp == RenderPass::OVERLAY)
     {
-        if (GameObject *selectedGameObject = GetReferencedGameObject())
+        if (GameObject *selectedGameObject = Editor::GetSelectedGameObject())
         {
-            for (Component *comp : GetReferencedGameObject()->GetComponents())
+            for (Component *comp : selectedGameObject->GetComponents())
             {
                 if (!comp->IsActive()) { continue; }
 
@@ -66,12 +66,6 @@ void ComponentsGizmos::Render(RenderPass rp, bool renderChildren)
             RenderGameObjectGizmosWhenNotSelected(openScene);
         }
     }
-}
-
-void ComponentsGizmos::SetReferencedGameObject(GameObject *referencedGameObject)
-{
-    SelectionGizmo::SetReferencedGameObject(referencedGameObject);
-    Update();
 }
 
 void ComponentsGizmos::RenderGameObjectGizmosWhenNotSelected(GameObject *go)

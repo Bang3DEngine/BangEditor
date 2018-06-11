@@ -20,10 +20,10 @@
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/UISceneImage.h"
+#include "BangEditor/GizmosManager.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/NotSelectableInEditor.h"
-#include "BangEditor/SelectionGizmosManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -74,7 +74,7 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
         GEngine *ge = GEngine::GetInstance();
         if (sfb && ge && edCamGo && openScene)
         {
-            SelectionGizmosManager *sgm = SelectionGizmosManager::GetInstance();
+            GizmosManager *sgm = GizmosManager::GetInstance();
             sgm->OnBeginRender(openScene);
             ge->PushActiveRenderingCamera();
             ge->SetActiveRenderingCamera(edCam);

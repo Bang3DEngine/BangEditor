@@ -3,7 +3,7 @@
 
 #include "Bang/Bang.h"
 
-#include "BangEditor/SelectionGizmosManager.h"
+#include "BangEditor/GizmosManager.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
@@ -14,7 +14,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class EditorFloor;
 FORWARD class EditorCamera;
-FORWARD class SelectionGizmosManager;
+FORWARD class GizmosManager;
 
 class EditSceneGameObjects
 {
@@ -29,14 +29,14 @@ public:
 
     EditorFloor *GetEditorFloor() const;
     EditorCamera *GetEditorCamera() const;
-    SelectionGizmosManager *GetSelectionGizmosManager() const;
+    GizmosManager *GetGizmosManager() const;
 
     static EditSceneGameObjects *GetInstance();
 
 private:
     EditorFloor *m_editorFloor = nullptr;
     EditorCamera *m_editorCamera = nullptr;
-    SelectionGizmosManager *m_selectionGizmosManager = nullptr;
+    GizmosManager *m_gizmosManager = nullptr;
 
     friend class EditorCamera;
 };

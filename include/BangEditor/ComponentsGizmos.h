@@ -13,7 +13,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class ComponentsGizmos : public SelectionGizmo
+class ComponentsGizmos : public GameObject
 {
     GAMEOBJECT_EDITOR(ComponentsGizmos);
 
@@ -23,9 +23,6 @@ public:
 
     // GameObject
     void Render(RenderPass rp, bool renderChildren) override;
-
-    // SelectionGizmo
-    void SetReferencedGameObject(GameObject *referencedGameObject) override;
 
 private:
     void RenderGameObjectGizmosWhenNotSelected(GameObject *go);

@@ -12,11 +12,11 @@
 
 #include "BangEditor/ScaleGizmo.h"
 #include "BangEditor/RotateGizmo.h"
+#include "BangEditor/GizmosManager.h"
 #include "BangEditor/TranslateGizmo.h"
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/NotSelectableInEditor.h"
-#include "BangEditor/SelectionGizmosManager.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
 #include "BangEditor/RectTransformSelectionGizmo.h"
 
@@ -200,5 +200,5 @@ TransformGizmo::TransformMode TransformGizmo::GetTransformMode() const
 
 TransformGizmo *TransformGizmo::GetInstance()
 {
-    return SelectionGizmosManager::GetInstance()->GetTransformGizmo();
+    return GizmosManager::GetInstance()->GetTransformGizmo();
 }

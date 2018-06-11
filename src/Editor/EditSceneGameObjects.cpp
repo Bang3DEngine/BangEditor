@@ -12,14 +12,14 @@ EditSceneGameObjects::EditSceneGameObjects()
 {
     m_editorFloor = GameObject::Create<EditorFloor>();
     m_editorCamera = GameObject::Create<EditorCamera>();
-    m_selectionGizmosManager = new SelectionGizmosManager();
+    m_gizmosManager = new GizmosManager();
 }
 
 EditSceneGameObjects::~EditSceneGameObjects()
 {
     GameObject::Destroy(m_editorCamera);
     GameObject::Destroy(m_editorFloor);
-    delete m_selectionGizmosManager;
+    delete m_gizmosManager;
 }
 
 void EditSceneGameObjects::Update()
@@ -28,18 +28,18 @@ void EditSceneGameObjects::Update()
     GetEditorCamera()->Start();
     GetEditorFloor()->Update();
     GetEditorCamera()->Update();
-    GetSelectionGizmosManager()->Update();
+    GetGizmosManager()->Update();
 }
 
 void EditSceneGameObjects::OnBeginRender(Scene *scene)
 {
     GetEditorFloor()->SetParent(scene);
-    GetSelectionGizmosManager()->OnBeginRender(scene);
+    GetGizmosManager()->OnBeginRender(scene);
 }
 
-SelectionGizmosManager *EditSceneGameObjects::GetSelectionGizmosManager() const
+GizmosManager *EditSceneGameObjects::GetGizmosManager() const
 {
-    return m_selectionGizmosManager;
+    return m_gizmosManager;
 }
 
 EditSceneGameObjects *EditSceneGameObjects::GetInstance()
@@ -50,7 +50,7 @@ EditSceneGameObjects *EditSceneGameObjects::GetInstance()
 void EditSceneGameObjects::OnEndRender(Scene *scene)
 {
     GetEditorFloor()->SetParent(nullptr);
-    GetSelectionGizmosManager()->OnEndRender(scene);
+    GetGizmosManager()->OnEndRender(scene);
 }
 
 EditorCamera *EditSceneGameObjects::GetEditorCamera() const

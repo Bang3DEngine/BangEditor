@@ -1,4 +1,4 @@
-#include "BangEditor/SelectionGizmosManager.h"
+#include "BangEditor/GizmosManager.h"
 
 #include "Bang/Gizmos.h"
 
@@ -12,7 +12,7 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-SelectionGizmosManager::SelectionGizmosManager()
+GizmosManager::GizmosManager()
 {
     TransformGizmo *tg = GameObject::Create<TransformGizmo>();
     p_transformGizmo = tg;
@@ -24,16 +24,15 @@ SelectionGizmosManager::SelectionGizmosManager()
 
     ComponentsGizmos *csg = GameObject::Create<ComponentsGizmos>();
     p_componentsGizmos = csg;
-    GetComponentsGizmos()->SetReferencedGameObject(nullptr);
 
     Editor::GetInstance()->EventEmitter<IEventsEditor>::RegisterListener(this);
 }
 
-SelectionGizmosManager::~SelectionGizmosManager()
+GizmosManager::~GizmosManager()
 {
 }
 
-void SelectionGizmosManager::Update()
+void GizmosManager::Update()
 {
     GetTransformGizmo()->Start();
     GetComponentsGizmos()->Start();
@@ -44,7 +43,7 @@ void SelectionGizmosManager::Update()
     GetGameObjectSelectionGizmo()->Update();
 }
 
-void SelectionGizmosManager::OnBeginRender(Scene *scene)
+void GizmosManager::OnBeginRender(Scene *scene)
 {
     GetGameObjectSelectionGizmo()->SetParent(scene);
     GetComponentsGizmos()->SetParent(scene);
@@ -52,7 +51,7 @@ void SelectionGizmosManager::OnBeginRender(Scene *scene)
     GetTransformGizmo()->OnBeginRender(scene);
 }
 
-void SelectionGizmosManager::OnEndRender(Scene*)
+void GizmosManager::OnEndRender(Scene*)
 {
     GetTransformGizmo()->SetParent(nullptr);
     GetTransformGizmo()->OnEndRender(nullptr);
@@ -60,36 +59,35 @@ void SelectionGizmosManager::OnEndRender(Scene*)
     GetComponentsGizmos()->SetParent(nullptr);
 }
 
-SelectionGizmosManager* SelectionGizmosManager::GetInstance()
+GizmosManager* GizmosManager::GetInstance()
 {
-    return EditSceneGameObjects::GetInstance()->GetSelectionGizmosManager();
+    return EditSceneGameObjects::GetInstance()->GetGizmosManager();
 }
 
-void SelectionGizmosManager::OnGameObjectSelected(GameObject *selectedGameObject)
+void GizmosManager::OnGameObjectSelected(GameObject *selectedGameObject)
 {
     GetTransformGizmo()->SetReferencedGameObject(selectedGameObject);
-    GetComponentsGizmos()->SetReferencedGameObject(selectedGameObject);
     GetGameObjectSelectionGizmo()->SetReferencedGameObject(selectedGameObject);
 
     GetTransformGizmo()->SetEnabled( selectedGameObject != nullptr );
     GetGameObjectSelectionGizmo()->SetEnabled( selectedGameObject != nullptr );
 }
 
-void SelectionGizmosManager::OnDestroyed(EventEmitter<IEventsDestroy> *object)
+void GizmosManager::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
 }
 
-TransformGizmo* SelectionGizmosManager::GetTransformGizmo() const
+TransformGizmo* GizmosManager::GetTransformGizmo() const
 {
     return p_transformGizmo;
 }
 
-ComponentsGizmos *SelectionGizmosManager::GetComponentsGizmos() const
+ComponentsGizmos *GizmosManager::GetComponentsGizmos() const
 {
     return p_componentsGizmos;
 }
 
-GameObjectSelectionGizmo *SelectionGizmosManager::GetGameObjectSelectionGizmo() const
+GameObjectSelectionGizmo *GizmosManager::GetGameObjectSelectionGizmo() const
 {
     return p_gameObjectSelectionGizmo;
 }

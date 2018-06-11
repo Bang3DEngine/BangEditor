@@ -14,12 +14,12 @@ FORWARD class TransformGizmo;
 FORWARD class GameObjectSelectionGizmo;
 FORWARD class ComponentsGizmos;
 
-class SelectionGizmosManager : public EventListener<IEventsEditor>,
+class GizmosManager : public EventListener<IEventsEditor>,
                                public EventListener<IEventsDestroy>
 {
 public:
-    SelectionGizmosManager();
-	virtual ~SelectionGizmosManager();
+    GizmosManager();
+    virtual ~GizmosManager();
 
     void Update();
 
@@ -30,7 +30,7 @@ public:
     ComponentsGizmos *GetComponentsGizmos() const;
     GameObjectSelectionGizmo *GetGameObjectSelectionGizmo() const;
 
-    static SelectionGizmosManager* GetInstance();
+    static GizmosManager* GetInstance();
 
 private:
     TransformGizmo *p_transformGizmo = nullptr;
