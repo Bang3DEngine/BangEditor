@@ -1,5 +1,5 @@
-#ifndef SELECTIONGIZMOSMANAGER_H
-#define SELECTIONGIZMOSMANAGER_H
+#ifndef GIZMOSMANAGER_H
+#define GIZMOSMANAGER_H
 
 #include "Bang/Bang.h"
 #include "Bang/EventListener.h"
@@ -11,8 +11,8 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class TransformGizmo;
-FORWARD class GameObjectSelectionGizmo;
 FORWARD class ComponentsGizmos;
+FORWARD class GameObjectSelectionGizmo;
 
 class GizmosManager : public EventListener<IEventsEditor>,
                                public EventListener<IEventsDestroy>
@@ -46,5 +46,5 @@ private:
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // SELECTIONGIZMOSMANAGER_H
+#endif // GIZMOSMANAGER_H
 

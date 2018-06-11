@@ -5,7 +5,6 @@
 #include "Bang/AABox.h"
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
-#include "Bang/Gizmos.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
 #include "Bang/Transform.h"
@@ -14,6 +13,7 @@
 #include "Bang/AudioSource.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
+#include "Bang/RenderFactory.h"
 #include "Bang/TextureFactory.h"
 #include "Bang/DirectionalLight.h"
 
@@ -130,8 +130,8 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam,
 
     if (!whenCompIsSelected)
     {
-        Gizmos::Reset();
-        Gizmos::SetRenderPass(RenderPass::OVERLAY);
+        RenderFactory::Reset();
+        RenderFactory::SetRenderPass(RenderPass::OVERLAY);
 
         static RH<Mesh> cameraMesh = MeshFactory::GetCamera();
         Transform *camTransform = cam->GetGameObject()->GetTransform();
@@ -144,23 +144,23 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam,
                                             camTransform->GetPosition());
         */
 
-        Gizmos::SetReceivesLighting(true);
-        Gizmos::SetPosition(camTransform->GetPosition());
-        Gizmos::SetRotation(camTransform->GetRotation());
-        Gizmos::SetScale(Vector3::One * 0.02f * distScale);
-        Gizmos::SetColor(Color::White);
-        Gizmos::RenderCustomMesh(cameraMesh.Get());
+        RenderFactory::SetReceivesLighting(true);
+        RenderFactory::SetPosition(camTransform->GetPosition());
+        RenderFactory::SetRotation(camTransform->GetRotation());
+        RenderFactory::SetScale(Vector3::One * 0.02f * distScale);
+        RenderFactory::SetColor(Color::White);
+        RenderFactory::RenderCustomMesh(cameraMesh.Get());
     }
     else
     {
-        Gizmos::Reset();
-        Gizmos::SetColor(Color::Green);
-        Gizmos::SetReceivesLighting(false);
-        Gizmos::SetRenderPass(RenderPass::OVERLAY);
+        RenderFactory::Reset();
+        RenderFactory::SetColor(Color::Green);
+        RenderFactory::SetReceivesLighting(false);
+        RenderFactory::SetRenderPass(RenderPass::OVERLAY);
 
         if (cam->GetProjectionMode() == Camera::ProjectionMode::PERSPECTIVE)
         {
-            Gizmos::RenderFrustum(camTransform->GetForward(),
+            RenderFactory::RenderFrustum(camTransform->GetForward(),
                                   camTransform->GetUp(),
                                   camTransform->GetPosition(),
                                   cam->GetZNear(),
@@ -178,8 +178,8 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam,
                                           -cam->GetZNear()));
             orthoBox.SetMax(pos + Vector3( orthoSize.x,  orthoSize.y,
                                            -cam->GetZFar()));
-            Gizmos::SetRotation(camTransform->GetRotation());
-            Gizmos::RenderSimpleBox(orthoBox);
+            RenderFactory::SetRotation(camTransform->GetRotation());
+            RenderFactory::RenderSimpleBox(orthoBox);
         }
     }
 
@@ -196,23 +196,23 @@ void ComponentsGizmos::RenderPointLightGizmo(PointLight *pointLight,
 
     if (!whenCompIsSelected)
     {
-        Gizmos::Reset();
-        Gizmos::SetRenderPass(RenderPass::OVERLAY);
-        Gizmos::SetColor(pointLight->GetColor().WithAlpha(1.0f));
-        Gizmos::SetPosition( pointLight->GetGameObject()->GetTransform()->
+        RenderFactory::Reset();
+        RenderFactory::SetRenderPass(RenderPass::OVERLAY);
+        RenderFactory::SetColor(pointLight->GetColor().WithAlpha(1.0f));
+        RenderFactory::SetPosition( pointLight->GetGameObject()->GetTransform()->
                              GetPosition() );
-        Gizmos::SetScale( Vector3(0.1f) );
-        Gizmos::RenderIcon( TextureFactory::GetLightBulbIcon().Get(), true );
+        RenderFactory::SetScale( Vector3(0.1f) );
+        RenderFactory::RenderIcon( TextureFactory::GetLightBulbIcon().Get(), true );
     }
     else
     {
-        Gizmos::Reset();
-        Gizmos::SetThickness(2.0f);
-        Gizmos::SetReceivesLighting(false);
-        Gizmos::SetColor(pointLight->GetColor());
-        Gizmos::SetRenderPass(RenderPass::OVERLAY);
+        RenderFactory::Reset();
+        RenderFactory::SetThickness(2.0f);
+        RenderFactory::SetReceivesLighting(false);
+        RenderFactory::SetColor(pointLight->GetColor());
+        RenderFactory::SetRenderPass(RenderPass::OVERLAY);
         Transform *plTransform = pointLight->GetGameObject()->GetTransform();
-        Gizmos::RenderSimpleSphere(plTransform->GetPosition(),
+        RenderFactory::RenderSimpleSphere(plTransform->GetPosition(),
                                    pointLight->GetRange(),
                                    true,
                                    1, 2, 32);
@@ -230,17 +230,17 @@ void ComponentsGizmos::RenderDirectionalLightGizmo(DirectionalLight *dirLight,
 
     if (!whenCompIsSelected)
     {
-        Gizmos::Reset();
-        Gizmos::SetRenderPass(RenderPass::OVERLAY);
-        Gizmos::SetColor( dirLight->GetColor().WithAlpha(1.0f) );
-        Gizmos::SetPosition( dirLight->GetGameObject()->GetTransform()->
+        RenderFactory::Reset();
+        RenderFactory::SetRenderPass(RenderPass::OVERLAY);
+        RenderFactory::SetColor( dirLight->GetColor().WithAlpha(1.0f) );
+        RenderFactory::SetPosition( dirLight->GetGameObject()->GetTransform()->
                              GetPosition() );
-        Gizmos::SetScale( Vector3(0.1f) );
-        Gizmos::RenderIcon( TextureFactory::GetSunIcon().Get(), true );
+        RenderFactory::SetScale( Vector3(0.1f) );
+        RenderFactory::RenderIcon( TextureFactory::GetSunIcon().Get(), true );
     }
     else
     {
-        Gizmos::Reset();
+        RenderFactory::Reset();
 
         GameObject *lightGo = dirLight->GetGameObject();
         GameObject *camGo = Camera::GetActive()->GetGameObject();
@@ -253,15 +253,15 @@ void ComponentsGizmos::RenderDirectionalLightGizmo(DirectionalLight *dirLight,
         const Vector3 forward = lightGo->GetTransform()->GetForward() * length;
         const Vector3 center = lightGo->GetTransform()->GetPosition();
 
-        Gizmos::SetThickness(2.0f);
-        Gizmos::SetReceivesLighting(false);
-        Gizmos::SetColor(dirLight->GetColor());
-        Gizmos::SetRenderPass(RenderPass::OVERLAY);
+        RenderFactory::SetThickness(2.0f);
+        RenderFactory::SetReceivesLighting(false);
+        RenderFactory::SetColor(dirLight->GetColor());
+        RenderFactory::SetRenderPass(RenderPass::OVERLAY);
         for (float ang = 0.0f; ang <= 2 * Math::Pi; ang += Math::Pi / 4.0f)
         {
             const Vector3 offx = right * Math::Cos(ang);
             const Vector3 offy = up * Math::Sin(ang);
-            Gizmos::RenderLine(center + offx + offy,
+            RenderFactory::RenderLine(center + offx + offy,
                                center + offx + offy + forward);
         }
     }
@@ -278,21 +278,21 @@ void ComponentsGizmos::RenderAudioSourceGizmo(AudioSource *audioSource,
 
     if (!whenCompIsSelected)
     {
-        Gizmos::Reset();
-        Gizmos::SetRenderPass(RenderPass::OVERLAY);
-        Gizmos::SetPosition( audioSource->GetGameObject()->
+        RenderFactory::Reset();
+        RenderFactory::SetRenderPass(RenderPass::OVERLAY);
+        RenderFactory::SetPosition( audioSource->GetGameObject()->
                              GetTransform()->GetPosition() );
-        Gizmos::SetScale( Vector3(0.1f) );
-        Gizmos::RenderIcon( TextureFactory::GetAudioIcon().Get(), true );
+        RenderFactory::SetScale( Vector3(0.1f) );
+        RenderFactory::RenderIcon( TextureFactory::GetAudioIcon().Get(), true );
     }
     else
     {
-        Gizmos::Reset();
-        Gizmos::SetThickness(2.0f);
-        Gizmos::SetColor(Color::White);
-        Gizmos::SetReceivesLighting(false);
-        Gizmos::SetRenderPass(RenderPass::OVERLAY);
-        Gizmos::RenderSimpleSphere(audioSource->GetGameObject()->
+        RenderFactory::Reset();
+        RenderFactory::SetThickness(2.0f);
+        RenderFactory::SetColor(Color::White);
+        RenderFactory::SetReceivesLighting(false);
+        RenderFactory::SetRenderPass(RenderPass::OVERLAY);
+        RenderFactory::RenderSimpleSphere(audioSource->GetGameObject()->
                                         GetTransform()->GetPosition(),
                                    audioSource->GetRange(),
                                    true,

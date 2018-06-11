@@ -1,8 +1,8 @@
 #include "BangEditor/GameObjectSelectionGizmo.h"
 
-#include "Bang/Gizmos.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
+#include "Bang/RenderFactory.h"
 
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/HideInHierarchy.h"
@@ -41,11 +41,11 @@ void GameObjectSelectionGizmo::Render(RenderPass rp, bool renderChildren)
             gb->PushDepthStencilTexture();
             gb->SetOverlayDepthStencil();
 
-            Gizmos::Reset();
-            Gizmos::SetThickness(2.0f);
-            Gizmos::SetColor(Color::Orange);
-            Gizmos::SetReceivesLighting(false);
-            Gizmos::RenderOutline( GetReferencedGameObject() );
+            RenderFactory::Reset();
+            RenderFactory::SetThickness(2.0f);
+            RenderFactory::SetColor(Color::Orange);
+            RenderFactory::SetReceivesLighting(false);
+            RenderFactory::RenderOutline( GetReferencedGameObject() );
 
             gb->PopDepthStencilTexture();
         }

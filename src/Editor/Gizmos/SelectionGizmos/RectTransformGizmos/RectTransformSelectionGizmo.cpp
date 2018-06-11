@@ -1,10 +1,10 @@
 #include "BangEditor/RectTransformSelectionGizmo.h"
 
 #include "Bang/AARect.h"
-#include "Bang/Gizmos.h"
 #include "Bang/GEngine.h"
 #include "Bang/Material.h"
 #include "Bang/RectTransform.h"
+#include "Bang/RenderFactory.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/GameObjectFactory.h"
@@ -81,13 +81,13 @@ void RectTransformSelectionGizmo::Render(RenderPass renderPass, bool renderChild
         if (!refGo->GetRectTransform()) { return; }
 
         // Gizmos rendering!
-        Gizmos::Reset();
+        RenderFactory::Reset();
 
         // Rect
-        Gizmos::SetThickness(2.0f);
-        Gizmos::SetColor( Color::White );
-        Gizmos::SetRenderPass(renderPass);
-        Gizmos::RenderRect(refGo->GetRectTransform()->GetViewportRect().GetPoints());
+        RenderFactory::SetThickness(2.0f);
+        RenderFactory::SetColor( Color::White );
+        RenderFactory::SetRenderPass(renderPass);
+        RenderFactory::RenderRect(refGo->GetRectTransform()->GetViewportRect().GetPoints());
     }
 
     SelectionGizmo::Render(renderPass, renderChildren);

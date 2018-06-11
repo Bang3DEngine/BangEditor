@@ -1,6 +1,6 @@
 #include "BangEditor/GizmosManager.h"
 
-#include "Bang/Gizmos.h"
+#include "Bang/RenderFactory.h"
 
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/TransformGizmo.h"
