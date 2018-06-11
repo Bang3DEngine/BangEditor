@@ -80,14 +80,12 @@ void RectTransformSelectionGizmo::Render(RenderPass renderPass, bool renderChild
         if (!refGo) { return; }
         if (!refGo->GetRectTransform()) { return; }
 
-        // Gizmos rendering!
-        RenderFactory::Reset();
-
-        // Rect
-        RenderFactory::SetThickness(2.0f);
-        RenderFactory::SetColor( Color::White );
-        RenderFactory::SetRenderPass(renderPass);
-        RenderFactory::RenderRect(refGo->GetRectTransform()->GetViewportRect().GetPoints());
+        RenderFactory::Parameters params;
+        params.thickness = 2.0f;
+        params.color = Color::White;
+        RenderFactory::RenderRect(refGo->GetRectTransform()->
+                                  GetViewportRect().GetPoints(),
+                                  params);
     }
 
     SelectionGizmo::Render(renderPass, renderChildren);

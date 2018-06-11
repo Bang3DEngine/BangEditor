@@ -123,20 +123,11 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam,
 {
     Transform *camTransform = cam->GetGameObject()->GetTransform();
 
-    GBuffer *gb = GEngine::GetActiveGBuffer();
-
-    gb->PushDepthStencilTexture();
-    gb->SetSceneDepthStencil();
-
     if (!whenCompIsSelected)
     {
-        RenderFactory::Reset();
-        RenderFactory::SetRenderPass(RenderPass::OVERLAY);
-
         static RH<Mesh> cameraMesh = MeshFactory::GetCamera();
         Transform *camTransform = cam->GetGameObject()->GetTransform();
         float distScale = 15.0f;
-
         /*
         Camera *sceneCam = SceneManager::GetActiveScene()->GetCamera();
         Transform *sceneCamTransform = sceneCam->GetGameObject()->GetTransform();
@@ -144,29 +135,38 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam,
                                             camTransform->GetPosition());
         */
 
-        RenderFactory::SetReceivesLighting(true);
-        RenderFactory::SetPosition(camTransform->GetPosition());
-        RenderFactory::SetRotation(camTransform->GetRotation());
-        RenderFactory::SetScale(Vector3::One * 0.02f * distScale);
-        RenderFactory::SetColor(Color::White);
-        RenderFactory::RenderCustomMesh(cameraMesh.Get());
+        RenderFactory::Parameters params;
+        params.receivesLighting = true;
+        params.position = camTransform->GetPosition();
+        params.rotation = camTransform->GetRotation();
+        params.scale = Vector3(0.02f * distScale);
+        params.color = Color::White;
+        GL::Disable(GL::Enablable::CULL_FACE);
+        GL::Disable(GL::Enablable::DEPTH_TEST);
+        RenderFactory::RenderCustomMesh(cameraMesh.Get(), params);
+        GL::Enable(GL::Enablable::DEPTH_TEST);
+        GL::Enable(GL::Enablable::CULL_FACE);
     }
     else
     {
-        RenderFactory::Reset();
-        RenderFactory::SetColor(Color::Green);
-        RenderFactory::SetReceivesLighting(false);
-        RenderFactory::SetRenderPass(RenderPass::OVERLAY);
+        GBuffer *gb = GEngine::GetActiveGBuffer();
+        gb->PushDepthStencilTexture();
+        gb->SetSceneDepthStencil();
+
+        RenderFactory::Parameters params;
+        params.color = Color::Green;
+        params.receivesLighting = false;
 
         if (cam->GetProjectionMode() == Camera::ProjectionMode::PERSPECTIVE)
         {
             RenderFactory::RenderFrustum(camTransform->GetForward(),
-                                  camTransform->GetUp(),
-                                  camTransform->GetPosition(),
-                                  cam->GetZNear(),
-                                  cam->GetZFar(),
-                                  cam->GetFovDegrees(),
-                                  GL::GetViewportAspectRatio() );
+                                         camTransform->GetUp(),
+                                         camTransform->GetPosition(),
+                                         cam->GetZNear(),
+                                         cam->GetZFar(),
+                                         cam->GetFovDegrees(),
+                                         GL::GetViewportAspectRatio(),
+                                         params);
         }
         else
         {
@@ -178,69 +178,68 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam,
                                           -cam->GetZNear()));
             orthoBox.SetMax(pos + Vector3( orthoSize.x,  orthoSize.y,
                                            -cam->GetZFar()));
-            RenderFactory::SetRotation(camTransform->GetRotation());
-            RenderFactory::RenderSimpleBox(orthoBox);
+            params.rotation = camTransform->GetRotation();
+            RenderFactory::RenderSimpleBox(orthoBox, params);
         }
-    }
 
-    gb->PopDepthStencilTexture();
+        gb->PopDepthStencilTexture();
+    }
 }
 
 void ComponentsGizmos::RenderPointLightGizmo(PointLight *pointLight,
                                              bool whenCompIsSelected)
 {
-    GBuffer *gb = GEngine::GetActiveGBuffer();
-
-    gb->PushDepthStencilTexture();
-    gb->SetSceneDepthStencil();
+    RenderFactory::Parameters params;
+    params.receivesLighting = false;
+    params.color = pointLight->GetColor().WithAlpha(1.0f);
+    params.position = pointLight->GetGameObject()->
+                      GetTransform()->GetPosition();
 
     if (!whenCompIsSelected)
     {
-        RenderFactory::Reset();
-        RenderFactory::SetRenderPass(RenderPass::OVERLAY);
-        RenderFactory::SetColor(pointLight->GetColor().WithAlpha(1.0f));
-        RenderFactory::SetPosition( pointLight->GetGameObject()->GetTransform()->
-                             GetPosition() );
-        RenderFactory::SetScale( Vector3(0.1f) );
-        RenderFactory::RenderIcon( TextureFactory::GetLightBulbIcon().Get(), true );
+        params.scale = Vector3(0.1f);
+        RenderFactory::RenderIcon(TextureFactory::GetLightBulbIcon().Get(),
+                                  true,
+                                  params);
     }
     else
     {
-        RenderFactory::Reset();
-        RenderFactory::SetThickness(2.0f);
-        RenderFactory::SetReceivesLighting(false);
-        RenderFactory::SetColor(pointLight->GetColor());
-        RenderFactory::SetRenderPass(RenderPass::OVERLAY);
-        Transform *plTransform = pointLight->GetGameObject()->GetTransform();
-        RenderFactory::RenderSimpleSphere(plTransform->GetPosition(),
-                                   pointLight->GetRange(),
-                                   true,
-                                   1, 2, 32);
+        GBuffer *gb = GEngine::GetActiveGBuffer();
+        gb->PushDepthStencilTexture();
+        gb->SetSceneDepthStencil();
+
+        params.thickness = 2.0f;
+        RenderFactory::RenderSimpleSphere(pointLight->GetRange(),
+                                          true,
+                                          params,
+                                          1, 2, 32);
+
+        gb->PopDepthStencilTexture();
     }
 
-    gb->PopDepthStencilTexture();
 }
 
 void ComponentsGizmos::RenderDirectionalLightGizmo(DirectionalLight *dirLight,
                                                    bool whenCompIsSelected)
 {
-    GBuffer *gb = GEngine::GetActiveGBuffer();
-    gb->PushDepthStencilTexture();
-    gb->SetSceneDepthStencil();
+    RenderFactory::Parameters params;
+    params.receivesLighting = false;
+    params.color = dirLight->GetColor().WithAlpha(1.0f);
 
     if (!whenCompIsSelected)
     {
-        RenderFactory::Reset();
-        RenderFactory::SetRenderPass(RenderPass::OVERLAY);
-        RenderFactory::SetColor( dirLight->GetColor().WithAlpha(1.0f) );
-        RenderFactory::SetPosition( dirLight->GetGameObject()->GetTransform()->
-                             GetPosition() );
-        RenderFactory::SetScale( Vector3(0.1f) );
-        RenderFactory::RenderIcon( TextureFactory::GetSunIcon().Get(), true );
+        params.position = dirLight->GetGameObject()->
+                          GetTransform()->GetPosition();
+        params.scale = Vector3(0.1f);
+        RenderFactory::RenderIcon(TextureFactory::GetSunIcon().Get(),
+                                  true,
+                                  params);
     }
     else
     {
-        RenderFactory::Reset();
+        GBuffer *gb = GEngine::GetActiveGBuffer();
+        gb->PushDepthStencilTexture();
+        gb->SetSceneDepthStencil();
 
         GameObject *lightGo = dirLight->GetGameObject();
         GameObject *camGo = Camera::GetActive()->GetGameObject();
@@ -253,51 +252,48 @@ void ComponentsGizmos::RenderDirectionalLightGizmo(DirectionalLight *dirLight,
         const Vector3 forward = lightGo->GetTransform()->GetForward() * length;
         const Vector3 center = lightGo->GetTransform()->GetPosition();
 
-        RenderFactory::SetThickness(2.0f);
-        RenderFactory::SetReceivesLighting(false);
-        RenderFactory::SetColor(dirLight->GetColor());
-        RenderFactory::SetRenderPass(RenderPass::OVERLAY);
+        params.thickness = 2.0f;
         for (float ang = 0.0f; ang <= 2 * Math::Pi; ang += Math::Pi / 4.0f)
         {
             const Vector3 offx = right * Math::Cos(ang);
             const Vector3 offy = up * Math::Sin(ang);
             RenderFactory::RenderLine(center + offx + offy,
-                               center + offx + offy + forward);
+                                      center + offx + offy + forward,
+                                      params);
         }
-    }
 
-    gb->PopDepthStencilTexture();
+        gb->PopDepthStencilTexture();
+    }
 }
 
 void ComponentsGizmos::RenderAudioSourceGizmo(AudioSource *audioSource,
                                               bool whenCompIsSelected)
 {
-    GBuffer *gb = GEngine::GetActiveGBuffer();
-    gb->PushDepthStencilTexture();
-    gb->SetSceneDepthStencil();
+    RenderFactory::Parameters params;
+    params.color = Color::White;
+    params.receivesLighting = false;
+    params.position = audioSource->GetGameObject()->
+                      GetTransform()->GetPosition();
 
     if (!whenCompIsSelected)
     {
-        RenderFactory::Reset();
-        RenderFactory::SetRenderPass(RenderPass::OVERLAY);
-        RenderFactory::SetPosition( audioSource->GetGameObject()->
-                             GetTransform()->GetPosition() );
-        RenderFactory::SetScale( Vector3(0.1f) );
-        RenderFactory::RenderIcon( TextureFactory::GetAudioIcon().Get(), true );
+        params.scale = Vector3(0.1f);
+        RenderFactory::RenderIcon(TextureFactory::GetAudioIcon().Get(),
+                                  true,
+                                  params);
     }
     else
     {
-        RenderFactory::Reset();
-        RenderFactory::SetThickness(2.0f);
-        RenderFactory::SetColor(Color::White);
-        RenderFactory::SetReceivesLighting(false);
-        RenderFactory::SetRenderPass(RenderPass::OVERLAY);
-        RenderFactory::RenderSimpleSphere(audioSource->GetGameObject()->
-                                        GetTransform()->GetPosition(),
-                                   audioSource->GetRange(),
-                                   true,
-                                   1, 2, 32);
-    }
+        GBuffer *gb = GEngine::GetActiveGBuffer();
+        gb->PushDepthStencilTexture();
+        gb->SetSceneDepthStencil();
 
-    gb->PopDepthStencilTexture();
+        params.thickness = 2.0f;
+        RenderFactory::RenderSimpleSphere(audioSource->GetRange(),
+                                          true,
+                                          params,
+                                          1, 2, 32);
+
+        gb->PopDepthStencilTexture();
+    }
 }

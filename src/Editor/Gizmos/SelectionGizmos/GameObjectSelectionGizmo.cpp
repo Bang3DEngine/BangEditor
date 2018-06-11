@@ -41,11 +41,11 @@ void GameObjectSelectionGizmo::Render(RenderPass rp, bool renderChildren)
             gb->PushDepthStencilTexture();
             gb->SetOverlayDepthStencil();
 
-            RenderFactory::Reset();
-            RenderFactory::SetThickness(2.0f);
-            RenderFactory::SetColor(Color::Orange);
-            RenderFactory::SetReceivesLighting(false);
-            RenderFactory::RenderOutline( GetReferencedGameObject() );
+            RenderFactory::Parameters params;
+            params.thickness = 2.0f;
+            params.color = Color::Orange;
+            params.receivesLighting = false;
+            RenderFactory::RenderOutline( GetReferencedGameObject(), params );
 
             gb->PopDepthStencilTexture();
         }
