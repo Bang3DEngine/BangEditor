@@ -42,6 +42,8 @@ UISceneEditContainer::UISceneEditContainer()
 
     cameraPreviewGo->AddComponent<UILayoutIgnorer>();
     cameraPreviewGo->SetParent(this);
+
+    EventEmitter<IEventsGameObjectVisibilityChanged>::RegisterListener(this);
 }
 
 UISceneEditContainer::~UISceneEditContainer()
@@ -62,9 +64,6 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
         m_needToRenderPreviewImg = false;
     }
 
-    GEngine *ge = GEngine::GetInstance();
-    ge->PushActiveRenderingCamera();
-
     if ( NeedsToRenderSelectionFramebuffer() )
     {
         EditorCamera *edCamGo = EditorCamera::GetInstance();
@@ -74,6 +73,9 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
         GEngine *ge = GEngine::GetInstance();
         if (sfb && ge && edCamGo && openScene)
         {
+            GEngine *ge = GEngine::GetInstance();
+            ge->PushActiveRenderingCamera();
+
             GizmosManager *sgm = GizmosManager::GetInstance();
             sgm->OnBeginRender(openScene);
             ge->PushActiveRenderingCamera();
@@ -94,10 +96,11 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
 
             ge->PopActiveRenderingCamera();
             sgm->OnEndRender(openScene);
+
+            ge->PopActiveRenderingCamera();
         }
     }
 
-    ge->PopActiveRenderingCamera();
 
     GameObject::Render(rp, renderChildren);
 }
@@ -235,6 +238,19 @@ void UISceneEditContainer::RestoreDraggedMaterialToPreviousGameObjectOvered()
     for (MeshRenderer *mr : restoredMeshRenderers)
     {
         m_meshRenderersToPreviousMaterials.Remove(mr);
+    }
+}
+
+void UISceneEditContainer::OnVisibilityChanged(GameObject*)
+{
+    EditorCamera *edCamGo = EditorCamera::GetInstance();
+    if (IsVisible())
+    {
+        edCamGo->RequestUnBlockBy(this);
+    }
+    else
+    {
+        edCamGo->RequestBlockBy(this);
     }
 }
 

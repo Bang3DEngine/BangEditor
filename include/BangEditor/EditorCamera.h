@@ -33,9 +33,12 @@ public:
     void AlignViewWithGameObject(GameObject *selected);
     void SwitchProjectionModeTo(bool mode3D);
     void StartLookAt(GameObject *lookAtFocus);
+    void RequestBlockBy(GameObject *go);
+    void RequestUnBlockBy(GameObject *go);
 
     SelectionFramebuffer *GetSelectionFramebuffer() const;
     Camera *GetCamera() const;
+    bool IsBlocked() const;
 
     static EditorCamera *GetInstance();
 
@@ -48,6 +51,7 @@ private:
     Transform *p_camt          = nullptr;
     GameObject *p_camContainer = nullptr;
     SelectionFramebuffer *m_selectionFramebuffer = nullptr;
+    Set<GameObject*> m_blockRequests;
 
     // WASD
     float m_keysMoveAccel = 1.0f;

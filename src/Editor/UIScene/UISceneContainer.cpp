@@ -64,16 +64,10 @@ void UISceneContainer::RenderIfNeeded()
         Camera *cam = GetSceneCamera(GetContainedScene());
         if (cam)
         {
-            GL::Push(GL::Pushable::VIEWPORT);
-
             cam->SetRenderSize( Vector2i(GetSceneImage()->GetRectTransform()->
                                          GetViewportAARect().GetSize()) );
-            //cam->SetRenderSize( AARecti(GetRectTransform()->GetViewportAARect()).
-            //                    GetSize() );
             GEngine::GetInstance()->Render(GetContainedScene(), cam);
             OnRenderNeededSceneFinished();
-
-            GL::Pop(GL::Pushable::VIEWPORT);
         }
     }
 }

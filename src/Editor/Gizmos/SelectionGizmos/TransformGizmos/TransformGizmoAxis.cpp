@@ -29,6 +29,19 @@ void TransformGizmoAxis::Update()
 
     // Change color depending on selection state
     SetColor( GetSelectionState() );
+
+    // Block editor camera if being grabbed
+    if (EditorCamera *edCam = EditorCamera::GetInstance())
+    {
+        if (IsBeingGrabbed())
+        {
+            edCam->RequestBlockBy(this);
+        }
+        else
+        {
+            edCam->RequestUnBlockBy(this);
+        }
+    }
 }
 
 void TransformGizmoAxis::SetAxis(Axis3DExt axis)

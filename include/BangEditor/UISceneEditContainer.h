@@ -3,6 +3,7 @@
 
 #include "Bang/Bang.h"
 #include "Bang/Material.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/SceneManager.h"
 #include "Bang/EventListener.h"
 #include "Bang/ResourceHandle.h"
@@ -22,10 +23,12 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class SelectionFramebuffer;
 
-class UISceneEditContainer : public UISceneContainer,
-                             public EventListener<IEventsScenePlayer>,
-                             public EventListener<IEventsSceneManager>,
-                             public EventListener<IEventsDragDrop>
+class UISceneEditContainer :
+        public UISceneContainer,
+        public EventListener<IEventsGameObjectVisibilityChanged>,
+        public EventListener<IEventsScenePlayer>,
+        public EventListener<IEventsSceneManager>,
+        public EventListener<IEventsDragDrop>
 {
     GAMEOBJECT_EDITOR(UISceneEditContainer);
 
@@ -59,6 +62,9 @@ private:
     GameObject* GetCurrentOveredGameObject() const;
     void ApplyDraggedMaterialToOveredGameObject();
     void RestoreDraggedMaterialToPreviousGameObjectOvered();
+
+    // IEventsGameObjectVisibilityChanged
+    void OnVisibilityChanged(GameObject *go) override;
 
     // IEventsDestroy
     virtual void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;

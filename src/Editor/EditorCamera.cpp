@@ -247,34 +247,40 @@ void EditorCamera::Update()
     AdjustSpeeds();
 
     bool unwrapMouse = true;
-    if (!p_currentFocus)
+    if (!IsBlocked())
     {
-        bool hasMoved = false;
-        Vector3 moveStep = Vector3::Zero;
-
-        if ( GL::GetViewportRect().Contains( Input::GetMousePositionWindow() ))
+        if (!p_currentFocus)
         {
-            HandleKeyMovement(&moveStep, &hasMoved); //WASD
-            if (!HandleMouseRotation(&hasMoved, &unwrapMouse)) //Mouse rot with right click
+            bool hasMoved = false;
+            Vector3 moveStep = Vector3::Zero;
+
+            if ( GL::GetViewportRect().Contains( Input::GetMousePositionWindow() ))
             {
-                HandleMousePanning(&hasMoved, &unwrapMouse); //Mouse move with mid click
+                HandleKeyMovement(&moveStep, &hasMoved); //WASD
+
+                //Mouse rot with right click
+                if (!HandleMouseRotation(&hasMoved, &unwrapMouse))
+                {
+                    //Mouse move with mid click
+                    HandleMousePanning(&hasMoved, &unwrapMouse);
+                }
+
+                HandleWheelZoom(&moveStep, &hasMoved);
+
+                if (!hasMoved)
+                {
+                    m_keysCurrentMoveSpeed = 0.0f; // Reset speed
+                }
+
+                GetTransform()->Translate(moveStep);
             }
-
-            HandleWheelZoom(&moveStep, &hasMoved);
-
-            if (!hasMoved)
-            {
-                m_keysCurrentMoveSpeed = 0.0f; //reset speed
-            }
-
-            GetTransform()->Translate(moveStep);
         }
-    }
-    else
-    {
-        UpdateRotationVariables();
-        HandleLookAtFocus();
-        UpdateRotationVariables();
+        else
+        {
+            UpdateRotationVariables();
+            HandleLookAtFocus();
+            UpdateRotationVariables();
+        }
     }
 
     // Copy clear mode stuff from current scene camera
@@ -293,14 +299,6 @@ void EditorCamera::Update()
         GetCamera()->SetClearMode(Camera::ClearMode::COLOR);
         GetCamera()->SetClearColor(Color::LightBlue);
     }
-
-    // PointLight *pl = scene->GetComponentInChildren<PointLight>(true);
-    // if (pl)
-    // {
-    //     GetCamera()->SetClearMode(Camera::ClearMode::SkyBox);
-    //     GetCamera()->SetSkyBoxTexture(pl->GetShadowMapTexture());
-    //     //Debug_Peek( pl->GetShadowMapTexture()->GetGLId() );
-    // }
 
     if (unwrapMouse) { Input::SetMouseWrapping(false); }
 }
@@ -331,6 +329,21 @@ void EditorCamera::SwitchProjectionModeTo(bool mode3D)
         p_cam->SetZNear(-999999.9f);
         p_cam->SetZFar(999999.9f);
     }
+}
+
+void EditorCamera::RequestBlockBy(GameObject *go)
+{
+    m_blockRequests.Add(go);
+}
+
+void EditorCamera::RequestUnBlockBy(GameObject *go)
+{
+    m_blockRequests.Remove(go);
+}
+
+bool EditorCamera::IsBlocked() const
+{
+    return !m_blockRequests.IsEmpty();
 }
 
 SelectionFramebuffer* EditorCamera::GetSelectionFramebuffer() const
