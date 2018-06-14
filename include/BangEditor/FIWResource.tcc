@@ -103,7 +103,7 @@ template<class T>
 void FIWResource<T>::UpdateFromFileWhenChanged()
 {
     RH<T> newResourceT;
-    if (GetPath().IsFile())
+    if (GetPath().IsFile() || Resources::IsEmbeddedResource(GetPath()))
     {
         newResourceT = Resources::Load<T>( GetPath() );
     }

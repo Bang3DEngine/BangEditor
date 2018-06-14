@@ -6,6 +6,7 @@
 #include "Bang/XMLNode.h"
 #include "Bang/UILabel.h"
 #include "Bang/Material.h"
+#include "Bang/Resources.h"
 #include "Bang/GLUniforms.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/SceneManager.h"
@@ -183,7 +184,8 @@ void Inspector::ShowPath(const Path &path)
                 AddWidget(fiw);
 
                 bool isEngineFile = Paths::IsEnginePath(m_currentOpenPath);
-                SetCurrentWidgetBlocked(isEngineFile);
+                bool isEmbeddedPath = Resources::IsEmbeddedResource(path);
+                SetCurrentWidgetBlocked(isEngineFile || isEmbeddedPath);
             }
         }
     }

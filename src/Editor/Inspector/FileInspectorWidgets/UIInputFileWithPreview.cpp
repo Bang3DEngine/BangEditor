@@ -1,6 +1,7 @@
 #include "BangEditor/UIInputFileWithPreview.h"
 
 #include "Bang/UICanvas.h"
+#include "Bang/Resources.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
@@ -48,9 +49,15 @@ void UIInputFileWithPreview::SetPath(const Path &path)
 {
     UIInputFile::SetPath(path);
 
-    if (GetPath().IsFile())
+    bool isGoodPath = (path.IsFile() || Resources::IsEmbeddedResource(path));
+    RH<Texture2D> previewTex;
+    if (isGoodPath)
     {
-        RH<Texture2D> previewTex = GetPreviewTextureFromPath(path);
+        previewTex = GetPreviewTextureFromPath(path);
+    }
+
+    if (previewTex)
+    {
         p_bigPreviewImg->SetImageTexture( previewTex.Get() );
         p_previewImg->SetImageTexture( previewTex.Get() );
     }

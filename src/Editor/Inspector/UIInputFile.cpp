@@ -5,6 +5,7 @@
 #include "Bang/UILabel.h"
 #include "Bang/UIButton.h"
 #include "Bang/UICanvas.h"
+#include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UIInputText.h"
 #include "Bang/RectTransform.h"
@@ -144,10 +145,12 @@ void UIInputFile::SetPath(const Path &path)
     {
         m_path = path;
 
-        String textContent = GetPath().IsFile() ? GetPath().GetNameExt() : "None";
+        bool pathGood = (GetPath().IsFile() ||
+                         Resources::IsEmbeddedResource(path));
+        String textContent = pathGood ? GetPath().GetNameExt() : "None";
         GetInputText()->GetText()->SetContent(textContent);
 
-        p_openFileInInspectorButton->SetBlocked( !GetPath().Exists() );
+        p_openFileInInspectorButton->SetBlocked( !pathGood );
 
         EventEmitter<IEventsValueChanged>::PropagateToListeners(
                 &IEventsValueChanged::OnValueChanged, this);
