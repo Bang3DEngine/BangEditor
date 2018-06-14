@@ -3,6 +3,7 @@
 #include "Bang/Mesh.h"
 #include "Bang/Path.h"
 #include "Bang/Model.h"
+#include "Bang/Material.h"
 #include "Bang/Resources.h"
 #include "Bang/Extensions.h"
 #include "Bang/GameObject.h"
@@ -72,7 +73,7 @@ List<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
 
             for (const String& meshName : model.Get()->GetMeshesNames())
             {
-                Path meshPath = path.Append(meshName).AppendExtension("bmesh");
+                Path meshPath = path.Append(meshName);
                 ExplorerItem *meshExplorerItem =
                         ExplorerItemFactory::CreateExplorerItem(meshPath);
                 expItems.PushBack( meshExplorerItem );
@@ -80,8 +81,7 @@ List<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
 
             for (const String& materialName : model.Get()->GetMaterialsNames())
             {
-                Path materialPath = path.Append(materialName).
-                        AppendExtension(Extensions::GetMaterialExtension());
+                Path materialPath = path.Append(materialName);
                 ExplorerItem *materialExplorerItem =
                         ExplorerItemFactory::CreateExplorerItem(materialPath);
                 expItems.PushBack( materialExplorerItem );

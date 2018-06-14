@@ -45,7 +45,7 @@ UIInputColor::UIInputColor()
     m_colorPickerReporter = new ColorPickerReporter();
     m_colorPickerReporter->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    RH<Texture2D> lensIcon = EditorTextureFactory::GetLensLittleIcon().Get();
+    RH<Texture2D> lensIcon = EditorTextureFactory::GetLensLittleIcon();
     p_searchColorButton = GameObjectFactory::CreateUIButton("", lensIcon.Get());
     p_searchColorButton->SetIcon(lensIcon.Get(), Vector2i(16));
     p_searchColorButton->AddClickedCallback([this]()

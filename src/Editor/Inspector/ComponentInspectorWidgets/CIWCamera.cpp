@@ -146,7 +146,7 @@ void CIWCamera::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
     if (p_textureCubeMapInput->GetPath().IsFile())
     {
         tcmRH = Resources::Load<TextureCubeMap>(
-                                    p_textureCubeMapInput->GetPath()).Get();
+                                    p_textureCubeMapInput->GetPath());
     }
     GetCamera()->SetSkyBoxTexture(tcmRH.Get());
 

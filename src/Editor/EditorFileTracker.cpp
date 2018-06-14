@@ -61,7 +61,7 @@ void EditorFileTracker::OnPathAdded(const Path &addedPath)
     if (!ImportFilesManager::IsImportFile(addedPath) &&
         !ImportFilesManager::HasImportFile(addedPath))
     {
-        ImportFilesManager::CreateImportFile(addedPath);
+        ImportFilesManager::CreateImportFileIfMissing(addedPath);
     }
 }
 
@@ -72,7 +72,7 @@ void EditorFileTracker::OnPathModified(const Path &modifiedPath)
     if (modifiedPath.IsFile())
     {
         // Refresh/reimport resources of the modified path
-        Array<Resource*> pathResources = Resources::GetCached(modifiedPath);
+        Array<Resource*> pathResources = Resources::GetAllCached(modifiedPath);
         for (Resource *pathRes : pathResources)
         {
             Resources::Import(pathRes);
