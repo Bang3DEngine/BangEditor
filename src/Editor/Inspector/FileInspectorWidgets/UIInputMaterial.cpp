@@ -1,5 +1,6 @@
 #include "BangEditor/UIInputMaterial.h"
 
+#include "Bang/Material.h"
 #include "Bang/Resources.h"
 
 #include "BangEditor/MaterialPreviewFactory.h"

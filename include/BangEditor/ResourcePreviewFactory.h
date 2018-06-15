@@ -27,12 +27,21 @@ protected:
     ResourcePreviewFactory();
     virtual ~ResourcePreviewFactory();
 
-    virtual void OnCreateSceneFirstTime(Scene *scene) = 0;
-    virtual void OnUpdateTextureBegin(Scene *scene, T *resource) = 0;
-    virtual void OnUpdateTextureEnd(Scene *scene, T *resource) = 0;
+    virtual void OnCreateSceneFirstTime(Scene *previewScene,
+                                        Camera *previewCamera,
+                                        GameObject *previewGoContainer) = 0;
+    virtual void OnUpdateTextureBegin(Scene *previewScene,
+                                      Camera *previewCamera,
+                                      GameObject *previewGoContainer,
+                                      T *resource) = 0;
+    virtual void OnUpdateTextureEnd(Scene *previewScene,
+                                    Camera *previewCamera,
+                                    GameObject *previewGoContainer,
+                                    T *resource) = 0;
 
     Scene *GetPreviewScene() const;
     Camera *GetPreviewCamera() const;
+    GameObject *GetPreviewGameObjectContainer() const;
     RH<Texture2D> GetPreviewTextureFor_(T *resource);
 
 private:
@@ -41,6 +50,7 @@ private:
 
     Scene *m_previewScene = nullptr;
     Camera *p_previewCamera = nullptr;
+    GameObject *p_previewGameObjectContainer = nullptr;
     Framebuffer *m_auxiliarFBToCopyTextures = nullptr;
 
     void CreatePreviewScene();

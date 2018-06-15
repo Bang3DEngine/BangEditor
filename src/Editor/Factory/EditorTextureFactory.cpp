@@ -1,5 +1,7 @@
 #include "BangEditor/EditorTextureFactory.h"
 
+#include "Bang/Model.h"
+#include "Bang/Material.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Resources.h"
 #include "Bang/Extensions.h"

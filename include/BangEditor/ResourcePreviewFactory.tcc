@@ -61,22 +61,29 @@ void ResourcePreviewFactory<T>::CreatePreviewScene()
     camGo->GetTransform()->LookAt(Vector3::Zero);
     camGo->SetParent(scene);
 
-    Camera *camera = camGo->AddComponent<Camera>();
-    camera->SetClearMode(Camera::ClearMode::SKY_BOX);
-    camera->SetSkyBoxTexture( TextureFactory::GetDefaultTextureCubeMap().Get() );
-    scene->SetCamera(camera);
+    Camera *previewCamera = camGo->AddComponent<Camera>();
+    previewCamera->SetClearMode(Camera::ClearMode::SKY_BOX);
+    previewCamera->SetSkyBoxTexture(
+                        TextureFactory::GetDefaultTextureCubeMap().Get() );
+    scene->SetCamera(previewCamera);
 
     GameObject *dLightGo = GameObjectFactory::CreateGameObject();
     DirectionalLight *dLight = dLightGo->AddComponent<DirectionalLight>();
     dLight->SetShadowType(Light::ShadowType::NONE);
     dLightGo->SetParent(scene);
 
-    OnCreateSceneFirstTime(scene);
+    GameObject *previewGameObjectContainer = GameObjectFactory::CreateGameObject();
+    previewGameObjectContainer->SetParent(scene);
+
+    OnCreateSceneFirstTime(scene,
+                           previewCamera,
+                           previewGameObjectContainer);
 
     scene->Start();
 
     m_previewScene = scene;
-    p_previewCamera = camera;
+    p_previewCamera = previewCamera;
+    p_previewGameObjectContainer = previewGameObjectContainer;
 }
 
 template<class T>
@@ -110,26 +117,32 @@ void ResourcePreviewFactory<T>::FillTextureWithPreview(Texture2D *texture,
     GL::Push(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
 
     // Prepare to draw scene
-    if (!m_previewScene) { CreatePreviewScene(); }
-    ASSERT(m_previewScene);
-    ASSERT(p_previewCamera);
+    if (!GetPreviewScene())
+    {
+        CreatePreviewScene();
+    }
+    ASSERT(GetPreviewScene());
+    ASSERT(GetPreviewCamera());
 
     const uint previewTextureSize = 256;
     m_auxiliarFBToCopyTextures->SetAttachmentTexture(texture,
                                                      GL::Attachment::COLOR0);
     m_auxiliarFBToCopyTextures->Resize(previewTextureSize, previewTextureSize);
 
-    p_previewCamera->GetGBuffer()->Resize(previewTextureSize, previewTextureSize);
+    GetPreviewCamera()->GetGBuffer()->Resize(previewTextureSize, previewTextureSize);
 
-    OnUpdateTextureBegin(m_previewScene, resource);
+    OnUpdateTextureBegin(GetPreviewScene(),
+                         GetPreviewCamera(),
+                         GetPreviewGameObjectContainer(),
+                         resource);
 
     GL::SetViewport(0, 0, previewTextureSize, previewTextureSize);
-    GEngine::GetInstance()->Render(m_previewScene, p_previewCamera);
+    GEngine::GetInstance()->Render(GetPreviewScene(), GetPreviewCamera());
 
-    GL::Bind(GL::BindTarget::READ_FRAMEBUFFER, p_previewCamera->GetGBuffer()->GetGLId());
+    GL::Bind(GL::BindTarget::READ_FRAMEBUFFER, GetPreviewCamera()->GetGBuffer()->GetGLId());
     GL::Bind(GL::BindTarget::DRAW_FRAMEBUFFER, m_auxiliarFBToCopyTextures->GetGLId());
 
-    GL::ReadBuffer(p_previewCamera->GetGBuffer()->GetLastDrawnColorAttachment());
+    GL::ReadBuffer(GetPreviewCamera()->GetGBuffer()->GetLastDrawnColorAttachment());
     GL::DrawBuffers( {GL::Attachment::COLOR0} );
 
     GL::BlitFramebuffer(GL::GetViewportRect(),
@@ -143,7 +156,10 @@ void ResourcePreviewFactory<T>::FillTextureWithPreview(Texture2D *texture,
     // texture->SetFilterMode(GL::FilterMode::Trilinear_LL);
     texture->PropagateResourceChanged();
 
-    OnUpdateTextureEnd(m_previewScene, resource);
+    OnUpdateTextureEnd(GetPreviewScene(),
+                       GetPreviewCamera(),
+                       GetPreviewGameObjectContainer(),
+                       resource);
 
     // Restore OpenGL state
     GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
@@ -177,7 +193,13 @@ Camera *ResourcePreviewFactory<T>::GetPreviewCamera() const
     return p_previewCamera;
 }
 
+template<class T>
+GameObject *ResourcePreviewFactory<T>::GetPreviewGameObjectContainer() const
+{
+    return p_previewGameObjectContainer;
+}
+
 NAMESPACE_BANG_EDITOR_END
 
-#endif // PREVIEWFACTORY_H
+#endif // RESOURCEPREVIEWFACTORY_TCC
 
