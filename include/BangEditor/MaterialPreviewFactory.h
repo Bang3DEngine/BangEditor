@@ -8,7 +8,7 @@
 #include "Bang/Framebuffer.h"
 #include "Bang/IEventsResource.h"
 
-#include "BangEditor/BangEditor.h"
+#include "BangEditor/ResourcePreviewFactory.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
@@ -19,16 +19,13 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class MaterialPreviewFactory : public EventListener<IEventsResource>
+class MaterialPreviewFactory : public ResourcePreviewFactory<Material>
 {
 public:
     MaterialPreviewFactory();
     virtual ~MaterialPreviewFactory();
 
-    void Init();
-
     static RH<Texture2D> GetPreviewTextureFor(Material *material);
-
     static MaterialPreviewFactory *GetActive();
 
 private:
@@ -40,12 +37,10 @@ private:
     MeshRenderer *p_previewMeshRenderer = nullptr;
     Framebuffer *m_auxiliarFBToCopyTextures = nullptr;
 
-    void CreatePreviewScene();
-    RH<Texture2D> GetPreviewTextureFor_(Material *material);
-    void FillTextureWithPreview(Texture2D *texture, Material *material);
-
-    // IEventsResource
-    void OnResourceChanged(Resource *changedResource) override;
+    // ResourcePreviewFactory
+    void OnCreateSceneFirstTime(Scene *scene) override;
+    void OnUpdateTextureBegin(Scene *scene, Material *material) override;
+    void OnUpdateTextureEnd(Scene *scene, Material *material) override;
 };
 
 NAMESPACE_BANG_EDITOR_END
