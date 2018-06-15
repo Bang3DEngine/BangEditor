@@ -18,6 +18,7 @@ class EditorTextureFactory
 {
 public:
     static RH<Texture2D> GetIconForPath(const Path &path);
+    static bool IsIconAnImage(const Path &path);
     static RH<Texture2D> GetIconForExtension(const String &extension);
 
     static RH<Texture2D> GetRotateIcon();

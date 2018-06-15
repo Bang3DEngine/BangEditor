@@ -2,6 +2,7 @@
 
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorMeshFactory.h"
+#include "BangEditor/ModelPreviewFactory.h"
 #include "BangEditor/MaterialPreviewFactory.h"
 
 USING_NAMESPACE_BANG
@@ -10,11 +11,18 @@ USING_NAMESPACE_BANG_EDITOR
 EditorResources::EditorResources()
 {
     m_materialPreviewFactory = new MaterialPreviewFactory();
+    m_modelPreviewFactory = new ModelPreviewFactory();
 }
 
 EditorResources::~EditorResources()
 {
+    delete m_modelPreviewFactory;
     delete m_materialPreviewFactory;
+}
+
+ModelPreviewFactory *EditorResources::GetModelPreviewFactory() const
+{
+    return m_modelPreviewFactory;
 }
 
 MaterialPreviewFactory *EditorResources::GetMaterialPreviewFactory() const
@@ -30,6 +38,7 @@ EditorResources *EditorResources::GetInstance()
 void EditorResources::Init()
 {
     Resources::Init();
+    m_modelPreviewFactory->Init();
     m_materialPreviewFactory->Init();
 }
 

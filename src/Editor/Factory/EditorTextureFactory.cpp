@@ -6,6 +6,7 @@
 #include "Bang/TextureFactory.h"
 
 #include "BangEditor/EditorPaths.h"
+#include "BangEditor/ModelPreviewFactory.h"
 #include "BangEditor/MaterialPreviewFactory.h"
 
 USING_NAMESPACE_BANG
@@ -15,13 +16,18 @@ RH<Texture2D> EditorTextureFactory::GetIconForPath(const Path &path)
 {
     if (!path.IsDir())
     {
-        if ( Extensions::Has(path, Extensions::GetImageExtensions()) )
+        if ( path.HasExtension(Extensions::GetImageExtensions()) )
         {
             Resources::SetPermanent(path, true);
             RH<Texture2D> tex = Resources::Load<Texture2D>(path);
             return tex;
         }
-        else if ( Extensions::Has(path, {Extensions::GetMaterialExtension()}) )
+        else if ( path.HasExtension(Extensions::GetModelExtensions()) )
+        {
+            RH<Model> model = Resources::Load<Model>(path);
+            return ModelPreviewFactory::GetPreviewTextureFor(model.Get());
+        }
+        else if ( path.HasExtension(Extensions::GetMaterialExtension()) )
         {
             RH<Material> material = Resources::Load<Material>(path);
             return MaterialPreviewFactory::GetPreviewTextureFor(material.Get());
@@ -32,6 +38,12 @@ RH<Texture2D> EditorTextureFactory::GetIconForPath(const Path &path)
         }
     }
     return EditorTextureFactory::GetFolderIcon();
+}
+
+bool EditorTextureFactory::IsIconAnImage(const Path &path)
+{
+    return !path.HasExtension(Extensions::GetModelExtensions()) &&
+           !path.HasExtension(Extensions::GetMaterialExtension());
 }
 
 RH<Texture2D> EditorTextureFactory::GetIconForExtension(const String &ext)

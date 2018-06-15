@@ -106,7 +106,10 @@ void ExplorerItem::SetPath(const Path &path)
         m_path = path;
 
         RH<Texture2D> iconTex = EditorTextureFactory::GetIconForPath(GetPath());
+        bool invertY = EditorTextureFactory::IsIconAnImage(GetPath());
         p_icon->SetImageTexture(iconTex.Get());
+        p_icon->SetMode(invertY ? UIImageRenderer::Mode::TEXTURE_INV_UVY :
+                                  UIImageRenderer::Mode::TEXTURE);
         p_icon->SetTint(Color::White);
 
         if (iconTex.Get())

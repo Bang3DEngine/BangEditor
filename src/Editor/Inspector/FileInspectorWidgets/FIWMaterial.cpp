@@ -201,6 +201,7 @@ void FIWMaterial::UpdateInputsFromResource()
     p_cullFaceInput->SetSelectionByValue( SCAST<int>(GetMaterial()->GetCullFace()) );
     p_lineWidthInput->SetValue( GetMaterial()->GetLineWidth() );
 
+    p_materialPreviewImg->SetMode(UIImageRenderer::Mode::TEXTURE);
     p_materialPreviewImg->SetImageTexture(
             MaterialPreviewFactory::GetPreviewTextureFor(GetMaterial()).Get() );
 

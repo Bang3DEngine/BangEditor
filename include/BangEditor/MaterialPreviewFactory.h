@@ -28,9 +28,6 @@ public:
     void Init();
 
     static RH<Texture2D> GetPreviewTextureFor(Material *material);
-    RH<Texture2D> GetPreviewTextureFor_(Material *material);
-
-    void CreatePreviewScene();
 
     static MaterialPreviewFactory *GetActive();
 
@@ -43,6 +40,8 @@ private:
     MeshRenderer *p_previewMeshRenderer = nullptr;
     Framebuffer *m_auxiliarFBToCopyTextures = nullptr;
 
+    void CreatePreviewScene();
+    RH<Texture2D> GetPreviewTextureFor_(Material *material);
     void FillTextureWithPreview(Texture2D *texture, Material *material);
 
     // IEventsResource

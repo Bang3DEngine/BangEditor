@@ -16,19 +16,19 @@ USING_NAMESPACE_BANG_EDITOR
 InspectorWidget *FileInspectorWidgetFactory::Create(const Path &path)
 {
     FileInspectorWidget *fiw = nullptr;
-    if (Extensions::Has(path, {Extensions::GetMaterialExtension()}))
+    if (path.HasExtension(Extensions::GetMaterialExtension()))
     {
         fiw = GameObject::Create<FIWMaterial>();
     }
-    else if (Extensions::Has(path, {Extensions::GetImageExtensions()}))
+    else if (path.HasExtension(Extensions::GetImageExtensions()))
     {
         fiw = GameObject::Create<FIWTexture>();
     }
-    else if (Extensions::Has(path, {Extensions::GetTextureCubeMapExtension()}))
+    else if (path.HasExtension(Extensions::GetTextureCubeMapExtension()))
     {
         fiw = GameObject::Create<FIWTextureCubeMap>();
     }
-    else if (Extensions::Has(path, {Extensions::GetBehaviourExtensions()}))
+    else if (path.HasExtension(Extensions::GetBehaviourExtensions()))
     {
         fiw = GameObject::Create<FIWBehaviour>();
     }
