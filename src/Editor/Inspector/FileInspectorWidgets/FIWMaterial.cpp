@@ -129,6 +129,7 @@ void FIWMaterial::Init()
     // materialPreviewGoLE->SetFlexibleSize( Vector2::One );
 
     p_materialPreviewImg = materialPreviewGo->AddComponent<UIImageRenderer>();
+    p_materialPreviewImg->SetMode(UIImageRenderer::Mode::TEXTURE);
     p_materialPreviewImg->SetImageTexture( TextureFactory::GetWhiteTexture().Get() );
 
     UIContentSizeFitter *previewContentSizeFitter =
@@ -201,7 +202,6 @@ void FIWMaterial::UpdateInputsFromResource()
     p_cullFaceInput->SetSelectionByValue( SCAST<int>(GetMaterial()->GetCullFace()) );
     p_lineWidthInput->SetValue( GetMaterial()->GetLineWidth() );
 
-    p_materialPreviewImg->SetMode(UIImageRenderer::Mode::TEXTURE);
     p_materialPreviewImg->SetImageTexture(
             MaterialPreviewFactory::GetPreviewTextureFor(GetMaterial()).Get() );
 

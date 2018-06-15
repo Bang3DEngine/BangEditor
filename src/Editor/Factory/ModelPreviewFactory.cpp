@@ -3,6 +3,7 @@
 #include "Bang/Model.h"
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
+#include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
 #include "Bang/GameObjectFactory.h"
@@ -52,13 +53,24 @@ void ModelPreviewFactory::OnUpdateTextureBegin(Scene *previewScene,
 
     previewScene->Start();
 
+    // Modify material
+    List<MeshRenderer*> meshRenderers = previewGoContainer->
+                                        GetComponentsInChildren<MeshRenderer>(true);
+    for (MeshRenderer *mr : meshRenderers)
+    {
+        mr->GetMaterial()->SetCullFace(GL::CullFaceExt::NONE);
+    }
+
     // Focus camera to model
     Transform *camTR = previewCamera->GetGameObject()->GetTransform();
     Sphere modelSphere = modelGo->GetBoundingSphere();
     float halfFov = Math::DegToRad(previewCamera->GetFovDegrees() / 2.0f);
-    float camDist = modelSphere.GetRadius() / Math::Tan(halfFov) * 1.0f;
-    camTR->SetPosition( modelSphere.GetCenter() - Vector3::Forward * camDist);
+    float camDist = modelSphere.GetRadius() / Math::Tan(halfFov) * 1.1f;
+    Vector3 camDir = Vector3(1,1,-1).Normalized();
+    camTR->SetPosition( modelSphere.GetCenter() + camDir * camDist);
     camTR->LookAt(modelSphere.GetCenter());
+
+    previewCamera->SetZFar( (camDist +   modelSphere.GetRadius() * 2.0f) * 1.2f);
 }
 
 void ModelPreviewFactory::OnUpdateTextureEnd(Scene *previewScene,
@@ -69,10 +81,12 @@ void ModelPreviewFactory::OnUpdateTextureEnd(Scene *previewScene,
     (void) previewScene;
     (void) previewCamera;
     (void) previewGoContainer;
+    (void) model;
 
-    GameObject *modelContainer = previewGoContainer->FindInChildren("ModelContainer");
-    ASSERT(modelContainer);
+    GameObject *modelGo = previewGoContainer->FindInChildren("ModelContainer");
+    ASSERT(modelGo);
 
-    GameObject::Destroy(modelContainer);
+    GameObject::Destroy(modelGo);
+    previewScene->DestroyPending();
 }
 
