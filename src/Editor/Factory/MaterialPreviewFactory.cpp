@@ -23,7 +23,16 @@ MaterialPreviewFactory::~MaterialPreviewFactory()
 
 RH<Texture2D> MaterialPreviewFactory::GetPreviewTextureFor(Material *material)
 {
-    return MaterialPreviewFactory::GetActive()->GetPreviewTextureFor_(material);
+    return MaterialPreviewFactory::GetPreviewTextureFor(
+                            material, MaterialPreviewFactory::Parameters());
+}
+
+RH<Texture2D> MaterialPreviewFactory::GetPreviewTextureFor(
+                            Material *material,
+                            const MaterialPreviewFactory::Parameters &params)
+{
+    return MaterialPreviewFactory::GetActive()->GetPreviewTextureFor_(material,
+                                                                      params);
 }
 
 MaterialPreviewFactory *MaterialPreviewFactory::GetActive()
@@ -44,11 +53,14 @@ void MaterialPreviewFactory::OnCreateSceneFirstTime(Scene *previewScene,
     sphere->SetParent(previewGoContainer);
 }
 
-void MaterialPreviewFactory::OnUpdateTextureBegin(Scene *previewScene,
-                                                  Camera *previewCamera,
-                                                  GameObject *previewGoContainer,
-                                                  Material *material)
+void MaterialPreviewFactory::OnUpdateTextureBegin(
+                              Scene *previewScene,
+                              Camera *previewCamera,
+                              GameObject *previewGoContainer,
+                              Material *material,
+                              const MaterialPreviewFactory::Parameters &params)
 {
+    (void) params;
     (void) previewScene;
     (void) previewCamera;
     (void) previewGoContainer;
@@ -59,14 +71,17 @@ void MaterialPreviewFactory::OnUpdateTextureBegin(Scene *previewScene,
     mr->SetMaterial(material);
 }
 
-void MaterialPreviewFactory::OnUpdateTextureEnd(Scene *previewScene,
-                                                Camera *previewCamera,
-                                                GameObject *previewGoContainer,
-                                                Material *material)
+void MaterialPreviewFactory::OnUpdateTextureEnd(
+                              Scene *previewScene,
+                              Camera *previewCamera,
+                              GameObject *previewGoContainer,
+                              Material *material,
+                              const MaterialPreviewFactory::Parameters &params)
 {
     (void) previewScene;
     (void) previewCamera;
     (void) previewGoContainer;
     (void) material;
+    (void) params;
 }
 

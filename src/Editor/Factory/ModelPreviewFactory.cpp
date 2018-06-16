@@ -23,7 +23,16 @@ ModelPreviewFactory::~ModelPreviewFactory()
 
 RH<Texture2D> ModelPreviewFactory::GetPreviewTextureFor(Model *model)
 {
-    return ModelPreviewFactory::GetActive()->GetPreviewTextureFor_(model);
+    return ModelPreviewFactory::GetPreviewTextureFor(
+                                    model, ModelPreviewFactory::Parameters());
+}
+
+RH<Texture2D> ModelPreviewFactory::GetPreviewTextureFor(
+                                Model *model,
+                                const ModelPreviewFactory::Parameters &params)
+{
+    return ModelPreviewFactory::GetActive()->GetPreviewTextureFor_(model,
+                                                                   params);
 }
 
 ModelPreviewFactory *ModelPreviewFactory::GetActive()
@@ -40,11 +49,16 @@ void ModelPreviewFactory::OnCreateSceneFirstTime(Scene *previewScene,
     (void) previewGoContainer;
 }
 
-void ModelPreviewFactory::OnUpdateTextureBegin(Scene *previewScene,
-                                               Camera *previewCamera,
-                                               GameObject *previewGoContainer,
-                                               Model *model)
+void ModelPreviewFactory::OnUpdateTextureBegin(
+                                Scene *previewScene,
+                                Camera *previewCamera,
+                                GameObject *previewGoContainer,
+                                Model *model,
+                                const ModelPreviewFactory::Parameters &params)
 {
+    (void) previewCamera;
+    (void) params;
+
     ASSERT(previewScene);
 
     GameObject *modelGo = model->CreateGameObjectFromModel();
@@ -60,28 +74,20 @@ void ModelPreviewFactory::OnUpdateTextureBegin(Scene *previewScene,
     {
         mr->GetMaterial()->SetCullFace(GL::CullFaceExt::NONE);
     }
-
-    // Focus camera to model
-    Transform *camTR = previewCamera->GetGameObject()->GetTransform();
-    Sphere modelSphere = modelGo->GetBoundingSphere();
-    float halfFov = Math::DegToRad(previewCamera->GetFovDegrees() / 2.0f);
-    float camDist = modelSphere.GetRadius() / Math::Tan(halfFov) * 1.1f;
-    Vector3 camDir = Vector3(1,1,-1).Normalized();
-    camTR->SetPosition( modelSphere.GetCenter() + camDir * camDist);
-    camTR->LookAt(modelSphere.GetCenter());
-
-    previewCamera->SetZFar( (camDist +   modelSphere.GetRadius() * 2.0f) * 1.2f);
 }
 
-void ModelPreviewFactory::OnUpdateTextureEnd(Scene *previewScene,
-                                             Camera *previewCamera,
-                                             GameObject *previewGoContainer,
-                                             Model *model)
+void ModelPreviewFactory::OnUpdateTextureEnd(
+                                Scene *previewScene,
+                                Camera *previewCamera,
+                                GameObject *previewGoContainer,
+                                Model *model,
+                                const ModelPreviewFactory::Parameters &params)
 {
     (void) previewScene;
     (void) previewCamera;
     (void) previewGoContainer;
     (void) model;
+    (void) params;
 
     GameObject *modelGo = previewGoContainer->FindInChildren("ModelContainer");
     ASSERT(modelGo);

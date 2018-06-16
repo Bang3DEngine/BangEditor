@@ -4,6 +4,7 @@
 #include "Bang/GL.h"
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
+#include "Bang/Sphere.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
 #include "Bang/Transform.h"
@@ -87,7 +88,9 @@ void ResourcePreviewFactory<T>::CreatePreviewScene()
 }
 
 template<class T>
-RH<Texture2D> ResourcePreviewFactory<T>::GetPreviewTextureFor_(T *resource)
+RH<Texture2D> ResourcePreviewFactory<T>::GetPreviewTextureFor_(
+                              T *resource,
+                              const ResourcePreviewFactory::Parameters &params)
 {
     if (!resource) { return TextureFactory::GetWhiteTexture(); }
     if (!m_previewsMap.ContainsKey(resource->GetGUID()))
@@ -97,7 +100,7 @@ RH<Texture2D> ResourcePreviewFactory<T>::GetPreviewTextureFor_(T *resource)
         Texture2D *previewTex = previewTexRH.Get();
 
         // Fill texture with preview
-        FillTextureWithPreview(previewTex, resource);
+        FillTextureWithPreview(previewTex, resource, params);
 
         // Add to preview map
         resource->EventEmitter<IEventsResource>::RegisterListener(this);
@@ -108,8 +111,10 @@ RH<Texture2D> ResourcePreviewFactory<T>::GetPreviewTextureFor_(T *resource)
 }
 
 template<class T>
-void ResourcePreviewFactory<T>::FillTextureWithPreview(Texture2D *texture,
-                                                       T *resource)
+void ResourcePreviewFactory<T>::FillTextureWithPreview(
+                              Texture2D *texture,
+                              T *resource,
+                              const ResourcePreviewFactory::Parameters &params)
 {
     // Now we will fill the texture with the proper preview
     GL::Push(GL::Pushable::VIEWPORT);
@@ -131,10 +136,29 @@ void ResourcePreviewFactory<T>::FillTextureWithPreview(Texture2D *texture,
 
     GetPreviewCamera()->GetGBuffer()->Resize(previewTextureSize, previewTextureSize);
 
+    m_lastPreviewParameters.Add(resource->GetGUID(), params);
     OnUpdateTextureBegin(GetPreviewScene(),
                          GetPreviewCamera(),
                          GetPreviewGameObjectContainer(),
-                         resource);
+                         resource,
+                         params);
+
+    // Set camera
+    Transform *camTR = GetPreviewCamera()->GetGameObject()->GetTransform();
+    Sphere goSphere = GetPreviewGameObjectContainer()->GetBoundingSphere();
+    float halfFov = Math::DegToRad(GetPreviewCamera()->GetFovDegrees() / 2.0f);
+    float camDist = goSphere.GetRadius() / Math::Tan(halfFov) * 1.0f;
+    camDist *= params.camDistanceMultiplier;
+    const Vector2 &angles = params.camOrbitAnglesDegs;
+    Vector3 camDir = (Quaternion::AngleAxis(Math::DegToRad(angles.x), Vector3::Up) *
+                      Quaternion::AngleAxis(Math::DegToRad(angles.y), Vector3::Right) *
+                      Vector3(0,0,1)).
+                     Normalized();
+    camTR->SetPosition( goSphere.GetCenter() + camDir * camDist);
+    camTR->LookAt(goSphere.GetCenter());
+    /*
+    GetPreviewCamera()->SetZFar( (camDist + goSphere.GetRadius() * 2.0f) * 1.2f);
+    */
 
     GL::SetViewport(0, 0, previewTextureSize, previewTextureSize);
     GEngine::GetInstance()->Render(GetPreviewScene(), GetPreviewCamera());
@@ -159,7 +183,8 @@ void ResourcePreviewFactory<T>::FillTextureWithPreview(Texture2D *texture,
     OnUpdateTextureEnd(GetPreviewScene(),
                        GetPreviewCamera(),
                        GetPreviewGameObjectContainer(),
-                       resource);
+                       resource,
+                       params);
 
     // Restore OpenGL state
     GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
@@ -176,7 +201,13 @@ void ResourcePreviewFactory<T>::OnResourceChanged(Resource *changedResource)
 
     T *changedResT = SCAST<T*>(changedResource);
     Texture2D *resPreviewTex = m_previewsMap.Get(changedResT->GetGUID()).Get();
-    FillTextureWithPreview(resPreviewTex, changedResT); // Update preview
+
+    ASSERT(m_lastPreviewParameters.ContainsKey(changedResource->GetGUID()));
+    const ResourcePreviewFactory::Parameters &lastParams =
+                     m_lastPreviewParameters.Get(changedResource->GetGUID());
+
+    // Update preview
+    FillTextureWithPreview(resPreviewTex, changedResT, lastParams);
 
     SetReceiveEvents(true);
 }
