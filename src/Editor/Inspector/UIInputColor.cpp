@@ -53,9 +53,15 @@ UIInputColor::UIInputColor()
         EditorDialog::GetColor("Pick Color...", GetColor(), m_colorPickerReporter);
     });
 
-    colorImgFocusable->AddClickedCallback([this](IFocusable*, ClickType clickType)
+    colorImgFocusable->AddEventCallback(
+    [this](IFocusable*, const IEventsFocus::Event &event)
     {
-        p_searchColorButton->Click(clickType);
+        if (event.type == IEventsFocus::Event::Type::MOUSE_CLICK)
+        {
+            p_searchColorButton->Click(event.click.type);
+            return IEventsFocus::Event::PropagationResult::STOP_PROPAGATION;
+        }
+        return IEventsFocus::Event::PropagationResult::PROPAGATE_TO_PARENT;
     });
 
     colorImgCont->SetParent(this);

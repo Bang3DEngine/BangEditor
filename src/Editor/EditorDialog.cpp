@@ -135,26 +135,33 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
                 expItem->GetLabel()->GetText()->SetContent("None");
             }
 
-            expItem->GetFocusable()->AddClickedCallback(
-            [expItem, gridLayoutGo](IFocusable*, ClickType clickType)
+            expItem->GetFocusable()->AddEventCallback(
+            [expItem, gridLayoutGo](IFocusable*,
+                                    const IEventsFocus::Event &event)
             {
-                if (clickType == ClickType::DOWN)
+                if (event.type == IEventsFocus::Event::Type::MOUSE_CLICK)
                 {
-                    // Save path, and select only the clicked one
-                    EditorDialog::s_assetPathResult = expItem->GetPath();
-                    for (GameObject *expItemGo : gridLayoutGo->GetChildren())
+                    if (event.click.type == ClickType::DOWN)
                     {
-                        ExplorerItem *expItem = DCAST<ExplorerItem*>(expItemGo);
-                        if (expItem) { expItem->SetSelected(false); }
+                        // Save path, and select only the clicked one
+                        EditorDialog::s_assetPathResult = expItem->GetPath();
+                        for (GameObject *expItemGo : gridLayoutGo->GetChildren())
+                        {
+                            ExplorerItem *expItem = DCAST<ExplorerItem*>(expItemGo);
+                            if (expItem) { expItem->SetSelected(false); }
+                        }
+                        expItem->SetSelected(true);
+                        return IEventsFocus::Event::PropagationResult::STOP_PROPAGATION;
                     }
-                    expItem->SetSelected(true);
+                    else if (event.click.type == ClickType::DOUBLE)
+                    {
+                        // Directly select
+                        EditorDialog::s_accepted = true;
+                        Dialog::EndCurrentDialog();
+                        return IEventsFocus::Event::PropagationResult::STOP_PROPAGATION;
+                    }
                 }
-                else if (clickType == ClickType::DOUBLE)
-                {
-                    // Directly select
-                    EditorDialog::s_accepted = true;
-                    Dialog::EndCurrentDialog();
-                }
+                return IEventsFocus::Event::PropagationResult::PROPAGATE_TO_PARENT;
             });
 
             expItem->SetParent(gridLayoutGo);

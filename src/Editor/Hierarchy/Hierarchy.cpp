@@ -76,12 +76,18 @@ Hierarchy::Hierarchy()
             EventEmitter<IEventsSceneManager>::RegisterListener(this);
 
     UIFocusable *focusable = AddComponent<UIFocusable>();
-    focusable->AddClickedCallback([](IFocusable*, ClickType clickType)
+    focusable->AddEventCallback([](IFocusable*,
+                                   const IEventsFocus::Event &event)
     {
-        if (clickType == ClickType::FULL)
+        if (event.type == IEventsFocus::Event::Type::MOUSE_CLICK)
         {
-            Editor::SelectGameObject(nullptr);
+            if (event.click.type == ClickType::FULL)
+            {
+                Editor::SelectGameObject(nullptr);
+                return IEventsFocus::Event::PropagationResult::STOP_PROPAGATION;
+            }
         }
+        return IEventsFocus::Event::PropagationResult::PROPAGATE_TO_PARENT;
     });
 
     p_contextMenu = AddComponent<UIContextMenu>();

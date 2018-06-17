@@ -150,12 +150,18 @@ Explorer::Explorer()
     });
     p_contextMenu->AddButtonPart(this);
 
-    focusable->AddClickedCallback([this](IFocusable*, ClickType clickType)
+    focusable->AddEventCallback([this](IFocusable *focusable,
+                                       const IEventsFocus::Event &event)
     {
-        if (clickType == ClickType::FULL)
+        if (event.type == IEventsFocus::Event::Type::MOUSE_CLICK)
         {
-            SelectPath(Path::Empty);
+            if (event.click.type == ClickType::FULL)
+            {
+                SelectPath(Path::Empty);
+                return IEventsFocus::Event::PropagationResult::STOP_PROPAGATION;
+            }
         }
+        return IEventsFocus::Event::PropagationResult::PROPAGATE_TO_PARENT;
     });
 
     SetCurrentPath( Paths::GetEngineAssetsDir() );
@@ -341,18 +347,24 @@ void Explorer::AddItem(ExplorerItem *explorerItem)
 
     explorerItem->SetParent(p_itemsContainer);
 
-    explorerItem->GetFocusable()->AddClickedCallback(
-                [this, explorerItem](IFocusable* focusable, ClickType clickType)
+    explorerItem->GetFocusable()->AddEventCallback(
+    [this, explorerItem](IFocusable *focusable,
+                         const IEventsFocus::Event &event)
     {
-        if (clickType == ClickType::FULL)
+        if (event.type == IEventsFocus::Event::Type::MOUSE_CLICK)
         {
-            SelectPath(explorerItem->GetPath());
+            if (event.click.type == ClickType::FULL)
+            {
+                SelectPath( explorerItem->GetPath() );
+                return IEventsFocus::Event::PropagationResult::STOP_PROPAGATION;
+            }
+            else if (event.click.type == ClickType::DOUBLE)
+            {
+                OnItemDoubleClicked(focusable);
+                return IEventsFocus::Event::PropagationResult::STOP_PROPAGATION;
+            }
         }
-
-        if (clickType == ClickType::DOUBLE)
-        {
-            OnItemDoubleClicked(focusable);
-        }
+        return IEventsFocus::Event::PropagationResult::PROPAGATE_TO_PARENT;
     });
     explorerItem->EventEmitter<IEventsExplorerItem>::RegisterListener(this);
 

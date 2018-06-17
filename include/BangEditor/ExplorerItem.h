@@ -70,10 +70,8 @@ private:
     UIAspectRatioFitter *p_aspectRatioFitter = nullptr;
 
     // IEventsFocus
-    virtual void OnClicked(EventEmitter<IEventsFocus>*,
-                           ClickType clickType) override;
-    virtual void OnMouseEnter(EventEmitter<IEventsFocus>*) override;
-    virtual void OnMouseExit(EventEmitter<IEventsFocus>*) override;
+    virtual void OnEvent(IFocusable *focusable,
+                         const IEventsFocus::Event &event) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

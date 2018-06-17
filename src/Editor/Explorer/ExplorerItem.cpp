@@ -91,11 +91,22 @@ ExplorerItem::~ExplorerItem()
 {
 }
 
-void ExplorerItem::OnClicked(EventEmitter<IEventsFocus>*, ClickType clickType)
+void ExplorerItem::OnEvent(IFocusable*,
+                           const IEventsFocus::Event &event)
 {
-    if (clickType == ClickType::FULL)
+    if (event.type == IEventsFocus::Event::Type::MOUSE_ENTER)
     {
-
+        if (!IsSelected())
+        {
+            p_bg->SetTint(Color::LightBlue.WithAlpha(0.6f));
+        }
+    }
+    else if (event.type == IEventsFocus::Event::Type::MOUSE_EXIT)
+    {
+        if (!IsSelected())
+        {
+            p_bg->SetTint(Color::Zero);
+        }
     }
 }
 
@@ -240,22 +251,6 @@ void ExplorerItem::OnDrop(EventEmitter<IEventsDragDrop> *dd_)
 const Path &ExplorerItem::GetPath() const
 {
     return m_path;
-}
-
-void ExplorerItem::OnMouseEnter(EventEmitter<IEventsFocus>*)
-{
-    if (!IsSelected())
-    {
-        p_bg->SetTint(Color::LightBlue.WithAlpha(0.6f));
-    }
-}
-
-void ExplorerItem::OnMouseExit(EventEmitter<IEventsFocus>*)
-{
-    if (!IsSelected())
-    {
-        p_bg->SetTint(Color::Zero);
-    }
 }
 
 
