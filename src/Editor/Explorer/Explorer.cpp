@@ -203,7 +203,9 @@ void Explorer::ForceCheckFileChanges()
     EditorFileTracker::GetInstance()->GetFileTracker()->Update(true);
 }
 
-void Explorer::SelectPath(const Path &path, bool registerUndo)
+void Explorer::SelectPath(const Path &path,
+                          bool registerUndo,
+                          bool travelToDirectory)
 {
     if (path != GetSelectedPath())
     {
@@ -218,7 +220,11 @@ void Explorer::SelectPath(const Path &path, bool registerUndo)
             explorerItem->SetSelected(false);
         }
 
-        if (path.GetDirectory().Exists()) { SetCurrentPath(path.GetDirectory()); }
+        if (path.GetDirectory().Exists() && travelToDirectory)
+        {
+            SetCurrentPath(path.GetDirectory());
+        }
+
         ExplorerItem *explorerItem = GetItemFromPath(path);
         if (explorerItem)
         {
@@ -350,7 +356,8 @@ void Explorer::AddItem(ExplorerItem *explorerItem)
     {
         if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
         {
-            SelectPath( explorerItem->GetPath() );
+            bool travelToDirectory = (explorerItem->GetPathString() != "..");
+            SelectPath( explorerItem->GetPath(), true, travelToDirectory);
             return UIEventResult::INTERCEPT;
         }
         else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)

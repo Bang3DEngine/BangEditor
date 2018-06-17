@@ -38,7 +38,9 @@ public:
     void Update() override;
 
     void ForceCheckFileChanges();
-    void SelectPath(const Path &path, bool registerUndo = true);
+    void SelectPath(const Path &path,
+                    bool registerUndo = true,
+                    bool travelToDirectory = true);
     void SetRootPath(const Path &rootPath);
     void SetCurrentPath(const Path &path);
 
