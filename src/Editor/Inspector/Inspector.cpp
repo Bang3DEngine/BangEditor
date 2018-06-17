@@ -30,6 +30,7 @@
 #include "BangEditor/EditorClipboard.h"
 #include "BangEditor/InspectorWidget.h"
 #include "BangEditor/UndoRedoManager.h"
+#include "BangEditor/EditorFileTracker.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 #include "BangEditor/FileInspectorWidgetFactory.h"
@@ -120,6 +121,8 @@ Inspector::Inspector()
     GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 40)->
                         SetParent(GetWidgetsContainer());
 
+    EditorFileTracker::GetInstance()->GetFileTracker()->
+            EventEmitter<IEventsFileTracker>::RegisterListener(this);
     Editor::GetInstance()->EventEmitter<IEventsEditor>::RegisterListener(this);
     SceneManager::GetActive()->EventEmitter<IEventsSceneManager>::
                                RegisterListener(this);
@@ -229,6 +232,14 @@ void Inspector::OnSceneLoaded(Scene*, const Path &)
 void Inspector::OnDestroyed(EventEmitter<IEventsDestroy>*)
 {
     Clear();
+}
+
+void Inspector::OnPathRemoved(const Path &removedPath)
+{
+    if (GetCurrentPath() == removedPath)
+    {
+        Clear();
+    }
 }
 
 void Inspector::OnCreateContextMenu(MenuItem *menuRootItem)

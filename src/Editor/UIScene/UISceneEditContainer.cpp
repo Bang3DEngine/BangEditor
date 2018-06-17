@@ -101,7 +101,6 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
         }
     }
 
-
     GameObject::Render(rp, renderChildren);
 }
 
@@ -203,9 +202,11 @@ bool UISceneEditContainer::NeedsToRenderSelectionFramebuffer() const
 
 GameObject* UISceneEditContainer::GetCurrentOveredGameObject() const
 {
-    GameObject *overedGameObject =
-                  Selection::GetOveredGameObject( Input::GetMousePosition() );
-    ASSERT(!overedGameObject->HasComponent<NotSelectableInEditor>());
+    AARecti imgRect( GetSceneImage()->GetRectTransform()->GetViewportAARect() );
+    Vector2i mousePosLocal = Input::GetMousePosition() - imgRect.GetMin();
+    GameObject *overedGameObject = Selection::GetOveredGameObject(mousePosLocal);
+    ASSERT(!overedGameObject ||
+           !overedGameObject->HasComponent<NotSelectableInEditor>());
     return overedGameObject;
 }
 

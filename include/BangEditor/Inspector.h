@@ -5,6 +5,7 @@
 #include "Bang/SceneManager.h"
 #include "Bang/IEventsDestroy.h"
 #include "Bang/IEventsComponent.h"
+#include "Bang/IEventsFileTracker.h"
 
 #include "BangEditor/Editor.h"
 
@@ -26,6 +27,7 @@ class Inspector : public GameObject,
                   public EventListener<IEventsEditor>,
                   public EventListener<IEventsDestroy>,
                   public EventListener<IEventsComponent>,
+                  public EventListener<IEventsFileTracker>,
                   public EventListener<IEventsSceneManager>
 {
     GAMEOBJECT_EDITOR(Inspector);
@@ -78,6 +80,9 @@ private:
 
     // IEventsDestroy
     void OnDestroyed(EventEmitter<IEventsDestroy> *destroyedObject) override;
+
+    // IFileTrackerListener
+    void OnPathRemoved(const Path &removedPath) override;
 
     // IEditorListener
     void OnExplorerPathSelected(const Path &path) override;
