@@ -69,13 +69,13 @@ void UIInputFileWithPreview::SetPath(const Path &path)
 }
 
 void UIInputFileWithPreview::OnEvent(IFocusable*,
-                                     const IEventsFocus::Event &event)
+                                     const UIEvent &event)
 {
-    if (event.type == IEventsFocus::Event::Type::MOUSE_ENTER)
+    if (event.type == UIEvent::Type::MOUSE_ENTER)
     {
         p_bigPreviewImg->GetGameObject()->SetVisible(true);
     }
-    else if (event.type == IEventsFocus::Event::Type::MOUSE_EXIT)
+    else if (event.type == UIEvent::Type::MOUSE_EXIT)
     {
         p_bigPreviewImg->GetGameObject()->SetVisible(false);
     }

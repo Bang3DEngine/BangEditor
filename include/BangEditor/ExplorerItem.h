@@ -70,8 +70,7 @@ private:
     UIAspectRatioFitter *p_aspectRatioFitter = nullptr;
 
     // IEventsFocus
-    virtual void OnEvent(IFocusable *focusable,
-                         const IEventsFocus::Event &event) override;
+    virtual void OnEvent(IFocusable *focusable, const UIEvent &event) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

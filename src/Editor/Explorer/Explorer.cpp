@@ -151,17 +151,14 @@ Explorer::Explorer()
     p_contextMenu->AddButtonPart(this);
 
     focusable->AddEventCallback([this](IFocusable *focusable,
-                                       const IEventsFocus::Event &event)
+                                       const UIEvent &event)
     {
-        if (event.type == IEventsFocus::Event::Type::MOUSE_CLICK)
+        if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
         {
-            if (event.click.type == ClickType::FULL)
-            {
-                SelectPath(Path::Empty);
-                return IEventsFocus::Event::PropagationResult::STOP_PROPAGATION;
-            }
+            SelectPath(Path::Empty);
+            return UIEventResult::INTERCEPT;
         }
-        return IEventsFocus::Event::PropagationResult::PROPAGATE_TO_PARENT;
+        return UIEventResult::IGNORE;
     });
 
     SetCurrentPath( Paths::GetEngineAssetsDir() );
@@ -349,22 +346,19 @@ void Explorer::AddItem(ExplorerItem *explorerItem)
 
     explorerItem->GetFocusable()->AddEventCallback(
     [this, explorerItem](IFocusable *focusable,
-                         const IEventsFocus::Event &event)
+                         const UIEvent &event)
     {
-        if (event.type == IEventsFocus::Event::Type::MOUSE_CLICK)
+        if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
         {
-            if (event.click.type == ClickType::FULL)
-            {
-                SelectPath( explorerItem->GetPath() );
-                return IEventsFocus::Event::PropagationResult::STOP_PROPAGATION;
-            }
-            else if (event.click.type == ClickType::DOUBLE)
-            {
-                OnItemDoubleClicked(focusable);
-                return IEventsFocus::Event::PropagationResult::STOP_PROPAGATION;
-            }
+            SelectPath( explorerItem->GetPath() );
+            return UIEventResult::INTERCEPT;
         }
-        return IEventsFocus::Event::PropagationResult::PROPAGATE_TO_PARENT;
+        else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
+        {
+            OnItemDoubleClicked(focusable);
+            return UIEventResult::INTERCEPT;
+        }
+        return UIEventResult::IGNORE;
     });
     explorerItem->EventEmitter<IEventsExplorerItem>::RegisterListener(this);
 

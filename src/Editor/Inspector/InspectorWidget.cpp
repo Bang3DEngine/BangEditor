@@ -148,6 +148,7 @@ void InspectorWidget::AddWidgetInternal(const String &labelContent,
     {
         label = InspectorWidget::CreateWidgetLabel(labelContent, height,
                                                    GetLabelsWidth());
+        label->SetFocusEnabled(false);
     }
 
     if (height >= 0)

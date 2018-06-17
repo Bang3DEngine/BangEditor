@@ -32,8 +32,7 @@ private:
     UIImageRenderer *p_bigPreviewImg = nullptr;
 
     // IFocusable
-    virtual void OnEvent(IFocusable *focusable,
-                         const IEventsFocus::Event &event) override;
+    virtual void OnEvent(IFocusable *focusable, const UIEvent &event) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

@@ -50,17 +50,14 @@ UISceneToolbar::UISceneToolbar()
         (*button)->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
         (*button)->GetIcon()->SetTint(Color::DarkGray);
         (*button)->GetFocusable()->AddEventCallback(
-        [callbackFunc](IFocusable*, const IEventsFocus::Event &event)
+        [callbackFunc](IFocusable*, const UIEvent &event)
         {
-            if (event.type == IEventsFocus::Event::Type::MOUSE_CLICK)
+            if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
             {
-                if (event.click.type == ClickType::DOWN)
-                {
-                    callbackFunc();
-                    return IEventsFocus::Event::PropagationResult::STOP_PROPAGATION;
-                }
+                callbackFunc();
+                return UIEventResult::INTERCEPT;
             }
-            return IEventsFocus::Event::PropagationResult::PROPAGATE_TO_PARENT;
+            return UIEventResult::IGNORE;
         });
         (*button)->GetGameObject()->SetParent(this);
     };

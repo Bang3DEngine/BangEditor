@@ -111,7 +111,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
 
         gridLayoutGo->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
         UIGridLayout *gridLayout = gridLayoutGo->AddComponent<UIGridLayout>();
-        gridLayout->SetCellSize( Vector2i(80) );
+        gridLayout->SetCellSize( Vector2i(200) );
         gridLayout->SetSpacing(10);
 
         UILayoutElement *gridLE = gridLayoutGo->AddComponent<UILayoutElement>();
@@ -136,32 +136,28 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
             }
 
             expItem->GetFocusable()->AddEventCallback(
-            [expItem, gridLayoutGo](IFocusable*,
-                                    const IEventsFocus::Event &event)
+            [expItem, gridLayoutGo](IFocusable*, const UIEvent &event)
             {
-                if (event.type == IEventsFocus::Event::Type::MOUSE_CLICK)
+                if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
                 {
-                    if (event.click.type == ClickType::DOWN)
+                    // Save path, and select only the clicked one
+                    EditorDialog::s_assetPathResult = expItem->GetPath();
+                    for (GameObject *expItemGo : gridLayoutGo->GetChildren())
                     {
-                        // Save path, and select only the clicked one
-                        EditorDialog::s_assetPathResult = expItem->GetPath();
-                        for (GameObject *expItemGo : gridLayoutGo->GetChildren())
-                        {
-                            ExplorerItem *expItem = DCAST<ExplorerItem*>(expItemGo);
-                            if (expItem) { expItem->SetSelected(false); }
-                        }
-                        expItem->SetSelected(true);
-                        return IEventsFocus::Event::PropagationResult::STOP_PROPAGATION;
+                        ExplorerItem *expItem = DCAST<ExplorerItem*>(expItemGo);
+                        if (expItem) { expItem->SetSelected(false); }
                     }
-                    else if (event.click.type == ClickType::DOUBLE)
-                    {
-                        // Directly select
-                        EditorDialog::s_accepted = true;
-                        Dialog::EndCurrentDialog();
-                        return IEventsFocus::Event::PropagationResult::STOP_PROPAGATION;
-                    }
+                    expItem->SetSelected(true);
+                    return UIEventResult::INTERCEPT;
                 }
-                return IEventsFocus::Event::PropagationResult::PROPAGATE_TO_PARENT;
+                else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
+                {
+                    // Directly select
+                    EditorDialog::s_accepted = true;
+                    Dialog::EndCurrentDialog();
+                    return UIEventResult::INTERCEPT;
+                }
+                return UIEventResult::IGNORE;
             });
 
             expItem->SetParent(gridLayoutGo);

@@ -54,14 +54,14 @@ UIInputColor::UIInputColor()
     });
 
     colorImgFocusable->AddEventCallback(
-    [this](IFocusable*, const IEventsFocus::Event &event)
+    [this](IFocusable*, const UIEvent &event)
     {
-        if (event.type == IEventsFocus::Event::Type::MOUSE_CLICK)
+        if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
         {
-            p_searchColorButton->Click(event.click.type);
-            return IEventsFocus::Event::PropagationResult::STOP_PROPAGATION;
+            p_searchColorButton->Click();
+            return UIEventResult::INTERCEPT;
         }
-        return IEventsFocus::Event::PropagationResult::PROPAGATE_TO_PARENT;
+        return UIEventResult::IGNORE;
     });
 
     colorImgCont->SetParent(this);
