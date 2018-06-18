@@ -7,6 +7,7 @@
 #include "Bang/UIAspectRatioFitter.h"
 #include "Bang/UIContentSizeFitter.h"
 
+#include "BangEditor/PreviewViewer.h"
 #include "BangEditor/ModelPreviewFactory.h"
 
 USING_NAMESPACE_BANG
@@ -31,21 +32,9 @@ void FIWModel::Init()
     modelPreviewGo->GetRectTransform()->SetAnchors(Vector2::Zero);
     modelPreviewGo->GetRectTransform()->SetPivotPosition(Vector2::Zero);
 
-    p_modelPreviewImg = modelPreviewGo->AddComponent<UIImageRenderer>();
-    p_modelPreviewImg->SetMode(UIImageRenderer::Mode::TEXTURE);
-    p_modelPreviewImg->SetImageTexture( TextureFactory::GetWhiteTexture().Get() );
+    p_modelPreviewViewer = GameObject::Create<PreviewViewer>();
 
-    UIContentSizeFitter *previewContentSizeFitter =
-                     modelPreviewGo->AddComponent<UIContentSizeFitter>();
-    previewContentSizeFitter->SetVerticalSizeType(LayoutSizeType::PREFERRED);
-    previewContentSizeFitter->SetHorizontalSizeType(LayoutSizeType::PREFERRED);
-
-    UIAspectRatioFitter *previewAspectRatioSizeFitter =
-                     modelPreviewGo->AddComponent<UIAspectRatioFitter>();
-    previewAspectRatioSizeFitter->SetAspectRatio(1.0f);
-    previewAspectRatioSizeFitter->SetAspectRatioMode(AspectRatioMode::KEEP);
-
-    AddWidget(modelPreviewGo, 256);
+    AddWidget(p_modelPreviewViewer, 256);
 
     SetLabelsWidth(130);
 }
@@ -57,8 +46,11 @@ Model *FIWModel::GetModel() const
 
 void FIWModel::UpdateInputsFromResource()
 {
-    p_modelPreviewImg->SetImageTexture(
-            ModelPreviewFactory::GetPreviewTextureFor(GetModel()).Get() );
+    p_modelPreviewViewer->SetPreviewImageProvider([this](
+                      const ResourcePreviewFactoryParameters &params)
+    {
+        return ModelPreviewFactory::GetPreviewTextureFor(GetModel(), params);
+    });
 }
 
 void FIWModel::OnValueChangedFIWResource(EventEmitter<IEventsValueChanged>*)

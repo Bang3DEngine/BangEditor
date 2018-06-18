@@ -18,7 +18,7 @@ public:
     static RH<Texture2D> GetPreviewTextureFor(Material *material);
     static RH<Texture2D> GetPreviewTextureFor(
                               Material *material,
-                              const MaterialPreviewFactory::Parameters &params);
+                              const ResourcePreviewFactoryParameters &params);
     static MaterialPreviewFactory *GetActive();
 
 private:
@@ -31,13 +31,13 @@ private:
                   Camera *previewCamera,
                   GameObject *previewGoContainer,
                   Material *material,
-                  const MaterialPreviewFactory::Parameters &params) override;
+                  const ResourcePreviewFactoryParameters &params) override;
     void OnUpdateTextureEnd(
                   Scene *previewScene,
                   Camera *previewCamera,
                   GameObject *previewGoContainer,
                   Material *material,
-                  const MaterialPreviewFactory::Parameters &params) override;
+                  const ResourcePreviewFactoryParameters &params) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

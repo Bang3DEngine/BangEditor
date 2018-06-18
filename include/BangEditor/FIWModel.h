@@ -11,6 +11,8 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class PreviewViewer;
+
 class FIWModel : public FIWResource<Model>
 {
     GAMEOBJECT_EDITOR(FIWModel);
@@ -21,7 +23,7 @@ public:
 
 private:
     RH<Model> m_modelRH;
-    UIImageRenderer *p_modelPreviewImg = nullptr;
+    PreviewViewer *p_modelPreviewViewer = nullptr;
 
     FIWModel();
     virtual ~FIWModel();

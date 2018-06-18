@@ -22,6 +22,7 @@ FORWARD class UIInputFile;
 FORWARD class UIInputColor;
 FORWARD class UIInputVector;
 FORWARD class UIInputTexture;
+FORWARD class PreviewViewer;
 
 class FIWMaterial : public FIWResource<Material>
 {
@@ -51,7 +52,7 @@ private:
     UICheckBox *p_renderWireframe = nullptr;
     UIInputFile *p_vertexShaderInput = nullptr;
     UIInputFile *p_fragmentShaderInput = nullptr;
-    UIImageRenderer *p_materialPreviewImg = nullptr;
+    PreviewViewer *p_materialPreviewViewer = nullptr;
 
 	FIWMaterial();
     virtual ~FIWMaterial();

@@ -90,9 +90,16 @@ void ResourcePreviewFactory<T>::CreatePreviewScene()
 template<class T>
 RH<Texture2D> ResourcePreviewFactory<T>::GetPreviewTextureFor_(
                               T *resource,
-                              const ResourcePreviewFactory::Parameters &params)
+                              const ResourcePreviewFactoryParameters &params)
 {
     if (!resource) { return TextureFactory::GetWhiteTexture(); }
+
+    if (!m_lastPreviewParameters.ContainsKey(resource->GetGUID()) ||
+        params != m_lastPreviewParameters.Get(resource->GetGUID()))
+    {
+        m_previewsMap.Remove(resource->GetGUID());
+    }
+
     if (!m_previewsMap.ContainsKey(resource->GetGUID()))
     {
         // Create empty preview texture
@@ -114,7 +121,7 @@ template<class T>
 void ResourcePreviewFactory<T>::FillTextureWithPreview(
                               Texture2D *texture,
                               T *resource,
-                              const ResourcePreviewFactory::Parameters &params)
+                              const ResourcePreviewFactoryParameters &params)
 {
     // Now we will fill the texture with the proper preview
     GL::Push(GL::Pushable::VIEWPORT);
@@ -134,7 +141,8 @@ void ResourcePreviewFactory<T>::FillTextureWithPreview(
                                                      GL::Attachment::COLOR0);
     m_auxiliarFBToCopyTextures->Resize(previewTextureSize, previewTextureSize);
 
-    GetPreviewCamera()->GetGBuffer()->Resize(previewTextureSize, previewTextureSize);
+    GetPreviewCamera()->GetGBuffer()->Resize(previewTextureSize,
+                                             previewTextureSize);
 
     m_lastPreviewParameters.Add(resource->GetGUID(), params);
     OnUpdateTextureBegin(GetPreviewScene(),
@@ -150,7 +158,7 @@ void ResourcePreviewFactory<T>::FillTextureWithPreview(
     float camDist = goSphere.GetRadius() / Math::Tan(halfFov) * 1.0f;
     camDist *= params.camDistanceMultiplier;
     const Vector2 &angles = params.camOrbitAnglesDegs;
-    Vector3 camDir = (Quaternion::AngleAxis(Math::DegToRad(angles.x), Vector3::Up) *
+    Vector3 camDir = (Quaternion::AngleAxis(Math::DegToRad(-angles.x), Vector3::Up) *
                       Quaternion::AngleAxis(Math::DegToRad(angles.y), Vector3::Right) *
                       Vector3(0,0,1)).
                      Normalized();
@@ -203,7 +211,7 @@ void ResourcePreviewFactory<T>::OnResourceChanged(Resource *changedResource)
     Texture2D *resPreviewTex = m_previewsMap.Get(changedResT->GetGUID()).Get();
 
     ASSERT(m_lastPreviewParameters.ContainsKey(changedResource->GetGUID()));
-    const ResourcePreviewFactory::Parameters &lastParams =
+    const ResourcePreviewFactoryParameters &lastParams =
                      m_lastPreviewParameters.Get(changedResource->GetGUID());
 
     // Update preview

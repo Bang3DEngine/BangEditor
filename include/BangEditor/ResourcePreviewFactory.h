@@ -17,16 +17,27 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+struct ResourcePreviewFactoryParameters
+{
+    Vector2 camOrbitAnglesDegs = Vector2(45.0f, -45.0f);
+    float camDistanceMultiplier = 1.0f;
+
+    bool operator==(const ResourcePreviewFactoryParameters &rhs) const
+    {
+        return camOrbitAnglesDegs == rhs.camOrbitAnglesDegs &&
+               camDistanceMultiplier == rhs.camDistanceMultiplier;
+    }
+    bool operator!=(const ResourcePreviewFactoryParameters &rhs) const
+    {
+        return !((*this) == rhs);
+    }
+};
+
+
 template <class T>
 class ResourcePreviewFactory : public EventListener<IEventsResource>
 {
 public:
-    struct Parameters
-    {
-        Vector2 camOrbitAnglesDegs = Vector2(45.0f, -45.0f);
-        float camDistanceMultiplier = 1.0f;
-    };
-
     virtual void Init();
 
 protected:
@@ -41,25 +52,25 @@ protected:
                          Camera *previewCamera,
                          GameObject *previewGoContainer,
                          T *resource,
-                         const ResourcePreviewFactory::Parameters &params) = 0;
+                         const ResourcePreviewFactoryParameters &params) = 0;
     virtual void OnUpdateTextureEnd(
                          Scene *previewScene,
                          Camera *previewCamera,
                          GameObject *previewGoContainer,
                          T *resource,
-                         const ResourcePreviewFactory::Parameters &params) = 0;
+                         const ResourcePreviewFactoryParameters &params) = 0;
 
     Scene *GetPreviewScene() const;
     Camera *GetPreviewCamera() const;
     GameObject *GetPreviewGameObjectContainer() const;
     RH<Texture2D> GetPreviewTextureFor_(
                             T *resource,
-                            const ResourcePreviewFactory::Parameters &params);
+                            const ResourcePreviewFactoryParameters &params);
 
 private:
     UMap<GUID, RH<Texture2D>> m_previewsMap;
     Array<RH<T>> m_previewsResources;
-    UMap<GUID, ResourcePreviewFactory::Parameters> m_lastPreviewParameters;
+    UMap<GUID, ResourcePreviewFactoryParameters> m_lastPreviewParameters;
 
     Scene *m_previewScene = nullptr;
     Camera *p_previewCamera = nullptr;
@@ -70,7 +81,7 @@ private:
     void FillTextureWithPreview(
                             Texture2D *texture,
                             T *resource,
-                            const ResourcePreviewFactory::Parameters &params);
+                            const ResourcePreviewFactoryParameters &params);
 
     // IEventsResource
     void OnResourceChanged(Resource *changedResource) override;

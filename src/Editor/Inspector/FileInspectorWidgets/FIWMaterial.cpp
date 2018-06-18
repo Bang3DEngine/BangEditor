@@ -25,6 +25,7 @@
 
 #include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputColor.h"
+#include "BangEditor/PreviewViewer.h"
 #include "BangEditor/UIInputVector.h"
 #include "BangEditor/UIInputTexture.h"
 #include "BangEditor/MaterialPreviewFactory.h"
@@ -120,29 +121,9 @@ void FIWMaterial::Init()
     p_renderWireframe = GameObjectFactory::CreateUICheckBox();
     p_renderWireframe->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    GameObject *materialPreviewGo = GameObjectFactory::CreateUIGameObject();
-    materialPreviewGo->GetRectTransform()->SetAnchors(Vector2::Zero);
-    materialPreviewGo->GetRectTransform()->SetPivotPosition(Vector2::Zero);
+    p_materialPreviewViewer = GameObject::Create<PreviewViewer>();
 
-    // UILayoutElement *materialPreviewGoLE = materialPreviewGo->
-    //                                        AddComponent<UILayoutElement>();
-    // materialPreviewGoLE->SetFlexibleSize( Vector2::One );
-
-    p_materialPreviewImg = materialPreviewGo->AddComponent<UIImageRenderer>();
-    p_materialPreviewImg->SetMode(UIImageRenderer::Mode::TEXTURE);
-    p_materialPreviewImg->SetImageTexture( TextureFactory::GetWhiteTexture().Get() );
-
-    UIContentSizeFitter *previewContentSizeFitter =
-                     materialPreviewGo->AddComponent<UIContentSizeFitter>();
-    previewContentSizeFitter->SetVerticalSizeType(LayoutSizeType::PREFERRED);
-    previewContentSizeFitter->SetHorizontalSizeType(LayoutSizeType::PREFERRED);
-
-    UIAspectRatioFitter *previewAspectRatioSizeFitter =
-                     materialPreviewGo->AddComponent<UIAspectRatioFitter>();
-    previewAspectRatioSizeFitter->SetAspectRatio(1.0f);
-    previewAspectRatioSizeFitter->SetAspectRatioMode(AspectRatioMode::KEEP);
-
-    AddWidget(materialPreviewGo,      256);
+    AddWidget(p_materialPreviewViewer,      256);
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Render pass",          p_renderPassInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
@@ -202,8 +183,13 @@ void FIWMaterial::UpdateInputsFromResource()
     p_cullFaceInput->SetSelectionByValue( SCAST<int>(GetMaterial()->GetCullFace()) );
     p_lineWidthInput->SetValue( GetMaterial()->GetLineWidth() );
 
-    p_materialPreviewImg->SetImageTexture(
-            MaterialPreviewFactory::GetPreviewTextureFor(GetMaterial()).Get() );
+
+    p_materialPreviewViewer->SetPreviewImageProvider([this](
+                       const ResourcePreviewFactoryParameters &params)
+    {
+        return MaterialPreviewFactory::GetPreviewTextureFor(GetMaterial(),
+                                                            params);
+    });
 
     ShaderProgram *sp = GetMaterial()->GetShaderProgram();
     Shader *vs = sp ? sp->GetVertexShader() : nullptr;

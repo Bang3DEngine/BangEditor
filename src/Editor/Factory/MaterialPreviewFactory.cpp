@@ -24,12 +24,13 @@ MaterialPreviewFactory::~MaterialPreviewFactory()
 RH<Texture2D> MaterialPreviewFactory::GetPreviewTextureFor(Material *material)
 {
     return MaterialPreviewFactory::GetPreviewTextureFor(
-                            material, MaterialPreviewFactory::Parameters());
+                                        material,
+                                        ResourcePreviewFactoryParameters());
 }
 
 RH<Texture2D> MaterialPreviewFactory::GetPreviewTextureFor(
                             Material *material,
-                            const MaterialPreviewFactory::Parameters &params)
+                            const ResourcePreviewFactoryParameters &params)
 {
     return MaterialPreviewFactory::GetActive()->GetPreviewTextureFor_(material,
                                                                       params);
@@ -58,7 +59,7 @@ void MaterialPreviewFactory::OnUpdateTextureBegin(
                               Camera *previewCamera,
                               GameObject *previewGoContainer,
                               Material *material,
-                              const MaterialPreviewFactory::Parameters &params)
+                              const ResourcePreviewFactoryParameters &params)
 {
     (void) params;
     (void) previewScene;
@@ -76,7 +77,7 @@ void MaterialPreviewFactory::OnUpdateTextureEnd(
                               Camera *previewCamera,
                               GameObject *previewGoContainer,
                               Material *material,
-                              const MaterialPreviewFactory::Parameters &params)
+                              const ResourcePreviewFactoryParameters &params)
 {
     (void) previewScene;
     (void) previewCamera;
