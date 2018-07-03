@@ -3,6 +3,7 @@
 #include "Bang/Component.h"
 
 #include "BangEditor/CIWCamera.h"
+#include "BangEditor/CIWAnimator.h"
 #include "BangEditor/CIWTransform.h"
 #include "BangEditor/CIWPointLight.h"
 #include "BangEditor/CIWAudioSource.h"
@@ -14,6 +15,7 @@
 #include "BangEditor/CIWDirectionalLight.h"
 #include "BangEditor/CIWPostProcessEffect.h"
 #include "BangEditor/CIWBehaviourContainer.h"
+#include "BangEditor/CIWSkinnedMeshRenderer.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
 USING_NAMESPACE_BANG
@@ -43,6 +45,10 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(Component *com
     {
         ciw = GameObject::Create<CIWMeshRenderer>();
     }
+    else if (cName == "SkinnedMeshRenderer")
+    {
+        ciw = GameObject::Create<CIWSkinnedMeshRenderer>();
+    }
     else if (cName == "BehaviourContainer")
     {
         ciw = GameObject::Create<CIWBehaviourContainer>();
@@ -66,6 +72,10 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(Component *com
     else if (cName == "AudioSource")
     {
         ciw = GameObject::Create<CIWAudioSource>();
+    }
+    else if (cName == "Animator")
+    {
+        ciw = GameObject::Create<CIWAnimator>();
     }
     else if (cName == "PostProcessEffect")
     {

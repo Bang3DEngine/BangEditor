@@ -17,18 +17,17 @@ class CIWMeshRenderer : public CIWRenderer
     GAMEOBJECT_EDITOR(CIWMeshRenderer);
 
 public:
-
     // InspectorWidget
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
 
-private:
+protected:
     UIInputFile *p_meshInputFile = nullptr;
-
-    MeshRenderer *GetMeshRenderer() const;
 
     CIWMeshRenderer() = default;
     virtual ~CIWMeshRenderer() = default;
+
+    MeshRenderer *GetMeshRenderer() const;
 
     // ComponentInspectorWidget
     void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;

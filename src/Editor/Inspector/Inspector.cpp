@@ -186,7 +186,7 @@ void Inspector::ShowPath(const Path &path)
                 m_currentOpenPath = path;
                 AddWidget(fiw);
 
-                bool isEngineFile = Paths::IsEnginePath(m_currentOpenPath);
+                bool isEngineFile = false; // Paths::IsEnginePath(m_currentOpenPath);
                 bool isEmbeddedPath = Resources::IsEmbeddedResource(path);
                 SetCurrentWidgetBlocked(isEngineFile || isEmbeddedPath);
             }

@@ -9,6 +9,7 @@
 #include "Bang/Random.h"
 #include "Bang/UIMask.h"
 #include "Bang/UILabel.h"
+#include "Bang/Animator.h"
 #include "Bang/Material.h"
 #include "Bang/UIButton.h"
 #include "Bang/UISlider.h"
@@ -44,6 +45,7 @@
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/BehaviourContainer.h"
 #include "Bang/UIHorizontalLayout.h"
+#include "Bang/SkinnedMeshRenderer.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/Explorer.h"
@@ -221,6 +223,7 @@ MenuItem* MenuBar::GetItem(int i)
 void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
 {
     MenuItem *addAudio = rootItem->AddItem("Audio");
+    MenuItem *addAnimator = rootItem->AddItem("Animator");
     MenuItem *addAudioListener = addAudio->AddItem("Audio Listener");
     MenuItem *addAudioSource = addAudio->AddItem("Audio Source");
     MenuItem *addBehaviours = rootItem->AddItem("Behaviour");
@@ -234,6 +237,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addRenderer = rootItem->AddItem("Renderer");
     MenuItem *addLineRenderer = addRenderer->AddItem("LineRenderer");
     MenuItem *addMeshRenderer = addRenderer->AddItem("MeshRenderer");
+    MenuItem *addSkinnedMeshRenderer = addRenderer->AddItem("SkinnedMeshRenderer");
     MenuItem *addTransforms = rootItem->AddItem("Transform");
     MenuItem *addTransform = addTransforms->AddItem("Transform");
     MenuItem *addRectTransform = addTransforms->AddItem("RectTransform");
@@ -257,6 +261,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addUIScrollPanel = addUI->AddItem("ScrollPanel");
     MenuItem *addUITextRenderer = addUI->AddItem("Text Renderer");
     MenuItem *addUIVerticalLayout = addUI->AddItem("VerticalLayout");
+    addAnimator->SetSelectedCallback(MenuBar::OnAddAnimator);
     addAudioListener->SetSelectedCallback(MenuBar::OnAddAudioListener);
     addAudioSource->SetSelectedCallback(MenuBar::OnAddAudioSource);
     addNewBehaviour->SetSelectedCallback(MenuBar::OnAddNewBehaviour);
@@ -267,6 +272,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     addDirectionalLight->SetSelectedCallback(MenuBar::OnAddDirectionalLight);
     addLineRenderer->SetSelectedCallback(MenuBar::OnAddLineRenderer);
     addMeshRenderer->SetSelectedCallback(MenuBar::OnAddMeshRenderer);
+    addSkinnedMeshRenderer->SetSelectedCallback(MenuBar::OnAddSkinnedMeshRenderer);
     addTransform->SetSelectedCallback(MenuBar::OnAddTransform);
     addRectTransform->SetSelectedCallback(MenuBar::OnAddRectTransform);
     addPostProcessEffect->SetSelectedCallback(MenuBar::OnAddPostProcessEffect);
@@ -389,6 +395,11 @@ T* OnAddComponent()
     return comp;
 }
 
+void MenuBar::OnAddAnimator(MenuItem *item)
+{
+    OnAddComponent<Animator>();
+}
+
 void MenuBar::OnAddAudioListener(MenuItem*)
 {
     OnAddComponent<AudioListener>();
@@ -468,6 +479,11 @@ void MenuBar::OnAddLineRenderer(MenuItem*)
 void MenuBar::OnAddMeshRenderer(MenuItem*)
 {
     OnAddComponent<MeshRenderer>();
+}
+
+void MenuBar::OnAddSkinnedMeshRenderer(MenuItem *item)
+{
+    OnAddComponent<SkinnedMeshRenderer>();
 }
 
 void MenuBar::OnAddTransform(MenuItem*)

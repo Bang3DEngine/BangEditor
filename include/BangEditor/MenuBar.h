@@ -63,6 +63,7 @@ private:
     static void OnCreateMaterial (MenuItem *item);
     static void OnCreateTextureCubeMap (MenuItem *item);
 
+    static void OnAddAnimator             (MenuItem *item);
     static void OnAddAudioListener        (MenuItem *item);
     static void OnAddAudioSource          (MenuItem *item);
     static void OnAddNewBehaviour         (MenuItem *item);
@@ -73,6 +74,7 @@ private:
     static void OnAddDirectionalLight     (MenuItem *item);
     static void OnAddLineRenderer         (MenuItem *item);
     static void OnAddMeshRenderer         (MenuItem *item);
+    static void OnAddSkinnedMeshRenderer  (MenuItem *item);
     static void OnAddTransform            (MenuItem *item);
     static void OnAddRectTransform        (MenuItem *item);
     static void OnAddPostProcessEffect    (MenuItem *item);

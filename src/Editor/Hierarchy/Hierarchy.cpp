@@ -356,6 +356,8 @@ void Hierarchy::AddGameObject(GameObject *go)
         go->EventEmitter<IEventsChildren>::RegisterListener(this);
         go->EventEmitter<IEventsDestroy>::RegisterListener(this);
         goItem->EventEmitter<IEventsHierarchyItem>::RegisterListener(this);
+
+        GetUITree()->SetItemCollapsed(goItem, true);
     }
 }
 
