@@ -83,7 +83,7 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
                 if (gb && sp)
                 {
                     Texture2D *depthTex = gb->GetSceneDepthStencilTexture();
-                    sp->SetTexture("B_SceneDepthStencilTex", depthTex);
+                    sp->SetTexture2D("B_SceneDepthStencilTex", depthTex);
                 }
                 }
                 break;
@@ -95,7 +95,7 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
                 if (sfb)
                 {
                     Texture2D *selectionTex = sfb->GetColorTexture().Get();
-                    sp->SetTexture("B_SelectionTex", selectionTex);
+                    sp->SetTexture2D("B_SelectionTex", selectionTex);
                 }
                 }
                 break;

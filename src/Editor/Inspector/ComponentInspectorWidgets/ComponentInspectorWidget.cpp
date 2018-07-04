@@ -51,7 +51,6 @@ void ComponentInspectorWidget::SetComponent(Component *comp)
     ASSERT(!GetComponent());
 
     p_component = comp;
-    SetTitle(GetComponent()->GetClassName());
     p_icon->SetImageTexture( GetComponentIconTexture().Get() );
     Update();
 }

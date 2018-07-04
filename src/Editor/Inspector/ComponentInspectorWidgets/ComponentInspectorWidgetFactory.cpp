@@ -21,7 +21,8 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(Component *component)
+ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
+                                Component *component)
 {
     ComponentInspectorWidget *ciw = nullptr;
     String cName = component->GetClassName();

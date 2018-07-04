@@ -164,8 +164,8 @@ void ResourcePreviewFactory<T>::FillTextureWithPreview(
                      Normalized();
     camTR->SetPosition( goSphere.GetCenter() + camDir * camDist);
     camTR->LookAt(goSphere.GetCenter());
-    /*
     GetPreviewCamera()->SetZFar( (camDist + goSphere.GetRadius() * 2.0f) * 1.2f);
+    /*
     */
 
     GL::SetViewport(0, 0, previewTextureSize, previewTextureSize);

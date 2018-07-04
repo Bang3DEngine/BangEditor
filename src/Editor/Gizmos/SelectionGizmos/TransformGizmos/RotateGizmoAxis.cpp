@@ -301,7 +301,7 @@ void RotateGizmoAxis::UpdateCirclePoints()
             selectionMeshPoints.PushBack(p1 + norm1_c - norm1_n);
         }
         sMesh->SetPositionsPool(selectionMeshPoints);
-        m_selectionMesh.Get()->UpdateGeometry();
+        m_selectionMesh.Get()->UpdateVAOs();
     }
 }
 

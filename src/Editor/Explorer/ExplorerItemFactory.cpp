@@ -86,6 +86,14 @@ List<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
                         ExplorerItemFactory::CreateExplorerItem(materialPath);
                 expItems.PushBack( materialExplorerItem );
             }
+
+            for (const String& animationName : model.Get()->GetAnimationsNames())
+            {
+                Path animationPath = path.Append(animationName);
+                ExplorerItem *animationExplorerItem =
+                        ExplorerItemFactory::CreateExplorerItem(animationPath);
+                expItems.PushBack( animationExplorerItem );
+            }
         }
     }
 
