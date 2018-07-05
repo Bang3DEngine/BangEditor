@@ -171,7 +171,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
 
     List<Path> engineAssetPaths =
             Paths::GetEngineAssetsDir().GetFiles(Path::FindFlag::RECURSIVE,
-                                            extensions);
+                                                 extensions);
     engineAssetPaths.PushFront(Path::Empty);
     GameObject *engineAssetsGo = CreateAssetContainerGameObject(engineAssetPaths);
 

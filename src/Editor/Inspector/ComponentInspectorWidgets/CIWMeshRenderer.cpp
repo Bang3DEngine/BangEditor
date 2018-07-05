@@ -21,7 +21,7 @@ void CIWMeshRenderer::InitInnerWidgets()
     SetTitle("Mesh Renderer");
 
     p_meshInputFile = GameObject::Create<UIInputFile>();
-    p_meshInputFile->SetExtensions( Extensions::GetModelExtensions() );
+    p_meshInputFile->SetExtensions( { Extensions::GetMeshExtension() } );
     p_meshInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     AddWidget("Mesh", p_meshInputFile);
@@ -44,7 +44,8 @@ void CIWMeshRenderer::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *objec
 
     if (object == p_meshInputFile)
     {
-        RH<Mesh> mesh = Resources::Load<Mesh>(p_meshInputFile->GetPath());
+        Path meshPath = p_meshInputFile->GetPath();
+        RH<Mesh> mesh = Resources::Load<Mesh>(meshPath);
         GetMeshRenderer()->SetMesh(mesh.Get());
     }
 }
