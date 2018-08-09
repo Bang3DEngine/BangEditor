@@ -60,6 +60,14 @@ void FIWMaterial::Init()
     p_albedoUvOffsetInput->SetSize(2);
     p_albedoUvOffsetInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
+    p_roughnessTextureInput = GameObject::Create<UIInputTexture>();
+    p_roughnessTextureInput->SetExtensions( Extensions::GetImageExtensions() );
+    p_roughnessTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_metalnessTextureInput = GameObject::Create<UIInputTexture>();
+    p_metalnessTextureInput->SetExtensions( Extensions::GetImageExtensions() );
+    p_metalnessTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
     p_normalMapTextureInput = GameObject::Create<UIInputTexture>();
     p_normalMapTextureInput->SetExtensions( Extensions::GetImageExtensions() );
     p_normalMapTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
@@ -129,7 +137,9 @@ void FIWMaterial::Init()
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Rec. light",           p_receivesLightingCheckBox->GetGameObject());
     AddWidget("Roughness",            p_roughnessSlider->GetGameObject());
+    AddWidget("Roughness Tex.",       p_roughnessTextureInput);
     AddWidget("Metalness",            p_metalnessSlider->GetGameObject());
+    AddWidget("Metalness Tex.",       p_metalnessTextureInput);
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Albedo Color",         p_albedoColorInput);
     AddWidget("Albedo Tex.",          p_albedoTextureInput);
@@ -163,6 +173,16 @@ void FIWMaterial::UpdateInputsFromResource()
                                                Path::Empty);
     p_albedoUvOffsetInput->Set( GetMaterial()->GetAlbedoUvOffset() );
     p_albedoUvMultiplyInput->Set( GetMaterial()->GetAlbedoUvMultiply() );
+
+    Texture2D *roughnessTex = GetMaterial()->GetRoughnessTexture();
+    p_roughnessTextureInput->SetPath( roughnessTex ?
+                                      roughnessTex->GetResourceFilepath() :
+                                      Path::Empty );
+
+    Texture2D *metalnessTex = GetMaterial()->GetMetalnessTexture();
+    p_metalnessTextureInput->SetPath( metalnessTex ?
+                                      metalnessTex->GetResourceFilepath() :
+                                      Path::Empty );
 
     Texture2D *normalMapTex = GetMaterial()->GetNormalMapTexture();
     p_normalMapTextureInput->SetPath( normalMapTex ?
@@ -209,6 +229,22 @@ void FIWMaterial::OnValueChangedFIWResource(EventEmitter<IEventsValueChanged> *o
         GetMaterial()->SetAlbedoTexture(tex.Get());
     }
     else { GetMaterial()->SetAlbedoTexture(nullptr); }
+
+    Path roughnessTexPath = p_roughnessTextureInput->GetPath();
+    if (roughnessTexPath.IsFile())
+    {
+        RH<Texture2D> tex = Resources::Load<Texture2D>(roughnessTexPath);
+        GetMaterial()->SetRoughnessTexture(tex.Get());
+    }
+    else { GetMaterial()->SetRoughnessTexture(nullptr); }
+
+    Path metalnessTexPath = p_metalnessTextureInput->GetPath();
+    if (metalnessTexPath.IsFile())
+    {
+        RH<Texture2D> tex = Resources::Load<Texture2D>(metalnessTexPath);
+        GetMaterial()->SetMetalnessTexture(tex.Get());
+    }
+    else { GetMaterial()->SetMetalnessTexture(nullptr); }
 
     Path normalMapTexPath = p_normalMapTextureInput->GetPath();
     if (normalMapTexPath.IsFile())

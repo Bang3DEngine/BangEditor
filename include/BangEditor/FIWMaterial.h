@@ -40,6 +40,8 @@ private:
     UIInputTexture *p_albedoTextureInput = nullptr;
     UIInputVector *p_albedoUvMultiplyInput = nullptr;
     UIInputVector *p_albedoUvOffsetInput   = nullptr;
+    UIInputTexture *p_roughnessTextureInput = nullptr;
+    UIInputTexture *p_metalnessTextureInput = nullptr;
     UIInputTexture *p_normalMapTextureInput = nullptr;
     UIInputVector *p_normalMapUvMultiplyInput = nullptr;
     UIInputVector *p_normalMapUvOffsetInput   = nullptr;
