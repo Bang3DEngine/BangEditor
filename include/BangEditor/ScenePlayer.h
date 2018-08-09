@@ -32,7 +32,7 @@ public:
     static ScenePlayer *GetInstance();
 
 private:
-    PlayState m_currentPlayState;
+    PlayState m_currentPlayState = PlayState::EDITING;
 
     bool m_steppingFrame = false;
     Scene *p_editOpenScene = nullptr;

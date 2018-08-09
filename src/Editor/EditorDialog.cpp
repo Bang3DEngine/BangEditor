@@ -11,7 +11,6 @@
 #include "Bang/UIButton.h"
 #include "Bang/UISlider.h"
 #include "Bang/GameObject.h"
-#include "Bang/TextureFactory.h"
 #include "Bang/DialogWindow.h"
 #include "Bang/SceneManager.h"
 #include "Bang/UIScrollArea.h"
@@ -20,6 +19,7 @@
 #include "Bang/UIInputNumber.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/TextureFactory.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIVerticalLayout.h"
@@ -32,6 +32,7 @@
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/UITabContainer.h"
+#include "BangEditor/ExplorerItemFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -123,44 +124,66 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
         gridScrollPanel->SetVerticalScrollBarSide(HorizontalSide::RIGHT);
         gridScrollPanel->SetHorizontalScrollEnabled(false);
 
+        auto CreateExpItemFromPath = [gridLayoutGo,
+                                      extensions](const Path &assetPath)
+        {
+            List<ExplorerItem*> expItems =
+                    ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
+                                            assetPath, false);
+
+            ExplorerItem *assetExpItem = GameObject::Create<ExplorerItem>();
+            assetExpItem->SetPath(assetPath);
+            expItems.PushFront(assetExpItem);
+
+            for (ExplorerItem *expItem : expItems)
+            {
+                Path path = expItem->GetPath();
+                if (path.IsEmpty() || path.HasExtension(extensions))
+                {
+                    expItem->GetLabel()->GetText()->SetTextColor(Color::Black);
+
+                    if (path.IsEmpty())
+                    {
+                        expItem->GetLabel()->GetText()->SetContent("None");
+                    }
+
+                    expItem->GetFocusable()->AddEventCallback(
+                    [expItem, gridLayoutGo](IFocusable*, const UIEvent &event)
+                    {
+                        if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
+                        {
+                            // Save path, and select only the clicked one
+                            EditorDialog::s_assetPathResult = expItem->GetPath();
+                            for (GameObject *expItemGo : gridLayoutGo->GetChildren())
+                            {
+                                ExplorerItem *expItem = DCAST<ExplorerItem*>(expItemGo);
+                                if (expItem)
+                                {
+                                    expItem->SetSelected(false);
+                                }
+                            }
+                            expItem->SetSelected(true);
+                            return UIEventResult::INTERCEPT;
+                        }
+                        else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
+                        {
+                            // Directly select
+                            EditorDialog::s_accepted = true;
+                            Dialog::EndCurrentDialog();
+                            return UIEventResult::INTERCEPT;
+                        }
+                        return UIEventResult::IGNORE;
+                    });
+
+                    expItem->SetParent(gridLayoutGo);
+                }
+            }
+        };
+
         // Add paths to grid layout
         for (const Path &assetPath : assetPaths)
         {
-            ExplorerItem *expItem = GameObject::Create<ExplorerItem>();
-            expItem->GetLabel()->GetText()->SetTextColor(Color::Black);
-            expItem->SetPath(assetPath);
-
-            if (assetPath.IsEmpty())
-            {
-                expItem->GetLabel()->GetText()->SetContent("None");
-            }
-
-            expItem->GetFocusable()->AddEventCallback(
-            [expItem, gridLayoutGo](IFocusable*, const UIEvent &event)
-            {
-                if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
-                {
-                    // Save path, and select only the clicked one
-                    EditorDialog::s_assetPathResult = expItem->GetPath();
-                    for (GameObject *expItemGo : gridLayoutGo->GetChildren())
-                    {
-                        ExplorerItem *expItem = DCAST<ExplorerItem*>(expItemGo);
-                        if (expItem) { expItem->SetSelected(false); }
-                    }
-                    expItem->SetSelected(true);
-                    return UIEventResult::INTERCEPT;
-                }
-                else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
-                {
-                    // Directly select
-                    EditorDialog::s_accepted = true;
-                    Dialog::EndCurrentDialog();
-                    return UIEventResult::INTERCEPT;
-                }
-                return UIEventResult::IGNORE;
-            });
-
-            expItem->SetParent(gridLayoutGo);
+            CreateExpItemFromPath(assetPath);
         }
 
         return gridScrollPanel->GetGameObject();
@@ -170,14 +193,12 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
     UITabContainer *tabContainer = GameObject::Create<UITabContainer>();
 
     List<Path> engineAssetPaths =
-            Paths::GetEngineAssetsDir().GetFiles(Path::FindFlag::RECURSIVE,
-                                                 extensions);
+            Paths::GetEngineAssetsDir().GetFiles(Path::FindFlag::RECURSIVE);
     engineAssetPaths.PushFront(Path::Empty);
     GameObject *engineAssetsGo = CreateAssetContainerGameObject(engineAssetPaths);
 
     List<Path> projectAssetPaths =
-            Paths::GetProjectAssetsDir().GetFiles(Path::FindFlag::RECURSIVE,
-                                                  extensions);
+            Paths::GetProjectAssetsDir().GetFiles(Path::FindFlag::RECURSIVE);
     projectAssetPaths.PushFront(Path::Empty);
     GameObject *projectAssetsGo = CreateAssetContainerGameObject(projectAssetPaths);
 

@@ -74,14 +74,14 @@ TextureCubeMap *FIWTextureCubeMap::GetTextureCubeMap() const
 void FIWTextureCubeMap::CheckValidity() const
 {
     TextureCubeMap *tcm = GetTextureCubeMap();
-    RH<Imageb> topImg   = tcm->GetImageResource(GL::CubeMapDir::TOP);
-    RH<Imageb> botImg   = tcm->GetImageResource(GL::CubeMapDir::BOT);
-    RH<Imageb> leftImg  = tcm->GetImageResource(GL::CubeMapDir::LEFT);
-    RH<Imageb> rightImg = tcm->GetImageResource(GL::CubeMapDir::RIGHT);
-    RH<Imageb> frontImg = tcm->GetImageResource(GL::CubeMapDir::FRONT);
-    RH<Imageb> backImg  = tcm->GetImageResource(GL::CubeMapDir::BACK);
+    RH<Texture2D> topTex   = tcm->GetSideTexture(GL::CubeMapDir::TOP);
+    RH<Texture2D> botTex   = tcm->GetSideTexture(GL::CubeMapDir::BOT);
+    RH<Texture2D> leftTex  = tcm->GetSideTexture(GL::CubeMapDir::LEFT);
+    RH<Texture2D> rightTex = tcm->GetSideTexture(GL::CubeMapDir::RIGHT);
+    RH<Texture2D> frontTex = tcm->GetSideTexture(GL::CubeMapDir::FRONT);
+    RH<Texture2D> backTex  = tcm->GetSideTexture(GL::CubeMapDir::BACK);
 
-    if (!topImg || !botImg || !leftImg || !rightImg || !frontImg || !backImg)
+    if (!topTex || !botTex || !leftTex || !rightTex || !frontTex || !backTex)
     {
         p_warningLabel->GetText()->SetTextColor(Color::Red);
         p_warningLabel->GetText()->SetContent("Please set all images so that cubemap "
@@ -91,13 +91,13 @@ void FIWTextureCubeMap::CheckValidity() const
     else
     {
         bool allSizesCorrect = true;
-        Vector2i size = topImg.Get()->GetSize();
+        Vector2i size = topTex.Get()->GetSize();
         allSizesCorrect = (size.x == size.y) &&
-                          botImg.Get()->GetSize()   == size &&
-                          leftImg.Get()->GetSize()  == size &&
-                          rightImg.Get()->GetSize() == size &&
-                          frontImg.Get()->GetSize() == size &&
-                          backImg.Get()->GetSize()  == size;
+                          botTex.Get()->GetSize()   == size &&
+                          leftTex.Get()->GetSize()  == size &&
+                          rightTex.Get()->GetSize() == size &&
+                          frontTex.Get()->GetSize() == size &&
+                          backTex.Get()->GetSize()  == size;
         if (!allSizesCorrect)
         {
             p_warningLabel->GetText()->SetTextColor(Color::Red);
@@ -115,18 +115,18 @@ void FIWTextureCubeMap::CheckValidity() const
 void FIWTextureCubeMap::UpdateInputsFromResource()
 {
     TextureCubeMap *tcm = GetTextureCubeMap();
-    const RH<Imageb> topImg   = tcm->GetImageResource(GL::CubeMapDir::TOP);
-    const RH<Imageb> botImg   = tcm->GetImageResource(GL::CubeMapDir::BOT);
-    const RH<Imageb> leftImg  = tcm->GetImageResource(GL::CubeMapDir::LEFT);
-    const RH<Imageb> rightImg = tcm->GetImageResource(GL::CubeMapDir::RIGHT);
-    const RH<Imageb> frontImg = tcm->GetImageResource(GL::CubeMapDir::FRONT);
-    const RH<Imageb> backImg  = tcm->GetImageResource(GL::CubeMapDir::BACK);
-    p_topTextureInput->SetPath(topImg     ? topImg.Get()->GetResourceFilepath()   : Path::Empty);
-    p_botTextureInput->SetPath(botImg     ? botImg.Get()->GetResourceFilepath()   : Path::Empty);
-    p_leftTextureInput->SetPath(leftImg   ? leftImg.Get()->GetResourceFilepath()  : Path::Empty);
-    p_rightTextureInput->SetPath(rightImg ? rightImg.Get()->GetResourceFilepath() : Path::Empty);
-    p_frontTextureInput->SetPath(frontImg ? frontImg.Get()->GetResourceFilepath() : Path::Empty);
-    p_backTextureInput->SetPath(backImg   ? backImg.Get()->GetResourceFilepath()  : Path::Empty);
+    const RH<Texture2D> topTex   = tcm->GetSideTexture(GL::CubeMapDir::TOP);
+    const RH<Texture2D> botTex   = tcm->GetSideTexture(GL::CubeMapDir::BOT);
+    const RH<Texture2D> leftTex  = tcm->GetSideTexture(GL::CubeMapDir::LEFT);
+    const RH<Texture2D> rightTex = tcm->GetSideTexture(GL::CubeMapDir::RIGHT);
+    const RH<Texture2D> frontTex = tcm->GetSideTexture(GL::CubeMapDir::FRONT);
+    const RH<Texture2D> backTex  = tcm->GetSideTexture(GL::CubeMapDir::BACK);
+    p_topTextureInput->SetPath(topTex     ? topTex.Get()->GetResourceFilepath()   : Path::Empty);
+    p_botTextureInput->SetPath(botTex     ? botTex.Get()->GetResourceFilepath()   : Path::Empty);
+    p_leftTextureInput->SetPath(leftTex   ? leftTex.Get()->GetResourceFilepath()  : Path::Empty);
+    p_rightTextureInput->SetPath(rightTex ? rightTex.Get()->GetResourceFilepath() : Path::Empty);
+    p_frontTextureInput->SetPath(frontTex ? frontTex.Get()->GetResourceFilepath() : Path::Empty);
+    p_backTextureInput->SetPath(backTex   ? backTex.Get()->GetResourceFilepath()  : Path::Empty);
 
     CheckValidity();
 }
@@ -142,10 +142,12 @@ void FIWTextureCubeMap::OnValueChangedFIWResource(
     {
         if (inputFile->GetPath().IsFile())
         {
-            RH<Imageb> img = Resources::Load<Imageb>( inputFile->GetPath() );
-            tcm->SetImageResource(cmdir, img.Get());
+            Imageb img;
+            RH<Texture2D> tex;
+            ImageIO::Import(inputFile->GetPath(), &img, tex.Get());
+            tcm->SetSideTexture(cmdir, tex.Get());
         }
-        else { tcm->SetImageResource(cmdir, nullptr); }
+        else { tcm->SetSideTexture(cmdir, nullptr); }
 
     };
 

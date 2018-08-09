@@ -52,6 +52,8 @@ Array<Path> EditorResources::GetLookUpPaths() const
     Array<Path> lookUpPaths = Resources::GetLookUpPaths();
     lookUpPaths.PushBack(EditorPaths::GetEditorAssetsDir());
     lookUpPaths.PushBack(EditorPaths::GetEditorAssetsDir().Append("Shaders"));
+    lookUpPaths.PushBack(EditorPaths::GetEditorAssetsDir().Append("Shaders").
+                         Append("Include"));
     return lookUpPaths;
 }
 

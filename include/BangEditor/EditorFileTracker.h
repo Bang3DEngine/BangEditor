@@ -35,6 +35,8 @@ private:
     FileTracker *m_fileTracker = nullptr;
     BehaviourTracker *m_behaviourFileTracker = nullptr;
 
+    void CheckForShaderIncludePathsModifications(const Path &modifiedPath);
+
     // IFileTrackerListener
     void OnPathAdded(const Path &addedPath) override;
     void OnPathModified(const Path &modifiedPath) override;
