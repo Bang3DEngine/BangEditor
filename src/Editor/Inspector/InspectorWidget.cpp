@@ -32,8 +32,8 @@ void InspectorWidget::Init()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     p_bgRenderer = AddComponent<UIImageRenderer>();
-    p_bgRenderer->SetImageTexture( TextureFactory::Get9SliceRoundRectTexture().Get() );
-    p_bgRenderer->SetMode(UIImageRenderer::Mode::SLICE_9);
+    // p_bgRenderer->SetImageTexture( TextureFactory::Get9SliceRoundRectTexture().Get() );
+    // p_bgRenderer->SetMode(UIImageRenderer::Mode::SLICE_9);
     p_bgRenderer->SetTint(Color::Zero);
 
     UIVerticalLayout *mainVL = AddComponent<UIVerticalLayout>();
