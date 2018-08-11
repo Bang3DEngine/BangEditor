@@ -34,6 +34,7 @@
 #include "Bang/RectTransform.h"
 #include "Bang/UIAutoFocuser.h"
 #include "Bang/UIScrollPanel.h"
+#include "Bang/WaterRenderer.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -238,6 +239,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addLineRenderer = addRenderer->AddItem("LineRenderer");
     MenuItem *addMeshRenderer = addRenderer->AddItem("MeshRenderer");
     MenuItem *addSkinnedMeshRenderer = addRenderer->AddItem("SkinnedMeshRenderer");
+    MenuItem *addWaterRenderer = addRenderer->AddItem("WaterRenderer");
     MenuItem *addTransforms = rootItem->AddItem("Transform");
     MenuItem *addTransform = addTransforms->AddItem("Transform");
     MenuItem *addRectTransform = addTransforms->AddItem("RectTransform");
@@ -273,6 +275,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     addLineRenderer->SetSelectedCallback(MenuBar::OnAddLineRenderer);
     addMeshRenderer->SetSelectedCallback(MenuBar::OnAddMeshRenderer);
     addSkinnedMeshRenderer->SetSelectedCallback(MenuBar::OnAddSkinnedMeshRenderer);
+    addWaterRenderer->SetSelectedCallback(MenuBar::OnAddWaterRenderer);
     addTransform->SetSelectedCallback(MenuBar::OnAddTransform);
     addRectTransform->SetSelectedCallback(MenuBar::OnAddRectTransform);
     addPostProcessEffect->SetSelectedCallback(MenuBar::OnAddPostProcessEffect);
@@ -484,6 +487,11 @@ void MenuBar::OnAddMeshRenderer(MenuItem*)
 void MenuBar::OnAddSkinnedMeshRenderer(MenuItem *item)
 {
     OnAddComponent<SkinnedMeshRenderer>();
+}
+
+void MenuBar::OnAddWaterRenderer(MenuItem *item)
+{
+    OnAddComponent<WaterRenderer>();
 }
 
 void MenuBar::OnAddTransform(MenuItem*)

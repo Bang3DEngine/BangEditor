@@ -75,6 +75,7 @@ private:
     static void OnAddLineRenderer         (MenuItem *item);
     static void OnAddMeshRenderer         (MenuItem *item);
     static void OnAddSkinnedMeshRenderer  (MenuItem *item);
+    static void OnAddWaterRenderer        (MenuItem *item);
     static void OnAddTransform            (MenuItem *item);
     static void OnAddRectTransform        (MenuItem *item);
     static void OnAddPostProcessEffect    (MenuItem *item);

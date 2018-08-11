@@ -8,6 +8,7 @@
 #include "BangEditor/CIWPointLight.h"
 #include "BangEditor/CIWAudioSource.h"
 #include "BangEditor/CIWMeshRenderer.h"
+#include "BangEditor/CIWWaterRenderer.h"
 #include "BangEditor/CIWAudioListener.h"
 #include "BangEditor/CIWRectTransform.h"
 #include "BangEditor/CIWUITextRenderer.h"
@@ -45,6 +46,10 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     else if (cName == "MeshRenderer")
     {
         ciw = GameObject::Create<CIWMeshRenderer>();
+    }
+    else if (cName == "WaterRenderer")
+    {
+        ciw = GameObject::Create<CIWWaterRenderer>();
     }
     else if (cName == "SkinnedMeshRenderer")
     {
