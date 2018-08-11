@@ -13,6 +13,7 @@
 #include "BangEditor/CIWRectTransform.h"
 #include "BangEditor/CIWUITextRenderer.h"
 #include "BangEditor/CIWUIImageRenderer.h"
+#include "BangEditor/CIWReflectionProbe.h"
 #include "BangEditor/CIWDirectionalLight.h"
 #include "BangEditor/CIWPostProcessEffect.h"
 #include "BangEditor/CIWBehaviourContainer.h"
@@ -82,6 +83,10 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     else if (cName == "Animator")
     {
         ciw = GameObject::Create<CIWAnimator>();
+    }
+    else if (cName == "ReflectionProbe")
+    {
+        ciw = GameObject::Create<CIWReflectionProbe>();
     }
     else if (cName == "PostProcessEffect")
     {

@@ -11,7 +11,6 @@ void CIWWaterRenderer::InitInnerWidgets()
 
     SetName("CIWWaterRenderer");
     SetTitle("Water Renderer");
-
 }
 
 void CIWWaterRenderer::UpdateFromReference()

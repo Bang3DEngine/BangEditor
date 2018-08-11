@@ -36,6 +36,7 @@
 #include "Bang/UIScrollPanel.h"
 #include "Bang/WaterRenderer.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/ReflectionProbe.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UILayoutIgnorer.h"
@@ -263,6 +264,8 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addUIScrollPanel = addUI->AddItem("ScrollPanel");
     MenuItem *addUITextRenderer = addUI->AddItem("Text Renderer");
     MenuItem *addUIVerticalLayout = addUI->AddItem("VerticalLayout");
+    MenuItem *addMisc = rootItem->AddItem("Misc");
+    MenuItem *addReflectionProbe = addMisc->AddItem("ReflectionProbe");
     addAnimator->SetSelectedCallback(MenuBar::OnAddAnimator);
     addAudioListener->SetSelectedCallback(MenuBar::OnAddAudioListener);
     addAudioSource->SetSelectedCallback(MenuBar::OnAddAudioSource);
@@ -276,6 +279,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     addMeshRenderer->SetSelectedCallback(MenuBar::OnAddMeshRenderer);
     addSkinnedMeshRenderer->SetSelectedCallback(MenuBar::OnAddSkinnedMeshRenderer);
     addWaterRenderer->SetSelectedCallback(MenuBar::OnAddWaterRenderer);
+    addReflectionProbe->SetSelectedCallback(MenuBar::OnAddReflectionProbe);
     addTransform->SetSelectedCallback(MenuBar::OnAddTransform);
     addRectTransform->SetSelectedCallback(MenuBar::OnAddRectTransform);
     addPostProcessEffect->SetSelectedCallback(MenuBar::OnAddPostProcessEffect);
@@ -492,6 +496,11 @@ void MenuBar::OnAddSkinnedMeshRenderer(MenuItem *item)
 void MenuBar::OnAddWaterRenderer(MenuItem *item)
 {
     OnAddComponent<WaterRenderer>();
+}
+
+void MenuBar::OnAddReflectionProbe(MenuItem *item)
+{
+    OnAddComponent<ReflectionProbe>();
 }
 
 void MenuBar::OnAddTransform(MenuItem*)
