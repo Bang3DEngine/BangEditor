@@ -8,6 +8,7 @@
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/UIInputTexture.h"
+#include "BangEditor/UITextureCubeMapPreviewer.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -62,6 +63,13 @@ void FIWTextureCubeMap::Init()
                                           "is fully configured.");
     p_warningLabel->GetText()->SetWrapping(true);
     AddWidget(p_warningLabel->GetGameObject(), 60);
+
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
+
+    p_textureCMPreviewer = GameObject::Create<UITextureCubeMapPreviewer>();
+    p_textureCMPreviewer->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    AddLabel("Preview");
+    AddWidget(p_textureCMPreviewer, 256);
 
     SetLabelsWidth(100);
 }
@@ -128,36 +136,42 @@ void FIWTextureCubeMap::UpdateInputsFromResource()
     p_frontTextureInput->SetPath(frontTex ? frontTex.Get()->GetResourceFilepath() : Path::Empty);
     p_backTextureInput->SetPath(backTex   ? backTex.Get()->GetResourceFilepath()  : Path::Empty);
 
+    p_textureCMPreviewer->SetTextureCubeMap(tcm);
+
     CheckValidity();
 }
 
 void FIWTextureCubeMap::OnValueChangedFIWResource(
-                                        EventEmitter<IEventsValueChanged>*)
+                                        EventEmitter<IEventsValueChanged> *ee)
 {
-    TextureCubeMap *tcm = GetTextureCubeMap();
-
-    auto Refresh = [this](UIInputFile *inputFile,
-                          TextureCubeMap *tcm,
-                          GL::CubeMapDir cmdir)
+    if (ee != p_textureCMPreviewer)
     {
-        if (inputFile->GetPath().IsFile())
+        auto Refresh = [this](UIInputFile *inputFile,
+                              TextureCubeMap *tcm,
+                              GL::CubeMapDir cmdir)
         {
-            Imageb img;
-            RH<Texture2D> tex;
-            ImageIO::Import(inputFile->GetPath(), &img, tex.Get());
-            tcm->SetSideTexture(cmdir, tex.Get());
-        }
-        else { tcm->SetSideTexture(cmdir, nullptr); }
+            if (inputFile->GetPath().IsFile())
+            {
+                Imageb img;
+                RH<Texture2D> tex = tcm->GetSideTexture(cmdir);
+                ImageIO::Import(inputFile->GetPath(), &img, tex.Get());
+                tcm->SetSideTexture(cmdir, tex.Get());
+            }
+            else
+            {
+                tcm->SetSideTexture(cmdir, nullptr);
+            }
+        };
 
-    };
+        TextureCubeMap *tcm = GetTextureCubeMap();
+        Refresh(p_topTextureInput,   tcm, GL::CubeMapDir::TOP);
+        Refresh(p_botTextureInput,   tcm, GL::CubeMapDir::BOT);
+        Refresh(p_leftTextureInput,  tcm, GL::CubeMapDir::LEFT);
+        Refresh(p_rightTextureInput, tcm, GL::CubeMapDir::RIGHT);
+        Refresh(p_frontTextureInput, tcm, GL::CubeMapDir::FRONT);
+        Refresh(p_backTextureInput,  tcm, GL::CubeMapDir::BACK);
 
-    Refresh(p_topTextureInput,   tcm, GL::CubeMapDir::TOP);
-    Refresh(p_botTextureInput,   tcm, GL::CubeMapDir::BOT);
-    Refresh(p_leftTextureInput,  tcm, GL::CubeMapDir::LEFT);
-    Refresh(p_rightTextureInput, tcm, GL::CubeMapDir::RIGHT);
-    Refresh(p_frontTextureInput, tcm, GL::CubeMapDir::FRONT);
-    Refresh(p_backTextureInput,  tcm, GL::CubeMapDir::BACK);
-
-    CheckValidity();
+        CheckValidity();
+    }
 }
 

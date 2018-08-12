@@ -16,6 +16,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UIInputTexture;
+FORWARD class UITextureCubeMapPreviewer;
 
 class FIWTextureCubeMap : public FIWResource<TextureCubeMap>
 {
@@ -32,6 +33,7 @@ private:
     UIInputTexture *p_leftTextureInput  = nullptr;
     UIInputTexture *p_frontTextureInput = nullptr;
     UIInputTexture *p_backTextureInput  = nullptr;
+    UITextureCubeMapPreviewer *p_textureCMPreviewer = nullptr;
     UILabel *p_warningLabel = nullptr;
 
     FIWTextureCubeMap();
