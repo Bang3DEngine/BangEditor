@@ -7,6 +7,7 @@
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class PointLight;
 FORWARD class AudioSource;
+FORWARD class ReflectionProbe;
 FORWARD class DirectionalLight;
 FORWARD NAMESPACE_BANG_END
 
@@ -34,6 +35,8 @@ private:
                                bool whenCompIsSelected);
     void RenderDirectionalLightGizmo(DirectionalLight *dirLight,
                                      bool whenCompIsSelected);
+    void RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
+                                    bool whenCompIsSelected);
     void RenderAudioSourceGizmo(AudioSource *audioSource,
                                 bool whenCompIsSelected);
 };

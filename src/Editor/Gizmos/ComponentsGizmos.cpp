@@ -15,12 +15,14 @@
 #include "Bang/SceneManager.h"
 #include "Bang/RenderFactory.h"
 #include "Bang/TextureFactory.h"
+#include "Bang/ReflectionProbe.h"
 #include "Bang/DirectionalLight.h"
 
 #include "BangEditor/Selection.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/NotSelectableInEditor.h"
 
@@ -105,6 +107,11 @@ void ComponentsGizmos::RenderComponentGizmos(Component *comp,
     if (DirectionalLight *dl = DCAST<DirectionalLight*>(comp))
     {
         RenderDirectionalLightGizmo(dl, whenCompIsSelected);
+    }
+
+    if (ReflectionProbe *rp = DCAST<ReflectionProbe*>(comp))
+    {
+        RenderReflectionProbeGizmo(rp, whenCompIsSelected);
     }
 
     if (AudioSource *as = DCAST<AudioSource*>(comp))
@@ -264,6 +271,21 @@ void ComponentsGizmos::RenderDirectionalLightGizmo(DirectionalLight *dirLight,
 
         gb->PopDepthStencilTexture();
     }
+}
+
+void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
+                                                  bool whenCompIsSelected)
+{
+    RenderFactory::Parameters params;
+    params.color = Color::White;
+    params.scale = Vector3(0.15f);
+    params.receivesLighting = false;
+    params.position = reflProbe->GetGameObject()->
+                      GetTransform()->GetPosition();
+
+    RenderFactory::RenderIcon(EditorTextureFactory::GetWhiteSphereIcon().Get(),
+                              true,
+                              params);
 }
 
 void ComponentsGizmos::RenderAudioSourceGizmo(AudioSource *audioSource,
