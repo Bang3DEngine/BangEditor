@@ -276,16 +276,47 @@ void ComponentsGizmos::RenderDirectionalLightGizmo(DirectionalLight *dirLight,
 void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
                                                   bool whenCompIsSelected)
 {
+    Vector3 reflProbeCenter = reflProbe->GetGameObject()->
+                              GetTransform()->GetPosition();
+
     RenderFactory::Parameters params;
-    params.color = Color::White;
+    params.color = Color::Green.WithValue(0.8f);
     params.scale = Vector3(0.15f);
     params.receivesLighting = false;
-    params.position = reflProbe->GetGameObject()->
-                      GetTransform()->GetPosition();
+    params.position = reflProbeCenter;
 
-    RenderFactory::RenderIcon(EditorTextureFactory::GetWhiteSphereIcon().Get(),
-                              true,
-                              params);
+    GBuffer *gb = GEngine::GetActiveGBuffer();
+    gb->PushDepthStencilTexture();
+    gb->SetSceneDepthStencil();
+
+    RenderFactory::RenderSphere(1.0f, params);
+
+    if (whenCompIsSelected)
+    {
+        if (reflProbe->GetIsBoxed())
+        {
+            Vector3 reflProbSize = reflProbe->GetSize();
+
+            params.scale = Vector3::One;
+            params.cullFace = GL::CullFaceExt::NONE;
+            AABox reflProbeBox = AABox(reflProbeCenter + reflProbSize * 0.5f,
+                                       reflProbeCenter - reflProbSize * 0.5f);
+
+            params.thickness = 0.1f;
+            params.wireframe = false;
+            params.position = Vector3::Zero;
+            params.color = params.color.WithAlpha(0.25f);
+            RenderFactory::RenderBox(reflProbeBox, params);
+
+            params.wireframe = true;
+            params.thickness = 3.0f;
+            params.position = Vector3::Zero;
+            params.color = params.color.WithAlpha(1.0f);
+            RenderFactory::RenderSimpleBox(reflProbeBox, params);
+        }
+    }
+
+    gb->PopDepthStencilTexture();
 }
 
 void ComponentsGizmos::RenderAudioSourceGizmo(AudioSource *audioSource,

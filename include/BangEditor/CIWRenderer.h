@@ -36,6 +36,7 @@ private:
     UICheckBox *p_visibleCheckBox = nullptr;
     UICheckBox *p_castsShadowsCheckBox = nullptr;
     UICheckBox *p_receivesShadowsCheckBox = nullptr;
+    UICheckBox *p_useReflectionProbesCheckBox = nullptr;
     UIInputMaterial *p_materialInputFile = nullptr;
 };
 

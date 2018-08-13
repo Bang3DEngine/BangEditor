@@ -3,6 +3,7 @@
 
 #include "Bang/Bang.h"
 
+#include "BangEditor/UIInputVector.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
@@ -24,7 +25,11 @@ public:
     virtual void UpdateFromReference() override;
 
 private:
+    UICheckBox *p_isBoxedCheckBox = nullptr;
+    UIInputVector *p_sizeInput = nullptr;
     UITextureCubeMapPreviewer *p_previewCMRenderer = nullptr;
+
+    add znear, zfar, clearmode, clearskybox, clearcolor, ibl skybox generation
 
     CIWReflectionProbe();
     virtual ~CIWReflectionProbe();

@@ -75,12 +75,12 @@ void EditorFileTracker::CheckForShaderIncludePathsModifications(const Path &modi
     Array<ShaderProgram*> shaderPrograms = Resources::GetAll<ShaderProgram>();
     for (ShaderProgram *sp : shaderPrograms)
     {
-        List<Path> shaderIncPaths;
-        shaderIncPaths.PushBack(Paths::GetEngineAssetsDir().Append("Shaders"));
-        shaderIncPaths.PushBack(EditorPaths::GetEngineAssetsDir().Append("Shaders").
+        List<Path> shadersIncPaths;
+        shadersIncPaths.PushBack(Paths::GetEngineAssetsDir().Append("Shaders"));
+        shadersIncPaths.PushBack(EditorPaths::GetEngineAssetsDir().Append("Shaders").
                                 Append("Include"));
-        shaderIncPaths.PushBack(EditorPaths::GetEditorAssetsDir().Append("Shaders"));
-        shaderIncPaths.PushBack(EditorPaths::GetEditorAssetsDir().Append("Shaders").
+        shadersIncPaths.PushBack(EditorPaths::GetEditorAssetsDir().Append("Shaders"));
+        shadersIncPaths.PushBack(EditorPaths::GetEditorAssetsDir().Append("Shaders").
                                 Append("Include"));
 
         std::array<Shader*, 3> shaders = {{ sp->GetVertexShader(),
@@ -90,14 +90,22 @@ void EditorFileTracker::CheckForShaderIncludePathsModifications(const Path &modi
         {
             if (shader)
             {
+                Set<Path> processedPaths;
                 List<Path> incPaths = CodePreprocessor::GetSourceIncludePaths(
-                                 shader->GetResourceFilepath(), shaderIncPaths);
+                                 shader->GetResourceFilepath(), shadersIncPaths);
                 for (const Path &incPath : incPaths)
                 {
                     if (incPath == modifiedPath)
                     {
                         Resources::Import(shader);
                         break;
+                    }
+                    else if (!processedPaths.Contains(incPath))
+                    {
+                        incPaths.PushBack(
+                             CodePreprocessor::GetSourceIncludePaths(
+                                        incPath, shadersIncPaths)); // Recursive
+                        processedPaths.Add(incPath);
                     }
                 }
             }
