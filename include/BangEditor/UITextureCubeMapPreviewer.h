@@ -31,6 +31,7 @@ public:
     // GameObject
     void Update() override;
 
+    void InvalidateRenderer();
     void SetTextureCubeMap(TextureCubeMap *texCubeMap);
     TextureCubeMap *GetTextureCubeMap() const;
 

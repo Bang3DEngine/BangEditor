@@ -77,13 +77,18 @@ void UITextureCubeMapPreviewer::Update()
 
     if (p_focusable->IsBeingPressed())
     {
+        InvalidateRenderer();
         m_rotationRads += Vector2(Input::GetMouseDelta()) * 0.01f;
-        p_previewImageRenderer->EventEmitter<IEventsRendererChanged>::
-            PropagateToListeners(&IEventsRendererChanged::OnRendererChanged,
-                                 p_previewImageRenderer);
         EventEmitter<IEventsValueChanged>::PropagateToListeners(
                         &IEventsValueChanged::OnValueChanged, this);
     }
+}
+
+void UITextureCubeMapPreviewer::InvalidateRenderer()
+{
+    p_previewImageRenderer->EventEmitter<IEventsRendererChanged>::
+        PropagateToListeners(&IEventsRendererChanged::OnRendererChanged,
+                             p_previewImageRenderer);
 }
 
 void UITextureCubeMapPreviewer::SetTextureCubeMap(TextureCubeMap *texCubeMap)

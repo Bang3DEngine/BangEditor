@@ -31,6 +31,7 @@ public:
     void LimitValues();
 
 private:
+    UIComboBox *p_reflectionProbSizeInput = nullptr;
     UIInputVector *p_sizeInput = nullptr;
     UICheckBox *p_isBoxedCheckBox = nullptr;
     UIInputNumber *p_restTimeInput = nullptr;
