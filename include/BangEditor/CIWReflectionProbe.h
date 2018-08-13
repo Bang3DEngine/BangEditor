@@ -29,8 +29,6 @@ private:
     UIInputVector *p_sizeInput = nullptr;
     UITextureCubeMapPreviewer *p_previewCMRenderer = nullptr;
 
-    add znear, zfar, clearmode, clearskybox, clearcolor, ibl skybox generation
-
     CIWReflectionProbe();
     virtual ~CIWReflectionProbe();
 
