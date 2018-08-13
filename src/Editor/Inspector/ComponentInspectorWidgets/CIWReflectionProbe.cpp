@@ -2,12 +2,16 @@
 
 #include "Bang/Camera.h"
 #include "Bang/GBuffer.h"
+#include "Bang/Extensions.h"
 #include "Bang/UICheckBox.h"
+#include "Bang/UIComboBox.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/ReflectionProbe.h"
 #include "Bang/GameObjectFactory.h"
 
+#include "BangEditor/UIInputFile.h"
+#include "BangEditor/UIInputColor.h"
 #include "BangEditor/UIInputVector.h"
 #include "BangEditor/UITextureCubeMapPreviewer.h"
 
@@ -47,12 +51,37 @@ void CIWReflectionProbe::InitInnerWidgets()
     p_restTimeInput->SetMinMaxValues(0.0f, Math::Infinity<float>());
     p_restTimeInput->SetDecimalPlaces(1);
 
+    p_zNearInput = GameObjectFactory::CreateUIInputNumber();
+    p_zNearInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_zFarInput = GameObjectFactory::CreateUIInputNumber();
+    p_zFarInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_clearModeInput = GameObjectFactory::CreateUIComboBox();
+    p_clearModeInput->AddItem("Color",  SCAST<int>(Camera::ClearMode::COLOR));
+    p_clearModeInput->AddItem("SkyBox", SCAST<int>(Camera::ClearMode::SKY_BOX));
+    p_clearModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_clearColorInput = GameObject::Create<UIInputColor>();
+    p_clearColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_textureCubeMapInput = GameObject::Create<UIInputFile>();
+    p_textureCubeMapInput->SetExtensions( {Extensions::GetTextureCubeMapExtension()} );
+    p_textureCubeMapInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
     p_previewCMRenderer = GameObject::Create<UITextureCubeMapPreviewer>();
 
     AddWidget("Rest time sec.", p_restTimeInput->GetGameObject());
     AddWidget("Boxed", p_isBoxedCheckBox->GetGameObject());
     AddWidget("Filter for IBL", p_filterForIBLCheckBox->GetGameObject());
     AddWidget("Size",  p_sizeInput);
+    AddWidget( GameObjectFactory::CreateUIHSeparator(), 10 );
+    AddWidget("ZNear", p_zNearInput->GetGameObject());
+    AddWidget("ZFar", p_zFarInput->GetGameObject());
+    AddWidget("Clear Mode", p_clearModeInput->GetGameObject());
+    AddWidget("Clear Color", p_clearColorInput);
+    AddWidget("SkyBox", p_textureCubeMapInput);
+    AddWidget( GameObjectFactory::CreateUIHSeparator(), 10 );
     AddLabel("Preview");
     AddWidget(p_previewCMRenderer, 200);
 
@@ -65,6 +94,33 @@ void CIWReflectionProbe::UpdateFromReference()
 
     ReflectionProbe *reflProbe = GetReflectionProbe();
 
+    if (!p_zNearInput->HasFocus())
+    {
+        p_zNearInput->SetValue( reflProbe->GetCamerasZNear() );
+    }
+
+    if (!p_zFarInput->HasFocus())
+    {
+        p_zFarInput->SetValue( reflProbe->GetCamerasZFar() );
+    }
+
+    if (!p_clearModeInput->HasFocus())
+    {
+        p_clearModeInput->SetSelectionByValue(
+                    SCAST<int>(reflProbe->GetCamerasClearMode()) );
+    }
+
+    if (!p_clearColorInput->HasFocus())
+    {
+        p_clearColorInput->SetColor( reflProbe->GetCamerasClearColor() );
+    }
+
+    TextureCubeMap *skyBoxTex = reflProbe->GetCamerasSkyBoxTexture();
+    if (skyBoxTex)
+    {
+        p_textureCubeMapInput->SetPath(skyBoxTex->GetResourceFilepath());
+    }
+
     p_sizeInput->Set( reflProbe->GetSize() );
     p_restTimeInput->SetValue( reflProbe->GetRestTimeSeconds() );
     p_isBoxedCheckBox->SetChecked( reflProbe->GetIsBoxed() );
@@ -73,11 +129,32 @@ void CIWReflectionProbe::UpdateFromReference()
                                             GetTextureCubeMapWithoutFiltering() );
 }
 
+void CIWReflectionProbe::LimitValues()
+{
+    p_zNearInput->SetMinMaxValues(0.1f, GetReflectionProbe()->GetCamerasZFar());
+    p_zFarInput->SetMinMaxValues(GetReflectionProbe()->GetCamerasZNear(),
+                                 Math::Infinity<float>());
+}
+
 void CIWReflectionProbe::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChangedCIW(object);
 
     ReflectionProbe *reflProbe = GetReflectionProbe();
+    reflProbe->SetCamerasZNear( p_zNearInput->GetValue() );
+    reflProbe->SetCamerasZFar( p_zFarInput->GetValue() );
+    reflProbe->SetCamerasClearMode( SCAST<Camera::ClearMode>(
+                                    p_clearModeInput->GetSelectedValue()) );
+    reflProbe->SetCamerasClearColor( p_clearColorInput->GetColor() );
+
+    RH<TextureCubeMap> tcmRH;
+    if (p_textureCubeMapInput->GetPath().IsFile())
+    {
+        tcmRH = Resources::Load<TextureCubeMap>(
+                                    p_textureCubeMapInput->GetPath());
+    }
+    reflProbe->SetCamerasSkyBoxTexture(tcmRH.Get());
+
     reflProbe->SetSize( p_sizeInput->GetVector3() );
     reflProbe->SetIsBoxed( p_isBoxedCheckBox->IsChecked() );
     reflProbe->SetRestTimeSeconds( p_restTimeInput->GetValue() );
