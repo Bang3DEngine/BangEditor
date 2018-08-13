@@ -44,7 +44,6 @@ void UndoRedoCreateGameObject::Redo()
 
 void UndoRedoCreateGameObject::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
-    ASSERT(object == p_createdGameObject || object == p_parent);
     p_createdGameObject = nullptr;
     p_parent = nullptr;
 }

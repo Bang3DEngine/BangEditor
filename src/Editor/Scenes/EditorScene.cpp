@@ -154,6 +154,10 @@ void EditorScene::Init()
     cam->RemoveRenderPass(RenderPass::CANVAS_POSTPROCESS);
     cam->RemoveRenderPass(RenderPass::OVERLAY);
     cam->RemoveRenderPass(RenderPass::OVERLAY_POSTPROCESS);
+    cam->SetClearMode(Camera::ClearMode::COLOR);
+    cam->SetRenderFlags( RenderFlags(RenderFlag::NONE).
+                         SetOn(RenderFlag::CLEAR_COLOR).
+                         SetOn(RenderFlag::CLEAR_DEPTH_STENCIL) );
     SetCamera(cam);
 
     m_undoRedoManager = new UndoRedoManager();

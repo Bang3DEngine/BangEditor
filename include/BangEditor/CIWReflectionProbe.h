@@ -2,6 +2,7 @@
 #define CIWREFLECTIONPROBE_H
 
 #include "Bang/Bang.h"
+#include "Bang/UIInputNumber.h"
 
 #include "BangEditor/UIInputVector.h"
 #include "BangEditor/ComponentInspectorWidget.h"
@@ -25,8 +26,10 @@ public:
     virtual void UpdateFromReference() override;
 
 private:
-    UICheckBox *p_isBoxedCheckBox = nullptr;
     UIInputVector *p_sizeInput = nullptr;
+    UICheckBox *p_isBoxedCheckBox = nullptr;
+    UIInputNumber *p_restTimeInput = nullptr;
+    UICheckBox *p_filterForIBLCheckBox = nullptr;
     UITextureCubeMapPreviewer *p_previewCMRenderer = nullptr;
 
     CIWReflectionProbe();

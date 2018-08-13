@@ -110,6 +110,7 @@ bool UIInputVector::HasFocus() const
 void UIInputVector::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     EventEmitter<IEventsValueChanged>::
-        PropagateToListeners(&IEventsValueChanged::OnValueChanged, this);
+        PropagateToListeners(&IEventsValueChanged::OnValueChanged,
+                             object);
 }
 

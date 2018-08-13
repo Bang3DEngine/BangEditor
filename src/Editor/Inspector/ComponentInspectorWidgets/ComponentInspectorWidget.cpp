@@ -137,7 +137,7 @@ void ComponentInspectorWidget::OnValueChanged(
 
     OnValueChangedCIW(object);
 
-        if (GetComponent())
+    if (GetComponent())
     {
         PushCurrentStateToUndoRedoIfAnyChangeForComponent(undoXMLBefore);
     }
