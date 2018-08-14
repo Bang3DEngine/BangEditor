@@ -69,7 +69,6 @@ List<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
         if (path.HasExtension(Extensions::GetModelExtensions()))
         {
             RH<Model> model = Resources::Load<Model>(path);
-            Resources::SetPermanent(model.Get(), true);
 
             for (const String& meshName : model.Get()->GetMeshesNames())
             {

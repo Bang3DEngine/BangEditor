@@ -48,7 +48,6 @@ Texture2D* EditorTextureFactory::GetIconForPath(const Path &path)
         if (icon)
         {
             etf->m_iconCacheMap.Add(path, icon);
-            Resources::SetPermanent(path, true);
         }
 
         return icon.Get();
