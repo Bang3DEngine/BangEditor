@@ -16,7 +16,7 @@ shift
 
 EXEC_DIR=$(dirname ${EXECUTABLE})
 echo "${EXEC_DIR}"
-${EXECUTABLE} ; \
+${EXECUTABLE} $* ; \
  google-pprof --text ${EXECUTABLE} ${EXEC_DIR}/profiling_info.out > prof.txt ; \
  google-pprof --pdf ${EXECUTABLE} ${EXEC_DIR}/profiling_info.out > prof.pdf
 
