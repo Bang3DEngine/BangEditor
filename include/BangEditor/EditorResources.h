@@ -23,12 +23,14 @@ public:
     static EditorResources *GetInstance();
 
     virtual void Init() override;
+    void InitAfterGLIsInited();
 
 private:
     ModelPreviewFactory *m_modelPreviewFactory = nullptr;
     MaterialPreviewFactory *m_materialPreviewFactory = nullptr;
 
     virtual MeshFactory* CreateMeshFactory() const override;
+    virtual TextureFactory* CreateTextureFactory() const override;
 
     Array<Path> GetLookUpPaths() const override;
 };

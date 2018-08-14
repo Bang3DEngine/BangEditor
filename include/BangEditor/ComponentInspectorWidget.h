@@ -47,7 +47,7 @@ protected:
 
     virtual bool CanBeRemovedFromContextMenu() const;
 
-    virtual RH<Texture2D> GetComponentIconTexture() const;
+    virtual Texture2D* GetComponentIconTexture() const;
 
     virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object);
 

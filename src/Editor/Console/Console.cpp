@@ -128,7 +128,7 @@ ConsoleUIListEntry::ConsoleUIListEntry()
 
     GameObject *typeIconGo = GameObjectFactory::CreateUIGameObject();
     p_typeIconImg = typeIconGo->AddComponent<UIImageRenderer>();
-    p_typeIconImg->SetImageTexture( TextureFactory::GetWarningIcon().Get() );
+    p_typeIconImg->SetImageTexture( TextureFactory::GetWarningIcon() );
     UILayoutElement *iconLE = typeIconGo->AddComponent<UILayoutElement>();
     iconLE->SetMinSize( Vector2i(20) );
     iconLE->SetFlexibleSize( Vector2::Zero );
@@ -159,13 +159,13 @@ void ConsoleUIListEntry::SetConsoleMessage(const ConsoleMessage &cMsg)
     switch (cMsg.msgType)
     {
         case DebugMessageType::LOG:
-            iconTex = TextureFactory::GetInfoIcon().Get();
+            iconTex = TextureFactory::GetInfoIcon();
         break;
         case DebugMessageType::WARN:
-            iconTex = TextureFactory::GetWarningIcon().Get();
+            iconTex = TextureFactory::GetWarningIcon();
         break;
         case DebugMessageType::ERROR:
-            iconTex = TextureFactory::GetErrorIcon().Get();
+            iconTex = TextureFactory::GetErrorIcon();
         break;
     }
     p_typeIconImg->SetImageTexture(iconTex);

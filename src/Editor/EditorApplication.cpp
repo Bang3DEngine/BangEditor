@@ -34,6 +34,7 @@ void EditorApplication::InitEditorApplication(const Path &engineRootPath,
                                               const Path &editorRootPath)
 {
     Application::Init(engineRootPath);
+    EditorResources::GetInstance()->InitAfterGLIsInited();
 
     GetEditorPaths()->InitEditorPath(editorRootPath);
     ImportFilesManager::CreateMissingImportFiles( EditorPaths::GetEditorAssetsDir() );

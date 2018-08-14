@@ -47,9 +47,9 @@ UIInputFile::UIInputFile()
     pathInputTextLE->SetFlexibleSize( Vector2(9999.9f) );
     pathInputTextLE->SetLayoutPriority(1);
 
-    RH<Texture2D> lensIcon = EditorTextureFactory::GetLensLittleIcon();
-    p_searchButton = GameObjectFactory::CreateUIButton("", lensIcon.Get());
-    p_searchButton->SetIcon(lensIcon.Get(), Vector2i(16));
+    Texture2D *lensIcon = EditorTextureFactory::GetLensLittleIcon();
+    p_searchButton = GameObjectFactory::CreateUIButton("", lensIcon);
+    p_searchButton->SetIcon(lensIcon, Vector2i(16));
     p_searchButton->AddClickedCallback([this]()
     {
         Path openPath;
@@ -61,10 +61,10 @@ UIInputFile::UIInputFile()
         if (accepted) { SetPath(openPath); }
     });
 
-    RH<Texture2D> rightArrowIcon = TextureFactory::GetRightArrowIcon();
+    Texture2D *rightArrowIcon = TextureFactory::GetRightArrowIcon();
     p_openFileInInspectorButton =
-                  GameObjectFactory::CreateUIButton("", rightArrowIcon.Get());
-    p_openFileInInspectorButton->SetIcon(rightArrowIcon.Get(), Vector2i(16));
+                  GameObjectFactory::CreateUIButton("", rightArrowIcon);
+    p_openFileInInspectorButton->SetIcon(rightArrowIcon, Vector2i(16));
     p_openFileInInspectorButton->AddClickedCallback( [this]()
     {
         if ( !Paths::IsEnginePath( GetPath() ) )

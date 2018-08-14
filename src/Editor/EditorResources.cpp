@@ -3,6 +3,7 @@
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorMeshFactory.h"
 #include "BangEditor/ModelPreviewFactory.h"
+#include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/MaterialPreviewFactory.h"
 
 USING_NAMESPACE_BANG
@@ -38,6 +39,10 @@ EditorResources *EditorResources::GetInstance()
 void EditorResources::Init()
 {
     Resources::Init();
+}
+
+void EditorResources::InitAfterGLIsInited()
+{
     m_modelPreviewFactory->Init();
     m_materialPreviewFactory->Init();
 }
@@ -45,6 +50,11 @@ void EditorResources::Init()
 MeshFactory *EditorResources::CreateMeshFactory() const
 {
     return new EditorMeshFactory();
+}
+
+TextureFactory *EditorResources::CreateTextureFactory() const
+{
+    return new EditorTextureFactory();
 }
 
 Array<Path> EditorResources::GetLookUpPaths() const

@@ -21,7 +21,7 @@ PreviewViewer::PreviewViewer()
 
     p_imgRenderer = AddComponent<UIImageRenderer>();
     p_imgRenderer->SetMode(UIImageRenderer::Mode::TEXTURE);
-    p_imgRenderer->SetImageTexture( TextureFactory::GetWhiteTexture().Get() );
+    p_imgRenderer->SetImageTexture( TextureFactory::GetWhiteTexture() );
 
     UIContentSizeFitter *previewContentSizeFitter =
                                         AddComponent<UIContentSizeFitter>();

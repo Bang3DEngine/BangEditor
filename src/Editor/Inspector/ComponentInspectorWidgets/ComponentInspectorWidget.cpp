@@ -51,7 +51,7 @@ void ComponentInspectorWidget::SetComponent(Component *comp)
     ASSERT(!GetComponent());
 
     p_component = comp;
-    p_icon->SetImageTexture( GetComponentIconTexture().Get() );
+    p_icon->SetImageTexture( GetComponentIconTexture() );
     Update();
 }
 
@@ -143,7 +143,7 @@ void ComponentInspectorWidget::OnValueChanged(
     }
 }
 
-RH<Texture2D> ComponentInspectorWidget::GetComponentIconTexture() const
+Texture2D* ComponentInspectorWidget::GetComponentIconTexture() const
 {
     if (GetComponent())
     {

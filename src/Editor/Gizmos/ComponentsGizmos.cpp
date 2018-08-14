@@ -205,7 +205,7 @@ void ComponentsGizmos::RenderPointLightGizmo(PointLight *pointLight,
     if (!whenCompIsSelected)
     {
         params.scale = Vector3(0.1f);
-        RenderFactory::RenderIcon(TextureFactory::GetLightBulbIcon().Get(),
+        RenderFactory::RenderIcon(TextureFactory::GetLightBulbIcon(),
                                   true,
                                   params);
     }
@@ -238,7 +238,7 @@ void ComponentsGizmos::RenderDirectionalLightGizmo(DirectionalLight *dirLight,
         params.position = dirLight->GetGameObject()->
                           GetTransform()->GetPosition();
         params.scale = Vector3(0.1f);
-        RenderFactory::RenderIcon(TextureFactory::GetSunIcon().Get(),
+        RenderFactory::RenderIcon(TextureFactory::GetSunIcon(),
                                   true,
                                   params);
     }
@@ -331,7 +331,7 @@ void ComponentsGizmos::RenderAudioSourceGizmo(AudioSource *audioSource,
     if (!whenCompIsSelected)
     {
         params.scale = Vector3(0.1f);
-        RenderFactory::RenderIcon(TextureFactory::GetAudioIcon().Get(),
+        RenderFactory::RenderIcon(TextureFactory::GetAudioIcon(),
                                   true,
                                   params);
     }

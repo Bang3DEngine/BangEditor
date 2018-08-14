@@ -37,7 +37,7 @@ UIInputColor::UIInputColor()
     colorImgLE->SetFlexibleWidth(1.0f);
 
     p_bgCheckerboardImage = colorImgCont->AddComponent<UIImageRenderer>();
-    p_bgCheckerboardImage->SetImageTexture( TextureFactory::GetCheckerboard().Get() );
+    p_bgCheckerboardImage->SetImageTexture( TextureFactory::GetCheckerboard() );
     p_bgCheckerboardImage->GetMaterial()->SetAlbedoUvMultiply( Vector2(1, 1) );
 
     p_colorImage = GameObjectFactory::CreateUIImage();
@@ -45,9 +45,9 @@ UIInputColor::UIInputColor()
     m_colorPickerReporter = new ColorPickerReporter();
     m_colorPickerReporter->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    RH<Texture2D> lensIcon = EditorTextureFactory::GetLensLittleIcon();
-    p_searchColorButton = GameObjectFactory::CreateUIButton("", lensIcon.Get());
-    p_searchColorButton->SetIcon(lensIcon.Get(), Vector2i(16));
+    Texture2D *lensIcon = EditorTextureFactory::GetLensLittleIcon();
+    p_searchColorButton = GameObjectFactory::CreateUIButton("", lensIcon);
+    p_searchColorButton->SetIcon(lensIcon, Vector2i(16));
     p_searchColorButton->AddClickedCallback([this]()
     {
         EditorDialog::GetColor("Pick Color...", GetColor(), m_colorPickerReporter);

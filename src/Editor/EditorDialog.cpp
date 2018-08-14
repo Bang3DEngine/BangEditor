@@ -354,7 +354,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
     UILayoutElement *resultColorContLE = resultColorContainer ->GetGameObject()->
                                                AddComponent<UILayoutElement>();
     resultColorContLE->SetFlexibleHeight(1.0f);
-    resultColorContainer->SetImageTexture(TextureFactory::GetCheckerboard().Get());
+    resultColorContainer->SetImageTexture(TextureFactory::GetCheckerboard());
     resultColorContainer->GetGameObject()->SetParent(controlsVLGo);
 
     GameObjectFactory::CreateUIVSpacer(LayoutSizeType::PREFERRED,
@@ -378,7 +378,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
             focusable->SetCursorType( Cursor::Type::HAND );
 
             p_img = AddComponent<UIImageRenderer>();
-            p_img->SetImageTexture(TextureFactory::GetCircleIcon().Get());
+            p_img->SetImageTexture(TextureFactory::GetCircleIcon());
             p_img->GetGameObject()->GetRectTransform()->SetMargins(-5);
             p_img->GetGameObject()->GetRectTransform()->SetAnchors(Vector2::Zero);
         }

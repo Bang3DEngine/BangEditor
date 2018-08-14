@@ -80,9 +80,9 @@ Explorer::Explorer()
     spLE->SetFlexibleSize( Vector2::One );
 
     // Back button
-    RH<Texture2D> backButtonTex = EditorTextureFactory::GetBackArrowIcon();
-    p_backButton = GameObjectFactory::CreateUIButton("", backButtonTex.Get());
-    p_backButton->SetIcon(backButtonTex.Get(), Vector2i(20, 15), 0);
+    Texture2D *backButtonTex = EditorTextureFactory::GetBackArrowIcon();
+    p_backButton = GameObjectFactory::CreateUIButton("", backButtonTex);
+    p_backButton->SetIcon(backButtonTex, Vector2i(20, 15), 0);
     p_backButton->GetText()->SetContent("");
     p_backButton->AddClickedCallback( [this]() { GoDirectoryUp(); });
 
@@ -115,7 +115,7 @@ Explorer::Explorer()
     p_iconSizeSlider->SetValue(128);
 
     UIImageRenderer *eyeImg = GameObjectFactory::CreateUIImage();
-    eyeImg->SetImageTexture(EditorTextureFactory::GetEyeIcon().Get());
+    eyeImg->SetImageTexture( EditorTextureFactory::GetEyeIcon() );
     UILayoutElement *eyeImgLE = eyeImg->GetGameObject()->
                                         AddComponent<UILayoutElement>();
     eyeImgLE->SetPreferredSize( Vector2i(20, ToolBarHeight) );

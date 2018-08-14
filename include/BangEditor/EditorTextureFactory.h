@@ -1,7 +1,10 @@
 #ifndef EDITORTEXTUREFACTORY_H
 #define EDITORTEXTUREFACTORY_H
 
+
+#include "Bang/Map.h"
 #include "Bang/Path.h"
+#include "Bang/TextureFactory.h"
 #include "Bang/ResourceHandle.h"
 
 #include "BangEditor/BangEditor.h"
@@ -13,46 +16,49 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-
-class EditorTextureFactory
+class EditorTextureFactory : public TextureFactory
 {
 public:
-    static RH<Texture2D> GetIconForPath(const Path &path);
+    static Texture2D* GetIconForPath(const Path &path);
     static bool IsIconAnImage(const Path &path);
-    static RH<Texture2D> GetIconForExtension(const String &extension);
+    static Texture2D* GetIconForExtension(const String &extension);
 
-    static RH<Texture2D> GetRotateIcon();
-    static RH<Texture2D> GetRightArrowAndBarIcon();
-    static RH<Texture2D> GetDoubleBarIcon();
-    static RH<Texture2D> GetBackArrowIcon();
-    static RH<Texture2D> GetLensIcon();
-    static RH<Texture2D> GetLensLittleIcon();
-    static RH<Texture2D> GetSquareIcon();
-    static RH<Texture2D> GetAnchorIcon();
-    static RH<Texture2D> GetCubeMapIcon();
-    static RH<Texture2D> GetWhiteSphereIcon();
-    static RH<Texture2D> GetFolderIcon();
-    static RH<Texture2D> GetLetterIcon();
-    static RH<Texture2D> GetPillIcon();
-    static RH<Texture2D> GetCubeIcon();
-    static RH<Texture2D> GetBracketsIcon();
-    static RH<Texture2D> GetFileIcon();
-    static RH<Texture2D> GetSceneIcon();
-    static RH<Texture2D> GetAxesIcon();
-    static RH<Texture2D> GetHairCrossIcon();
-    static RH<Texture2D> GetCircleIcon();
-    static RH<Texture2D> GetCircleHardIcon();
-    static RH<Texture2D> GetEyeIcon();
-    static RH<Texture2D> GetAnchoredRectIcon();
+    static Texture2D* GetRotateIcon();
+    static Texture2D* GetRightArrowAndBarIcon();
+    static Texture2D* GetDoubleBarIcon();
+    static Texture2D* GetBackArrowIcon();
+    static Texture2D* GetLensIcon();
+    static Texture2D* GetLensLittleIcon();
+    static Texture2D* GetSquareIcon();
+    static Texture2D* GetAnchorIcon();
+    static Texture2D* GetCubeMapIcon();
+    static Texture2D* GetWhiteSphereIcon();
+    static Texture2D* GetFolderIcon();
+    static Texture2D* GetLetterIcon();
+    static Texture2D* GetPillIcon();
+    static Texture2D* GetCubeIcon();
+    static Texture2D* GetBracketsIcon();
+    static Texture2D* GetFileIcon();
+    static Texture2D* GetSceneIcon();
+    static Texture2D* GetAxesIcon();
+    static Texture2D* GetHairCrossIcon();
+    static Texture2D* GetCircleIcon();
+    static Texture2D* GetCircleHardIcon();
+    static Texture2D* GetEyeIcon();
+    static Texture2D* GetAnchoredRectIcon();
 
-    static RH<Texture2D> GetComponentIcon(const String &componentName);
+    static Texture2D* GetComponentIcon(const String &componentName);
 
 private:
+    Map<Path, RH<Texture2D>> m_iconCacheMap;
+
     EditorTextureFactory() = default;
     virtual ~EditorTextureFactory() = default;
 
-    static RH<Texture2D> GetTexture2D(const String &filename);
+    static EditorTextureFactory *GetInstance();
+    static Texture2D* GetTexture2D(const String &filename);
 
+    friend class EditorResources;
 };
 
 NAMESPACE_BANG_EDITOR_END

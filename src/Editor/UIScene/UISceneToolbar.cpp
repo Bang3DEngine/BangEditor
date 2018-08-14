@@ -33,14 +33,14 @@ UISceneToolbar::UISceneToolbar()
     toolbarLE->SetPreferredHeight(ToolBarHeight);
     toolbarLE->SetFlexibleWidth( 1.0f );
 
-    RH<Texture2D> rightArrowIcon       = TextureFactory::GetRightArrowIcon();
-    RH<Texture2D> doubleBarIcon        = EditorTextureFactory::GetDoubleBarIcon();
-    RH<Texture2D> squareIcon           = EditorTextureFactory::GetSquareIcon();
-    RH<Texture2D> rightArrowAndBarIcon = EditorTextureFactory::GetRightArrowAndBarIcon();
-    RH<Texture2D> translateIcon        = EditorTextureFactory::GetHairCrossIcon();
-    RH<Texture2D> rotateIcon           = EditorTextureFactory::GetRotateIcon();
-    RH<Texture2D> scaleIcon            = EditorTextureFactory::GetAxesIcon();
-    RH<Texture2D> rectTransformIcon    = EditorTextureFactory::GetAnchoredRectIcon();
+    Texture2D *rightArrowIcon       = TextureFactory::GetRightArrowIcon();
+    Texture2D *doubleBarIcon        = EditorTextureFactory::GetDoubleBarIcon();
+    Texture2D *squareIcon           = EditorTextureFactory::GetSquareIcon();
+    Texture2D *rightArrowAndBarIcon = EditorTextureFactory::GetRightArrowAndBarIcon();
+    Texture2D *translateIcon        = EditorTextureFactory::GetHairCrossIcon();
+    Texture2D *rotateIcon           = EditorTextureFactory::GetRotateIcon();
+    Texture2D *scaleIcon            = EditorTextureFactory::GetAxesIcon();
+    Texture2D *rectTransformIcon    = EditorTextureFactory::GetAnchoredRectIcon();
 
     auto AddToolbarButton = [&](UIButton **button, Texture2D *icon,
                                 std::function<void()> callbackFunc)
@@ -62,28 +62,28 @@ UISceneToolbar::UISceneToolbar()
         (*button)->GetGameObject()->SetParent(this);
     };
 
-    AddToolbarButton(&p_translateButton, translateIcon.Get(),
+    AddToolbarButton(&p_translateButton, translateIcon,
                      [&]() { TransformGizmo::GetInstance()->SetTransformMode(
                              TransformGizmo::TransformMode::TRANSLATE); });
-    AddToolbarButton(&p_rotateButton, rotateIcon.Get(),
+    AddToolbarButton(&p_rotateButton, rotateIcon,
                      [&]() { TransformGizmo::GetInstance()->SetTransformMode(
                              TransformGizmo::TransformMode::ROTATE); });
-    AddToolbarButton(&p_scaleButton, scaleIcon.Get(),
+    AddToolbarButton(&p_scaleButton, scaleIcon,
                      [&]() { TransformGizmo::GetInstance()->SetTransformMode(
                              TransformGizmo::TransformMode::SCALE); });
-    AddToolbarButton(&p_rectTransformButton, rectTransformIcon.Get(),
+    AddToolbarButton(&p_rectTransformButton, rectTransformIcon,
                      [&]() { TransformGizmo::GetInstance()->SetTransformMode(
                              TransformGizmo::TransformMode::RECT); });
 
     GameObjectFactory::CreateUIHSpacer()->SetParent(this);
 
-    AddToolbarButton(&p_playButton, rightArrowIcon.Get(),
+    AddToolbarButton(&p_playButton, rightArrowIcon,
                      [&]() { ScenePlayer::PlayScene(); });
-    AddToolbarButton(&p_pauseButton, doubleBarIcon.Get(),
+    AddToolbarButton(&p_pauseButton, doubleBarIcon,
                      [&]() { ScenePlayer::PauseScene(); });
-    AddToolbarButton(&p_stepButton, rightArrowAndBarIcon.Get(),
+    AddToolbarButton(&p_stepButton, rightArrowAndBarIcon,
                      [&]() { ScenePlayer::StepFrame(); });
-    AddToolbarButton(&p_stopButton, squareIcon.Get(),
+    AddToolbarButton(&p_stopButton, squareIcon,
                      [&]() { ScenePlayer::StopScene(); });
 
     p_renderModeInput = GameObjectFactory::CreateUIComboBox();

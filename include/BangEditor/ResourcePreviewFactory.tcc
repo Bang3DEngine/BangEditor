@@ -64,8 +64,7 @@ void ResourcePreviewFactory<T>::CreatePreviewScene()
 
     Camera *previewCamera = camGo->AddComponent<Camera>();
     previewCamera->SetClearMode(Camera::ClearMode::SKY_BOX);
-    previewCamera->SetSkyBoxTexture(
-                        TextureFactory::GetDefaultTextureCubeMap().Get() );
+    previewCamera->SetSkyBoxTexture( TextureFactory::GetDefaultTextureCubeMap() );
     scene->SetCamera(previewCamera);
 
     GameObject *dLightGo = GameObjectFactory::CreateGameObject();
@@ -92,7 +91,10 @@ RH<Texture2D> ResourcePreviewFactory<T>::GetPreviewTextureFor_(
                               T *resource,
                               const ResourcePreviewFactoryParameters &params)
 {
-    if (!resource) { return TextureFactory::GetWhiteTexture(); }
+    if (!resource)
+    {
+        return RH<Texture2D>(TextureFactory::GetWhiteTexture());
+    }
 
     if (!m_lastPreviewParameters.ContainsKey(resource->GetGUID()) ||
         params != m_lastPreviewParameters.Get(resource->GetGUID()))

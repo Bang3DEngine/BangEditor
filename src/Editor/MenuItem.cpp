@@ -62,7 +62,7 @@ MenuItem::MenuItem(MenuItemType itemType)
         if (GetItemType() != MenuItemType::TOP)
         {
             p_rightArrow = GameObjectFactory::CreateUIImage();
-            p_rightArrow->SetImageTexture( TextureFactory::GetRightArrowIcon().Get() );
+            p_rightArrow->SetImageTexture( TextureFactory::GetRightArrowIcon() );
 
             UILayoutElement *rightArrowLE = p_rightArrow->GetGameObject()
                                             ->AddComponent<UILayoutElement>();

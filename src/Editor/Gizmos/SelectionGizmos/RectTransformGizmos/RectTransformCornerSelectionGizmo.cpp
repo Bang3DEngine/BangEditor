@@ -28,7 +28,7 @@ RectTransformCornerSelectionGizmo::RectTransformCornerSelectionGizmo()
     p_cornerGO = GameObjectFactory::CreateUIGameObjectNamed("CornerGO");
     p_cornerRenderer = p_cornerGO->AddComponent<UIImageRenderer>();
     p_cornerRenderer->GetMaterial()->SetRenderPass(RenderPass::OVERLAY);
-    p_cornerRenderer->SetImageTexture(EditorTextureFactory::GetCircleHardIcon().Get());
+    p_cornerRenderer->SetImageTexture(EditorTextureFactory::GetCircleHardIcon());
 
     p_selectionGO = GameObjectFactory::CreateUIGameObjectNamed("SelectionGO");
     p_selectionRenderer = p_selectionGO->AddComponent<UIImageRenderer>();
