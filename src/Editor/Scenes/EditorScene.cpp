@@ -154,6 +154,11 @@ void EditorScene::Init()
     cam->RemoveRenderPass(RenderPass::CANVAS_POSTPROCESS);
     cam->RemoveRenderPass(RenderPass::OVERLAY);
     cam->RemoveRenderPass(RenderPass::OVERLAY_POSTPROCESS);
+
+    #ifdef DEBUG
+    cam->AddRenderPass(RenderPass::OVERLAY);
+    #endif
+
     cam->SetClearMode(Camera::ClearMode::COLOR);
     cam->SetRenderFlags( RenderFlags(RenderFlag::NONE).
                          SetOn(RenderFlag::CLEAR_COLOR).

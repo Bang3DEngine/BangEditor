@@ -35,8 +35,8 @@ EditorFloor::EditorFloor()
     m_lineRenderer->GetMaterial()->SetShaderProgram(sp);
 
     Array<Vector3> floorLinePoints;
-    constexpr float GridSize = 15000.0f;
-    constexpr int GridNumCells = 1000;
+    constexpr float GridSize = 1500.0f;
+    constexpr int GridNumCells = 100;
     constexpr float HGS = GridSize / 2;
     constexpr float CellSize = (GridSize / GridNumCells);
     for (int i = 0; i < GridNumCells; ++i)

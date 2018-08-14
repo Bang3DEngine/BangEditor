@@ -115,6 +115,7 @@ UISceneToolbar::UISceneToolbar()
     showDebugStatsTextGo->SetParent(this);
     p_showDebugStatsCheckbox->GetGameObject()->SetParent(this);
 
+    OnStopScene();
     ScenePlayer::GetInstance()->EventEmitter<IEventsScenePlayer>::RegisterListener(this);
 }
 
@@ -126,11 +127,6 @@ void UISceneToolbar::Update()
 {
     GameObject::Update();
 
-    p_translateButton->SetBlocked(false);
-    p_rotateButton->SetBlocked(false);
-    p_scaleButton->SetBlocked(false);
-    p_rectTransformButton->SetBlocked(false);
-
     GameObject *selGO = Editor::GetSelectedGameObject();
     p_translateButton->GetGameObject()->SetVisible(selGO && selGO->GetTransform());
     p_rotateButton->GetGameObject()->SetVisible(selGO && selGO->GetTransform());
@@ -141,17 +137,29 @@ void UISceneToolbar::Update()
     {
         case TransformGizmo::TransformMode::TRANSLATE:
             p_translateButton->SetBlocked(true);
+            p_rotateButton->SetBlocked(false);
+            p_scaleButton->SetBlocked(false);
+            p_rectTransformButton->SetBlocked(false);
         break;
 
         case TransformGizmo::TransformMode::ROTATE:
+            p_translateButton->SetBlocked(false);
             p_rotateButton->SetBlocked(true);
+            p_scaleButton->SetBlocked(false);
+            p_rectTransformButton->SetBlocked(false);
         break;
 
         case TransformGizmo::TransformMode::SCALE:
+            p_translateButton->SetBlocked(false);
+            p_rotateButton->SetBlocked(false);
             p_scaleButton->SetBlocked(true);
+            p_rectTransformButton->SetBlocked(false);
         break;
 
         case TransformGizmo::TransformMode::RECT:
+            p_translateButton->SetBlocked(false);
+            p_rotateButton->SetBlocked(false);
+            p_scaleButton->SetBlocked(false);
             p_rectTransformButton->SetBlocked(true);
         break;
     }

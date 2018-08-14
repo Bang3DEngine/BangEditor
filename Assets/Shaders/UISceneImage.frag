@@ -24,7 +24,10 @@ void main()
         case COLOR:            color = B_SampleColor(uv).rgb;               break;
         case NORMAL:           color = B_SampleNormal(uv).rgb;              break;
         case ALBEDO:           color = B_SampleAlbedoColor(uv).rgb;         break;
-        case WORLD_POSITION:   color = B_ComputeWorldPosition();            break;
+        case WORLD_POSITION:
+            color = B_ComputeWorldPosition(texture(B_SceneDepthStencilTex, uv).r,
+                                           uv);
+        break;
         case ROUGHNESS:        color = vec3( B_SampleRoughness(uv) );       break;
         case METALNESS:        color = vec3( B_SampleMetalness(uv) );       break;
         case RECEIVES_LIGHT:   color = vec3( B_SampleReceivesLight(uv) );   break;

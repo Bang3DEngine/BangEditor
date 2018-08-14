@@ -41,7 +41,7 @@ public:
     virtual void OnGrabEnd();
 
     // IEventsObject
-    void OnDisabled() override;
+    void OnDisabled(Object *object) override;
 
     // IEventsDestroy
     virtual void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;

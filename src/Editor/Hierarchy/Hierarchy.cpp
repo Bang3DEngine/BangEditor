@@ -49,6 +49,7 @@ Hierarchy::Hierarchy()
     UIRendererCacher *rendCacher = GameObjectFactory::CreateUIRendererCacherInto(this);
     GameObject *rendererCacherContainer = rendCacher->GetContainer();
     rendCacher->GetContainer()->GetRectTransform()->SetMargins(0, 5, 0, 5);
+    rendCacher->SetCachingEnabled(false);
 
     p_tree = GameObjectFactory::CreateUITree();
     GetUITree()->GetUIList()->GetScrollPanel()->SetForceHorizontalFit(true);
@@ -79,7 +80,7 @@ Hierarchy::Hierarchy()
     focusable->AddEventCallback([](IFocusable*,
                                    const UIEvent &event)
     {
-        if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
+        if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
         {
             Editor::SelectGameObject(nullptr);
             return UIEventResult::INTERCEPT;

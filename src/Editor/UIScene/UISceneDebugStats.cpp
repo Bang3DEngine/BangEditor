@@ -58,9 +58,9 @@ void UISceneDebugStats::Update()
     // std::cerr << fpsText << std::endl;
 }
 
-void UISceneDebugStats::OnEnabled()
+void UISceneDebugStats::OnEnabled(Object *object)
 {
-    Object::OnEnabled();
+    Object::OnEnabled(object);
     m_editorRenderFPSChrono.MarkBegin();
 }
 

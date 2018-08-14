@@ -34,7 +34,8 @@ HierarchyItem::HierarchyItem()
         OnCreateContextMenu(menuRootItem);
     });
 
-    AddComponent<UIHorizontalLayout>();
+    UIHorizontalLayout *hLayout = AddComponent<UIHorizontalLayout>();
+    hLayout->SetChildrenHorizontalStretch(Stretch::FULL);
 
     GameObject *textGo = GameObjectFactory::CreateUIGameObject();
     textGo->SetName("HierarchyItemText");
@@ -199,7 +200,7 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
             selectGameObject = true;
         break;
 
-        case UIList::Action::CLICKED_RIGHT:
+        case UIList::Action::MOUSE_RIGHT_DOWN:
             selectGameObject = true;
             p_contextMenu->ShowMenu();
         break;

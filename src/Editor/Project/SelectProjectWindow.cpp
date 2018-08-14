@@ -118,7 +118,7 @@ SelectProjectScene::SelectProjectScene()
         RecentProjectListEntry *entry = SCAST<RecentProjectListEntry*>(item);
         switch (action)
         {
-            case UIList::Action::CLICKED_LEFT:
+            case UIList::Action::MOUSE_LEFT_DOWN:
                 m_selectedRecentPath = entry->m_projectPath;
             break;
 

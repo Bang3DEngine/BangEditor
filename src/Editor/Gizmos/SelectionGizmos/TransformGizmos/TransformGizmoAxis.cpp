@@ -108,9 +108,9 @@ void TransformGizmoAxis::SetColor(SelectionState state)
     }
 }
 
-void TransformGizmoAxis::OnDisabled()
+void TransformGizmoAxis::OnDisabled(Object *object)
 {
-    SelectionGizmo::OnDisabled();
+    SelectionGizmo::OnDisabled(object);
     SetColor(SelectionState::IDLE);
 }
 

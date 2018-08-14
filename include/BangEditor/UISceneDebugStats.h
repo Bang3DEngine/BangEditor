@@ -27,7 +27,7 @@ public:
     void Update() override;
 
     // IEventsObject
-    void OnEnabled() override;
+    void OnEnabled(Object *object) override;
 
 private:
     FPSChrono m_editorRenderFPSChrono;

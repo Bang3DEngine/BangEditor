@@ -41,7 +41,7 @@ private:
     void SetColor(SelectionState state);
 
     // IEventsObject
-    void OnDisabled() override;
+    void OnDisabled(Object *object) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

@@ -193,7 +193,7 @@ void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
     MenuItem *parentItem = menuItem ? menuItem->GetParentItem() : nullptr;
     switch (action)
     {
-        case UIList::Action::CLICKED_LEFT:
+        case UIList::Action::MOUSE_LEFT_DOWN:
         case UIList::Action::PRESSED:
         {
             if (menuItem && menuItem->IsOverAndActionEnabled() &&

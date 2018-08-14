@@ -75,10 +75,12 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
     {
         case UISceneImage::RenderMode::DEPTH:
         case UISceneImage::RenderMode::SELECTION:
+        case UISceneImage::RenderMode::WORLD_POSITION:
         {
             switch (GetRenderMode())
             {
                 case UISceneImage::RenderMode::DEPTH:
+                case UISceneImage::RenderMode::WORLD_POSITION:
                 {
                 if (gb && sp)
                 {

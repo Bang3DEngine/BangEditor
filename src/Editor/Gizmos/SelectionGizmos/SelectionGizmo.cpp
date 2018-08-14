@@ -115,9 +115,9 @@ void SelectionGizmo::OnDestroyed(EventEmitter<IEventsDestroy> *object)
     SetReferencedGameObject(nullptr);
 }
 
-void SelectionGizmo::OnDisabled()
+void SelectionGizmo::OnDisabled(Object *object)
 {
-    GameObject::OnDisabled();
+    GameObject::OnDisabled(object);
     m_selectionState = SelectionState::IDLE;
     m_grabHasJustChanged = false;
 }
