@@ -90,7 +90,8 @@ private:
 
     // IEventsComponent
     void OnComponentAdded(Component *addedComponent, int index) override;
-    void OnComponentRemoved(Component *removedComponent) override;
+    void OnComponentRemoved(Component *removedComponent,
+                            GameObject *previousGameObject) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

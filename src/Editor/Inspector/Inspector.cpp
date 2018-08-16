@@ -303,8 +303,11 @@ void Inspector::OnComponentAdded(Component *addedComponent, int index)
     }
 }
 
-void Inspector::OnComponentRemoved(Component *removedComponent)
+void Inspector::OnComponentRemoved(Component *removedComponent,
+                                   GameObject *previousGameObject)
 {
+    (void) previousGameObject;
+
     ASSERT (m_objToWidget.ContainsKey(removedComponent));
     RemoveWidget(m_objToWidget.Get(removedComponent));
     m_objToWidget.Remove(removedComponent);
