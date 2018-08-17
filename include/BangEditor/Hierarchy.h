@@ -57,11 +57,17 @@ public:
     virtual void OnDuplicate(HierarchyItem *item) override;
     virtual void OnCreatePrefab(HierarchyItem *item) override;
 
-    // IUITreeListener
+    // IEventsUITree
     virtual void OnItemMoved(GOItem *item,
-                             GOItem *oldParentItem, int oldIndexInsideParent,
-                             GOItem *newParentItem, int newIndexInsideParent)
-                             override;
+                             GOItem *oldParentItem,
+                             int oldIndexInsideParent,
+                             GOItem *newParentItem,
+                             int newIndexInsideParent) override;
+    virtual void OnDropOutside(GOItem *item) override;
+    virtual void OnDropFromOutside(UIDragDroppable *dropped,
+                                   GameObject *newParentItem,
+                                   int newIndexInsideParent) override;
+    virtual bool AcceptDragOrDrop(UIDragDroppable *dd) override;
 
     // UIContextMenu
     void OnCreateContextMenu(MenuItem *menuRootItem);

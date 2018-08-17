@@ -72,7 +72,8 @@ private:
     // IEventsDragDrop
     virtual void OnDragStarted(EventEmitter<IEventsDragDrop> *dragDroppable) override;
     virtual void OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDroppable) override;
-    virtual void OnDrop(EventEmitter<IEventsDragDrop> *dragDroppable) override;
+    virtual void OnDrop(EventEmitter<IEventsDragDrop> *dragDroppable,
+                        bool inside) override;
 
     // IEventsScenePlayer
     void OnPlayStateChanged(PlayState previousPlayState,

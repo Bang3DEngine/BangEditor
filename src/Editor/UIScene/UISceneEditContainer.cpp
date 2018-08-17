@@ -297,9 +297,10 @@ void UISceneEditContainer::OnDragUpdate(EventEmitter<IEventsDragDrop> *dd_)
     }
 }
 
-void UISceneEditContainer::OnDrop(EventEmitter<IEventsDragDrop> *dd_)
+void UISceneEditContainer::OnDrop(EventEmitter<IEventsDragDrop> *dd_,
+                                  bool inside)
 {
-    IEventsDragDrop::OnDrop(dd_);
+    IEventsDragDrop::OnDrop(dd_, inside);
 
     m_currentMaterialBeingDragged.Set(nullptr);
     m_meshRenderersToPreviousMaterials.Clear();

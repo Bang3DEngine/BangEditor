@@ -4,6 +4,7 @@
 
 #include "Bang/Input.h"
 #include "Bang/Timer.h"
+#include "Bang/Model.h"
 #include "Bang/Scene.h"
 #include "Bang/Dialog.h"
 #include "Bang/Prefab.h"
@@ -17,12 +18,14 @@
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/UIDragDroppable.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/UIRendererCacher.h"
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/Explorer.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/ExplorerItem.h"
 #include "BangEditor/UIContextMenu.h"
 #include "BangEditor/HierarchyItem.h"
 #include "BangEditor/EditorClipboard.h"
@@ -246,8 +249,10 @@ void Hierarchy::OnCreatePrefab(HierarchyItem *item)
 }
 
 void Hierarchy::OnItemMoved(GOItem *item,
-                            GOItem *oldParentItem, int oldIndexInsideParent,
-                            GOItem *newParentItem, int newIndexInsideParent)
+                            GOItem *oldParentItem,
+                            int oldIndexInsideParent,
+                            GOItem *newParentItem,
+                            int newIndexInsideParent)
 {
     IEventsUITree::OnItemMoved(item, oldParentItem, oldIndexInsideParent,
                                  newParentItem, newIndexInsideParent);
@@ -268,6 +273,63 @@ void Hierarchy::OnItemMoved(GOItem *item,
     movedGo->SetParent(newParent, newIndexInsideParent);
     Editor::SelectGameObject(movedGo, false);
     IEventListenerCommon::SetReceiveEventsCommon(true);
+}
+
+void Hierarchy::OnDropOutside(GOItem *item)
+{
+    if (UICanvas::GetActive(this)->IsMouseOver(this, true))
+    {
+        GameObject *go = GetGameObjectFromItem(item);
+        go->SetParent( EditorSceneManager::GetOpenScene(), -1 );
+    }
+}
+
+void Hierarchy::OnDropFromOutside(UIDragDroppable *dropped,
+                                  GameObject *newParentItem,
+                                  int newIndexInsideParent)
+{
+    if (ExplorerItem *expItem = DCAST<ExplorerItem*>(dropped->GetGameObject()))
+    {
+        if ( Extensions::Equals(expItem->GetPath().GetExtension(),
+                                Extensions::GetModelExtensions()) )
+        {
+            RH<Model> modelRH = Resources::Load<Model>( expItem->GetPath() );
+            if (Model *model = modelRH.Get())
+            {
+                GameObject *newParent = (newParentItem ?
+                                             GetGameObjectFromItem(newParentItem) :
+                                             EditorSceneManager::GetOpenScene());
+                GameObject *modelGo = model->CreateGameObjectFromModel();
+                modelGo->SetParent(newParent, newIndexInsideParent);
+
+                UndoRedoManager::PushAction(
+                                       new UndoRedoCreateGameObject(modelGo) );
+            }
+        }
+    }
+}
+
+bool Hierarchy::AcceptDragOrDrop(UIDragDroppable *dd)
+{
+    if ( UITreeItemContainer *treeItemCont = DCAST<UITreeItemContainer*>(
+                                                        dd->GetGameObject()) )
+    {
+        if (GameObject *containedItem = treeItemCont->GetContainedItem())
+        {
+            if (DCAST<HierarchyItem*>(containedItem))
+            {
+                return true;
+            }
+        }
+    }
+
+    if (ExplorerItem *expItem = DCAST<ExplorerItem*>(dd->GetGameObject()))
+    {
+        return Extensions::Equals(expItem->GetPath().GetExtension(),
+                                  Extensions::GetModelExtensions());
+    }
+
+    return false;
 }
 
 void Hierarchy::OnCreateContextMenu(MenuItem *menuRootItem)

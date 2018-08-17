@@ -220,9 +220,16 @@ void ExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
     }
 }
 
-void ExplorerItem::OnDrop(EventEmitter<IEventsDragDrop> *dd_)
+void ExplorerItem::OnDrop(EventEmitter<IEventsDragDrop> *dd_, bool inside)
 {
+    IEventsDragDrop::OnDrop(dd_, inside);
+
     UIDragDroppable *dd = DCAST<UIDragDroppable*>(dd_);
+    if (!inside)
+    {
+        return;
+    }
+
     if (ExplorerItem *expItem = DCAST<ExplorerItem*>(dd->GetGameObject()))
     {
         if (expItem != this &&
