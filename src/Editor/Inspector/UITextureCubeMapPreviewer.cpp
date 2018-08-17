@@ -70,8 +70,8 @@ void UITextureCubeMapPreviewer::Update()
 
     ShaderProgram *sp = p_previewImageRenderer->GetMaterial()->GetShaderProgram();
     sp->Bind();
-    sp->SetMatrix4("B_Rotation", rotationMatrix, false);
-    sp->SetTextureCubeMap("B_TextureCubeMapToPreview", GetTextureCubeMap(), false);
+    sp->SetMatrix4("B_Rotation", rotationMatrix);
+    sp->SetTextureCubeMap("B_TextureCubeMapToPreview", GetTextureCubeMap());
 
     GL::Pop(GL::Pushable::SHADER_PROGRAM);
 

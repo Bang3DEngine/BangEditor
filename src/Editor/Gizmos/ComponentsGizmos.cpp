@@ -89,6 +89,7 @@ void ComponentsGizmos::RenderComponentGizmos(Component *comp,
                                              bool whenCompIsSelected)
 {
     SelectionFramebuffer *sfb = Selection::GetSelectionFramebuffer();
+
     if (!whenCompIsSelected && Selection::IsBeingRendered())
     {
         sfb->SetNextRenderSelectable( comp->GetGameObject() );
@@ -98,23 +99,19 @@ void ComponentsGizmos::RenderComponentGizmos(Component *comp,
     {
         RenderCameraGizmo(cam, whenCompIsSelected);
     }
-
-    if (PointLight *pl = DCAST<PointLight*>(comp))
+    else if (PointLight *pl = DCAST<PointLight*>(comp))
     {
         RenderPointLightGizmo(pl, whenCompIsSelected);
     }
-
-    if (DirectionalLight *dl = DCAST<DirectionalLight*>(comp))
+    else if (DirectionalLight *dl = DCAST<DirectionalLight*>(comp))
     {
         RenderDirectionalLightGizmo(dl, whenCompIsSelected);
     }
-
-    if (ReflectionProbe *rp = DCAST<ReflectionProbe*>(comp))
+    else if (ReflectionProbe *rp = DCAST<ReflectionProbe*>(comp))
     {
         RenderReflectionProbeGizmo(rp, whenCompIsSelected);
     }
-
-    if (AudioSource *as = DCAST<AudioSource*>(comp))
+    else if (AudioSource *as = DCAST<AudioSource*>(comp))
     {
         RenderAudioSourceGizmo(as, whenCompIsSelected);
     }
