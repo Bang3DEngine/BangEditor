@@ -70,6 +70,7 @@ private:
     static void OnAddExistingBehaviour    (MenuItem *item);
     static void OnAddEmptyBehaviour       (MenuItem *item);
     static void OnAddCamera               (MenuItem *item);
+    static void OnAddBoxCollider          (MenuItem *item);
     static void OnAddPointLight           (MenuItem *item);
     static void OnAddDirectionalLight     (MenuItem *item);
     static void OnAddLineRenderer         (MenuItem *item);
@@ -80,6 +81,7 @@ private:
     static void OnAddTransform            (MenuItem *item);
     static void OnAddRectTransform        (MenuItem *item);
     static void OnAddPostProcessEffect    (MenuItem *item);
+    static void OnAddRigidBody            (MenuItem *item);
     static void OnAddUIAutoFocuser        (MenuItem *item);
     static void OnAddUIButton             (MenuItem *item);
     static void OnAddUICanvas             (MenuItem *item);

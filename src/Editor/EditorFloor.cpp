@@ -32,6 +32,7 @@ EditorFloor::EditorFloor()
                 ShaderProgramFactory::GetDefaultVertexShaderPath(),
                 EditorPaths::GetEditorAssetsDir().Append("Shaders").
                     Append("EditorFloor.frag"));
+    m_lineRenderer->GetMaterial()->SetRenderPass(RenderPass::OVERLAY);
     m_lineRenderer->GetMaterial()->SetShaderProgram(sp);
 
     Array<Vector3> floorLinePoints;
@@ -58,6 +59,7 @@ EditorFloor::EditorFloor()
 
     AddComponent<HideInHierarchy>();
     AddComponent<NotSelectableInEditor>();
+
 }
 
 EditorFloor::~EditorFloor()
@@ -66,12 +68,15 @@ EditorFloor::~EditorFloor()
 
 void EditorFloor::Render(RenderPass renderPass, bool renderChildren)
 {
-    // GBuffer *gbuffer = GEngine::GetActiveGBuffer();
-    // gbuffer->PushDepthStencilTexture();
-    // gbuffer->SetSceneDepthStencil();
+    if (renderPass == RenderPass::OVERLAY)
+    {
+        GBuffer *gbuffer = GEngine::GetActiveGBuffer();
+        gbuffer->PushDepthStencilTexture();
+        gbuffer->SetSceneDepthStencil();
 
-    GameObject::Render(renderPass, renderChildren);
+        GameObject::Render(renderPass, renderChildren);
 
-    // gbuffer->PopDepthStencilTexture();
+        gbuffer->PopDepthStencilTexture();
+    }
 }
 

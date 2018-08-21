@@ -35,12 +35,12 @@ GizmosManager::~GizmosManager()
 void GizmosManager::Update()
 {
     GetTransformGizmo()->Start();
-    GetComponentsGizmos()->Start();
     GetGameObjectSelectionGizmo()->Start();
+    GetComponentsGizmos()->Start();
 
     GetTransformGizmo()->Update();
-    GetComponentsGizmos()->Update();
     GetGameObjectSelectionGizmo()->Update();
+    GetComponentsGizmos()->Update();
 }
 
 void GizmosManager::OnBeginRender(Scene *scene)
@@ -55,8 +55,8 @@ void GizmosManager::OnEndRender(Scene*)
 {
     GetTransformGizmo()->SetParent(nullptr);
     GetTransformGizmo()->OnEndRender(nullptr);
-    GetGameObjectSelectionGizmo()->SetParent(nullptr);
     GetComponentsGizmos()->SetParent(nullptr);
+    GetGameObjectSelectionGizmo()->SetParent(nullptr);
 }
 
 GizmosManager* GizmosManager::GetInstance()

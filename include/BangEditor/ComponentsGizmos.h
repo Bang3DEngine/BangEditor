@@ -7,6 +7,7 @@
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class PointLight;
 FORWARD class AudioSource;
+FORWARD class BoxCollider;
 FORWARD class ReflectionProbe;
 FORWARD class DirectionalLight;
 FORWARD NAMESPACE_BANG_END
@@ -26,19 +27,17 @@ public:
     void Render(RenderPass rp, bool renderChildren) override;
 
 private:
-    void RenderGameObjectGizmosWhenNotSelected(GameObject *go);
-    void RenderComponentGizmos(Component *comp, bool whenCompIsSelected);
+    void RenderComponentGizmosWhenNotSelected(GameObject *go);
+    void RenderComponentGizmos(Component *comp, bool isBeingSelected);
 
-    void RenderCameraGizmo(Camera *cam,
-                           bool whenCompIsSelected);
-    void RenderPointLightGizmo(PointLight *pointLight,
-                               bool whenCompIsSelected);
+    void RenderBoxColliderGizmo(BoxCollider *bc, bool isBeingSelected);
+    void RenderCameraGizmo(Camera *cam, bool isBeingSelected);
+    void RenderPointLightGizmo(PointLight *pointLight, bool isBeingSelected);
     void RenderDirectionalLightGizmo(DirectionalLight *dirLight,
-                                     bool whenCompIsSelected);
+                                     bool isBeingSelected);
     void RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
-                                    bool whenCompIsSelected);
-    void RenderAudioSourceGizmo(AudioSource *audioSource,
-                                bool whenCompIsSelected);
+                                    bool isBeingSelected);
+    void RenderAudioSourceGizmo(AudioSource *audioSource, bool isBeingSelected);
 };
 
 NAMESPACE_BANG_EDITOR_END

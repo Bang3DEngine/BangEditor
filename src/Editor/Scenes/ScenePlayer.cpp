@@ -1,6 +1,7 @@
 #include "BangEditor/ScenePlayer.h"
 
 #include "Bang/Scene.h"
+#include "Bang/Physics.h"
 #include "Bang/Behaviour.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/BehaviourContainer.h"
@@ -102,6 +103,7 @@ void ScenePlayer::PlayScene()
                     SceneManager::LoadSceneInstantly(sp->p_playOpenScene, false);
 
                     Time::SetDeltaTimeReferenceToNow();
+                    Physics::GetInstance()->SetIgnoreNextFrames(sp->p_playOpenScene, 5);
                     ScenePlayer::SetPlayState(PlayState::PLAYING);
                 }
             }

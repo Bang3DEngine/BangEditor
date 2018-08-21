@@ -14,6 +14,7 @@
 #include "Bang/UIButton.h"
 #include "Bang/UISlider.h"
 #include "Bang/UICanvas.h"
+#include "Bang/RigidBody.h"
 #include "Bang/Behaviour.h"
 #include "Bang/Resources.h"
 #include "Bang/Transform.h"
@@ -23,6 +24,7 @@
 #include "Bang/UICheckBox.h"
 #include "Bang/UIComboBox.h"
 #include "Bang/UIRectMask.h"
+#include "Bang/BoxCollider.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/AudioSource.h"
 #include "Bang/UIFocusable.h"
@@ -244,6 +246,10 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addTransforms = rootItem->AddItem("Transform");
     MenuItem *addTransform = addTransforms->AddItem("Transform");
     MenuItem *addRectTransform = addTransforms->AddItem("RectTransform");
+    MenuItem *addPhysics = rootItem->AddItem("Physics");
+    MenuItem *addRigidBody = addPhysics->AddItem("RigidBody");
+    MenuItem *addColliders = addPhysics->AddItem("Colliders");
+    MenuItem *addBoxCollider = addColliders->AddItem("BoxCollider");
     MenuItem *addPostProcessEffect = rootItem->AddItem("PostProcessEffect");
     MenuItem *addUI = rootItem->AddItem("UI");
     MenuItem *addUIAutoFocuser = addUI->AddItem("Auto Focuser");
@@ -266,6 +272,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addUIVerticalLayout = addUI->AddItem("VerticalLayout");
     MenuItem *addMisc = rootItem->AddItem("Misc");
     MenuItem *addReflectionProbe = addMisc->AddItem("ReflectionProbe");
+    addBoxCollider->SetSelectedCallback(MenuBar::OnAddBoxCollider);
     addAnimator->SetSelectedCallback(MenuBar::OnAddAnimator);
     addAudioListener->SetSelectedCallback(MenuBar::OnAddAudioListener);
     addAudioSource->SetSelectedCallback(MenuBar::OnAddAudioSource);
@@ -281,6 +288,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     addWaterRenderer->SetSelectedCallback(MenuBar::OnAddWaterRenderer);
     addReflectionProbe->SetSelectedCallback(MenuBar::OnAddReflectionProbe);
     addTransform->SetSelectedCallback(MenuBar::OnAddTransform);
+    addRigidBody->SetSelectedCallback(MenuBar::OnAddRigidBody);
     addRectTransform->SetSelectedCallback(MenuBar::OnAddRectTransform);
     addPostProcessEffect->SetSelectedCallback(MenuBar::OnAddPostProcessEffect);
     addUICanvas->SetSelectedCallback(MenuBar::OnAddUICanvas);
@@ -468,6 +476,11 @@ void MenuBar::OnAddCamera(MenuItem*)
     OnAddComponent<Camera>();
 }
 
+void MenuBar::OnAddBoxCollider(MenuItem *item)
+{
+    OnAddComponent<BoxCollider>();
+}
+
 void MenuBar::OnAddPointLight(MenuItem*)
 {
     OnAddComponent<PointLight>();
@@ -606,6 +619,11 @@ void MenuBar::OnAddUILabel(MenuItem*)
 void MenuBar::OnAddPostProcessEffect(MenuItem*)
 {
     OnAddComponent<PostProcessEffect>();
+}
+
+void MenuBar::OnAddRigidBody(MenuItem *item)
+{
+    OnAddComponent<RigidBody>();
 }
 
 void MenuBar::OnCreateEmpty(MenuItem *)

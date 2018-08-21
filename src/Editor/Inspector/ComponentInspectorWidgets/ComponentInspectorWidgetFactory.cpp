@@ -5,7 +5,9 @@
 #include "BangEditor/CIWCamera.h"
 #include "BangEditor/CIWAnimator.h"
 #include "BangEditor/CIWTransform.h"
+#include "BangEditor/CIWRigidBody.h"
 #include "BangEditor/CIWPointLight.h"
+#include "BangEditor/CIWBoxCollider.h"
 #include "BangEditor/CIWAudioSource.h"
 #include "BangEditor/CIWMeshRenderer.h"
 #include "BangEditor/CIWWaterRenderer.h"
@@ -47,6 +49,14 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     else if (cName == "MeshRenderer")
     {
         ciw = GameObject::Create<CIWMeshRenderer>();
+    }
+    else if (cName == "RigidBody")
+    {
+        ciw = GameObject::Create<CIWRigidBody>();
+    }
+    else if (cName == "BoxCollider")
+    {
+        ciw = GameObject::Create<CIWBoxCollider>();
     }
     else if (cName == "WaterRenderer")
     {

@@ -11,6 +11,7 @@
 #include "Bang/Resources.h"
 #include "Bang/PointLight.h"
 #include "Bang/AudioSource.h"
+#include "Bang/BoxCollider.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RenderFactory.h"
@@ -65,12 +66,12 @@ void ComponentsGizmos::Render(RenderPass rp, bool renderChildren)
         Scene *openScene = EditorSceneManager::GetOpenScene();
         if (openScene)
         {
-            RenderGameObjectGizmosWhenNotSelected(openScene);
+            RenderComponentGizmosWhenNotSelected(openScene);
         }
     }
 }
 
-void ComponentsGizmos::RenderGameObjectGizmosWhenNotSelected(GameObject *go)
+void ComponentsGizmos::RenderComponentGizmosWhenNotSelected(GameObject *go)
 {
     const List<Component*> &comps = go->GetComponents();
     for (Component *comp : comps)
@@ -81,53 +82,82 @@ void ComponentsGizmos::RenderGameObjectGizmosWhenNotSelected(GameObject *go)
     const List<GameObject*> &goChildren = go->GetChildren();
     for (GameObject *child : goChildren)
     {
-        RenderGameObjectGizmosWhenNotSelected(child);
+        RenderComponentGizmosWhenNotSelected(child);
     }
 }
 
 void ComponentsGizmos::RenderComponentGizmos(Component *comp,
-                                             bool whenCompIsSelected)
+                                             bool isBeingSelected)
 {
     SelectionFramebuffer *sfb = Selection::GetSelectionFramebuffer();
 
-    if (!whenCompIsSelected && Selection::IsBeingRendered())
+    if (!isBeingSelected && Selection::IsBeingRendered())
     {
         sfb->SetNextRenderSelectable( comp->GetGameObject() );
     }
 
     if (Camera *cam = DCAST<Camera*>(comp))
     {
-        RenderCameraGizmo(cam, whenCompIsSelected);
+        RenderCameraGizmo(cam, isBeingSelected);
     }
     else if (PointLight *pl = DCAST<PointLight*>(comp))
     {
-        RenderPointLightGizmo(pl, whenCompIsSelected);
+        RenderPointLightGizmo(pl, isBeingSelected);
+    }
+    else if (BoxCollider *bc = DCAST<BoxCollider*>(comp))
+    {
+        RenderBoxColliderGizmo(bc, isBeingSelected);
     }
     else if (DirectionalLight *dl = DCAST<DirectionalLight*>(comp))
     {
-        RenderDirectionalLightGizmo(dl, whenCompIsSelected);
+        RenderDirectionalLightGizmo(dl, isBeingSelected);
     }
     else if (ReflectionProbe *rp = DCAST<ReflectionProbe*>(comp))
     {
-        RenderReflectionProbeGizmo(rp, whenCompIsSelected);
+        RenderReflectionProbeGizmo(rp, isBeingSelected);
     }
     else if (AudioSource *as = DCAST<AudioSource*>(comp))
     {
-        RenderAudioSourceGizmo(as, whenCompIsSelected);
+        RenderAudioSourceGizmo(as, isBeingSelected);
     }
 
-    if (!whenCompIsSelected && Selection::IsBeingRendered())
+    if (!isBeingSelected && Selection::IsBeingRendered())
     {
         sfb->SetNextRenderSelectable(nullptr);
     }
 }
 
+void ComponentsGizmos::RenderBoxColliderGizmo(BoxCollider *bc,
+                                              bool isBeingSelected)
+{
+    if (isBeingSelected && bc->IsEnabled())
+    {
+        GBuffer *gb = GEngine::GetActiveGBuffer();
+        gb->PushDepthStencilTexture();
+        gb->SetSceneDepthStencil();
+
+        Transform *tr = bc->GetGameObject()->GetTransform();
+        RenderFactory::Parameters params;
+        params.thickness = 2.0f;
+        params.wireframe = true;
+        params.color = Color::Green;
+        params.rotation = tr->GetRotation();
+        params.cullFace = GL::CullFaceExt::BACK;
+        Vector3 centerDisplacement = params.rotation * bc->GetCenter();
+        Vector3 c = tr->GetPosition() + centerDisplacement;
+        Vector3 hs = tr->GetScale() * bc->GetHalfExtents();
+        RenderFactory::RenderBox(AABox(c - hs, c + hs), params);
+
+        gb->PopDepthStencilTexture();
+    }
+}
+
 void ComponentsGizmos::RenderCameraGizmo(Camera *cam,
-                                         bool whenCompIsSelected)
+                                         bool isBeingSelected)
 {
     Transform *camTransform = cam->GetGameObject()->GetTransform();
 
-    if (!whenCompIsSelected)
+    if (!isBeingSelected)
     {
         static RH<Mesh> cameraMesh = MeshFactory::GetCamera();
         Transform *camTransform = cam->GetGameObject()->GetTransform();
@@ -191,7 +221,7 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam,
 }
 
 void ComponentsGizmos::RenderPointLightGizmo(PointLight *pointLight,
-                                             bool whenCompIsSelected)
+                                             bool isBeingSelected)
 {
     RenderFactory::Parameters params;
     params.receivesLighting = false;
@@ -199,7 +229,7 @@ void ComponentsGizmos::RenderPointLightGizmo(PointLight *pointLight,
     params.position = pointLight->GetGameObject()->
                       GetTransform()->GetPosition();
 
-    if (!whenCompIsSelected)
+    if (!isBeingSelected)
     {
         params.scale = Vector3(0.1f);
         RenderFactory::RenderIcon(TextureFactory::GetLightBulbIcon(),
@@ -224,13 +254,13 @@ void ComponentsGizmos::RenderPointLightGizmo(PointLight *pointLight,
 }
 
 void ComponentsGizmos::RenderDirectionalLightGizmo(DirectionalLight *dirLight,
-                                                   bool whenCompIsSelected)
+                                                   bool isBeingSelected)
 {
     RenderFactory::Parameters params;
     params.receivesLighting = false;
     params.color = dirLight->GetColor().WithAlpha(1.0f);
 
-    if (!whenCompIsSelected)
+    if (!isBeingSelected)
     {
         params.position = dirLight->GetGameObject()->
                           GetTransform()->GetPosition();
@@ -271,7 +301,7 @@ void ComponentsGizmos::RenderDirectionalLightGizmo(DirectionalLight *dirLight,
 }
 
 void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
-                                                  bool whenCompIsSelected)
+                                                  bool isBeingSelected)
 {
     Vector3 reflProbeCenter = reflProbe->GetGameObject()->
                               GetTransform()->GetPosition();
@@ -288,7 +318,7 @@ void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
 
     RenderFactory::RenderSphere(1.0f, params);
 
-    if (whenCompIsSelected)
+    if (isBeingSelected)
     {
         if (reflProbe->GetIsBoxed())
         {
@@ -317,7 +347,7 @@ void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
 }
 
 void ComponentsGizmos::RenderAudioSourceGizmo(AudioSource *audioSource,
-                                              bool whenCompIsSelected)
+                                              bool isBeingSelected)
 {
     RenderFactory::Parameters params;
     params.color = Color::White;
@@ -325,7 +355,7 @@ void ComponentsGizmos::RenderAudioSourceGizmo(AudioSource *audioSource,
     params.position = audioSource->GetGameObject()->
                       GetTransform()->GetPosition();
 
-    if (!whenCompIsSelected)
+    if (!isBeingSelected)
     {
         params.scale = Vector3(0.1f);
         RenderFactory::RenderIcon(TextureFactory::GetAudioIcon(),
