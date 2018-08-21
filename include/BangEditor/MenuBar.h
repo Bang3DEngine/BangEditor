@@ -71,6 +71,7 @@ private:
     static void OnAddEmptyBehaviour       (MenuItem *item);
     static void OnAddCamera               (MenuItem *item);
     static void OnAddBoxCollider          (MenuItem *item);
+    static void OnAddSphereCollider       (MenuItem *item);
     static void OnAddPointLight           (MenuItem *item);
     static void OnAddDirectionalLight     (MenuItem *item);
     static void OnAddLineRenderer         (MenuItem *item);

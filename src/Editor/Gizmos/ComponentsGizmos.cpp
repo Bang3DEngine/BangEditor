@@ -15,6 +15,7 @@
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RenderFactory.h"
+#include "Bang/SphereCollider.h"
 #include "Bang/TextureFactory.h"
 #include "Bang/ReflectionProbe.h"
 #include "Bang/DirectionalLight.h"
@@ -108,6 +109,10 @@ void ComponentsGizmos::RenderComponentGizmos(Component *comp,
     {
         RenderBoxColliderGizmo(bc, isBeingSelected);
     }
+    else if (SphereCollider *sc = DCAST<SphereCollider*>(comp))
+    {
+        RenderSphereColliderGizmo(sc, isBeingSelected);
+    }
     else if (DirectionalLight *dl = DCAST<DirectionalLight*>(comp))
     {
         RenderDirectionalLightGizmo(dl, isBeingSelected);
@@ -145,8 +150,35 @@ void ComponentsGizmos::RenderBoxColliderGizmo(BoxCollider *bc,
         params.cullFace = GL::CullFaceExt::BACK;
         Vector3 centerDisplacement = params.rotation * bc->GetCenter();
         Vector3 c = tr->GetPosition() + centerDisplacement;
-        Vector3 hs = tr->GetScale() * bc->GetHalfExtents();
+        Vector3 hs = tr->GetScale() * bc->GetHalfExtents() + 0.01f;
         RenderFactory::RenderBox(AABox(c - hs, c + hs), params);
+
+        gb->PopDepthStencilTexture();
+    }
+}
+
+void ComponentsGizmos::RenderSphereColliderGizmo(SphereCollider *sc,
+                                                 bool isBeingSelected)
+{
+    if (isBeingSelected && sc->IsEnabled())
+    {
+        GBuffer *gb = GEngine::GetActiveGBuffer();
+        gb->PushDepthStencilTexture();
+        gb->SetSceneDepthStencil();
+
+        Transform *tr = sc->GetGameObject()->GetTransform();
+        RenderFactory::Parameters params;
+        params.thickness = 2.0f;
+        params.wireframe = true;
+        params.color = Color::Green;
+        params.rotation = tr->GetRotation();
+        params.cullFace = GL::CullFaceExt::BACK;
+        Vector3 centerDisplacement = params.rotation * sc->GetCenter();
+        Vector3 center = tr->GetPosition() + centerDisplacement;
+        params.position = center;
+        RenderFactory::RenderSimpleSphere(sc->GetScaledRadius() + 0.01f,
+                                          false, params,
+                                          2, 2);
 
         gb->PopDepthStencilTexture();
     }

@@ -37,6 +37,7 @@
 #include "Bang/UIAutoFocuser.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/WaterRenderer.h"
+#include "Bang/SphereCollider.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/ReflectionProbe.h"
 #include "Bang/UIImageRenderer.h"
@@ -250,6 +251,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addRigidBody = addPhysics->AddItem("RigidBody");
     MenuItem *addColliders = addPhysics->AddItem("Colliders");
     MenuItem *addBoxCollider = addColliders->AddItem("BoxCollider");
+    MenuItem *addSphereCollider = addColliders->AddItem("SphereCollider");
     MenuItem *addPostProcessEffect = rootItem->AddItem("PostProcessEffect");
     MenuItem *addUI = rootItem->AddItem("UI");
     MenuItem *addUIAutoFocuser = addUI->AddItem("Auto Focuser");
@@ -273,6 +275,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addMisc = rootItem->AddItem("Misc");
     MenuItem *addReflectionProbe = addMisc->AddItem("ReflectionProbe");
     addBoxCollider->SetSelectedCallback(MenuBar::OnAddBoxCollider);
+    addSphereCollider->SetSelectedCallback(MenuBar::OnAddSphereCollider);
     addAnimator->SetSelectedCallback(MenuBar::OnAddAnimator);
     addAudioListener->SetSelectedCallback(MenuBar::OnAddAudioListener);
     addAudioSource->SetSelectedCallback(MenuBar::OnAddAudioSource);
@@ -479,6 +482,11 @@ void MenuBar::OnAddCamera(MenuItem*)
 void MenuBar::OnAddBoxCollider(MenuItem *item)
 {
     OnAddComponent<BoxCollider>();
+}
+
+void MenuBar::OnAddSphereCollider(MenuItem *item)
+{
+    OnAddComponent<SphereCollider>();
 }
 
 void MenuBar::OnAddPointLight(MenuItem*)

@@ -13,6 +13,7 @@
 #include "BangEditor/CIWWaterRenderer.h"
 #include "BangEditor/CIWAudioListener.h"
 #include "BangEditor/CIWRectTransform.h"
+#include "BangEditor/CIWSphereCollider.h"
 #include "BangEditor/CIWUITextRenderer.h"
 #include "BangEditor/CIWUIImageRenderer.h"
 #include "BangEditor/CIWReflectionProbe.h"
@@ -57,6 +58,10 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     else if (cName == "BoxCollider")
     {
         ciw = GameObject::Create<CIWBoxCollider>();
+    }
+    else if (cName == "SphereCollider")
+    {
+        ciw = GameObject::Create<CIWSphereCollider>();
     }
     else if (cName == "WaterRenderer")
     {
