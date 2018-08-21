@@ -64,7 +64,7 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
         m_needToRenderPreviewImg = false;
     }
 
-    if ( NeedsToRenderSelectionFramebuffer() )
+    if ( rp == RenderPass::CANVAS && NeedsToRenderSelectionFramebuffer() )
     {
         EditorCamera *edCamGo = EditorCamera::GetInstance();
         Camera *edCam = edCamGo->GetCamera();
@@ -277,6 +277,7 @@ void UISceneEditContainer::OnDragStarted(EventEmitter<IEventsDragDrop> *dd_)
     {
         Camera *edCam = EditorCamera::GetInstance()->GetCamera();
         edCam->RemoveRenderPass(RenderPass::OVERLAY);
+        GetSelectionFramebuffer()->SetDrawOverlay(false);
     }
 }
 
@@ -307,6 +308,7 @@ void UISceneEditContainer::OnDrop(EventEmitter<IEventsDragDrop> *dd_,
 
     Camera *edCam = EditorCamera::GetInstance()->GetCamera();
     edCam->AddRenderPass(RenderPass::OVERLAY);
+    GetSelectionFramebuffer()->SetDrawOverlay(true);
 }
 
 void UISceneEditContainer::OnDestroyed(EventEmitter<IEventsDestroy> *object)

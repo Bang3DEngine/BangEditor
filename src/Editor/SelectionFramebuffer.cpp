@@ -34,7 +34,7 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
 
     Bind();
     CreateAttachmentTex2D(AttColor, GL::ColorFormat::RGBA8);
-    CreateAttachmentTex2D(GL::Attachment::DEPTH, GL::ColorFormat::DEPTH24);
+    CreateAttachmentTex2D(GL::Attachment::DEPTH, GL::ColorFormat::DEPTH16);
     UnBind();
 
     p_colorTexture.Set(GetAttachmentTex2D(AttColor));
@@ -85,14 +85,20 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Scene *scene)
     SetAllDrawBuffers();
 
     GL::ClearColorStencilDepthBuffers();
+    GL::SetDepthMask(true);
+    GL::SetDepthFunc(GL::Function::LEQUAL);
     ge->RenderWithPass(scene, RenderPass::SCENE);
     ge->RenderWithPass(scene, RenderPass::SCENE_TRANSPARENT);
     GL::ClearStencilDepthBuffers();
     GL::SetDepthFunc(GL::Function::LEQUAL);
     ge->RenderWithPass(scene, RenderPass::CANVAS);
-    GL::ClearDepthBuffer();
-    GL::SetDepthMask(false);
-    ge->RenderWithPass(scene, RenderPass::OVERLAY);
+
+    if (m_drawOverlay)
+    {
+        GL::ClearDepthBuffer();
+        GL::SetDepthMask(false);
+        ge->RenderWithPass(scene, RenderPass::OVERLAY);
+    }
 
     UnBind();
 
@@ -100,6 +106,11 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Scene *scene)
     GL::Pop(GL::Pushable::DEPTH_STATES);
     GL::Pop(GL::Pushable::BLEND_STATES);
     GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
+}
+
+void SelectionFramebuffer::SetDrawOverlay(bool drawOverlay)
+{
+    m_drawOverlay = drawOverlay;
 }
 
 void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)

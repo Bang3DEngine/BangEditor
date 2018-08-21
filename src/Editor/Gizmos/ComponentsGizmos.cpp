@@ -344,16 +344,16 @@ void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
     params.receivesLighting = false;
     params.position = reflProbeCenter;
 
-    GBuffer *gb = GEngine::GetActiveGBuffer();
-    gb->PushDepthStencilTexture();
-    gb->SetSceneDepthStencil();
-
     RenderFactory::RenderSphere(1.0f, params);
 
     if (isBeingSelected)
     {
         if (reflProbe->GetIsBoxed())
         {
+            GBuffer *gb = GEngine::GetActiveGBuffer();
+            gb->PushDepthStencilTexture();
+            gb->SetSceneDepthStencil();
+
             Vector3 reflProbSize = reflProbe->GetSize();
 
             params.scale = Vector3::One;
@@ -372,10 +372,10 @@ void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
             params.position = Vector3::Zero;
             params.color = params.color.WithAlpha(1.0f);
             RenderFactory::RenderSimpleBox(reflProbeBox, params);
+
+            gb->PopDepthStencilTexture();
         }
     }
-
-    gb->PopDepthStencilTexture();
 }
 
 void ComponentsGizmos::RenderAudioSourceGizmo(AudioSource *audioSource,

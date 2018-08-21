@@ -29,6 +29,7 @@ public:
     void PrepareNewFrameForRender(const GameObject *go);
     void SetNextRenderSelectable(GameObject *go);
     void RenderForSelectionBuffer(Scene *scene);
+    void SetDrawOverlay(bool drawOverlay);
 
     RH<Texture2D> GetColorTexture() const;
     GameObject *GetGameObjectInViewportPoint(const Vector2i &vpPoint);
@@ -41,6 +42,7 @@ private:
     RH<Texture2D> p_colorTexture;
     RH<Material> p_selectionMaterial;
 
+    bool m_drawOverlay = true;
     GameObject *p_nextRenderSelectable = nullptr;
     mutable UMap<GameObject*, IdType> m_gameObject_To_Id;
     mutable UMap<IdType, GameObject*> m_id_To_GameObject;
