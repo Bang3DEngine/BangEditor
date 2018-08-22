@@ -49,9 +49,8 @@ void UIInputFileWithPreview::SetPath(const Path &path)
 {
     UIInputFile::SetPath(path);
 
-    bool isGoodPath = (path.IsFile() || Resources::IsEmbeddedResource(path));
     RH<Texture2D> previewTex;
-    if (isGoodPath)
+    if ( HaveExistingPath() )
     {
         previewTex = GetPreviewTextureFromPath(path);
     }
@@ -68,12 +67,19 @@ void UIInputFileWithPreview::SetPath(const Path &path)
     }
 }
 
-void UIInputFileWithPreview::OnEvent(IFocusable*,
-                                     const UIEvent &event)
+bool UIInputFileWithPreview::HaveExistingPath() const
+{
+    return (GetPath().IsFile() || Resources::IsEmbeddedResource( GetPath() ));
+}
+
+void UIInputFileWithPreview::OnEvent(IFocusable*, const UIEvent &event)
 {
     if (event.type == UIEvent::Type::MOUSE_ENTER)
     {
-        p_bigPreviewImg->GetGameObject()->SetVisible(true);
+        if (HaveExistingPath())
+        {
+            p_bigPreviewImg->GetGameObject()->SetVisible(true);
+        }
     }
     else if (event.type == UIEvent::Type::MOUSE_EXIT)
     {

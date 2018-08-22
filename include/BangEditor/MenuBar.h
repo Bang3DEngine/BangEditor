@@ -39,6 +39,8 @@ protected:
 private:
     MenuItem *m_fileItem = nullptr;
     MenuItem *m_editItem = nullptr;
+    MenuItem *m_undoItem = nullptr;
+    MenuItem *m_redoItem = nullptr;
     MenuItem *m_assetsItem = nullptr;
     MenuItem *m_componentsItem  = nullptr;
     MenuItem *m_gameObjectsItem = nullptr;
@@ -59,6 +61,10 @@ private:
     static void OnOpenScene   (MenuItem *item);
     static void OnBuild       (MenuItem *item);
     static void OnBuildAndRun (MenuItem *item);
+
+    static void OnUndo(MenuItem *item);
+    static void OnRedo(MenuItem *item);
+    static void OnEditPhysicsSettings(MenuItem *item);
 
     static void OnCreateMaterial (MenuItem *item);
     static void OnCreateTextureCubeMap (MenuItem *item);

@@ -16,7 +16,11 @@ public:
 	UndoRedoManager();
 	virtual ~UndoRedoManager();
 
+    static void Undo();
+    static void Redo();
     static void Clear();
+    static bool CanUndo();
+    static bool CanRedo();
     static void PushAction(UndoRedoAction *action);
     static void PushActionsInSameStep(
                         const Array<UndoRedoAction*> &actionsInSameStep);
@@ -31,8 +35,6 @@ private:
 
     // Only for debugging
     bool m_undoingOrRedoing = false;
-
-    void OnUndoRedoPressed(bool undo);
 };
 
 NAMESPACE_BANG_EDITOR_END

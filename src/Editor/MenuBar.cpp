@@ -106,8 +106,14 @@ MenuBar::MenuBar()
     // Edit
     m_editItem = AddItem();
     m_editItem->GetText()->SetContent("Edit");
-    MenuItem *editNone = m_editItem->AddItem("None");
-    (void) editNone;
+    m_undoItem = m_editItem->AddItem("Undo - Ctrl + Z");
+    m_redoItem = m_editItem->AddItem("Redo - Ctrl + Shift + Z");
+    m_editItem->AddSeparator();
+    MenuItem *editSettings = m_editItem->AddItem("Settings");
+    MenuItem *editSettingsPhysics = editSettings->AddItem("Physics");
+    m_undoItem->SetSelectedCallback(MenuBar::OnUndo);
+    m_redoItem->SetSelectedCallback(MenuBar::OnRedo);
+    editSettingsPhysics->SetSelectedCallback(MenuBar::OnEditPhysicsSettings);
 
     // Assets
     m_assetsItem = AddItem();
@@ -201,7 +207,10 @@ void MenuBar::Update()
             item->SetForceShow(true); // Force show on item under mouse
             p_currentTopItemBeingShown = item;
         }
-        if (p_currentTopItemBeingShown != item) { item->Close(true); }
+        if (p_currentTopItemBeingShown != item)
+        {
+            item->Close(true);
+        }
 
         if (!hasFocusRecursive)
         {
@@ -209,7 +218,14 @@ void MenuBar::Update()
             item->Close(true);
         }
     }
-    if (!hasFocusRecursive) { p_currentTopItemBeingShown = nullptr; }
+
+    if (!hasFocusRecursive)
+    {
+        p_currentTopItemBeingShown = nullptr;
+    }
+
+    m_undoItem->SetOverAndActionEnabled( UndoRedoManager::CanUndo() );
+    m_redoItem->SetOverAndActionEnabled( UndoRedoManager::CanRedo() );
 }
 
 MenuItem* MenuBar::AddItem()
@@ -361,6 +377,20 @@ void MenuBar::OnBuildAndRun(MenuItem*)
     Thread *thread = new Thread();
     thread->SetRunnable(runnable);
     thread->Start();
+}
+
+void MenuBar::OnUndo(MenuItem *)
+{
+    UndoRedoManager::Undo();
+}
+
+void MenuBar::OnRedo(MenuItem *)
+{
+    UndoRedoManager::Redo();
+}
+
+void MenuBar::OnEditPhysicsSettings(MenuItem *)
+{
 }
 
 

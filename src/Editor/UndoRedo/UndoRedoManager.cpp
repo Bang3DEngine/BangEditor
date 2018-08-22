@@ -13,21 +13,68 @@ UndoRedoManager::UndoRedoManager()
 {
     ShortcutManager::RegisterShortcut(
         Shortcut(Key::LCTRL, Key::Z, "Undo", true),
-        [this](const Shortcut&)
+        [](const Shortcut&)
         {
-            OnUndoRedoPressed(true);
+            UndoRedoManager::Undo();
         });
 
     ShortcutManager::RegisterShortcut(
         Shortcut(Key::LCTRL, Key::LSHIFT, Key::Z, "Redo", true),
-        [this](const Shortcut&)
+        [](const Shortcut&)
         {
-            OnUndoRedoPressed(false);
+            UndoRedoManager::Redo();
         });
 }
 
 UndoRedoManager::~UndoRedoManager()
 {
+}
+
+void UndoRedoManager::Undo()
+{
+    if (UndoRedoManager::CanUndo())
+    {
+        UndoRedoManager *urm = UndoRedoManager::GetInstance();
+        const Array<UndoRedoAction*> &actions = urm->m_undoActions.Front();
+
+        urm->m_undoingOrRedoing = true;
+        for (UndoRedoAction *action : actions)
+        {
+            action->Undo();
+        }
+        urm->m_undoingOrRedoing = false;
+
+        urm->m_redoActions.PushFront(actions);
+        urm->m_undoActions.PopFront();
+
+        if (urm->m_redoActions.Size() > UndoRedoManager::UndoListSize)
+        {
+            for (UndoRedoAction *action : urm->m_redoActions.Back())
+            {
+                delete action;
+            }
+            urm->m_redoActions.PopBack();
+        }
+    }
+}
+
+void UndoRedoManager::Redo()
+{
+    if (UndoRedoManager::CanRedo())
+    {
+        UndoRedoManager *urm = UndoRedoManager::GetInstance();
+        const Array<UndoRedoAction*> &actions = urm->m_redoActions.Front();
+
+        urm->m_undoingOrRedoing = true;
+        for (UndoRedoAction *action : actions)
+        {
+            action->Redo();
+        }
+        urm->m_undoingOrRedoing = false;
+
+        urm->m_undoActions.PushFront(actions);
+        urm->m_redoActions.PopFront();
+    }
 }
 
 void UndoRedoManager::Clear()
@@ -53,6 +100,18 @@ void UndoRedoManager::Clear()
 
     urm->m_undoActions.Clear();
     urm->m_redoActions.Clear();
+}
+
+bool UndoRedoManager::CanUndo()
+{
+    return ScenePlayer::GetPlayState() == PlayState::EDITING &&
+           UndoRedoManager::GetInstance()->m_undoActions.Size() >= 1;
+}
+
+bool UndoRedoManager::CanRedo()
+{
+    return ScenePlayer::GetPlayState() == PlayState::EDITING &&
+           UndoRedoManager::GetInstance()->m_redoActions.Size() >= 1;
 }
 
 void UndoRedoManager::PushAction(UndoRedoAction *action)
@@ -89,53 +148,3 @@ UndoRedoManager *UndoRedoManager::GetInstance()
     EditorScene *es = esm ? esm->GetEditorScene() : nullptr;
     return es ? es->GetUndoRedoManager() : nullptr;
 }
-
-void UndoRedoManager::OnUndoRedoPressed(bool undo)
-{
-    if (ScenePlayer::GetPlayState() != PlayState::EDITING)
-    {
-        return;
-    }
-
-    const bool redo = !undo;
-
-    // Debug_Peek(m_undoActions);
-    if (undo && m_undoActions.Size() >= 1)
-    {
-        const Array<UndoRedoAction*> &actions = m_undoActions.Front();
-
-        m_undoingOrRedoing = true;
-        for (UndoRedoAction *action : actions)
-        {
-            action->Undo();
-        }
-        m_undoingOrRedoing = false;
-
-        m_redoActions.PushFront(actions);
-        m_undoActions.PopFront();
-
-        if (m_redoActions.Size() > UndoListSize)
-        {
-            for (UndoRedoAction *action : m_redoActions.Back())
-            {
-                delete action;
-            }
-            m_redoActions.PopBack();
-        }
-    }
-    else if (redo && m_redoActions.Size() >= 1)
-    {
-        const Array<UndoRedoAction*> &actions = m_redoActions.Front();
-
-        m_undoingOrRedoing = true;
-        for (UndoRedoAction *action : actions)
-        {
-            action->Redo();
-        }
-        m_undoingOrRedoing = false;
-
-        m_undoActions.PushFront(actions);
-        m_redoActions.PopFront();
-    }
-}
-
