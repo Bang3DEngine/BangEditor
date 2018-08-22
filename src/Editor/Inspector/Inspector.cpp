@@ -220,6 +220,8 @@ void Inspector::ShowGameObject(GameObject *go)
 void Inspector::ShowInspectorWidget(InspectorWidget *inspectorWidget)
 {
     Clear();
+    p_titleSeparator->SetEnabled(true);
+    p_titleText->SetContent(inspectorWidget->GetTitle());
     AddWidget(inspectorWidget);
 }
 

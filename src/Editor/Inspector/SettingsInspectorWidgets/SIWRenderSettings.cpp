@@ -19,7 +19,7 @@ void SIWRenderSettings::InitInnerWidgets()
     SetName("SIWRenderSettings");
 }
 
-void SIWRenderSettings::Update()
+void SIWRenderSettings::UpdateFromReference()
 {
-    SettingsInspectorWidget::Update();
+    SettingsInspectorWidget::UpdateFromReference();
 }

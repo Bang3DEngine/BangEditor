@@ -19,8 +19,8 @@ void SIWEditorSettings::InitInnerWidgets()
     SetName("SIWEditorSettings");
 }
 
-void SIWEditorSettings::Update()
+void SIWEditorSettings::UpdateFromReference()
 {
-    SettingsInspectorWidget::Update();
+    SettingsInspectorWidget::UpdateFromReference();
 }
 

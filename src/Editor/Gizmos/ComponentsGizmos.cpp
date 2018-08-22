@@ -348,33 +348,33 @@ void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
 
     if (isBeingSelected)
     {
+        GBuffer *gb = GEngine::GetActiveGBuffer();
+        gb->PushDepthStencilTexture();
+        gb->SetSceneDepthStencil();
+
+        Vector3 reflProbSize = reflProbe->GetSize();
+
+        params.scale = Vector3::One;
+        params.cullFace = GL::CullFaceExt::NONE;
+        AABox reflProbeBox = AABox(reflProbeCenter + reflProbSize * 0.5f,
+                                   reflProbeCenter - reflProbSize * 0.5f);
+
         if (reflProbe->GetIsBoxed())
         {
-            GBuffer *gb = GEngine::GetActiveGBuffer();
-            gb->PushDepthStencilTexture();
-            gb->SetSceneDepthStencil();
-
-            Vector3 reflProbSize = reflProbe->GetSize();
-
-            params.scale = Vector3::One;
-            params.cullFace = GL::CullFaceExt::NONE;
-            AABox reflProbeBox = AABox(reflProbeCenter + reflProbSize * 0.5f,
-                                       reflProbeCenter - reflProbSize * 0.5f);
-
             params.thickness = 0.1f;
             params.wireframe = false;
             params.position = Vector3::Zero;
             params.color = params.color.WithAlpha(0.25f);
             RenderFactory::RenderBox(reflProbeBox, params);
-
-            params.wireframe = true;
-            params.thickness = 3.0f;
-            params.position = Vector3::Zero;
-            params.color = params.color.WithAlpha(1.0f);
-            RenderFactory::RenderSimpleBox(reflProbeBox, params);
-
-            gb->PopDepthStencilTexture();
         }
+
+        params.wireframe = true;
+        params.thickness = 3.0f;
+        params.position = Vector3::Zero;
+        params.color = params.color.WithAlpha(1.0f);
+        RenderFactory::RenderSimpleBox(reflProbeBox, params);
+
+        gb->PopDepthStencilTexture();
     }
 }
 

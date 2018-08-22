@@ -16,8 +16,9 @@ void SettingsInspectorWidget::InitInnerWidgets()
     InspectorWidget::InitInnerWidgets();
 }
 
-void SettingsInspectorWidget::Update()
+void SettingsInspectorWidget::UpdateFromReference()
 {
-    InspectorWidget::Update();
+    InspectorWidget::UpdateFromReference();
 }
+
 

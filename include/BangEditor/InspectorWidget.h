@@ -22,6 +22,8 @@ class InspectorWidget : public GameObject
 
 public:
     virtual void Init();
+
+    const String& GetTitle() const;
     void SetBackgroundColor(const Color &bgColor);
 
 protected:

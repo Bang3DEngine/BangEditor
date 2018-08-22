@@ -16,7 +16,7 @@ public:
 
     // InspectorWidget
     virtual void InitInnerWidgets() override;
-    virtual void Update() override;
+    virtual void UpdateFromReference() override;
 };
 
 NAMESPACE_BANG_EDITOR_END

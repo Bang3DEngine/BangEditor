@@ -101,12 +101,7 @@ void ProjectManager::ExportProject(const Project *project)
 {
     if (!project) { return; }
     bool ok = project->ExportXMLToFile(project->GetProjectFilepath());
-    if (ok)
-    {
-        Debug_Log("Project '" << project->GetProjectName() <<
-                  "' successfully saved.");
-    }
-    else
+    if (!ok)
     {
         Debug_Error("Could not save the project...");
     }
@@ -117,7 +112,7 @@ void ProjectManager::ExportCurrentProject()
     ProjectManager::ExportProject( ProjectManager::GetCurrentProject() );
 }
 
-bool ProjectManager::CloseCurrentProject()
+bool ProjectManager:: CloseCurrentProject()
 {
     if (!SceneOpenerSaver::GetInstance()) { return true; }
     if (!SceneOpenerSaver::GetInstance()->CloseScene()) { return false; }

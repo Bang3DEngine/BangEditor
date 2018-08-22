@@ -52,7 +52,7 @@ Hierarchy::Hierarchy()
     UIRendererCacher *rendCacher = GameObjectFactory::CreateUIRendererCacherInto(this);
     GameObject *rendererCacherContainer = rendCacher->GetContainer();
     rendCacher->GetContainer()->GetRectTransform()->SetMargins(0, 5, 0, 5);
-    rendCacher->SetCachingEnabled(false);
+    rendCacher->SetCachingEnabled(true);
 
     p_tree = GameObjectFactory::CreateUITree();
     GetUITree()->GetUIList()->GetScrollPanel()->SetForceHorizontalFit(true);

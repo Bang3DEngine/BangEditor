@@ -87,10 +87,10 @@ MenuBar::MenuBar()
     bg->SetTint( Color::LightGray.WithValue(0.9f) );
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetMinHeight(15);
+    le->SetMinHeight(20);
 
     m_horizontalLayout = AddComponent<UIHorizontalLayout>();
-    m_horizontalLayout->SetSpacing(5);
+    m_horizontalLayout->SetSpacing(10);
 
     // File
     m_fileItem = AddItem();
@@ -193,10 +193,7 @@ void MenuBar::Update()
 {
     GameObject::Update();
 
-    bool componentsEnabled = Editor::GetSelectedGameObject() != nullptr;
-    m_componentsItem->SetOverAndActionEnabledRecursively(componentsEnabled);
-    m_componentsItem->SetOverAndActionEnabled(true);
-
+    // Force show
     UICanvas *canvas = UICanvas::GetActive(this);
     bool hasFocusRecursive = canvas->HasFocus(this, true);
     for (MenuItem *item : m_items)
@@ -205,8 +202,9 @@ void MenuBar::Update()
         item->SetDropDownEnabled(hasFocusRecursive);
 
         // Force show on top item if mouse over and menu bar has focus
-        bool forceShow = (hasFocusRecursive && canvas->IsMouseOver(item, true));
-        if (forceShow && item != p_currentTopItemBeingShown)
+        bool forceShowItem = (hasFocusRecursive &&
+                              canvas->IsMouseOver(item, true));
+        if (forceShowItem && item != p_currentTopItemBeingShown)
         {
             if (p_currentTopItemBeingShown) // Unforce show on the other
             {
@@ -217,6 +215,7 @@ void MenuBar::Update()
             item->SetForceShow(true); // Force show on item under mouse
             p_currentTopItemBeingShown = item;
         }
+
         if (p_currentTopItemBeingShown != item)
         {
             item->Close(true);
@@ -234,6 +233,10 @@ void MenuBar::Update()
         p_currentTopItemBeingShown = nullptr;
     }
 
+    // Enabled/Disabled menu items
+    bool componentsEnabled = (Editor::GetSelectedGameObject() != nullptr);
+    m_componentsItem->SetOverAndActionEnabledRecursively(componentsEnabled);
+    m_componentsItem->SetOverAndActionEnabled(true);
     m_undoItem->SetOverAndActionEnabled( UndoRedoManager::CanUndo() );
     m_redoItem->SetOverAndActionEnabled( UndoRedoManager::CanRedo() );
     m_projectSettingsItem->SetOverAndActionEnabledRecursively(

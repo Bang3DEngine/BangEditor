@@ -21,7 +21,13 @@ class MenuItem : public GameObject
     GAMEOBJECT(MenuItem);
 
 public:
-    enum class MenuItemType { ROOT, TOP, NORMAL };
+    enum class MenuItemType
+    {
+        ROOT,
+        TOP,
+        NORMAL,
+        SEPARATOR
+    };
 
     // GameObject
     void Update() override;

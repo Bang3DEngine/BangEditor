@@ -134,6 +134,11 @@ void InspectorWidget::AddWidget(const String &labelContent,
     AddWidgetInternal(labelContent, widget, height, true);
 }
 
+const String &InspectorWidget::GetTitle() const
+{
+    return p_titleText->GetContent();
+}
+
 void InspectorWidget::AddWidgetInternal(const String &labelContent,
                                         GameObject *widget,
                                         int height,
