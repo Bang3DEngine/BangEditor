@@ -53,16 +53,22 @@
 #include "Bang/SkinnedMeshRenderer.h"
 
 #include "BangEditor/Editor.h"
+#include "BangEditor/Project.h"
 #include "BangEditor/Explorer.h"
 #include "BangEditor/MenuItem.h"
+#include "BangEditor/Inspector.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/GameBuilder.h"
 #include "BangEditor/EditorDialog.h"
+#include "BangEditor/ProjectManager.h"
 #include "BangEditor/EditorSettings.h"
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/BehaviourCreator.h"
+#include "BangEditor/SIWRenderSettings.h"
+#include "BangEditor/SIWEditorSettings.h"
+#include "BangEditor/SIWPhysicsSettings.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/UndoRedoMoveGameObject.h"
 #include "BangEditor/UndoRedoCreateGameObject.h"
@@ -109,11 +115,15 @@ MenuBar::MenuBar()
     m_undoItem = m_editItem->AddItem("Undo - Ctrl + Z");
     m_redoItem = m_editItem->AddItem("Redo - Ctrl + Shift + Z");
     m_editItem->AddSeparator();
-    MenuItem *editSettings = m_editItem->AddItem("Settings");
-    MenuItem *editSettingsPhysics = editSettings->AddItem("Physics");
+    MenuItem *editorSettingsItem = m_editItem->AddItem("Editor Settings");
+    m_projectSettingsItem = m_editItem->AddItem("Project Settings");
     m_undoItem->SetSelectedCallback(MenuBar::OnUndo);
     m_redoItem->SetSelectedCallback(MenuBar::OnRedo);
-    editSettingsPhysics->SetSelectedCallback(MenuBar::OnEditPhysicsSettings);
+    MenuItem *renderSettings  = m_projectSettingsItem->AddItem("Render Settings");
+    MenuItem *physicsSettings = m_projectSettingsItem->AddItem("Physics Settings");
+    editorSettingsItem->SetSelectedCallback(MenuBar::OnEditorSettings);
+    renderSettings->SetSelectedCallback(MenuBar::OnRenderSettings);
+    physicsSettings->SetSelectedCallback(MenuBar::OnPhysicsSettings);
 
     // Assets
     m_assetsItem = AddItem();
@@ -226,6 +236,8 @@ void MenuBar::Update()
 
     m_undoItem->SetOverAndActionEnabled( UndoRedoManager::CanUndo() );
     m_redoItem->SetOverAndActionEnabled( UndoRedoManager::CanRedo() );
+    m_projectSettingsItem->SetOverAndActionEnabledRecursively(
+                            (ProjectManager::GetCurrentProject() != nullptr) );
 }
 
 MenuItem* MenuBar::AddItem()
@@ -389,8 +401,25 @@ void MenuBar::OnRedo(MenuItem *)
     UndoRedoManager::Redo();
 }
 
-void MenuBar::OnEditPhysicsSettings(MenuItem *)
+void MenuBar::OnEditorSettings(MenuItem *)
 {
+    SIWEditorSettings *siw = GameObject::Create<SIWEditorSettings>();
+    siw->Init();
+    Inspector::GetActive()->ShowInspectorWidget(siw);
+}
+
+void MenuBar::OnRenderSettings(MenuItem *)
+{
+    SIWRenderSettings *siw = GameObject::Create<SIWRenderSettings>();
+    siw->Init();
+    Inspector::GetActive()->ShowInspectorWidget(siw);
+}
+
+void MenuBar::OnPhysicsSettings(MenuItem *)
+{
+    SIWPhysicsSettings *siw = GameObject::Create<SIWPhysicsSettings>();
+    siw->Init();
+    Inspector::GetActive()->ShowInspectorWidget(siw);
 }
 
 

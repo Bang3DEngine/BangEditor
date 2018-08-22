@@ -81,7 +81,6 @@ void EditorDialog::GetColor(const String &title,
     Dialog::EndDialogCreation(scene);
 }
 
-
 Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
                                              const Array<String> &extensions)
 {

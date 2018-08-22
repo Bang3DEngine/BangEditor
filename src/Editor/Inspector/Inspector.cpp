@@ -197,7 +197,10 @@ void Inspector::ShowPath(const Path &path)
 void Inspector::ShowGameObject(GameObject *go)
 {
     Clear();
-    if(!go || go->IsWaitingToBeDestroyed()) { return; }
+    if(!go || go->IsWaitingToBeDestroyed())
+    {
+        return;
+    }
 
     p_currentGameObject = go;
     GetCurrentGameObject()->EventEmitter<IEventsComponent>::RegisterListener(this);
@@ -212,6 +215,12 @@ void Inspector::ShowGameObject(GameObject *go)
         OnComponentAdded(comp, i);
         ++i;
     }
+}
+
+void Inspector::ShowInspectorWidget(InspectorWidget *inspectorWidget)
+{
+    Clear();
+    AddWidget(inspectorWidget);
 }
 
 const Path &Inspector::GetCurrentPath() const

@@ -44,6 +44,7 @@ private:
     MenuItem *m_assetsItem = nullptr;
     MenuItem *m_componentsItem  = nullptr;
     MenuItem *m_gameObjectsItem = nullptr;
+    MenuItem *m_projectSettingsItem = nullptr;
 
     Array<MenuItem*> m_items;
     UIFocusable *p_focusable = nullptr;
@@ -64,7 +65,9 @@ private:
 
     static void OnUndo(MenuItem *item);
     static void OnRedo(MenuItem *item);
-    static void OnEditPhysicsSettings(MenuItem *item);
+    static void OnEditorSettings(MenuItem *item);
+    static void OnRenderSettings(MenuItem *item);
+    static void OnPhysicsSettings(MenuItem *item);
 
     static void OnCreateMaterial (MenuItem *item);
     static void OnCreateTextureCubeMap (MenuItem *item);

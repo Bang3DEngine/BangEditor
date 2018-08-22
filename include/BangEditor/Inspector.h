@@ -43,6 +43,7 @@ public:
     void ShowSerializable(Serializable *serializable);
     void ShowPath(const Path &path);
     void ShowGameObject(GameObject *gameObject);
+    void ShowInspectorWidget(InspectorWidget *inspectorWidget);
 
     const Path &GetCurrentPath() const;
     GameObject *GetCurrentGameObject() const;

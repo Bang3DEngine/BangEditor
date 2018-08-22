@@ -8,7 +8,6 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UILabel;
-FORWARD class MenuItem;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
 FORWARD class UILayoutElement;
@@ -22,6 +21,7 @@ class InspectorWidget : public GameObject
     GAMEOBJECT_EDITOR(InspectorWidget);
 
 public:
+    virtual void Init();
     void SetBackgroundColor(const Color &bgColor);
 
 protected:
@@ -31,7 +31,6 @@ protected:
     InspectorWidget();
     virtual ~InspectorWidget();
 
-    virtual void Init();
     virtual void InitInnerWidgets();
 
     virtual void SetTitle(const String &title);

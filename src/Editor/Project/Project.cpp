@@ -76,7 +76,9 @@ Path Project::GetFirstFoundScenePath() const
 void Project::ImportXML(const XMLNode &xmlInfo)
 {
     if (xmlInfo.Contains("RandomID"))
-    { m_id = xmlInfo.Get<GUID>("RandomID"); }
+    {
+        m_id = xmlInfo.Get<GUID>("RandomID");
+    }
 }
 
 void Project::ExportXML(XMLNode *xmlInfo) const
