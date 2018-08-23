@@ -43,7 +43,7 @@ FIWMaterial::~FIWMaterial()
 
 void FIWMaterial::Init()
 {
-    FileInspectorWidget::Init();
+    FIWResource<Material>::Init();
 
     SetName("FIWMaterial");
     SetTitle("Material");

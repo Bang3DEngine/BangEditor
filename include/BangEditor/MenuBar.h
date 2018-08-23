@@ -71,6 +71,7 @@ private:
 
     static void OnCreateMaterial (MenuItem *item);
     static void OnCreateTextureCubeMap (MenuItem *item);
+    static void OnCreatePhysicsMaterial (MenuItem *item);
 
     static void OnAddAnimator             (MenuItem *item);
     static void OnAddAudioListener        (MenuItem *item);

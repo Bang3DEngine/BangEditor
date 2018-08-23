@@ -83,6 +83,10 @@ Texture2D* EditorTextureFactory::GetIconForExtension(const String &ext)
     {
         return EditorTextureFactory::GetCubeIcon();
     }
+    else if ( Extensions::Equals(ext, Extensions::GetPhysicsMaterialExtension()) )
+    {
+        return EditorTextureFactory::GetPhysicsBallIcon();
+    }
     else if ( Extensions::Equals(ext, Extensions::GetBehaviourExtensions()) )
     {
         return EditorTextureFactory::GetBracketsIcon();
@@ -183,6 +187,11 @@ Texture2D* EditorTextureFactory::GetCubeIcon()
 Texture2D* EditorTextureFactory::GetBracketsIcon()
 {
     return EditorTextureFactory::GetTexture2D("Brackets.png");
+}
+
+Texture2D *EditorTextureFactory::GetPhysicsBallIcon()
+{
+    return EditorTextureFactory::GetTexture2D("PhysicsBall.png");
 }
 
 Texture2D* EditorTextureFactory::GetFileIcon()

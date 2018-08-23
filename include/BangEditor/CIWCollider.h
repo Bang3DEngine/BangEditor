@@ -13,6 +13,8 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class UIInputFile;
+
 FORWARD class UIInputVector;
 
 class CIWCollider : public ComponentInspectorWidget
@@ -37,6 +39,7 @@ protected:
 
 private:
     UIInputVector *p_centerInput = nullptr;
+    UIInputFile *p_physicsMaterialInput = nullptr;
 
     friend class ComponentInspectorWidgetFactory;
 };

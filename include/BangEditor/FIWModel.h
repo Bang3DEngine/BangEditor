@@ -22,7 +22,6 @@ public:
     void Init() override;
 
 private:
-    RH<Model> m_modelRH;
     PreviewViewer *p_modelPreviewViewer = nullptr;
 
     FIWModel();

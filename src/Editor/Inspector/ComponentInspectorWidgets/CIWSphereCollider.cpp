@@ -30,7 +30,7 @@ void CIWSphereCollider::InitInnerWidgets()
 
     AddWidget("Radius", p_radiusInput->GetGameObject());
 
-    SetLabelsWidth(85);
+    SetLabelsWidth(95);
 }
 
 void CIWSphereCollider::UpdateFromReference()

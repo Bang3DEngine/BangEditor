@@ -40,6 +40,7 @@
 #include "Bang/SphereCollider.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/ReflectionProbe.h"
+#include "Bang/PhysicsMaterial.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UILayoutIgnorer.h"
@@ -129,8 +130,10 @@ MenuBar::MenuBar()
     m_assetsItem = AddItem();
     m_assetsItem->GetText()->SetContent("Assets");
     MenuItem *createMaterial = m_assetsItem->AddItem("Material");
-    createMaterial->SetSelectedCallback(MenuBar::OnCreateMaterial);
+    MenuItem *createPhysicsMaterial = m_assetsItem->AddItem("Physics Material");
     MenuItem *createTextureCubeMap = m_assetsItem->AddItem("Texture Cube Map");
+    createMaterial->SetSelectedCallback(MenuBar::OnCreateMaterial);
+    createPhysicsMaterial->SetSelectedCallback(MenuBar::OnCreatePhysicsMaterial);
     createTextureCubeMap->SetSelectedCallback(MenuBar::OnCreateTextureCubeMap);
 
     // Components
@@ -448,6 +451,12 @@ OnCreateAssetFile(const String &name, const String &extension)
 void MenuBar::OnCreateMaterial(MenuItem*)
 {
     OnCreateAssetFile<Material>("Material", Extensions::GetMaterialExtension());
+}
+
+void MenuBar::OnCreatePhysicsMaterial(MenuItem*)
+{
+    OnCreateAssetFile<PhysicsMaterial>("PhysicsMaterial",
+                                       Extensions::GetPhysicsMaterialExtension());
 }
 
 void MenuBar::OnCreateTextureCubeMap(MenuItem *item)

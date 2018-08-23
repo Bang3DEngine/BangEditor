@@ -41,6 +41,7 @@ public:
     static Texture2D* GetPillIcon();
     static Texture2D* GetCubeIcon();
     static Texture2D* GetBracketsIcon();
+    static Texture2D* GetPhysicsBallIcon();
     static Texture2D* GetFileIcon();
     static Texture2D* GetSceneIcon();
     static Texture2D* GetAxesIcon();

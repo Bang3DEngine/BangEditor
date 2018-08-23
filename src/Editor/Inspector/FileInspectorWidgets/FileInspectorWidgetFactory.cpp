@@ -9,6 +9,7 @@
 #include "BangEditor/FIWMaterial.h"
 #include "BangEditor/FIWBehaviour.h"
 #include "BangEditor/FIWTextureCubeMap.h"
+#include "BangEditor/FIWPhysicsMaterial.h"
 #include "BangEditor/FileInspectorWidget.h"
 
 USING_NAMESPACE_BANG
@@ -20,6 +21,10 @@ InspectorWidget *FileInspectorWidgetFactory::Create(const Path &path)
     if (path.HasExtension(Extensions::GetMaterialExtension()))
     {
         fiw = GameObject::Create<FIWMaterial>();
+    }
+    if (path.HasExtension(Extensions::GetPhysicsMaterialExtension()))
+    {
+        fiw = GameObject::Create<FIWPhysicsMaterial>();
     }
     else if (path.HasExtension(Extensions::GetImageExtensions()))
     {

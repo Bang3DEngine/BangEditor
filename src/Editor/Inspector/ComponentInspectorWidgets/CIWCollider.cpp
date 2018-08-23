@@ -30,9 +30,14 @@ void CIWCollider::InitInnerWidgets()
     p_centerInput->SetSize(3);
     p_centerInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
+    p_physicsMaterialInput = GameObject::Create<UIInputFile>();
+    p_physicsMaterialInput->SetExtensions( {Extensions::GetPhysicsMaterialExtension()} );
+    p_physicsMaterialInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    AddWidget("Physics Material", p_physicsMaterialInput);
     AddWidget("Center", p_centerInput);
 
-    SetLabelsWidth(75);
+    SetLabelsWidth(95);
 }
 
 void CIWCollider::UpdateFromReference()
@@ -44,6 +49,10 @@ void CIWCollider::UpdateFromReference()
     {
         p_centerInput->Set( collider->GetCenter() );
     }
+
+    p_physicsMaterialInput->SetPath(
+       collider->GetActivePhysicsMaterial() ?
+         collider->GetActivePhysicsMaterial()->GetResourceFilepath() : Path::Empty);
 }
 
 void CIWCollider::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
@@ -52,6 +61,23 @@ void CIWCollider::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 
     Collider *collider = GetCollider();
     collider->SetCenter( p_centerInput->GetVector3() );
+
+    if (p_physicsMaterialInput->GetPath().IsFile())
+    {
+        RH<PhysicsMaterial> phMat = Resources::Load<PhysicsMaterial>(
+                                            p_physicsMaterialInput->GetPath());
+        collider->SetPhysicsMaterial(phMat.Get());
+    }
+    else if (p_physicsMaterialInput->GetPath().IsEmpty())
+    {
+        collider->SetPhysicsMaterial(nullptr);
+    }
+    /*
+    else
+    {
+        collider->SetPhysicsMaterial(nullptr);
+    }
+    */
 }
 
 Collider *CIWCollider::GetCollider() const

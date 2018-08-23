@@ -33,8 +33,6 @@ public:
     void Init() override;
 
 private:
-    RH<Material> m_materialRH;
-
     UIComboBox *p_renderPassInput = nullptr;
     UIInputColor *p_albedoColorInput = nullptr;
     UIInputTexture *p_albedoTextureInput = nullptr;

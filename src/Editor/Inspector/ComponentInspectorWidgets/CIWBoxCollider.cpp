@@ -33,7 +33,7 @@ void CIWBoxCollider::InitInnerWidgets()
 
     AddWidget("Half Extents", p_halfExtentsInput);
 
-    SetLabelsWidth(85);
+    SetLabelsWidth(95);
 }
 
 void CIWBoxCollider::UpdateFromReference()
