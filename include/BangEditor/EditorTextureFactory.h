@@ -24,6 +24,9 @@ public:
     static Texture2D* GetIconForExtension(const String &extension);
 
     static Texture2D* GetRotateIcon();
+    static Texture2D* GetGreenCubeIcon();
+    static Texture2D* GetGreenSphereIcon();
+    static Texture2D* GetCrashDummyIcon();
     static Texture2D* GetRightArrowAndBarIcon();
     static Texture2D* GetDoubleBarIcon();
     static Texture2D* GetBackArrowIcon();
@@ -41,6 +44,7 @@ public:
     static Texture2D* GetFileIcon();
     static Texture2D* GetSceneIcon();
     static Texture2D* GetAxesIcon();
+    static Texture2D* GetColoredAxesIcon();
     static Texture2D* GetHairCrossIcon();
     static Texture2D* GetCircleIcon();
     static Texture2D* GetCircleHardIcon();
@@ -48,6 +52,7 @@ public:
     static Texture2D* GetAnchoredRectIcon();
 
     static Texture2D* GetComponentIcon(const String &componentName);
+    static Color GetComponentIconTint(const String &componentName);
 
 private:
     Map<Path, RH<Texture2D>> m_iconCacheMap;

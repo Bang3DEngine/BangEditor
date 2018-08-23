@@ -100,6 +100,21 @@ Texture2D* EditorTextureFactory::GetRotateIcon()
     return EditorTextureFactory::GetTexture2D("Rotate.png");
 }
 
+Texture2D *EditorTextureFactory::GetGreenCubeIcon()
+{
+    return EditorTextureFactory::GetTexture2D("GreenCube.png");
+}
+
+Texture2D *EditorTextureFactory::GetGreenSphereIcon()
+{
+    return EditorTextureFactory::GetTexture2D("GreenSphere.png");
+}
+
+Texture2D *EditorTextureFactory::GetCrashDummyIcon()
+{
+    return EditorTextureFactory::GetTexture2D("CrashDummy.png");
+}
+
 Texture2D* EditorTextureFactory::GetRightArrowAndBarIcon()
 {
     return EditorTextureFactory::GetTexture2D("RightArrowAndBar.png");
@@ -185,6 +200,11 @@ Texture2D* EditorTextureFactory::GetAxesIcon()
     return EditorTextureFactory::GetTexture2D("Axes.png");
 }
 
+Texture2D *EditorTextureFactory::GetColoredAxesIcon()
+{
+    return EditorTextureFactory::GetTexture2D("ColoredAxes.png");
+}
+
 Texture2D* EditorTextureFactory::GetHairCrossIcon()
 {
     return EditorTextureFactory::GetTexture2D("HairCross.png");
@@ -214,11 +234,23 @@ Texture2D* EditorTextureFactory::GetComponentIcon(const String &componentName)
 {
     if (componentName == "Transform")
     {
-        return EditorTextureFactory::GetAxesIcon();
+        return EditorTextureFactory::GetColoredAxesIcon();
     }
     if (componentName == "RectTransform")
     {
         return EditorTextureFactory::GetAnchoredRectIcon();
+    }
+    if (componentName == "BoxCollider")
+    {
+        return EditorTextureFactory::GetGreenCubeIcon();
+    }
+    if (componentName == "SphereCollider")
+    {
+        return EditorTextureFactory::GetGreenSphereIcon();
+    }
+    if (componentName == "RigidBody")
+    {
+        return EditorTextureFactory::GetCrashDummyIcon();
     }
     if (componentName == "PointLight")
     {
@@ -246,6 +278,11 @@ Texture2D* EditorTextureFactory::GetComponentIcon(const String &componentName)
     }
 
     return EditorTextureFactory::GetCubeIcon();
+}
+
+Color EditorTextureFactory::GetComponentIconTint(const String &componentName)
+{
+    return Color::White;
 }
 
 EditorTextureFactory *EditorTextureFactory::GetInstance()

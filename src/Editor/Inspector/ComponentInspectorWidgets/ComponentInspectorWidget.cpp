@@ -52,6 +52,7 @@ void ComponentInspectorWidget::SetComponent(Component *comp)
 
     p_component = comp;
     p_icon->SetImageTexture( GetComponentIconTexture() );
+    p_icon->SetTint( GetComponentIconTint() );
     Update();
 }
 
@@ -151,6 +152,16 @@ Texture2D* ComponentInspectorWidget::GetComponentIconTexture() const
         return EditorTextureFactory::GetComponentIcon(componentName);
     }
     return EditorTextureFactory::GetCubeIcon();
+}
+
+Color ComponentInspectorWidget::GetComponentIconTint() const
+{
+    if (GetComponent())
+    {
+        String componentName = GetComponent()->GetClassName();
+        return EditorTextureFactory::GetComponentIconTint(componentName);
+    }
+    return Color::White;
 }
 
 void ComponentInspectorWidget::PushCurrentStateToUndoRedoIfAnyChangeForComponent(
