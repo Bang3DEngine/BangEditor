@@ -63,7 +63,7 @@ public:
                              int oldIndexInsideParent,
                              GOItem *newParentItem,
                              int newIndexInsideParent) override;
-    virtual void OnDropOutside(GOItem *item) override;
+    virtual void OnDropOutside(UIDragDroppable *dropped) override;
     virtual void OnDropFromOutside(UIDragDroppable *dropped,
                                    GameObject *newParentItem,
                                    int newIndexInsideParent) override;

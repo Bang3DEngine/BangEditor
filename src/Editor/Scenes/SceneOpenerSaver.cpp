@@ -10,6 +10,7 @@
 #include "BangEditor/MenuBar.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UndoRedoManager.h"
 
 USING_NAMESPACE_BANG
@@ -29,7 +30,10 @@ SceneOpenerSaver::~SceneOpenerSaver()
 
 bool SceneOpenerSaver::OnNewScene()
 {
-    if (!Editor::IsEditingScene()) { return false; }
+    if (!Editor::IsEditingScene())
+    {
+        return false;
+    }
 
     if (CloseScene())
     {
@@ -45,7 +49,10 @@ bool SceneOpenerSaver::OnNewScene()
 
 bool SceneOpenerSaver::OnOpenScene()
 {
-    if (!Editor::IsEditingScene()) { return false; }
+    if (!Editor::IsEditingScene())
+    {
+        return false;
+    }
 
     Path openScenePath = Dialog::OpenFilePath("Open Scene...",
                                              { Extensions::GetSceneExtension() },
@@ -141,7 +148,9 @@ Dialog::YesNoCancel SceneOpenerSaver::Overwrite(const Path &path)
 bool SceneOpenerSaver::CloseScene()
 {
     Scene *previousScene = EditorSceneManager::GetOpenScene();
-    if (previousScene && !IsCurrentSceneSaved())
+    if (previousScene &&
+        !IsCurrentSceneSaved() &&
+        ScenePlayer::GetPlayState() ==  PlayState::EDITING)
     {
         Dialog::YesNoCancel saveSceneYNC =
                 Dialog::GetYesNoCancel("Save current scene",
@@ -150,12 +159,21 @@ bool SceneOpenerSaver::CloseScene()
 
         if (saveSceneYNC == Dialog::YES)
         {
-            if (!OnSaveScene()) { return false; }
+            if (!OnSaveScene())
+            {
+                return false;
+            }
         }
-        else if (saveSceneYNC == Dialog::CANCEL) { return false; }
+        else if (saveSceneYNC == Dialog::CANCEL)
+        {
+            return false;
+        }
     }
 
-    if (previousScene) { GameObject::Destroy(previousScene); }
+    if (previousScene)
+    {
+        GameObject::Destroy(previousScene);
+    }
 
     m_currentOpenScenePath   = Path::Empty;
     m_currentLoadedScenePath = Path::Empty;
@@ -194,7 +212,10 @@ void SceneOpenerSaver::OnPlayStateChanged(PlayState, PlayState newPlayState)
 bool SceneOpenerSaver::IsCurrentSceneSaved() const
 {
     Scene *openScene = EditorSceneManager::GetOpenScene();
-    if (!openScene) { return false; }
+    if (!openScene)
+    {
+        return false;
+    }
 
     if (Time::GetNow_Seconds() - m_lastTimeCheckSaved >= 2.0f)
     {
@@ -213,7 +234,10 @@ bool SceneOpenerSaver::IsCurrentSceneSaved() const
 
 bool SceneOpenerSaver::OpenSceneInEditor(const Path &scenePath)
 {
-    if (!Editor::IsEditingScene()) { return false; }
+    if (!Editor::IsEditingScene())
+    {
+        return false;
+    }
 
     if (CloseScene())
     {

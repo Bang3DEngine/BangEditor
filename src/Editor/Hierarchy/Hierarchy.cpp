@@ -260,8 +260,14 @@ void Hierarchy::OnItemMoved(GOItem *item,
     GameObject *go = GetGameObjectFromItem(item);
     GameObject *oldParent = GetGameObjectFromItem(oldParentItem);
     GameObject *newParent = GetGameObjectFromItem(newParentItem);
-    if (!oldParent) { oldParent = go->GetScene(); }
-    if (!newParent) { newParent = go->GetScene(); }
+    if (!oldParent)
+    {
+        oldParent = go->GetScene();
+    }
+    if (!newParent)
+    {
+        newParent = go->GetScene();
+    }
 
     UndoRedoManager::PushAction(
                 new UndoRedoMoveGameObject(go, oldParent, oldIndexInsideParent,
@@ -269,18 +275,32 @@ void Hierarchy::OnItemMoved(GOItem *item,
 
     IEventListenerCommon::SetReceiveEventsCommon(false);
     GameObject *movedGo = GetGameObjectFromItem(item);
-    if (!newParent) { newParent = movedGo->GetScene(); }
+    if (!newParent)
+    {
+        newParent = movedGo->GetScene();
+    }
     movedGo->SetParent(newParent, newIndexInsideParent);
     Editor::SelectGameObject(movedGo, false);
     IEventListenerCommon::SetReceiveEventsCommon(true);
 }
 
-void Hierarchy::OnDropOutside(GOItem *item)
+void Hierarchy::OnDropOutside(UIDragDroppable *dropped)
 {
-    if (UICanvas::GetActive(this)->IsMouseOver(this, true))
+    if (UITreeItemContainer *treeItemCont =
+            DCAST<UITreeItemContainer*>(dropped->GetGameObject()))
     {
-        GameObject *go = GetGameObjectFromItem(item);
-        go->SetParent( EditorSceneManager::GetOpenScene(), -1 );
+        HierarchyItem *hItem =
+                       DCAST<HierarchyItem*>(treeItemCont->GetContainedItem());
+        if (UICanvas::GetActive(this)->IsMouseOver(this, true))
+        {
+            GameObject *go = GetGameObjectFromItem(hItem);
+            ASSERT(go);
+            go->SetParent( EditorSceneManager::GetOpenScene(), -1 );
+        }
+    }
+    else
+    {
+        OnDropFromOutside(dropped, nullptr, -1);
     }
 }
 
@@ -454,7 +474,11 @@ HierarchyItem* Hierarchy::GetItemFromGameObject(GameObject *go) const
 
 GameObject *Hierarchy::GetGameObjectFromItem(GOItem *item) const
 {
-    if (!item) { return nullptr; }
+    if (!item)
+    {
+        return nullptr;
+    }
+    ASSERT(DCAST<HierarchyItem*>(item));
     HierarchyItem *hItem = SCAST<HierarchyItem*>(item);
     return hItem->GetReferencedGameObject();
 }

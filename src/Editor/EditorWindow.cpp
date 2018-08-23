@@ -47,9 +47,9 @@ void EditorWindow::Render()
     Window::Render();
 }
 
-void EditorWindow::OnClosed()
+bool EditorWindow::OnClosed()
 {
-    SceneOpenerSaver::GetInstance()->CloseScene();
+    return SceneOpenerSaver::GetInstance()->CloseScene();
 }
 
 SceneManager *EditorWindow::CreateSceneManager() const
