@@ -74,14 +74,12 @@ void ComponentsGizmos::Render(RenderPass rp, bool renderChildren)
 
 void ComponentsGizmos::RenderComponentGizmosWhenNotSelected(GameObject *go)
 {
-    const List<Component*> &comps = go->GetComponents();
-    for (Component *comp : comps)
+    for (Component *comp : go->GetComponents())
     {
         RenderComponentGizmos(comp, false);
     }
 
-    const List<GameObject*> &goChildren = go->GetChildren();
-    for (GameObject *child : goChildren)
+    for (GameObject *child : go->GetChildren())
     {
         RenderComponentGizmosWhenNotSelected(child);
     }

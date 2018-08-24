@@ -276,7 +276,8 @@ void MenuItem::SetFontSize(uint fontSize)
     if (fontSize != GetFontSize())
     {
         m_fontSize = fontSize;
-        List<UITextRenderer*> texts = GetComponentsInChildren<UITextRenderer>();
+        Array<UITextRenderer*> texts =
+                            GetComponentsInChildrenAndThis<UITextRenderer>();
         for (UITextRenderer *text : texts)
         {
             text->SetTextSize(GetFontSize());

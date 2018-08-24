@@ -154,7 +154,14 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
            rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMax()));
 
         gbuffer->Bind();
-        gbuffer->Resize(previewRectPx.GetWidth(), previewRectPx.GetHeight());
+        if (previewRectPx.IsValid())
+        {
+            gbuffer->Resize(previewRectPx.GetWidth(), previewRectPx.GetHeight());
+        }
+        else
+        {
+            gbuffer->Resize(1, 1);
+        }
 
         // Render in the size of sceneEditContainer, since we have a miniature,
         // but the canvas must be the same as in the scenePlayContainer size!!!
@@ -215,7 +222,7 @@ void UISceneEditContainer::ApplyDraggedMaterialToOveredGameObject()
     GameObject *overedGameObject = GetCurrentOveredGameObject();
     if (overedGameObject)
     {
-        List<MeshRenderer*> mrs = overedGameObject->GetComponents<MeshRenderer>();
+        Array<MeshRenderer*> mrs = overedGameObject->GetComponents<MeshRenderer>();
         for (MeshRenderer *mr : mrs)
         {
             RH<Material> prevMat = RH<Material>(mr->GetActiveMaterial());

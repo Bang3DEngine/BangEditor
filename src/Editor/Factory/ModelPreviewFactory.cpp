@@ -68,8 +68,8 @@ void ModelPreviewFactory::OnUpdateTextureBegin(
     previewScene->Start();
 
     // Modify material
-    List<MeshRenderer*> meshRenderers = previewGoContainer->
-                                        GetComponentsInChildren<MeshRenderer>(true);
+    Array<MeshRenderer*> meshRenderers =
+         previewGoContainer->GetComponentsInDescendantsAndThis<MeshRenderer>();
     for (MeshRenderer *mr : meshRenderers)
     {
         mr->GetMaterial()->SetCullFace(GL::CullFaceExt::NONE);

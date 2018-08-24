@@ -374,8 +374,7 @@ void Hierarchy::OnSceneLoaded(Scene *scene, const Path&)
     Clear();
     if (scene)
     {
-        const List<GameObject*> &sceneGos = scene->GetChildren();
-        for (GameObject *go : sceneGos)
+        for (GameObject *go : scene->GetChildren())
         {
             AddGameObject(go);
         }

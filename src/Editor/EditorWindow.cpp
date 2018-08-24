@@ -32,8 +32,8 @@ void EditorWindow::Create(uint flags)
     Window::Create(flags);
     Maximize();
     SetTitle("Bang Editor - <OpenGL " +
-                             String(GetGLMajorVersion()) + "." +
-                             String(GetGLMinorVersion()) + ">");
+             String(GetGLMajorVersion()) + "." +
+             String(GetGLMinorVersion()) + ">");
 }
 
 void EditorWindow::Update()

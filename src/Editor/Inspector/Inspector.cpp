@@ -366,9 +366,9 @@ void Inspector::SetCurrentWidgetBlocked(bool blocked)
 {
     p_blockLayer->GetGameObject()->SetEnabled( blocked );
 
-    List<Object*> childrenAndChildrenComps;
+    Array<Object*> childrenAndChildrenComps;
 
-    List<GameObject*> children = GetWidgetsContainer()->GetChildrenRecursively();
+    Array<GameObject*> children = GetWidgetsContainer()->GetChildrenRecursively();
     for (GameObject *child : children)
     {
         childrenAndChildrenComps.PushBack(child);
