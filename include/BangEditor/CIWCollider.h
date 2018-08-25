@@ -38,6 +38,7 @@ protected:
     Collider *GetCollider() const;
 
 private:
+    UICheckBox *p_isTriggerInput = nullptr;
     UIInputVector *p_centerInput = nullptr;
     UIInputFile *p_physicsMaterialInput = nullptr;
 

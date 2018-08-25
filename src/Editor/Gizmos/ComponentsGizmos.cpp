@@ -156,8 +156,6 @@ void ComponentsGizmos::RenderBoxColliderGizmo(BoxCollider *bc,
         Vector3 hs = tr->GetScale() * bc->GetHalfExtents() + 0.01f;
         RenderFactory::RenderBox(AABox(c - hs, c + hs), params);
 
-        RenderFactory::RenderWireframeCapsule(1.0f, 1.0f, params);
-
         gb->PopDepthStencilTexture();
     }
 }
