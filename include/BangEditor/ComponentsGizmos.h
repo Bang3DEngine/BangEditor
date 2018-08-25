@@ -9,6 +9,7 @@ FORWARD class PointLight;
 FORWARD class AudioSource;
 FORWARD class BoxCollider;
 FORWARD class SphereCollider;
+FORWARD class CapsuleCollider;
 FORWARD class ReflectionProbe;
 FORWARD class DirectionalLight;
 FORWARD NAMESPACE_BANG_END
@@ -32,6 +33,7 @@ private:
     void RenderComponentGizmos(Component *comp, bool isBeingSelected);
 
     void RenderBoxColliderGizmo(BoxCollider *bc, bool isBeingSelected);
+    void RenderCapsuleColliderGizmo(CapsuleCollider *cc, bool isBeingSelected);
     void RenderSphereColliderGizmo(SphereCollider *sc, bool isBeingSelected);
     void RenderCameraGizmo(Camera *cam, bool isBeingSelected);
     void RenderPointLightGizmo(PointLight *pointLight, bool isBeingSelected);

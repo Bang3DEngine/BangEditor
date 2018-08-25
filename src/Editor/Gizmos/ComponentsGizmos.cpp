@@ -17,6 +17,7 @@
 #include "Bang/RenderFactory.h"
 #include "Bang/SphereCollider.h"
 #include "Bang/TextureFactory.h"
+#include "Bang/CapsuleCollider.h"
 #include "Bang/ReflectionProbe.h"
 #include "Bang/DirectionalLight.h"
 
@@ -107,6 +108,10 @@ void ComponentsGizmos::RenderComponentGizmos(Component *comp,
     {
         RenderBoxColliderGizmo(bc, isBeingSelected);
     }
+    else if (CapsuleCollider *cc = DCAST<CapsuleCollider*>(comp))
+    {
+        RenderCapsuleColliderGizmo(cc, isBeingSelected);
+    }
     else if (SphereCollider *sc = DCAST<SphereCollider*>(comp))
     {
         RenderSphereColliderGizmo(sc, isBeingSelected);
@@ -151,6 +156,51 @@ void ComponentsGizmos::RenderBoxColliderGizmo(BoxCollider *bc,
         Vector3 hs = tr->GetScale() * bc->GetHalfExtents() + 0.01f;
         RenderFactory::RenderBox(AABox(c - hs, c + hs), params);
 
+        RenderFactory::RenderWireframeCapsule(1.0f, 1.0f, params);
+
+        gb->PopDepthStencilTexture();
+    }
+}
+
+void ComponentsGizmos::RenderCapsuleColliderGizmo(CapsuleCollider *cc,
+                                                  bool isBeingSelected)
+{
+    if (isBeingSelected && cc->IsEnabled())
+    {
+        GBuffer *gb = GEngine::GetActiveGBuffer();
+        gb->PushDepthStencilTexture();
+        gb->SetSceneDepthStencil();
+
+        Transform *tr = cc->GetGameObject()->GetTransform();
+        RenderFactory::Parameters params;
+        params.thickness = 2.0f;
+        params.wireframe = true;
+        params.color = Color::Green;
+        params.position = tr->GetPosition();
+        params.rotation = tr->GetRotation();
+        switch (cc->GetAxis())
+        {
+            case Axis3D::X:
+                params.rotation = params.rotation *
+                        Quaternion::AngleAxis(Math::Pi * 0.5f, Vector3::Forward);
+            break;
+
+            case Axis3D::Z:
+                params.rotation = params.rotation *
+                        Quaternion::AngleAxis(Math::Pi * 0.5f, Vector3::Right);
+            break;
+
+            default:
+            break;
+        }
+        params.cullFace = GL::CullFaceExt::BACK;
+
+        // Vector3 centerDisplacement = params.rotation * cc->GetCenter();
+        // Vector3 c = tr->GetPosition() + centerDisplacement;
+        float r = cc->GetScaledRadius() + 0.01f;
+        float h = cc->GetScaledHeight() * 0.5f + 0.01f;
+        RenderFactory::RenderWireframeCapsule(h, r, params);
+
         gb->PopDepthStencilTexture();
     }
 }
@@ -174,9 +224,9 @@ void ComponentsGizmos::RenderSphereColliderGizmo(SphereCollider *sc,
         Vector3 centerDisplacement = params.rotation * sc->GetCenter();
         Vector3 center = tr->GetPosition() + centerDisplacement;
         params.position = center;
-        RenderFactory::RenderSimpleSphere(sc->GetScaledRadius() + 0.01f,
-                                          false, params,
-                                          2, 2);
+        RenderFactory::RenderWireframeSphere(sc->GetScaledRadius() + 0.01f,
+                                             false, params,
+                                             2, 2);
 
         gb->PopDepthStencilTexture();
     }
@@ -243,7 +293,7 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam,
             orthoBox.SetMax(pos + Vector3( orthoSize.x,  orthoSize.y,
                                            -cam->GetZFar()));
             params.rotation = camTransform->GetRotation();
-            RenderFactory::RenderSimpleBox(orthoBox, params);
+            RenderFactory::RenderWireframeBox(orthoBox, params);
         }
 
         gb->PopDepthStencilTexture();
@@ -273,10 +323,10 @@ void ComponentsGizmos::RenderPointLightGizmo(PointLight *pointLight,
         gb->SetSceneDepthStencil();
 
         params.thickness = 2.0f;
-        RenderFactory::RenderSimpleSphere(pointLight->GetRange(),
-                                          true,
-                                          params,
-                                          1, 2, 32);
+        RenderFactory::RenderWireframeSphere(pointLight->GetRange(),
+                                             true,
+                                             params,
+                                             1, 2, 32);
 
         gb->PopDepthStencilTexture();
     }
@@ -370,7 +420,7 @@ void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
         params.thickness = 3.0f;
         params.position = Vector3::Zero;
         params.color = params.color.WithAlpha(1.0f);
-        RenderFactory::RenderSimpleBox(reflProbeBox, params);
+        RenderFactory::RenderWireframeBox(reflProbeBox, params);
 
         gb->PopDepthStencilTexture();
     }
@@ -399,10 +449,10 @@ void ComponentsGizmos::RenderAudioSourceGizmo(AudioSource *audioSource,
         gb->SetSceneDepthStencil();
 
         params.thickness = 2.0f;
-        RenderFactory::RenderSimpleSphere(audioSource->GetRange(),
-                                          true,
-                                          params,
-                                          1, 2, 32);
+        RenderFactory::RenderWireframeSphere(audioSource->GetRange(),
+                                             true,
+                                             params,
+                                             1, 2, 32);
 
         gb->PopDepthStencilTexture();
     }

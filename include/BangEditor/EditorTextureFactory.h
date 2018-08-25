@@ -26,6 +26,7 @@ public:
     static Texture2D* GetRotateIcon();
     static Texture2D* GetGreenCubeIcon();
     static Texture2D* GetGreenSphereIcon();
+    static Texture2D* GetGreenCapsuleIcon();
     static Texture2D* GetCrashDummyIcon();
     static Texture2D* GetRightArrowAndBarIcon();
     static Texture2D* GetDoubleBarIcon();

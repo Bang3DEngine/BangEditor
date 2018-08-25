@@ -81,6 +81,7 @@ private:
     static void OnAddEmptyBehaviour       (MenuItem *item);
     static void OnAddCamera               (MenuItem *item);
     static void OnAddBoxCollider          (MenuItem *item);
+    static void OnAddCapsuleCollider      (MenuItem *item);
     static void OnAddSphereCollider       (MenuItem *item);
     static void OnAddPointLight           (MenuItem *item);
     static void OnAddDirectionalLight     (MenuItem *item);
@@ -115,6 +116,7 @@ private:
     static void OnCreateEmpty                    (MenuItem *item);
     static void OnCreateCone                     (MenuItem *item);
     static void OnCreateCube                     (MenuItem *item);
+    static void OnCreateCapsule                  (MenuItem *item);
     static void OnCreatePlane                    (MenuItem *item);
     static void OnCreateSphere                   (MenuItem *item);
     static void OnCreateDirectionalLightGO       (MenuItem *item);

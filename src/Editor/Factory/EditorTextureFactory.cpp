@@ -114,6 +114,11 @@ Texture2D *EditorTextureFactory::GetGreenSphereIcon()
     return EditorTextureFactory::GetTexture2D("GreenSphere.png");
 }
 
+Texture2D *EditorTextureFactory::GetGreenCapsuleIcon()
+{
+    return EditorTextureFactory::GetTexture2D("GreenCapsule.png");
+}
+
 Texture2D *EditorTextureFactory::GetCrashDummyIcon()
 {
     return EditorTextureFactory::GetTexture2D("CrashDummy.png");
@@ -256,6 +261,10 @@ Texture2D* EditorTextureFactory::GetComponentIcon(const String &componentName)
     if (componentName == "SphereCollider")
     {
         return EditorTextureFactory::GetGreenSphereIcon();
+    }
+    if (componentName == "CapsuleCollider")
+    {
+        return EditorTextureFactory::GetGreenCapsuleIcon();
     }
     if (componentName == "RigidBody")
     {

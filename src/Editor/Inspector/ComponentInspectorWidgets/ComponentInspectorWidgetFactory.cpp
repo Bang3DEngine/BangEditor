@@ -15,6 +15,7 @@
 #include "BangEditor/CIWRectTransform.h"
 #include "BangEditor/CIWSphereCollider.h"
 #include "BangEditor/CIWUITextRenderer.h"
+#include "BangEditor/CIWCapsuleCollider.h"
 #include "BangEditor/CIWUIImageRenderer.h"
 #include "BangEditor/CIWReflectionProbe.h"
 #include "BangEditor/CIWDirectionalLight.h"
@@ -58,6 +59,10 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     else if (cName == "BoxCollider")
     {
         ciw = GameObject::Create<CIWBoxCollider>();
+    }
+    else if (cName == "CapsuleCollider")
+    {
+        ciw = GameObject::Create<CIWCapsuleCollider>();
     }
     else if (cName == "SphereCollider")
     {

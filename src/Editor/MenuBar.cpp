@@ -39,6 +39,7 @@
 #include "Bang/WaterRenderer.h"
 #include "Bang/SphereCollider.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/CapsuleCollider.h"
 #include "Bang/ReflectionProbe.h"
 #include "Bang/PhysicsMaterial.h"
 #include "Bang/UIImageRenderer.h"
@@ -145,12 +146,13 @@ MenuBar::MenuBar()
     m_gameObjectsItem = AddItem();
     m_gameObjectsItem->GetText()->SetContent("GameObjects");
     MenuItem *primitiveGameObjectItem = m_gameObjectsItem->AddItem("Primitives");
-    MenuItem *createEmpty  = primitiveGameObjectItem->AddItem("Empty");
-    MenuItem *createCone   = primitiveGameObjectItem->AddItem("Cone");
-    MenuItem *createCube   = primitiveGameObjectItem->AddItem("Cube");
-    MenuItem *createSphere = primitiveGameObjectItem->AddItem("Sphere");
-    MenuItem *createPlane  = primitiveGameObjectItem->AddItem("Plane");
-    MenuItem *lightsGOItem = m_gameObjectsItem->AddItem("Lights");
+    MenuItem *createEmpty   = primitiveGameObjectItem->AddItem("Empty");
+    MenuItem *createCone    = primitiveGameObjectItem->AddItem("Cone");
+    MenuItem *createCube    = primitiveGameObjectItem->AddItem("Cube");
+    MenuItem *createCapsule = primitiveGameObjectItem->AddItem("Capsule");
+    MenuItem *createSphere  = primitiveGameObjectItem->AddItem("Sphere");
+    MenuItem *createPlane   = primitiveGameObjectItem->AddItem("Plane");
+    MenuItem *lightsGOItem  = m_gameObjectsItem->AddItem("Lights");
     MenuItem *createDirectionalLightGO = lightsGOItem->AddItem("Directional Light");
     MenuItem *createPointLightGO = lightsGOItem->AddItem("Point Light");
     MenuItem *uiItemGO = m_gameObjectsItem->AddItem("UI");
@@ -161,6 +163,7 @@ MenuBar::MenuBar()
     createEmpty->SetSelectedCallback(MenuBar::OnCreateEmpty);
     createCone->SetSelectedCallback(MenuBar::OnCreateCone);
     createCube->SetSelectedCallback(MenuBar::OnCreateCube);
+    createCapsule->SetSelectedCallback(MenuBar::OnCreateCapsule);
     createPlane->SetSelectedCallback(MenuBar::OnCreatePlane);
     createSphere->SetSelectedCallback(MenuBar::OnCreateSphere);
     createDirectionalLightGO->SetSelectedCallback(MenuBar::OnCreateDirectionalLightGO);
@@ -286,6 +289,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addColliders = addPhysics->AddItem("Colliders");
     MenuItem *addBoxCollider = addColliders->AddItem("BoxCollider");
     MenuItem *addSphereCollider = addColliders->AddItem("SphereCollider");
+    MenuItem *addCapsuleCollider = addColliders->AddItem("CapsuleCollider");
     MenuItem *addPostProcessEffect = rootItem->AddItem("PostProcessEffect");
     MenuItem *addUI = rootItem->AddItem("UI");
     MenuItem *addUIAutoFocuser = addUI->AddItem("Auto Focuser");
@@ -309,6 +313,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addMisc = rootItem->AddItem("Misc");
     MenuItem *addReflectionProbe = addMisc->AddItem("ReflectionProbe");
     addBoxCollider->SetSelectedCallback(MenuBar::OnAddBoxCollider);
+    addCapsuleCollider->SetSelectedCallback(MenuBar::OnAddCapsuleCollider);
     addSphereCollider->SetSelectedCallback(MenuBar::OnAddSphereCollider);
     addAnimator->SetSelectedCallback(MenuBar::OnAddAnimator);
     addAudioListener->SetSelectedCallback(MenuBar::OnAddAudioListener);
@@ -550,12 +555,17 @@ void MenuBar::OnAddCamera(MenuItem*)
     OnAddComponent<Camera>();
 }
 
-void MenuBar::OnAddBoxCollider(MenuItem *item)
+void MenuBar::OnAddBoxCollider(MenuItem*)
 {
     OnAddComponent<BoxCollider>();
 }
 
-void MenuBar::OnAddSphereCollider(MenuItem *item)
+void MenuBar::OnAddCapsuleCollider(MenuItem*)
+{
+    OnAddComponent<CapsuleCollider>();
+}
+
+void MenuBar::OnAddSphereCollider(MenuItem*)
 {
     OnAddComponent<SphereCollider>();
 }
@@ -722,6 +732,12 @@ void MenuBar::OnCreateCube(MenuItem*)
 {
     MenuBar::OnEndCreateGameObjectFromMenuBar(
                 GameObjectFactory::CreateCubeGameObject() );
+}
+
+void MenuBar::OnCreateCapsule(MenuItem *item)
+{
+    MenuBar::OnEndCreateGameObjectFromMenuBar(
+                GameObjectFactory::CreateCapsuleGameObject() );
 }
 
 void MenuBar::OnCreateSphere(MenuItem*)
