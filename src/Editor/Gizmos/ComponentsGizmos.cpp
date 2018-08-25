@@ -176,7 +176,10 @@ void ComponentsGizmos::RenderCapsuleColliderGizmo(CapsuleCollider *cc,
         params.thickness = 2.0f;
         params.wireframe = true;
         params.color = Color::Green;
+        params.cullFace = GL::CullFaceExt::BACK;
+
         params.position = tr->GetPosition();
+
         params.rotation = tr->GetRotation();
         switch (cc->GetAxis())
         {
@@ -193,10 +196,10 @@ void ComponentsGizmos::RenderCapsuleColliderGizmo(CapsuleCollider *cc,
             default:
             break;
         }
-        params.cullFace = GL::CullFaceExt::BACK;
 
-        // Vector3 centerDisplacement = params.rotation * cc->GetCenter();
-        // Vector3 c = tr->GetPosition() + centerDisplacement;
+        Vector3 centerDisplacement = params.rotation * cc->GetCenter();
+        params.position += centerDisplacement;
+
         float r = cc->GetScaledRadius() + 0.01f;
         float h = cc->GetScaledHeight() * 0.5f + 0.01f;
         RenderFactory::RenderWireframeCapsule(h, r, params);
