@@ -412,10 +412,12 @@ Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType,
     if (binaryType == BinType::BIN_DEBUG)
     {
         job.flags.PushBack( List<String>({"-O0", "-g", "-Wl,-O0"}) );
+        job.flags.PushBack( "-D_DEBUG" );
     }
     else
     {
         job.flags.PushBack( List<String>({"-O3", "-Wl,-O3"}) );
+        job.flags.PushBack( "-DNDEBUG" );
     }
     return job;
 }
