@@ -75,7 +75,7 @@ private:
 
     static List<Path> GetCompiledObjectsPaths();
     static List<Path> GetBehaviourSourcesPaths();
-    static Compiler::Job CreateBaseJob(BinType binaryType);
+    static Compiler::Job CreateBaseJob(BinType binaryType, bool addLibs);
     static Path GetObjectOutputPath(const Path &inputBehaviourPath);
     static Compiler::Job CreateCompileBehaviourJob(const Path& behaviourFilepath,
                                                    const Path& outputObjectFilepath,

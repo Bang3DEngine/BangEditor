@@ -19,7 +19,7 @@ USING_NAMESPACE_BANG_EDITOR
 
 EditorBehaviourManager::EditorBehaviourManager()
 {
-    m_compileThreadPool.SetMaxThreadCount(3);
+    m_compileThreadPool.SetMaxThreadCount(1);
     m_compileThreadPool.SetName("BehaviourCompileThread");
 }
 
@@ -31,7 +31,6 @@ void EditorBehaviourManager::Update()
 {
     BehaviourManager::Update();
 
-    /*
     if (Editor::IsEditingScene())
     {
         UpdateCompileInformations();
@@ -44,48 +43,50 @@ void EditorBehaviourManager::Update()
             }
         }
     }
-    */
 }
 
 void EditorBehaviourManager::WaitForAsyncCompileJobs()
 {
-    while (IsSomeBehaviourBeingCompiled()) { Thread::SleepCurrentThread(0.2f); }
+    while (IsSomeBehaviourBeingCompiled())
+    {
+        Thread::SleepCurrentThread(0.2f);
+    }
 }
 
 bool EditorBehaviourManager::PrepareBehavioursLibrary()
 {
-    if (GetBehaviourSourcesPaths().IsEmpty()) { return true; }
-
-    WaitForAsyncCompileJobs();
-
-    // Update for changes
-    GetBehaviourTracker()->Update(true);
-    UpdateCompileInformations();
-
-    // Compile
-    if (!AreAllBehavioursCompiledSuccessfully())
+    if (GetBehaviourSourcesPaths().Size() >= 1)
     {
-        CompileAllProjectBehaviours();
+        WaitForAsyncCompileJobs();
+
+        // Update for changes
+        GetBehaviourTracker()->Update(true);
+        UpdateCompileInformations();
+
+        // Compile
         if (!AreAllBehavioursCompiledSuccessfully())
         {
-            Debug_Error("Can not prepare behaviours library. "
-                        "Could not compile all behaviours.");
-            return false;
+            CompileAllProjectBehaviours();
+            if (!AreAllBehavioursCompiledSuccessfully())
+            {
+                Debug_Error("Can not prepare behaviours library. "
+                            "Could not compile all behaviours.");
+                return false;
+            }
         }
-    }
 
-    // Merge
-    if (!IsBehavioursLibraryReady())
-    {
-        MergeIntoBehavioursLibrary();
+        // Merge
         if (!IsBehavioursLibraryReady())
         {
-            Debug_Error("Can not prepare behaviours library. "
-                        "Could not link all behaviours into behaviours library.");
-            return false;
+            MergeIntoBehavioursLibrary();
+            if (!IsBehavioursLibraryReady())
+            {
+                Debug_Error("Can not prepare behaviours library. "
+                      "Could not link all behaviours into behaviours library.");
+                return false;
+            }
         }
     }
-
     return true;
 }
 
@@ -113,7 +114,8 @@ bool EditorBehaviourManager::AreAllBehavioursCompiledSuccessfully() const
     List<Path> behaviourPaths = GetBehaviourSourcesPaths();
     for (const Path &behaviourPath : behaviourPaths)
     {
-        if (IsBeingCompiled(behaviourPath) || !IsCompiledSuccessfully(behaviourPath))
+        if (IsBeingCompiled(behaviourPath) ||
+            !IsCompiledSuccessfully(behaviourPath))
         {
             return false;
         }
@@ -137,7 +139,8 @@ bool EditorBehaviourManager::IsCompiledWithError(const Path &behaviourFilepath) 
     const bool isCompiled = IsCompiled(behaviourFilepath);
 
     MutexLocker ml( GetMutex() ); (void)ml;
-    return isCompiled && !m_successfullyCompiledBehaviours.Contains(behaviourFilepath);
+    return isCompiled &&
+           !m_successfullyCompiledBehaviours.Contains(behaviourFilepath);
 }
 
 bool EditorBehaviourManager::IsCompiledSuccessfully(const Path &behaviourFilepath) const
@@ -145,7 +148,8 @@ bool EditorBehaviourManager::IsCompiledSuccessfully(const Path &behaviourFilepat
     const bool isCompiled = IsCompiled(behaviourFilepath);
 
     MutexLocker ml( GetMutex() ); (void)ml;
-    return isCompiled && m_successfullyCompiledBehaviours.Contains(behaviourFilepath);
+    return isCompiled &&
+           m_successfullyCompiledBehaviours.Contains(behaviourFilepath);
 }
 
 bool EditorBehaviourManager::IsBeingCompiled(const Path &behaviourFilepath) const
@@ -156,14 +160,17 @@ bool EditorBehaviourManager::IsBeingCompiled(const Path &behaviourFilepath) cons
 
 Behaviour *EditorBehaviourManager::CreateBehaviourInstance(const String &behaviourName)
 {
-    Library *behavioursLib = EditorBehaviourManager::GetActive()->GetBehavioursLibrary();
-    return BehaviourManager::CreateBehaviourInstance(behaviourName, behavioursLib);
+    Library *behavioursLib = EditorBehaviourManager::GetActive()->
+                             GetBehavioursLibrary();
+    return BehaviourManager::CreateBehaviourInstance(behaviourName,
+                                                     behavioursLib);
 }
 
 bool EditorBehaviourManager::DeleteBehaviourInstance(const String &behaviourName,
                                                      Behaviour *behaviour)
 {
-    Library *behavioursLib = EditorBehaviourManager::GetActive()->GetBehavioursLibrary();
+    Library *behavioursLib = EditorBehaviourManager::GetActive()->
+                             GetBehavioursLibrary();
     return BehaviourManager::DeleteBehaviourInstance(behaviourName,
                                                      behaviour,
                                                      behavioursLib);
@@ -180,7 +187,8 @@ EditorBehaviourManager *EditorBehaviourManager::GetActive()
 }
 
 
-Compiler::Result EditorBehaviourManager::CompileBehaviourObject(const Path &behaviourPath)
+Compiler::Result EditorBehaviourManager::
+CompileBehaviourObject(const Path &behaviourPath)
 {
     Path outputObjPath = GetObjectOutputPath(behaviourPath);
     return EditorBehaviourManager::CompileBehaviourObject(behaviourPath,
@@ -192,14 +200,15 @@ Compiler::Result EditorBehaviourManager::CompileBehaviourObject(
                                         const Path &outputObjectFilepath,
                                         BinType binaryType)
 {
-    EditorBehaviourManager::RemoveBehaviourLibrariesOf(outputObjectFilepath.GetName());
+    EditorBehaviourManager::RemoveBehaviourLibrariesOf(
+                                            outputObjectFilepath.GetName());
     File::CreateDirectory(outputObjectFilepath.GetDirectory());
 
     Compiler::Job job =
          EditorBehaviourManager::CreateCompileBehaviourJob(behaviourFilepath,
                                                            outputObjectFilepath,
                                                            binaryType);
-
+    job.libraries.Clear();
 
     Compiler::Result compileResult = Compiler::Compile(job);
 
@@ -209,14 +218,18 @@ Compiler::Result EditorBehaviourManager::CompileBehaviourObject(
     {
         m_successfullyCompiledBehaviours.Add(behaviourFilepath);
     }
-    else { m_successfullyCompiledBehaviours.Remove(behaviourFilepath); }
+    else
+    {
+        m_successfullyCompiledBehaviours.Remove(behaviourFilepath);
+    }
     m_behavioursBeingCompiled.Remove(behaviourFilepath);
     GetMutex()->UnLock();
 
     return compileResult;
 }
 
-void EditorBehaviourManager::CompileBehaviourObjectAsync(const Path &behaviourPath)
+void EditorBehaviourManager::
+CompileBehaviourObjectAsync(const Path &behaviourPath)
 {
     BehaviourCompileRunnable *compileRunnable = new BehaviourCompileRunnable();
     compileRunnable->m_behaviourManager = this;
@@ -225,12 +238,13 @@ void EditorBehaviourManager::CompileBehaviourObjectAsync(const Path &behaviourPa
     bool compilingThreadStarted = m_compileThreadPool.TryStart(compileRunnable);
     if (compilingThreadStarted)
     {
-        MutexLocker ml(GetMutex()); (void)ml;
+        MutexLocker ml(GetMutex()); (void) ml;
         m_behavioursBeingCompiled.Add(behaviourPath);
     }
 }
 
-void EditorBehaviourManager::RemoveBehaviourLibrariesOf(const String& behaviourName)
+void EditorBehaviourManager::
+RemoveBehaviourLibrariesOf(const String& behaviourName)
 {
     if (behaviourName.IsEmpty()) { return; }
 
@@ -254,7 +268,10 @@ void EditorBehaviourManager::RemoveOrphanBehaviourLibraries()
                                      GetFiles(Path::FindFlag::RECURSIVE);
         for (Path &libPath : currentLibPaths)
         {
-            if (libPath.HasExtension("so")) { File::Remove(libPath); }
+            if (libPath.HasExtension("so"))
+            {
+                File::Remove(libPath);
+            }
         }
     }
 
@@ -319,7 +336,7 @@ Compiler::Result EditorBehaviourManager::MergeBehaviourObjects(
     EditorBehaviourManager::RemoveOrphanBehaviourLibraries();
     File::CreateDirectory(outputLibFilepath.GetDirectory());
 
-    Compiler::Job job = EditorBehaviourManager::CreateBaseJob(binaryType);
+    Compiler::Job job = EditorBehaviourManager::CreateBaseJob(binaryType, true);
     job.outputMode = Compiler::OutputType::SHARED_LIB;
     // job.libDirs.PushBack( Paths::GetEngineLibrariesDir( BinType::BIN_DEBUG ) );
     job.AddInputFiles(behaviourObjectFilepaths.To<Array>());
@@ -330,8 +347,10 @@ Compiler::Result EditorBehaviourManager::MergeBehaviourObjects(
 
 List<Path> EditorBehaviourManager::GetCompiledObjectsPaths()
 {
-    return Paths::GetProjectLibrariesDir().GetFiles(Path::FindFlag::SIMPLE, {"o"});
+    return Paths::GetProjectLibrariesDir().
+           GetFiles(Path::FindFlag::SIMPLE, {"o"});
 }
+
 List<Path> EditorBehaviourManager::GetBehaviourSourcesPaths()
 {
     List<Path> behaviourSources = Paths::GetProjectAssetsDir().
@@ -347,29 +366,49 @@ List<Path> EditorBehaviourManager::GetBehaviourSourcesPaths()
         String pathLower = (*it).GetAbsolute().ToLower();
         for (const String &srcExt : srcExts)
         {
-            if (pathLower.EndsWith(srcExt.ToLower())) { correct = true; break; }
+            if (pathLower.EndsWith(srcExt.ToLower()))
+            {
+                correct = true;
+                break;
+            }
         }
-        if (!correct) { it = behaviourSources.Remove(it); } else { ++it; }
+
+        if (!correct)
+        {
+            it = behaviourSources.Remove(it);
+        }
+        else
+        {
+            ++it;
+        }
     }
     return behaviourSources;
 }
 
-Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType)
+Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType,
+                                                    bool addLibs)
 {
     const Path bangLibPath = EditorPaths::GetBangStaticLibPath();
     if (!bangLibPath.Exists())
     {
-        Debug_Error(bangLibPath << " not found! Needed to build behaviours..." <<
+        Debug_Error(bangLibPath <<
+                    " not found! Needed to build behaviours..." <<
                     "Will not compile them!");
         return Compiler::Job();
     }
 
     Compiler::Job job;
-    job.AddInputFile(" -Wl,--whole-archive " + bangLibPath.GetAbsolute() +
-                     " -Wl,--no-whole-archive");
+    if (addLibs)
+    {
+        job.AddInputFile(" -Wl,--whole-archive " +
+                         bangLibPath.GetAbsolute() +
+                         " -Wl,--no-whole-archive");
+    }
 
-    job.flags =  {"-fPIC", "--std=c++11", "-Wl,-O0,--export-dynamic",
-                 "-Wl,--whole-archive"};
+    job.flags =  {"-fPIC",
+                  "--std=c++11",
+                  "-Wl,-O0,--export-dynamic",
+                  "-Wl,--whole-archive"};
     if (binaryType == BinType::BIN_DEBUG)
     {
         job.flags.PushBack( List<String>({"-O0", "-g", "-Wl,-O0"}) );
@@ -394,7 +433,8 @@ Compiler::Job EditorBehaviourManager::CreateCompileBehaviourJob(
                                             const Path &outputObjectFilepath,
                                             BinType binaryType)
 {
-    Compiler::Job job = EditorBehaviourManager::CreateBaseJob(binaryType);
+    Compiler::Job job = EditorBehaviourManager::CreateBaseJob(binaryType,
+                                                              false);
     job.outputMode = Compiler::OutputType::OBJECT;
     job.includePaths.PushBack( Paths::GetEngineIncludeDirs() );
     // job.includePaths.PushBack( EditorPaths::GetEditorIncludeDirs() );
@@ -407,7 +447,10 @@ Compiler::Job EditorBehaviourManager::CreateCompileBehaviourJob(
 
 void EditorBehaviourManager::UpdateCompileInformations()
 {
-    if (ScenePlayer::GetPlayState() != PlayState::EDITING) { return; }
+    if (ScenePlayer::GetPlayState() != PlayState::EDITING)
+    {
+        return;
+    }
 
     GetBehaviourTracker()->Update(false);
 
@@ -424,14 +467,17 @@ void EditorBehaviourManager::UpdateCompileInformations()
     GetMutex()->UnLock();
 
     // Invalidate library if some behaviour has changed
-    if (!modifiedBehaviours.IsEmpty()) { SetBehavioursLibrary(nullptr); }
+    if (!modifiedBehaviours.IsEmpty())
+    {
+        SetBehavioursLibrary(nullptr);
+    }
 
     // Remove them from compiled structures
     for (const Path &modifiedBehaviour : modifiedBehaviours)
     {
         if ( !IsBeingCompiled(modifiedBehaviour) )
         {
-            MutexLocker ml(GetMutex()); (void)ml;
+            MutexLocker ml(GetMutex()); (void) ml;
             m_compiledBehaviours.Remove(modifiedBehaviour);
             m_successfullyCompiledBehaviours.Remove(modifiedBehaviour);
         }
@@ -440,11 +486,18 @@ void EditorBehaviourManager::UpdateCompileInformations()
     GetBehaviourTracker()->ResetModifications();
 }
 
-Mutex* EditorBehaviourManager::GetMutex() const { return &m_mutex; }
+Mutex* EditorBehaviourManager::GetMutex() const
+{
+    return &m_mutex;
+}
 BehaviourTracker *EditorBehaviourManager::GetBehaviourTracker()
-{ return &m_behaviourTracker; }
+{
+    return &m_behaviourTracker;
+}
 const BehaviourTracker *EditorBehaviourManager::GetBehaviourTracker() const
-{ return &m_behaviourTracker; }
+{
+    return &m_behaviourTracker;
+}
 
 void EditorBehaviourManager::BehaviourCompileRunnable::Run()
 {
