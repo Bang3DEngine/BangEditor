@@ -81,3 +81,17 @@ EditorPaths *EditorPaths::GetInstance()
 {
     return EditorApplication::GetInstance()->GetEditorPaths();
 }
+
+Bang::Path BangEditor::EditorPaths::GetBangLatestLibPath()
+{
+    Path staticLibPath = EditorPaths::GetBangStaticLibPath();
+    Path dynamicLibPath = EditorPaths::GetBangDynamicLibPath();
+    if (staticLibPath.IsFile() &&
+        (staticLibPath.GetModificationTimeSeconds() >
+         dynamicLibPath.GetModificationTimeSeconds())
+       )
+    {
+        return staticLibPath;
+    }
+    return dynamicLibPath;
+}

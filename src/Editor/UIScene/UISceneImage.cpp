@@ -133,7 +133,7 @@ void UISceneImage::SetSceneImageCamera(Camera *sceneCam)
     {
         GBuffer *camGBuffer = sceneCam->GetGBuffer();
 
-        ShaderProgram *sp = p_sceneImg->GetActiveMaterial()->GetShaderProgram();
+        ShaderProgram *sp = p_sceneImg->GetMaterial()->GetShaderProgram();
 
         GL::Push(GL::BindTarget::SHADER_PROGRAM);
 

@@ -388,7 +388,7 @@ List<Path> EditorBehaviourManager::GetBehaviourSourcesPaths()
 Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType,
                                                     bool addLibs)
 {
-    const Path bangLibPath = EditorPaths::GetBangStaticLibPath();
+    const Path bangLibPath = EditorPaths::GetBangLatestLibPath();
     if (!bangLibPath.Exists())
     {
         Debug_Error(bangLibPath <<
@@ -400,15 +400,23 @@ Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType,
     Compiler::Job job;
     if (addLibs)
     {
-        job.AddInputFile(" -Wl,--whole-archive " +
-                         bangLibPath.GetAbsolute() +
-                         " -Wl,--no-whole-archive");
+        bool isBangLibStatic = (bangLibPath.GetExtension() == "a");
+        if (isBangLibStatic)
+        {
+            job.AddInputFile(" -Wl,--whole-archive " +
+                             bangLibPath.GetAbsolute() +
+                             " -Wl,--no-whole-archive");
+        }
+        else
+        {
+            job.libDirs.PushBack( EditorPaths::GetEditorLibrariesDir() );
+            job.libraries.PushBack("Bang");
+        }
     }
 
     job.flags =  {"-fPIC",
                   "--std=c++11",
-                  "-Wl,-O0,--export-dynamic",
-                  "-Wl,--whole-archive"};
+                  "-Wl,-O0,--export-dynamic"};
     if (binaryType == BinType::BIN_DEBUG)
     {
         job.flags.PushBack( List<String>({"-O0", "-g", "-Wl,-O0"}) );

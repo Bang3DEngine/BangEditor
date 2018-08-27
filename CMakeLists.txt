@@ -155,7 +155,7 @@ if (${COMPILE_GAME})
     target_link_libraries(GameTemplate PRIVATE BangLib)
 endif()
 
-add_dependencies(BangEditorObjects BangLib BuildDependencies PhysX3)
+add_dependencies(BangEditorObjects BangLib BuildDependencies)
 target_link_libraries(BangEditor PRIVATE ${DEPENDENCIES_LIBS})
 target_link_libraries(BangEditor PRIVATE BangLib)
 add_clang_tidy(BangEditorObjects)
