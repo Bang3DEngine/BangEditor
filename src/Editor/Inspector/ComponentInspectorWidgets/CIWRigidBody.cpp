@@ -4,6 +4,7 @@
 #include "Bang/Resources.h"
 #include "Bang/Extensions.h"
 #include "Bang/UICheckBox.h"
+#include "Bang/UIComboBox.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/GameObjectFactory.h"
 
@@ -46,11 +47,27 @@ void CIWRigidBody::InitInnerWidgets()
     p_isKinematicInput = GameObjectFactory::CreateUICheckBox();
     p_isKinematicInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
+    p_constraintsInput = GameObjectFactory::CreateUIBoolComboBox();
+    p_constraintsInput->AddItem("Lock Position X",
+                                SCAST<int>(RigidBodyConstraint::LOCK_POSITION_X));
+    p_constraintsInput->AddItem("Lock Position Y",
+                                SCAST<int>(RigidBodyConstraint::LOCK_POSITION_Y));
+    p_constraintsInput->AddItem("Lock Position Z",
+                                SCAST<int>(RigidBodyConstraint::LOCK_POSITION_Z));
+    p_constraintsInput->AddItem("Lock Rotation X",
+                                SCAST<int>(RigidBodyConstraint::LOCK_ROTATION_X));
+    p_constraintsInput->AddItem("Lock Rotation Y",
+                                SCAST<int>(RigidBodyConstraint::LOCK_ROTATION_Y));
+    p_constraintsInput->AddItem("Lock Rotation Z",
+                                SCAST<int>(RigidBodyConstraint::LOCK_ROTATION_Z));
+    p_constraintsInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
     AddWidget("Mass", p_massInput->GetGameObject());
     AddWidget("Drag", p_dragInput->GetGameObject());
     AddWidget("Angular Drag", p_angularDragInput->GetGameObject());
     AddWidget("Use Gravity",  p_useGravityInput->GetGameObject());
     AddWidget("Is Kinematic", p_isKinematicInput->GetGameObject());
+    AddWidget("Constraints", p_constraintsInput->GetGameObject());
 
     SetLabelsWidth(100);
 }
@@ -66,6 +83,8 @@ void CIWRigidBody::UpdateFromReference()
     p_angularDragInput->SetValue( rigidBody->GetAngularDrag() );
     p_useGravityInput->SetChecked( rigidBody->GetUseGravity() );
     p_isKinematicInput->SetChecked( rigidBody->GetIsKinematic() );
+    p_constraintsInput->SetSelectionForFlag( SCAST<int>(rigidBody->GetConstraints().
+                                                        GetValue()) );
 }
 
 void CIWRigidBody::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
@@ -93,6 +112,12 @@ void CIWRigidBody::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
     else if (object == p_isKinematicInput)
     {
         rigidBody->SetIsKinematic( p_isKinematicInput->IsChecked() );
+    }
+    else if (object == p_constraintsInput)
+    {
+        rigidBody->SetConstraints(
+                    SCAST<RigidBodyConstraint>(
+                        p_constraintsInput->GetSelectedValuesForFlag()));
     }
 }
 

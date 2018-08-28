@@ -118,7 +118,7 @@ Inspector::Inspector()
     p_contextMenu->AddButtonPart(this);
 
     // Add a bit of margin below...
-    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 40)->
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 150)->
                         SetParent(GetWidgetsContainer());
 
     EditorFileTracker::GetInstance()->GetFileTracker()->

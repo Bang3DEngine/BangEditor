@@ -8,6 +8,7 @@
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class RigidBody;
 FORWARD class UICheckBox;
+FORWARD class UIComboBox;
 FORWARD class UIInputNumber;
 FORWARD class UIInputVector;
 FORWARD NAMESPACE_BANG_END
@@ -32,6 +33,7 @@ private:
     UIInputNumber *p_angularDragInput = nullptr;
     UICheckBox *p_useGravityInput = nullptr;
     UICheckBox *p_isKinematicInput = nullptr;
+    UIComboBox *p_constraintsInput = nullptr;
 
     CIWRigidBody();
     virtual ~CIWRigidBody();
