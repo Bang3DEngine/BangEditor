@@ -213,8 +213,8 @@ void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
     {
         XMLNode undoXMLBefore = GetComponent()->GetGameObject()->GetXMLInfo();
         EditorClipboard::CopyComponent( GetComponent() );
-        Component::Destroy( GetComponent() );
         PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoXMLBefore);
+        Component::Destroy( GetComponent() );
     });
 
     MenuItem *paste = menuRootItem->AddItem("Paste");

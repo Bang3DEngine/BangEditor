@@ -319,9 +319,11 @@ void Inspector::OnComponentRemoved(Component *removedComponent,
 {
     (void) previousGameObject;
 
-    ASSERT (m_objToWidget.ContainsKey(removedComponent));
-    RemoveWidget(m_objToWidget.Get(removedComponent));
-    m_objToWidget.Remove(removedComponent);
+    if (m_objToWidget.ContainsKey(removedComponent))
+    {
+        RemoveWidget(m_objToWidget.Get(removedComponent));
+        m_objToWidget.Remove(removedComponent);
+    }
 }
 
 Inspector* Inspector::GetActive()
@@ -351,8 +353,7 @@ void Inspector::AddWidget(InspectorWidget *widget, int _index)
 void Inspector::RemoveWidget(InspectorWidget *widget)
 {
     m_widgets.Remove(widget);
-    GameObject::Destroy(widget); // Order dependent. Before setting parent to null!
-    widget->SetParent(nullptr);
+    GameObject::Destroy(widget);
 }
 
 void Inspector::RemoveWidget(int index)

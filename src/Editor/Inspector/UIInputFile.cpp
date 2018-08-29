@@ -125,15 +125,21 @@ void UIInputFile::OnDrop(EventEmitter<IEventsDragDrop> *dd_,
     IEventsDragDrop::OnDrop(dd_, inside);
 
     UICanvas *canvas = UICanvas::GetActive(this);
-    UIDragDroppable *dragDroppable = DCAST<UIDragDroppable*>(dd_);
-    ExplorerItem *expItem = DCAST<ExplorerItem*>(dragDroppable->GetGameObject());
-    if (expItem && canvas->IsMouseOver(p_pathInputText))
+    if (UIDragDroppable *dragDroppable = DCAST<UIDragDroppable*>(dd_))
     {
-        Path draggedPath = expItem->GetPath();
-        bool acceptedFileType = draggedPath.HasExtension(GetExtensions());
-        if (acceptedFileType)
+        if (ExplorerItem *expItem = DCAST<ExplorerItem*>(dragDroppable->
+                                                         GetGameObject()))
         {
-            SetPath(draggedPath);
+            if (canvas->IsMouseOver(p_pathInputText))
+            {
+                Path draggedPath = expItem->GetPath();
+                bool acceptedFileType = draggedPath.
+                                        HasExtension(GetExtensions());
+                if (acceptedFileType)
+                {
+                    SetPath(draggedPath);
+                }
+            }
         }
     }
     p_pathInputText->GetText()->SetTextColor(Color::Black);

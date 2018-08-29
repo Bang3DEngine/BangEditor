@@ -93,6 +93,5 @@ void ModelPreviewFactory::OnUpdateTextureEnd(
     ASSERT(modelGo);
 
     GameObject::Destroy(modelGo);
-    previewScene->DestroyPending();
 }
 

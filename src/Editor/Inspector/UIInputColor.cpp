@@ -71,7 +71,8 @@ UIInputColor::UIInputColor()
 
 UIInputColor::~UIInputColor()
 {
-    Object::DestroyObject(m_colorPickerReporter);
+    Object::PropagateObjectDestruction(m_colorPickerReporter);
+    delete m_colorPickerReporter;
 }
 
 void UIInputColor::Update()

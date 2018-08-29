@@ -98,7 +98,6 @@ MenuItem::MenuItem(MenuItemType itemType)
 
 MenuItem::~MenuItem()
 {
-
 }
 
 MenuItem* MenuItem::GetTopOrRootItem() const
@@ -235,7 +234,8 @@ void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
             case UIList::Action::SELECTION_IN:
             case UIList::Action::MOUSE_LEFT_DOWN:
             {
-                if (menuItem && menuItem->IsOverAndActionEnabled() &&
+                if (menuItem &&
+                    menuItem->IsOverAndActionEnabled() &&
                     menuItem->m_selectedCallback &&
                     (action != UIList::Action::SELECTION_IN))
                 {
@@ -244,7 +244,8 @@ void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
                     menuItem->Close(true);
                 }
 
-                if (menuItem && menuItem->GetItemType() == MenuItemType::SEPARATOR)
+                if (menuItem &&
+                    menuItem->GetItemType() == MenuItemType::SEPARATOR)
                 {
                     parentItem->GetChildrenList()->SetSelection(nullptr);
                 }
@@ -300,13 +301,13 @@ void MenuItem::Close(bool recursiveUp)
         }
         else
         {
-            GameObject::Destroy(this);
+            GameObject::DestroyDelayed(this);
         }
     }
     else
     {
-        GetParentItem()->Close(true);
         GetParentItem()->GetChildrenList()->SetSelection(nullptr);
+        GetParentItem()->Close(true);
     }
 }
 void MenuItem::SetDestroyOnClose(bool destroyOnSelect)
