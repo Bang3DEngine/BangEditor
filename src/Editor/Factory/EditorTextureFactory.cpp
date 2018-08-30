@@ -250,6 +250,10 @@ Texture2D* EditorTextureFactory::GetComponentIcon(const String &componentName)
     {
         return EditorTextureFactory::GetColoredAxesIcon();
     }
+    if (componentName == "Behaviour" || componentName == "BehaviourContainer")
+    {
+        return EditorTextureFactory::GetBracketsIcon();
+    }
     if (componentName == "RectTransform")
     {
         return EditorTextureFactory::GetAnchoredRectIcon();

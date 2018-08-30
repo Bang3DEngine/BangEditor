@@ -29,6 +29,7 @@ public:
     MenuItem* GetItem(int i);
 
     static void CreateComponentsMenuInto(MenuItem *rootItem);
+    static void CreateAssetsMenuInto(MenuItem *rootItem);
 
     static constexpr int GetFixedHeight() { return 18; }
 

@@ -130,12 +130,7 @@ MenuBar::MenuBar()
     // Assets
     m_assetsItem = AddItem();
     m_assetsItem->GetText()->SetContent("Assets");
-    MenuItem *createMaterial = m_assetsItem->AddItem("Material");
-    MenuItem *createPhysicsMaterial = m_assetsItem->AddItem("Physics Material");
-    MenuItem *createTextureCubeMap = m_assetsItem->AddItem("Texture Cube Map");
-    createMaterial->SetSelectedCallback(MenuBar::OnCreateMaterial);
-    createPhysicsMaterial->SetSelectedCallback(MenuBar::OnCreatePhysicsMaterial);
-    createTextureCubeMap->SetSelectedCallback(MenuBar::OnCreateTextureCubeMap);
+    MenuBar::CreateAssetsMenuInto(m_assetsItem);
 
     // Components
     m_componentsItem = AddItem();
@@ -351,6 +346,16 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     addUISlider->SetSelectedCallback(MenuBar::OnAddUISlider);
     addUIScrollPanel->SetSelectedCallback(MenuBar::OnAddUIScrollPanel);
     addUIAutoFocuser->SetSelectedCallback(MenuBar::OnAddUIAutoFocuser);
+}
+
+void BangEditor::MenuBar::CreateAssetsMenuInto(BangEditor::MenuItem *rootItem)
+{
+    MenuItem *createMaterial = rootItem->AddItem("Material");
+    MenuItem *createPhysicsMaterial = rootItem->AddItem("Physics Material");
+    MenuItem *createTextureCubeMap = rootItem->AddItem("Texture Cube Map");
+    createMaterial->SetSelectedCallback(MenuBar::OnCreateMaterial);
+    createPhysicsMaterial->SetSelectedCallback(MenuBar::OnCreatePhysicsMaterial);
+    createTextureCubeMap->SetSelectedCallback(MenuBar::OnCreateTextureCubeMap);
 }
 
 MenuBar *MenuBar::GetInstance()

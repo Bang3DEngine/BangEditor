@@ -27,6 +27,7 @@
 #include "Bang/UIContentSizeFitter.h"
 
 #include "BangEditor/Editor.h"
+#include "BangEditor/MenuBar.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorClipboard.h"
@@ -603,6 +604,9 @@ void Explorer::OnCreateContextMenu(MenuItem *menuRootItem)
         ForceCheckFileChanges();
         SelectPath(newDirPath);
     });
+
+    MenuItem *createAssetItem = menuRootItem->AddItem("Create Asset");
+    MenuBar::CreateAssetsMenuInto(createAssetItem);
 
     MenuItem *pasteItem = menuRootItem->AddItem("Paste");
     pasteItem->SetOverAndActionEnabled( EditorClipboard::HasCopiedPath() );

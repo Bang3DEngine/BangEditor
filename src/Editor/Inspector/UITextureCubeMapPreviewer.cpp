@@ -62,7 +62,7 @@ void UITextureCubeMapPreviewer::Update()
     p_previewImgAspectRatioFitter->SetAspectRatio(arSize);
     p_previewImgAspectRatioFitter->Invalidate();
 
-    Quaternion rotation = Quaternion::FromEulerAngles(
+    Quaternion rotation = Quaternion::FromEulerAnglesRads(
                             Vector3(-m_rotationRads.y, m_rotationRads.x, 0.0f));
     Matrix4 rotationMatrix = Matrix4::RotateMatrix(rotation);
 

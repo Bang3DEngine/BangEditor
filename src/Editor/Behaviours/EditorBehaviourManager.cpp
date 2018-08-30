@@ -246,14 +246,15 @@ CompileBehaviourObjectAsync(const Path &behaviourPath)
 void EditorBehaviourManager::
 RemoveBehaviourLibrariesOf(const String& behaviourName)
 {
-    if (behaviourName.IsEmpty()) { return; }
-
-    List<Path> libFilepaths = GetCompiledObjectsPaths();
-    for (const Path &libFilepath : libFilepaths)
+    if (!behaviourName.IsEmpty())
     {
-        if (libFilepath.GetName() == behaviourName)
+        List<Path> libFilepaths = GetCompiledObjectsPaths();
+        for (const Path &libFilepath : libFilepaths)
         {
-            File::Remove(libFilepath);
+            if (libFilepath.GetName() == behaviourName)
+            {
+                File::Remove(libFilepath);
+            }
         }
     }
 }
@@ -457,43 +458,41 @@ Compiler::Job EditorBehaviourManager::CreateCompileBehaviourJob(
 
 void EditorBehaviourManager::UpdateCompileInformations()
 {
-    if (ScenePlayer::GetPlayState() != PlayState::EDITING)
+    if (ScenePlayer::GetPlayState() == PlayState::EDITING)
     {
-        return;
-    }
+        GetBehaviourTracker()->Update(false);
 
-    GetBehaviourTracker()->Update(false);
-
-    GetMutex()->Lock();
-    const List<Path> behaviourPaths = GetBehaviourSourcesPaths();
-    USet<Path> modifiedBehaviours;
-    for (const Path &behaviourPath : behaviourPaths)
-    {
-        if ( GetBehaviourTracker()->HasBeenModified(behaviourPath) )
+        GetMutex()->Lock();
+        const List<Path> behaviourPaths = GetBehaviourSourcesPaths();
+        USet<Path> modifiedBehaviours;
+        for (const Path &behaviourPath : behaviourPaths)
         {
-            modifiedBehaviours.Add(behaviourPath);
+            if ( GetBehaviourTracker()->HasBeenModified(behaviourPath) )
+            {
+                modifiedBehaviours.Add(behaviourPath);
+            }
         }
-    }
-    GetMutex()->UnLock();
+        GetMutex()->UnLock();
 
-    // Invalidate library if some behaviour has changed
-    if (!modifiedBehaviours.IsEmpty())
-    {
-        SetBehavioursLibrary(nullptr);
-    }
-
-    // Remove them from compiled structures
-    for (const Path &modifiedBehaviour : modifiedBehaviours)
-    {
-        if ( !IsBeingCompiled(modifiedBehaviour) )
+        // Invalidate library if some behaviour has changed
+        if (!modifiedBehaviours.IsEmpty())
         {
-            MutexLocker ml(GetMutex()); (void) ml;
-            m_compiledBehaviours.Remove(modifiedBehaviour);
-            m_successfullyCompiledBehaviours.Remove(modifiedBehaviour);
+            SetBehavioursLibrary(nullptr);
         }
-    }
 
-    GetBehaviourTracker()->ResetModifications();
+        // Remove them from compiled structures
+        for (const Path &modifiedBehaviour : modifiedBehaviours)
+        {
+            if ( !IsBeingCompiled(modifiedBehaviour) )
+            {
+                MutexLocker ml(GetMutex()); (void) ml;
+                m_compiledBehaviours.Remove(modifiedBehaviour);
+                m_successfullyCompiledBehaviours.Remove(modifiedBehaviour);
+            }
+        }
+
+        GetBehaviourTracker()->ResetModifications();
+    }
 }
 
 Mutex* EditorBehaviourManager::GetMutex() const
