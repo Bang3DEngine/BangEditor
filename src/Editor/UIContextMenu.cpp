@@ -126,7 +126,7 @@ void ContextMenu::Update()
     {
         if (!m_justCreated && !GetRootItem()->GetRectTransform()->IsMouseOver(true))
         {
-            GameObject::DestroyDelayed(this);
+            GameObject::Destroy(this);
         }
     }
     m_justCreated = false;
@@ -140,5 +140,5 @@ MenuItem *ContextMenu::GetRootItem() const
 void ContextMenu::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     ASSERT(object == p_rootItem);
-    GameObject::DestroyDelayed(this);
+    GameObject::Destroy(this);
 }

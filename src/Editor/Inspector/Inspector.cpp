@@ -353,7 +353,7 @@ void Inspector::AddWidget(InspectorWidget *widget, int _index)
 void Inspector::RemoveWidget(InspectorWidget *widget)
 {
     m_widgets.Remove(widget);
-    GameObject::DestroyDelayed(widget); // To allow move up/down to work e.g.
+    GameObject::Destroy(widget); // To allow move up/down to work e.g.
 }
 
 void Inspector::RemoveWidget(int index)

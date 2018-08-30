@@ -124,20 +124,22 @@ void UIInputFile::OnDrop(EventEmitter<IEventsDragDrop> *dd_,
 {
     IEventsDragDrop::OnDrop(dd_, inside);
 
-    UICanvas *canvas = UICanvas::GetActive(this);
-    if (UIDragDroppable *dragDroppable = DCAST<UIDragDroppable*>(dd_))
+    if (UICanvas *canvas = UICanvas::GetActive(this))
     {
-        if (ExplorerItem *expItem = DCAST<ExplorerItem*>(dragDroppable->
-                                                         GetGameObject()))
+        if (UIDragDroppable *dragDroppable = DCAST<UIDragDroppable*>(dd_))
         {
-            if (canvas->IsMouseOver(p_pathInputText))
+            if (ExplorerItem *expItem = DCAST<ExplorerItem*>(dragDroppable->
+                                                             GetGameObject()))
             {
-                Path draggedPath = expItem->GetPath();
-                bool acceptedFileType = draggedPath.
-                                        HasExtension(GetExtensions());
-                if (acceptedFileType)
+                if (canvas->IsMouseOver(p_pathInputText))
                 {
-                    SetPath(draggedPath);
+                    Path draggedPath = expItem->GetPath();
+                    bool acceptedFileType = draggedPath.
+                                            HasExtension(GetExtensions());
+                    if (acceptedFileType)
+                    {
+                        SetPath(draggedPath);
+                    }
                 }
             }
         }

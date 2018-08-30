@@ -35,7 +35,7 @@ ResourcePreviewFactory<T>::~ResourcePreviewFactory()
 
     if (m_previewScene)
     {
-        GameObject::Destroy(m_previewScene);
+        GameObject::DestroyImmediate(m_previewScene);
     }
 
     for (RH<T> &res : m_previewsResources)

@@ -13,7 +13,7 @@ void CIWDirectionalLight::InitInnerWidgets()
     CIWLight::InitInnerWidgets();
 
     SetName("CIWDirectionalLight");
-    SetTitle("DirectionalLight");
+    SetTitle("Directional Light");
 
     p_shadowDistanceInput = GameObjectFactory::CreateUIInputNumber();
     p_shadowDistanceInput->SetMinMaxValues(1.0f, 2000.0f);

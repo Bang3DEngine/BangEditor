@@ -301,7 +301,7 @@ void MenuItem::Close(bool recursiveUp)
         }
         else
         {
-            GameObject::DestroyDelayed(this);
+            GameObject::Destroy(this);
         }
     }
     else

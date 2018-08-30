@@ -12,6 +12,9 @@ void CIWPointLight::InitInnerWidgets()
 {
     CIWLight::InitInnerWidgets();
 
+    SetName("CIWPointLight");
+    SetTitle("Point Light");
+
     p_rangeInput = GameObjectFactory::CreateUIInputNumber();
     p_rangeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     p_rangeInput->SetMinMaxValues(0.0f, Math::Infinity<float>());

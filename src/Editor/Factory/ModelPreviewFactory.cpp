@@ -92,6 +92,6 @@ void ModelPreviewFactory::OnUpdateTextureEnd(
     GameObject *modelGo = previewGoContainer->FindInChildren("ModelContainer");
     ASSERT(modelGo);
 
-    GameObject::Destroy(modelGo);
+    GameObject::DestroyImmediate(modelGo);
 }
 

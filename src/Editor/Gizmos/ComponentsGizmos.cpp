@@ -199,7 +199,7 @@ void ComponentsGizmos::RenderCapsuleColliderGizmo(CapsuleCollider *cc,
         params.position += centerDisplacement;
 
         float r = cc->GetScaledRadius() + 0.01f;
-        float h = cc->GetScaledHeight() * 0.5f + 0.01f;
+        float h = cc->GetScaledHeight() + 0.01f;
         RenderFactory::RenderWireframeCapsule(h, r, params);
 
         gb->PopDepthStencilTexture();
