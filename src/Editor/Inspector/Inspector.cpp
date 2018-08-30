@@ -397,6 +397,7 @@ void Inspector::Clear()
 {
     p_titleText->SetContent("");
     p_titleSeparator->SetEnabled(false);
+    GetScrollPanel()->SetScrolling(Vector2i::Zero);
 
     while (!m_widgets.IsEmpty())
     {
