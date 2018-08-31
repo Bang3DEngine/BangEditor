@@ -61,44 +61,6 @@ bool EditorTextureFactory::IsIconAnImage(const Path &path)
            !path.HasExtension(Extensions::GetMaterialExtension());
 }
 
-Texture2D* EditorTextureFactory::GetIconForExtension(const String &ext)
-{
-    if ( Extensions::Equals(ext, Extensions::GetTTFExtensions()) )
-    {
-        return EditorTextureFactory::GetLetterIcon();
-    }
-    else if ( Extensions::Equals(ext, Extensions::GetAudioClipExtensions()) )
-    {
-        return TextureFactory::GetAudioIcon();
-    }
-    else if ( Extensions::Equals(ext, Extensions::GetSceneExtension()) )
-    {
-        return EditorTextureFactory::GetSceneIcon();
-    }
-    else if ( Extensions::Equals(ext, Extensions::GetPrefabExtension()) )
-    {
-        return EditorTextureFactory::GetPillIcon();
-    }
-    else if ( Extensions::Equals(ext, Extensions::GetModelExtensions()) )
-    {
-        return EditorTextureFactory::GetCubeIcon();
-    }
-    else if ( Extensions::Equals(ext, Extensions::GetPhysicsMaterialExtension()) )
-    {
-        return EditorTextureFactory::GetPhysicsBallIcon();
-    }
-    else if ( Extensions::Equals(ext, Extensions::GetBehaviourExtensions()) )
-    {
-        return EditorTextureFactory::GetBracketsIcon();
-    }
-    else if ( Extensions::Equals(ext, Extensions::GetTextureCubeMapExtension()) )
-    {
-        return EditorTextureFactory::GetCubeMapIcon();
-    }
-
-    return EditorTextureFactory::GetFileIcon();
-}
-
 Texture2D* EditorTextureFactory::GetRotateIcon()
 {
     return EditorTextureFactory::GetTexture2D("Rotate.png");
@@ -122,6 +84,11 @@ Texture2D *EditorTextureFactory::GetGreenCapsuleIcon()
 Texture2D *EditorTextureFactory::GetCrashDummyIcon()
 {
     return EditorTextureFactory::GetTexture2D("CrashDummy.png");
+}
+
+Texture2D *EditorTextureFactory::GetPlayWithCircleIcon()
+{
+    return EditorTextureFactory::GetTexture2D("PlayWithCircle.png");
 }
 
 Texture2D* EditorTextureFactory::GetRightArrowAndBarIcon()
@@ -305,6 +272,52 @@ Texture2D* EditorTextureFactory::GetComponentIcon(const String &componentName)
 Color EditorTextureFactory::GetComponentIconTint(const String &componentName)
 {
     return Color::White;
+}
+
+Texture2D* EditorTextureFactory::GetIconForExtension(const String &ext)
+{
+    if ( Extensions::Equals(ext, Extensions::GetTTFExtensions()) )
+    {
+        return EditorTextureFactory::GetLetterIcon();
+    }
+    else if ( Extensions::Equals(ext, Extensions::GetAudioClipExtensions()) )
+    {
+        return TextureFactory::GetAudioIcon();
+    }
+    else if ( Extensions::Equals(ext, Extensions::GetSceneExtension()) )
+    {
+        return EditorTextureFactory::GetSceneIcon();
+    }
+    else if ( Extensions::Equals(ext, Extensions::GetPrefabExtension()) )
+    {
+        return EditorTextureFactory::GetPillIcon();
+    }
+    else if ( Extensions::Equals(ext, Extensions::GetModelExtensions()) )
+    {
+        return EditorTextureFactory::GetCubeIcon();
+    }
+    else if ( Extensions::Equals(ext, Extensions::GetPhysicsMaterialExtension()) )
+    {
+        return EditorTextureFactory::GetPhysicsBallIcon();
+    }
+    else if ( Extensions::Equals(ext, Extensions::GetBehaviourExtensions()) )
+    {
+        return EditorTextureFactory::GetBracketsIcon();
+    }
+    else if ( Extensions::Equals(ext, Extensions::GetTextureCubeMapExtension()) )
+    {
+        return EditorTextureFactory::GetCubeMapIcon();
+    }
+    else if ( Extensions::Equals(ext, Extensions::GetAnimationExtension()) )
+    {
+        return EditorTextureFactory::GetPlayWithCircleIcon();
+    }
+    else if ( Extensions::Equals(ext, Extensions::GetMeshExtension()) )
+    {
+        return EditorTextureFactory::GetCubeIcon();
+    }
+
+    return EditorTextureFactory::GetFileIcon();
 }
 
 EditorTextureFactory *EditorTextureFactory::GetInstance()

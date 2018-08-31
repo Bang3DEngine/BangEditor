@@ -404,8 +404,9 @@ Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType,
         bool isBangLibStatic = (bangLibPath.GetExtension() == "a");
         if (isBangLibStatic)
         {
-            job.AddInputFile(" -Wl,--whole-archive " +
-                             bangLibPath.GetAbsolute() +
+            String Quote = "\"";
+            job.AddInputFile("   -Wl,--whole-archive " +
+                             Quote + bangLibPath.GetAbsolute() + Quote +
                              " -Wl,--no-whole-archive");
         }
         else

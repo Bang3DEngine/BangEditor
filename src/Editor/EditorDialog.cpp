@@ -111,7 +111,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
 
         gridLayoutGo->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
         UIGridLayout *gridLayout = gridLayoutGo->AddComponent<UIGridLayout>();
-        gridLayout->SetCellSize( Vector2i(200) );
+        gridLayout->SetCellSize( Vector2i(100) );
         gridLayout->SetSpacing(10);
 
         UILayoutElement *gridLE = gridLayoutGo->AddComponent<UILayoutElement>();
