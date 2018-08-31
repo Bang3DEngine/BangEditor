@@ -35,6 +35,7 @@
 #include "BangEditor/UndoRedoMoveGameObject.h"
 #include "BangEditor/UndoRedoCreateGameObject.h"
 #include "BangEditor/UndoRedoRemoveGameObject.h"
+#include "BangEditor/UndoRedoSerializableChange.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -155,10 +156,10 @@ void Hierarchy::OnGameObjectSelected(GameObject *selectedGameObject)
 {
     if (selectedGameObject)
     {
-        HierarchyItem *selectedHItem = GetItemFromGameObject(selectedGameObject);
-        if (!selectedHItem) { return; }
-
-        GetUITree()->SetSelection(selectedHItem);
+        if (HierarchyItem *selectedHItem = GetItemFromGameObject(selectedGameObject))
+        {
+            GetUITree()->SetSelection(selectedHItem);
+        }
     }
     else
     {
@@ -170,20 +171,26 @@ void Hierarchy::OnCreateEmpty(HierarchyItem *item)
 {
     GameObject *empty = GameObjectFactory::CreateGameObjectNamed("Empty");
 
-    GameObject *parent = nullptr;
-    if (item) { parent = item->GetReferencedGameObject(); }
-    else { parent = EditorSceneManager::GetOpenScene(); }
-
-    if (parent) { empty->SetParent(parent); }
+    GameObject *parent = item ? item->GetReferencedGameObject() :
+                                EditorSceneManager::GetOpenScene();
+    if (parent)
+    {
+        empty->SetParent(parent);
+        UndoRedoManager::PushAction( new UndoRedoCreateGameObject(empty) );
+    }
 }
 
 void Hierarchy::OnRename(HierarchyItem *item)
 {
     GameObject *go = item->GetReferencedGameObject();
     String previousName = go->GetName();
-    String newName = Dialog::GetString("Rename", "Introduce the new name:",
+    String newName = Dialog::GetString("Rename",
+                                       "Introduce the new name:",
                                        previousName);
-    if (!newName.IsEmpty()) { go->SetName(newName); }
+    if (!newName.IsEmpty())
+    {
+        go->SetName(newName);
+    }
 }
 
 void Hierarchy::OnRemove(HierarchyItem *item)
@@ -206,26 +213,30 @@ void Hierarchy::OnCut(HierarchyItem *item)
 
 void Hierarchy::OnPaste(HierarchyItem *item)
 {
-    if (!EditorClipboard::HasCopiedGameObject()) { return; }
+    if (!EditorClipboard::HasCopiedGameObject())
+    {
+        return;
+    }
 
     bool pastingDirectlyOverInspector = !item;
     GameObject *pastingOverGo = item ? item->GetReferencedGameObject() :
                                        EditorSceneManager::GetOpenScene();
-    if (!pastingOverGo) { return; }
+    if (pastingOverGo)
+    {
+        int pastingOverIndex = pastingDirectlyOverInspector ?
+                     pastingOverGo->GetChildren().Size() :
+                    (pastingOverGo->GetChildren().IndexOf(pastingOverGo + 1));
 
-    int pastingOverIndex = pastingDirectlyOverInspector ?
-                 pastingOverGo->GetChildren().Size() :
-                (pastingOverGo->GetChildren().IndexOf(pastingOverGo + 1));
+        GameObject *original = EditorClipboard::GetCopiedGameObject();
+        GameObject *clone = original->Clone();
+        clone->SetName( GameObjectFactory::GetGameObjectDuplicateName(original) );
 
-    GameObject *original = EditorClipboard::GetCopiedGameObject();
-    GameObject *clone = original->Clone();
-    clone->SetName( GameObjectFactory::GetGameObjectDuplicateName(original) );
-    clone->SetParent(pastingOverGo, pastingOverIndex);
+        clone->SetParent(pastingOverGo, pastingOverIndex, true);
+        UndoRedoManager::PushAction( new UndoRedoCreateGameObject(clone) );
 
-    UndoRedoManager::PushAction( new UndoRedoCreateGameObject(clone) );
-
-    // Auto-select
-    Editor::SelectGameObject(clone, false);
+        // Auto-select
+        Editor::SelectGameObject(clone, false);
+    }
 }
 
 void Hierarchy::OnDuplicate(HierarchyItem *item)
@@ -254,24 +265,25 @@ void Hierarchy::OnItemMoved(GOItem *item,
                             GOItem *newParentItem,
                             int newIndexInsideParent)
 {
-    IEventsUITree::OnItemMoved(item, oldParentItem, oldIndexInsideParent,
-                                 newParentItem, newIndexInsideParent);
+    IEventsUITree::OnItemMoved(item,
+                               oldParentItem,
+                               oldIndexInsideParent,
+                               newParentItem,
+                               newIndexInsideParent);
 
     GameObject *go = GetGameObjectFromItem(item);
+
     GameObject *oldParent = GetGameObjectFromItem(oldParentItem);
-    GameObject *newParent = GetGameObjectFromItem(newParentItem);
     if (!oldParent)
     {
         oldParent = go->GetScene();
     }
+
+    GameObject *newParent = GetGameObjectFromItem(newParentItem);
     if (!newParent)
     {
         newParent = go->GetScene();
     }
-
-    UndoRedoManager::PushAction(
-                new UndoRedoMoveGameObject(go, oldParent, oldIndexInsideParent,
-                                           newParent, newIndexInsideParent) );
 
     IEventListenerCommon::SetReceiveEventsCommon(false);
     GameObject *movedGo = GetGameObjectFromItem(item);
@@ -279,7 +291,17 @@ void Hierarchy::OnItemMoved(GOItem *item,
     {
         newParent = movedGo->GetScene();
     }
-    movedGo->SetParent(newParent, newIndexInsideParent);
+
+    XMLNode prevXMLInfo = go->GetXMLInfo();
+    movedGo->SetParent(newParent, newIndexInsideParent, true);
+    UndoRedoManager::PushActionsInSameStep(
+        {new UndoRedoMoveGameObject(go,
+                                    oldParent,
+                                    oldIndexInsideParent,
+                                    newParent,
+                                    newIndexInsideParent),
+         new UndoRedoSerializableChange(go, prevXMLInfo, go->GetXMLInfo())});
+
     Editor::SelectGameObject(movedGo, false);
     IEventListenerCommon::SetReceiveEventsCommon(true);
 }
@@ -295,7 +317,21 @@ void Hierarchy::OnDropOutside(UIDragDroppable *dropped)
         {
             GameObject *go = GetGameObjectFromItem(hItem);
             ASSERT(go);
-            go->SetParent( EditorSceneManager::GetOpenScene(), -1 );
+
+            GameObject *prevGoParent = go->GetParent();
+            int prevIndexInParent = go->GetIndexInsideParent();
+
+            XMLNode prevXMLInfo = go->GetXMLInfo();
+            go->SetParent( EditorSceneManager::GetOpenScene(), -1, true );
+            UndoRedoManager::PushActionsInSameStep(
+                {new UndoRedoMoveGameObject(go,
+                                            prevGoParent,
+                                            prevIndexInParent,
+                                            go->GetParent(),
+                                            go->GetIndexInsideParent()),
+                 new UndoRedoSerializableChange(go,
+                                                prevXMLInfo,
+                                                go->GetXMLInfo())});
         }
     }
     else
@@ -320,10 +356,10 @@ void Hierarchy::OnDropFromOutside(UIDragDroppable *dropped,
                                              GetGameObjectFromItem(newParentItem) :
                                              EditorSceneManager::GetOpenScene());
                 GameObject *modelGo = model->CreateGameObjectFromModel();
-                modelGo->SetParent(newParent, newIndexInsideParent);
 
-                UndoRedoManager::PushAction(
-                                       new UndoRedoCreateGameObject(modelGo) );
+                XMLNode prevXMLInfo = modelGo->GetXMLInfo();
+                modelGo->SetParent(newParent, newIndexInsideParent, true);
+                UndoRedoManager::PushAction(new UndoRedoCreateGameObject(modelGo));
             }
         }
     }
@@ -385,7 +421,11 @@ void Hierarchy::OnSceneLoaded(Scene *scene, const Path&)
 void Hierarchy::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     GameObject *destroyedGo = DCAST<GameObject*>(object);
-    if (destroyedGo) { RemoveGameObjectItem( GetItemFromGameObject(destroyedGo) ); }
+    if (destroyedGo)
+    {
+        HierarchyItem *hItem = GetItemFromGameObject(destroyedGo);
+        RemoveGameObjectItem(hItem);
+    }
 }
 
 void Hierarchy::Clear()
@@ -420,7 +460,10 @@ void Hierarchy::AddGameObject(GameObject *go)
         int indexInsideParent = go->GetParent()->GetChildren().IndexOf(go);
         for (GameObject *child : go->GetParent()->GetChildren())
         {
-            if (child->HasComponent<HideInHierarchy>()) { --indexInsideParent; }
+            if (child->HasComponent<HideInHierarchy>())
+            {
+                --indexInsideParent;
+            }
         }
 
         if (indexInsideParent >= 0)
@@ -491,23 +534,38 @@ void Hierarchy::OnShortcutPressed(const Shortcut &shortcut)
     if (selectedItem)
     {
         if (shortcut.GetName() == "Rename")
-        { selectedItem->Rename(); }
+        {
+            selectedItem->Rename();
+        }
 
         if (shortcut.GetName() == "Copy")
-        { selectedItem->Copy(); }
+        {
+            selectedItem->Copy();
+        }
 
         if (shortcut.GetName() == "Cut")
-        { selectedItem->Cut(); }
+        {
+            selectedItem->Cut();
+        }
 
         if (shortcut.GetName() == "Paste")
-        { selectedItem->Paste(); }
+        {
+            selectedItem->Paste();
+        }
 
         if (shortcut.GetName() == "Duplicate")
-        { selectedItem->Duplicate(); }
+        {
+            selectedItem->Duplicate();
+        }
 
         if (shortcut.GetName() == "Delete")
-        { selectedItem->Remove(); }
+        {
+            selectedItem->Remove();
+        }
     }
 }
 
-UITree *Hierarchy::GetUITree() const { return p_tree; }
+UITree *Hierarchy::GetUITree() const
+{
+    return p_tree;
+}

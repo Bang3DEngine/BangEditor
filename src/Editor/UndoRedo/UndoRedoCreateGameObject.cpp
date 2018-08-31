@@ -10,8 +10,12 @@ USING_NAMESPACE_BANG_EDITOR
 UndoRedoCreateGameObject::UndoRedoCreateGameObject(GameObject *createdGameObject)
 {
     p_createdGameObject = createdGameObject;
+    ASSERT(p_createdGameObject);
+
     p_parent = createdGameObject->GetParent();
-    m_indexInParent = p_parent->GetChildren().IndexOf(createdGameObject);
+    ASSERT(p_parent);
+
+    m_indexInParent = createdGameObject->GetIndexInsideParent();
 
     p_parent->EventEmitter<IEventsDestroy>::RegisterListener(this);
     p_createdGameObject->EventEmitter<IEventsDestroy>::RegisterListener(this);
