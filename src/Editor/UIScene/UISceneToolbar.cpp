@@ -52,7 +52,7 @@ UISceneToolbar::UISceneToolbar()
         (*button)->GetFocusable()->AddEventCallback(
         [callbackFunc](IFocusable*, const UIEvent &event)
         {
-            if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
+            if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
             {
                 callbackFunc();
                 return UIEventResult::INTERCEPT;

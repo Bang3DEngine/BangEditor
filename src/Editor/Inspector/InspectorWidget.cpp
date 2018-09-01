@@ -70,6 +70,8 @@ void InspectorWidget::Init()
     SetReceiveEventsCommon(false);
     InitInnerWidgets();
     SetReceiveEventsCommon(true);
+
+    GameObjectFactory::AddOuterShadow(this, Vector2i(3), 0.4f);
 }
 
 void InspectorWidget::InitInnerWidgets()
@@ -239,7 +241,9 @@ InspectorWidgetTitle::InspectorWidgetTitle()
     titleHL->SetSpacing(5);
 
     UIImageRenderer *bg = AddComponent<UIImageRenderer>();
-    bg->SetTint(Color::White.WithValue(0.9f));
+    bg->SetImageTexture( TextureFactory::GetButtonIdle() );
+    bg->SetMode( UIImageRenderer::Mode::SLICE_9_INV_UVY );
+    bg->SetTint(Color::White.WithValue(1.1f));
 
     GameObjectFactory::AddInnerBorder(this, Vector2i(1));
 

@@ -40,8 +40,8 @@ void ComponentInspectorWidget::InitInnerWidgets()
     p_contextMenu->AddButtonPart( this );
     p_contextMenu->AddButtonPart( GetWidgetsContainer() );
 
-    GetInspectorWidgetTitle()->GetEnabledCheckBox()->SetEnabled(
-                MustShowEnabledCheckbox() );
+    GetInspectorWidgetTitle()->GetEnabledCheckBox()->
+                    GetGameObject()->SetEnabled( MustShowEnabledCheckbox() );
     GetInspectorWidgetTitle()->GetEnabledCheckBox()->
                     EventEmitter<IEventsValueChanged>::RegisterListener(this);
 }

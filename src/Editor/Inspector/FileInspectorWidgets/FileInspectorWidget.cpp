@@ -8,7 +8,8 @@ USING_NAMESPACE_BANG_EDITOR
 void FileInspectorWidget::InitInnerWidgets()
 {
     InspectorWidget::InitInnerWidgets();
-    GetInspectorWidgetTitle()->GetEnabledCheckBox()->SetEnabled(false);
+    GetInspectorWidgetTitle()->GetEnabledCheckBox()->
+                               GetGameObject()->SetEnabled(false);
 }
 
 void FileInspectorWidget::Update()
