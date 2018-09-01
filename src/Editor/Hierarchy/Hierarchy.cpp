@@ -69,10 +69,12 @@ Hierarchy::Hierarchy()
     GameObject *treeGo = GetUITree()->GetGameObject();
     UILayoutElement *treeLE = treeGo->AddComponent<UILayoutElement>();
     treeLE->SetFlexibleSize( Vector2::One );
+    GetUITree()->GetUIList()->GetDirLayout()->SetPaddingTop(10);
 
-    GetUITree()->SetSelectionCallback(
-                          [this](GOItem *item, UIList::Action action)
-                          { this->TreeSelectionCallback(item, action); } );
+    GetUITree()->SetSelectionCallback([this](GOItem *item, UIList::Action action)
+    {
+        this->TreeSelectionCallback(item, action);
+    } );
     GetUITree()->EventEmitter<IEventsUITree>::RegisterListener(this);
     treeGo->SetParent(rendererCacherContainer);
 

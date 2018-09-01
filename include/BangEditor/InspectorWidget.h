@@ -8,6 +8,7 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UILabel;
+FORWARD class UICheckBox;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
 FORWARD class UILayoutElement;
@@ -15,6 +16,8 @@ FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
+
+FORWARD class InspectorWidgetTitle;
 
 class InspectorWidget : public GameObject
 {
@@ -54,7 +57,8 @@ protected:
     GameObject *GetWidgetsContainer() const;
 
 protected:
-    virtual GameObject* CreateTitleGameObject();
+    virtual InspectorWidgetTitle* CreateTitleGameObject();
+    InspectorWidgetTitle *GetInspectorWidgetTitle() const;
 
 private:
     int m_labelsWidth = -1;
@@ -62,7 +66,7 @@ private:
     UMap<GameObject*, UILabel*> m_widgetToLabel;
     UMap<UILabel*, UILayoutElement*> m_labelToLabelLE;
 
-    UITextRenderer *p_titleText = nullptr;
+    InspectorWidgetTitle *p_inspectorWidgetTitleGo = nullptr;
     UIImageRenderer *p_bgRenderer = nullptr;
     GameObject *p_widgetsContainer = nullptr;
 
@@ -72,6 +76,28 @@ private:
                            GameObject *widget,
                            int height,
                            bool addLabel);
+};
+
+// Title GameObject for an InspectorWidget
+class InspectorWidgetTitle : public GameObject
+{
+    GAMEOBJECT_EDITOR(InspectorWidgetTitle);
+
+public:
+    InspectorWidgetTitle();
+    virtual ~InspectorWidgetTitle();
+
+    UITextRenderer *GetText() const;
+    UIImageRenderer *GetIcon() const;
+    UITextRenderer *GetEnabledText() const;
+    UICheckBox *GetEnabledCheckBox() const;
+
+private:
+    UITextRenderer *p_text = nullptr;
+    UIImageRenderer *p_icon = nullptr;
+    UITextRenderer *p_enabledText = nullptr;
+    UICheckBox *p_enabledCheckBox = nullptr;
+
 };
 
 NAMESPACE_BANG_EDITOR_END

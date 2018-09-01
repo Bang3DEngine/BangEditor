@@ -1,11 +1,14 @@
 #include "BangEditor/FileInspectorWidget.h"
 
+#include "Bang/UICheckBox.h"
+
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
 void FileInspectorWidget::InitInnerWidgets()
 {
     InspectorWidget::InitInnerWidgets();
+    GetInspectorWidgetTitle()->GetEnabledCheckBox()->SetEnabled(false);
 }
 
 void FileInspectorWidget::Update()

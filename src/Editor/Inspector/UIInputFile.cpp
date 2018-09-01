@@ -65,6 +65,7 @@ UIInputFile::UIInputFile()
     p_openFileInInspectorButton =
                   GameObjectFactory::CreateUIButton("", rightArrowIcon);
     p_openFileInInspectorButton->SetIcon(rightArrowIcon, Vector2i(16));
+    p_openFileInInspectorButton->GetIcon()->SetTint(Color::Black);
     p_openFileInInspectorButton->AddClickedCallback( [this]()
     {
         if ( !Paths::IsEnginePath( GetPath() ) )

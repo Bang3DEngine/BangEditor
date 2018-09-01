@@ -73,20 +73,18 @@ Inspector::Inspector()
     widgetsVLGo->GetRectTransform()->SetPivotPosition( Vector2(-1, 1) );
     widgetsVLGo->SetParent(rendererCacherContainer);
 
-    UILabel *goNameLabel = GameObjectFactory::CreateUILabel();
-    GameObject *goNameLabelGo = goNameLabel->GetGameObject();
+    UILabel *titleGo = GameObjectFactory::CreateUILabel();
+    GameObject *goNameLabelGo = titleGo->GetGameObject();
     UILayoutElement *goNameLE = goNameLabelGo->GetComponent<UILayoutElement>();
     goNameLE->SetFlexibleHeight(0.0f);
-    p_titleText = goNameLabel->GetText();
+    p_titleText = titleGo->GetText();
+    p_titleText->SetTextSize(18);
     p_titleText->SetHorizontalAlign(HorizontalAlignment::LEFT);
 
-    p_titleSeparator = GameObjectFactory::CreateUIHSeparator(LayoutSizeType::MIN, 5);
-    p_titleSeparator->SetEnabled(false);
-
     UIVerticalLayout *widgetsVL = widgetsVLGo->AddComponent<UIVerticalLayout>();
-    widgetsVL->SetSpacing(10);
+    widgetsVL->SetSpacing(20);
     widgetsVL->SetPaddingTop(10);
-    widgetsVL->SetPaddingLeft(5);
+    widgetsVL->SetPaddingLeft(10);
     widgetsVL->SetPaddingRight(10);
 
     UIContentSizeFitter *vlCSF = widgetsVLGo->AddComponent<UIContentSizeFitter>();
@@ -101,8 +99,9 @@ Inspector::Inspector()
                                                 GetMainVL()->GetGameObject() );
     GetScrollPanel()->SetVerticalShowScrollMode(ShowScrollMode::WHEN_NEEDED);
 
-    goNameLabel->GetGameObject()->SetParent(mainVLGo);
-    p_titleSeparator->SetParent(mainVLGo);
+    titleGo->GetGameObject()->SetParent(mainVLGo);
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 5)->
+                       SetParent(mainVLGo);
     scrollPanel->GetGameObject()->SetParent(mainVLGo);
 
     p_blockLayer = GameObjectFactory::CreateUIImage(Color::Black.WithAlpha(0.3f));
@@ -181,7 +180,6 @@ void Inspector::ShowPath(const Path &path)
             if (fiw || path.IsFile()) { Clear(); }
             if (fiw)
             {
-                p_titleSeparator->SetEnabled(true);
                 p_titleText->SetContent(path.GetNameExt());
                 m_currentOpenPath = path;
                 AddWidget(fiw);
@@ -205,7 +203,6 @@ void Inspector::ShowGameObject(GameObject *go)
     p_currentGameObject = go;
     GetCurrentGameObject()->EventEmitter<IEventsComponent>::RegisterListener(this);
 
-    p_titleSeparator->SetEnabled(true);
     p_titleText->SetContent(go->GetName());
     GetCurrentGameObject()->EventEmitter<IEventsDestroy>::RegisterListener(this);
 
@@ -220,7 +217,6 @@ void Inspector::ShowGameObject(GameObject *go)
 void Inspector::ShowInspectorWidget(InspectorWidget *inspectorWidget)
 {
     Clear();
-    p_titleSeparator->SetEnabled(true);
     p_titleText->SetContent(inspectorWidget->GetTitle());
     AddWidget(inspectorWidget);
 }
@@ -396,7 +392,6 @@ void Inspector::SetCurrentWidgetBlocked(bool blocked)
 void Inspector::Clear()
 {
     p_titleText->SetContent("");
-    p_titleSeparator->SetEnabled(false);
     GetScrollPanel()->SetScrolling(Vector2i::Zero);
 
     while (!m_widgets.IsEmpty())

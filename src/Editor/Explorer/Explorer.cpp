@@ -40,6 +40,7 @@
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/IEventsProjectManager.h"
 #include "BangEditor/UndoRedoExplorerSelect.h"
+#include "BangEditor/EditorGameObjectFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -76,6 +77,7 @@ Explorer::Explorer()
     p_scrollPanel = GameObjectFactory::CreateUIScrollPanel();
     p_scrollPanel->GetScrollArea()->GetBackground()->SetTint(
                                         Color::LightGray.WithValue(0.7f));
+
     GameObject *scrollPanelGo = p_scrollPanel->GetGameObject();
     UILayoutElement *spLE = scrollPanelGo->AddComponent<UILayoutElement>();
     spLE->SetFlexibleSize( Vector2::One );
@@ -117,6 +119,7 @@ Explorer::Explorer()
 
     UIImageRenderer *eyeImg = GameObjectFactory::CreateUIImage();
     eyeImg->SetImageTexture( EditorTextureFactory::GetEyeIcon() );
+    eyeImg->SetTint(Color::Black);
     UILayoutElement *eyeImgLE = eyeImg->GetGameObject()->
                                         AddComponent<UILayoutElement>();
     eyeImgLE->SetPreferredSize( Vector2i(20, ToolBarHeight) );
@@ -129,13 +132,13 @@ Explorer::Explorer()
     iconsSizeSliderLE->SetLayoutPriority(2);
 
     p_backButton->GetGameObject()->SetParent(toolBar);
-    GameObjectFactory::CreateUIVSeparator(LayoutSizeType::MIN, 15)->SetParent(toolBar);
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 15)->SetParent(toolBar);
     eyeImg->GetGameObject()->SetParent(toolBar);
     GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 5)->SetParent(toolBar);
     p_iconSizeSlider->GetGameObject()->SetParent(toolBar);
     dirBar->SetParent(toolBar);
     toolBar->SetParent(mainVLGo);
-    GameObjectFactory::CreateUIHSeparator(LayoutSizeType::MIN, 5)->SetParent(mainVLGo);
+    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::MIN, 5)->SetParent(mainVLGo);
     p_scrollPanel->GetGameObject()->SetParent(mainVLGo);
 
     p_scrollPanel->GetScrollArea()->SetContainedGameObject(p_itemsContainer);
@@ -347,7 +350,10 @@ void Explorer::AddItem(const Path &itemPath)
 void Explorer::AddItem(ExplorerItem *explorerItem)
 {
     Path itemPath = explorerItem->GetPath();
-    if ( GetItemFromPath(itemPath) ) { return; }
+    if ( GetItemFromPath(itemPath) )
+    {
+        return;
+    }
 
     explorerItem->SetParent(p_itemsContainer);
 
@@ -558,21 +564,32 @@ void Explorer::OnShortcutPressed(const Shortcut &shortcut)
     if (selectedItem)
     {
         if (shortcut.GetName() == "Rename")
-        { selectedItem->Rename(); }
+        {
+            selectedItem->Rename();
+        }
 
         if (shortcut.GetName() == "Duplicate")
-        { selectedItem->Duplicate(); }
+        {
+            selectedItem->Duplicate();
+        }
 
         if (shortcut.GetName() == "Delete")
-        { selectedItem->Remove(); }
+        {
+            selectedItem->Remove();
+        }
 
         if (shortcut.GetName() == "Copy")
-        { EditorClipboard::CopyPath( selectedItem->GetPath() ); }
+        {
+            EditorClipboard::CopyPath( selectedItem->GetPath() );
+        }
     }
 
     if (shortcut.GetName() == "Paste" && EditorClipboard::HasCopiedPath())
     {
-        if (selectedItem) { selectedItem->Paste(); }
+        if (selectedItem)
+        {
+            selectedItem->Paste();
+        }
         else
         {
             const Path &copiedPath = EditorClipboard::GetCopiedPath();

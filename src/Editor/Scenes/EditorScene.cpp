@@ -72,6 +72,9 @@ void EditorScene::Init()
     m_menuBar->GetTransform()->TranslateLocal( Vector3(0, 0, -0.1) );
     m_menuBar->SetParent(m_mainEditorVL);
 
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 5)->
+                       SetParent(m_mainEditorVL);
+
     m_editSceneGameObjects = new EditSceneGameObjects();
 
     GameObject *topHLGo = GameObjectFactory::CreateUIGameObject();

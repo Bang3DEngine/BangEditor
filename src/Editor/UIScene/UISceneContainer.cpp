@@ -46,6 +46,7 @@ UISceneContainer::UISceneContainer()
     p_sceneImage = GameObject::Create<UISceneImage>();
 
     GetSceneToolbar()->SetParent(this);
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::PREFERRED, 5)->SetParent(this);
     p_sceneImage->SetParent(this);
 
     GetSceneToolbar()->EventEmitter<IEventsValueChanged>::RegisterListener(this);

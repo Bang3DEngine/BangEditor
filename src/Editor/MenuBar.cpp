@@ -82,6 +82,7 @@ MenuBar::MenuBar()
 {
     SetName("MenuBar");
     GameObjectFactory::CreateUIGameObjectInto(this);
+    GameObjectFactory::AddOuterShadow(this, Vector2i(0, 5), 0.3f);
 
     p_focusable = AddComponent<UIFocusable>();
 

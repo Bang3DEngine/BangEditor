@@ -39,11 +39,17 @@ void ComponentInspectorWidget::InitInnerWidgets()
     AddComponent<UIFocusable>();
     p_contextMenu->AddButtonPart( this );
     p_contextMenu->AddButtonPart( GetWidgetsContainer() );
+
+    GetInspectorWidgetTitle()->GetEnabledCheckBox()->SetEnabled(
+                MustShowEnabledCheckbox() );
+    GetInspectorWidgetTitle()->GetEnabledCheckBox()->
+                    EventEmitter<IEventsValueChanged>::RegisterListener(this);
 }
 
 void ComponentInspectorWidget::UpdateFromReference()
 {
-    p_enabledCheckBox->SetChecked( GetComponent()->IsEnabled() );
+    GetInspectorWidgetTitle()->GetEnabledCheckBox()->
+                               SetChecked( GetComponent()->IsEnabled() );
 }
 
 void ComponentInspectorWidget::SetComponent(Component *comp)
@@ -51,8 +57,9 @@ void ComponentInspectorWidget::SetComponent(Component *comp)
     ASSERT(!GetComponent());
 
     p_component = comp;
-    p_icon->SetImageTexture( GetComponentIconTexture() );
-    p_icon->SetTint( GetComponentIconTint() );
+    UIImageRenderer *icon = GetInspectorWidgetTitle()->GetIcon();
+    icon->SetImageTexture( GetComponentIconTexture() );
+    icon->SetTint( GetComponentIconTint() );
     Update();
 }
 
@@ -68,48 +75,7 @@ GameObject *ComponentInspectorWidget::GetInspectedGameObject() const
 
 void ComponentInspectorWidget::SetTitle(const String &title)
 {
-    p_titleText->SetContent(title);
-}
-
-GameObject *ComponentInspectorWidget::CreateTitleGameObject()
-{
-    GameObject *titleHLGo = GameObjectFactory::CreateUIGameObject();
-    UIHorizontalLayout *titleHL = titleHLGo->AddComponent<UIHorizontalLayout>();
-    titleHL->SetSpacing(5);
-
-    p_icon = GameObjectFactory::CreateUIImage(Color::White);
-    GameObject *iconGo = p_icon->GetGameObject();
-    UILayoutElement *iconLE = iconGo->AddComponent<UILayoutElement>();
-    iconLE->SetPreferredSize( Vector2i(16) );
-    p_icon->SetTint(Color::DarkGray);
-
-    GameObject *titleTextGo = GameObjectFactory::CreateUIGameObject();
-    UITextRenderer *titleText = titleTextGo->AddComponent<UITextRenderer>();
-    titleText->SetHorizontalAlign(HorizontalAlignment::LEFT);
-    titleText->SetContent("InspectorWidget");
-    titleText->SetTextSize(12);
-    p_titleText = titleText;
-
-    UILayoutElement *titleLE = titleTextGo->AddComponent<UILayoutElement>();
-    titleLE->SetFlexibleWidth(99.9f);
-
-    GameObject *enabledTextGo = GameObjectFactory::CreateUIGameObject();
-    UITextRenderer *enabledText = enabledTextGo->AddComponent<UITextRenderer>();
-    enabledText->SetContent("Enabled");
-    enabledText->SetTextSize(12);
-    enabledTextGo->SetEnabled( MustShowEnabledCheckbox() );
-
-    p_enabledCheckBox = GameObjectFactory::CreateUICheckBox();
-    GameObject *enabledCheckBoxGo = p_enabledCheckBox->GetGameObject();
-    p_enabledCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-    enabledCheckBoxGo->SetEnabled( MustShowEnabledCheckbox() );
-
-    iconGo->SetParent(titleHLGo);
-    titleTextGo->SetParent(titleHLGo);
-    enabledTextGo->SetParent(titleHLGo);
-    enabledCheckBoxGo->SetParent(titleHLGo);
-
-    return titleHLGo;
+    GetInspectorWidgetTitle()->GetText()->SetContent(title);
 }
 
 bool ComponentInspectorWidget::CanBeRemovedFromContextMenu() const
@@ -120,9 +86,10 @@ bool ComponentInspectorWidget::CanBeRemovedFromContextMenu() const
 void ComponentInspectorWidget::OnValueChangedCIW(
                             EventEmitter<IEventsValueChanged> *object)
 {
-    if (object == p_enabledCheckBox)
+    if (object == GetInspectorWidgetTitle()->GetEnabledCheckBox())
     {
-        GetComponent()->SetEnabled( p_enabledCheckBox->IsChecked() );
+        GetComponent()->SetEnabled( GetInspectorWidgetTitle()->
+                                    GetEnabledCheckBox()->IsChecked() );
     }
 }
 
@@ -255,7 +222,6 @@ void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
         MoveComponent(GetComponent(), 1);
         PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoXMLBefore);
     });
-    menuRootItem->AddSeparator();
 
     remove->SetOverAndActionEnabled( CanBeRemovedFromContextMenu() );
     cut->SetOverAndActionEnabled( CanBeRemovedFromContextMenu() );

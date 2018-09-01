@@ -87,6 +87,8 @@ MenuItem::MenuItem(MenuItemType itemType)
     csf->SetHorizontalSizeType(LayoutSizeType::PREFERRED);
     csf->SetVerticalSizeType(LayoutSizeType::PREFERRED);
 
+    GameObjectFactory::AddOuterBorder(childrenListGo, Vector2i(1));
+
     AdjustToBeInsideScreen();
 
     childrenListGo->AddComponent<UILayoutIgnorer>();

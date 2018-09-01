@@ -4,7 +4,9 @@
 #include "Bang/UILabel.h"
 #include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
+#include "Bang/UICheckBox.h"
 #include "Bang/EventListener.h"
+#include "Bang/RectTransform.h"
 #include "Bang/TextureFactory.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -36,22 +38,23 @@ void InspectorWidget::Init()
     // p_bgRenderer->SetMode(UIImageRenderer::Mode::SLICE_9);
     p_bgRenderer->SetTint(Color::Zero);
 
+    GameObjectFactory::AddInnerBorder(this, Vector2i(1));
+
     UIVerticalLayout *mainVL = AddComponent<UIVerticalLayout>();
-    mainVL->SetPaddings(5);
     mainVL->SetSpacing(1);
 
     UILayoutElement *vlLE = AddComponent<UILayoutElement>();
     vlLE->SetFlexibleSize( Vector2(1) );
 
-    GameObject *titleGo = CreateTitleGameObject();
+    p_inspectorWidgetTitleGo = CreateTitleGameObject();
 
-    GameObject *topSeparator =
-            GameObjectFactory::CreateUIHSeparator(LayoutSizeType::MIN, 5, 1.0f);
+    GameObject *topSpacer =
+            GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 4);
 
     GameObject *widgetsGo = GameObjectFactory::CreateUIGameObject();
     UIVerticalLayout *widgetsVL = widgetsGo->AddComponent<UIVerticalLayout>();
     widgetsVL->SetChildrenHorizontalStretch(Stretch::FULL);
-    widgetsVL->SetPaddings(4);
+    widgetsVL->SetPaddings(10);
     widgetsVL->SetSpacing(3);
     UILayoutElement *widgetsLE = widgetsGo->AddComponent<UILayoutElement>();
     widgetsLE->SetFlexibleWidth(1.0f);
@@ -60,8 +63,8 @@ void InspectorWidget::Init()
 
     SetLabelsWidth( DefaultLabelWidth );
 
-    titleGo->SetParent(this);
-    topSeparator->SetParent(this);
+    p_inspectorWidgetTitleGo->SetParent(this);
+    topSpacer->SetParent(this);
     widgetsGo->SetParent(this);
 
     SetReceiveEventsCommon(false);
@@ -80,7 +83,7 @@ void InspectorWidget::SetBackgroundColor(const Color &bgColor)
 
 void InspectorWidget::SetTitle(const String &title)
 {
-    p_titleText->SetContent(title);
+    p_inspectorWidgetTitleGo->GetText()->SetContent(title);
 }
 
 void InspectorWidget::SetLabelsWidth(int labelsWidth)
@@ -136,7 +139,7 @@ void InspectorWidget::AddWidget(const String &labelContent,
 
 const String &InspectorWidget::GetTitle() const
 {
-    return p_titleText->GetContent();
+    return p_inspectorWidgetTitleGo->GetText()->GetContent();
 }
 
 void InspectorWidget::AddWidgetInternal(const String &labelContent,
@@ -216,14 +219,83 @@ GameObject *InspectorWidget::GetWidgetsContainer() const
     return p_widgetsContainer;
 }
 
-GameObject *InspectorWidget::CreateTitleGameObject()
+InspectorWidgetTitle *InspectorWidget::CreateTitleGameObject()
 {
-    GameObject *titleGo = GameObjectFactory::CreateUIGameObject();
-    UITextRenderer *titleText = titleGo->AddComponent<UITextRenderer>();
+    InspectorWidgetTitle *widgetTitleGo =
+                            GameObject::Create<InspectorWidgetTitle>();
+    return widgetTitleGo;
+}
+
+InspectorWidgetTitle *InspectorWidget::GetInspectorWidgetTitle() const
+{
+    return p_inspectorWidgetTitleGo;
+}
+
+InspectorWidgetTitle::InspectorWidgetTitle()
+{
+    GameObjectFactory::CreateUIGameObjectInto(this);
+    UIHorizontalLayout *titleHL = AddComponent<UIHorizontalLayout>();
+    titleHL->SetPaddings(5, 7, 5, 5);
+    titleHL->SetSpacing(5);
+
+    UIImageRenderer *bg = AddComponent<UIImageRenderer>();
+    bg->SetTint(Color::White.WithValue(0.9f));
+
+    GameObjectFactory::AddInnerBorder(this, Vector2i(1));
+
+    p_icon = GameObjectFactory::CreateUIImage(Color::White);
+    GameObject *iconGo = p_icon->GetGameObject();
+    UILayoutElement *iconLE = iconGo->AddComponent<UILayoutElement>();
+    iconLE->SetPreferredSize( Vector2i(16) );
+    p_icon->SetTint(Color::DarkGray);
+
+    GameObject *titleTextGo = GameObjectFactory::CreateUIGameObject();
+    UITextRenderer *titleText = titleTextGo->AddComponent<UITextRenderer>();
     titleText->SetHorizontalAlign(HorizontalAlignment::LEFT);
     titleText->SetContent("InspectorWidget");
-    titleText->SetTextSize(13);
-    p_titleText = titleText;
+    titleText->SetTextSize(12);
+    p_text = titleText;
 
-    return titleGo;
+    UILayoutElement *titleLE = titleTextGo->AddComponent<UILayoutElement>();
+    titleLE->SetFlexibleWidth(99.9f);
+
+    GameObject *enabledTextGo = GameObjectFactory::CreateUIGameObject();
+    UITextRenderer *enabledText = enabledTextGo->AddComponent<UITextRenderer>();
+    enabledText->SetContent("Enabled");
+    enabledText->SetTextSize(12);
+    enabledTextGo->SetEnabled( false );
+    p_enabledText = enabledText;
+
+    p_enabledCheckBox = GameObjectFactory::CreateUICheckBox();
+    GameObject *enabledCheckBoxGo = p_enabledCheckBox->GetGameObject();
+
+    iconGo->SetParent(this);
+    titleTextGo->SetParent(this);
+    enabledTextGo->SetParent(this);
+    enabledCheckBoxGo->SetParent(this);
+}
+
+InspectorWidgetTitle::~InspectorWidgetTitle()
+{
+
+}
+
+UITextRenderer *InspectorWidgetTitle::GetText() const
+{
+    return p_text;
+}
+
+UIImageRenderer *InspectorWidgetTitle::GetIcon() const
+{
+    return p_icon;
+}
+
+UITextRenderer *InspectorWidgetTitle::GetEnabledText() const
+{
+    return p_enabledText;
+}
+
+UICheckBox *InspectorWidgetTitle::GetEnabledCheckBox() const
+{
+    return p_enabledCheckBox;
 }

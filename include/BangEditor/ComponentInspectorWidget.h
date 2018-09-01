@@ -43,7 +43,6 @@ protected:
     GameObject *GetInspectedGameObject() const;
 
     virtual void SetTitle(const String& title) override;
-    virtual GameObject *CreateTitleGameObject() override;
 
     virtual bool CanBeRemovedFromContextMenu() const;
 
@@ -57,10 +56,6 @@ private:
 
     XMLNode m_undoXMLBefore;
     UIContextMenu *p_contextMenu = nullptr;
-
-    UIImageRenderer *p_icon = nullptr;
-    UITextRenderer *p_titleText = nullptr;
-    UICheckBox *p_enabledCheckBox = nullptr;
 
     // UIContextMenu
     virtual void OnCreateContextMenu(MenuItem *menuRootItem);

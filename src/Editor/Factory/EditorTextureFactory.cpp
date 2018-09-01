@@ -271,6 +271,10 @@ Texture2D* EditorTextureFactory::GetComponentIcon(const String &componentName)
 
 Color EditorTextureFactory::GetComponentIconTint(const String &componentName)
 {
+    if (componentName == "MeshRenderer")
+    {
+        return Color::White.WithValue(0.2f);
+    }
     return Color::White;
 }
 

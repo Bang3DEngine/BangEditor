@@ -59,7 +59,6 @@ private:
     UIVerticalLayout *p_mainVL   = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
     UITextRenderer *p_titleText = nullptr;
-    GameObject *p_titleSeparator = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
     UIImageRenderer *p_blockLayer = nullptr;
 
