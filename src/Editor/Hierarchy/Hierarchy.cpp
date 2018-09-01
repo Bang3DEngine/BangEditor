@@ -70,6 +70,9 @@ Hierarchy::Hierarchy()
     UILayoutElement *treeLE = treeGo->AddComponent<UILayoutElement>();
     treeLE->SetFlexibleSize( Vector2::One );
     GetUITree()->GetUIList()->GetDirLayout()->SetPaddingTop(10);
+    GetUITree()->GetUIList()->GetScrollPanel()->
+                 GetScrollArea()->GetBackground()->SetTint(
+                                        Color::White.WithValue(0.7f));
 
     GetUITree()->SetSelectionCallback([this](GOItem *item, UIList::Action action)
     {

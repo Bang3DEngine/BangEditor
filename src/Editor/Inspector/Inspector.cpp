@@ -61,6 +61,8 @@ Inspector::Inspector()
 
     UIScrollPanel *scrollPanel = GameObjectFactory::CreateUIScrollPanel();
     scrollPanel->GetScrollArea()->GetBackground()->SetVisible(false);
+    scrollPanel->GetScrollArea()->GetBackground()->SetTint(
+                                            Color::White.WithValue(0.7f));
 
     UILayoutElement *scrollLE = scrollPanel->GetGameObject()->
                                 AddComponent<UILayoutElement>();

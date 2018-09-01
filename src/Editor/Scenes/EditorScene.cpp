@@ -64,16 +64,17 @@ void EditorScene::Init()
     GameObjectFactory::CreateUICanvasInto(this);
     SetName("EditorScene");
 
-    m_mainEditorVL = GameObjectFactory::CreateUIGameObjectNamed("MainEditorVL");
-    m_mainEditorVL->AddComponent<UIVerticalLayout>();
-    m_mainEditorVL->SetParent(this);
+    m_mainEditorVLGo = GameObjectFactory::CreateUIGameObjectNamed("MainEditorVL");
+    UIVerticalLayout *mainEdVL = m_mainEditorVLGo->AddComponent<UIVerticalLayout>();
+    mainEdVL->SetPaddings(5, 30, 5, 0);
+    m_mainEditorVLGo->SetParent(this);
 
     m_menuBar = GameObject::Create<MenuBar>();
     m_menuBar->GetTransform()->TranslateLocal( Vector3(0, 0, -0.1) );
-    m_menuBar->SetParent(m_mainEditorVL);
+    m_menuBar->SetParent(m_mainEditorVLGo);
 
     GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 5)->
-                       SetParent(m_mainEditorVL);
+                       SetParent(m_mainEditorVLGo);
 
     m_editSceneGameObjects = new EditSceneGameObjects();
 
@@ -82,10 +83,10 @@ void EditorScene::Init()
     UILayoutElement *topHLLe = topHLGo->AddComponent<UILayoutElement>();
     topHLLe->SetLayoutPriority(1);
     topHLLe->SetFlexibleSize(Vector2(1, 1.5f));
-    topHLGo->SetParent(m_mainEditorVL);
+    topHLGo->SetParent(m_mainEditorVLGo);
 
     GameObjectFactory::CreateUIDirLayoutMovableVSeparator()->GetGameObject()->
-                       SetParent(m_mainEditorVL);
+                       SetParent(m_mainEditorVLGo);
 
     GameObject *botHLGo = GameObjectFactory::CreateUIGameObjectNamed("BotHL");
     botHLGo->AddComponent<UIHorizontalLayout>();
@@ -93,7 +94,7 @@ void EditorScene::Init()
     botHLLe->SetLayoutPriority(1);
     botHLLe->SetMinSize( Vector2i(1, 300) );
     botHLLe->SetFlexibleSize( Vector2(1, 1) );
-    botHLGo->SetParent(m_mainEditorVL);
+    botHLGo->SetParent(m_mainEditorVLGo);
 
     // Inspector, Hierarchy, etc. creation
     p_sceneEditContainer = GameObject::Create<UISceneEditContainer>();
@@ -162,6 +163,7 @@ void EditorScene::Init()
     cam->AddRenderPass(RenderPass::OVERLAY);
     #endif
 
+    cam->SetClearColor( Color::White.WithValue(0.8f) );
     cam->SetClearMode(Camera::ClearMode::COLOR);
     cam->SetRenderFlags( RenderFlags(RenderFlag::NONE).
                          SetOn(RenderFlag::CLEAR_COLOR).

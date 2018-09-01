@@ -104,7 +104,7 @@ private:
     UITabContainer *p_botRightTabContainer = nullptr;
 
     MenuBar *m_menuBar = nullptr;
-    GameObject *m_mainEditorVL = nullptr;
+    GameObject *m_mainEditorVLGo = nullptr;
 
     std::stack<AARecti> m_viewportsStack;
 

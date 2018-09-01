@@ -76,7 +76,7 @@ Explorer::Explorer()
     // Scroll Panel
     p_scrollPanel = GameObjectFactory::CreateUIScrollPanel();
     p_scrollPanel->GetScrollArea()->GetBackground()->SetTint(
-                                        Color::LightGray.WithValue(0.7f));
+                                        Color::White.WithValue(0.7f));
 
     GameObject *scrollPanelGo = p_scrollPanel->GetGameObject();
     UILayoutElement *spLE = scrollPanelGo->AddComponent<UILayoutElement>();

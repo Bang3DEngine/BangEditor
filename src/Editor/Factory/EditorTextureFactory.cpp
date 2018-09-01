@@ -275,6 +275,18 @@ Color EditorTextureFactory::GetComponentIconTint(const String &componentName)
     {
         return Color::White.WithValue(0.2f);
     }
+    else if (componentName == "DirectionalLight")
+    {
+        return Color::White.WithValue(0.2f);
+    }
+    else if (componentName == "PointLight")
+    {
+        return Color::White.WithValue(0.2f);
+    }
+    else if (componentName == "BehaviourContainer")
+    {
+        return Color::White.WithValue(0.2f);
+    }
     return Color::White;
 }
 
@@ -322,6 +334,24 @@ Texture2D* EditorTextureFactory::GetIconForExtension(const String &ext)
     }
 
     return EditorTextureFactory::GetFileIcon();
+}
+
+Color EditorTextureFactory::GetPathIconTint(const Path &path)
+{
+    return EditorTextureFactory::GetExtensionIconTint(path.GetExtension());
+}
+
+Color EditorTextureFactory::GetExtensionIconTint(const String &extension)
+{
+    if (Extensions::Equals(extension, Extensions::GetSceneExtension()))
+    {
+        return Color::Black;
+    }
+    else if (Extensions::Equals(extension, Extensions::GetBehaviourExtensions()))
+    {
+        return Color::Black;
+    }
+    return Color::White;
 }
 
 EditorTextureFactory *EditorTextureFactory::GetInstance()

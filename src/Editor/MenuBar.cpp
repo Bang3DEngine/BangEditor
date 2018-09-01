@@ -82,12 +82,13 @@ MenuBar::MenuBar()
 {
     SetName("MenuBar");
     GameObjectFactory::CreateUIGameObjectInto(this);
+    GameObjectFactory::AddInnerBorder(this, Vector2i(1));
     GameObjectFactory::AddOuterShadow(this, Vector2i(0, 5), 0.3f);
 
     p_focusable = AddComponent<UIFocusable>();
 
     UIImageRenderer *bg = AddComponent<UIImageRenderer>();
-    bg->SetTint( Color::LightGray.WithValue(0.9f) );
+    bg->SetTint( Color::White.WithValue(0.85f) );
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinHeight(20);

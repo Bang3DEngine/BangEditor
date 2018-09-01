@@ -5,6 +5,7 @@
 #include "Bang/Window.h"
 #include "Bang/UIButton.h"
 #include "Bang/Application.h"
+#include "Bang/UIScrollArea.h"
 #include "Bang/WindowManager.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/TextureFactory.h"
@@ -59,6 +60,8 @@ Console::Console()
     p_messageList = GameObjectFactory::CreateUIList();
     // p_messageList->GetScrollPanel()->SetForceHorizontalFit(false);
     p_messageList->GetScrollPanel()->SetForceHorizontalFit(true);
+    p_messageList->GetScrollPanel()->GetScrollArea()->GetBackground()->
+                                     SetTint(Color::White.WithValue(0.7f));
     p_messageList->GetScrollPanel()->SetVerticalScrollBarSide(HorizontalSide::RIGHT);
     UILayoutElement *listLE = p_messageList->GetGameObject()->
                               AddComponent<UILayoutElement>();
