@@ -9,13 +9,13 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class InspectorWidget;
 
-class FileInspectorWidgetFactory
+class ResourceInspectorWidgetFactory
 {
 public:
     static InspectorWidget* Create(const Path &path);
 
-    FileInspectorWidgetFactory() = delete;
-    virtual ~FileInspectorWidgetFactory() = delete;
+    ResourceInspectorWidgetFactory() = delete;
+    virtual ~ResourceInspectorWidgetFactory() = delete;
 };
 
 NAMESPACE_BANG_EDITOR_END

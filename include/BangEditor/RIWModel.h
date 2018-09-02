@@ -1,21 +1,21 @@
-#ifndef FIWMODEL_H
-#define FIWMODEL_H
+#ifndef RIWMODEL_H
+#define RIWMODEL_H
 
 #include "Bang/Path.h"
 #include "Bang/Model.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/IEventsValueChanged.h"
 
-#include "BangEditor/FIWResource.h"
+#include "BangEditor/RIWResource.h"
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class PreviewViewer;
 
-class FIWModel : public FIWResource<Model>
+class RIWModel : public RIWResource<Model>
 {
-    GAMEOBJECT_EDITOR(FIWModel);
+    GAMEOBJECT_EDITOR(RIWModel);
 
 public:
     // InspectorWidget
@@ -24,21 +24,21 @@ public:
 private:
     PreviewViewer *p_modelPreviewViewer = nullptr;
 
-    FIWModel();
-    virtual ~FIWModel();
+    RIWModel();
+    virtual ~RIWModel();
 
     Model *GetModel() const;
 
-    // FIWResource
+    // RIWResource
     void UpdateInputsFromResource() override;
 
-    // FIWResource
-    void OnValueChangedFIWResource(EventEmitter<IEventsValueChanged> *object) override;
+    // RIWResource
+    void OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *object) override;
 
-    friend class FileInspectorWidgetFactory;
+    friend class ResourceInspectorWidgetFactory;
 };
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // FIWMODEL_H
+#endif // RIWMODEL_H
 

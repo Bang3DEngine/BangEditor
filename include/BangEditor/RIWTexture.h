@@ -1,12 +1,12 @@
-#ifndef FIWTEXTURE_H
-#define FIWTEXTURE_H
+#ifndef RIWTEXTURE_H
+#define RIWTEXTURE_H
 
 #include "Bang/Path.h"
 #include "Bang/Texture2D.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/IEventsValueChanged.h"
 
-#include "BangEditor/FIWResource.h"
+#include "BangEditor/RIWResource.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UISlider;
@@ -20,9 +20,9 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class FIWTexture : public FIWResource<Texture2D>
+class RIWTexture : public RIWResource<Texture2D>
 {
-    GAMEOBJECT_EDITOR(FIWTexture);
+    GAMEOBJECT_EDITOR(RIWTexture);
 
 public:
     // InspectorWidget
@@ -37,22 +37,22 @@ private:
     UIImageRenderer *p_textureImageRend = nullptr;
     UIAspectRatioFitter *p_imageAspectRatioFitter = nullptr;
 
-	FIWTexture();
-	virtual ~FIWTexture();
+	RIWTexture();
+	virtual ~RIWTexture();
 
     Texture2D *GetTexture() const;
 
-    // FIWResource
+    // RIWResource
     void UpdateInputsFromResource() override;
 
-    // FIWResource
-    void OnValueChangedFIWResource(EventEmitter<IEventsValueChanged> *object)
+    // RIWResource
+    void OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *object)
                                                                     override;
 
-    friend class FileInspectorWidgetFactory;
+    friend class ResourceInspectorWidgetFactory;
 };
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // FIWTEXTURE_H
+#endif // RIWTEXTURE_H
 

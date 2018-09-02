@@ -8,11 +8,11 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class FileInspectorWidget : public InspectorWidget
+class ResourceInspectorWidget : public InspectorWidget
 {
 protected:
-    FileInspectorWidget() = default;
-    virtual ~FileInspectorWidget() = default;
+    ResourceInspectorWidget() = default;
+    virtual ~ResourceInspectorWidget() = default;
 
     // InspectorWidget
     virtual void InitInnerWidgets() override;
@@ -26,7 +26,7 @@ protected:
 private:
     Path m_path = Path::Empty;
 
-    friend class FileInspectorWidgetFactory;
+    friend class ResourceInspectorWidgetFactory;
 };
 
 NAMESPACE_BANG_EDITOR_END

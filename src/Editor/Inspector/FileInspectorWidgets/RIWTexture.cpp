@@ -1,4 +1,4 @@
-#include "BangEditor/FIWTexture.h"
+#include "BangEditor/RIWTexture.h"
 
 #include "Bang/UILabel.h"
 #include "Bang/UISlider.h"
@@ -17,20 +17,20 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-FIWTexture::FIWTexture()
+RIWTexture::RIWTexture()
 {
 }
 
-FIWTexture::~FIWTexture()
+RIWTexture::~RIWTexture()
 {
 }
 
-void FIWTexture::Init()
+void RIWTexture::Init()
 {
-    FileInspectorWidget::Init();
+    ResourceInspectorWidget::Init();
 
     SetTitle("Texture");
-    SetName("FIWTexture");
+    SetName("RIWTexture");
 
     p_filterModeComboBox = GameObjectFactory::CreateUIComboBox();
     p_filterModeComboBox->AddItem("Nearest",      int(GL::FilterMode::NEAREST));
@@ -76,12 +76,12 @@ void FIWTexture::Init()
     SetLabelsWidth(100);
 }
 
-Texture2D *FIWTexture::GetTexture() const
+Texture2D *RIWTexture::GetTexture() const
 {
     return SCAST<Texture2D*>(GetResource().Get());
 }
 
-void FIWTexture::UpdateInputsFromResource()
+void RIWTexture::UpdateInputsFromResource()
 {
     p_textureImageRend->SetImageTexture( GetTexture() );
     p_textureImageRend->SetTint(Color::White);
@@ -96,7 +96,7 @@ void FIWTexture::UpdateInputsFromResource()
     p_alphaCutoffInput->SetValue( GetTexture()->GetAlphaCutoff() );
 }
 
-void FIWTexture::OnValueChangedFIWResource(EventEmitter<IEventsValueChanged>*)
+void RIWTexture::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged>*)
 {
     Path texImportPath = ImportFilesManager::GetImportFilepath(
                                     GetTexture()->GetResourceFilepath());

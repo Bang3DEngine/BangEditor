@@ -1,4 +1,4 @@
-#include "BangEditor/FIWTextureCubeMap.h"
+#include "BangEditor/RIWTextureCubeMap.h"
 
 #include "Bang/UILabel.h"
 #include "Bang/Resources.h"
@@ -13,20 +13,20 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-FIWTextureCubeMap::FIWTextureCubeMap()
+RIWTextureCubeMap::RIWTextureCubeMap()
 {
 }
 
-FIWTextureCubeMap::~FIWTextureCubeMap()
+RIWTextureCubeMap::~RIWTextureCubeMap()
 {
 }
 
-void FIWTextureCubeMap::Init()
+void RIWTextureCubeMap::Init()
 {
-    FileInspectorWidget::Init();
+    ResourceInspectorWidget::Init();
 
     SetTitle("Texture Cube Map");
-    SetName("FIWTextureCubeMap");
+    SetName("RIWTextureCubeMap");
 
     p_topTextureInput = GameObject::Create<UIInputTexture>();
     p_topTextureInput->SetExtensions( Extensions::GetImageExtensions() );
@@ -74,12 +74,12 @@ void FIWTextureCubeMap::Init()
     SetLabelsWidth(100);
 }
 
-TextureCubeMap *FIWTextureCubeMap::GetTextureCubeMap() const
+TextureCubeMap *RIWTextureCubeMap::GetTextureCubeMap() const
 {
     return SCAST<TextureCubeMap*>(GetResource().Get());
 }
 
-void FIWTextureCubeMap::CheckValidity() const
+void RIWTextureCubeMap::CheckValidity() const
 {
     TextureCubeMap *tcm = GetTextureCubeMap();
     RH<Texture2D> topTex   = tcm->GetSideTexture(GL::CubeMapDir::TOP);
@@ -120,7 +120,7 @@ void FIWTextureCubeMap::CheckValidity() const
     }
 }
 
-void FIWTextureCubeMap::UpdateInputsFromResource()
+void RIWTextureCubeMap::UpdateInputsFromResource()
 {
     TextureCubeMap *tcm = GetTextureCubeMap();
     const RH<Texture2D> topTex   = tcm->GetSideTexture(GL::CubeMapDir::TOP);
@@ -141,7 +141,7 @@ void FIWTextureCubeMap::UpdateInputsFromResource()
     CheckValidity();
 }
 
-void FIWTextureCubeMap::OnValueChangedFIWResource(
+void RIWTextureCubeMap::OnValueChangedRIWResource(
                                         EventEmitter<IEventsValueChanged> *ee)
 {
     if (ee != p_textureCMPreviewer)

@@ -1,4 +1,4 @@
-#include "BangEditor/FIWBehaviour.h"
+#include "BangEditor/RIWBehaviour.h"
 
 #include "Bang/File.h"
 #include "Bang/Path.h"
@@ -19,12 +19,12 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-void FIWBehaviour::Init()
+void RIWBehaviour::Init()
 {
-    FileInspectorWidget::Init();
+    ResourceInspectorWidget::Init();
 
     SetTitle("Behaviour");
-    SetName("FIWBehaviour");
+    SetName("RIWBehaviour");
 
     GameObject *codeTextGo = GameObjectFactory::CreateUIGameObject();
     p_codeText = codeTextGo->AddComponent<UITextRenderer>();
@@ -69,15 +69,15 @@ void FIWBehaviour::Init()
     SetLabelsWidth(100);
 }
 
-FIWBehaviour::FIWBehaviour()
+RIWBehaviour::RIWBehaviour()
 {
 }
 
-FIWBehaviour::~FIWBehaviour()
+RIWBehaviour::~RIWBehaviour()
 {
 }
 
-void FIWBehaviour::UpdateFromFileWhenChanged()
+void RIWBehaviour::UpdateFromFileWhenChanged()
 {
     String behaviourContents = File(GetPath()).GetContents();
     p_codeText->SetContent(behaviourContents);

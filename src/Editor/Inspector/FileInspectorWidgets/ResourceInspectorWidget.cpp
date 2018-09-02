@@ -1,23 +1,23 @@
-#include "BangEditor/FileInspectorWidget.h"
+#include "BangEditor/ResourceInspectorWidget.h"
 
 #include "Bang/UICheckBox.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-void FileInspectorWidget::InitInnerWidgets()
+void ResourceInspectorWidget::InitInnerWidgets()
 {
     InspectorWidget::InitInnerWidgets();
     GetInspectorWidgetTitle()->GetEnabledCheckBox()->
                                GetGameObject()->SetEnabled(false);
 }
 
-void FileInspectorWidget::Update()
+void ResourceInspectorWidget::Update()
 {
     InspectorWidget::Update();
 }
 
-void FileInspectorWidget::SetPath(const Path &path)
+void ResourceInspectorWidget::SetPath(const Path &path)
 {
     if (path != GetPath())
     {
@@ -26,7 +26,7 @@ void FileInspectorWidget::SetPath(const Path &path)
     }
 }
 
-Path FileInspectorWidget::GetPath() const
+Path ResourceInspectorWidget::GetPath() const
 {
     return m_path;
 }

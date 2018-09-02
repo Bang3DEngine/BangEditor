@@ -1,46 +1,46 @@
-#include "BangEditor/FileInspectorWidgetFactory.h"
+#include "BangEditor/ResourceInspectorWidgetFactory.h"
 
 #include "Bang/Path.h"
 #include "Bang/String.h"
 #include "Bang/Extensions.h"
 
-#include "BangEditor/FIWModel.h"
-#include "BangEditor/FIWTexture.h"
-#include "BangEditor/FIWMaterial.h"
-#include "BangEditor/FIWBehaviour.h"
-#include "BangEditor/FIWTextureCubeMap.h"
-#include "BangEditor/FIWPhysicsMaterial.h"
-#include "BangEditor/FileInspectorWidget.h"
+#include "BangEditor/RIWModel.h"
+#include "BangEditor/RIWTexture.h"
+#include "BangEditor/RIWMaterial.h"
+#include "BangEditor/RIWBehaviour.h"
+#include "BangEditor/RIWTextureCubeMap.h"
+#include "BangEditor/RIWPhysicsMaterial.h"
+#include "BangEditor/ResourceInspectorWidget.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-InspectorWidget *FileInspectorWidgetFactory::Create(const Path &path)
+InspectorWidget *ResourceInspectorWidgetFactory::Create(const Path &path)
 {
-    FileInspectorWidget *fiw = nullptr;
+    ResourceInspectorWidget *fiw = nullptr;
     if (path.HasExtension(Extensions::GetMaterialExtension()))
     {
-        fiw = GameObject::Create<FIWMaterial>();
+        fiw = GameObject::Create<RIWMaterial>();
     }
     if (path.HasExtension(Extensions::GetPhysicsMaterialExtension()))
     {
-        fiw = GameObject::Create<FIWPhysicsMaterial>();
+        fiw = GameObject::Create<RIWPhysicsMaterial>();
     }
     else if (path.HasExtension(Extensions::GetImageExtensions()))
     {
-        fiw = GameObject::Create<FIWTexture>();
+        fiw = GameObject::Create<RIWTexture>();
     }
     else if (path.HasExtension(Extensions::GetModelExtensions()))
     {
-        fiw = GameObject::Create<FIWModel>();
+        fiw = GameObject::Create<RIWModel>();
     }
     else if (path.HasExtension(Extensions::GetTextureCubeMapExtension()))
     {
-        fiw = GameObject::Create<FIWTextureCubeMap>();
+        fiw = GameObject::Create<RIWTextureCubeMap>();
     }
     else if (path.HasExtension(Extensions::GetBehaviourExtensions()))
     {
-        fiw = GameObject::Create<FIWBehaviour>();
+        fiw = GameObject::Create<RIWBehaviour>();
     }
 
     if (fiw)

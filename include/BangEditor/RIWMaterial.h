@@ -1,12 +1,12 @@
-#ifndef FIWMATERIAL_H
-#define FIWMATERIAL_H
+#ifndef RIWMATERIAL_H
+#define RIWMATERIAL_H
 
 #include "Bang/Path.h"
 #include "Bang/Material.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/IEventsValueChanged.h"
 
-#include "BangEditor/FIWResource.h"
+#include "BangEditor/RIWResource.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UISlider;
@@ -24,9 +24,9 @@ FORWARD class UIInputVector;
 FORWARD class UIInputTexture;
 FORWARD class PreviewViewer;
 
-class FIWMaterial : public FIWResource<Material>
+class RIWMaterial : public RIWResource<Material>
 {
-    GAMEOBJECT_EDITOR(FIWMaterial);
+    GAMEOBJECT_EDITOR(RIWMaterial);
 
 public:
     // InspectorWidget
@@ -54,21 +54,21 @@ private:
     UIInputFile *p_fragmentShaderInput = nullptr;
     PreviewViewer *p_materialPreviewViewer = nullptr;
 
-	FIWMaterial();
-    virtual ~FIWMaterial();
+	RIWMaterial();
+    virtual ~RIWMaterial();
 
     Material *GetMaterial() const;
 
-    // FIWResource
+    // RIWResource
     void UpdateInputsFromResource() override;
 
-    // FIWResource
-    void OnValueChangedFIWResource(EventEmitter<IEventsValueChanged> *object) override;
+    // RIWResource
+    void OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *object) override;
 
-    friend class FileInspectorWidgetFactory;
+    friend class ResourceInspectorWidgetFactory;
 };
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // FIWMATERIAL_H
+#endif // RIWMATERIAL_H
 

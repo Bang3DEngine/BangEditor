@@ -1,5 +1,5 @@
-#ifndef FIWRESOURCE_H
-#define FIWRESOURCE_H
+#ifndef RIWRESOURCE_H
+#define RIWRESOURCE_H
 
 #include "Bang/Path.h"
 #include "Bang/XMLNode.h"
@@ -9,7 +9,7 @@
 #include "Bang/IEventsResource.h"
 #include "Bang/IEventsValueChanged.h"
 
-#include "BangEditor/FileInspectorWidget.h"
+#include "BangEditor/ResourceInspectorWidget.h"
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -18,13 +18,13 @@ FORWARD class UndoRedoFileChange;
 FORWARD class UndoRedoSerializableChange;
 
 template <class T>
-class FIWResource : public FileInspectorWidget,
+class RIWResource : public ResourceInspectorWidget,
                     public EventListener<IEventsValueChanged>,
                     public EventListener<IEventsResource>
 {
 protected:
-    FIWResource() = default;
-    virtual ~FIWResource() = default;
+    RIWResource() = default;
+    virtual ~RIWResource() = default;
 
     // InspectorWidget
     virtual void InitInnerWidgets() override;
@@ -37,12 +37,12 @@ protected:
     void BeginUndoRedo();
     void EndUndoRedo();
 
-    virtual void OnValueChangedFIWResource(
+    virtual void OnValueChangedRIWResource(
                         EventEmitter<IEventsValueChanged> *object) = 0;
     virtual void UpdateInputsFromResource() = 0;
     virtual Array<Path> GetUndoRedoPaths() const;
 
-    // FileInspectorWidget
+    // ResourceInspectorWidget
     virtual void UpdateFromFileWhenChanged() override;
 
 private:
@@ -60,7 +60,7 @@ private:
 
 NAMESPACE_BANG_EDITOR_END
 
-#include "BangEditor/FIWResource.tcc"
+#include "BangEditor/RIWResource.tcc"
 
-#endif // FIWRESOURCE_H
+#endif // RIWRESOURCE_H
 

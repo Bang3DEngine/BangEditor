@@ -1,12 +1,12 @@
-#ifndef FIWTEXTURECUBEMAP_H
-#define FIWTEXTURECUBEMAP_H
+#ifndef RIWTEXTURECUBEMAP_H
+#define RIWTEXTURECUBEMAP_H
 
 #include "Bang/Path.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/TextureCubeMap.h"
 #include "Bang/IEventsValueChanged.h"
 
-#include "BangEditor/FIWResource.h"
+#include "BangEditor/RIWResource.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Texture2D;
@@ -18,9 +18,9 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class UIInputTexture;
 FORWARD class UITextureCubeMapPreviewer;
 
-class FIWTextureCubeMap : public FIWResource<TextureCubeMap>
+class RIWTextureCubeMap : public RIWResource<TextureCubeMap>
 {
-    GAMEOBJECT_EDITOR(FIWTextureCubeMap);
+    GAMEOBJECT_EDITOR(RIWTextureCubeMap);
 
 public:
     // InspectorWidget
@@ -36,23 +36,23 @@ private:
     UITextureCubeMapPreviewer *p_textureCMPreviewer = nullptr;
     UILabel *p_warningLabel = nullptr;
 
-    FIWTextureCubeMap();
-    virtual ~FIWTextureCubeMap();
+    RIWTextureCubeMap();
+    virtual ~RIWTextureCubeMap();
 
     TextureCubeMap *GetTextureCubeMap() const;
 
     void CheckValidity() const;
 
-    // FIWResource
+    // RIWResource
     void UpdateInputsFromResource() override;
 
-    // FIWResource
-    void OnValueChangedFIWResource(EventEmitter<IEventsValueChanged> *object)
+    // RIWResource
+    void OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *object)
                                                                     override;
 
 };
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // FIWTEXTURECUBEMAP_H
+#endif // RIWTEXTURECUBEMAP_H
 

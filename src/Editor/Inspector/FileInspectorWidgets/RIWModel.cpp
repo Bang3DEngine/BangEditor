@@ -1,4 +1,4 @@
-#include "BangEditor/FIWModel.h"
+#include "BangEditor/RIWModel.h"
 
 #include "Bang/RectTransform.h"
 #include "Bang/TextureFactory.h"
@@ -13,19 +13,19 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-FIWModel::FIWModel()
+RIWModel::RIWModel()
 {
 }
 
-FIWModel::~FIWModel()
+RIWModel::~RIWModel()
 {
 }
 
-void FIWModel::Init()
+void RIWModel::Init()
 {
-    FileInspectorWidget::Init();
+    ResourceInspectorWidget::Init();
 
-    SetName("FIWModel");
+    SetName("RIWModel");
     SetTitle("Model");
 
     GameObject *modelPreviewGo = GameObjectFactory::CreateUIGameObject();
@@ -39,12 +39,12 @@ void FIWModel::Init()
     SetLabelsWidth(130);
 }
 
-Model *FIWModel::GetModel() const
+Model *RIWModel::GetModel() const
 {
     return SCAST<Model*>(GetResource().Get());
 }
 
-void FIWModel::UpdateInputsFromResource()
+void RIWModel::UpdateInputsFromResource()
 {
     p_modelPreviewViewer->SetPreviewImageProvider([this](
                       const ResourcePreviewFactoryParameters &params)
@@ -53,7 +53,7 @@ void FIWModel::UpdateInputsFromResource()
     });
 }
 
-void FIWModel::OnValueChangedFIWResource(EventEmitter<IEventsValueChanged>*)
+void RIWModel::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged>*)
 {
     if (!GetModel()) { return; }
 }

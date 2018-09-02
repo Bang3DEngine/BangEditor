@@ -1,10 +1,10 @@
-#ifndef FIWPHYSICSMATERIAL_H
-#define FIWPHYSICSMATERIAL_H
+#ifndef RIWPHYSICSMATERIAL_H
+#define RIWPHYSICSMATERIAL_H
 
 #include "Bang/Bang.h"
 #include "Bang/PhysicsMaterial.h"
 
-#include "BangEditor/FIWResource.h"
+#include "BangEditor/RIWResource.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UISlider;
@@ -15,9 +15,9 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class FIWPhysicsMaterial : public FIWResource<PhysicsMaterial>
+class RIWPhysicsMaterial : public RIWResource<PhysicsMaterial>
 {
-    GAMEOBJECT_EDITOR(FIWPhysicsMaterial);
+    GAMEOBJECT_EDITOR(RIWPhysicsMaterial);
 
 public:
     // InspectorWidget
@@ -32,21 +32,21 @@ private:
     UIComboBox *p_frictionCombineModeInput    = nullptr;
     UIComboBox *p_restitutionCombineModeInput = nullptr;
 
-    FIWPhysicsMaterial();
-    virtual ~FIWPhysicsMaterial();
+    RIWPhysicsMaterial();
+    virtual ~RIWPhysicsMaterial();
 
     PhysicsMaterial *GetPhysicsMaterial() const;
 
-    // FIWResource
+    // RIWResource
     void UpdateInputsFromResource() override;
 
-    // FIWResource
-    void OnValueChangedFIWResource(EventEmitter<IEventsValueChanged> *object) override;
+    // RIWResource
+    void OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *object) override;
 
-    friend class FileInspectorWidgetFactory;
+    friend class ResourceInspectorWidgetFactory;
 };
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // FIWPHYSICSMATERIAL_H
+#endif // RIWPHYSICSMATERIAL_H
 

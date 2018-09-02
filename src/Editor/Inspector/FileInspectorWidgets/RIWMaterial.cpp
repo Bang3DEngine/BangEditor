@@ -1,4 +1,4 @@
-#include "BangEditor/FIWMaterial.h"
+#include "BangEditor/RIWMaterial.h"
 
 #include "Bang/Model.h"
 #include "Bang/Shader.h"
@@ -33,19 +33,19 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-FIWMaterial::FIWMaterial()
+RIWMaterial::RIWMaterial()
 {
 }
 
-FIWMaterial::~FIWMaterial()
+RIWMaterial::~RIWMaterial()
 {
 }
 
-void FIWMaterial::Init()
+void RIWMaterial::Init()
 {
-    FIWResource<Material>::Init();
+    RIWResource<Material>::Init();
 
-    SetName("FIWMaterial");
+    SetName("RIWMaterial");
     SetTitle("Material");
 
     p_albedoTextureInput = GameObject::Create<UIInputTexture>();
@@ -161,12 +161,12 @@ void FIWMaterial::Init()
     SetLabelsWidth(130);
 }
 
-Material *FIWMaterial::GetMaterial() const
+Material *RIWMaterial::GetMaterial() const
 {
     return SCAST<Material*>(GetResource().Get());
 }
 
-void FIWMaterial::UpdateInputsFromResource()
+void RIWMaterial::UpdateInputsFromResource()
 {
     Texture2D *albedoTex = GetMaterial()->GetAlbedoTexture();
     p_albedoTextureInput->SetPath( albedoTex ? albedoTex->GetResourceFilepath() :
@@ -218,7 +218,7 @@ void FIWMaterial::UpdateInputsFromResource()
     p_fragmentShaderInput->SetPath( fs ? fs->GetResourceFilepath() : Path::Empty );
 }
 
-void FIWMaterial::OnValueChangedFIWResource(EventEmitter<IEventsValueChanged> *obj)
+void RIWMaterial::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *obj)
 {
     if (!GetMaterial()) { return; }
 

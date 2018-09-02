@@ -33,7 +33,7 @@
 #include "BangEditor/EditorFileTracker.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/ComponentInspectorWidget.h"
-#include "BangEditor/FileInspectorWidgetFactory.h"
+#include "BangEditor/ResourceInspectorWidgetFactory.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
 #include "BangEditor/ComponentInspectorWidgetFactory.h"
 
@@ -178,7 +178,7 @@ void Inspector::ShowPath(const Path &path)
     {
         if (!path.IsDir())
         {
-            InspectorWidget *fiw = FileInspectorWidgetFactory::Create(path);
+            InspectorWidget *fiw = ResourceInspectorWidgetFactory::Create(path);
             if (fiw || path.IsFile())
             {
                 Clear();

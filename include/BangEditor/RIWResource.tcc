@@ -1,4 +1,4 @@
-#include "BangEditor/FIWResource.h"
+#include "BangEditor/RIWResource.h"
 
 #include "Bang/Resources.h"
 #include "Bang/ImportFilesManager.h"
@@ -11,19 +11,19 @@ USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
 template <class T>
-void FIWResource<T>::InitInnerWidgets()
+void RIWResource<T>::InitInnerWidgets()
 {
-    FileInspectorWidget::InitInnerWidgets();
+    ResourceInspectorWidget::InitInnerWidgets();
 }
 
 template <class T>
-void FIWResource<T>::Update()
+void RIWResource<T>::Update()
 {
-    FileInspectorWidget::Update();
+    ResourceInspectorWidget::Update();
 }
 
 template <class T>
-void FIWResource<T>::SetResource(RH<T> &resource)
+void RIWResource<T>::SetResource(RH<T> &resource)
 {
     if (resource != GetResource())
     {
@@ -44,13 +44,13 @@ void FIWResource<T>::SetResource(RH<T> &resource)
 }
 
 template <class T>
-RH<T> FIWResource<T>::GetResource() const
+RH<T> RIWResource<T>::GetResource() const
 {
     return m_resource;
 }
 
 template <class T>
-void FIWResource<T>::BeginUndoRedo()
+void RIWResource<T>::BeginUndoRedo()
 {
     if (GetResource())
     {
@@ -75,7 +75,7 @@ void FIWResource<T>::BeginUndoRedo()
 }
 
 template <class T>
-void FIWResource<T>::EndUndoRedo()
+void RIWResource<T>::EndUndoRedo()
 {
     if (GetResource())
     {
@@ -100,7 +100,7 @@ void FIWResource<T>::EndUndoRedo()
 }
 
 template <class T>
-Array<Path> FIWResource<T>::GetUndoRedoPaths() const
+Array<Path> RIWResource<T>::GetUndoRedoPaths() const
 {
     if (Resource *res = GetResource().Get())
     {
@@ -110,7 +110,7 @@ Array<Path> FIWResource<T>::GetUndoRedoPaths() const
 }
 
 template<class T>
-void FIWResource<T>::UpdateFromFileWhenChanged()
+void RIWResource<T>::UpdateFromFileWhenChanged()
 {
     RH<T> newResourceT;
     if (GetPath().IsFile() || Resources::IsEmbeddedResource(GetPath()))
@@ -121,14 +121,14 @@ void FIWResource<T>::UpdateFromFileWhenChanged()
 }
 
 template<class T>
-void FIWResource<T>::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void RIWResource<T>::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     if (GetResource())
     {
         BeginUndoRedo();
 
         // Virtual call
-        OnValueChangedFIWResource(object);
+        OnValueChangedRIWResource(object);
 
         // Export to file
         Resource *resourceToExport = GetResource().Get();
@@ -154,7 +154,7 @@ void FIWResource<T>::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 }
 
 template <class T>
-void FIWResource<T>::OnResourceChanged(Resource *res)
+void RIWResource<T>::OnResourceChanged(Resource *res)
 {
     ASSERT(res == GetResource().Get());
     if (GetResource())

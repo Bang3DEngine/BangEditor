@@ -1,4 +1,4 @@
-#include "BangEditor/FIWPhysicsMaterial.h"
+#include "BangEditor/RIWPhysicsMaterial.h"
 
 #include "Bang/UISlider.h"
 #include "Bang/UIComboBox.h"
@@ -7,19 +7,19 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-FIWPhysicsMaterial::FIWPhysicsMaterial()
+RIWPhysicsMaterial::RIWPhysicsMaterial()
 {
 }
 
-FIWPhysicsMaterial::~FIWPhysicsMaterial()
+RIWPhysicsMaterial::~RIWPhysicsMaterial()
 {
 }
 
-void FIWPhysicsMaterial::Init()
+void RIWPhysicsMaterial::Init()
 {
-    FIWResource<PhysicsMaterial>::Init();
+    RIWResource<PhysicsMaterial>::Init();
 
-    SetName("FIWPhysicsMaterial");
+    SetName("RIWPhysicsMaterial");
     SetTitle("Physics Material");
 
 
@@ -67,12 +67,12 @@ void FIWPhysicsMaterial::Init()
     SetLabelsWidth(130);
 }
 
-PhysicsMaterial *FIWPhysicsMaterial::GetPhysicsMaterial() const
+PhysicsMaterial *RIWPhysicsMaterial::GetPhysicsMaterial() const
 {
     return SCAST<PhysicsMaterial*>(GetResource().Get());
 }
 
-void FIWPhysicsMaterial::UpdateInputsFromResource()
+void RIWPhysicsMaterial::UpdateInputsFromResource()
 {
     p_staticFrictionInput->SetValue( GetPhysicsMaterial()->GetStaticFriction() );
     p_dynamicFrictionInput->SetValue( GetPhysicsMaterial()->GetDynamicFriction() );
@@ -83,7 +83,7 @@ void FIWPhysicsMaterial::UpdateInputsFromResource()
                 SCAST<int>(GetPhysicsMaterial()->GetRestitutionCombineMode()) );
 }
 
-void FIWPhysicsMaterial::OnValueChangedFIWResource(EventEmitter<IEventsValueChanged> *object)
+void RIWPhysicsMaterial::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *object)
 {
     GetPhysicsMaterial()->SetStaticFriction( p_staticFrictionInput->GetValue() );
     GetPhysicsMaterial()->SetDynamicFriction( p_dynamicFrictionInput->GetValue() );

@@ -22,7 +22,7 @@
 #include "BangEditor/EditorDialog.h"
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/EditorTextureFactory.h"
-#include "BangEditor/FileInspectorWidgetFactory.h"
+#include "BangEditor/ResourceInspectorWidgetFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
