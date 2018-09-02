@@ -142,6 +142,30 @@ set(BANG_ENGINE_INCLUDE_DIRS "")
 list(APPEND BANG_ENGINE_INCLUDE_DIRS "${BANG_ENGINE_INCLUDE_DIRS_0}")
 list(APPEND BANG_ENGINE_INCLUDE_DIRS "${BANG_ENGINE_INCLUDE_DIRS_1}")
 list(APPEND BANG_ENGINE_INCLUDE_DIRS "${DEPENDENCIES_INCLUDE_DIRS}")
+
+# Inspector lib
+set(BANG_INSPECTOR_LIB_SOURCES "")
+file(GLOB_RECURSE BANG_INSPECTOR_LIB_SOURCES "${EDITOR_SRC_DIR}/Inspector/*.cpp")
+add_library(BangInspectorLib ${BANG_INSPECTOR_LIB_SOURCES})
+target_include_directories(BangInspectorLib PUBLIC ${BANG_ENGINE_INCLUDE_DIRS} ${BANG_EDITOR_INCLUDE_DIR})
+add_bang_compilation_flags(BangInspectorLib)
+remove_from_list_another_list(EDITOR_SRC_FILES ${BANG_INSPECTOR_LIB_SOURCES})
+
+# Gizmos lib
+set(BANG_GIZMOS_LIB_SOURCES "")
+file(GLOB_RECURSE BANG_GIZMOS_LIB_SOURCES "${EDITOR_SRC_DIR}/Gizmos/*.cpp")
+add_library(BangGizmosLib ${BANG_GIZMOS_LIB_SOURCES})
+target_include_directories(BangGizmosLib PUBLIC ${BANG_ENGINE_INCLUDE_DIRS} ${BANG_EDITOR_INCLUDE_DIR})
+add_bang_compilation_flags(BangGizmosLib)
+
+# UndoRedo lib
+set(BANG_UNDO_REDO_LIB_SOURCES "")
+file(GLOB_RECURSE BANG_UNDO_REDO_LIB_SOURCES "${EDITOR_SRC_DIR}/UndoRedo/*.cpp")
+add_library(BangUndoRedoLib ${BANG_UNDO_REDO_LIB_SOURCES})
+target_include_directories(BangUndoRedoLib PUBLIC ${BANG_ENGINE_INCLUDE_DIRS} ${BANG_EDITOR_INCLUDE_DIR})
+add_bang_compilation_flags(BangUndoRedoLib)
+remove_from_list_another_list(EDITOR_SRC_FILES ${BANG_UNDO_REDO_LIB_SOURCES})
+
 target_compile_definitions(BangEditor        PRIVATE -DBANG_ENGINE_ROOT="${BANG_ENGINE_ROOT_DEFINE}")
 target_compile_definitions(BangEditor        PRIVATE -DBANG_EDITOR_ROOT="${BANG_EDITOR_ROOT_DEFINE}")
 target_include_directories(BangEditor        PRIVATE ${BANG_ENGINE_INCLUDE_DIRS} ${BANG_EDITOR_INCLUDE_DIR})
@@ -158,9 +182,12 @@ if (${COMPILE_GAME})
 endif()
 
 add_dependencies(BangEditorObjects BangLib BuildDependencies)
-target_link_libraries(BangEditor PRIVATE ${DEPENDENCIES_LIBS})
-target_link_libraries(BangEditor PRIVATE BangLib)
-target_link_libraries(BangEditor PRIVATE BangEditorLib)
+target_link_libraries(BangEditorLib PUBLIC BangInspectorLib)
+target_link_libraries(BangEditorLib PUBLIC BangUndoRedoLib)
+target_link_libraries(BangEditorLib PUBLIC BangGizmosLib)
+target_link_libraries(BangEditor PUBLIC ${DEPENDENCIES_LIBS})
+target_link_libraries(BangEditor PUBLIC BangLib)
+target_link_libraries(BangEditor PUBLIC BangEditorLib)
 add_clang_tidy(BangEditorObjects)
 add_clang_tidy(BangEngineObjects)
 
