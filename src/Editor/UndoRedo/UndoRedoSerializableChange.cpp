@@ -26,6 +26,16 @@ UndoRedoSerializableChange::~UndoRedoSerializableChange()
 {
 }
 
+void UndoRedoSerializableChange::SetXMLBefore(const XMLNode &xmlBefore)
+{
+    m_xmlBefore = xmlBefore;
+}
+
+void UndoRedoSerializableChange::SetXMLAfter(const XMLNode &xmlAfter)
+{
+    m_xmlAfter = xmlAfter;
+}
+
 void UndoRedoSerializableChange::Undo()
 {
     if (p_serializable)

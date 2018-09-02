@@ -54,17 +54,23 @@ void FIWResource<T>::BeginUndoRedo()
 {
     if (GetResource())
     {
-        Resource *res = GetResource().Get();
-        m_undoSerializableXMLBefore = res->GetXMLInfo();
-
-        Array<Path> undoRedoPaths = GetUndoRedoPaths();
-        for (const Path &undoRedoPath : undoRedoPaths)
+        if (GetPath().IsFile())
         {
-            UndoRedoFileChange *undoRedoFileChange =
-                                    new UndoRedoFileChange(undoRedoPath);
-            undoRedoFileChange->ReadBefore();
-            p_undoRedosFileChanges.PushBack(undoRedoFileChange);
+            Array<Path> undoRedoPaths = GetUndoRedoPaths();
+            for (const Path &undoRedoPath : undoRedoPaths)
+            {
+                UndoRedoFileChange *undoRedoFileChange =
+                                        new UndoRedoFileChange(undoRedoPath);
+                undoRedoFileChange->ReadBefore();
+                p_undoRedosFileChanges.PushBack(undoRedoFileChange);
+            }
         }
+
+        UndoRedoSerializableChange *undoRedoSerializableChange =
+           new UndoRedoSerializableChange(GetResource().Get(),
+                                          GetResource().Get()->GetXMLInfo(),
+                                          XMLNode());
+        p_undoRedosSerializableChanges.PushBack(undoRedoSerializableChange);
     }
 }
 
@@ -74,19 +80,21 @@ void FIWResource<T>::EndUndoRedo()
     if (GetResource())
     {
         Array<UndoRedoAction*> undoRedoActions;
-        undoRedoActions.PushBack(
-            new UndoRedoSerializableChange(GetResource().Get(),
-                                           m_undoSerializableXMLBefore,
-                                           GetResource().Get()->GetXMLInfo()));
-
         for(UndoRedoFileChange *undoRedoFileChange : p_undoRedosFileChanges)
         {
             undoRedoFileChange->ReadAfter();
         }
+        for(UndoRedoSerializableChange *undoRedoSerializableChange :
+            p_undoRedosSerializableChanges)
+        {
+            undoRedoSerializableChange->SetXMLAfter(
+                        GetResource().Get()->GetXMLInfo() );
+        }
+        undoRedoActions.PushBack(p_undoRedosSerializableChanges);
         undoRedoActions.PushBack(p_undoRedosFileChanges);
 
         UndoRedoManager::PushActionsInSameStep(undoRedoActions);
-
+        p_undoRedosSerializableChanges.Clear();
         p_undoRedosFileChanges.Clear();
     }
 }
@@ -94,9 +102,11 @@ void FIWResource<T>::EndUndoRedo()
 template <class T>
 Array<Path> FIWResource<T>::GetUndoRedoPaths() const
 {
-    Resource *res = GetResource().Get();
-    if (!res) { return {}; }
-    return { ImportFilesManager::GetImportFilepath(res->GetGUID()) };
+    if (Resource *res = GetResource().Get())
+    {
+        return { ImportFilesManager::GetImportFilepath(res->GetGUID()) };
+    }
+    return {};
 }
 
 template<class T>
@@ -121,11 +131,22 @@ void FIWResource<T>::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
         OnValueChangedFIWResource(object);
 
         // Export to file
-        const Path importPath = ImportFilesManager::GetImportFilepath(
-                                    GetResource().Get()->GetGUID());
-        if (importPath.IsFile())
+        Resource *resourceToExport = GetResource().Get();
+        Path resourcePath = resourceToExport->GetResourceFilepath();
+        if (!resourcePath.IsFile())
         {
-            GetResource().Get()->ExportXMLToFile(importPath);
+            if (Resource *parentResource = GetResource().Get()->
+                                           GetParentResource())
+            {
+                resourceToExport = parentResource;
+                resourcePath = parentResource->GetResourceFilepath();
+            }
+        }
+
+        Path importPath = ImportFilesManager::GetImportFilepath(resourcePath);
+        if (resourceToExport && importPath.IsFile())
+        {
+            resourceToExport->ExportXMLToFile(importPath);
         }
 
         EndUndoRedo();

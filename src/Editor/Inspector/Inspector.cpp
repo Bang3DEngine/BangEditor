@@ -179,7 +179,11 @@ void Inspector::ShowPath(const Path &path)
         if (!path.IsDir())
         {
             InspectorWidget *fiw = FileInspectorWidgetFactory::Create(path);
-            if (fiw || path.IsFile()) { Clear(); }
+            if (fiw || path.IsFile())
+            {
+                Clear();
+            }
+
             if (fiw)
             {
                 p_titleText->SetContent(path.GetNameExt());
@@ -187,8 +191,7 @@ void Inspector::ShowPath(const Path &path)
                 AddWidget(fiw);
 
                 bool isEnginePath = Paths::IsEnginePath(m_currentOpenPath);
-                bool isEmbeddedPath = Resources::IsEmbeddedResource(path);
-                SetCurrentWidgetBlocked(isEnginePath || isEmbeddedPath);
+                SetCurrentWidgetBlocked(isEnginePath);
             }
         }
     }

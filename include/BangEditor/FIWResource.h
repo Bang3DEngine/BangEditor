@@ -48,8 +48,8 @@ protected:
 private:
     RH<T> m_resource;
 
-    XMLNode m_undoSerializableXMLBefore;
     Array<UndoRedoFileChange*> p_undoRedosFileChanges;
+    Array<UndoRedoSerializableChange*> p_undoRedosSerializableChanges;
 
     // IEventsValueChanged
     void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;

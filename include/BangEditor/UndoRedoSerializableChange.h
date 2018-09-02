@@ -23,6 +23,9 @@ public:
                                const XMLNode &xmlAfter);
 	virtual ~UndoRedoSerializableChange();
 
+    void SetXMLBefore(const XMLNode &xmlBefore);
+    void SetXMLAfter(const XMLNode &xmlAfter);
+
     void Undo() override;
     void Redo() override;
 
