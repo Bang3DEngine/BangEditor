@@ -240,19 +240,23 @@ void ExplorerItem::OnDrop(EventEmitter<IEventsDragDrop> *dd_, bool inside)
         {
             Path newDir = GetPath();
             Path droppedPath = expItem->GetPath();
-            File::Rename(droppedPath, newDir.Append(droppedPath.GetNameExt()));
-
-            // Move import file if any
-            if ( ImportFilesManager::HasImportFile(droppedPath) )
+            if (droppedPath.IsFile())
             {
-                Path importDroppedPath =
-                        ImportFilesManager::GetImportFilepath(droppedPath);
-                File::Rename(importDroppedPath,
-                             newDir.Append(importDroppedPath.GetNameExt()));
-            }
+                File::Rename(droppedPath,
+                             newDir.Append(droppedPath.GetNameExt()));
 
-            EventEmitter<IEventsExplorerItem>::PropagateToListeners(
-                           &IEventsExplorerItem::OnDroppedToDirectory, expItem);
+                // Move import file if any
+                if ( ImportFilesManager::HasImportFile(droppedPath) )
+                {
+                    Path importDroppedPath =
+                            ImportFilesManager::GetImportFilepath(droppedPath);
+                    File::Rename(importDroppedPath,
+                                 newDir.Append(importDroppedPath.GetNameExt()));
+                }
+
+                EventEmitter<IEventsExplorerItem>::PropagateToListeners(
+                        &IEventsExplorerItem::OnDroppedToDirectory, expItem);
+            }
         }
     }
 }

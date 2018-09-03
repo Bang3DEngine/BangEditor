@@ -39,8 +39,14 @@ void ScenePlayer::OnShortcutPressed(const Shortcut &shortcut)
 {
     if (shortcut.GetName() == "Play")
     {
-        if (!Editor::IsEditingScene()) { StopScene(); }
-        else { PlayScene(); }
+        if (!Editor::IsEditingScene())
+        {
+            StopScene();
+        }
+        else
+        {
+            PlayScene();
+        }
     }
 }
 
@@ -138,7 +144,10 @@ void ScenePlayer::StopScene()
     {
         ScenePlayer *sp = ScenePlayer::GetInstance();
         SceneManager::LoadSceneInstantly(sp->p_editOpenScene, false);
-        if (sp->p_playOpenScene) { GameObject::Destroy(sp->p_playOpenScene); }
+        if (sp->p_playOpenScene)
+        {
+            GameObject::Destroy(sp->p_playOpenScene);
+        }
 
         ScenePlayer::SetPlayState(PlayState::EDITING);
     }

@@ -87,7 +87,10 @@ Explorer::Explorer()
     p_backButton = GameObjectFactory::CreateUIButton("", backButtonTex);
     p_backButton->SetIcon(backButtonTex, Vector2i(20, 15), 0);
     p_backButton->GetText()->SetContent("");
-    p_backButton->AddClickedCallback( [this]() { GoDirectoryUp(); });
+    p_backButton->AddClickedCallback( [this]()
+    {
+        GoDirectoryUp();
+    });
 
     // Direction label
     p_currentPathLabel = GameObjectFactory::CreateUILabel();
@@ -513,15 +516,22 @@ void Explorer::OnPastedOver(ExplorerItem *item)
 void Explorer::OnDroppedToDirectory(ExplorerItem *item)
 {
     (void) item;
-    OnPathRemoved(item->GetPath());
-    ForceCheckFileChanges();
+    Path itemPath = item->GetPath();
+    if (itemPath.Exists())
+    {
+        OnPathRemoved(itemPath);
+        ForceCheckFileChanges();
+    }
 }
 
 ExplorerItem *Explorer::GetSelectedItem() const
 {
     for (ExplorerItem *explorerItem : p_items)
     {
-        if (explorerItem->IsSelected()) { return explorerItem; }
+        if (explorerItem->IsSelected())
+        {
+            return explorerItem;
+        }
     }
     return nullptr;
 }
@@ -616,7 +626,8 @@ void Explorer::OnCreateContextMenu(MenuItem *menuRootItem)
     MenuItem *createDirItem = menuRootItem->AddItem("Create directory");
     createDirItem->SetSelectedCallback([this](MenuItem*)
     {
-        Path newDirPath = GetCurrentPath().Append("New_directory").GetDuplicatePath();
+        Path newDirPath = GetCurrentPath().Append("New_directory").
+                          GetDuplicatePath();
         File::CreateDirectory(newDirPath);
         ForceCheckFileChanges();
         SelectPath(newDirPath);

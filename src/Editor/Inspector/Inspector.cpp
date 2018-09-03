@@ -236,13 +236,17 @@ GameObject *Inspector::GetCurrentGameObject() const
     return p_currentGameObject;
 }
 
-void Inspector::OnSceneLoaded(Scene*, const Path &)
+void Inspector::OnSceneLoaded(Scene *scene, const Path &)
 {
-    Clear();
+    if (p_currentGameObject)
+    {
+        Clear();
+    }
 }
 
-void Inspector::OnDestroyed(EventEmitter<IEventsDestroy>*)
+void Inspector::OnDestroyed(EventEmitter<IEventsDestroy> *ee)
 {
+    ASSERT(ee == p_currentGameObject);
     Clear();
 }
 

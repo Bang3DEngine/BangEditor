@@ -257,6 +257,10 @@ Texture2D* EditorTextureFactory::GetComponentIcon(const String &componentName)
     {
         return EditorTextureFactory::GetCubeIcon();
     }
+    if (componentName == "Animator")
+    {
+        return EditorTextureFactory::GetPlayWithCircleIcon();
+    }
     if (componentName == "AudioSource")
     {
         return TextureFactory::GetAudioIcon();
@@ -272,6 +276,10 @@ Texture2D* EditorTextureFactory::GetComponentIcon(const String &componentName)
 Color EditorTextureFactory::GetComponentIconTint(const String &componentName)
 {
     if (componentName == "MeshRenderer")
+    {
+        return Color::White.WithValue(0.2f);
+    }
+    else if (componentName == "SkinnedMeshRenderer")
     {
         return Color::White.WithValue(0.2f);
     }

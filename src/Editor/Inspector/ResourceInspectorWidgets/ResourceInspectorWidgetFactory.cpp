@@ -7,6 +7,7 @@
 #include "BangEditor/RIWModel.h"
 #include "BangEditor/RIWTexture.h"
 #include "BangEditor/RIWMaterial.h"
+#include "BangEditor/RIWAnimation.h"
 #include "BangEditor/RIWBehaviour.h"
 #include "BangEditor/RIWTextureCubeMap.h"
 #include "BangEditor/RIWPhysicsMaterial.h"
@@ -17,37 +18,41 @@ USING_NAMESPACE_BANG_EDITOR
 
 InspectorWidget *ResourceInspectorWidgetFactory::Create(const Path &path)
 {
-    ResourceInspectorWidget *fiw = nullptr;
+    ResourceInspectorWidget *riw = nullptr;
     if (path.HasExtension(Extensions::GetMaterialExtension()))
     {
-        fiw = GameObject::Create<RIWMaterial>();
+        riw = GameObject::Create<RIWMaterial>();
     }
     if (path.HasExtension(Extensions::GetPhysicsMaterialExtension()))
     {
-        fiw = GameObject::Create<RIWPhysicsMaterial>();
+        riw = GameObject::Create<RIWPhysicsMaterial>();
     }
     else if (path.HasExtension(Extensions::GetImageExtensions()))
     {
-        fiw = GameObject::Create<RIWTexture>();
+        riw = GameObject::Create<RIWTexture>();
     }
     else if (path.HasExtension(Extensions::GetModelExtensions()))
     {
-        fiw = GameObject::Create<RIWModel>();
+        riw = GameObject::Create<RIWModel>();
+    }
+    else if (path.HasExtension(Extensions::GetAnimationExtension()))
+    {
+        riw = GameObject::Create<RIWAnimation>();
     }
     else if (path.HasExtension(Extensions::GetTextureCubeMapExtension()))
     {
-        fiw = GameObject::Create<RIWTextureCubeMap>();
+        riw = GameObject::Create<RIWTextureCubeMap>();
     }
     else if (path.HasExtension(Extensions::GetBehaviourExtensions()))
     {
-        fiw = GameObject::Create<RIWBehaviour>();
+        riw = GameObject::Create<RIWBehaviour>();
     }
 
-    if (fiw)
+    if (riw)
     {
-        fiw->Init();
-        fiw->SetPath(path);
+        riw->Init();
+        riw->SetPath(path);
     }
 
-    return fiw;
+    return riw;
 }
