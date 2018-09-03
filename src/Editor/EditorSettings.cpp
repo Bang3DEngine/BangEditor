@@ -3,7 +3,6 @@
 #include "Bang/File.h"
 #include "Bang/Debug.h"
 #include "Bang/MetaNode.h"
-#include "Bang/XMLMetaReader.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorPaths.h"
@@ -58,7 +57,8 @@ void EditorSettings::ImportFromFile()
 {
     const Path editorSettingsPath = EditorSettings::GetEditorSettingsPath();
 
-    MetaNode settingsMeta = XMLMetaReader::FromFile(editorSettingsPath);
+    MetaNode settingsMeta;
+    settingsMeta.Import(editorSettingsPath);
     m_recentProjectFilesOpen = settingsMeta.GetArray<Path>("RecentProjectFilesOpen");
     ExportToFile();
 }

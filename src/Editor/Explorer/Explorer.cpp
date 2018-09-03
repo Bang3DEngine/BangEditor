@@ -22,7 +22,7 @@
 #include "Bang/UIRendererCacher.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/ImportFilesManager.h"
+#include "Bang/MetaFilesManager.h"
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIContentSizeFitter.h"
 
@@ -410,7 +410,7 @@ void DuplicateImportFiles(const Path &srcPath, const Path &dstPath)
 
     if (srcPath.IsFile())
     {
-        ImportFilesManager::DuplicateImportFile(srcPath, dstPath);
+        MetaFilesManager::DuplicateMetaFile(srcPath, dstPath);
     }
     else // IsDir()
     {
@@ -488,7 +488,7 @@ void Explorer::OnRemove(ExplorerItem *explorerItem)
     if (yesNoCancel == Dialog::YesNoCancel::YES)
     {
         File::Remove( path );
-        File::Remove( ImportFilesManager::GetImportFilepath(path) );
+        File::Remove( MetaFilesManager::GetMetaFilepath(path) );
     }
 
     ForceCheckFileChanges();

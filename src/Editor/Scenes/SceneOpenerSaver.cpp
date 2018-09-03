@@ -2,8 +2,8 @@
 
 #include "Bang/Debug.h"
 #include "Bang/Dialog.h"
+#include "Bang/MetaNode.h"
 #include "Bang/Extensions.h"
-#include "Bang/XMLMetaReader.h"
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/Editor.h"
@@ -221,7 +221,9 @@ bool SceneOpenerSaver::IsCurrentSceneSaved() const
     {
         if (GetOpenScenePath().IsFile())
         {
-            MetaNode savedInfo = XMLMetaReader::FromFile( GetOpenScenePath() );
+            MetaNode savedInfo;
+            savedInfo.Import( GetOpenScenePath() );
+
             MetaNode sceneInfo;
             openScene->ExportMeta(&sceneInfo);
 

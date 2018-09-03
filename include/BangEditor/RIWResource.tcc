@@ -1,7 +1,7 @@
 #include "BangEditor/RIWResource.h"
 
 #include "Bang/Resources.h"
-#include "Bang/ImportFilesManager.h"
+#include "Bang/MetaFilesManager.h"
 
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/UndoRedoFileChange.h"
@@ -104,7 +104,7 @@ Array<Path> RIWResource<T>::GetUndoRedoPaths() const
 {
     if (Resource *res = GetResource().Get())
     {
-        return { ImportFilesManager::GetImportFilepath(res->GetGUID()) };
+        return { MetaFilesManager::GetMetaFilepath(res->GetGUID()) };
     }
     return {};
 }
@@ -143,7 +143,7 @@ void RIWResource<T>::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
             }
         }
 
-        Path importPath = ImportFilesManager::GetImportFilepath(resourcePath);
+        Path importPath = MetaFilesManager::GetMetaFilepath(resourcePath);
         if (resourceToExport && importPath.IsFile())
         {
             resourceToExport->ExportMetaToFile(importPath);

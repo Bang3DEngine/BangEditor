@@ -7,7 +7,7 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/CodePreprocessor.h"
 #include "Bang/IEventsFileTracker.h"
-#include "Bang/ImportFilesManager.h"
+#include "Bang/MetaFilesManager.h"
 
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
@@ -52,7 +52,7 @@ BehaviourTracker *EditorFileTracker::GetBehaviourTracker() const
 
 void EditorFileTracker::OnPathRenamed(const Path &previousPath, const Path &newPath)
 {
-    ImportFilesManager::OnFilepathRenamed(previousPath, newPath);
+    MetaFilesManager::OnFilepathRenamed(previousPath, newPath);
 }
 
 EditorFileTracker *EditorFileTracker::GetInstance()
@@ -62,10 +62,10 @@ EditorFileTracker *EditorFileTracker::GetInstance()
 
 void EditorFileTracker::OnPathAdded(const Path &addedPath)
 {
-    if (!ImportFilesManager::IsImportFile(addedPath) &&
-        !ImportFilesManager::HasImportFile(addedPath))
+    if (!MetaFilesManager::IsMetaFile(addedPath) &&
+        !MetaFilesManager::HasMetaFile(addedPath))
     {
-        ImportFilesManager::CreateImportFileIfMissing(addedPath);
+        MetaFilesManager::CreateMetaFileIfMissing(addedPath);
     }
 }
 
@@ -115,7 +115,7 @@ void EditorFileTracker::CheckForShaderIncludePathsModifications(const Path &modi
 
 void EditorFileTracker::OnPathModified(const Path &modifiedPath)
 {
-    if (ImportFilesManager::IsImportFile(modifiedPath)) { return; }
+    if (MetaFilesManager::IsMetaFile(modifiedPath)) { return; }
 
     if (modifiedPath.IsFile())
     {
@@ -132,7 +132,7 @@ void EditorFileTracker::OnPathModified(const Path &modifiedPath)
 
 void EditorFileTracker::OnPathRemoved(const Path &removedPath)
 {
-    Path importPath = ImportFilesManager::GetImportFilepath(removedPath);
+    Path importPath = MetaFilesManager::GetMetaFilepath(removedPath);
     File::Remove(importPath);
 }
 

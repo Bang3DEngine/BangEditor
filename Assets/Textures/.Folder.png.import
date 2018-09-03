@@ -1,8 +1,0 @@
-Texture2D:
-  AlphaCutoff: 0.1
-  FilterMode: 9729
-  Format: 32856
-  GUID: 1512115284278446187 6655131127428153345 0
-  WrapMode: 33071
-  Children:
-    {}

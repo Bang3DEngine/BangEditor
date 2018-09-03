@@ -17,7 +17,7 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/ImportFilesManager.h"
+#include "Bang/MetaFilesManager.h"
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIContentSizeFitter.h"
 #include "Bang/UIAspectRatioFitter.h"

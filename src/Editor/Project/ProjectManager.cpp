@@ -6,8 +6,7 @@
 #include "Bang/String.h"
 #include "Bang/MetaNode.h"
 #include "Bang/Extensions.h"
-#include "Bang/XMLMetaReader.h"
-#include "Bang/ImportFilesManager.h"
+#include "Bang/MetaFilesManager.h"
 
 #include "BangEditor/Project.h"
 #include "BangEditor/EditorPaths.h"
@@ -38,8 +37,8 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
     Paths::SetProjectRoot(currentProject->GetProjectDirectory());
 
     Path assetsDir = currentProject->GetProjectAssetsFilepath();
-    ImportFilesManager::CreateMissingImportFiles(assetsDir);
-    ImportFilesManager::LoadImportFilepathGUIDs(assetsDir);
+    MetaFilesManager::CreateMissingMetaFiles(assetsDir);
+    MetaFilesManager::LoadMetaFilepathGUIDs(assetsDir);
 
     ProjectManager::GetInstance()->
         EventEmitter<IEventsProjectManager>::PropagateToListeners(

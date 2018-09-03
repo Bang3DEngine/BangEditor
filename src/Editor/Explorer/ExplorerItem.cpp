@@ -14,7 +14,7 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/ImportFilesManager.h"
+#include "Bang/MetaFilesManager.h"
 #include "Bang/UIAspectRatioFitter.h"
 
 #include "BangEditor/Explorer.h"
@@ -246,10 +246,10 @@ void ExplorerItem::OnDrop(EventEmitter<IEventsDragDrop> *dd_, bool inside)
                              newDir.Append(droppedPath.GetNameExt()));
 
                 // Move import file if any
-                if ( ImportFilesManager::HasImportFile(droppedPath) )
+                if ( MetaFilesManager::HasMetaFile(droppedPath) )
                 {
                     Path importDroppedPath =
-                            ImportFilesManager::GetImportFilepath(droppedPath);
+                            MetaFilesManager::GetMetaFilepath(droppedPath);
                     File::Rename(importDroppedPath,
                                  newDir.Append(importDroppedPath.GetNameExt()));
                 }

@@ -98,7 +98,7 @@ void RIWTexture::UpdateInputsFromResource()
 
 void RIWTexture::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged>*)
 {
-    Path texImportPath = ImportFilesManager::GetImportFilepath(
+    Path texImportPath = MetaFilesManager::GetMetaFilepath(
                                     GetTexture()->GetResourceFilepath());
 
     int filterMode = p_filterModeComboBox->GetSelectedValue();

@@ -5,7 +5,7 @@
 #include "Bang/Scene.h"
 #include "Bang/Window.h"
 #include "Bang/SceneManager.h"
-#include "Bang/ImportFilesManager.h"
+#include "Bang/MetaFilesManager.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/Project.h"
@@ -37,8 +37,8 @@ void EditorApplication::InitEditorApplication(const Path &engineRootPath,
     EditorResources::GetInstance()->InitAfterGLIsInited();
 
     GetEditorPaths()->InitEditorPath(editorRootPath);
-    ImportFilesManager::CreateMissingImportFiles( EditorPaths::GetEditorAssetsDir() );
-    ImportFilesManager::LoadImportFilepathGUIDs(  EditorPaths::GetEditorAssetsDir() );
+    MetaFilesManager::CreateMissingMetaFiles( EditorPaths::GetEditorAssetsDir() );
+    MetaFilesManager::LoadMetaFilepathGUIDs(  EditorPaths::GetEditorAssetsDir() );
 
     m_editor = new Editor();
 }
