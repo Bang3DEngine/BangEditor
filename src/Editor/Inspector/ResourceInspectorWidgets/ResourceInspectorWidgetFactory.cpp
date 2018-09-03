@@ -4,6 +4,7 @@
 #include "Bang/String.h"
 #include "Bang/Extensions.h"
 
+#include "BangEditor/RIWMesh.h"
 #include "BangEditor/RIWModel.h"
 #include "BangEditor/RIWTexture.h"
 #include "BangEditor/RIWMaterial.h"
@@ -34,6 +35,10 @@ InspectorWidget *ResourceInspectorWidgetFactory::Create(const Path &path)
     else if (path.HasExtension(Extensions::GetModelExtensions()))
     {
         riw = GameObject::Create<RIWModel>();
+    }
+    if (path.HasExtension(Extensions::GetMeshExtension()))
+    {
+        riw = GameObject::Create<RIWMesh>();
     }
     else if (path.HasExtension(Extensions::GetAnimationExtension()))
     {
