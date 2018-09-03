@@ -2,6 +2,7 @@
 
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorMeshFactory.h"
+#include "BangEditor/MeshPreviewFactory.h"
 #include "BangEditor/ModelPreviewFactory.h"
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/MaterialPreviewFactory.h"
@@ -13,12 +14,19 @@ EditorResources::EditorResources()
 {
     m_materialPreviewFactory = new MaterialPreviewFactory();
     m_modelPreviewFactory = new ModelPreviewFactory();
+    m_meshPreviewFactory = new MeshPreviewFactory();
 }
 
 EditorResources::~EditorResources()
 {
+    delete m_meshPreviewFactory;
     delete m_modelPreviewFactory;
     delete m_materialPreviewFactory;
+}
+
+MeshPreviewFactory *EditorResources::GetMeshPreviewFactory() const
+{
+    return m_meshPreviewFactory;
 }
 
 ModelPreviewFactory *EditorResources::GetModelPreviewFactory() const
@@ -43,6 +51,7 @@ void EditorResources::Init()
 
 void EditorResources::InitAfterGLIsInited()
 {
+    m_meshPreviewFactory->Init();
     m_modelPreviewFactory->Init();
     m_materialPreviewFactory->Init();
 }

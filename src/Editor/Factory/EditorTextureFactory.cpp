@@ -8,6 +8,7 @@
 #include "Bang/TextureFactory.h"
 
 #include "BangEditor/EditorPaths.h"
+#include "BangEditor/MeshPreviewFactory.h"
 #include "BangEditor/ModelPreviewFactory.h"
 #include "BangEditor/MaterialPreviewFactory.h"
 
@@ -34,6 +35,11 @@ Texture2D* EditorTextureFactory::GetIconForPath(const Path &path)
         {
             RH<Model> model = Resources::Load<Model>(path);
             icon = ModelPreviewFactory::GetPreviewTextureFor(model.Get());
+        }
+        else if ( path.HasExtension(Extensions::GetMeshExtension()) )
+        {
+            RH<Mesh> mesh = Resources::Load<Mesh>(path);
+            icon = MeshPreviewFactory::GetPreviewTextureFor(mesh.Get());
         }
         else if ( path.HasExtension(Extensions::GetMaterialExtension()) )
         {

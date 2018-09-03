@@ -8,6 +8,7 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class MeshPreviewFactory;
 FORWARD class ModelPreviewFactory;
 FORWARD class MaterialPreviewFactory;
 
@@ -17,6 +18,7 @@ public:
 	EditorResources();
 	virtual ~EditorResources();
 
+    MeshPreviewFactory *GetMeshPreviewFactory() const;
     ModelPreviewFactory *GetModelPreviewFactory() const;
     MaterialPreviewFactory *GetMaterialPreviewFactory() const;
 
@@ -26,6 +28,7 @@ public:
     void InitAfterGLIsInited();
 
 private:
+    MeshPreviewFactory *m_meshPreviewFactory = nullptr;
     ModelPreviewFactory *m_modelPreviewFactory = nullptr;
     MaterialPreviewFactory *m_materialPreviewFactory = nullptr;
 
