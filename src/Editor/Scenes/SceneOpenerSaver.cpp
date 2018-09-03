@@ -3,7 +3,7 @@
 #include "Bang/Debug.h"
 #include "Bang/Dialog.h"
 #include "Bang/Extensions.h"
-#include "Bang/XMLNodeReader.h"
+#include "Bang/XMLMetaReader.h"
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/Editor.h"
@@ -130,7 +130,7 @@ bool SceneOpenerSaver::OnSaveScene(bool saveAs)
         {
             m_currentOpenScenePath = saveScenePath;
             m_currentLoadedScenePath = saveScenePath;
-            openScene->ExportXMLToFile( Path( GetOpenScenePath() ) );
+            openScene->ExportMetaToFile( Path( GetOpenScenePath() ) );
         }
 
         return true;
@@ -221,9 +221,9 @@ bool SceneOpenerSaver::IsCurrentSceneSaved() const
     {
         if (GetOpenScenePath().IsFile())
         {
-            XMLNode savedInfo = XMLNodeReader::FromFile( GetOpenScenePath() );
-            XMLNode sceneInfo;
-            openScene->ExportXML(&sceneInfo);
+            MetaNode savedInfo = XMLMetaReader::FromFile( GetOpenScenePath() );
+            MetaNode sceneInfo;
+            openScene->ExportMeta(&sceneInfo);
 
             m_lastTimeCheckSaved = Time::GetNow_Seconds();
             m_isCurrentSceneSaved = (savedInfo.ToString() == sceneInfo.ToString());

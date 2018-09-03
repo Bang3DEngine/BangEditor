@@ -2,7 +2,7 @@
 #define RIWRESOURCE_H
 
 #include "Bang/Path.h"
-#include "Bang/XMLNode.h"
+#include "Bang/MetaNode.h"
 #include "Bang/Resource.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/ResourceHandle.h"

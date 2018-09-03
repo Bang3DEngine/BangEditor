@@ -9,12 +9,12 @@ USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
 UndoRedoSerializableChange::UndoRedoSerializableChange(Serializable *serializable,
-                                                       const XMLNode &xmlBefore,
-                                                       const XMLNode &xmlAfter)
+                                                       const MetaNode &metaBefore,
+                                                       const MetaNode &metaAfter)
 {
     p_serializable = serializable;
-    m_xmlBefore = xmlBefore;
-    m_xmlAfter = xmlAfter;
+    m_metaBefore = metaBefore;
+    m_metaAfter = metaAfter;
 
     if (auto *destroyable = DCAST<EventEmitter<IEventsDestroy>*>(p_serializable))
     {
@@ -26,21 +26,21 @@ UndoRedoSerializableChange::~UndoRedoSerializableChange()
 {
 }
 
-void UndoRedoSerializableChange::SetXMLBefore(const XMLNode &xmlBefore)
+void UndoRedoSerializableChange::SetMetaBefore(const MetaNode &metaBefore)
 {
-    m_xmlBefore = xmlBefore;
+    m_metaBefore = metaBefore;
 }
 
-void UndoRedoSerializableChange::SetXMLAfter(const XMLNode &xmlAfter)
+void UndoRedoSerializableChange::SetMetaAfter(const MetaNode &metaAfter)
 {
-    m_xmlAfter = xmlAfter;
+    m_metaAfter = metaAfter;
 }
 
 void UndoRedoSerializableChange::Undo()
 {
     if (p_serializable)
     {
-        p_serializable->ImportXML(m_xmlBefore);
+        p_serializable->ImportMeta(m_metaBefore);
         SelectSerializableOrShowInInspectorIfPossible();
     }
 }
@@ -49,7 +49,7 @@ void UndoRedoSerializableChange::Redo()
 {
     if (p_serializable)
     {
-        p_serializable->ImportXML(m_xmlAfter);
+        p_serializable->ImportMeta(m_metaAfter);
         SelectSerializableOrShowInInspectorIfPossible();
     }
 }

@@ -259,7 +259,7 @@ void Hierarchy::OnCreatePrefab(HierarchyItem *item)
                           Append(item->GetReferencedGameObject()->GetName()).
                           AppendExtension(Extensions::GetPrefabExtension()).
                           GetDuplicatePath();
-    Resources::CreateResourceXMLAndImportFile(prefabRH.Get(), exportFilepath);
+    Resources::CreateResourceMetaAndImportFile(prefabRH.Get(), exportFilepath);
 
     Explorer::GetInstance()->ForceCheckFileChanges();
 }
@@ -297,7 +297,7 @@ void Hierarchy::OnItemMoved(GOItem *item,
         newParent = movedGo->GetScene();
     }
 
-    XMLNode prevXMLInfo = go->GetXMLInfo();
+    MetaNode prevMeta = go->GetMeta();
     movedGo->SetParent(newParent, newIndexInsideParent, true);
     UndoRedoManager::PushActionsInSameStep(
         {new UndoRedoMoveGameObject(go,
@@ -305,7 +305,7 @@ void Hierarchy::OnItemMoved(GOItem *item,
                                     oldIndexInsideParent,
                                     newParent,
                                     newIndexInsideParent),
-         new UndoRedoSerializableChange(go, prevXMLInfo, go->GetXMLInfo())});
+         new UndoRedoSerializableChange(go, prevMeta, go->GetMeta())});
 
     Editor::SelectGameObject(movedGo, false);
     IEventListenerCommon::SetReceiveEventsCommon(true);
@@ -326,7 +326,7 @@ void Hierarchy::OnDropOutside(UIDragDroppable *dropped)
             GameObject *prevGoParent = go->GetParent();
             int prevIndexInParent = go->GetIndexInsideParent();
 
-            XMLNode prevXMLInfo = go->GetXMLInfo();
+            MetaNode prevMeta = go->GetMeta();
             go->SetParent( EditorSceneManager::GetOpenScene(), -1, true );
             UndoRedoManager::PushActionsInSameStep(
                 {new UndoRedoMoveGameObject(go,
@@ -335,8 +335,8 @@ void Hierarchy::OnDropOutside(UIDragDroppable *dropped)
                                             go->GetParent(),
                                             go->GetIndexInsideParent()),
                  new UndoRedoSerializableChange(go,
-                                                prevXMLInfo,
-                                                go->GetXMLInfo())});
+                                                prevMeta,
+                                                go->GetMeta())});
         }
     }
     else
@@ -362,7 +362,6 @@ void Hierarchy::OnDropFromOutside(UIDragDroppable *dropped,
                                              EditorSceneManager::GetOpenScene());
                 GameObject *modelGo = model->CreateGameObjectFromModel();
 
-                XMLNode prevXMLInfo = modelGo->GetXMLInfo();
                 modelGo->SetParent(newParent, newIndexInsideParent, true);
                 UndoRedoManager::PushAction(new UndoRedoCreateGameObject(modelGo));
             }

@@ -455,7 +455,7 @@ OnCreateAssetFile(const String &name, const String &extension)
     Path assetPath = currentPath.Append("New_" + name)
                     .AppendExtension(extension).GetDuplicatePath();
     RH<T> asset = Resources::Create<T>();
-    Resources::CreateResourceXMLAndImportFile(asset.Get(), assetPath);
+    Resources::CreateResourceMetaAndImportFile(asset.Get(), assetPath);
     AfterCreateAssetFile(assetPath);
     return std::make_pair(asset, assetPath);
 }
@@ -483,14 +483,14 @@ T* OnAddComponent()
     GameObject *selectedGameObject = Editor::GetSelectedGameObject();
     if (selectedGameObject)
     {
-        XMLNode undoXMLBefore = selectedGameObject->GetXMLInfo();
+        MetaNode undoMetaBefore = selectedGameObject->GetMeta();
 
         comp = selectedGameObject->AddComponent<T>();
 
-        XMLNode currentXML = selectedGameObject->GetXMLInfo();
+        MetaNode currentMeta = selectedGameObject->GetMeta();
         UndoRedoManager::PushAction(
                     new UndoRedoSerializableChange(selectedGameObject,
-                                                   undoXMLBefore, currentXML));
+                                                   undoMetaBefore, currentMeta));
     }
 
     return comp;

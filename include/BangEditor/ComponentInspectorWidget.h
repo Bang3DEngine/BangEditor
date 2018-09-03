@@ -2,7 +2,7 @@
 #define COMPONENTINSPECTORWIDGET_H
 
 #include "Bang/Bang.h"
-#include "Bang/XMLNode.h"
+#include "Bang/MetaNode.h"
 #include "Bang/IEventsFocus.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/IEventsValueChanged.h"
@@ -34,9 +34,9 @@ protected:
     virtual void SetComponent(Component *comp);
 
     void PushCurrentStateToUndoRedoIfAnyChangeForComponent(
-                                                const XMLNode &undoXMLBefore);
+                                                const MetaNode &undoMetaBefore);
     void PushCurrentStateToUndoRedoIfAnyChangeForGameObject(
-                                                const XMLNode &undoXMLBefore);
+                                                const MetaNode &undoMetaBefore);
 
 protected:
     Component *GetComponent() const;
@@ -54,7 +54,7 @@ protected:
 private:
     Component *p_component = nullptr;
 
-    XMLNode m_undoXMLBefore;
+    MetaNode m_undoMetaBefore;
     UIContextMenu *p_contextMenu = nullptr;
 
     // UIContextMenu

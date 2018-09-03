@@ -2,8 +2,8 @@
 
 #include "Bang/File.h"
 #include "Bang/Debug.h"
-#include "Bang/XMLNode.h"
-#include "Bang/XMLNodeReader.h"
+#include "Bang/MetaNode.h"
+#include "Bang/XMLMetaReader.h"
 
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorPaths.h"
@@ -47,19 +47,19 @@ void EditorSettings::Init()
 
 void EditorSettings::ExportToFile()
 {
-    XMLNode xmlInfo;
-    xmlInfo.SetTagName("EditorSettings");
-    xmlInfo.SetArray("RecentProjectFilesOpen", m_recentProjectFilesOpen);
+    MetaNode metaNode;
+    metaNode.SetName("EditorSettings");
+    metaNode.SetArray("RecentProjectFilesOpen", m_recentProjectFilesOpen);
 
-    File::Write(EditorSettings::GetEditorSettingsPath(), xmlInfo.ToString());
+    File::Write(EditorSettings::GetEditorSettingsPath(), metaNode.ToString());
 }
 
 void EditorSettings::ImportFromFile()
 {
     const Path editorSettingsPath = EditorSettings::GetEditorSettingsPath();
 
-    XMLNode settingsXML = XMLNodeReader::FromFile(editorSettingsPath);
-    m_recentProjectFilesOpen = settingsXML.GetArray<Path>("RecentProjectFilesOpen");
+    MetaNode settingsMeta = XMLMetaReader::FromFile(editorSettingsPath);
+    m_recentProjectFilesOpen = settingsMeta.GetArray<Path>("RecentProjectFilesOpen");
     ExportToFile();
 }
 

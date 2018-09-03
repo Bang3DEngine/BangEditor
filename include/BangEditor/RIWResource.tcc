@@ -68,8 +68,8 @@ void RIWResource<T>::BeginUndoRedo()
 
         UndoRedoSerializableChange *undoRedoSerializableChange =
            new UndoRedoSerializableChange(GetResource().Get(),
-                                          GetResource().Get()->GetXMLInfo(),
-                                          XMLNode());
+                                          GetResource().Get()->GetMeta(),
+                                          MetaNode());
         p_undoRedosSerializableChanges.PushBack(undoRedoSerializableChange);
     }
 }
@@ -87,8 +87,8 @@ void RIWResource<T>::EndUndoRedo()
         for(UndoRedoSerializableChange *undoRedoSerializableChange :
             p_undoRedosSerializableChanges)
         {
-            undoRedoSerializableChange->SetXMLAfter(
-                        GetResource().Get()->GetXMLInfo() );
+            undoRedoSerializableChange->SetMetaAfter(
+                        GetResource().Get()->GetMeta() );
         }
         undoRedoActions.PushBack(p_undoRedosSerializableChanges);
         undoRedoActions.PushBack(p_undoRedosFileChanges);
@@ -146,7 +146,7 @@ void RIWResource<T>::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
         Path importPath = ImportFilesManager::GetImportFilepath(resourcePath);
         if (resourceToExport && importPath.IsFile())
         {
-            resourceToExport->ExportXMLToFile(importPath);
+            resourceToExport->ExportMetaToFile(importPath);
         }
 
         EndUndoRedo();

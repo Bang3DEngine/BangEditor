@@ -1,7 +1,7 @@
 #ifndef SELECTIONGIZMO_H
 #define SELECTIONGIZMO_H
 
-#include "Bang/XMLNode.h"
+#include "Bang/MetaNode.h"
 #include "Bang/GameObject.h"
 #include "Bang/EventListener.h"
 #include "Bang/IEventsDestroy.h"

@@ -145,18 +145,18 @@ void TransformGizmo::OnEndRender(Scene *)
 
 void TransformGizmo::OnGrabBegin()
 {
-    m_transformUndoXMLBefore = GetReferencedGameObject()->
-                               GetTransform()->GetXMLInfo();
+    m_transformUndoMetaBefore = GetReferencedGameObject()->
+                               GetTransform()->GetMeta();
 }
 
 void TransformGizmo::OnGrabEnd()
 {
     Transform *transform = GetReferencedGameObject()->GetTransform();
-    XMLNode newUndoXML = transform->GetXMLInfo();
+    MetaNode newUndoMeta = transform->GetMeta();
 
     UndoRedoManager::PushAction(
-        new UndoRedoSerializableChange(transform, m_transformUndoXMLBefore,
-                                       newUndoXML) );
+        new UndoRedoSerializableChange(transform, m_transformUndoMetaBefore,
+                                       newUndoMeta) );
 }
 
 void TransformGizmo::SetReferencedGameObject(GameObject *referencedGameObject)

@@ -5,7 +5,7 @@
 #include "Bang/Time.h"
 #include "Bang/Paths.h"
 #include "Bang/Physics.h"
-#include "Bang/XMLNode.h"
+#include "Bang/MetaNode.h"
 #include "Bang/Extensions.h"
 #include "Bang/SceneManager.h"
 
@@ -74,40 +74,40 @@ Path Project::GetFirstFoundScenePath() const
 }
 
 
-void Project::ImportXML(const XMLNode &xmlInfo)
+void Project::ImportMeta(const MetaNode &metaNode)
 {
-    if (xmlInfo.Contains("RandomID"))
+    if (metaNode.Contains("RandomID"))
     {
-        m_id = xmlInfo.Get<GUID>("RandomID");
+        m_id = metaNode.Get<GUID>("RandomID");
     }
 
-    if (xmlInfo.Contains("Physics_StepSleepTime"))
+    if (metaNode.Contains("Physics_StepSleepTime"))
     {
         Physics::GetInstance()->SetStepSleepTime(
-                    xmlInfo.Get<float>("Physics_StepSleepTime") );
+                    metaNode.Get<float>("Physics_StepSleepTime") );
     }
 
-    if (xmlInfo.Contains("Physics_MaxSubSteps"))
+    if (metaNode.Contains("Physics_MaxSubSteps"))
     {
         Physics::GetInstance()->SetMaxSubSteps(
-                    xmlInfo.Get<int>("Physics_MaxSubSteps"));
+                    metaNode.Get<int>("Physics_MaxSubSteps"));
     }
 
-    if (xmlInfo.Contains("Physics_Gravity"))
+    if (metaNode.Contains("Physics_Gravity"))
     {
         Physics::GetInstance()->SetGravity(
-                    xmlInfo.Get<Vector3>("Physics_Gravity"));
+                    metaNode.Get<Vector3>("Physics_Gravity"));
     }
 }
 
-void Project::ExportXML(XMLNode *xmlInfo) const
+void Project::ExportMeta(MetaNode *metaNode) const
 {
-    xmlInfo->SetTagName("Project");
-    xmlInfo->Set("RandomID", GetProjectRandomId());
-    xmlInfo->Set("Physics_StepSleepTime",
+    metaNode->SetName("Project");
+    metaNode->Set("RandomID", GetProjectRandomId());
+    metaNode->Set("Physics_StepSleepTime",
                  Physics::GetInstance()->GetStepSleepTimeSeconds());
-    xmlInfo->Set("Physics_MaxSubSteps",
+    metaNode->Set("Physics_MaxSubSteps",
                  Physics::GetInstance()->GetMaxSubSteps());
-    xmlInfo->Set("Physics_Gravity",
+    metaNode->Set("Physics_Gravity",
                  Physics::GetInstance()->GetGravity());
 }

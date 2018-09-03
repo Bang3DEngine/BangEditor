@@ -97,17 +97,17 @@ void ComponentInspectorWidget::OnValueChangedCIW(
 void ComponentInspectorWidget::OnValueChanged(
                             EventEmitter<IEventsValueChanged> *object)
 {
-    XMLNode undoXMLBefore;
+    MetaNode undoMetaBefore;
     if (GetComponent())
     {
-        undoXMLBefore = GetComponent()->GetXMLInfo();
+        undoMetaBefore = GetComponent()->GetMeta();
     }
 
     OnValueChangedCIW(object);
 
     if (GetComponent())
     {
-        PushCurrentStateToUndoRedoIfAnyChangeForComponent(undoXMLBefore);
+        PushCurrentStateToUndoRedoIfAnyChangeForComponent(undoMetaBefore);
     }
 }
 
@@ -132,26 +132,26 @@ Color ComponentInspectorWidget::GetComponentIconTint() const
 }
 
 void ComponentInspectorWidget::PushCurrentStateToUndoRedoIfAnyChangeForComponent(
-                                                const XMLNode &undoXMLBefore)
+                                                const MetaNode &undoMetaBefore)
 {
-    XMLNode currentXML = GetComponent()->GetXMLInfo();
-    if (currentXML.ToString() != undoXMLBefore.ToString())
+    MetaNode currentMeta = GetComponent()->GetMeta();
+    if (currentMeta.ToString() != undoMetaBefore.ToString())
     {
         UndoRedoManager::PushAction( new UndoRedoSerializableChange(GetComponent(),
-                                                                    undoXMLBefore,
-                                                                    currentXML) );
+                                                                    undoMetaBefore,
+                                                                    currentMeta) );
     }
 }
 
 void ComponentInspectorWidget::PushCurrentStateToUndoRedoIfAnyChangeForGameObject(
-                                                const XMLNode &undoXMLBefore)
+                                                const MetaNode &undoMetaBefore)
 {
     GameObject *go = GetComponent()->GetGameObject();
-    XMLNode currentXML = go->GetXMLInfo();
-    if (currentXML.ToString() != undoXMLBefore.ToString())
+    MetaNode currentMeta = go->GetMeta();
+    if (currentMeta.ToString() != undoMetaBefore.ToString())
     {
         UndoRedoManager::PushAction(
-                new UndoRedoSerializableChange(go, undoXMLBefore, currentXML) );
+                new UndoRedoSerializableChange(go, undoMetaBefore, currentMeta) );
     }
 }
 
@@ -162,10 +162,10 @@ void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
     MenuItem *remove = menuRootItem->AddItem("Remove");
     remove->SetSelectedCallback([this](MenuItem*)
     {
-        XMLNode undoXMLBefore = GetComponent()->GetGameObject()->GetXMLInfo();
+        MetaNode undoMetaBefore = GetComponent()->GetGameObject()->GetMeta();
         GameObject *go = GetComponent()->GetGameObject();
         go->RemoveComponent(GetComponent());
-        PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoXMLBefore);
+        PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoMetaBefore);
     });
     menuRootItem->AddSeparator();
 
@@ -178,30 +178,30 @@ void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
     MenuItem *cut = menuRootItem->AddItem("Cut");
     cut->SetSelectedCallback([this](MenuItem*)
     {
-        XMLNode undoXMLBefore = GetComponent()->GetGameObject()->GetXMLInfo();
+        MetaNode undoMetaBefore = GetComponent()->GetGameObject()->GetMeta();
         EditorClipboard::CopyComponent( GetComponent() );
-        PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoXMLBefore);
+        PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoMetaBefore);
         Component::Destroy( GetComponent() );
     });
 
     MenuItem *paste = menuRootItem->AddItem("Paste");
     paste->SetSelectedCallback([this](MenuItem*)
     {
-        XMLNode undoXMLBefore = GetComponent()->GetGameObject()->GetXMLInfo();
+        MetaNode undoMetaBefore = GetComponent()->GetGameObject()->GetMeta();
         Component *copiedComp = EditorClipboard::GetCopiedComponent();
         Component *newComponent = copiedComp->Clone();
         GetInspectedGameObject()->AddComponent(newComponent);
-        PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoXMLBefore);
+        PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoMetaBefore);
     });
     paste->SetOverAndActionEnabled( (EditorClipboard::HasCopiedComponent()) );
 
     MenuItem *pasteValues = menuRootItem->AddItem("Paste values");
     pasteValues->SetSelectedCallback([this](MenuItem*)
     {
-        XMLNode undoXMLBefore = GetComponent()->GetXMLInfo();
+        MetaNode undoMetaBefore = GetComponent()->GetMeta();
         Component *copiedComp = EditorClipboard::GetCopiedComponent();
         copiedComp->CloneInto( GetComponent() );
-        PushCurrentStateToUndoRedoIfAnyChangeForComponent(undoXMLBefore);
+        PushCurrentStateToUndoRedoIfAnyChangeForComponent(undoMetaBefore);
     });
     pasteValues->SetOverAndActionEnabled( (EditorClipboard::HasCopiedComponent()) );
 
@@ -210,17 +210,17 @@ void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
     MenuItem *moveUp = menuRootItem->AddItem("Move Up");
     moveUp->SetSelectedCallback([this](MenuItem*)
     {
-        XMLNode undoXMLBefore = GetComponent()->GetGameObject()->GetXMLInfo();
+        MetaNode undoMetaBefore = GetComponent()->GetGameObject()->GetMeta();
         MoveComponent(GetComponent(), -1);
-        PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoXMLBefore);
+        PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoMetaBefore);
     });
 
     MenuItem *moveDown = menuRootItem->AddItem("Move Down");
     moveDown->SetSelectedCallback([this](MenuItem*)
     {
-        XMLNode undoXMLBefore = GetComponent()->GetGameObject()->GetXMLInfo();
+        MetaNode undoMetaBefore = GetComponent()->GetGameObject()->GetMeta();
         MoveComponent(GetComponent(), 1);
-        PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoXMLBefore);
+        PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoMetaBefore);
     });
 
     remove->SetOverAndActionEnabled( CanBeRemovedFromContextMenu() );

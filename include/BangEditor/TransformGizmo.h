@@ -40,7 +40,7 @@ public:
     static TransformGizmo *GetInstance();
 
 private:
-    XMLNode m_transformUndoXMLBefore;
+    MetaNode m_transformUndoMetaBefore;
     TransformMode m_transformMode = TransformMode::TRANSLATE;
 
     GameObject                  *p_worldGizmoContainer  = nullptr;

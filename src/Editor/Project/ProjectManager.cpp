@@ -4,9 +4,9 @@
 #include "Bang/File.h"
 #include "Bang/Debug.h"
 #include "Bang/String.h"
-#include "Bang/XMLNode.h"
+#include "Bang/MetaNode.h"
 #include "Bang/Extensions.h"
-#include "Bang/XMLNodeReader.h"
+#include "Bang/XMLMetaReader.h"
 #include "Bang/ImportFilesManager.h"
 
 #include "BangEditor/Project.h"
@@ -32,7 +32,7 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
 
     ProjectManager::s_currentProject = new Project();
     Project *currentProject = ProjectManager::s_currentProject;
-    currentProject->ImportXMLFromFile(projectFilepath);
+    currentProject->ImportMetaFromFile(projectFilepath);
     currentProject->SetProjectFilepath(projectFilepath);
 
     Paths::SetProjectRoot(currentProject->GetProjectDirectory());
@@ -93,14 +93,14 @@ Project* ProjectManager::CreateNewProject(const Path &projectDirPath,
 Project *ProjectManager::CreateNewProjectFileOnly(const Path &projectFilepath)
 {
     Project *proj = new Project();
-    proj->ExportXMLToFile(projectFilepath);
+    proj->ExportMetaToFile(projectFilepath);
     return proj;
 }
 
 void ProjectManager::ExportProject(const Project *project)
 {
     if (!project) { return; }
-    bool ok = project->ExportXMLToFile(project->GetProjectFilepath());
+    bool ok = project->ExportMetaToFile(project->GetProjectFilepath());
     if (!ok)
     {
         Debug_Error("Could not save the project...");

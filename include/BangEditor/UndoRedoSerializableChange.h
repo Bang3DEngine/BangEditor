@@ -2,7 +2,7 @@
 #define UNDOREDOSERIALIZABLECHANGE_H
 
 #include "Bang/Bang.h"
-#include "Bang/XMLNode.h"
+#include "Bang/MetaNode.h"
 #include "Bang/Serializable.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventListener.h"
@@ -19,20 +19,20 @@ class UndoRedoSerializableChange : public UndoRedoAction,
 {
 public:
     UndoRedoSerializableChange(Serializable *serializable,
-                               const XMLNode &xmlBefore,
-                               const XMLNode &xmlAfter);
+                               const MetaNode &metaBefore,
+                               const MetaNode &metaAfter);
 	virtual ~UndoRedoSerializableChange();
 
-    void SetXMLBefore(const XMLNode &xmlBefore);
-    void SetXMLAfter(const XMLNode &xmlAfter);
+    void SetMetaBefore(const MetaNode &metaBefore);
+    void SetMetaAfter(const MetaNode &metaAfter);
 
     void Undo() override;
     void Redo() override;
 
 private:
     Serializable *p_serializable = nullptr;
-    XMLNode m_xmlBefore;
-    XMLNode m_xmlAfter;
+    MetaNode m_metaBefore;
+    MetaNode m_metaAfter;
 
     // IEventsDestroy
     void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;

@@ -3,7 +3,7 @@
 #include "Bang/GL.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
-#include "Bang/XMLNode.h"
+#include "Bang/MetaNode.h"
 #include "Bang/UILabel.h"
 #include "Bang/Material.h"
 #include "Bang/Resources.h"
@@ -106,9 +106,10 @@ Inspector::Inspector()
                        SetParent(mainVLGo);
     scrollPanel->GetGameObject()->SetParent(mainVLGo);
 
-    p_blockLayer = GameObjectFactory::CreateUIImage(Color::Black.WithAlpha(0.3f));
+    p_blockLayer = GameObjectFactory::CreateUIImage(Color::Red.WithAlpha(0.3f));
     p_blockLayer->GetGameObject()->AddComponent<UIFocusable>();
-    p_blockLayer->GetGameObject()->SetParent(this);
+    p_blockLayer->GetGameObject()->SetParent(GetScrollPanel()->GetGameObject());
+    SetCurrentWidgetBlocked(false);
 
     AddComponent<UIFocusable>();
     p_contextMenu = AddComponent<UIContextMenu>();
@@ -266,16 +267,16 @@ void Inspector::OnCreateContextMenu(MenuItem *menuRootItem)
     if (currentGameObject)
     {
         {
-            XMLNode undoXMLBefore = currentGameObject->GetXMLInfo();
+            MetaNode undoMetaBefore = currentGameObject->GetMeta();
 
             MenuItem *addComp = menuRootItem->AddItem("Add Component");
             MenuBar::CreateComponentsMenuInto(addComp);
             addComp->SetSelectedCallback([this](MenuItem*){});
 
-            XMLNode currentXML = currentGameObject->GetXMLInfo();
+            MetaNode currentMeta = currentGameObject->GetMeta();
             UndoRedoManager::PushAction(
                     new UndoRedoSerializableChange(currentGameObject,
-                                                   undoXMLBefore, currentXML) );
+                                                   undoMetaBefore, currentMeta) );
         }
 
         // menuRootItem->AddSeparator();
@@ -283,16 +284,16 @@ void Inspector::OnCreateContextMenu(MenuItem *menuRootItem)
         MenuItem *paste = menuRootItem->AddItem("Paste");
         paste->SetSelectedCallback([this, currentGameObject](MenuItem*)
         {
-            XMLNode undoXMLBefore = currentGameObject->GetXMLInfo();
+            MetaNode undoMetaBefore = currentGameObject->GetMeta();
 
             Component *copiedComp = EditorClipboard::GetCopiedComponent();
             Component *newComponent = copiedComp->Clone();
             GetCurrentGameObject()->AddComponent(newComponent);
 
-            XMLNode currentXML = currentGameObject->GetXMLInfo();
+            MetaNode currentMeta = currentGameObject->GetMeta();
             UndoRedoManager::PushAction(
                 new UndoRedoSerializableChange(currentGameObject,
-                                               undoXMLBefore, currentXML) );
+                                               undoMetaBefore, currentMeta) );
         });
         paste->SetOverAndActionEnabled( (EditorClipboard::HasCopiedComponent()) );
     }
