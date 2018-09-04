@@ -157,14 +157,14 @@ void ResourcePreviewFactory<T>::FillTextureWithPreview(
     Transform *camTR = GetPreviewCamera()->GetGameObject()->GetTransform();
     Sphere goSphere = GetPreviewGameObjectContainer()->GetBoundingSphere();
     float halfFov = Math::DegToRad(GetPreviewCamera()->GetFovDegrees() / 2.0f);
-    float camDist = goSphere.GetRadius() / Math::Tan(halfFov) * 1.0f;
+    float camDist = goSphere.GetRadius() / Math::Tan(halfFov) * 1.1f;
     camDist *= params.camDistanceMultiplier;
     const Vector2 &angles = params.camOrbitAnglesDegs;
     Vector3 camDir = (Quaternion::AngleAxis(Math::DegToRad(-angles.x), Vector3::Up) *
                       Quaternion::AngleAxis(Math::DegToRad(angles.y), Vector3::Right) *
                       Vector3(0,0,1)).
                      Normalized();
-    camTR->SetPosition( goSphere.GetCenter() + camDir * camDist);
+    camTR->SetPosition( goSphere.GetCenter() + camDir * camDist );
     camTR->LookAt(goSphere.GetCenter());
     GetPreviewCamera()->SetZFar( (camDist + goSphere.GetRadius() * 2.0f) * 1.2f);
     /*

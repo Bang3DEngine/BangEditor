@@ -45,7 +45,14 @@ void MeshPreviewFactory::OnCreateSceneFirstTime(Scene *previewScene,
 {
     (void) previewScene;
     (void) previewCamera;
-    (void) previewGoContainer;
+
+    GameObject *meshGo = GameObjectFactory::CreateGameObject();
+    meshGo->SetName("MeshContainer");
+
+    MeshRenderer *mr = meshGo->AddComponent<MeshRenderer>();
+    mr->GetMaterial()->SetCullFace(GL::CullFaceExt::NONE);
+
+    meshGo->SetParent(previewGoContainer);
 }
 
 void MeshPreviewFactory::OnUpdateTextureBegin(
@@ -55,19 +62,16 @@ void MeshPreviewFactory::OnUpdateTextureBegin(
                                 Mesh *mesh,
                                 const ResourcePreviewFactoryParameters &params)
 {
+    (void) previewGoContainer;
     (void) previewCamera;
     (void) params;
 
     ASSERT(previewScene);
 
-    GameObject *meshGo = GameObjectFactory::CreateGameObject();
-    meshGo->SetName("MeshContainer");
+    GameObject *meshGo = previewScene->FindInChildren("MeshContainer");
 
-    MeshRenderer *mr = meshGo->AddComponent<MeshRenderer>();
-    mr->GetMaterial()->SetCullFace(GL::CullFaceExt::NONE);
+    MeshRenderer *mr = meshGo->GetComponent<MeshRenderer>();
     mr->SetMesh(mesh);
-
-    meshGo->SetParent(previewGoContainer);
 
     previewScene->Start();
 }
@@ -84,10 +88,5 @@ void MeshPreviewFactory::OnUpdateTextureEnd(
     (void) previewGoContainer;
     (void) mesh;
     (void) params;
-
-    GameObject *meshGo = previewGoContainer->FindInChildren("MeshContainer");
-    ASSERT(meshGo);
-
-    GameObject::DestroyImmediate(meshGo);
 }
 

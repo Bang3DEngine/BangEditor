@@ -351,19 +351,22 @@ void Hierarchy::OnDropFromOutside(UIDragDroppable *dropped,
 {
     if (ExplorerItem *expItem = DCAST<ExplorerItem*>(dropped->GetGameObject()))
     {
-        if ( Extensions::Equals(expItem->GetPath().GetExtension(),
-                                Extensions::GetModelExtensions()) )
+        if (UICanvas::GetActive(this)->IsMouseOver(this, true))
         {
-            RH<Model> modelRH = Resources::Load<Model>( expItem->GetPath() );
-            if (Model *model = modelRH.Get())
+            if ( Extensions::Equals(expItem->GetPath().GetExtension(),
+                                    Extensions::GetModelExtensions()) )
             {
-                GameObject *newParent = (newParentItem ?
-                                             GetGameObjectFromItem(newParentItem) :
-                                             EditorSceneManager::GetOpenScene());
-                GameObject *modelGo = model->CreateGameObjectFromModel();
+                RH<Model> modelRH = Resources::Load<Model>( expItem->GetPath() );
+                if (Model *model = modelRH.Get())
+                {
+                    GameObject *newParent = (newParentItem ?
+                                                 GetGameObjectFromItem(newParentItem) :
+                                                 EditorSceneManager::GetOpenScene());
+                    GameObject *modelGo = model->CreateGameObjectFromModel();
 
-                modelGo->SetParent(newParent, newIndexInsideParent, true);
-                UndoRedoManager::PushAction(new UndoRedoCreateGameObject(modelGo));
+                    modelGo->SetParent(newParent, newIndexInsideParent, true);
+                    UndoRedoManager::PushAction(new UndoRedoCreateGameObject(modelGo));
+                }
             }
         }
     }

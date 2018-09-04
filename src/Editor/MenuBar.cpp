@@ -756,6 +756,7 @@ void MenuBar::OnCreateSphere(MenuItem*)
 void MenuBar::OnCreateDirectionalLightGO(MenuItem*)
 {
     GameObject *dlGo = GameObjectFactory::CreateGameObject();
+    dlGo->SetName("DirectionalLight");
     dlGo->AddComponent<DirectionalLight>();
     MenuBar::OnEndCreateGameObjectFromMenuBar(dlGo);
 }
@@ -763,6 +764,7 @@ void MenuBar::OnCreateDirectionalLightGO(MenuItem*)
 void MenuBar::OnCreatePointLightGO(MenuItem*)
 {
     GameObject *plGo = GameObjectFactory::CreateGameObject();
+    plGo->SetName("PointLight");
     plGo->AddComponent<PointLight>();
     MenuBar::OnEndCreateGameObjectFromMenuBar(plGo);
 }
