@@ -57,6 +57,7 @@ void EditorScene::Init()
     m_projectManager = new ProjectManager();
     m_scenePlayer = new ScenePlayer();
     m_editorClipboard = new EditorClipboard();
+    m_undoRedoManager = new UndoRedoManager();
     m_sceneOpenerSaver = new SceneOpenerSaver();
     m_editorFileTracker = new EditorFileTracker();
 
@@ -169,8 +170,6 @@ void EditorScene::Init()
                          SetOn(RenderFlag::CLEAR_COLOR).
                          SetOn(RenderFlag::CLEAR_DEPTH_STENCIL) );
     SetCamera(cam);
-
-    m_undoRedoManager = new UndoRedoManager();
 
     ScenePlayer::GetInstance()->EventEmitter<IEventsScenePlayer>::RegisterListener(this);
     SceneManager::GetActive()->EventEmitter<IEventsSceneManager>::RegisterListener(this);

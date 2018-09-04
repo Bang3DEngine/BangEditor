@@ -5,6 +5,7 @@
 #include "Bang/Texture2D.h"
 #include "Bang/Resources.h"
 #include "Bang/Extensions.h"
+#include "Bang/MeshFactory.h"
 #include "Bang/TextureFactory.h"
 
 #include "BangEditor/EditorPaths.h"

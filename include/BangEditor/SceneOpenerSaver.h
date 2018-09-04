@@ -6,6 +6,7 @@
 #include "Bang/EventListener.h"
 
 #include "BangEditor/ScenePlayer.h"
+#include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/IEventsScenePlayer.h"
 #include "BangEditor/EditorSceneManager.h"
 
@@ -13,7 +14,8 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class SceneOpenerSaver : public EventListener<IEventsSceneManager>,
-                         public EventListener<IEventsScenePlayer>
+                         public EventListener<IEventsScenePlayer>,
+                         public EventListener<IEventsUndoRedo>
 {
 public:
     SceneOpenerSaver();
@@ -38,19 +40,23 @@ public:
     static SceneOpenerSaver* GetInstance();
 
 private:
+    int m_numActionsDoneSinceLastSave = 0;
+
     Path m_previousLoadedScenePath = Path::Empty;
     Path m_previousOpenScenePath = Path::Empty;
 
     Path m_currentLoadedScenePath = Path::Empty;
     Path m_currentOpenScenePath = Path::Empty;
 
-    mutable double m_lastTimeCheckSaved = 0.0;
-    mutable bool m_isCurrentSceneSaved = false;
-
     bool OnSaveScene(bool saveAs);
     Dialog::YesNoCancel Overwrite(const Path &path);
 
     Path GetDialogStartPath() const;
+
+    // IEventsUndoRedo
+    void OnActionPushed(UndoRedoAction *action) override;
+    void OnUndo(UndoRedoAction *action) override;
+    void OnRedo(UndoRedoAction *action) override;
 
     // IEventsScenePlayer
     void OnPlayStateChanged(PlayState previousPlayState,

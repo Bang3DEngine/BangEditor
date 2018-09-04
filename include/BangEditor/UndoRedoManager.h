@@ -2,6 +2,9 @@
 #define UNDOREDOMANAGER_H
 
 #include "Bang/Bang.h"
+#include "Bang/IEvents.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.h"
 
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UndoRedoAction.h"
@@ -10,7 +13,17 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class UndoRedoManager
+class IEventsUndoRedo
+{
+    IEVENTS_NS(IEventsUndoRedo)
+
+public:
+    virtual void OnActionPushed(UndoRedoAction *action) { }
+    virtual void OnUndo(UndoRedoAction *action) { }
+    virtual void OnRedo(UndoRedoAction *action) { }
+};
+
+class UndoRedoManager : public EventEmitter<IEventsUndoRedo>
 {
 public:
 	UndoRedoManager();

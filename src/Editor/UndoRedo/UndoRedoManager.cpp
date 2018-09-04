@@ -41,6 +41,8 @@ void UndoRedoManager::Undo()
         for (UndoRedoAction *action : actions)
         {
             action->Undo();
+            urm->EventEmitter<IEventsUndoRedo>::PropagateToListeners(
+                                       &IEventsUndoRedo::OnUndo, action);
         }
         urm->m_undoingOrRedoing = false;
 
@@ -69,6 +71,8 @@ void UndoRedoManager::Redo()
         for (UndoRedoAction *action : actions)
         {
             action->Redo();
+            urm->EventEmitter<IEventsUndoRedo>::PropagateToListeners(
+                                            &IEventsUndoRedo::OnRedo, action);
         }
         urm->m_undoingOrRedoing = false;
 
@@ -125,6 +129,12 @@ void UndoRedoManager::PushActionsInSameStep(
     UndoRedoManager *urm = UndoRedoManager::GetInstance();
     ASSERT(urm);
     ASSERT(!urm->m_undoingOrRedoing);
+
+    for (UndoRedoAction *pushedAction : actionsInSameStep)
+    {
+        urm->EventEmitter<IEventsUndoRedo>::PropagateToListeners(
+                               &IEventsUndoRedo::OnActionPushed, pushedAction);
+    }
 
     urm->m_undoActions.PushFront(actionsInSameStep);
     urm->m_redoActions.Clear();

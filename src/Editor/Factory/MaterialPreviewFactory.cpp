@@ -50,8 +50,8 @@ void MaterialPreviewFactory::OnCreateSceneFirstTime(Scene *previewScene,
     (void) previewGoContainer;
 
     GameObject *sphere = GameObjectFactory::CreateSphereGameObject();
-    sphere->GetTransform()->SetPosition( Vector3::Zero );
     sphere->SetParent(previewGoContainer);
+    sphere->GetTransform()->SetPosition( Vector3::Zero );
 }
 
 void MaterialPreviewFactory::OnUpdateTextureBegin(

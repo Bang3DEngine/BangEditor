@@ -22,6 +22,9 @@ SceneOpenerSaver::SceneOpenerSaver()
         EventEmitter<IEventsSceneManager>::RegisterListener(this);
     ScenePlayer::GetInstance()->
         EventEmitter<IEventsScenePlayer>::RegisterListener(this);
+
+    UndoRedoManager::GetInstance()->EventEmitter<IEventsUndoRedo>::
+                                    RegisterListener(this);
 }
 
 SceneOpenerSaver::~SceneOpenerSaver()
@@ -75,8 +78,14 @@ void SceneOpenerSaver::OpenDefaultScene() const
     SceneManager::LoadScene(scene);
 }
 
-bool SceneOpenerSaver::OnSaveScene() { return OnSaveScene(false); }
-bool SceneOpenerSaver::OnSaveSceneAs() { return OnSaveScene(true); }
+bool SceneOpenerSaver::OnSaveScene()
+{
+    return OnSaveScene(false);
+}
+bool SceneOpenerSaver::OnSaveSceneAs()
+{
+    return OnSaveScene(true);
+}
 
 void SceneOpenerSaver::OnSceneLoaded(Scene*, const Path &sceneFilepath)
 {
@@ -101,7 +110,10 @@ SceneOpenerSaver *SceneOpenerSaver::GetInstance()
 
 bool SceneOpenerSaver::OnSaveScene(bool saveAs)
 {
-    if (!Editor::IsEditingScene()) { return false; }
+    if (!Editor::IsEditingScene())
+    {
+        return false;
+    }
 
     EditorScene *edScene = EditorSceneManager::GetEditorScene();
     Scene *openScene = edScene->GetOpenScene();
@@ -131,6 +143,7 @@ bool SceneOpenerSaver::OnSaveScene(bool saveAs)
             m_currentOpenScenePath = saveScenePath;
             m_currentLoadedScenePath = saveScenePath;
             openScene->ExportMetaToFile( Path( GetOpenScenePath() ) );
+            m_numActionsDoneSinceLastSave = 0;
         }
 
         return true;
@@ -190,6 +203,24 @@ Path SceneOpenerSaver::GetDialogStartPath() const
     return Paths::GetHome();
 }
 
+void SceneOpenerSaver::OnActionPushed(UndoRedoAction *action)
+{
+    (void) action;
+    ++m_numActionsDoneSinceLastSave;
+}
+
+void SceneOpenerSaver::OnUndo(UndoRedoAction *action)
+{
+    (void) action;
+    --m_numActionsDoneSinceLastSave;
+}
+
+void SceneOpenerSaver::OnRedo(UndoRedoAction *action)
+{
+    (void) action;
+    ++m_numActionsDoneSinceLastSave;
+}
+
 void SceneOpenerSaver::OnPlayStateChanged(PlayState, PlayState newPlayState)
 {
     switch (newPlayState)
@@ -211,27 +242,7 @@ void SceneOpenerSaver::OnPlayStateChanged(PlayState, PlayState newPlayState)
 
 bool SceneOpenerSaver::IsCurrentSceneSaved() const
 {
-    Scene *openScene = EditorSceneManager::GetOpenScene();
-    if (!openScene)
-    {
-        return false;
-    }
-
-    if (Time::GetNow_Seconds() - m_lastTimeCheckSaved >= 2.0f)
-    {
-        if (GetOpenScenePath().IsFile())
-        {
-            MetaNode savedInfo;
-            savedInfo.Import( GetOpenScenePath() );
-
-            MetaNode sceneInfo;
-            openScene->ExportMeta(&sceneInfo);
-
-            m_lastTimeCheckSaved = Time::GetNow_Seconds();
-            m_isCurrentSceneSaved = (savedInfo.ToString() == sceneInfo.ToString());
-        }
-    }
-    return m_isCurrentSceneSaved;
+    return (m_numActionsDoneSinceLastSave == 0);
 }
 
 bool SceneOpenerSaver::OpenSceneInEditor(const Path &scenePath)
@@ -246,7 +257,6 @@ bool SceneOpenerSaver::OpenSceneInEditor(const Path &scenePath)
         UndoRedoManager::Clear();
         SceneManager::LoadScene(scenePath, false);
         m_currentOpenScenePath = scenePath;
-        m_isCurrentSceneSaved = true;
         return true;
     }
     return false;
