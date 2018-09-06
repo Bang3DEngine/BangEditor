@@ -32,18 +32,19 @@
 #include "BangEditor/Inspector.h"
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/EditorCamera.h"
+#include "BangEditor/EditorWindow.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/UITabContainer.h"
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/EditorClipboard.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/UISceneContainer.h"
-#include "BangEditor/BehaviourTracker.h"
 #include "BangEditor/EditorFileTracker.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditSceneGameObjects.h"
 #include "BangEditor/UISceneEditContainer.h"
 #include "BangEditor/UIScenePlayContainer.h"
+#include "BangEditor/EditorBehaviourManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -171,8 +172,14 @@ void EditorScene::Init()
                          SetOn(RenderFlag::CLEAR_DEPTH_STENCIL) );
     SetCamera(cam);
 
+
+    EditorWindow *editorWindow = SCAST<EditorWindow*>(Window::GetActive());
+    editorWindow->EventEmitter<IEventsWindow>::RegisterListener(this);
+
     ScenePlayer::GetInstance()->EventEmitter<IEventsScenePlayer>::RegisterListener(this);
     SceneManager::GetActive()->EventEmitter<IEventsSceneManager>::RegisterListener(this);
+    GetEditorFileTracker()->EventEmitter<IEventsFileTracker>::RegisterListener(
+                                EditorBehaviourManager::GetActive());
 
     ScenePlayer::StopScene();
 }
@@ -196,8 +203,6 @@ void EditorScene::BeforeRender()
 void EditorScene::Update()
 {
     GetScenePlayer()->Update();
-    GetEditorFileTracker()->GetFileTracker()->Update(false);
-    GetEditorFileTracker()->GetBehaviourTracker()->Update(false);
 
     EditorSceneManager::SetActiveScene(this);
     Scene::Update();
@@ -295,9 +300,23 @@ void EditorScene::SetOpenScene(Scene *openScene)
     }
 }
 
+void EditorScene::OnFocusGained(Window *w)
+{
+    (void) w;
+    GetEditorFileTracker()->CheckFiles();
+}
+
+void EditorScene::OnFocusLost(Window *w)
+{
+    (void) w;
+}
+
 void EditorScene::OnSceneLoaded(Scene *scene, const Path &)
 {
-    if (scene != this) { SetOpenScene(scene); }
+    if (scene != this)
+    {
+        SetOpenScene(scene);
+    }
 }
 
 Scene *EditorScene::GetOpenScene() const

@@ -37,11 +37,11 @@ ExplorerItem *ExplorerItemFactory::CreateExplorerItem(const Path &path)
     return explorerItem;
 }
 
-List<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
+Array<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
                                                 const Path &path,
                                                 bool addBackItem)
 {
-    List<ExplorerItem*> expItems;
+    Array<ExplorerItem*> expItems;
 
     if (addBackItem)
     {
@@ -54,7 +54,7 @@ List<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
 
     if (path.IsDir())
     {
-        List<Path> subPaths = path.GetSubPaths(Path::FindFlag::SIMPLE);
+        Array<Path> subPaths = path.GetSubPaths(Path::FindFlag::SIMPLE);
         Paths::SortPathsByExtension(&subPaths);
         Paths::SortPathsByName(&subPaths);
         for (const Path &subPath : subPaths)

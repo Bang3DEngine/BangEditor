@@ -15,27 +15,31 @@ NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class BehaviourTracker;
-
 class EditorFileTracker : public EventListener<IEventsFileTracker>,
-                          public EventListener<IEventsProjectManager>
+                          public EventListener<IEventsProjectManager>,
+                          public EventEmitter<IEventsFileTracker>
 {
 public:
 	EditorFileTracker();
 	virtual ~EditorFileTracker();
 
-    FileTracker* GetFileTracker() const;
-    BehaviourTracker* GetBehaviourTracker() const;
-
+    void CheckFiles();
     void OnPathRenamed(const Path &previousPath, const Path &newPath);
+
+    const USet<Path>& GetTrackedPaths() const;
+    Array<Path> GetTrackedPathsWithExtensions(
+                                        const Array<String> &extensions) const;
+    Array<Path> GetTrackedPathsWithLastExtension(
+                                        const Array<String> &extensions) const;
 
     static EditorFileTracker *GetInstance();
 
 private:
     FileTracker *m_fileTracker = nullptr;
-    BehaviourTracker *m_behaviourFileTracker = nullptr;
 
-    void CheckForShaderIncludePathsModifications(const Path &modifiedPath);
+    void CheckForShaderModifications(const Path &modifiedPath);
+    void CheckForBehaviourModifications(const Path &modifiedPath);
+    FileTracker* GetFileTracker() const;
 
     // IFileTrackerListener
     void OnPathAdded(const Path &addedPath) override;

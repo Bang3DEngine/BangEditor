@@ -48,19 +48,19 @@ void QtProjectManager::CreateQtProjectFile()
     Path projectDir = p_proj->GetProjectDirectory();
     const Path &engineIncludeDir = Paths::GetEngineIncludeDir();
     const Path &projAssetsDir = projectDir.Append("Assets");
-    List<String> headers =
-            projAssetsDir.GetFiles(true, {"h"}).To<List, String>();
-    List<String> engineHeaders =
-            engineIncludeDir.GetFiles(true, {"h"}).To<List, String>();
-    List<String> sources =
-            projAssetsDir.GetFiles(true, {"cpp"}).To<List, String>();
-    List<String> engineSources =
-            engineIncludeDir.GetFiles(true, {"cpp"}).To<List, String>();
-    List<String> projIncPaths =
-            projAssetsDir.GetSubDirectories(true).To<List, String>();
+    Array<String> headers =
+            projAssetsDir.GetFiles(true, {"h"}).To<Array, String>();
+    Array<String> engineHeaders =
+            engineIncludeDir.GetFiles(true, {"h"}).To<Array, String>();
+    Array<String> sources =
+            projAssetsDir.GetFiles(true, {"cpp"}).To<Array, String>();
+    Array<String> engineSources =
+            engineIncludeDir.GetFiles(true, {"cpp"}).To<Array, String>();
+    Array<String> projIncPaths =
+            projAssetsDir.GetSubDirectories(true).To<Array, String>();
 
-    List<Path> engineIncPaths = Paths::GetEngineIncludeDirs();
-    List<String> engineIncPathsStr = engineIncPaths.To<List, String>();
+    Array<Path> engineIncPaths = Paths::GetEngineIncludeDirs();
+    Array<String> engineIncPathsStr = engineIncPaths.To<Array, String>();
 
     String headersString            = String::Join(headers,           "\n");
     String engineHeadersString      = String::Join(engineHeaders,     "\n");

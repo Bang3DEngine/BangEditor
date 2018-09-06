@@ -9,9 +9,10 @@
 #include "Bang/BinType.h"
 #include "Bang/Compiler.h"
 #include "Bang/ThreadPool.h"
+#include "Bang/FileTracker.h"
 #include "Bang/BehaviourManager.h"
 
-#include "BangEditor/BehaviourTracker.h"
+#include "BangEditor/BangEditor.h"
 
 NAMESPACE_BANG_BEGIN
 FORWARD class Library;
@@ -21,7 +22,8 @@ NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class EditorBehaviourManager : public BehaviourManager
+class EditorBehaviourManager : public BehaviourManager,
+                               public EventListener<IEventsFileTracker>
 {
 public:
     EditorBehaviourManager();
@@ -49,16 +51,14 @@ public:
 
 private:
     ThreadPool m_compileThreadPool;
-    BehaviourTracker m_behaviourTracker;
 
     USet<Path> m_compiledBehaviours;
+    USet<Path> m_modifiedBehaviourPaths;
     USet<Path> m_behavioursBeingCompiled;
     USet<Path> m_successfullyCompiledBehaviours;
 
     mutable Mutex m_mutex;
     std::queue<Compiler::Result> m_compileResults;
-
-    void UpdateCompileInformations();
 
     Compiler::Result CompileBehaviourObject(const Path &behaviourPath);
     Compiler::Result CompileBehaviourObject(const Path& behaviourFilepath,
@@ -69,23 +69,21 @@ private:
     void MergeIntoBehavioursLibrary();
 
     static Compiler::Result MergeBehaviourObjects(
-                                      const List<Path> &behaviourObjectPaths,
+                                      const Array<Path> &behaviourObjectPaths,
                                       const Path &outputLibFilepath,
                                       BinType binaryType);
 
-    static List<Path> GetCompiledObjectsPaths();
-    static List<Path> GetBehaviourSourcesPaths();
+    static Array<Path> GetCompiledObjectsPaths();
+    static Array<Path> GetBehaviourSourcesPaths();
     static Compiler::Job CreateBaseJob(BinType binaryType, bool addLibs);
     static Path GetObjectOutputPath(const Path &inputBehaviourPath);
     static Compiler::Job CreateCompileBehaviourJob(const Path& behaviourFilepath,
                                                    const Path& outputObjectFilepath,
                                                    BinType binaryType);
     static void RemoveBehaviourLibrariesOf(const String& behaviourName);
-    static void RemoveOrphanBehaviourLibraries();
+    static void RemoveOrphanBehaviourLibrariesAndObjects();
 
     Mutex* GetMutex() const;
-    BehaviourTracker *GetBehaviourTracker();
-    const BehaviourTracker *GetBehaviourTracker() const;
 
     class BehaviourCompileRunnable : public ThreadRunnable
     {
@@ -94,6 +92,11 @@ private:
         Path m_behaviourPath = Path::Empty;
         void Run() override;
     };
+
+    // IEventsFileTracker
+    void OnPathAdded(const Path &path) override;
+    void OnPathModified(const Path &path) override;
+    void OnPathRemoved(const Path &path) override;
 
     friend class GameBuilder;
     friend class BehaviourCompileRunnable;

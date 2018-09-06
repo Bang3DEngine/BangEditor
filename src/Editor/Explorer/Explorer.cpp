@@ -174,7 +174,7 @@ Explorer::Explorer()
             EventEmitter<IEventsEditor>::RegisterListener(this);
     ProjectManager::GetInstance()->
             EventEmitter<IEventsProjectManager>::RegisterListener(this);
-    EditorFileTracker::GetInstance()->GetFileTracker()->
+    EditorFileTracker::GetInstance()->
             EventEmitter<IEventsFileTracker>::RegisterListener(this);
 
     ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::D, "Duplicate"),
@@ -207,7 +207,7 @@ void Explorer::Update()
 
 void Explorer::ForceCheckFileChanges()
 {
-    EditorFileTracker::GetInstance()->GetFileTracker()->Update(true);
+    EditorFileTracker::GetInstance()->CheckFiles();
 }
 
 void Explorer::SelectPath(const Path &path,
@@ -265,7 +265,7 @@ void Explorer::SetCurrentPath(const Path &path)
 
         Clear();
 
-        List<ExplorerItem*> subExplorerItems =
+        Array<ExplorerItem*> subExplorerItems =
                 ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(path,
                                                                        canGoBack);
         for (ExplorerItem *expItem : subExplorerItems)
@@ -414,7 +414,7 @@ void DuplicateImportFiles(const Path &srcPath, const Path &dstPath)
     }
     else // IsDir()
     {
-        List<Path> srcSubPaths = srcPath.GetSubPaths(Path::FindFlag::SIMPLE);
+        Array<Path> srcSubPaths = srcPath.GetSubPaths(Path::FindFlag::SIMPLE);
         const Path& srcDir = srcPath;
         const Path& dstDir = dstPath;
         for (const Path &srcSubPath : srcSubPaths)

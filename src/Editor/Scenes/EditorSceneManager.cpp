@@ -22,8 +22,15 @@ EditorSceneManager::EditorSceneManager()
 
 EditorSceneManager::~EditorSceneManager()
 {
-    if (GetOpenScene()) { GameObject::Destroy( GetOpenScene() ); }
-    if (GetEditorScene()) { GameObject::Destroy( GetEditorScene() ); }
+    if (GetOpenScene())
+    {
+        GameObject::Destroy( GetOpenScene() );
+    }
+
+    if (GetEditorScene())
+    {
+        GameObject::Destroy( GetEditorScene() );
+    }
 }
 
 Scene *EditorSceneManager::GetOpenScene()

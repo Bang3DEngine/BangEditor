@@ -13,7 +13,7 @@ class ExplorerItemFactory
 {
 public:
     static ExplorerItem* CreateExplorerItem(const Path &path);
-    static List<ExplorerItem*> CreateAndGetSubPathsExplorerItems(
+    static Array<ExplorerItem*> CreateAndGetSubPathsExplorerItems(
                                                     const Path &path,
                                                     bool addBackItem);
     static bool CanHaveSubpaths(const Path &path);

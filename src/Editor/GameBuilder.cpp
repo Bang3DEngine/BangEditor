@@ -44,7 +44,7 @@ void GameBuilder::BuildGame(const String &gameName,
                             BinType binaryType,
                             bool compileBehaviours)
 {
-    List<Path> sceneFiles = Paths::GetProjectAssetsDir()
+    Array<Path> sceneFiles = Paths::GetProjectAssetsDir()
                                     .GetFiles(Path::FindFlag::RECURSIVE,
                                         {Extensions::GetSceneExtension()});
     if (sceneFiles.IsEmpty())
@@ -172,7 +172,7 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
     File::CreateDirectory(dataLibsDir);
 
     // Compile every behaviour into its .o
-    List<Path> behavioursSourceFiles = Paths::GetProjectAssetsDir()
+    Array<Path> behavioursSourceFiles = Paths::GetProjectAssetsDir()
                                         .GetFiles(Path::FindFlag::RECURSIVE,
                                          Extensions::GetSourceFileExtensions());
 
@@ -198,12 +198,16 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
                                                                     outputObjPath,
                                                                     binType);
 
-        if (!outputObjPath.IsFile()) { Debug_Error(res.output); return false; }
+        if (!outputObjPath.IsFile())
+        {
+            Debug_Error(res.output);
+            return false;
+        }
     }
 
     // Merge into .so
-    List<Path> behaviourObjectsPaths = dataLibsDir.GetFiles(Path::FindFlag::SIMPLE,
-                                                         {"o"});
+    Array<Path> behaviourObjectsPaths =
+                         dataLibsDir.GetFiles(Path::FindFlag::SIMPLE, {"o"});
     Path outputLibPath =
                 dataLibsDir.Append("Behaviours")
                        .AppendExtension("so")
@@ -214,7 +218,11 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
     Compiler::Result res = behaviourMgr->MergeBehaviourObjects(behaviourObjectsPaths,
                                                                outputLibPath,
                                                                binType);
-    if (!outputLibPath.IsFile()) { Debug_Error(res.output); return false; }
+    if (!outputLibPath.IsFile())
+    {
+        Debug_Error(res.output);
+        return false;
+    }
 
     return true;
 }

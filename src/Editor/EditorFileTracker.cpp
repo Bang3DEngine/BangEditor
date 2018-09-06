@@ -4,6 +4,7 @@
 #include "Bang/Paths.h"
 #include "Bang/Shader.h"
 #include "Bang/Resources.h"
+#include "Bang/Extensions.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/CodePreprocessor.h"
 #include "Bang/IEventsFileTracker.h"
@@ -12,7 +13,6 @@
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorResources.h"
-#include "BangEditor/BehaviourTracker.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
@@ -21,11 +21,10 @@ USING_NAMESPACE_BANG_EDITOR
 EditorFileTracker::EditorFileTracker()
 {
     m_fileTracker = new FileTracker();
-    m_behaviourFileTracker = new BehaviourTracker();
 
-    GetFileTracker()->SetCheckFrequencySeconds(3.0f);
     GetFileTracker()->TrackPath( Paths::GetEngineAssetsDir() );
     GetFileTracker()->TrackPath( Paths::GetProjectAssetsDir() );
+    GetFileTracker()->TrackPath( Paths::GetProjectLibrariesDir() );
     GetFileTracker()->TrackPath( EditorPaths::GetEditorAssetsDir() );
 
     GetFileTracker()->
@@ -37,7 +36,11 @@ EditorFileTracker::EditorFileTracker()
 EditorFileTracker::~EditorFileTracker()
 {
     delete m_fileTracker;
-    delete m_behaviourFileTracker;
+}
+
+void EditorFileTracker::CheckFiles()
+{
+    GetFileTracker()->CheckFiles();
 }
 
 FileTracker* EditorFileTracker::GetFileTracker() const
@@ -45,14 +48,26 @@ FileTracker* EditorFileTracker::GetFileTracker() const
     return m_fileTracker;
 }
 
-BehaviourTracker *EditorFileTracker::GetBehaviourTracker() const
-{
-    return m_behaviourFileTracker;
-}
-
 void EditorFileTracker::OnPathRenamed(const Path &previousPath, const Path &newPath)
 {
     MetaFilesManager::OnFilepathRenamed(previousPath, newPath);
+}
+
+const USet<Path> &EditorFileTracker::GetTrackedPaths() const
+{
+    return GetFileTracker()->GetTrackedPaths();
+}
+
+Array<Path> EditorFileTracker::GetTrackedPathsWithExtensions(
+                                    const Array<String> &extensions) const
+{
+    return GetFileTracker()->GetTrackedPathsWithExtensions(extensions);
+}
+
+Array<Path> EditorFileTracker::GetTrackedPathsWithLastExtension(
+                                    const Array<String> &extensions) const
+{
+    return GetFileTracker()->GetTrackedPathsWithLastExtension(extensions);
 }
 
 EditorFileTracker *EditorFileTracker::GetInstance()
@@ -60,29 +75,26 @@ EditorFileTracker *EditorFileTracker::GetInstance()
     return EditorSceneManager::GetEditorScene()->GetEditorFileTracker();
 }
 
-void EditorFileTracker::OnPathAdded(const Path &addedPath)
+void EditorFileTracker::CheckForShaderModifications(const Path &modifiedPath)
 {
-    if (!MetaFilesManager::IsMetaFile(addedPath) &&
-        !MetaFilesManager::HasMetaFile(addedPath))
+    if (!Extensions::Equals(modifiedPath.GetExtension(),
+                            Extensions::GetShaderExtensions()))
     {
-        MetaFilesManager::CreateMetaFileIfMissing(addedPath);
+        return;
     }
-}
 
-void EditorFileTracker::CheckForShaderIncludePathsModifications(const Path &modifiedPath)
-{
+    Array<Path> shadersIncPaths;
+    shadersIncPaths.PushBack(Paths::GetEngineAssetsDir().Append("Shaders"));
+    shadersIncPaths.PushBack(EditorPaths::GetEngineAssetsDir().Append("Shaders").
+                            Append("Include"));
+    shadersIncPaths.PushBack(EditorPaths::GetEditorAssetsDir().Append("Shaders"));
+    shadersIncPaths.PushBack(EditorPaths::GetEditorAssetsDir().Append("Shaders").
+                            Append("Include"));
+
     // Treat shaderProgram dependencies
     Array<ShaderProgram*> shaderPrograms = Resources::GetAll<ShaderProgram>();
     for (ShaderProgram *sp : shaderPrograms)
     {
-        List<Path> shadersIncPaths;
-        shadersIncPaths.PushBack(Paths::GetEngineAssetsDir().Append("Shaders"));
-        shadersIncPaths.PushBack(EditorPaths::GetEngineAssetsDir().Append("Shaders").
-                                Append("Include"));
-        shadersIncPaths.PushBack(EditorPaths::GetEditorAssetsDir().Append("Shaders"));
-        shadersIncPaths.PushBack(EditorPaths::GetEditorAssetsDir().Append("Shaders").
-                                Append("Include"));
-
         std::array<Shader*, 3> shaders = {{ sp->GetVertexShader(),
                                             sp->GetGeometryShader(),
                                             sp->GetFragmentShader() }};
@@ -91,10 +103,12 @@ void EditorFileTracker::CheckForShaderIncludePathsModifications(const Path &modi
             if (shader)
             {
                 Set<Path> processedPaths;
-                List<Path> incPaths = CodePreprocessor::GetSourceIncludePaths(
-                                 shader->GetResourceFilepath(), shadersIncPaths);
-                for (const Path &incPath : incPaths)
+                Array<Path> incPaths = CodePreprocessor::GetSourceIncludePaths(
+                                                   shader->GetResourceFilepath(),
+                                                   shadersIncPaths);
+                for (int i = 0; i < incPaths.Size(); ++i) // const Path &incPath : incPaths)
                 {
+                    const Path incPath = incPaths[i];
                     if (incPath == modifiedPath)
                     {
                         Resources::Import(shader);
@@ -113,36 +127,63 @@ void EditorFileTracker::CheckForShaderIncludePathsModifications(const Path &modi
     }
 }
 
+void EditorFileTracker::CheckForBehaviourModifications(const Path &modifiedPath)
+{
+
+}
+
+void EditorFileTracker::OnPathAdded(const Path &addedPath)
+{
+    if (!MetaFilesManager::IsMetaFile(addedPath) &&
+        !MetaFilesManager::HasMetaFile(addedPath))
+    {
+        MetaFilesManager::CreateMetaFileIfMissing(addedPath);
+    }
+
+    EventEmitter<IEventsFileTracker>::PropagateToListeners(
+                &IEventsFileTracker::OnPathAdded, addedPath);
+}
+
 void EditorFileTracker::OnPathModified(const Path &modifiedPath)
 {
-    if (MetaFilesManager::IsMetaFile(modifiedPath)) { return; }
-
-    if (modifiedPath.IsFile())
+    if (!MetaFilesManager::IsMetaFile(modifiedPath))
     {
-        CheckForShaderIncludePathsModifications(modifiedPath);
-
-        // Refresh/reimport resources of the modified path
-        Resource* modifiedResource = Resources::GetCached(modifiedPath);
-        if (modifiedResource)
+        if (modifiedPath.IsFile())
         {
-            Resources::Import(modifiedResource);
+            CheckForShaderModifications(modifiedPath);
+            CheckForBehaviourModifications(modifiedPath);
+
+            // Refresh/reimport resources of the modified path
+            Resource* modifiedResource = Resources::GetCached(modifiedPath);
+            if (modifiedResource)
+            {
+                Resources::Import(modifiedResource);
+            }
         }
     }
+
+    EventEmitter<IEventsFileTracker>::PropagateToListeners(
+                &IEventsFileTracker::OnPathModified, modifiedPath);
 }
 
 void EditorFileTracker::OnPathRemoved(const Path &removedPath)
 {
     Path importPath = MetaFilesManager::GetMetaFilepath(removedPath);
     File::Remove(importPath);
+
+    EventEmitter<IEventsFileTracker>::PropagateToListeners(
+                &IEventsFileTracker::OnPathRemoved, removedPath);
 }
 
 void EditorFileTracker::OnProjectOpen(const Project*)
 {
     GetFileTracker()->TrackPath( Paths::GetProjectAssetsDir() );
+    GetFileTracker()->TrackPath( Paths::GetProjectLibrariesDir() );
 }
 
 void EditorFileTracker::OnProjectClosed(const Project*)
 {
     GetFileTracker()->UnTrackPath( Paths::GetProjectAssetsDir() );
+    GetFileTracker()->UnTrackPath( Paths::GetProjectLibrariesDir() );
 }
 

@@ -93,7 +93,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
     vl->SetSpacing(10);
 
     auto CreateAssetContainerGameObject = [scene, &extensions]
-                                          (const List<Path> &assetPaths) ->
+                                          (const Array<Path> &assetPaths) ->
                                           GameObject*
     {
         UIScrollPanel *gridScrollPanel = GameObjectFactory::CreateUIScrollPanel();
@@ -127,7 +127,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
         auto CreateExpItemFromPath = [gridLayoutGo,
                                       extensions](const Path &assetPath)
         {
-            List<ExplorerItem*> expItems =
+            Array<ExplorerItem*> expItems =
                     ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
                                             assetPath, false);
 
@@ -192,12 +192,12 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
     // Add tabs
     UITabContainer *tabContainer = GameObject::Create<UITabContainer>();
 
-    List<Path> engineAssetPaths =
+    Array<Path> engineAssetPaths =
             Paths::GetEngineAssetsDir().GetFiles(Path::FindFlag::RECURSIVE);
     engineAssetPaths.PushFront(Path::Empty);
     GameObject *engineAssetsGo = CreateAssetContainerGameObject(engineAssetPaths);
 
-    List<Path> projectAssetPaths =
+    Array<Path> projectAssetPaths =
             Paths::GetProjectAssetsDir().GetFiles(Path::FindFlag::RECURSIVE);
     projectAssetPaths.PushFront(Path::Empty);
     GameObject *projectAssetsGo = CreateAssetContainerGameObject(projectAssetPaths);
@@ -229,8 +229,8 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
         Dialog::EndCurrentDialog();
     });
 
-    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::FLEXIBLE, 1.0f)
-                       ->SetParent(buttonsGo);
+    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::FLEXIBLE, 1.0f)->
+                       SetParent(buttonsGo);
     cancelButton->GetGameObject()->SetParent(buttonsGo);
     openButton->GetGameObject()->SetParent(buttonsGo);
     buttonsGo->SetParent(scene);

@@ -123,8 +123,8 @@ Inspector::Inspector()
     GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 150)->
                         SetParent(GetWidgetsContainer());
 
-    EditorFileTracker::GetInstance()->GetFileTracker()->
-            EventEmitter<IEventsFileTracker>::RegisterListener(this);
+    EditorFileTracker::GetInstance()->
+                      EventEmitter<IEventsFileTracker>::RegisterListener(this);
     Editor::GetInstance()->EventEmitter<IEventsEditor>::RegisterListener(this);
     SceneManager::GetActive()->EventEmitter<IEventsSceneManager>::
                                RegisterListener(this);
