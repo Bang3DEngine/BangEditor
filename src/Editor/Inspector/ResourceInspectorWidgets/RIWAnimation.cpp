@@ -2,8 +2,11 @@
 
 #include "Bang/UISlider.h"
 #include "Bang/UIComboBox.h"
+#include "Bang/Extensions.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/GameObjectFactory.h"
+
+#include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -46,7 +49,13 @@ void RIWAnimation::UpdateInputsFromResource()
 {
     p_speedInput->SetValue( GetAnimation()->GetSpeed() );
     p_wrapModeInput->SetSelectionByValue(
-                            SCAST<int>(GetAnimation()->GetWrapMode()) );
+                SCAST<int>(GetAnimation()->GetWrapMode()) );
+}
+
+Texture2D *RIWAnimation::GetIconTexture() const
+{
+    return EditorTextureFactory::GetIconForExtension(
+                Extensions::GetAnimationExtension() );
 }
 
 void RIWAnimation::OnValueChangedRIWResource(

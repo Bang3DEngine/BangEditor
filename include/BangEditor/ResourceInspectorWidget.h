@@ -5,6 +5,10 @@
 
 #include "BangEditor/InspectorWidget.h"
 
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Texture2D;
+FORWARD NAMESPACE_BANG_END
+
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
@@ -22,6 +26,9 @@ protected:
     Path GetPath() const;
 
     virtual void UpdateFromFileWhenChanged() = 0;
+    virtual Texture2D* GetIconTexture() const;
+    virtual Color GetIconTint() const;
+    void UpdateIcon();
 
 private:
     Path m_path = Path::Empty;

@@ -14,8 +14,8 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputFile;
 FORWARD class UIInputColor;
+FORWARD class UIInputFileWithPreview;
 
 class CIWCamera : public ComponentInspectorWidget
 {
@@ -38,14 +38,14 @@ protected:
     virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
-    UIInputNumber *p_zNearInput = nullptr;
-    UIInputNumber *p_zFarInput = nullptr;
-    UIInputNumber *p_orthoHeightInput = nullptr;
-    UISlider      *p_fovInput = nullptr;
-    UIComboBox *p_projectionModeInput = nullptr;
-    UIComboBox *p_clearModeInput = nullptr;
-    UIInputColor *p_clearColorInput = nullptr;
-    UIInputFile *p_textureCubeMapInput = nullptr;
+    UIInputNumber          *p_zNearInput          = nullptr;
+    UIInputNumber          *p_zFarInput           = nullptr;
+    UIInputNumber          *p_orthoHeightInput    = nullptr;
+    UISlider               *p_fovInput            = nullptr;
+    UIComboBox             *p_projectionModeInput = nullptr;
+    UIComboBox             *p_clearModeInput      = nullptr;
+    UIInputColor           *p_clearColorInput     = nullptr;
+    UIInputFileWithPreview *p_textureCubeMapInput = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

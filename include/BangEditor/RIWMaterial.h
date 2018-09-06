@@ -18,11 +18,11 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputFile;
 FORWARD class UIInputColor;
 FORWARD class UIInputVector;
-FORWARD class UIInputTexture;
 FORWARD class PreviewViewer;
+FORWARD class UIInputTexture;
+FORWARD class UIInputFileWithPreview;
 
 class RIWMaterial : public RIWResource<Material>
 {
@@ -50,8 +50,8 @@ private:
     UIInputNumber *p_lineWidthInput = nullptr;
     UIComboBox *p_cullFaceInput = nullptr;
     UICheckBox *p_renderWireframe = nullptr;
-    UIInputFile *p_vertexShaderInput = nullptr;
-    UIInputFile *p_fragmentShaderInput = nullptr;
+    UIInputFileWithPreview *p_vertexShaderInput = nullptr;
+    UIInputFileWithPreview *p_fragmentShaderInput = nullptr;
     PreviewViewer *p_materialPreviewViewer = nullptr;
 
 	RIWMaterial();
@@ -61,6 +61,7 @@ private:
 
     // RIWResource
     void UpdateInputsFromResource() override;
+    Texture2D* GetIconTexture() const override;
 
     // RIWResource
     void OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *object) override;

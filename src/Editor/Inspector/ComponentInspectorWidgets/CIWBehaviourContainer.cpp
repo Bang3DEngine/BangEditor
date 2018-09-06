@@ -6,14 +6,19 @@
 #include "Bang/BehaviourContainer.h"
 
 #include "BangEditor/EditorPaths.h"
-#include "BangEditor/UIInputFile.h"
 #include "BangEditor/EditorBehaviourManager.h"
+#include "BangEditor/UIInputFileWithPreview.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-CIWBehaviourContainer::CIWBehaviourContainer() {}
-CIWBehaviourContainer::~CIWBehaviourContainer() {}
+CIWBehaviourContainer::CIWBehaviourContainer()
+{
+}
+
+CIWBehaviourContainer::~CIWBehaviourContainer()
+{
+}
 
 void CIWBehaviourContainer::InitInnerWidgets()
 {
@@ -22,9 +27,10 @@ void CIWBehaviourContainer::InitInnerWidgets()
     SetName("CIWBehaviourContainer");
     SetTitle("Behaviour");
 
-    p_sourceInputFile = GameObject::Create<UIInputFile>();
+    p_sourceInputFile = GameObject::Create<UIInputFileWithPreview>();
     p_sourceInputFile->SetExtensions(Extensions::GetSourceFileExtensions());
     p_sourceInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_sourceInputFile->SetZoomable(false);
     AddWidget("Source", p_sourceInputFile);
 
     SetLabelsWidth(60);

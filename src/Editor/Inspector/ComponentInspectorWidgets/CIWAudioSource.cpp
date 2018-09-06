@@ -11,7 +11,7 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
-#include "BangEditor/UIInputFile.h"
+#include "BangEditor/UIInputFileWithPreview.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -23,9 +23,10 @@ void CIWAudioSource::InitInnerWidgets()
     SetName("CIWAudioSource");
     SetTitle("AudioSource");
 
-    p_audioClipFileInput = GameObject::Create<UIInputFile>();
+    p_audioClipFileInput = GameObject::Create<UIInputFileWithPreview>();
     p_audioClipFileInput->SetExtensions( Extensions::GetAudioClipExtensions() );
     p_audioClipFileInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_audioClipFileInput->SetZoomable(false);
 
     p_rangeInput = GameObjectFactory::CreateUIInputNumber();
     p_rangeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);

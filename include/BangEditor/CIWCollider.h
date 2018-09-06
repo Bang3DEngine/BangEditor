@@ -13,9 +13,8 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputFile;
-
 FORWARD class UIInputVector;
+FORWARD class UIInputFileWithPreview;
 
 class CIWCollider : public ComponentInspectorWidget
 {
@@ -38,9 +37,9 @@ protected:
     Collider *GetCollider() const;
 
 private:
-    UICheckBox *p_isTriggerInput = nullptr;
-    UIInputVector *p_centerInput = nullptr;
-    UIInputFile *p_physicsMaterialInput = nullptr;
+    UICheckBox *p_isTriggerInput                   = nullptr;
+    UIInputVector *p_centerInput                   = nullptr;
+    UIInputFileWithPreview *p_physicsMaterialInput = nullptr;
 
     friend class ComponentInspectorWidgetFactory;
 };

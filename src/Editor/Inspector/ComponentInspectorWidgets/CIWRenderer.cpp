@@ -9,7 +9,7 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
-#include "BangEditor/UIInputMaterial.h"
+#include "BangEditor/UIInputFileWithPreview.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -42,7 +42,7 @@ void CIWRenderer::InitInnerWidgets()
     p_useReflectionProbesCheckBox = GameObjectFactory::CreateUICheckBox();
     p_useReflectionProbesCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_materialInputFile = GameObject::Create<UIInputMaterial>();
+    p_materialInputFile = GameObject::Create<UIInputFileWithPreview>();
     p_materialInputFile->SetExtensions({Extensions::GetMaterialExtension()});
     p_materialInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 

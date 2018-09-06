@@ -8,7 +8,7 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/PostProcessEffect.h"
 
-#include "BangEditor/UIInputFile.h"
+#include "BangEditor/UIInputFileWithPreview.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -24,10 +24,11 @@ void CIWPostProcessEffect::InitInnerWidgets()
     p_priorityInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     p_priorityInput->SetDecimalPlaces(0);
 
-    p_fragmentShaderInput = GameObject::Create<UIInputFile>();
+    p_fragmentShaderInput = GameObject::Create<UIInputFileWithPreview>();
     p_fragmentShaderInput->SetExtensions(
                             Extensions::GetFragmentShaderExtensions() );
     p_fragmentShaderInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_fragmentShaderInput->SetZoomable(false);
 
     p_typeComboBox = GameObjectFactory::CreateUIComboBox();
     p_typeComboBox->AddItem("AfterScene",

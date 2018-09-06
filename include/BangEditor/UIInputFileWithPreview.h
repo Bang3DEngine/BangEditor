@@ -24,10 +24,12 @@ public:
 	UIInputFileWithPreview();
 	virtual ~UIInputFileWithPreview();
 
+    void SetZoomable(bool zoomable);
     void SetPath(const Path &path) override;
-    virtual RH<Texture2D> GetPreviewTextureFromPath(const Path &path) = 0;
+    virtual RH<Texture2D> GetPreviewTextureFromPath(const Path &path);
 
 private:
+    bool m_zoomable = true;
     UIImageRenderer *p_previewImg = nullptr;
     UIImageRenderer *p_bigPreviewImg = nullptr;
 

@@ -141,6 +141,13 @@ void RIWTextureCubeMap::UpdateInputsFromResource()
     CheckValidity();
 }
 
+Texture2D *RIWTextureCubeMap::GetIconTexture() const
+{
+    return GetTextureCubeMap() ?
+             GetTextureCubeMap()->GetSideTexture(GL::CubeMapDir::FRONT).Get() :
+             nullptr;
+}
+
 void RIWTextureCubeMap::OnValueChangedRIWResource(
                                         EventEmitter<IEventsValueChanged> *ee)
 {

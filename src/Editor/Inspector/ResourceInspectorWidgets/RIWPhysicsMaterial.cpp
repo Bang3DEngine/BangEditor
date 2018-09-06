@@ -1,8 +1,11 @@
 #include "BangEditor/RIWPhysicsMaterial.h"
 
 #include "Bang/UISlider.h"
+#include "Bang/Extensions.h"
 #include "Bang/UIComboBox.h"
 #include "Bang/GameObjectFactory.h"
+
+#include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -81,6 +84,12 @@ void RIWPhysicsMaterial::UpdateInputsFromResource()
                 SCAST<int>(GetPhysicsMaterial()->GetFrictionCombineMode()) );
     p_restitutionCombineModeInput->SetSelectionByValue(
                 SCAST<int>(GetPhysicsMaterial()->GetRestitutionCombineMode()) );
+}
+
+Texture2D *RIWPhysicsMaterial::GetIconTexture() const
+{
+    return EditorTextureFactory::GetIconForExtension(
+                Extensions::GetPhysicsMaterialExtension());
 }
 
 void RIWPhysicsMaterial::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *object)

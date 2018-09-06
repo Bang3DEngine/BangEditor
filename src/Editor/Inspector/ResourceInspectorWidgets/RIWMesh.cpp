@@ -53,6 +53,11 @@ void RIWMesh::UpdateInputsFromResource()
     });
 }
 
+Texture2D* RIWMesh::GetIconTexture() const
+{
+    return MeshPreviewFactory::GetPreviewTextureFor( GetMesh() ).Get();
+}
+
 void RIWMesh::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged>*)
 {
     if (!GetMesh())

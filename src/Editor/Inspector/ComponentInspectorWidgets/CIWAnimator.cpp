@@ -5,7 +5,7 @@
 #include "Bang/Resources.h"
 #include "Bang/Extensions.h"
 
-#include "BangEditor/UIInputFile.h"
+#include "BangEditor/UIInputFileWithPreview.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -25,9 +25,10 @@ void CIWAnimator::InitInnerWidgets()
     SetName("CIWAnimator");
     SetTitle("Animator");
 
-    p_animationInput = GameObject::Create<UIInputFile>();
+    p_animationInput = GameObject::Create<UIInputFileWithPreview>();
     p_animationInput->SetExtensions( {Extensions::GetAnimationExtension()} );
     p_animationInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_animationInput->SetZoomable(false);
 
     AddWidget("Animation", p_animationInput);
 

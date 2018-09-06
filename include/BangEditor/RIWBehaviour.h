@@ -28,6 +28,8 @@ private:
 
     // ResourceInspectorWidget
     void UpdateFromFileWhenChanged() override;
+    Texture2D *GetIconTexture() const override;
+    Color GetIconTint() const override;
 
     UITextRenderer *p_codeText = nullptr;
     UIButton *p_openButton = nullptr;

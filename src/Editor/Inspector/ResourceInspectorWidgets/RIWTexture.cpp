@@ -96,6 +96,11 @@ void RIWTexture::UpdateInputsFromResource()
     p_alphaCutoffInput->SetValue( GetTexture()->GetAlphaCutoff() );
 }
 
+Texture2D *RIWTexture::GetIconTexture() const
+{
+    return GetTexture();
+}
+
 void RIWTexture::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged>*)
 {
     Path texImportPath = MetaFilesManager::GetMetaFilepath(

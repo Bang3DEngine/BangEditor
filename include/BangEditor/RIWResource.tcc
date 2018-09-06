@@ -1,6 +1,7 @@
 #include "BangEditor/RIWResource.h"
 
 #include "Bang/Resources.h"
+#include "Bang/UIImageRenderer.h"
 #include "Bang/MetaFilesManager.h"
 
 #include "BangEditor/UndoRedoManager.h"
@@ -38,6 +39,8 @@ void RIWResource<T>::SetResource(RH<T> &resource)
         {
             GetResource().Get()->EventEmitter<IEventsResource>::
                                  RegisterListener(this);
+
+            UpdateIcon();
             OnResourceChanged( GetResource().Get() );
         }
     }

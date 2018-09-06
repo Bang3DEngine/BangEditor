@@ -15,7 +15,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputFile;
+FORWARD class UIInputFileWithPreview;
 
 class CIWAudioSource : public ComponentInspectorWidget
 {
@@ -29,13 +29,13 @@ public:
     virtual void UpdateFromReference() override;
 
 private:
-    UIInputNumber *p_rangeInput          = nullptr;
-    UISlider      *p_pitchSlider         = nullptr;
-    UISlider      *p_volumeSlider        = nullptr;
-    UIButton      *p_playStopButton      = nullptr;
-    UICheckBox    *p_loopingCheckbox     = nullptr;
-    UICheckBox    *p_playOnStartCheckbox = nullptr;
-    UIInputFile   *p_audioClipFileInput  = nullptr;
+    UIInputNumber *p_rangeInput                   = nullptr;
+    UISlider      *p_pitchSlider                  = nullptr;
+    UISlider      *p_volumeSlider                 = nullptr;
+    UIButton      *p_playStopButton               = nullptr;
+    UICheckBox    *p_loopingCheckbox              = nullptr;
+    UICheckBox    *p_playOnStartCheckbox          = nullptr;
+    UIInputFileWithPreview *p_audioClipFileInput  = nullptr;
 
     void OnPlayClicked();
 
