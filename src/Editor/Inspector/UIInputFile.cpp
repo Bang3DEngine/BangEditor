@@ -58,7 +58,10 @@ UIInputFile::UIInputFile()
                                GetExtensions(),
                                &openPath,
                                &accepted);
-        if (accepted) { SetPath(openPath); }
+        if (accepted)
+        {
+            SetPath(openPath);
+        }
     });
 
     Texture2D *rightArrowIcon = TextureFactory::GetRightArrowIcon();

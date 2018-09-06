@@ -23,10 +23,10 @@ set(BANG_EDITOR_BUILT ON)
 # Check input params and set some paths ==========================
 #=================================================================
 set(BANG_EDITOR_ROOT          "${CMAKE_CURRENT_LIST_DIR}")
-set(BANG_EDITOR_LIBRARIES_DIR "${BANG_EDITOR_ROOT}/Libraries")
+set(BANG_EDITOR_LIBRARIES_DIR "${BANG_EDITOR_ROOT}/Libraries/${CMAKE_BUILD_TYPE}")
 set(BANG_EDITOR_BINARIES_DIR  "${BANG_EDITOR_ROOT}/Binaries")
 set(BANG_ENGINE_ROOT          "${BANG_EDITOR_ROOT}/Bang")
-set(BANG_ENGINE_LIBRARIES_DIR "${BANG_ENGINE_ROOT}/Libraries")
+set(BANG_ENGINE_LIBRARIES_DIR "${BANG_ENGINE_ROOT}/Libraries/${CMAKE_BUILD_TYPE}")
 set(BANG_ENGINE_INCLUDE_DIR   "${BANG_ENGINE_ROOT}/include")
 set(EXECUTABLE_OUTPUT_PATH    "${BANG_EDITOR_BINARIES_DIR}")
 set(LIBRARY_OUTPUT_PATH       "${BANG_EDITOR_LIBRARIES_DIR}")

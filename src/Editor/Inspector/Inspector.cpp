@@ -147,25 +147,24 @@ void Inspector::Update()
 
 void Inspector::ShowSerializable(Serializable *serializable)
 {
-    if (!serializable)
+    if (serializable)
     {
-        Clear();
-    }
-    else if (Resource *res = DCAST<Resource*>(serializable))
-    {
-        Path resPath = res->GetResourceFilepath();
-        if (resPath.IsFile())
+        if (Resource *res = DCAST<Resource*>(serializable))
         {
-            ShowPath(resPath);
+            Path resPath = res->GetResourceFilepath();
+            if (resPath.IsFile())
+            {
+                ShowPath(resPath);
+            }
         }
-    }
-    else if (GameObject *gameObject = DCAST<GameObject*>(serializable))
-    {
-        ShowGameObject(gameObject);
-    }
-    else if (Component *comp = DCAST<Component*>(serializable))
-    {
-        ShowGameObject(comp->GetGameObject());
+        else if (GameObject *gameObject = DCAST<GameObject*>(serializable))
+        {
+            ShowGameObject(gameObject);
+        }
+        else if (Component *comp = DCAST<Component*>(serializable))
+        {
+            ShowGameObject(comp->GetGameObject());
+        }
     }
     else
     {
@@ -263,8 +262,7 @@ void Inspector::OnCreateContextMenu(MenuItem *menuRootItem)
 {
     menuRootItem->SetFontSize(12);
 
-    GameObject *currentGameObject = GetCurrentGameObject();
-    if (currentGameObject)
+    if (GameObject *currentGameObject = GetCurrentGameObject())
     {
         {
             MetaNode undoMetaBefore = currentGameObject->GetMeta();
@@ -311,9 +309,8 @@ void Inspector::OnGameObjectSelected(GameObject *selectedGameObject)
 
 void Inspector::OnComponentAdded(Component *addedComponent, int index)
 {
-    ComponentInspectorWidget *compWidget =
-            ComponentInspectorWidgetFactory::Create(addedComponent);
-    if (compWidget)
+    if (ComponentInspectorWidget *compWidget =
+            ComponentInspectorWidgetFactory::Create(addedComponent))
     {
         m_objToWidget.Add(addedComponent, compWidget);
         AddWidget(compWidget, index);
