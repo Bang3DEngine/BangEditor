@@ -44,7 +44,6 @@ void EditorBehaviourManager::Update()
         if (IsBeingCompiled(modifiedPath))
         {
             sourcesJustStartedToCompile.PushBack(modifiedPath);
-            m_modifiedBehaviourPaths.Add(modifiedPath);
         }
     }
 
@@ -115,7 +114,7 @@ bool EditorBehaviourManager::AreAllBehavioursCompiled() const
 
 bool EditorBehaviourManager::IsSomeBehaviourBeingCompiled() const
 {
-    MutexLocker ml( GetMutex() ); (void)ml;
+    MutexLocker ml( GetMutex() ); (void) ml;
     return !m_behavioursBeingCompiled.IsEmpty();
 }
 
@@ -521,10 +520,14 @@ void EditorBehaviourManager::OnPathModified(const Path &path)
         MutexLocker ml(GetMutex()); (void) ml;
         for (const Path &affectedBehaviourSource : affectedBehaviourSources)
         {
-            m_modifiedBehaviourPaths.Add(affectedBehaviourSource);
-            m_compiledBehaviours.Remove(affectedBehaviourSource);
-            RemoveBehaviourLibrariesOf(affectedBehaviourSource.GetName());
-            m_successfullyCompiledBehaviours.Remove(affectedBehaviourSource);
+            if (Extensions::Equals(affectedBehaviourSource.GetLastExtension(),
+                                   Extensions::GetSourceFileExtensions()))
+            {
+                m_modifiedBehaviourPaths.Add(affectedBehaviourSource);
+                m_compiledBehaviours.Remove(affectedBehaviourSource);
+                RemoveBehaviourLibrariesOf(affectedBehaviourSource.GetName());
+                m_successfullyCompiledBehaviours.Remove(affectedBehaviourSource);
+            }
         }
     }
 }
