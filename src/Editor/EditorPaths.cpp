@@ -49,7 +49,9 @@ Path EditorPaths::GetEditorAssetsDir()
 
 Path EditorPaths::GetEditorBinariesDir()
 {
-    return EditorPaths::GetEditorDir().Append("Binaries");
+    return EditorPaths::GetEditorDir().
+           Append("Binaries").
+           Append( Paths::GetBuildType() );
 }
 
 Path EditorPaths::GetEditorLibrariesDir()
