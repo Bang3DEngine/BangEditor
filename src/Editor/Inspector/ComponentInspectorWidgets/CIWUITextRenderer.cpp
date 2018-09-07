@@ -11,8 +11,8 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
-#include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputColor.h"
+#include "BangEditor/UIInputFileWithPreview.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -40,8 +40,9 @@ void CIWUITextRenderer::InitInnerWidgets()
     p_verticalAlignmentInput->AddItem("Center", int(VerticalAlignment::CENTER));
     p_verticalAlignmentInput->AddItem("Bot",    int(VerticalAlignment::BOT));
 
-    p_fontFileInput = GameObject::Create<UIInputFile>();
+    p_fontFileInput = GameObject::Create<UIInputFileWithPreview>();
     p_fontFileInput->SetExtensions( Extensions::GetTTFExtensions() );
+    p_fontFileInput->SetZoomable(false);
 
     p_colorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     p_contentInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);

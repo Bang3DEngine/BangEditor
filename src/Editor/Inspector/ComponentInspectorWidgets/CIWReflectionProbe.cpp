@@ -10,9 +10,9 @@
 #include "Bang/ReflectionProbe.h"
 #include "Bang/GameObjectFactory.h"
 
-#include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputColor.h"
 #include "BangEditor/UIInputVector.h"
+#include "BangEditor/UIInputFileWithPreview.h"
 #include "BangEditor/UITextureCubeMapPreviewer.h"
 
 USING_NAMESPACE_BANG
@@ -73,7 +73,7 @@ void CIWReflectionProbe::InitInnerWidgets()
     p_clearColorInput = GameObject::Create<UIInputColor>();
     p_clearColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_textureCubeMapInput = GameObject::Create<UIInputFile>();
+    p_textureCubeMapInput = GameObject::Create<UIInputFileWithPreview>();
     p_textureCubeMapInput->SetExtensions( {Extensions::GetTextureCubeMapExtension()} );
     p_textureCubeMapInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 

@@ -6,14 +6,14 @@
 #include "BangEditor/ComponentInspectorWidget.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIInputFile;
 FORWARD class BehaviourContainer;
+FORWARD class UIInputFileWithPreview;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputFile;
+FORWARD class UIInputFileWithPreview;
 
 class CIWBehaviourContainer : public ComponentInspectorWidget
 {
@@ -27,7 +27,7 @@ public:
     BehaviourContainer *GetBehaviourContainer() const;
 
 private:
-    UIInputFile *p_sourceInputFile = nullptr;
+    UIInputFileWithPreview *p_sourceInputFile = nullptr;
 
     CIWBehaviourContainer();
     virtual ~CIWBehaviourContainer();

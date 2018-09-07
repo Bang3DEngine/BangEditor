@@ -53,6 +53,11 @@ void RIWModel::UpdateInputsFromResource()
     });
 }
 
+Texture2D *RIWModel::GetIconTexture() const
+{
+    return ModelPreviewFactory::GetPreviewTextureFor( GetModel() ).Get();
+}
+
 void RIWModel::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged>*)
 {
     if (!GetModel()) { return; }

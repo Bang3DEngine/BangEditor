@@ -7,8 +7,8 @@
 #include "Bang/UIInputNumber.h"
 #include "Bang/GameObjectFactory.h"
 
-#include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputVector.h"
+#include "BangEditor/UIInputFileWithPreview.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -35,9 +35,10 @@ void CIWCollider::InitInnerWidgets()
     p_isTriggerInput = GameObjectFactory::CreateUICheckBox();
     p_isTriggerInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_physicsMaterialInput = GameObject::Create<UIInputFile>();
+    p_physicsMaterialInput = GameObject::Create<UIInputFileWithPreview>();
     p_physicsMaterialInput->SetExtensions( {Extensions::GetPhysicsMaterialExtension()} );
     p_physicsMaterialInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_physicsMaterialInput->SetZoomable(false);
 
     AddWidget("Is Trigger", p_isTriggerInput->GetGameObject());
     AddWidget("Physics Material", p_physicsMaterialInput);

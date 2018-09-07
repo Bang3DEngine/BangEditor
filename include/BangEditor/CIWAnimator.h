@@ -12,8 +12,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputFile;
-
+FORWARD class UIInputFileWithPreview;
 
 class CIWAnimator : public ComponentInspectorWidget
 {
@@ -27,7 +26,7 @@ public:
     virtual void UpdateFromReference() override;
 
 private:
-    UIInputFile *p_animationInput = nullptr;
+    UIInputFileWithPreview *p_animationInput = nullptr;
 
     CIWAnimator();
     virtual ~CIWAnimator();

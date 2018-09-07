@@ -10,8 +10,8 @@
 #include "Bang/TextureCubeMap.h"
 #include "Bang/GameObjectFactory.h"
 
-#include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputColor.h"
+#include "BangEditor/UIInputFileWithPreview.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -59,7 +59,7 @@ void CIWCamera::InitInnerWidgets()
     p_clearColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Clear Color", p_clearColorInput);
 
-    p_textureCubeMapInput = GameObject::Create<UIInputFile>();
+    p_textureCubeMapInput = GameObject::Create<UIInputFileWithPreview>();
     p_textureCubeMapInput->SetExtensions( {Extensions::GetTextureCubeMapExtension()} );
     p_textureCubeMapInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("SkyBox", p_textureCubeMapInput);

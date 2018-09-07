@@ -14,7 +14,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputFile;
+FORWARD class UIInputFileWithPreview;
 
 class CIWPostProcessEffect : public ComponentInspectorWidget
 {
@@ -26,9 +26,9 @@ public:
     virtual void UpdateFromReference() override;
 
 private:
-    UIInputNumber *p_priorityInput = nullptr;
-    UIInputFile *p_fragmentShaderInput = nullptr;
-    UIComboBox *p_typeComboBox = nullptr;
+    UIInputNumber *p_priorityInput                = nullptr;
+    UIComboBox *p_typeComboBox                    = nullptr;
+    UIInputFileWithPreview *p_fragmentShaderInput = nullptr;
 
     PostProcessEffect* GetPostProcessEffect() const;
 

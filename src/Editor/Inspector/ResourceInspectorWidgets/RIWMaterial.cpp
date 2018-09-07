@@ -23,12 +23,12 @@
 #include "Bang/UIAspectRatioFitter.h"
 #include "Bang/ShaderProgramFactory.h"
 
-#include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputColor.h"
 #include "BangEditor/PreviewViewer.h"
 #include "BangEditor/UIInputVector.h"
 #include "BangEditor/UIInputTexture.h"
 #include "BangEditor/MaterialPreviewFactory.h"
+#include "BangEditor/UIInputFileWithPreview.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -107,13 +107,15 @@ void RIWMaterial::Init()
     p_renderPassInput->AddItem("OverlayPostProcess", SCAST<int>(RenderPass::OVERLAY_POSTPROCESS) );
     p_renderPassInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_vertexShaderInput = GameObject::Create<UIInputFile>();
+    p_vertexShaderInput = GameObject::Create<UIInputFileWithPreview>();
     p_vertexShaderInput->SetExtensions( Extensions::GetVertexShaderExtensions() );
     p_vertexShaderInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_vertexShaderInput->SetZoomable(false);
 
-    p_fragmentShaderInput = GameObject::Create<UIInputFile>();
+    p_fragmentShaderInput = GameObject::Create<UIInputFileWithPreview>();
     p_fragmentShaderInput->SetExtensions( Extensions::GetFragmentShaderExtensions() );
     p_fragmentShaderInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_fragmentShaderInput->SetZoomable(false);
 
     p_lineWidthInput = GameObjectFactory::CreateUIInputNumber();
     p_lineWidthInput->SetMinMaxValues(1.0f, Math::Infinity<float>());
@@ -218,9 +220,17 @@ void RIWMaterial::UpdateInputsFromResource()
     p_fragmentShaderInput->SetPath( fs ? fs->GetResourceFilepath() : Path::Empty );
 }
 
+Texture2D *RIWMaterial::GetIconTexture() const
+{
+    return MaterialPreviewFactory::GetPreviewTextureFor(GetMaterial()).Get();
+}
+
 void RIWMaterial::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *obj)
 {
-    if (!GetMaterial()) { return; }
+    if (!GetMaterial())
+    {
+        return;
+    }
 
     Path albedoTexPath = p_albedoTextureInput->GetPath();
     if (albedoTexPath.IsFile())
@@ -228,7 +238,10 @@ void RIWMaterial::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *o
         RH<Texture2D> tex = Resources::Load<Texture2D>(albedoTexPath);
         GetMaterial()->SetAlbedoTexture(tex.Get());
     }
-    else { GetMaterial()->SetAlbedoTexture(nullptr); }
+    else
+    {
+        GetMaterial()->SetAlbedoTexture(nullptr);
+    }
 
     Path roughnessTexPath = p_roughnessTextureInput->GetPath();
     if (roughnessTexPath.IsFile())
@@ -236,7 +249,10 @@ void RIWMaterial::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *o
         RH<Texture2D> tex = Resources::Load<Texture2D>(roughnessTexPath);
         GetMaterial()->SetRoughnessTexture(tex.Get());
     }
-    else { GetMaterial()->SetRoughnessTexture(nullptr); }
+    else
+    {
+        GetMaterial()->SetRoughnessTexture(nullptr);
+    }
 
     Path metalnessTexPath = p_metalnessTextureInput->GetPath();
     if (metalnessTexPath.IsFile())
@@ -244,7 +260,10 @@ void RIWMaterial::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *o
         RH<Texture2D> tex = Resources::Load<Texture2D>(metalnessTexPath);
         GetMaterial()->SetMetalnessTexture(tex.Get());
     }
-    else { GetMaterial()->SetMetalnessTexture(nullptr); }
+    else
+    {
+        GetMaterial()->SetMetalnessTexture(nullptr);
+    }
 
     Path normalMapTexPath = p_normalMapTextureInput->GetPath();
     if (normalMapTexPath.IsFile())
@@ -252,7 +271,10 @@ void RIWMaterial::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *o
         RH<Texture2D> tex = Resources::Load<Texture2D>(normalMapTexPath);
         GetMaterial()->SetNormalMapTexture(tex.Get());
     }
-    else { GetMaterial()->SetNormalMapTexture(nullptr); }
+    else
+    {
+        GetMaterial()->SetNormalMapTexture(nullptr);
+    }
 
     GetMaterial()->SetAlbedoColor(p_albedoColorInput->GetColor());
     GetMaterial()->SetAlbedoUvOffset( p_albedoUvOffsetInput->GetVector2() );

@@ -8,7 +8,7 @@
 #include "Bang/MeshRenderer.h"
 #include "Bang/UITextRenderer.h"
 
-#include "BangEditor/UIInputFile.h"
+#include "BangEditor/UIInputFileWithPreview.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -20,7 +20,7 @@ void CIWMeshRenderer::InitInnerWidgets()
     SetName("CIWMeshRenderer");
     SetTitle("Mesh Renderer");
 
-    p_meshInputFile = GameObject::Create<UIInputFile>();
+    p_meshInputFile = GameObject::Create<UIInputFileWithPreview>();
     p_meshInputFile->SetExtensions( { Extensions::GetMeshExtension() } );
     p_meshInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 

@@ -10,6 +10,8 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
 
+#include "BangEditor/EditorTextureFactory.h"
+
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
@@ -45,6 +47,11 @@ UIInputFileWithPreview::~UIInputFileWithPreview()
 {
 }
 
+void UIInputFileWithPreview::SetZoomable(bool zoomable)
+{
+    m_zoomable = zoomable;
+}
+
 void UIInputFileWithPreview::SetPath(const Path &path)
 {
     UIInputFile::SetPath(path);
@@ -67,6 +74,11 @@ void UIInputFileWithPreview::SetPath(const Path &path)
     }
 }
 
+RH<Texture2D> UIInputFileWithPreview::GetPreviewTextureFromPath(const Path &path)
+{
+    return RH<Texture2D>( EditorTextureFactory::GetIconForPath(path) );
+}
+
 bool UIInputFileWithPreview::HaveExistingPath() const
 {
     return (GetPath().IsFile() || Resources::IsEmbeddedResource( GetPath() ));
@@ -76,7 +88,7 @@ void UIInputFileWithPreview::OnEvent(IFocusable*, const UIEvent &event)
 {
     if (event.type == UIEvent::Type::MOUSE_ENTER)
     {
-        if (HaveExistingPath())
+        if (HaveExistingPath() && m_zoomable)
         {
             p_bigPreviewImg->GetGameObject()->SetVisible(true);
         }

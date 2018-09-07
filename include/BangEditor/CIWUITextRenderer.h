@@ -15,8 +15,8 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputFile;
 FORWARD class UIInputColor;
+FORWARD class UIInputFileWithPreview;
 
 class CIWUITextRenderer : public ComponentInspectorWidget
 {
@@ -34,12 +34,12 @@ protected:
     void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
-    UIInputText *p_contentInput = nullptr;
-    UIInputNumber *p_sizeInput = nullptr;
-    UIInputColor *p_colorInput = nullptr;
-    UIComboBox *p_horizontalAlignmentInput = nullptr;
-    UIComboBox *p_verticalAlignmentInput = nullptr;
-    UIInputFile *p_fontFileInput = nullptr;
+    UIInputText *p_contentInput             = nullptr;
+    UIInputNumber *p_sizeInput              = nullptr;
+    UIInputColor *p_colorInput              = nullptr;
+    UIComboBox *p_horizontalAlignmentInput  = nullptr;
+    UIComboBox *p_verticalAlignmentInput    = nullptr;
+    UIInputFileWithPreview *p_fontFileInput = nullptr;
 
     CIWUITextRenderer() = default;
     virtual ~CIWUITextRenderer() = default;

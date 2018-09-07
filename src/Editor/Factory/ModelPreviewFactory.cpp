@@ -5,10 +5,12 @@
 #include "Bang/Camera.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
+#include "Bang/Extensions.h"
 #include "Bang/GameObject.h"
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/EditorResources.h"
+#include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -24,15 +26,28 @@ ModelPreviewFactory::~ModelPreviewFactory()
 RH<Texture2D> ModelPreviewFactory::GetPreviewTextureFor(Model *model)
 {
     return ModelPreviewFactory::GetPreviewTextureFor(
-                                    model, ResourcePreviewFactoryParameters());
+                            model, ResourcePreviewFactoryParameters());
 }
 
 RH<Texture2D> ModelPreviewFactory::GetPreviewTextureFor(
                                 Model *model,
                                 const ResourcePreviewFactoryParameters &params)
 {
-    return ModelPreviewFactory::GetActive()->GetPreviewTextureFor_(model,
-                                                                   params);
+    RH<Texture2D> texRH;
+    if (model)
+    {
+        if (model->GetMeshes().Size() >= 1)
+        {
+            texRH = ModelPreviewFactory::GetActive()->
+                                         GetPreviewTextureFor_(model, params);
+        }
+        else
+        {
+            texRH.Set(EditorTextureFactory::GetIconForExtension(
+                                Extensions::GetAnimationExtension() ) );
+        }
+    }
+    return texRH;
 }
 
 ModelPreviewFactory *ModelPreviewFactory::GetActive()

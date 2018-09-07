@@ -10,7 +10,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputFile;
+FORWARD class UIInputFileWithPreview;
 
 class CIWMeshRenderer : public CIWRenderer
 {
@@ -22,7 +22,7 @@ public:
     virtual void UpdateFromReference() override;
 
 protected:
-    UIInputFile *p_meshInputFile = nullptr;
+    UIInputFileWithPreview *p_meshInputFile = nullptr;
 
     CIWMeshRenderer() = default;
     virtual ~CIWMeshRenderer() = default;

@@ -13,8 +13,8 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputFile;
 FORWARD class UIInputMaterial;
+FORWARD class UIInputFileWithPreview;
 
 class CIWRenderer : public ComponentInspectorWidget
 {
@@ -37,7 +37,7 @@ private:
     UICheckBox *p_castsShadowsCheckBox = nullptr;
     UICheckBox *p_receivesShadowsCheckBox = nullptr;
     UICheckBox *p_useReflectionProbesCheckBox = nullptr;
-    UIInputMaterial *p_materialInputFile = nullptr;
+    UIInputFileWithPreview *p_materialInputFile = nullptr;
 };
 
 NAMESPACE_BANG_EDITOR_END

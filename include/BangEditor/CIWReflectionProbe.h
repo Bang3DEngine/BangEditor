@@ -15,8 +15,8 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputFile;
 FORWARD class UIInputColor;
+FORWARD class UIInputFileWithPreview;
 FORWARD class UITextureCubeMapPreviewer;
 
 class CIWReflectionProbe : public ComponentInspectorWidget
@@ -32,16 +32,16 @@ public:
 
 private:
     UIComboBox *p_reflectionProbSizeInput = nullptr;
-    UIInputVector *p_sizeInput = nullptr;
-    UICheckBox *p_isBoxedCheckBox = nullptr;
-    UIInputNumber *p_restTimeInput = nullptr;
-    UICheckBox *p_filterForIBLCheckBox = nullptr;
+    UIInputVector *p_sizeInput            = nullptr;
+    UICheckBox *p_isBoxedCheckBox         = nullptr;
+    UIInputNumber *p_restTimeInput        = nullptr;
+    UICheckBox *p_filterForIBLCheckBox    = nullptr;
 
-    UIInputNumber *p_zNearInput = nullptr;
-    UIInputNumber *p_zFarInput = nullptr;
-    UIComboBox *p_clearModeInput = nullptr;
-    UIInputColor *p_clearColorInput = nullptr;
-    UIInputFile *p_textureCubeMapInput = nullptr;
+    UIInputNumber *p_zNearInput                   = nullptr;
+    UIInputNumber *p_zFarInput                    = nullptr;
+    UIComboBox *p_clearModeInput                  = nullptr;
+    UIInputColor *p_clearColorInput               = nullptr;
+    UIInputFileWithPreview *p_textureCubeMapInput = nullptr;
 
     UITextureCubeMapPreviewer *p_previewCMRenderer = nullptr;
 

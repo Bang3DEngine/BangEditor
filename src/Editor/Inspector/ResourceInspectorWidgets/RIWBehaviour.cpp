@@ -4,6 +4,7 @@
 #include "Bang/Path.h"
 #include "Bang/UILabel.h"
 #include "Bang/UIButton.h"
+#include "Bang/Extensions.h"
 #include "Bang/UIScrollBar.h"
 #include "Bang/UIScrollArea.h"
 #include "Bang/RectTransform.h"
@@ -15,6 +16,7 @@
 #include "Bang/UIContentSizeFitter.h"
 
 #include "BangEditor/QtProjectManager.h"
+#include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -81,5 +83,17 @@ void RIWBehaviour::UpdateFromFileWhenChanged()
 {
     String behaviourContents = File(GetPath()).GetContents();
     p_codeText->SetContent(behaviourContents);
+}
+
+Texture2D *RIWBehaviour::GetIconTexture() const
+{
+    return EditorTextureFactory::GetIconForExtension(
+                Extensions::GetBehaviourExtensions().Front() );
+}
+
+Color RIWBehaviour::GetIconTint() const
+{
+    return EditorTextureFactory::GetExtensionIconTint(
+                 Extensions::GetBehaviourExtensions().Front() );
 }
 
