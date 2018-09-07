@@ -1,3 +1,5 @@
+#pragma once
+
 #include "BangEditor/RIWResource.h"
 
 #include "Bang/Resources.h"

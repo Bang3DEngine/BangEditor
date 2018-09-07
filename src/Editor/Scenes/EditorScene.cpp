@@ -166,7 +166,7 @@ void EditorScene::Init()
     #endif
 
     cam->SetClearColor( Color::White.WithValue(0.8f) );
-    cam->SetClearMode(Camera::ClearMode::COLOR);
+    cam->SetClearMode(CameraClearMode::COLOR);
     cam->SetRenderFlags( RenderFlags(RenderFlag::NONE).
                          SetOn(RenderFlag::CLEAR_COLOR).
                          SetOn(RenderFlag::CLEAR_DEPTH_STENCIL) );

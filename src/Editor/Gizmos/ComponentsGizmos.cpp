@@ -272,7 +272,7 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam,
         params.color = Color::Green;
         params.receivesLighting = false;
 
-        if (cam->GetProjectionMode() == Camera::ProjectionMode::PERSPECTIVE)
+        if (cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
         {
             RenderFactory::RenderFrustum(camTransform->GetForward(),
                                          camTransform->GetUp(),

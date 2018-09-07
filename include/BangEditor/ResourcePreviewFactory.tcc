@@ -1,5 +1,4 @@
-#ifndef RESOURCEPREVIEWFACTORY_TCC
-#define RESOURCEPREVIEWFACTORY_TCC
+#pragma once
 
 #include "Bang/GL.h"
 #include "Bang/Scene.h"
@@ -63,7 +62,7 @@ void ResourcePreviewFactory<T>::CreatePreviewScene()
     camGo->SetParent(scene);
 
     Camera *previewCamera = camGo->AddComponent<Camera>();
-    previewCamera->SetClearMode(Camera::ClearMode::SKY_BOX);
+    previewCamera->SetClearMode(CameraClearMode::SKY_BOX);
     previewCamera->SetSkyBoxTexture( TextureFactory::GetDefaultTextureCubeMap() );
     scene->SetCamera(previewCamera);
 
@@ -241,6 +240,4 @@ GameObject *ResourcePreviewFactory<T>::GetPreviewGameObjectContainer() const
 }
 
 NAMESPACE_BANG_EDITOR_END
-
-#endif // RESOURCEPREVIEWFACTORY_TCC
 

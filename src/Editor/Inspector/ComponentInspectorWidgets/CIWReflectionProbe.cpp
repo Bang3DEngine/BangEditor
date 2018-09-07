@@ -66,8 +66,8 @@ void CIWReflectionProbe::InitInnerWidgets()
     p_zFarInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_clearModeInput = GameObjectFactory::CreateUIComboBox();
-    p_clearModeInput->AddItem("Color",  SCAST<int>(Camera::ClearMode::COLOR));
-    p_clearModeInput->AddItem("SkyBox", SCAST<int>(Camera::ClearMode::SKY_BOX));
+    p_clearModeInput->AddItem("Color",  SCAST<int>(CameraClearMode::COLOR));
+    p_clearModeInput->AddItem("SkyBox", SCAST<int>(CameraClearMode::SKY_BOX));
     p_clearModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_clearColorInput = GameObject::Create<UIInputColor>();
@@ -167,7 +167,7 @@ void CIWReflectionProbe::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *ob
     ReflectionProbe *reflProbe = GetReflectionProbe();
     reflProbe->SetCamerasZNear( p_zNearInput->GetValue() );
     reflProbe->SetCamerasZFar( p_zFarInput->GetValue() );
-    reflProbe->SetCamerasClearMode( SCAST<Camera::ClearMode>(
+    reflProbe->SetCamerasClearMode( SCAST<CameraClearMode>(
                                     p_clearModeInput->GetSelectedValue()) );
     reflProbe->SetCamerasClearColor( p_clearColorInput->GetColor() );
     reflProbe->SetRenderSize( p_reflectionProbSizeInput->GetSelectedValue() );

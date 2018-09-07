@@ -43,15 +43,15 @@ void CIWCamera::InitInnerWidgets()
 
     p_projectionModeInput = GameObjectFactory::CreateUIComboBox();
     p_projectionModeInput->AddItem("Orthographic",
-                                   SCAST<int>(Camera::ProjectionMode::ORTHOGRAPHIC));
+                                   SCAST<int>(CameraProjectionMode::ORTHOGRAPHIC));
     p_projectionModeInput->AddItem("Perspective",
-                                   SCAST<int>(Camera::ProjectionMode::PERSPECTIVE));
+                                   SCAST<int>(CameraProjectionMode::PERSPECTIVE));
     p_projectionModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Projection Mode", p_projectionModeInput->GetGameObject());
 
     p_clearModeInput = GameObjectFactory::CreateUIComboBox();
-    p_clearModeInput->AddItem("Color",  SCAST<int>(Camera::ClearMode::COLOR));
-    p_clearModeInput->AddItem("SkyBox", SCAST<int>(Camera::ClearMode::SKY_BOX));
+    p_clearModeInput->AddItem("Color",  SCAST<int>(CameraClearMode::COLOR));
+    p_clearModeInput->AddItem("SkyBox", SCAST<int>(CameraClearMode::SKY_BOX));
     p_clearModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Clear Mode", p_clearModeInput->GetGameObject());
 
@@ -136,9 +136,9 @@ void CIWCamera::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
     GetCamera()->SetZFar( p_zFarInput->GetValue() );
     GetCamera()->SetOrthoHeight( p_orthoHeightInput->GetValue() );
     GetCamera()->SetFovDegrees( p_fovInput->GetValue() );
-    GetCamera()->SetProjectionMode(SCAST<Camera::ProjectionMode>(
+    GetCamera()->SetProjectionMode(SCAST<CameraProjectionMode>(
                                      p_projectionModeInput->GetSelectedValue()) );
-    GetCamera()->SetClearMode( SCAST<Camera::ClearMode>(
+    GetCamera()->SetClearMode( SCAST<CameraClearMode>(
                                   p_clearModeInput->GetSelectedValue()) );
     GetCamera()->SetClearColor( p_clearColorInput->GetColor() );
 

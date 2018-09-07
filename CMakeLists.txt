@@ -106,35 +106,8 @@ file(GLOB_RECURSE EDITOR_SRC_FILES "${EDITOR_SRC_DIR}/*.cpp")
 #=================================================================
 # Executables ====================================================
 #=================================================================
-add_library(BangEditorObjects OBJECT ${EDITOR_SRC_FILES} ${OTHER_FILES})
 
 set (CMAKE_POSITION_INDEPENDENT_CODE OFF)
-
-set (COMPILE_GAME OFF)
-if (${COMPILE_GAME})
-    add_executable(GameTemplate ${SRC_DIR}/MainGame.cpp)
-endif()
-add_library(BangEditorLib $<TARGET_OBJECTS:BangEditorObjects>)
-add_executable(BangEditor ${SRC_DIR}/Main.cpp)
-
-add_bang_compilation_flags(BangEditorObjects)
-add_bang_compilation_flags(BangEditorLib)
-add_bang_compilation_flags(BangEditor)
-if (${COMPILE_GAME})
-    add_bang_compilation_flags(GameTemplate)
-endif()
-
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-if (NOT DEFINED FORCE_NO_PIE)
-    set(FORCE_NO_PIE ON)
-endif()
-if (${FORCE_NO_PIE})
-    if (${COMPILE_GAME})
-        set_target_properties(GameTemplate PROPERTIES LINK_FLAGS "-no-pie")
-    endif()
-    set_target_properties(BangEditorLib PROPERTIES LINK_FLAGS "-no-pie")
-endif()
 
 get_target_property(BANG_ENGINE_INCLUDE_DIRS_0 BangEngineObjects INCLUDE_DIRECTORIES)
 get_target_property(BANG_ENGINE_INCLUDE_DIRS_1 BangLib           INCLUDE_DIRECTORIES)
@@ -166,6 +139,33 @@ add_library(BangUndoRedoLib ${BANG_UNDO_REDO_LIB_SOURCES})
 target_include_directories(BangUndoRedoLib PUBLIC ${BANG_ENGINE_INCLUDE_DIRS} ${BANG_EDITOR_INCLUDE_DIR})
 add_bang_compilation_flags(BangUndoRedoLib)
 remove_from_list_another_list(EDITOR_SRC_FILES "${BANG_UNDO_REDO_LIB_SOURCES}")
+
+set (COMPILE_GAME OFF)
+if (${COMPILE_GAME})
+    add_executable(GameTemplate ${SRC_DIR}/MainGame.cpp)
+endif()
+add_library(BangEditorObjects OBJECT ${EDITOR_SRC_FILES} ${OTHER_FILES})
+add_library(BangEditorLib $<TARGET_OBJECTS:BangEditorObjects>)
+add_executable(BangEditor ${SRC_DIR}/Main.cpp)
+
+add_bang_compilation_flags(BangEditorObjects)
+add_bang_compilation_flags(BangEditorLib)
+add_bang_compilation_flags(BangEditor)
+if (${COMPILE_GAME})
+    add_bang_compilation_flags(GameTemplate)
+endif()
+
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+if (NOT DEFINED FORCE_NO_PIE)
+    set(FORCE_NO_PIE ON)
+endif()
+if (${FORCE_NO_PIE})
+    if (${COMPILE_GAME})
+        set_target_properties(GameTemplate PROPERTIES LINK_FLAGS "-no-pie")
+    endif()
+    set_target_properties(BangEditorLib PROPERTIES LINK_FLAGS "-no-pie")
+endif()
 
 target_compile_definitions(BangEditor        PRIVATE -DBANG_ENGINE_ROOT="${BANG_ENGINE_ROOT_DEFINE}")
 target_compile_definitions(BangEditor        PRIVATE -DBANG_EDITOR_ROOT="${BANG_EDITOR_ROOT_DEFINE}")

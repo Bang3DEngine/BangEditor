@@ -40,7 +40,7 @@ EditorCamera::EditorCamera()
     p_camContainer->SetParent(this);
 
     p_cam = p_camContainer->AddComponent<Camera>();
-    p_cam->SetProjectionMode(Camera::ProjectionMode::PERSPECTIVE);
+    p_cam->SetProjectionMode(CameraProjectionMode::PERSPECTIVE);
     p_cam->AddRenderPass(RenderPass::OVERLAY);
 
     p_camt = p_camContainer->GetTransform();
@@ -99,7 +99,7 @@ void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
     // Apply zoom
     if (m_zoomCurrentSpeed != 0.0f)
     {
-        if (p_cam->GetProjectionMode() == Camera::ProjectionMode::PERSPECTIVE)
+        if (p_cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
         {
             *moveStep += m_zoomCurrentSpeed * p_camt->GetForward();
             *hasMoved  = (mouseWheel != 0.0f);
@@ -200,7 +200,7 @@ void EditorCamera::HandleLookAtFocus()
     //LookAt Move
     float stopDist = 0.0f;
     float radius = focusBSphere.GetRadius();
-    if (cam->GetProjectionMode() == Camera::ProjectionMode::PERSPECTIVE)
+    if (cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
     {
         float fov = Math::DegToRad(cam->GetFovDegrees() / 2.0f);
         stopDist = radius / std::tan(fov) * 1.5f;
@@ -296,7 +296,7 @@ void EditorCamera::Update()
     }
     else
     {
-        GetCamera()->SetClearMode(Camera::ClearMode::COLOR);
+        GetCamera()->SetClearMode(CameraClearMode::COLOR);
         GetCamera()->SetClearColor(Color::LightBlue);
     }
 
@@ -317,14 +317,14 @@ void EditorCamera::SwitchProjectionModeTo(bool mode3D)
 {
     if (mode3D)
     {
-        p_cam->SetProjectionMode(Camera::ProjectionMode::PERSPECTIVE);
+        p_cam->SetProjectionMode(CameraProjectionMode::PERSPECTIVE);
         p_cam->SetZNear(EditorCamera::InitialZNear);
         p_cam->SetZFar(EditorCamera::InitialZFar);
         p_cam->SetFovDegrees(EditorCamera::InitialFOVDegrees);
     }
     else
     {
-        p_cam->SetProjectionMode(Camera::ProjectionMode::ORTHOGRAPHIC);
+        p_cam->SetProjectionMode(CameraProjectionMode::ORTHOGRAPHIC);
         p_cam->SetOrthoHeight(m_orthoHeight);
         p_cam->SetZNear(-999999.9f);
         p_cam->SetZFar(999999.9f);
