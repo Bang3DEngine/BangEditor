@@ -114,7 +114,7 @@ bool EditorBehaviourManager::AreAllBehavioursCompiled() const
 
 bool EditorBehaviourManager::IsSomeBehaviourBeingCompiled() const
 {
-    MutexLocker ml( GetMutex() ); (void) ml;
+    MutexLocker ml( GetMutex() ); BANG_UNUSED(ml);
     return !m_behavioursBeingCompiled.IsEmpty();
 }
 
@@ -139,7 +139,7 @@ bool EditorBehaviourManager::IsBehavioursLibraryReady() const
 
 bool EditorBehaviourManager::IsCompiled(const Path &behaviourFilepath) const
 {
-    MutexLocker ml( GetMutex() ); (void)ml;
+    MutexLocker ml( GetMutex() ); BANG_UNUSED(ml);
     return m_compiledBehaviours.Contains(behaviourFilepath);
 }
 
@@ -147,7 +147,7 @@ bool EditorBehaviourManager::IsCompiledWithError(const Path &behaviourFilepath) 
 {
     const bool isCompiled = IsCompiled(behaviourFilepath);
 
-    MutexLocker ml( GetMutex() ); (void)ml;
+    MutexLocker ml( GetMutex() ); BANG_UNUSED(ml);
     return isCompiled &&
            !m_successfullyCompiledBehaviours.Contains(behaviourFilepath);
 }
@@ -156,14 +156,14 @@ bool EditorBehaviourManager::IsCompiledSuccessfully(const Path &behaviourFilepat
 {
     const bool isCompiled = IsCompiled(behaviourFilepath);
 
-    MutexLocker ml( GetMutex() ); (void)ml;
+    MutexLocker ml( GetMutex() ); BANG_UNUSED(ml);
     return isCompiled &&
            m_successfullyCompiledBehaviours.Contains(behaviourFilepath);
 }
 
 bool EditorBehaviourManager::IsBeingCompiled(const Path &behaviourFilepath) const
 {
-    MutexLocker ml( GetMutex() ); (void)ml;
+    MutexLocker ml( GetMutex() ); BANG_UNUSED(ml);
     return m_behavioursBeingCompiled.Contains(behaviourFilepath);
 }
 
@@ -247,7 +247,7 @@ CompileBehaviourObjectAsync(const Path &behaviourPath)
     bool compilingThreadStarted = m_compileThreadPool.TryStart(compileRunnable);
     if (compilingThreadStarted)
     {
-        MutexLocker ml(GetMutex()); (void) ml;
+        MutexLocker ml(GetMutex()); BANG_UNUSED(ml);
         m_behavioursBeingCompiled.Add(behaviourPath);
     }
 }
@@ -517,7 +517,7 @@ void EditorBehaviourManager::OnPathModified(const Path &path)
         Array<Path> affectedBehaviourSources =
            GetAffectedBehaviourSourcesWhenModifying(path, allBehaviourSources);
 
-        MutexLocker ml(GetMutex()); (void) ml;
+        MutexLocker ml(GetMutex()); BANG_UNUSED(ml);
         for (const Path &affectedBehaviourSource : affectedBehaviourSources)
         {
             if (Extensions::Equals(affectedBehaviourSource.GetLastExtension(),
@@ -537,7 +537,7 @@ void EditorBehaviourManager::OnPathRemoved(const Path &path)
     if ( Extensions::Equals(path.GetLastExtension(),
                             Extensions::GetBehaviourExtensions()) )
     {
-        MutexLocker ml(GetMutex()); (void) ml;
+        MutexLocker ml(GetMutex()); BANG_UNUSED(ml);
         m_successfullyCompiledBehaviours.Remove(path);
         m_modifiedBehaviourPaths.Remove(path);
         m_compiledBehaviours.Remove(path);

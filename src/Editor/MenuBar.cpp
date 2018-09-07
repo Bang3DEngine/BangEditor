@@ -539,7 +539,7 @@ void MenuBar::OnAddNewBehaviour(MenuItem*)
 void MenuBar::OnAddEmptyBehaviour(MenuItem*)
 {
     BehaviourContainer *behaviourContainer = OnAddComponent<BehaviourContainer>();
-    (void) behaviourContainer;
+    BANG_UNUSED(behaviourContainer);
 }
 
 void MenuBar::OnAddExistingBehaviour(MenuItem*)

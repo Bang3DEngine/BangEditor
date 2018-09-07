@@ -59,9 +59,7 @@ void ModelPreviewFactory::OnCreateSceneFirstTime(Scene *previewScene,
                                                  Camera *previewCamera,
                                                  GameObject *previewGoContainer)
 {
-    (void) previewScene;
-    (void) previewCamera;
-    (void) previewGoContainer;
+    BANG_UNUSED_3(previewScene, previewCamera, previewGoContainer);
 }
 
 void ModelPreviewFactory::OnUpdateTextureBegin(
@@ -71,8 +69,7 @@ void ModelPreviewFactory::OnUpdateTextureBegin(
                                 Model *model,
                                 const ResourcePreviewFactoryParameters &params)
 {
-    (void) previewCamera;
-    (void) params;
+    BANG_UNUSED_2(previewCamera, params);
 
     ASSERT(previewScene);
 
@@ -98,11 +95,7 @@ void ModelPreviewFactory::OnUpdateTextureEnd(
                                 Model *model,
                                 const ResourcePreviewFactoryParameters &params)
 {
-    (void) previewScene;
-    (void) previewCamera;
-    (void) previewGoContainer;
-    (void) model;
-    (void) params;
+    BANG_UNUSED_4(previewScene, previewCamera, model, params);
 
     GameObject *modelGo = previewGoContainer->FindInChildren("ModelContainer");
     ASSERT(modelGo);

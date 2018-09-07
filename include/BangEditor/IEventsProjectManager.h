@@ -16,12 +16,12 @@ class IEventsProjectManager
 public:
     virtual void OnProjectOpen(const Project *project)
     {
-        (void) project;
+        BANG_UNUSED(project);
     }
 
     virtual void OnProjectClosed(const Project *project)
     {
-        (void) project;
+        BANG_UNUSED(project);
     }
 };
 

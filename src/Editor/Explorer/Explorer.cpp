@@ -515,7 +515,8 @@ void Explorer::OnPastedOver(ExplorerItem *item)
 
 void Explorer::OnDroppedToDirectory(ExplorerItem *item)
 {
-    (void) item;
+    BANG_UNUSED(item);
+
     Path itemPath = item->GetPath();
     if (itemPath.Exists())
     {

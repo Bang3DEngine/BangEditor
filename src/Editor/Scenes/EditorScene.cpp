@@ -302,13 +302,13 @@ void EditorScene::SetOpenScene(Scene *openScene)
 
 void EditorScene::OnFocusGained(Window *w)
 {
-    (void) w;
+    BANG_UNUSED(w);
     GetEditorFileTracker()->CheckFiles();
 }
 
 void EditorScene::OnFocusLost(Window *w)
 {
-    (void) w;
+    BANG_UNUSED(w);
 }
 
 void EditorScene::OnSceneLoaded(Scene *scene, const Path &)
@@ -416,7 +416,7 @@ void EditorScene::PopGLViewport()
 void EditorScene::OnPlayStateChanged(PlayState previousPlayState,
                                      PlayState newPlayState)
 {
-    (void)(previousPlayState);
+    BANG_UNUSED(previousPlayState);
 
     // Change tab when play/stop
     switch (newPlayState)

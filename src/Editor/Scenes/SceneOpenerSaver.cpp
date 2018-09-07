@@ -205,19 +205,19 @@ Path SceneOpenerSaver::GetDialogStartPath() const
 
 void SceneOpenerSaver::OnActionPushed(UndoRedoAction *action)
 {
-    (void) action;
+    BANG_UNUSED(action);
     ++m_numActionsDoneSinceLastSave;
 }
 
 void SceneOpenerSaver::OnUndo(UndoRedoAction *action)
 {
-    (void) action;
+    BANG_UNUSED(action);
     --m_numActionsDoneSinceLastSave;
 }
 
 void SceneOpenerSaver::OnRedo(UndoRedoAction *action)
 {
-    (void) action;
+    BANG_UNUSED(action);
     ++m_numActionsDoneSinceLastSave;
 }
 

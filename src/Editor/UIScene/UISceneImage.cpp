@@ -34,7 +34,8 @@ UISceneImage::UISceneImage()
 
     AddComponent<UIFocusable>();
 
-    UIVerticalLayout *vl = AddComponent<UIVerticalLayout>(); (void)(vl);
+    UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
+    BANG_UNUSED(vl);
 
     GameObject *sceneImgGo = GameObjectFactory::CreateUIGameObject();
     p_sceneImg  = sceneImgGo->AddComponent<UISceneImageRenderer>();

@@ -43,8 +43,7 @@ void MeshPreviewFactory::OnCreateSceneFirstTime(Scene *previewScene,
                                                 Camera *previewCamera,
                                                 GameObject *previewGoContainer)
 {
-    (void) previewScene;
-    (void) previewCamera;
+    BANG_UNUSED_2(previewScene, previewCamera);
 
     GameObject *meshGo = GameObjectFactory::CreateGameObject();
     meshGo->SetName("MeshContainer");
@@ -62,10 +61,7 @@ void MeshPreviewFactory::OnUpdateTextureBegin(
                                 Mesh *mesh,
                                 const ResourcePreviewFactoryParameters &params)
 {
-    (void) previewGoContainer;
-    (void) previewCamera;
-    (void) params;
-
+    BANG_UNUSED_3(previewScene, previewCamera, params);
     ASSERT(previewScene);
 
     GameObject *meshGo = previewScene->FindInChildren("MeshContainer");
@@ -83,10 +79,7 @@ void MeshPreviewFactory::OnUpdateTextureEnd(
                                 Mesh *mesh,
                                 const ResourcePreviewFactoryParameters &params)
 {
-    (void) previewScene;
-    (void) previewCamera;
-    (void) previewGoContainer;
-    (void) mesh;
-    (void) params;
+    BANG_UNUSED_5(previewScene, previewCamera,
+                  previewGoContainer, mesh, params);
 }
 

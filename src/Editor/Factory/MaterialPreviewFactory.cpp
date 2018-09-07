@@ -45,9 +45,7 @@ void MaterialPreviewFactory::OnCreateSceneFirstTime(Scene *previewScene,
                                                     Camera *previewCamera,
                                                     GameObject *previewGoContainer)
 {
-    (void) previewScene;
-    (void) previewCamera;
-    (void) previewGoContainer;
+    BANG_UNUSED_3(previewScene, previewCamera, previewGoContainer);
 
     GameObject *sphere = GameObjectFactory::CreateSphereGameObject();
     sphere->SetParent(previewGoContainer);
@@ -61,10 +59,7 @@ void MaterialPreviewFactory::OnUpdateTextureBegin(
                               Material *material,
                               const ResourcePreviewFactoryParameters &params)
 {
-    (void) params;
-    (void) previewScene;
-    (void) previewCamera;
-    (void) previewGoContainer;
+    BANG_UNUSED_4(params, previewScene, previewCamera, previewGoContainer);
 
     MeshRenderer *mr = previewGoContainer->
                        GetComponentInChildren<MeshRenderer>(true);
@@ -79,10 +74,7 @@ void MaterialPreviewFactory::OnUpdateTextureEnd(
                               Material *material,
                               const ResourcePreviewFactoryParameters &params)
 {
-    (void) previewScene;
-    (void) previewCamera;
-    (void) previewGoContainer;
-    (void) material;
-    (void) params;
+    BANG_UNUSED_5(previewScene, previewCamera,
+                  previewGoContainer, material, params);
 }
 

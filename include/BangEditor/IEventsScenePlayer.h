@@ -16,8 +16,7 @@ public:
     virtual void OnPlayStateChanged(PlayState previousPlayState,
                                     PlayState newPlayState)
     {
-        (void) previousPlayState;
-        (void) newPlayState;
+        BANG_UNUSED_2(previousPlayState, newPlayState);
     }
 };
 

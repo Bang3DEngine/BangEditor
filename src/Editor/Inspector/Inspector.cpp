@@ -55,7 +55,8 @@ Inspector::Inspector()
     rendCacher->GetContainer()->GetRectTransform()->SetMargins(0, 10, 0, 5);
 
     GameObject *mainVLGo = rendererCacherContainer;
-    UIVerticalLayout *mainVL = mainVLGo->AddComponent<UIVerticalLayout>(); (void)(mainVL);
+    UIVerticalLayout *mainVL = mainVLGo->AddComponent<UIVerticalLayout>();
+    BANG_UNUSED(mainVL);
     UILayoutElement *mainVLLE = mainVLGo->AddComponent<UILayoutElement>();
     mainVLLE->SetFlexibleSize(Vector2::One);
 
@@ -238,6 +239,7 @@ GameObject *Inspector::GetCurrentGameObject() const
 
 void Inspector::OnSceneLoaded(Scene *scene, const Path &)
 {
+    BANG_UNUSED(scene);
     if (p_currentGameObject)
     {
         Clear();
@@ -269,7 +271,7 @@ void Inspector::OnCreateContextMenu(MenuItem *menuRootItem)
 
             MenuItem *addComp = menuRootItem->AddItem("Add Component");
             MenuBar::CreateComponentsMenuInto(addComp);
-            addComp->SetSelectedCallback([this](MenuItem*){});
+            addComp->SetSelectedCallback([](MenuItem*){});
 
             MetaNode currentMeta = currentGameObject->GetMeta();
             UndoRedoManager::PushAction(
@@ -320,7 +322,7 @@ void Inspector::OnComponentAdded(Component *addedComponent, int index)
 void Inspector::OnComponentRemoved(Component *removedComponent,
                                    GameObject *previousGameObject)
 {
-    (void) previousGameObject;
+    BANG_UNUSED(previousGameObject);
 
     if (m_objToWidget.ContainsKey(removedComponent))
     {
@@ -345,7 +347,7 @@ UIScrollPanel* Inspector::GetScrollPanel() const { return p_scrollPanel; }
 
 void Inspector::AddWidget(InspectorWidget *widget, int _index)
 {
-    int index = _index >= 0 ? _index : m_widgets.Size();
+    int index = _index >= 0 ? _index : int(m_widgets.Size());
 
     m_widgets.Insert(widget, index);
     Color bgColor = Color::LightGray.WithValue(0.9f);
