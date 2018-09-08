@@ -52,6 +52,7 @@ private:
     Dialog::YesNoCancel Overwrite(const Path &path);
 
     Path GetDialogStartPath() const;
+    static bool DoesUndoRedoActionAffectScene(UndoRedoAction *action);
 
     // IEventsUndoRedo
     void OnActionPushed(UndoRedoAction *action) override;

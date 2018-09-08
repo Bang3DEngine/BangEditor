@@ -12,6 +12,10 @@
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UndoRedoManager.h"
+#include "BangEditor/UndoRedoMoveGameObject.h"
+#include "BangEditor/UndoRedoCreateGameObject.h"
+#include "BangEditor/UndoRedoRemoveGameObject.h"
+#include "BangEditor/UndoRedoSerializableChange.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -160,8 +164,8 @@ Dialog::YesNoCancel SceneOpenerSaver::Overwrite(const Path &path)
 
 bool SceneOpenerSaver::CloseScene()
 {
-    Scene *previousScene = EditorSceneManager::GetOpenScene();
-    if (previousScene &&
+    Scene *previousOpenScene = EditorSceneManager::GetOpenScene();
+    if (previousOpenScene &&
         !IsCurrentSceneSaved() &&
         ScenePlayer::GetPlayState() ==  PlayState::EDITING)
     {
@@ -183,9 +187,9 @@ bool SceneOpenerSaver::CloseScene()
         }
     }
 
-    if (previousScene)
+    if (previousOpenScene)
     {
-        GameObject::Destroy(previousScene);
+        GameObject::Destroy(previousOpenScene);
     }
 
     m_numActionsDoneSinceLastSave = 0;
@@ -204,22 +208,36 @@ Path SceneOpenerSaver::GetDialogStartPath() const
     return Paths::GetHome();
 }
 
+bool SceneOpenerSaver::DoesUndoRedoActionAffectScene(UndoRedoAction *action)
+{
+    return DCAST<UndoRedoCreateGameObject*>(action) ||
+           DCAST<UndoRedoMoveGameObject*>(action)   ||
+           DCAST<UndoRedoRemoveGameObject*>(action) ||
+           DCAST<UndoRedoSerializableChange*>(action);
+}
+
 void SceneOpenerSaver::OnActionPushed(UndoRedoAction *action)
 {
-    BANG_UNUSED(action);
-    ++m_numActionsDoneSinceLastSave;
+    if (SceneOpenerSaver::DoesUndoRedoActionAffectScene(action))
+    {
+        ++m_numActionsDoneSinceLastSave;
+    }
 }
 
 void SceneOpenerSaver::OnUndo(UndoRedoAction *action)
 {
-    BANG_UNUSED(action);
-    --m_numActionsDoneSinceLastSave;
+    if (SceneOpenerSaver::DoesUndoRedoActionAffectScene(action))
+    {
+        --m_numActionsDoneSinceLastSave;
+    }
 }
 
 void SceneOpenerSaver::OnRedo(UndoRedoAction *action)
 {
-    BANG_UNUSED(action);
-    ++m_numActionsDoneSinceLastSave;
+    if (SceneOpenerSaver::DoesUndoRedoActionAffectScene(action))
+    {
+        ++m_numActionsDoneSinceLastSave;
+    }
 }
 
 void SceneOpenerSaver::OnPlayStateChanged(PlayState, PlayState newPlayState)
@@ -258,6 +276,7 @@ bool SceneOpenerSaver::OpenSceneInEditor(const Path &scenePath)
         UndoRedoManager::Clear();
         SceneManager::LoadScene(scenePath, false);
         m_currentOpenScenePath = scenePath;
+        m_numActionsDoneSinceLastSave = 0;
         return true;
     }
     return false;
