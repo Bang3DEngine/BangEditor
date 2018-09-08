@@ -16,8 +16,9 @@
 #include "Bang/TextureFactory.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
-#include "Bang/GameObjectFactory.h"
 #include "Bang/MetaFilesManager.h"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/NeededUniformFlags.h"
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIContentSizeFitter.h"
 #include "Bang/UIAspectRatioFitter.h"
@@ -107,6 +108,20 @@ void RIWMaterial::Init()
     p_renderPassInput->AddItem("OverlayPostProcess", SCAST<int>(RenderPass::OVERLAY_POSTPROCESS) );
     p_renderPassInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
+    p_neededUniformsInput = GameObjectFactory::CreateUIBoolComboBox();
+    p_neededUniformsInput->AddItem("Model",    SCAST<int>(NeededUniformFlag::MODEL));
+    p_neededUniformsInput->AddItem("ModelInv", SCAST<int>(NeededUniformFlag::MODEL_INV));
+    p_neededUniformsInput->AddItem("Normal",   SCAST<int>(NeededUniformFlag::NORMAL));
+    p_neededUniformsInput->AddItem("PVM",      SCAST<int>(NeededUniformFlag::PVM));
+    p_neededUniformsInput->AddItem("PVMInv",   SCAST<int>(NeededUniformFlag::PVM_INV));
+    p_neededUniformsInput->AddItem("Skyboxes", SCAST<int>(NeededUniformFlag::SKYBOXES));
+    p_neededUniformsInput->AddItem("MaterialAlbedo",
+                                   SCAST<int>(NeededUniformFlag::MATERIAL_ALBEDO));
+    p_neededUniformsInput->AddItem("MaterialPBR",
+                                   SCAST<int>(NeededUniformFlag::MATERIAL_PBR));
+    p_neededUniformsInput->AddItem("Time", SCAST<int>(NeededUniformFlag::TIME));
+    p_neededUniformsInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
     p_vertexShaderInput = GameObject::Create<UIInputFileWithPreview>();
     p_vertexShaderInput->SetExtensions( Extensions::GetVertexShaderExtensions() );
     p_vertexShaderInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
@@ -135,8 +150,6 @@ void RIWMaterial::Init()
 
     AddWidget(p_materialPreviewViewer,      256);
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
-    AddWidget("Render pass",          p_renderPassInput->GetGameObject());
-    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Rec. light",           p_receivesLightingCheckBox->GetGameObject());
     AddWidget("Roughness",            p_roughnessSlider->GetGameObject());
     AddWidget("Roughness Tex.",       p_roughnessTextureInput);
@@ -157,8 +170,11 @@ void RIWMaterial::Init()
     AddWidget("Render Wireframe",     p_renderWireframe->GetGameObject());
     AddWidget("Line Width",           p_lineWidthInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
+    AddWidget("Render pass",          p_renderPassInput->GetGameObject());
+    AddWidget("Needed uniforms",      p_neededUniformsInput->GetGameObject());
     AddWidget("Vert shader",          p_vertexShaderInput);
     AddWidget("Frag shader",          p_fragmentShaderInput);
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
 
     SetLabelsWidth(130);
 }
@@ -213,6 +229,8 @@ void RIWMaterial::UpdateInputsFromResource()
                                                             params);
     });
 
+    p_neededUniformsInput->SetSelectionForFlag( SCAST<int>(GetMaterial()->
+                                                GetNeededUniforms().GetValue()) );
     ShaderProgram *sp = GetMaterial()->GetShaderProgram();
     Shader *vs = sp ? sp->GetVertexShader() : nullptr;
     Shader *fs = sp ? sp->GetFragmentShader() : nullptr;
@@ -285,6 +303,9 @@ void RIWMaterial::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *o
     GetMaterial()->SetReceivesLighting(p_receivesLightingCheckBox->IsChecked());
     GetMaterial()->SetRoughness(p_roughnessSlider->GetValue());
     GetMaterial()->SetMetalness(p_metalnessSlider->GetValue());
+    GetMaterial()->GetNeededUniforms().SetTo( SCAST<FlagsPrimitiveType>(
+                                                  p_neededUniformsInput->
+                                                  GetSelectedValuesForFlag()) );
 
     if (obj == p_renderPassInput)
     {

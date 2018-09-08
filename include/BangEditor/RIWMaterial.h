@@ -33,7 +33,6 @@ public:
     void Init() override;
 
 private:
-    UIComboBox *p_renderPassInput = nullptr;
     UIInputColor *p_albedoColorInput = nullptr;
     UIInputTexture *p_albedoTextureInput = nullptr;
     UIInputVector *p_albedoUvMultiplyInput = nullptr;
@@ -50,6 +49,8 @@ private:
     UIInputNumber *p_lineWidthInput = nullptr;
     UIComboBox *p_cullFaceInput = nullptr;
     UICheckBox *p_renderWireframe = nullptr;
+    UIComboBox *p_renderPassInput = nullptr;
+    UIComboBox *p_neededUniformsInput = nullptr;
     UIInputFileWithPreview *p_vertexShaderInput = nullptr;
     UIInputFileWithPreview *p_fragmentShaderInput = nullptr;
     PreviewViewer *p_materialPreviewViewer = nullptr;

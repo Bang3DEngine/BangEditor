@@ -188,6 +188,7 @@ bool SceneOpenerSaver::CloseScene()
         GameObject::Destroy(previousScene);
     }
 
+    m_numActionsDoneSinceLastSave = 0;
     m_currentOpenScenePath   = Path::Empty;
     m_currentLoadedScenePath = Path::Empty;
     SceneManager::LoadScene(nullptr, false);
