@@ -41,6 +41,7 @@ public:
     void Render(RenderPass rp, bool renderChildren) override;
 
     void HandleSelection();
+    static Vector2i GetMousePositionInOpenScene();
 
 private:
     bool m_needToRenderPreviewImg = false;

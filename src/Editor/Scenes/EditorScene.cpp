@@ -223,11 +223,11 @@ void EditorScene::Update()
     }
 
     // Set scene tab name
-    String sceneTabName = "Scene";
+    String sceneTabName = "Scene - ";
     if (openScene)
     {
         Path loadedScenePath = SceneOpenerSaver::GetInstance()->GetLoadedScenePath();
-        sceneTabName += " - " + loadedScenePath.GetName();
+        sceneTabName += loadedScenePath.GetName();
         if ( Editor::IsEditingScene() &&
             !SceneOpenerSaver::GetInstance()->IsCurrentSceneSaved())
         {
@@ -261,25 +261,6 @@ void EditorScene::RenderOpenSceneIfNeeded()
         GetScenePlayContainer()->RenderIfNeeded();
 
         UnBindOpenScene();
-    }
-}
-
-void EditorScene::SetViewportForOpenScene()
-{
-    Scene *openScene = GetOpenScene();
-    if (openScene)
-    {
-        Camera *openSceneCam = openScene->GetCamera();
-        if (openSceneCam)
-        {
-            AARect ndcRect = GetOpenSceneWindowRectNDC();
-            AARect ndcRectNorm = ndcRect * 0.5f + 0.5f;
-            AARecti vpRectPx(
-               Vector2i(ndcRectNorm.GetMin() * Vector2(GL::GetViewportSize())),
-               Vector2i(ndcRectNorm.GetMax() * Vector2(GL::GetViewportSize())));
-
-            GL::SetViewport(vpRectPx);
-        }
     }
 }
 
@@ -333,8 +314,6 @@ void EditorScene::BindOpenScene()
 {
     if ( GetOpenScene() )
     {
-        PushGLViewport();
-        SetViewportForOpenScene();
         EditorSceneManager::SetActiveScene( GetOpenScene() );
     }
 }
@@ -344,16 +323,33 @@ void EditorScene::UnBindOpenScene()
     if ( GetOpenScene() )
     {
         EditorSceneManager::SetActiveScene(this);
-        PopGLViewport();
     }
 }
 
-MenuBar *EditorScene::GetMenuBar() const { return m_menuBar; }
-Console *EditorScene::GetConsole() const { return p_console; }
-Explorer *EditorScene::GetExplorer() const { return p_explorer; }
-Inspector *EditorScene::GetInspector() const { return p_inspector; }
-Hierarchy *EditorScene::GetHierarchy() const { return p_hierarchy; }
-ScenePlayer *EditorScene::GetScenePlayer() const { return m_scenePlayer; }
+MenuBar *EditorScene::GetMenuBar() const
+{
+    return m_menuBar;
+}
+Console *EditorScene::GetConsole() const
+{
+    return p_console;
+}
+Explorer *EditorScene::GetExplorer() const
+{
+    return p_explorer;
+}
+Inspector *EditorScene::GetInspector() const
+{
+    return p_inspector;
+}
+Hierarchy *EditorScene::GetHierarchy() const
+{
+    return p_hierarchy;
+}
+ScenePlayer *EditorScene::GetScenePlayer() const
+{
+    return m_scenePlayer;
+}
 ProjectManager *EditorScene::GetProjectManager() const
 {
     return m_projectManager;
@@ -397,20 +393,6 @@ UIScenePlayContainer *EditorScene::GetScenePlayContainer() const
 EditSceneGameObjects *EditorScene::GetEditSceneGameObjects() const
 {
     return m_editSceneGameObjects;
-}
-
-void EditorScene::PushGLViewport()
-{
-    m_viewportsStack.push(GL::GetViewportRect());
-}
-
-void EditorScene::PopGLViewport()
-{
-    if (!m_viewportsStack.empty())
-    {
-        GL::SetViewport( m_viewportsStack.top() );
-        m_viewportsStack.pop();
-    }
 }
 
 void EditorScene::OnPlayStateChanged(PlayState previousPlayState,

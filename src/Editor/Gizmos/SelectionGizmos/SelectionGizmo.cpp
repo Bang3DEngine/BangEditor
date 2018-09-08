@@ -27,7 +27,10 @@ void SelectionGizmo::Update()
     bool prevGrab = IsBeingGrabbed();
     if ( Input::GetMouseButtonDown(MouseButton::LEFT) )
     {
-        if (isMouseOver) { m_selectionState = SelectionState::GRABBED; }
+        if (isMouseOver)
+        {
+            m_selectionState = SelectionState::GRABBED;
+        }
     }
     else if ( !Input::GetMouseButton(MouseButton::LEFT) )
     {
@@ -39,8 +42,14 @@ void SelectionGizmo::Update()
     // Grab event
     if (GrabHasJustChanged())
     {
-        if (IsBeingGrabbed()) { OnGrabBegin(); }
-        else { OnGrabEnd(); }
+        if (IsBeingGrabbed())
+        {
+            OnGrabBegin();
+        }
+        else
+        {
+            OnGrabEnd();
+        }
     }
 }
 

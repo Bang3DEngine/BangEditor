@@ -17,6 +17,7 @@
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/Selection.h"
+#include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/UISceneImage.h"
@@ -38,7 +39,8 @@ UISceneEditContainer::UISceneEditContainer()
     GameObject *cameraPreviewGo = GameObjectFactory::CreateUIGameObject();
     p_cameraPreviewImg = cameraPreviewGo->AddComponent<UIImageRenderer>();
     p_cameraPreviewImg->SetMode(UIImageRenderer::Mode::TEXTURE);
-    p_cameraPreviewImg->SetVisible(false);
+    cameraPreviewGo->SetVisible(false);
+    GameObjectFactory::AddOuterBorder(cameraPreviewGo, Vector2i(2));
 
     cameraPreviewGo->AddComponent<UILayoutIgnorer>();
     cameraPreviewGo->SetParent(this);
@@ -112,10 +114,9 @@ void UISceneEditContainer::HandleSelection()
         bool isOverScene = canvas->IsMouseOver(GetSceneImage(), true);
         if (isOverScene)
         {
-            GameObject *selectedGameObject = Selection::GetOveredGameObject();
-            if (selectedGameObject)
+            if (GameObject *selectedGo = Selection::GetOveredGameObject())
             {
-                Editor::SelectGameObject(selectedGameObject, true);
+                Editor::SelectGameObject(selectedGo, true);
             }
             else
             {
@@ -123,6 +124,28 @@ void UISceneEditContainer::HandleSelection()
             }
         }
     }
+}
+
+Vector2i UISceneEditContainer::GetMousePositionInOpenScene()
+{
+    Vector2i mousePosInOpenScene = Vector2i::Zero;
+    if (EditorSceneManager *esm = EditorSceneManager::GetActive())
+    {
+        if (EditorScene *edScene = esm->GetEditorScene())
+        {
+            if (UISceneEditContainer *sec = edScene->GetSceneEditContainer())
+            {
+                AARecti vp = GL::GetViewportRect();
+                AARecti sceneVPRect( sec->GetRectTransform()->GetViewportAARect() );
+                AARecti windowSceneRect = sceneVPRect + vp.GetMin();
+                Vector2i vpMousePos( GL::FromWindowPointToViewportPoint(
+                                        Vector2(Input::GetMousePositionWindow()),
+                                        windowSceneRect) );
+                mousePosInOpenScene = vpMousePos;
+            }
+        }
+    }
+    return mousePosInOpenScene;
 }
 
 void UISceneEditContainer::RenderCameraPreviewIfSelected()
@@ -178,13 +201,16 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
         GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
 
     }
-    p_cameraPreviewImg->SetVisible( selectedCamera != nullptr );
+    p_cameraPreviewImg->GetGameObject()->SetVisible( selectedCamera != nullptr );
 }
 
 Camera* UISceneEditContainer::GetSceneCamera(Scene *scene)
 {
     Camera *editorCamera = EditorCamera::GetInstance()->GetCamera();
-    if (editorCamera) { return editorCamera; }
+    if (editorCamera)
+    {
+        return editorCamera;
+    }
     return scene->GetCamera();
 }
 

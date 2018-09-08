@@ -145,8 +145,7 @@ void TransformGizmo::OnEndRender(Scene *)
 
 void TransformGizmo::OnGrabBegin()
 {
-    m_transformUndoMetaBefore = GetReferencedGameObject()->
-                               GetTransform()->GetMeta();
+    m_transformUndoMetaBefore = GetReferencedGameObject()->GetTransform()->GetMeta();
 }
 
 void TransformGizmo::OnGrabEnd()

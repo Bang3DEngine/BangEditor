@@ -69,7 +69,10 @@ void TranslateGizmoAxis::Update()
     TransformGizmoAxis::Update();
 
     if (!GetReferencedGameObject() ||
-        !GetReferencedGameObject()->GetTransform()) { return; }
+        !GetReferencedGameObject()->GetTransform())
+    {
+        return;
+    }
 
     if (IsBeingGrabbed())
     {

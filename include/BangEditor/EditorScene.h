@@ -1,8 +1,6 @@
 #ifndef EDITORSCENE_H
 #define EDITORSCENE_H
 
-#include <stack>
-
 #include "Bang/Scene.h"
 #include "Bang/AARect.h"
 #include "Bang/SceneManager.h"
@@ -54,7 +52,6 @@ public:
     void OnResize(int newWidth, int newHeight) override;
 
     void RenderOpenSceneIfNeeded();
-    void SetViewportForOpenScene();
 
     Scene *GetOpenScene() const;
 
@@ -108,8 +105,6 @@ private:
     MenuBar *m_menuBar = nullptr;
     GameObject *m_mainEditorVLGo = nullptr;
 
-    std::stack<AARecti> m_viewportsStack;
-
     void Init();
 
     // GameObject
@@ -117,8 +112,6 @@ private:
 
     void BindOpenScene();
     void UnBindOpenScene();
-    void PushGLViewport();
-    void PopGLViewport();
 
     void SetOpenScene(Scene *openScene);
 

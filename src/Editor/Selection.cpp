@@ -27,7 +27,7 @@ bool Selection::IsBeingRendered()
 
 GameObject *Selection::GetOveredGameObject()
 {
-    const Vector2i &vpPoint = Input::GetMousePosition();
+    const Vector2i &vpPoint = UISceneEditContainer::GetMousePositionInOpenScene();
     return GetOveredGameObject(vpPoint);
 }
 
@@ -46,7 +46,10 @@ GameObject *Selection::GetOveredGameObject(const Vector2i &vpPoint)
         if (sfb)
         {
             GameObject *selGo = sfb->GetGameObjectInViewportPoint(vpPoint);
-            if (selGo) { return selGo; }
+            if (selGo)
+            {
+                return selGo;
+            }
         }
     }
     return nullptr;
