@@ -115,7 +115,10 @@ void UISceneContainer::OnRenderNeededSceneFinished()
 void UISceneContainer::OnTransformChanged()
 {
     Scene *containerScene = GetContainedScene();
-    if (containerScene) { containerScene->InvalidateCanvas(); }
+    if (containerScene)
+    {
+        containerScene->InvalidateCanvas();
+    }
 }
 
 void UISceneContainer::OnValueChanged(EventEmitter<IEventsValueChanged>*)

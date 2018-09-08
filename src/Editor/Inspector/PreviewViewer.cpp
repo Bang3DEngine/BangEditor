@@ -22,6 +22,7 @@ PreviewViewer::PreviewViewer()
     p_imgRenderer = AddComponent<UIImageRenderer>();
     p_imgRenderer->SetMode(UIImageRenderer::Mode::TEXTURE);
     p_imgRenderer->SetImageTexture( TextureFactory::GetWhiteTexture() );
+    GameObjectFactory::AddInnerShadow(this, Vector2i(20));
 
     UIContentSizeFitter *previewContentSizeFitter =
                                         AddComponent<UIContentSizeFitter>();

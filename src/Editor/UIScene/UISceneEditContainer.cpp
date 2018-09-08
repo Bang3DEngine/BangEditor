@@ -117,7 +117,10 @@ void UISceneEditContainer::HandleSelection()
             {
                 Editor::SelectGameObject(selectedGameObject, true);
             }
-            else { Editor::SelectGameObject(nullptr, true); }
+            else
+            {
+                Editor::SelectGameObject(nullptr, true);
+            }
         }
     }
 }

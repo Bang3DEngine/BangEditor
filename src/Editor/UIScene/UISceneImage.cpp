@@ -45,7 +45,7 @@ UISceneImage::UISceneImage()
                         EPATH("Shaders/UIImageRenderer.vert"),
                         EditorPaths::GetEditorAssetsDir().
                             Append("Shaders").Append("UISceneImage.frag")));
-    // GameObjectFactory::AddOuterBorder(sceneImgGo, Vector2i(1));
+    GameObjectFactory::AddOuterBorder(sceneImgGo, Vector2i(2));
 
     UILayoutElement *imgLE = sceneImgGo->AddComponent<UILayoutElement>();
     imgLE->SetFlexibleSize( Vector2(1) );

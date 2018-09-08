@@ -63,6 +63,7 @@ void RIWTexture::Init()
     p_imageAspectRatioFitter = imageGo->AddComponent<UIAspectRatioFitter>();
     p_imageAspectRatioFitter->SetAspectRatioMode(AspectRatioMode::KEEP);
     p_textureImageRend = imageGo->AddComponent<UIImageRenderer>();
+    GameObjectFactory::AddOuterBorder(imageGo, Vector2i(1));
     imageGo->SetParent(imageContainerGo);
 
     AddWidget("Filter Mode", p_filterModeComboBox->GetGameObject());
