@@ -35,7 +35,6 @@ public:
     void SetReferencedGameObject(GameObject *referencedGameObject);
     GameObject *GetReferencedGameObject() const;
 
-    void CreateEmpty();
     void Rename();
     void Remove();
     void Copy();

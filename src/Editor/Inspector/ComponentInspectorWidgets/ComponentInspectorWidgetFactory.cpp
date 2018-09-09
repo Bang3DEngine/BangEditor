@@ -22,6 +22,7 @@
 #include "BangEditor/CIWPostProcessEffect.h"
 #include "BangEditor/CIWBehaviourContainer.h"
 #include "BangEditor/CIWSkinnedMeshRenderer.h"
+#include "BangEditor/CIWPostProcessEffectSSAO.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
 USING_NAMESPACE_BANG
@@ -111,6 +112,10 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     else if (cName == "PostProcessEffect")
     {
         ciw = GameObject::Create<CIWPostProcessEffect>();
+    }
+    else if (cName == "PostProcessEffectSSAO")
+    {
+        ciw = GameObject::Create<CIWPostProcessEffectSSAO>();
     }
     else
     {

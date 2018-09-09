@@ -12,6 +12,7 @@
 #include "Bang/UIHorizontalLayout.h"
 
 #include "BangEditor/Editor.h"
+#include "BangEditor/MenuBar.h"
 #include "BangEditor/Hierarchy.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorClipboard.h"
@@ -87,12 +88,6 @@ GameObject *HierarchyItem::GetReferencedGameObject() const
     return p_refGameObject;
 }
 
-void HierarchyItem::CreateEmpty()
-{
-    EventEmitter<IEventsHierarchyItem>::PropagateToListeners(
-                &IEventsHierarchyItem::OnCreateEmpty, this);
-}
-
 void HierarchyItem::Rename()
 {
     EventEmitter<IEventsHierarchyItem>::PropagateToListeners(
@@ -146,9 +141,8 @@ void HierarchyItem::OnCreateContextMenu(MenuItem *menuRootItem)
 {
     menuRootItem->SetFontSize(12);
 
-    MenuItem *createEmpty = menuRootItem->AddItem("Create Empty");
-    createEmpty->SetSelectedCallback([this](MenuItem*)
-    { CreateEmpty(); });
+    MenuItem *create = menuRootItem->AddItem("Create");
+    MenuBar::CreateGameObjectMenuInto(create);
 
     MenuItem *createPrefab = menuRootItem->AddItem("Create Prefab");
     createPrefab->SetSelectedCallback([this](MenuItem*)

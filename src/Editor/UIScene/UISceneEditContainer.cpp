@@ -9,6 +9,7 @@
 #include "Bang/UICanvas.h"
 #include "Bang/Resources.h"
 #include "Bang/Extensions.h"
+#include "Bang/Framebuffer.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIDragDroppable.h"
@@ -42,6 +43,8 @@ UISceneEditContainer::UISceneEditContainer()
     cameraPreviewGo->SetVisible(false);
     GameObjectFactory::AddOuterBorder(cameraPreviewGo, Vector2i(2));
 
+    m_cameraPreviewGBuffer = new GBuffer(1,1);
+
     cameraPreviewGo->AddComponent<UILayoutIgnorer>();
     cameraPreviewGo->SetParent(this);
 
@@ -50,6 +53,7 @@ UISceneEditContainer::UISceneEditContainer()
 
 UISceneEditContainer::~UISceneEditContainer()
 {
+    delete m_cameraPreviewGBuffer;
 }
 
 void UISceneEditContainer::Update()
@@ -159,7 +163,7 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
     {
         GL::Push(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
 
-        GBuffer *gbuffer = selectedCamera->GetGBuffer();
+        GBuffer *gbuffer = m_cameraPreviewGBuffer;
 
         // Set preview size
         RectTransform *rt = GetRectTransform();
@@ -179,27 +183,22 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
            rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMin() + marginsBotLeft),
            rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMax()));
 
-        gbuffer->Bind();
         if (previewRectPx.IsValid())
         {
+            gbuffer->Bind();
             gbuffer->Resize(previewRectPx.GetWidth(), previewRectPx.GetHeight());
+
+            Scene *openScene = EditorSceneManager::GetOpenScene();
+
+            selectedCamera->SetReplacementGBuffer(gbuffer);
+            GEngine::GetInstance()->Render(openScene, selectedCamera);
+            selectedCamera->SetReplacementGBuffer(nullptr);
+
+            Texture2D *camColorTexture = gbuffer->GetLastDrawnColorTexture();
+            camColorTexture->SetWrapMode( GL::WrapMode::REPEAT );
+            p_cameraPreviewImg->SetImageTexture(camColorTexture);
         }
-        else
-        {
-            gbuffer->Resize(1, 1);
-        }
-
-        // Render in the size of sceneEditContainer, since we have a miniature,
-        // but the canvas must be the same as in the scenePlayContainer size!!!
-        Scene *openScene = EditorSceneManager::GetOpenScene();
-        GEngine::GetInstance()->Render(openScene, selectedCamera);
-
-        Texture2D *camColorTexture = gbuffer->GetLastDrawnColorTexture();
-        camColorTexture->SetWrapMode( GL::WrapMode::REPEAT );
-        p_cameraPreviewImg->SetImageTexture( gbuffer->GetLastDrawnColorTexture() );
-
         GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
-
     }
     p_cameraPreviewImg->GetGameObject()->SetVisible( selectedCamera != nullptr );
 }

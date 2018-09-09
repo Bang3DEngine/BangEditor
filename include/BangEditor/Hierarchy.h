@@ -48,7 +48,6 @@ public:
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
 
     // IEventsHierarchyItem
-    virtual void OnCreateEmpty(HierarchyItem *item) override;
     virtual void OnRename(HierarchyItem *item) override;
     virtual void OnRemove(HierarchyItem *item) override;
     virtual void OnCopy(HierarchyItem *item) override;

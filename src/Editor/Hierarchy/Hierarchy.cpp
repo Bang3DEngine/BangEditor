@@ -23,6 +23,7 @@
 #include "Bang/UIRendererCacher.h"
 #include "Bang/GameObjectFactory.h"
 
+#include "BangEditor/MenuBar.h"
 #include "BangEditor/Explorer.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/ExplorerItem.h"
@@ -172,19 +173,6 @@ void Hierarchy::OnGameObjectSelected(GameObject *selectedGameObject)
     }
 }
 
-void Hierarchy::OnCreateEmpty(HierarchyItem *item)
-{
-    GameObject *empty = GameObjectFactory::CreateGameObjectNamed("Empty");
-
-    GameObject *parent = item ? item->GetReferencedGameObject() :
-                                EditorSceneManager::GetOpenScene();
-    if (parent)
-    {
-        empty->SetParent(parent);
-        UndoRedoManager::PushAction( new UndoRedoCreateGameObject(empty) );
-    }
-}
-
 void Hierarchy::OnRename(HierarchyItem *item)
 {
     GameObject *go = item->GetReferencedGameObject();
@@ -212,7 +200,7 @@ void Hierarchy::OnCut(HierarchyItem *item)
 {
     GameObject *cutGo = item->GetReferencedGameObject();
     UndoRedoManager::PushAction( new UndoRedoRemoveGameObject(cutGo) );
-    EditorClipboard::CopyGameObject(cutGo);
+       EditorClipboard::CopyGameObject(cutGo);
     cutGo->SetParent(nullptr);
 }
 
@@ -399,11 +387,8 @@ void Hierarchy::OnCreateContextMenu(MenuItem *menuRootItem)
 {
     menuRootItem->SetFontSize(12);
 
-    MenuItem *createEmpty = menuRootItem->AddItem("Create Empty");
-    createEmpty->SetSelectedCallback([this](MenuItem*)
-    {
-        OnCreateEmpty(nullptr);
-    });
+    MenuItem *create = menuRootItem->AddItem("Create");
+    MenuBar::CreateGameObjectMenuInto(create);
 
     menuRootItem->AddSeparator();
 

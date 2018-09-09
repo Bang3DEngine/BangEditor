@@ -14,6 +14,7 @@
 #include "BangEditor/UISceneContainer.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class GBuffer;
 FORWARD class MeshRenderer;
 FORWARD class UIImageRenderer;
 FORWARD NAMESPACE_BANG_END
@@ -46,6 +47,7 @@ public:
 private:
     bool m_needToRenderPreviewImg = false;
     UIImageRenderer *p_cameraPreviewImg = nullptr;
+    GBuffer *m_cameraPreviewGBuffer = nullptr;
 
     RH<Material> m_currentMaterialBeingDragged;
     GameObject *p_lastOveredGameObject = nullptr;

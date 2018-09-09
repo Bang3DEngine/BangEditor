@@ -14,14 +14,41 @@ class IEventsHierarchyItem
     IEVENTS_NS(IEventsHierarchyItem);
 
 public:
-    virtual void OnCreateEmpty(HierarchyItem *item) = 0;
-    virtual void OnRename(HierarchyItem *item) = 0;
-    virtual void OnRemove(HierarchyItem *item) = 0;
-    virtual void OnCopy(HierarchyItem *item) = 0;
-    virtual void OnCut(HierarchyItem *item) = 0;
-    virtual void OnPaste(HierarchyItem *item) = 0;
-    virtual void OnDuplicate(HierarchyItem *item) = 0;
-    virtual void OnCreatePrefab(HierarchyItem *item) = 0;
+    virtual void OnRename(HierarchyItem *item)
+    {
+        BANG_UNUSED(item);
+    }
+
+    virtual void OnRemove(HierarchyItem *item)
+    {
+        BANG_UNUSED(item);
+    }
+
+    virtual void OnCopy(HierarchyItem *item)
+    {
+        BANG_UNUSED(item);
+    }
+
+    virtual void OnCut(HierarchyItem *item)
+    {
+        BANG_UNUSED(item);
+    }
+
+    virtual void OnPaste(HierarchyItem *item)
+    {
+        BANG_UNUSED(item);
+    }
+
+    virtual void OnDuplicate(HierarchyItem *item)
+    {
+        BANG_UNUSED(item);
+    }
+
+    virtual void OnCreatePrefab(HierarchyItem *item)
+    {
+        BANG_UNUSED(item);
+    }
+
 };
 
 NAMESPACE_BANG_EDITOR_END
