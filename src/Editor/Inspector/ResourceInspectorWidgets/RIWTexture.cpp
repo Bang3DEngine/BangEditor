@@ -6,12 +6,14 @@
 #include "Bang/Texture2D.h"
 #include "Bang/UIComboBox.h"
 #include "Bang/UICheckBox.h"
+#include "Bang/UIInputText.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutIgnorer.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIAspectRatioFitter.h"
 
 USING_NAMESPACE_BANG
@@ -54,6 +56,12 @@ void RIWTexture::Init()
     p_SRGBCheckBoxInput->SetChecked(true);
     p_SRGBCheckBoxInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
+    p_textureWidth = GameObjectFactory::CreateUIInputText();
+    p_textureWidth->SetBlocked(true);
+
+    p_textureHeight = GameObjectFactory::CreateUIInputText();
+    p_textureHeight->SetBlocked(true);
+
     GameObject *imageContainerGo = GameObjectFactory::CreateUIGameObject();
 
     GameObject *imageGo = GameObjectFactory::CreateUIGameObject();
@@ -66,13 +74,15 @@ void RIWTexture::Init()
     GameObjectFactory::AddOuterBorder(imageGo, Vector2i(1));
     imageGo->SetParent(imageContainerGo);
 
+    AddWidget(imageGo, 200);
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
+    AddWidget("Width",  p_textureWidth->GetGameObject());
+    AddWidget("Height", p_textureHeight->GetGameObject());
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Filter Mode", p_filterModeComboBox->GetGameObject());
     AddWidget("Wrap Mode", p_wrapModeComboBox->GetGameObject());
     AddWidget("Alpha Cutoff", p_alphaCutoffInput->GetGameObject());
     AddWidget("SRGB", p_SRGBCheckBoxInput->GetGameObject());
-    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
-    AddLabel("Texture");
-    AddWidget(imageGo, 400);
 
     SetLabelsWidth(100);
 }
@@ -95,6 +105,11 @@ void RIWTexture::UpdateInputsFromResource()
     p_filterModeComboBox->SetSelectionByValue( int(GetTexture()->GetFilterMode()) );
     p_wrapModeComboBox->SetSelectionByValue( int(GetTexture()->GetWrapMode()) );
     p_alphaCutoffInput->SetValue( GetTexture()->GetAlphaCutoff() );
+
+    p_textureWidth->GetText()->SetContent(
+                String::ToString(GetTexture()->GetWidth()) + " px");
+    p_textureHeight->GetText()->SetContent(
+                String::ToString(GetTexture()->GetHeight()) + " px");
 }
 
 Texture2D *RIWTexture::GetIconTexture() const

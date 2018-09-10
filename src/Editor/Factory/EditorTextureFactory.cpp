@@ -298,6 +298,14 @@ Color EditorTextureFactory::GetComponentIconTint(const String &componentName)
     {
         return Color::White.WithValue(0.2f);
     }
+    else if (componentName == "AudioSource")
+    {
+        return Color::White.WithValue(0.2f);
+    }
+    else if (componentName == "AudioListener")
+    {
+        return Color::White.WithValue(0.2f);
+    }
     else if (componentName == "BehaviourContainer")
     {
         return Color::White.WithValue(0.2f);

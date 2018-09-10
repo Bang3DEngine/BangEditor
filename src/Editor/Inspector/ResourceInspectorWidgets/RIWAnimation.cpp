@@ -1,9 +1,12 @@
 #include "BangEditor/RIWAnimation.h"
 
+#include "Bang/UILabel.h"
 #include "Bang/UISlider.h"
 #include "Bang/UIComboBox.h"
 #include "Bang/Extensions.h"
+#include "Bang/UIInputText.h"
 #include "Bang/UIInputNumber.h"
+#include "Bang/UITextRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/EditorTextureFactory.h"
@@ -35,8 +38,14 @@ void RIWAnimation::Init()
     p_wrapModeInput->AddItem("PingPong", SCAST<int>(AnimationWrapMode::PING_PONG));
     p_wrapModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
+    p_durationInSeconds = GameObjectFactory::CreateUIInputText();
+    p_durationInSeconds->SetBlocked(true);
+
     AddWidget("Speed", p_speedInput->GetGameObject());
     AddWidget("Wrap Mode", p_wrapModeInput->GetGameObject());
+    AddWidget( GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5) );
+    AddWidget("Duration ", p_durationInSeconds->GetGameObject());
+
     SetLabelsWidth(130);
 }
 
@@ -50,6 +59,11 @@ void RIWAnimation::UpdateInputsFromResource()
     p_speedInput->SetValue( GetAnimation()->GetSpeed() );
     p_wrapModeInput->SetSelectionByValue(
                 SCAST<int>(GetAnimation()->GetWrapMode()) );
+
+    float durationSecs = GetAnimation()->GetDurationInFrames() /
+                         Math::Max(1.0f, GetAnimation()->GetFramesPerSecond());
+    p_durationInSeconds->GetText()->SetContent(
+                                      String::ToString(durationSecs) + " s.");
 }
 
 Texture2D *RIWAnimation::GetIconTexture() const

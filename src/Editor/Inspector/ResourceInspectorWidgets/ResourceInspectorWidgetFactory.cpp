@@ -9,6 +9,7 @@
 #include "BangEditor/RIWTexture.h"
 #include "BangEditor/RIWMaterial.h"
 #include "BangEditor/RIWAnimation.h"
+#include "BangEditor/RIWAudioClip.h"
 #include "BangEditor/RIWBehaviour.h"
 #include "BangEditor/RIWTextureCubeMap.h"
 #include "BangEditor/RIWPhysicsMaterial.h"
@@ -24,7 +25,7 @@ InspectorWidget *ResourceInspectorWidgetFactory::Create(const Path &path)
     {
         riw = GameObject::Create<RIWMaterial>();
     }
-    if (path.HasExtension(Extensions::GetPhysicsMaterialExtension()))
+    else if (path.HasExtension(Extensions::GetPhysicsMaterialExtension()))
     {
         riw = GameObject::Create<RIWPhysicsMaterial>();
     }
@@ -36,9 +37,13 @@ InspectorWidget *ResourceInspectorWidgetFactory::Create(const Path &path)
     {
         riw = GameObject::Create<RIWModel>();
     }
-    if (path.HasExtension(Extensions::GetMeshExtension()))
+    else if (path.HasExtension(Extensions::GetMeshExtension()))
     {
         riw = GameObject::Create<RIWMesh>();
+    }
+    else if (path.HasExtension(Extensions::GetAudioClipExtensions()))
+    {
+        riw = GameObject::Create<RIWAudioClip>();
     }
     else if (path.HasExtension(Extensions::GetAnimationExtension()))
     {

@@ -13,6 +13,7 @@ FORWARD class UISlider;
 FORWARD class Texture2D;
 FORWARD class UIComboBox;
 FORWARD class UICheckBox;
+FORWARD class UIInputText;
 FORWARD class UIImageRenderer;
 FORWARD class UIAspectRatioFitter;
 FORWARD NAMESPACE_BANG_END
@@ -34,6 +35,8 @@ private:
     UISlider *p_alphaCutoffInput = nullptr;
     UICheckBox *p_SRGBCheckBoxInput = nullptr;
 
+    UIInputText *p_textureWidth  = nullptr;
+    UIInputText *p_textureHeight = nullptr;
     UIImageRenderer *p_textureImageRend = nullptr;
     UIAspectRatioFitter *p_imageAspectRatioFitter = nullptr;
 

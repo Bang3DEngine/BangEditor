@@ -1,40 +1,40 @@
-#ifndef RIWANIMATION_H
-#define RIWANIMATION_H
+#ifndef RIWAUDIOCLIP_H
+#define RIWAUDIOCLIP_H
 
 #include "Bang/Bang.h"
-#include "Bang/Animation.h"
+#include "Bang/AudioClip.h"
 
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UISlider;
-FORWARD class UIComboBox;
+FORWARD class UIButton;
 FORWARD class UIInputText;
 FORWARD class UIInputNumber;
 FORWARD NAMESPACE_BANG_END
 
-
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class RIWAnimation : public RIWResource<Animation>
+class RIWAudioClip : public RIWResource<AudioClip>
 {
-    GAMEOBJECT_EDITOR(RIWAnimation);
+    GAMEOBJECT_EDITOR(RIWAudioClip);
 
 public:
     // InspectorWidget
     void Init() override;
 
 private:
-    UIInputNumber *p_speedInput = nullptr;
-    UIComboBox *p_wrapModeInput = nullptr;
+    UIInputText *p_duration = nullptr;
+    UIInputText *p_frequency = nullptr;
+    UIInputNumber *p_bitDepth = nullptr;
+    UIInputNumber *p_bufferSize = nullptr;
+    UIInputNumber *p_numChannels = nullptr;
 
-    UIInputText *p_durationInSeconds = nullptr;
+	RIWAudioClip();
+	virtual ~RIWAudioClip();
 
-    RIWAnimation();
-    virtual ~RIWAnimation();
-
-    Animation *GetAnimation() const;
+    AudioClip* GetAudioClip() const;
 
     // RIWResource
     void UpdateInputsFromResource() override;
@@ -43,11 +43,9 @@ private:
     // RIWResource
     void OnValueChangedRIWResource(
                         EventEmitter<IEventsValueChanged> *object) override;
-
-    friend class ResourceInspectorWidgetFactory;
 };
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // RIWANIMATION_H
+#endif // RIWAUDIOCLIP_H
 

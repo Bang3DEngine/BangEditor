@@ -775,6 +775,7 @@ void MenuBar::OnCreateCamera(MenuItem *item)
     GameObject *camGameObject = GameObjectFactory::CreateGameObject();
     camGameObject->SetName("Camera");
     camGameObject->AddComponent<Camera>();
+    camGameObject->AddComponent<AudioListener>();
     MenuBar::OnEndCreateGameObjectFromMenuBar(camGameObject);
 }
 
