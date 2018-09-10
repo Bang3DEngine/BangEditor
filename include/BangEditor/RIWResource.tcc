@@ -44,6 +44,7 @@ void RIWResource<T>::SetResource(RH<T> &resource)
 
             UpdateIcon();
             OnResourceChanged( GetResource().Get() );
+            OnResourceSet();
         }
     }
 }
@@ -112,6 +113,12 @@ Array<Path> RIWResource<T>::GetUndoRedoPaths() const
         return { MetaFilesManager::GetMetaFilepath(res->GetGUID()) };
     }
     return {};
+}
+
+template<class T>
+void RIWResource<T>::OnResourceSet()
+{
+    // Empty
 }
 
 template<class T>

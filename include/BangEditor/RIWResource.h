@@ -41,6 +41,7 @@ protected:
                         EventEmitter<IEventsValueChanged> *object) = 0;
     virtual void UpdateInputsFromResource() = 0;
     virtual Array<Path> GetUndoRedoPaths() const;
+    virtual void OnResourceSet();
 
     // ResourceInspectorWidget
     virtual void UpdateFromFileWhenChanged() override;

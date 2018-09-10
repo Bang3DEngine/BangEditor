@@ -8,6 +8,10 @@
 
 #include "BangEditor/RIWResource.h"
 
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UIInputNumber;
+FORWARD NAMESPACE_BANG_END
+
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
@@ -24,12 +28,20 @@ public:
 private:
     PreviewViewer *p_modelPreviewViewer = nullptr;
 
+    UIInputNumber *p_numMeshes = nullptr;
+    UIInputNumber *p_numVertices  = nullptr;
+    UIInputNumber *p_numTriangles = nullptr;
+    UIInputNumber *p_numBones  = nullptr;
+    UIInputNumber *p_numMaterials = nullptr;
+    UIInputNumber *p_numAnimations = nullptr;
+
     RIWModel();
     virtual ~RIWModel();
 
     Model *GetModel() const;
 
     // RIWResource
+    void OnResourceSet() override;
     void UpdateInputsFromResource() override;
     Texture2D *GetIconTexture() const override;
 

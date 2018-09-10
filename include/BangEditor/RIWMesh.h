@@ -3,6 +3,7 @@
 
 #include "Bang/Path.h"
 #include "Bang/Mesh.h"
+#include "Bang/UIInputNumber.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/IEventsValueChanged.h"
 
@@ -23,6 +24,9 @@ public:
 
 private:
     PreviewViewer *p_meshPreviewViewer = nullptr;
+    UIInputNumber *p_numVertices  = nullptr;
+    UIInputNumber *p_numTriangles = nullptr;
+    UIInputNumber *p_numBones = nullptr;
 
     RIWMesh();
     virtual ~RIWMesh();
@@ -30,6 +34,7 @@ private:
     Mesh *GetMesh() const;
 
     // RIWResource
+    void OnResourceSet() override;
     void UpdateInputsFromResource() override;
     Texture2D* GetIconTexture() const override;
 
