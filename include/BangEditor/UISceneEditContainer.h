@@ -42,6 +42,7 @@ public:
     void Render(RenderPass rp, bool renderChildren) override;
 
     void HandleSelection();
+    static bool IsMouseOver();
     static Vector2i GetMousePositionInOpenScene();
 
 private:
@@ -84,6 +85,7 @@ private:
 
     // IEventsSceneManager
     void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
+    static UISceneEditContainer *GetActive();
 };
 
 NAMESPACE_BANG_EDITOR_END

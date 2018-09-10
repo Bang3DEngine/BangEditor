@@ -9,6 +9,7 @@
 #include "Bang/Camera.h"
 #include "Bang/Sphere.h"
 #include "Bang/Window.h"
+#include "Bang/UICanvas.h"
 #include "Bang/Transform.h"
 #include "Bang/SceneManager.h"
 #include "Bang/GameObjectFactory.h"
@@ -17,6 +18,7 @@
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditSceneGameObjects.h"
 #include "BangEditor/SelectionFramebuffer.h"
+#include "BangEditor/UISceneEditContainer.h"
 #include "BangEditor/NotSelectableInEditor.h"
 
 USING_NAMESPACE_BANG
@@ -93,19 +95,22 @@ void EditorCamera::UpdateRotationVariables()
 void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
 {
     // Update zoom value
-    float mouseWheel = Input::GetMouseWheel().y * m_mouseZoomPerDeltaWheel;
-    m_zoomCurrentSpeed = mouseWheel + (m_zoomCurrentSpeed * 0.5f); // Lerp
-
-    // Apply zoom
-    if (m_zoomCurrentSpeed != 0.0f)
+    if (UISceneEditContainer::IsMouseOver())
     {
-        if (p_cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
+        float mouseWheel = Input::GetMouseWheel().y * m_mouseZoomPerDeltaWheel;
+        m_zoomCurrentSpeed = mouseWheel + (m_zoomCurrentSpeed * 0.5f); // Lerp
+
+        // Apply zoom
+        if (m_zoomCurrentSpeed != 0.0f)
         {
-            *moveStep += m_zoomCurrentSpeed * p_camt->GetForward();
-            *hasMoved  = (mouseWheel != 0.0f);
+            if (p_cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
+            {
+                *moveStep += m_zoomCurrentSpeed * p_camt->GetForward();
+                *hasMoved  = (mouseWheel != 0.0f);
+            }
+            m_orthoHeight -= 2.75f * mouseWheel; // Magic number here :)
+            p_cam->SetOrthoHeight(m_orthoHeight);
         }
-        m_orthoHeight -= 2.75f * mouseWheel; // Magic number here :)
-        p_cam->SetOrthoHeight(m_orthoHeight);
     }
 }
 

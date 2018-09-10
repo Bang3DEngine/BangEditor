@@ -130,24 +130,24 @@ void UISceneEditContainer::HandleSelection()
     }
 }
 
+bool UISceneEditContainer::IsMouseOver()
+{
+    UISceneEditContainer *uisec = UISceneEditContainer::GetActive();
+    return UICanvas::GetActive(uisec)->IsMouseOver( uisec->GetSceneImage(), true );
+}
+
 Vector2i UISceneEditContainer::GetMousePositionInOpenScene()
 {
     Vector2i mousePosInOpenScene = Vector2i::Zero;
-    if (EditorSceneManager *esm = EditorSceneManager::GetActive())
+    if (UISceneEditContainer *sec = UISceneEditContainer::GetActive())
     {
-        if (EditorScene *edScene = esm->GetEditorScene())
-        {
-            if (UISceneEditContainer *sec = edScene->GetSceneEditContainer())
-            {
-                AARecti vp = GL::GetViewportRect();
-                AARecti sceneVPRect( sec->GetRectTransform()->GetViewportAARect() );
-                AARecti windowSceneRect = sceneVPRect + vp.GetMin();
-                Vector2i vpMousePos( GL::FromWindowPointToViewportPoint(
-                                        Vector2(Input::GetMousePositionWindow()),
-                                        windowSceneRect) );
-                mousePosInOpenScene = vpMousePos;
-            }
-        }
+        AARecti vp = GL::GetViewportRect();
+        AARecti sceneVPRect( sec->GetRectTransform()->GetViewportAARect() );
+        AARecti windowSceneRect = sceneVPRect + vp.GetMin();
+        Vector2i vpMousePos( GL::FromWindowPointToViewportPoint(
+                                Vector2(Input::GetMousePositionWindow()),
+                                windowSceneRect) );
+        mousePosInOpenScene = vpMousePos;
     }
     return mousePosInOpenScene;
 }
@@ -369,4 +369,19 @@ void UISceneEditContainer::OnPlayStateChanged(PlayState, PlayState)
 
 void UISceneEditContainer::OnSceneLoaded(Scene *scene, const Path&)
 {
+}
+
+UISceneEditContainer *UISceneEditContainer::GetActive()
+{
+    if (EditorSceneManager *esm = EditorSceneManager::GetActive())
+    {
+        if (EditorScene *edScene = esm->GetEditorScene())
+        {
+            if (UISceneEditContainer *sec = edScene->GetSceneEditContainer())
+            {
+                return sec;
+            }
+        }
+    }
+    return nullptr;
 }
