@@ -47,7 +47,10 @@ void CIWAudioSource::InitInnerWidgets()
     p_playOnStartCheckbox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_playStopButton = GameObjectFactory::CreateUIButton("Play");
-    p_playStopButton->AddClickedCallback([this]() { OnPlayClicked(); });
+    p_playStopButton->AddClickedCallback([this]()
+    {
+        OnPlayClicked();
+    });
 
     AddWidget("Audio clip",    p_audioClipFileInput);
     AddWidget("Range",         p_rangeInput->GetGameObject());

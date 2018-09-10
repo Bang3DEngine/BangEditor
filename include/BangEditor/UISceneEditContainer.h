@@ -2,6 +2,7 @@
 #define UISCENEEDITCONTAINER_H
 
 #include "Bang/Bang.h"
+#include "Bang/MetaNode.h"
 #include "Bang/Material.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/SceneManager.h"
@@ -52,7 +53,8 @@ private:
 
     RH<Material> m_currentMaterialBeingDragged;
     GameObject *p_lastOveredGameObject = nullptr;
-    Map<MeshRenderer*, RH<Material>> m_meshRenderersToPreviousMaterials;
+    MetaNode m_prevGameObjectMetaBeforeDraggingMaterial;
+    Map<MeshRenderer*, RH<Material>> m_matDragMeshRenderersToPrevMaterials;
 
     void RenderCameraPreviewIfSelected();
     Camera* GetSceneCamera(Scene *scene) override;

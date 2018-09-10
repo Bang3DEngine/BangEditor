@@ -78,7 +78,6 @@ ExplorerItem::ExplorerItem()
 
     p_dragDroppable = AddComponent<UIDragDroppable>();
 
-
     bgGo->SetParent(this);
     labelGo->SetParent(this);
     iconContainerGo->SetParent(this);
@@ -199,13 +198,22 @@ void ExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
         menuRootItem->SetFontSize(12);
 
         MenuItem *duplicate = menuRootItem->AddItem("Duplicate");
-        duplicate->SetSelectedCallback([this](MenuItem*) { Duplicate(); });
+        duplicate->SetSelectedCallback([this](MenuItem*)
+        {
+            Duplicate();
+        });
 
         MenuItem *rename = menuRootItem->AddItem("Rename");
-        rename->SetSelectedCallback([this](MenuItem*) { Rename(); });
+        rename->SetSelectedCallback([this](MenuItem*)
+        {
+            Rename();
+        });
 
         MenuItem *remove = menuRootItem->AddItem("Remove");
-        remove->SetSelectedCallback([this](MenuItem*) { Remove(); });
+        remove->SetSelectedCallback([this](MenuItem*)
+        {
+            Remove();
+        });
 
         MenuItem *copy = menuRootItem->AddItem("Copy");
         copy->SetSelectedCallback([this](MenuItem*)

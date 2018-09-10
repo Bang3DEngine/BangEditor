@@ -23,9 +23,11 @@
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/GizmosManager.h"
+#include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/NotSelectableInEditor.h"
+#include "BangEditor/UndoRedoSerializableChange.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -255,7 +257,7 @@ void UISceneEditContainer::ApplyDraggedMaterialToOveredGameObject()
         {
             RH<Material> prevMat = RH<Material>(mr->GetActiveMaterial());
             mr->SetMaterial( m_currentMaterialBeingDragged.Get() );
-            m_meshRenderersToPreviousMaterials.Add(mr, prevMat);
+            m_matDragMeshRenderersToPrevMaterials.Add(mr, prevMat);
         }
     }
 }
@@ -263,7 +265,7 @@ void UISceneEditContainer::ApplyDraggedMaterialToOveredGameObject()
 void UISceneEditContainer::RestoreDraggedMaterialToPreviousGameObjectOvered()
 {
     List<MeshRenderer*> restoredMeshRenderers;
-    for (const auto &pair : m_meshRenderersToPreviousMaterials)
+    for (const auto &pair : m_matDragMeshRenderersToPrevMaterials)
     {
         MeshRenderer *mr = pair.first;
         RH<Material> previousMat = pair.second;
@@ -273,7 +275,7 @@ void UISceneEditContainer::RestoreDraggedMaterialToPreviousGameObjectOvered()
 
     for (MeshRenderer *mr : restoredMeshRenderers)
     {
-        m_meshRenderersToPreviousMaterials.Remove(mr);
+        m_matDragMeshRenderersToPrevMaterials.Remove(mr);
     }
 }
 
@@ -322,12 +324,14 @@ void UISceneEditContainer::OnDragUpdate(EventEmitter<IEventsDragDrop> *dd_)
 
     if (m_currentMaterialBeingDragged)
     {
-        GameObject *currentOveredGameObject = GetCurrentOveredGameObject();
-        if (currentOveredGameObject != p_lastOveredGameObject)
+        GameObject *currentOveredGo = GetCurrentOveredGameObject();
+        if (currentOveredGo != p_lastOveredGameObject)
         {
             RestoreDraggedMaterialToPreviousGameObjectOvered();
 
-            p_lastOveredGameObject = currentOveredGameObject;
+            m_prevGameObjectMetaBeforeDraggingMaterial =
+                    currentOveredGo ? currentOveredGo->GetMeta() : MetaNode();
+            p_lastOveredGameObject = currentOveredGo;
             ApplyDraggedMaterialToOveredGameObject();
         }
     }
@@ -338,8 +342,15 @@ void UISceneEditContainer::OnDrop(EventEmitter<IEventsDragDrop> *dd_,
 {
     IEventsDragDrop::OnDrop(dd_, inside);
 
+    if (p_lastOveredGameObject)
+    {
+        UndoRedoManager::PushAction( new UndoRedoSerializableChange(
+                                p_lastOveredGameObject,
+                                m_prevGameObjectMetaBeforeDraggingMaterial,
+                                p_lastOveredGameObject->GetMeta()));
+    }
     m_currentMaterialBeingDragged.Set(nullptr);
-    m_meshRenderersToPreviousMaterials.Clear();
+    m_matDragMeshRenderersToPrevMaterials.Clear();
 
     Camera *edCam = EditorCamera::GetInstance()->GetCamera();
     edCam->AddRenderPass(RenderPass::OVERLAY);
@@ -359,7 +370,7 @@ void UISceneEditContainer::OnDestroyed(EventEmitter<IEventsDestroy> *object)
     MeshRenderer *mr = DCAST<MeshRenderer*>(mr);
     if (mr)
     {
-        m_meshRenderersToPreviousMaterials.Remove(mr);
+        m_matDragMeshRenderersToPrevMaterials.Remove(mr);
     }
 }
 
@@ -369,6 +380,7 @@ void UISceneEditContainer::OnPlayStateChanged(PlayState, PlayState)
 
 void UISceneEditContainer::OnSceneLoaded(Scene *scene, const Path&)
 {
+    BANG_UNUSED(scene);
 }
 
 UISceneEditContainer *UISceneEditContainer::GetActive()

@@ -10,13 +10,15 @@
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIButton;
 FORWARD class UIInputText;
+FORWARD class ALAudioSource;
 FORWARD class UIInputNumber;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class RIWAudioClip : public RIWResource<AudioClip>
+class RIWAudioClip : public RIWResource<AudioClip>,
+                     public EventListener<IEventsDestroy>
 {
     GAMEOBJECT_EDITOR(RIWAudioClip);
 
@@ -25,6 +27,9 @@ public:
     void Init() override;
 
 private:
+    UIButton *p_playStopButton = nullptr;
+    ALAudioSource *p_alAudioSourceBeingPlayed = nullptr;
+
     UIInputText *p_duration = nullptr;
     UIInputText *p_frequency = nullptr;
     UIInputNumber *p_bitDepth = nullptr;
@@ -34,15 +39,21 @@ private:
 	RIWAudioClip();
 	virtual ~RIWAudioClip();
 
+    void Play();
+    void Stop();
     AudioClip* GetAudioClip() const;
 
     // RIWResource
     void UpdateInputsFromResource() override;
     Texture2D *GetIconTexture() const override;
+    Color GetIconTint() const override;
 
     // RIWResource
     void OnValueChangedRIWResource(
                         EventEmitter<IEventsValueChanged> *object) override;
+
+    // IEventsDestroy
+    void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 };
 
 NAMESPACE_BANG_EDITOR_END
