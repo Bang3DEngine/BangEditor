@@ -56,6 +56,12 @@ void UndoRedoMoveGameObject::Redo()
     }
 }
 
+bool UndoRedoMoveGameObject::IsRedundant() const
+{
+    return (p_previousParent == p_newParent) &&
+           (m_indexInPreviousParent == m_indexInNewParent);
+}
+
 void UndoRedoMoveGameObject::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     p_movedGameObject = nullptr;

@@ -25,6 +25,7 @@ public:
 
     void Undo() override;
     void Redo() override;
+    bool IsRedundant() const override;
 
 private:
     GameObject *p_movedGameObject = nullptr;

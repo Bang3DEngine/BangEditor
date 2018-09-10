@@ -20,6 +20,7 @@ public:
     // UndoRedoAction
     void Undo() override;
     void Redo() override;
+    bool IsRedundant() const override;
 
 private:
     Path m_previousSelectedPath = Path::Empty;

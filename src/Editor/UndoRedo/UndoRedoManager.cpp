@@ -130,26 +130,36 @@ void UndoRedoManager::PushActionsInSameStep(
     ASSERT(urm);
     ASSERT(!urm->m_undoingOrRedoing);
 
+    bool allStepsRedundant = true;
     for (UndoRedoAction *pushedAction : actionsInSameStep)
     {
-        urm->EventEmitter<IEventsUndoRedo>::PropagateToListeners(
-                               &IEventsUndoRedo::OnActionPushed, pushedAction);
-    }
-
-    urm->m_undoActions.PushFront(actionsInSameStep);
-    urm->m_redoActions.Clear();
-
-    if (urm->m_undoActions.Size() > UndoListSize)
-    {
-        for (UndoRedoAction *action : urm->m_undoActions.Back())
+        if (!pushedAction->IsRedundant())
         {
-            delete action;
+            allStepsRedundant = false;
+            break;
         }
-        urm->m_undoActions.PopBack();
     }
 
-    // Debug_Peek(urm->m_undoActions);
-    // Debug_Peek(urm->m_redoActions);
+    if (!allStepsRedundant)
+    {
+        for (UndoRedoAction *pushedAction : actionsInSameStep)
+        {
+            urm->EventEmitter<IEventsUndoRedo>::PropagateToListeners(
+                                   &IEventsUndoRedo::OnActionPushed, pushedAction);
+        }
+
+        urm->m_undoActions.PushFront(actionsInSameStep);
+        urm->m_redoActions.Clear();
+
+        if (urm->m_undoActions.Size() > UndoListSize)
+        {
+            for (UndoRedoAction *action : urm->m_undoActions.Back())
+            {
+                delete action;
+            }
+            urm->m_undoActions.PopBack();
+        }
+    }
 }
 
 UndoRedoManager *UndoRedoManager::GetInstance()

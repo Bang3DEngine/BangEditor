@@ -54,8 +54,14 @@ void UndoRedoSerializableChange::Redo()
     }
 }
 
+bool UndoRedoSerializableChange::IsRedundant() const
+{
+    return (m_metaBefore.ToString() == m_metaAfter.ToString());
+}
+
 void UndoRedoSerializableChange::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
+    BANG_UNUSED(object);
     p_serializable = nullptr;
 }
 

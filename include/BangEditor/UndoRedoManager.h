@@ -18,9 +18,9 @@ class IEventsUndoRedo
     IEVENTS_NS(IEventsUndoRedo)
 
 public:
-    virtual void OnActionPushed(UndoRedoAction *action) { }
-    virtual void OnUndo(UndoRedoAction *action) { }
-    virtual void OnRedo(UndoRedoAction *action) { }
+    virtual void OnActionPushed(UndoRedoAction *action) { BANG_UNUSED(action); }
+    virtual void OnUndo(UndoRedoAction *action) { BANG_UNUSED(action); }
+    virtual void OnRedo(UndoRedoAction *action) { BANG_UNUSED(action); }
 };
 
 class UndoRedoManager : public EventEmitter<IEventsUndoRedo>

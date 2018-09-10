@@ -26,6 +26,11 @@ void UndoRedoExplorerSelect::Redo()
     RestorePath(m_newSelectedPath);
 }
 
+bool UndoRedoExplorerSelect::IsRedundant() const
+{
+    return (m_previousSelectedPath == m_newSelectedPath);
+}
+
 void UndoRedoExplorerSelect::RestorePath(const Path &path)
 {
     Explorer *explorer = Explorer::GetInstance();

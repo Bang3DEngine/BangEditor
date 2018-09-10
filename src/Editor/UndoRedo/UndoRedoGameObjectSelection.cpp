@@ -44,6 +44,11 @@ void UndoRedoGameObjectSelection::Redo()
     }
 }
 
+bool UndoRedoGameObjectSelection::IsRedundant() const
+{
+    return (p_previousSelectedGameObject == p_newSelectedGameObject);
+}
+
 void UndoRedoGameObjectSelection::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     if (object == p_previousSelectedGameObject)

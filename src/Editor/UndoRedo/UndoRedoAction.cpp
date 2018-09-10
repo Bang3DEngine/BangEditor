@@ -11,3 +11,8 @@ UndoRedoAction::~UndoRedoAction()
 {
 }
 
+bool UndoRedoAction::IsRedundant() const
+{
+    return false;
+}
+

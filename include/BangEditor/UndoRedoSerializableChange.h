@@ -26,8 +26,10 @@ public:
     void SetMetaBefore(const MetaNode &metaBefore);
     void SetMetaAfter(const MetaNode &metaAfter);
 
+    // UndoRedoAction
     void Undo() override;
     void Redo() override;
+    bool IsRedundant() const override;
 
 private:
     Serializable *p_serializable = nullptr;
