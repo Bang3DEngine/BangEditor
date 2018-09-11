@@ -33,8 +33,9 @@
 #include "BangEditor/EditorFileTracker.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/ComponentInspectorWidget.h"
-#include "BangEditor/ResourceInspectorWidgetFactory.h"
+#include "BangEditor/GameObjectInspectorWidget.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
+#include "BangEditor/ResourceInspectorWidgetFactory.h"
 #include "BangEditor/ComponentInspectorWidgetFactory.h"
 
 USING_NAMESPACE_BANG
@@ -144,6 +145,11 @@ void Inspector::OnStart()
 void Inspector::Update()
 {
     GameObject::Update();
+
+    if (p_currentGameObject)
+    {
+        p_titleText->SetContent( p_currentGameObject->GetName() );
+    }
 }
 
 void Inspector::ShowSerializable(Serializable *serializable)
@@ -218,6 +224,11 @@ void Inspector::ShowGameObject(GameObject *go)
         OnComponentAdded(comp, i);
         ++i;
     }
+
+    GameObjectInspectorWidget *giw = GameObject::Create<GameObjectInspectorWidget>();
+    giw->Init();
+    giw->SetGameObject(go);
+    AddWidget(giw, 0);
 }
 
 void Inspector::ShowInspectorWidget(InspectorWidget *inspectorWidget)

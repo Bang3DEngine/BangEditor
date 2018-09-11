@@ -33,28 +33,22 @@ protected:
 
     virtual void SetComponent(Component *comp);
 
-    void PushCurrentStateToUndoRedoIfAnyChangeForComponent(
+    void PushCurrentStateToUndoRedo(
                                                 const MetaNode &undoMetaBefore);
     void PushCurrentStateToUndoRedoIfAnyChangeForGameObject(
                                                 const MetaNode &undoMetaBefore);
-
-protected:
     Component *GetComponent() const;
     GameObject *GetInspectedGameObject() const;
 
     virtual void SetTitle(const String& title) override;
 
     virtual bool CanBeRemovedFromContextMenu() const;
-
     virtual Texture2D* GetComponentIconTexture() const;
     virtual Color GetComponentIconTint() const;
-
     virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object);
 
 private:
     Component *p_component = nullptr;
-
-    MetaNode m_undoMetaBefore;
     UIContextMenu *p_contextMenu = nullptr;
 
     // UIContextMenu

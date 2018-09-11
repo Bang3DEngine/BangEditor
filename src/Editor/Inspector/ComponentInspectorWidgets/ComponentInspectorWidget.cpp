@@ -107,7 +107,7 @@ void ComponentInspectorWidget::OnValueChanged(
 
     if (GetComponent())
     {
-        PushCurrentStateToUndoRedoIfAnyChangeForComponent(undoMetaBefore);
+        PushCurrentStateToUndoRedo(undoMetaBefore);
     }
 }
 
@@ -131,16 +131,13 @@ Color ComponentInspectorWidget::GetComponentIconTint() const
     return Color::White;
 }
 
-void ComponentInspectorWidget::PushCurrentStateToUndoRedoIfAnyChangeForComponent(
+void ComponentInspectorWidget::PushCurrentStateToUndoRedo(
                                                 const MetaNode &undoMetaBefore)
 {
     MetaNode currentMeta = GetComponent()->GetMeta();
-    if (currentMeta.ToString() != undoMetaBefore.ToString())
-    {
-        UndoRedoManager::PushAction( new UndoRedoSerializableChange(GetComponent(),
-                                                                    undoMetaBefore,
-                                                                    currentMeta) );
-    }
+    UndoRedoManager::PushAction( new UndoRedoSerializableChange(GetComponent(),
+                                                                undoMetaBefore,
+                                                                currentMeta) );
 }
 
 void ComponentInspectorWidget::PushCurrentStateToUndoRedoIfAnyChangeForGameObject(
@@ -201,7 +198,7 @@ void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
         MetaNode undoMetaBefore = GetComponent()->GetMeta();
         Component *copiedComp = EditorClipboard::GetCopiedComponent();
         copiedComp->CloneInto( GetComponent() );
-        PushCurrentStateToUndoRedoIfAnyChangeForComponent(undoMetaBefore);
+        PushCurrentStateToUndoRedo(undoMetaBefore);
     });
     pasteValues->SetOverAndActionEnabled( (EditorClipboard::HasCopiedComponent()) );
 

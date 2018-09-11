@@ -77,6 +77,9 @@ void HierarchyItem::SetReferencedGameObject(GameObject *referencedGameObject)
         p_refGameObject = referencedGameObject;
 
         SetText( GetReferencedGameObject()->GetName() );
+
+        GetReferencedGameObject()->
+                        EventEmitter<IEventsObject>::RegisterListener(this);
         GetReferencedGameObject()->
                         EventEmitter<IEventsName>::RegisterListener(this);
         SetName("HItem_" + GetReferencedGameObject()->GetName());
@@ -130,6 +133,30 @@ void HierarchyItem::CreatePrefab()
                 &IEventsHierarchyItem::OnCreatePrefab, this);
 }
 
+void HierarchyItem::UpdateEnabledDisabledColor()
+{
+    if (GetReferencedGameObject()->IsEnabled(true))
+    {
+        p_textRenderer->SetTextColor(Color::Black);
+    }
+    else
+    {
+        p_textRenderer->SetTextColor(Color::DarkGray);
+    }
+}
+
+void HierarchyItem::OnEnabled(Object *obj)
+{
+    GameObject::OnEnabled(obj);
+    UpdateEnabledDisabledColor();
+}
+
+void HierarchyItem::OnDisabled(Object *obj)
+{
+    GameObject::OnDisabled(obj);
+    UpdateEnabledDisabledColor();
+}
+
 void HierarchyItem::OnNameChanged(GameObject *go, const String &,
                                   const String &newName)
 {
@@ -146,39 +173,58 @@ void HierarchyItem::OnCreateContextMenu(MenuItem *menuRootItem)
 
     MenuItem *createPrefab = menuRootItem->AddItem("Create Prefab");
     createPrefab->SetSelectedCallback([this](MenuItem*)
-    { CreatePrefab(); });
+    {
+        CreatePrefab();
+    });
 
     menuRootItem->AddSeparator();
 
     MenuItem *copy = menuRootItem->AddItem("Copy");
-    copy->SetSelectedCallback([this](MenuItem*) { Copy(); });
+    copy->SetSelectedCallback([this](MenuItem*)
+    {
+        Copy();
+    });
 
     MenuItem *cut = menuRootItem->AddItem("Cut");
-    cut->SetSelectedCallback([this](MenuItem*) { Cut(); });
+    cut->SetSelectedCallback([this](MenuItem*)
+    {
+        Cut();
+    });
 
     MenuItem *paste = menuRootItem->AddItem("Paste");
-    paste->SetSelectedCallback([this](MenuItem*) { Paste(); });
+    paste->SetSelectedCallback([this](MenuItem*)
+    {
+        Paste();
+    });
     paste->SetOverAndActionEnabled( EditorClipboard::HasCopiedGameObject() );
 
     MenuItem *duplicate = menuRootItem->AddItem("Duplicate");
-    duplicate->SetSelectedCallback([this](MenuItem*) { Duplicate(); });
+    duplicate->SetSelectedCallback([this](MenuItem*)
+    {
+        Duplicate();
+    });
 
     menuRootItem->AddSeparator();
 
     MenuItem *rename = menuRootItem->AddItem("Rename");
-    rename->SetSelectedCallback([this](MenuItem*) { Rename(); });
+    rename->SetSelectedCallback([this](MenuItem*)
+    {
+        Rename();
+    });
 
     menuRootItem->AddSeparator();
 
     MenuItem *remove = menuRootItem->AddItem("Remove");
-    remove->SetSelectedCallback([this](MenuItem*) { Remove(); });
+    remove->SetSelectedCallback([this](MenuItem*)
+    {
+        Remove();
+    });
 }
 
 void HierarchyItem::SetText(const String &text)
 {
-    if (text != m_text)
+    if (text != p_textRenderer->GetContent())
     {
-        m_text = text;
         p_textRenderer->SetContent(text);
     }
 }

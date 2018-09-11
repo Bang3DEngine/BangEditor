@@ -43,8 +43,15 @@ public:
     void Duplicate();
     void CreatePrefab();
 
+    void UpdateEnabledDisabledColor();
+
+    // IEventsObject
+    void OnEnabled(Object *obj) override;
+    void OnDisabled(Object *obj) override;
+
     // IEventsName
-    void OnNameChanged(GameObject *go, const String &oldName,
+    void OnNameChanged(GameObject *go,
+                       const String &oldName,
                        const String &newName) override;
 
     // UIContextMenu callback
@@ -56,7 +63,6 @@ public:
     String ToString() const override;
 
 private:
-    String m_text = "";
     GameObject *p_refGameObject = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
     UITextRenderer *p_textRenderer = nullptr;
