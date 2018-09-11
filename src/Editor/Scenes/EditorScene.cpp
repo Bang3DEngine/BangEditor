@@ -182,6 +182,8 @@ void EditorScene::Init()
                                 EditorBehaviourManager::GetActive());
 
     ScenePlayer::StopScene();
+
+    AudioManager::SetPlayOnStartBlocked(true);
 }
 
 EditorScene::~EditorScene()
