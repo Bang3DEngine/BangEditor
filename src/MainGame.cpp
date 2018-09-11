@@ -9,37 +9,49 @@
 #include "Bang/SceneManager.h"
 #include "Bang/WindowManager.h"
 #include "Bang/BehaviourManager.h"
+#include "Bang/MetaFilesManager.h"
 #include "Bang/BehaviourContainer.h"
-#include "Bang/ImportFilesManager.h"
 
 USING_NAMESPACE_BANG
 
 int main(int argc, char **argv)
 {
+    Path execDir = (argc > 1) ? Path(argv[1]) : Paths::GetExecutableDir();
+
     // Get path and directories, and check for their existence.
-    Path execPath     = Paths::GetExecutablePath();
-    Path execDir      = execPath.GetDirectory();
     Path dataDir      = execDir.Append("Data");
     if (!dataDir.IsDir())
-    { Debug_Error("Could not find data directory '" << dataDir << "'."); return 1; }
+    {
+        Debug_Error("Could not find data directory '" << dataDir << "'.");
+        return 1;
+    }
 
     Path bangDataDir = dataDir.Append("Bang");
     if (!bangDataDir.IsDir())
-    { Debug_Error("Could not find bang data directory '" << bangDataDir << "'."); return 3; }
+    {
+        Debug_Error("Could not find bang data directory '" << bangDataDir << "'.");
+        return 3;
+    }
 
     Path gameAssetsDir = dataDir.Append("Assets");
     if (!gameAssetsDir.IsDir())
-    { Debug_Error("Could not find game assets directory '" << gameAssetsDir << "'."); return 4; }
+    {
+        Debug_Error("Could not find game assets directory '" << gameAssetsDir << "'.");
+        return 4;
+    }
 
     Path librariesDir = dataDir.Append("Libraries");
     if (!librariesDir.IsDir())
-    { Debug_Error("Could not find libraries directory '" << librariesDir << "'."); return 5; }
+    {
+        Debug_Error("Could not find libraries directory '" << librariesDir << "'.");
+        return 5;
+    }
 
     Application app;
     app.Init(bangDataDir);
 
-    ImportFilesManager::CreateMissingImportFiles(gameAssetsDir);
-    ImportFilesManager::LoadImportFilepathGUIDs(gameAssetsDir);
+    MetaFilesManager::CreateMissingMetaFiles(gameAssetsDir);
+    MetaFilesManager::LoadMetaFilepathGUIDs(gameAssetsDir);
 
     Paths::SetProjectRoot(dataDir);
 
@@ -48,7 +60,7 @@ int main(int argc, char **argv)
     mainWindow->SetTitle("Bang");
     mainWindow->Maximize();
 
-    List<Path> sceneFilepaths = gameAssetsDir.GetFiles(Path::FindFlag::RECURSIVE,
+    Array<Path> sceneFilepaths = gameAssetsDir.GetFiles(Path::FindFlag::RECURSIVE,
                                                 {Extensions::GetSceneExtension()});
     if (sceneFilepaths.IsEmpty())
     {
@@ -64,7 +76,7 @@ int main(int argc, char **argv)
 
     // Find the behaviours library
     Path behavioursLibPath;
-    List<Path> libPaths = librariesDir.GetFiles(Path::FindFlag::SIMPLE);
+    Array<Path> libPaths = librariesDir.GetFiles(Path::FindFlag::SIMPLE);
     for (const Path &libPath : libPaths)
     {
         if (libPath.GetExtension().Contains("so"))

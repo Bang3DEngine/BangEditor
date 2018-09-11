@@ -55,11 +55,11 @@ void GameBuilder::BuildGame(const String &gameName,
     }
 
     #define BANG_BUILD_GAME_CHECK_EXISTANCE(path) \
-    if (!path.Exists())  { Debug_Error("'" << path << "' not found."); return; }
+    if (!path.Exists()) { Debug_Error("'" << path << "' not found."); return; }
 
     const Path binariesDir = EditorPaths::GetEditorBinariesDir();
     const Path librariesDir = EditorPaths::GetEditorLibrariesDir();
-    const Path gameBinaryTemplatePath = binariesDir.Append("Game");
+    const Path gameBinaryTemplatePath = binariesDir.Append("GameTemplate");
     const Path gameBinaryPath = gameDir.Append(gameName).AppendExtension("exe");
     BANG_BUILD_GAME_CHECK_EXISTANCE(binariesDir);
     BANG_BUILD_GAME_CHECK_EXISTANCE(librariesDir);
@@ -67,7 +67,10 @@ void GameBuilder::BuildGame(const String &gameName,
 
     Debug_Log("Copying assets into data directory...");
     if (!GameBuilder::CreateDataDirectory(gameDir))
-    { Debug_Error("Could not create data directory"); return; }
+    {
+        Debug_Error("Could not create data directory");
+        return;
+    }
 
     if (compileBehaviours)
     {
@@ -137,12 +140,19 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
 {
     Path dataDir = executableDir.Append("Data");
     File::Remove(dataDir);
-    if (!File::CreateDirectory(dataDir)) { return false; }
+    if (!File::CreateDirectory(dataDir))
+    {
+        return false;
+    }
 
     // Copy the Engine needed directories into the Data directory
     Path bangDataDir = dataDir.Append("Bang");
     Path bangAssetsDataDir = bangDataDir.Append("Assets");
-    if (!File::CreateDirectory(bangDataDir)) { return false; }
+    if (!File::CreateDirectory(bangDataDir))
+    {
+        return false;
+    }
+
     if (!File::DuplicateDir(Paths::GetEngineAssetsDir(), bangAssetsDataDir))
     {
         Debug_Error("Could not duplicate engine assets directory '" <<

@@ -76,6 +76,7 @@ void HierarchyItem::SetReferencedGameObject(GameObject *referencedGameObject)
 
         p_refGameObject = referencedGameObject;
 
+        UpdateEnabledDisabledColor();
         SetText( GetReferencedGameObject()->GetName() );
 
         GetReferencedGameObject()->

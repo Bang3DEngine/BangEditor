@@ -19,6 +19,9 @@ set(BANG_EDITOR_BUILT ON)
 #=================================================================
 #=================================================================
 
+option(COMPILE_GAME_TEMPLATE "Whether to compile the game template needed to build games" ON)
+option(FORCE_NO_PIE "Whether to force no -pie build option." OFF)
+
 #=================================================================
 # Check input params and set some paths ==========================
 #=================================================================
@@ -140,8 +143,7 @@ target_include_directories(BangUndoRedoLib PUBLIC ${BANG_ENGINE_INCLUDE_DIRS} ${
 add_bang_compilation_flags(BangUndoRedoLib)
 remove_from_list_another_list(EDITOR_SRC_FILES "${BANG_UNDO_REDO_LIB_SOURCES}")
 
-set (COMPILE_GAME OFF)
-if (${COMPILE_GAME})
+if (${COMPILE_GAME_TEMPLATE})
     add_executable(GameTemplate ${SRC_DIR}/MainGame.cpp)
 endif()
 add_library(BangEditorObjects OBJECT ${EDITOR_SRC_FILES} ${OTHER_FILES})
@@ -151,7 +153,7 @@ add_executable(BangEditor ${SRC_DIR}/Main.cpp)
 add_bang_compilation_flags(BangEditorObjects)
 add_bang_compilation_flags(BangEditorLib)
 add_bang_compilation_flags(BangEditor)
-if (${COMPILE_GAME})
+if (${COMPILE_GAME_TEMPLATE})
     add_bang_compilation_flags(GameTemplate)
 endif()
 
@@ -161,7 +163,7 @@ if (NOT DEFINED FORCE_NO_PIE)
     set(FORCE_NO_PIE ON)
 endif()
 if (${FORCE_NO_PIE})
-    if (${COMPILE_GAME})
+    if (${COMPILE_GAME_TEMPLATE})
         set_target_properties(GameTemplate PROPERTIES LINK_FLAGS "-no-pie")
     endif()
     set_target_properties(BangEditorLib PROPERTIES LINK_FLAGS "-no-pie")
@@ -174,7 +176,7 @@ target_compile_definitions(BangEditorObjects PRIVATE -DBANG_ENGINE_ROOT="${BANG_
 target_compile_definitions(BangEditorObjects PRIVATE -DBANG_EDITOR_ROOT="${BANG_EDITOR_ROOT_DEFINE}")
 target_include_directories(BangEditorObjects PRIVATE ${BANG_ENGINE_INCLUDE_DIRS} ${BANG_EDITOR_INCLUDE_DIR})
 
-if (${COMPILE_GAME})
+if (${COMPILE_GAME_TEMPLATE})
     target_compile_definitions(GameTemplate PRIVATE -DBANG_ENGINE_ROOT="${BANG_ENGINE_ROOT_DEFINE}")
     target_compile_definitions(GameTemplate PRIVATE -DBANG_EDITOR_ROOT="${BANG_EDITOR_ROOT_DEFINE}")
     target_include_directories(GameTemplate PRIVATE ${BANG_ENGINE_INCLUDE_DIRS} ${BANG_EDITOR_INCLUDE_DIR})
