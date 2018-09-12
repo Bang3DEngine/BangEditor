@@ -4,7 +4,10 @@
 #include "Bang/Animation.h"
 #include "Bang/Resources.h"
 #include "Bang/Extensions.h"
+#include "Bang/UICheckBox.h"
+#include "Bang/GameObjectFactory.h"
 
+#include "BangEditor/UIInputArray.h"
 #include "BangEditor/UIInputFileWithPreview.h"
 
 USING_NAMESPACE_BANG
@@ -25,14 +28,31 @@ void CIWAnimator::InitInnerWidgets()
     SetName("CIWAnimator");
     SetTitle("Animator");
 
-    p_animationInput = GameObject::Create<UIInputFileWithPreview>();
-    p_animationInput->SetExtensions( {Extensions::GetAnimationExtension()} );
-    p_animationInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-    p_animationInput->SetZoomable(false);
+    p_animationsInput = GameObject::Create<UIInputArray>();
+    p_animationsInput->SetGetNewElementFunction([this]()
+    {
+        return CreateAnimationEntry();
+    });
+    p_animationsInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    AddWidget("Animation", p_animationInput);
+    p_playOnStartInput = GameObjectFactory::CreateUICheckBox();
+    p_playOnStartInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    SetLabelsWidth(75);
+    AddWidget("Play on start", p_playOnStartInput->GetGameObject());
+    AddWidget(GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5));
+    AddLabel("Animations");
+    AddWidget(p_animationsInput, -1);
+
+    SetLabelsWidth(90);
+}
+
+UIInputFileWithPreview* CIWAnimator::CreateAnimationEntry()
+{
+    UIInputFileWithPreview *entry = GameObject::Create<UIInputFileWithPreview>();
+    entry->SetExtensions( {Extensions::GetAnimationExtension()} );
+    entry->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    entry->SetZoomable(false);
+    return entry;
 }
 
 void CIWAnimator::UpdateFromReference()
@@ -41,9 +61,34 @@ void CIWAnimator::UpdateFromReference()
 
     Animator *animator = GetAnimator();
 
-    p_animationInput->SetPath( animator->GetAnimation() ?
-                                 animator->GetAnimation()->GetResourceFilepath() :
-                                 Path::Empty);
+    const Array<RH<Animation>>& animsRHs = animator->GetAnimations();
+
+    // Add new ones
+    for (uint i = p_animationsInput->Size(); i < animsRHs.Size(); ++i)
+    {
+        UIInputFileWithPreview *inputFile = CreateAnimationEntry();
+        p_animationsInput->AddElement(inputFile);
+    }
+
+    // Update old and new ones
+    const uint minSize = Math::Min(animsRHs.Size(), p_animationsInput->Size());
+    for (uint i = 0; i < minSize; ++i)
+    {
+        UIInputFileWithPreview *inputFile =
+            SCAST<UIInputFileWithPreview*>(p_animationsInput->GetArray()[i]);
+        if (Animation *animation = animsRHs[i].Get())
+        {
+            inputFile->SetPath( animation->GetResourceFilepath() );
+        }
+    }
+
+    // Remove if there are more
+    for (uint i = animsRHs.Size(); i < p_animationsInput->Size(); ++i)
+    {
+        p_animationsInput->RemoveElement(i);
+    }
+
+    p_playOnStartInput->SetChecked( GetAnimator()->GetPlayOnStart() );
 }
 
 void CIWAnimator::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
@@ -52,12 +97,50 @@ void CIWAnimator::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 
     Animator *animator = GetAnimator();
 
-    if (object == p_animationInput)
+    if (object == p_animationsInput)
     {
-        RH<Animation> animation =
-                    Resources::Load<Animation>(p_animationInput->GetPath());
-        animator->SetAnimation(animation.Get());
+        // Add or update
+        for (uint i = 0; i < p_animationsInput->Size(); ++i)
+        {
+            UIInputFileWithPreview *inputFile =
+                SCAST<UIInputFileWithPreview*>(p_animationsInput->GetArray()[i]);
+            RH<Animation> animationRH =
+                    Resources::Load<Animation>(inputFile->GetPath());
+            if (i < animator->GetAnimations().Size())
+            {
+                animator->SetAnimation(i, animationRH.Get());
+            }
+            else
+            {
+                animator->AddAnimation(animationRH.Get(), i);
+            }
+        }
+
+        // Remove
+        for (uint i = p_animationsInput->Size();
+             i < animator->GetAnimations().Size();
+             ++i)
+        {
+            animator->RemoveAnimation(i);
+        }
     }
+    else
+    {
+        ASSERT(p_animationsInput->Size() == animator->GetAnimations().Size());
+        for (uint i = 0; i < p_animationsInput->Size(); ++i)
+        {
+            GameObject *inputFileGo = p_animationsInput->GetArray()[i];
+            auto inputFile = SCAST<UIInputFileWithPreview*>(inputFileGo);
+            RH<Animation> animationRH = Resources::Load<Animation>(inputFile->GetPath());
+            animator->SetAnimation(i, animationRH.Get());
+        }
+
+        if (object == p_playOnStartInput)
+        {
+            GetAnimator()->SetPlayOnStart( p_playOnStartInput->IsChecked() );
+        }
+    }
+
 }
 
 Animator *CIWAnimator::GetAnimator() const

@@ -68,6 +68,16 @@ bool EditorTextureFactory::IsIconAnImage(const Path &path)
            !path.HasExtension(Extensions::GetMaterialExtension());
 }
 
+Texture2D *EditorTextureFactory::GetAddIcon()
+{
+    return EditorTextureFactory::GetTexture2D("Add.png");
+}
+
+Texture2D *EditorTextureFactory::GetLessIcon()
+{
+    return EditorTextureFactory::GetTexture2D("Less.png");
+}
+
 Texture2D* EditorTextureFactory::GetRotateIcon()
 {
     return EditorTextureFactory::GetTexture2D("Rotate.png");
