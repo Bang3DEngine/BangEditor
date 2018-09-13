@@ -55,6 +55,7 @@ UIInputVector::~UIInputVector()
 void UIInputVector::SetSize(int size)
 {
     ASSERT(size >= 1 && size <= 4);
+    m_size = size;
     for (int i = 0; i < 4; ++i)
     {
         m_inputNumbers[i]->GetGameObject()->SetEnabled( i < size );
@@ -94,6 +95,11 @@ Vector3 UIInputVector::GetVector3() const
 Vector4 UIInputVector::GetVector4() const
 {
     return Vector4(Get(0), Get(1), Get(2), Get(3));
+}
+
+int UIInputVector::GetSize() const
+{
+    return m_size;
 }
 
 const Array<UIInputNumber *> UIInputVector::GetInputNumbers() const

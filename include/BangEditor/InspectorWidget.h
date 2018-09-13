@@ -50,6 +50,7 @@ protected:
     void AddWidget(const String &labelContent,
                    GameObject *widget,
                    int height = DefaultWidgetHeight);
+    void RemoveWidget(GameObject *widget);
 
     void SetWidgetEnabled(GameObject *widget, bool enabled);
 

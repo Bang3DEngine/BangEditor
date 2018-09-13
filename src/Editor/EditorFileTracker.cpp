@@ -53,6 +53,11 @@ void EditorFileTracker::OnPathRenamed(const Path &previousPath, const Path &newP
     MetaFilesManager::OnFilepathRenamed(previousPath, newPath);
 }
 
+Time::TimeT EditorFileTracker::GetModificationTime(const Path &path) const
+{
+    return m_fileTracker->GetModificationTime(path);
+}
+
 const USet<Path> &EditorFileTracker::GetTrackedPaths() const
 {
     return GetFileTracker()->GetTrackedPaths();

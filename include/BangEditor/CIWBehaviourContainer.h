@@ -1,8 +1,11 @@
 #ifndef CIWBEHAVIOURCONTAINER_H
 #define CIWBEHAVIOURCONTAINER_H
 
+#include "Bang/Time.h"
 #include "Bang/IEventsValueChanged.h"
+#include "Bang/BPReflectedVariable.h"
 
+#include "BangEditor/CIWBehaviour.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
@@ -29,8 +32,14 @@ public:
 private:
     UIInputFileWithPreview *p_sourceInputFile = nullptr;
 
+    CIWBehaviourHelper m_ciwBehaviourHelper;
+    Time::TimeT m_prevTimeHeaderChanged = 0;
+
     CIWBehaviourContainer();
     virtual ~CIWBehaviourContainer();
+
+    void UpdateFromReflection(const BPReflectedStruct &reflectStruct);
+    void UpdateInitializationMetaFromWidgets();
 
     // ComponentInspectorWidget
     void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;

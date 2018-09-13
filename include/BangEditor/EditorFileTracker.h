@@ -26,6 +26,8 @@ public:
     void CheckFiles();
     void OnPathRenamed(const Path &previousPath, const Path &newPath);
 
+    Time::TimeT GetModificationTime(const Path &path) const;
+
     const USet<Path>& GetTrackedPaths() const;
     Array<Path> GetTrackedPathsWithExtensions(
                                         const Array<String> &extensions) const;

@@ -35,6 +35,8 @@ public:
     Vector3 GetVector3() const;
     Vector4 GetVector4() const;
 
+    int GetSize() const;
+
     const Array<UIInputNumber*> GetInputNumbers() const;
 
     bool HasFocus() const;
@@ -47,6 +49,7 @@ protected:
     virtual ~UIInputVector();
 
 private:
+    int m_size = 4;
     Array<UIInputNumber*> m_inputNumbers;
 };
 

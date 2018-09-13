@@ -33,8 +33,7 @@ protected:
 
     virtual void SetComponent(Component *comp);
 
-    void PushCurrentStateToUndoRedo(
-                                                const MetaNode &undoMetaBefore);
+    void PushCurrentStateToUndoRedo(const MetaNode &undoMetaBefore);
     void PushCurrentStateToUndoRedoIfAnyChangeForGameObject(
                                                 const MetaNode &undoMetaBefore);
     Component *GetComponent() const;
@@ -56,6 +55,7 @@ private:
 
     void MoveComponent(Component *comp, int offset);
 
+    virtual void OnComponentSet();
     virtual bool MustShowEnabledCheckbox() const;
 
     // IEventsValueChanged

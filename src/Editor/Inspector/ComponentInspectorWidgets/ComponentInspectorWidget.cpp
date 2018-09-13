@@ -60,6 +60,7 @@ void ComponentInspectorWidget::SetComponent(Component *comp)
     UIImageRenderer *icon = GetInspectorWidgetTitle()->GetIcon();
     icon->SetImageTexture( GetComponentIconTexture() );
     icon->SetTint( GetComponentIconTint() );
+    OnComponentSet();
     Update();
 }
 
@@ -232,6 +233,11 @@ void ComponentInspectorWidget::MoveComponent(Component *comp, int offset)
     int newIndex = (prevIndex + offset + numComps) % numComps;
     go->RemoveComponent(comp);
     go->AddComponent(comp, newIndex);
+}
+
+void ComponentInspectorWidget::OnComponentSet()
+{
+    // Empty
 }
 
 bool ComponentInspectorWidget::MustShowEnabledCheckbox() const

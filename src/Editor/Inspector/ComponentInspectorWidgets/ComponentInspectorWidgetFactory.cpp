@@ -1,9 +1,11 @@
 #include "BangEditor/ComponentInspectorWidgetFactory.h"
 
+#include "Bang/Behaviour.h"
 #include "Bang/Component.h"
 
 #include "BangEditor/CIWCamera.h"
 #include "BangEditor/CIWAnimator.h"
+#include "BangEditor/CIWBehaviour.h"
 #include "BangEditor/CIWTransform.h"
 #include "BangEditor/CIWRigidBody.h"
 #include "BangEditor/CIWPointLight.h"
@@ -32,8 +34,13 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
                                 Component *component)
 {
     ComponentInspectorWidget *ciw = nullptr;
+
     String cName = component->GetClassName();
-    if (cName == "Transform")
+    if (DCAST<Behaviour*>(component))
+    {
+        ciw = GameObject::Create<CIWBehaviour>();
+    }
+    else if (cName == "Transform")
     {
         ciw = GameObject::Create<CIWTransform>();
     }

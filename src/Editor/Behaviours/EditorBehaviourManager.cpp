@@ -7,6 +7,7 @@
 #include "Bang/Behaviour.h"
 #include "Bang/Extensions.h"
 #include "Bang/Application.h"
+#include "Bang/BangPreprocessor.h"
 #include "Bang/CodePreprocessor.h"
 
 #include "BangEditor/Editor.h"
@@ -244,6 +245,7 @@ CompileBehaviourObjectAsync(const Path &behaviourPath)
     compileRunnable->m_behaviourManager = this;
     compileRunnable->m_behaviourPath = behaviourPath;
 
+    BangPreprocessor::Preprocess(behaviourPath.WithExtension("h"));
     bool compilingThreadStarted = m_compileThreadPool.TryStart(compileRunnable);
     if (compilingThreadStarted)
     {
@@ -270,13 +272,13 @@ RemoveBehaviourLibrariesOf(const String& behaviourName)
 
 void EditorBehaviourManager::RemoveOrphanBehaviourLibrariesAndObjects()
 {
-    Array<Path> behaviourSourcePaths = GetBehaviourSourcesPaths();
-    Array<Path> currentObjPaths = EditorFileTracker::GetInstance()->
+    // Clean up unused behaviours shared libs
+    Array<Path> currentSharedLibPaths = EditorFileTracker::GetInstance()->
                                   GetTrackedPathsWithExtensions({"so"});
     Library *behavioursLib = EditorBehaviourManager::GetActive()->
                              GetBehavioursLibrary();
     {
-        for (Path &libPath : currentObjPaths)
+        for (Path &libPath : currentSharedLibPaths)
         {
             if (!behavioursLib || (libPath != behavioursLib->GetLibraryPath()))
             {
@@ -285,12 +287,17 @@ void EditorBehaviourManager::RemoveOrphanBehaviourLibrariesAndObjects()
         }
     }
 
+    // Gather source names
     Array<String> behaviourSourcesNames;
+    Array<Path> behaviourSourcePaths = GetBehaviourSourcesPaths();
     for (const Path &behaviourSourcePath : behaviourSourcePaths)
     {
         behaviourSourcesNames.PushBack( behaviourSourcePath.GetName() );
     }
 
+    // Clean up unused obj's
+    Array<Path> currentObjPaths = EditorFileTracker::GetInstance()->
+                                  GetTrackedPathsWithExtensions({"o"});
     for (const Path &objPath : currentObjPaths)
     {
         if (!behaviourSourcesNames.Contains( objPath.GetName() ))
@@ -298,6 +305,9 @@ void EditorBehaviourManager::RemoveOrphanBehaviourLibrariesAndObjects()
             File::Remove(objPath);
         }
     }
+
+    // Clean up unused metas
+    MetaFilesManager::CreateMissingMetaFiles(EditorPaths::GetProjectLibrariesDir());
 }
 
 void EditorBehaviourManager::CompileAllProjectBehaviours()
