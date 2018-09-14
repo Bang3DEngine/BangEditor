@@ -3,6 +3,7 @@
 #include "Bang/File.h"
 #include "Bang/Debug.h"
 #include "Bang/Extensions.h"
+#include "Bang/MetaFilesManager.h"
 
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/QtProjectManager.h"
@@ -66,6 +67,9 @@ void BehaviourCreator::CreateNewBehaviour(const Path &dirPath,
 
     File::Write(headerPath, BehaviourCreator::GetNewBehaviourHeaderCode(behaviourName));
     File::Write(sourcePath, BehaviourCreator::GetNewBehaviourSourceCode(behaviourName));
+
+    MetaFilesManager::CreateMetaFileIfMissing(headerPath);
+    MetaFilesManager::CreateMetaFileIfMissing(sourcePath);
 
     QtProjectManager::CreateQtProjectFile();
 

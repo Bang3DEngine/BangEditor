@@ -5,6 +5,7 @@
 #include "Bang/Array.h"
 #include "Bang/Paths.h"
 #include "Bang/Debug.h"
+#include "Bang/Thread.h"
 #include "Bang/SystemUtils.h"
 
 #include "BangEditor/Project.h"
@@ -100,13 +101,13 @@ void QtProjectManager::OpenBehaviourInQtCreator(const Path &behFilepath)
     }
     args.PushBack(behFilepath.GetAbsolute());
 
-    bool ok = false;
-    SystemUtils::System("qtcreator", args, nullptr, &ok);
-
-    if (!ok)
+    Thread *runBGThread = new Thread();
+    runBGThread->SetRunnable(new ThreadRunnableLambda([args]()
     {
-        SystemUtils::System("xdg-open", {behFilepath.GetAbsolute()});
-    }
+        SystemUtils::System("qtcreator", args, nullptr, nullptr);
+    }));
+    runBGThread->Start();
+    runBGThread->Detach();
 }
 
 QtProjectManager::QtProjectManager()

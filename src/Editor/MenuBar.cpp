@@ -482,9 +482,10 @@ void MenuBar::OnCreatePhysicsMaterial(MenuItem*)
                                        Extensions::GetPhysicsMaterialExtension());
 }
 
-void MenuBar::OnCreateTextureCubeMap(MenuItem *item)
+void MenuBar::OnCreateTextureCubeMap(MenuItem*)
 {
-    OnCreateAssetFile<TextureCubeMap>("CubeMap", Extensions::GetTextureCubeMapExtension());
+    OnCreateAssetFile<TextureCubeMap>("CubeMap",
+                                      Extensions::GetTextureCubeMapExtension());
 }
 
 template <class T>
@@ -507,7 +508,7 @@ T* OnAddComponent()
     return comp;
 }
 
-void MenuBar::OnAddAnimator(MenuItem *item)
+void MenuBar::OnAddAnimator(MenuItem*)
 {
     OnAddComponent<Animator>();
 }
@@ -532,7 +533,10 @@ void MenuBar::OnAddNewBehaviour(MenuItem*)
                               "Please, the name of the new Behaviour: ",
                               "NewBehaviour");
 
-        if (behaviourName == "") { return; }
+        if (behaviourName == "")
+        {
+            return;
+        }
     }
     while (!BehaviourCreator::CanCreateNewBehaviour(behaviourDir, behaviourName));
 
@@ -609,17 +613,17 @@ void MenuBar::OnAddMeshRenderer(MenuItem*)
     OnAddComponent<MeshRenderer>();
 }
 
-void MenuBar::OnAddSkinnedMeshRenderer(MenuItem *item)
+void MenuBar::OnAddSkinnedMeshRenderer(MenuItem*)
 {
     OnAddComponent<SkinnedMeshRenderer>();
 }
 
-void MenuBar::OnAddWaterRenderer(MenuItem *item)
+void MenuBar::OnAddWaterRenderer(MenuItem*)
 {
     OnAddComponent<WaterRenderer>();
 }
 
-void MenuBar::OnAddReflectionProbe(MenuItem *item)
+void MenuBar::OnAddReflectionProbe(MenuItem*)
 {
     OnAddComponent<ReflectionProbe>();
 }
@@ -729,12 +733,12 @@ void MenuBar::OnAddPostProcessEffect(MenuItem*)
     OnAddComponent<PostProcessEffect>();
 }
 
-void MenuBar::OnAddSSAO(MenuItem *item)
+void MenuBar::OnAddSSAO(MenuItem*)
 {
     OnAddComponent<PostProcessEffectSSAO>();
 }
 
-void MenuBar::OnAddRigidBody(MenuItem *item)
+void MenuBar::OnAddRigidBody(MenuItem*)
 {
     OnAddComponent<RigidBody>();
 }
@@ -758,7 +762,7 @@ void MenuBar::OnCreateCube(MenuItem*)
                 GameObjectFactory::CreateCubeGameObject() );
 }
 
-void MenuBar::OnCreateCapsule(MenuItem *item)
+void MenuBar::OnCreateCapsule(MenuItem*)
 {
     MenuBar::OnEndCreateGameObjectFromMenuBar(
                 GameObjectFactory::CreateCapsuleGameObject() );
@@ -770,7 +774,7 @@ void MenuBar::OnCreateSphere(MenuItem*)
                 GameObjectFactory::CreateSphereGameObject() );
 }
 
-void MenuBar::OnCreateCamera(MenuItem *item)
+void MenuBar::OnCreateCamera(MenuItem*)
 {
     GameObject *camGameObject = GameObjectFactory::CreateGameObject();
     camGameObject->SetName("Camera");
@@ -851,7 +855,11 @@ void MenuBar::OnEndCreateGameObjectFromMenuBar(GameObject *go)
 void MenuBar::OnEndCreateUIGameObjectFromMenuBar(GameObject *uiGo)
 {
     GameObject *parentGo = Editor::GetSelectedGameObject();
-    if (!parentGo) { parentGo = EditorSceneManager::GetOpenScene(); }
+    if (!parentGo)
+    {
+        parentGo = EditorSceneManager::GetOpenScene();
+    }
+
     if (parentGo)
     {
         uiGo->SetParent(parentGo);
