@@ -68,8 +68,8 @@ protected:
                             const ResourcePreviewFactoryParameters &params);
 
 private:
-    UMap<GUID, RH<Texture2D>> m_previewsMap;
     Array<RH<T>> m_previewsResources;
+    UMap<GUID, RH<Texture2D>> m_previewsMap;
     UMap<GUID, ResourcePreviewFactoryParameters> m_lastPreviewParameters;
 
     Scene *m_previewScene = nullptr;

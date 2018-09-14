@@ -116,7 +116,10 @@ void SelectionFramebuffer::SetDrawOverlay(bool drawOverlay)
 void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 {
     ASSERT(GL::IsBound(this));
-    if (!rend->GetActiveMaterial()) { return; }
+    if (!rend->GetActiveMaterial())
+    {
+        return;
+    }
 
     GameObject *go = p_nextRenderSelectable ? p_nextRenderSelectable :
                                               rend->GetGameObject();
