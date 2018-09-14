@@ -81,15 +81,23 @@ Console::~Console()
 void Console::Update()
 {
     GameObject::Update();
+
+    for (const ConsoleMessage &cMsg : m_queuedMessages)
+    {
+        ConsoleUIListEntry *entryGo = GameObject::Create<ConsoleUIListEntry>();
+        entryGo->SetConsoleMessage(cMsg);
+        p_messageList->AddItem(entryGo);
+        m_messages.PushBack(cMsg);
+        p_messageList->ScrollToEnd();
+    }
+    m_queuedMessages.Clear();
 }
 
 void Console::AddMessage(const ConsoleMessage &cMsg)
 {
-    ConsoleUIListEntry *entryGo = GameObject::Create<ConsoleUIListEntry>();
-    entryGo->SetConsoleMessage(cMsg);
-    p_messageList->AddItem(entryGo);
-    m_messages.PushBack(cMsg);
-    p_messageList->ScrollToEnd();
+    m_mutex.Lock();
+    m_queuedMessages.PushBack(cMsg);
+    m_mutex.UnLock();
 }
 
 void Console::Clear()
@@ -103,20 +111,15 @@ void Console::OnMessage(DebugMessageType msgType,
                         int line,
                         const String &fileName)
 {
-    bool isMainThread = (Thread::GetCurrentThreadId() ==
-                         Application::GetMainThreadId());
-    if (isMainThread)
+    if (msgType != DebugMessageType::DLOG)
     {
-        if (msgType != DebugMessageType::DLOG)
-        {
-            ConsoleMessage cMsg;
-            cMsg.msgType = msgType;
-            cMsg.msgStr = str;
-            cMsg.line = line;
-            cMsg.fileName = fileName;
+        ConsoleMessage cMsg;
+        cMsg.msgType = msgType;
+        cMsg.msgStr = str;
+        cMsg.line = line;
+        cMsg.fileName = fileName;
 
-            AddMessage(cMsg);
-        }
+        AddMessage(cMsg);
     }
 }
 

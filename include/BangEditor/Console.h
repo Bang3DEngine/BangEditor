@@ -2,6 +2,7 @@
 #define CONSOLE_H
 
 #include "Bang/Debug.h"
+#include "Bang/Mutex.h"
 #include "Bang/UIList.h"
 #include "Bang/GameObject.h"
 
@@ -33,8 +34,10 @@ class Console : public GameObject,
     GAMEOBJECT_EDITOR(Console);
 
 private:
+    Mutex m_mutex;
     UIList *p_messageList = nullptr;
     List<ConsoleMessage> m_messages;
+    Array<ConsoleMessage> m_queuedMessages;
 
     Console();
     virtual ~Console();

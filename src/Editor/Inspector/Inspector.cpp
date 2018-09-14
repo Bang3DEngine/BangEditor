@@ -218,17 +218,17 @@ void Inspector::ShowGameObject(GameObject *go)
     p_titleText->SetContent(go->GetName());
     GetCurrentGameObject()->EventEmitter<IEventsDestroy>::RegisterListener(this);
 
+    GameObjectInspectorWidget *giw = GameObject::Create<GameObjectInspectorWidget>();
+    giw->Init();
+    giw->SetGameObject(go);
+    AddWidget(giw, 0);
+
     int i = 0;
     for (Component *comp : go->GetComponents())
     {
         OnComponentAdded(comp, i);
         ++i;
     }
-
-    GameObjectInspectorWidget *giw = GameObject::Create<GameObjectInspectorWidget>();
-    giw->Init();
-    giw->SetGameObject(go);
-    AddWidget(giw, 0);
 }
 
 void Inspector::ShowInspectorWidget(InspectorWidget *inspectorWidget)
@@ -326,7 +326,7 @@ void Inspector::OnComponentAdded(Component *addedComponent, int index)
             ComponentInspectorWidgetFactory::Create(addedComponent))
     {
         m_objToWidget.Add(addedComponent, compWidget);
-        AddWidget(compWidget, index);
+        AddWidget(compWidget, index+1);
     }
 }
 
