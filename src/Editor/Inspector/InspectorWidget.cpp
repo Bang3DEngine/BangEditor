@@ -5,6 +5,7 @@
 #include "Bang/Resources.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UICheckBox.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/EventListener.h"
 #include "Bang/RectTransform.h"
 #include "Bang/TextureFactory.h"

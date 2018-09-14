@@ -42,7 +42,8 @@ UISceneToolbar::UISceneToolbar()
     Texture2D *scaleIcon            = EditorTextureFactory::GetAxesIcon();
     Texture2D *rectTransformIcon    = EditorTextureFactory::GetAnchoredRectIcon();
 
-    auto AddToolbarButton = [&](UIButton **button, Texture2D *icon,
+    auto AddToolbarButton = [&](UIButton **button,
+                                Texture2D *icon,
                                 std::function<void()> callbackFunc)
     {
         (*button) = GameObjectFactory::CreateUIButton("", icon);
@@ -50,9 +51,9 @@ UISceneToolbar::UISceneToolbar()
         (*button)->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
         (*button)->GetIcon()->SetTint(Color::DarkGray);
         (*button)->GetFocusable()->AddEventCallback(
-        [callbackFunc](IFocusable*, const UIEventExt &event)
+        [callbackFunc](UIFocusable*, const UIEvent &event)
         {
-            if (event.type == UIEventExt::Type::MOUSE_CLICK_FULL)
+            if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
             {
                 callbackFunc();
                 return UIEventResult::INTERCEPT;

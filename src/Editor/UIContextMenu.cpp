@@ -3,7 +3,7 @@
 #include "Bang/Input.h"
 #include "Bang/UIList.h"
 #include "Bang/UICanvas.h"
-#include "Bang/IFocusable.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"

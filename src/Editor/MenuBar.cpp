@@ -19,7 +19,6 @@
 #include "Bang/Resources.h"
 #include "Bang/Transform.h"
 #include "Bang/Extensions.h"
-#include "Bang/IFocusable.h"
 #include "Bang/PointLight.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIComboBox.h"

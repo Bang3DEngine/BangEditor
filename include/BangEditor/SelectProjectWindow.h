@@ -5,7 +5,7 @@
 #include "Bang/Path.h"
 #include "Bang/Scene.h"
 #include "Bang/Window.h"
-#include "Bang/IFocusable.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/IEventsFocus.h"
 
 #include "BangEditor/BangEditor.h"

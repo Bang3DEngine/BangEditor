@@ -90,16 +90,16 @@ ExplorerItem::~ExplorerItem()
 {
 }
 
-void ExplorerItem::OnUIEvent(IFocusable*, const UIEventExt &event)
+void ExplorerItem::OnUIEvent(UIFocusable*, const UIEvent &event)
 {
-    if (event.type == UIEventExt::Type::MOUSE_ENTER)
+    if (event.type == UIEvent::Type::MOUSE_ENTER)
     {
         if (!IsSelected())
         {
             p_bg->SetTint(Color::LightBlue.WithAlpha(0.6f));
         }
     }
-    else if (event.type == UIEventExt::Type::MOUSE_EXIT)
+    else if (event.type == UIEvent::Type::MOUSE_EXIT)
     {
         if (!IsSelected())
         {

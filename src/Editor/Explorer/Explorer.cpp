@@ -157,10 +157,10 @@ Explorer::Explorer()
     });
     p_contextMenu->AddButtonPart(this);
 
-    focusable->AddEventCallback([this](IFocusable *focusable,
-                                       const UIEventExt &event)
+    focusable->AddEventCallback([this](UIFocusable *focusable,
+                                       const UIEvent &event)
     {
-        if (event.type == UIEventExt::Type::MOUSE_CLICK_FULL)
+        if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
         {
             SelectPath(Path::Empty);
             return UIEventResult::INTERCEPT;
@@ -361,16 +361,16 @@ void Explorer::AddItem(ExplorerItem *explorerItem)
     explorerItem->SetParent(p_itemsContainer);
 
     explorerItem->GetFocusable()->AddEventCallback(
-    [this, explorerItem](IFocusable *focusable,
-                         const UIEventExt &event)
+    [this, explorerItem](UIFocusable *focusable,
+                         const UIEvent &event)
     {
-        if (event.type == UIEventExt::Type::MOUSE_CLICK_FULL)
+        if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
         {
             bool travelToDirectory = (explorerItem->GetPathString() != "..");
             SelectPath( explorerItem->GetPath(), true, travelToDirectory);
             return UIEventResult::INTERCEPT;
         }
-        else if (event.type == UIEventExt::Type::MOUSE_CLICK_DOUBLE)
+        else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
         {
             OnItemDoubleClicked(focusable);
             return UIEventResult::INTERCEPT;
@@ -536,7 +536,7 @@ ExplorerItem *Explorer::GetItemFromPath(const Path &path) const
     return m_pathsToItem.ContainsKey(path) ? m_pathsToItem.Get(path) : nullptr;
 }
 
-void Explorer::OnItemDoubleClicked(IFocusable *itemFocusable)
+void Explorer::OnItemDoubleClicked(UIFocusable *itemFocusable)
 {
     GameObject *itemGo = DCAST<UIFocusable*>(itemFocusable)->GetGameObject();
     ExplorerItem *expItem = DCAST<ExplorerItem*>(itemGo);

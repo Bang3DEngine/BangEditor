@@ -54,9 +54,9 @@ UIInputColor::UIInputColor()
     });
 
     colorImgFocusable->AddEventCallback(
-    [this](IFocusable*, const UIEventExt &event)
+    [this](UIFocusable*, const UIEvent &event)
     {
-        if (event.type == UIEventExt::Type::MOUSE_CLICK_DOWN)
+        if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
         {
             p_searchColorButton->Click();
             return UIEventResult::INTERCEPT;

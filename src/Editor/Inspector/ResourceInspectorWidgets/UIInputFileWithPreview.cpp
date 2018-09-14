@@ -84,16 +84,16 @@ bool UIInputFileWithPreview::HaveExistingPath() const
     return (GetPath().IsFile() || Resources::IsEmbeddedResource( GetPath() ));
 }
 
-void UIInputFileWithPreview::OnUIEvent(IFocusable*, const UIEventExt &event)
+void UIInputFileWithPreview::OnUIEvent(UIFocusable*, const UIEvent &event)
 {
-    if (event.type == UIEventExt::Type::MOUSE_ENTER)
+    if (event.type == UIEvent::Type::MOUSE_ENTER)
     {
         if (HaveExistingPath() && m_zoomable)
         {
             p_bigPreviewImg->GetGameObject()->SetVisible(true);
         }
     }
-    else if (event.type == UIEventExt::Type::MOUSE_EXIT)
+    else if (event.type == UIEvent::Type::MOUSE_EXIT)
     {
         p_bigPreviewImg->GetGameObject()->SetVisible(false);
     }
