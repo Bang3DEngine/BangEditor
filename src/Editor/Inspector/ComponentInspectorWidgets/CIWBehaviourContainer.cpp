@@ -78,7 +78,7 @@ void CIWBehaviourContainer::UpdateFromReference()
 {
     ComponentInspectorWidget::UpdateFromReference();
 
-    const Path &srcPath = GetBehaviourContainer()->GetSourceFilepath();
+    Path srcPath = GetBehaviourContainer()->GetSourceFilepath();
     if (srcPath.IsFile())
     {
         Path headerPath = srcPath.WithExtension("h");

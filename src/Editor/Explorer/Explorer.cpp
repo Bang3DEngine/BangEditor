@@ -516,13 +516,7 @@ void Explorer::OnPastedOver(ExplorerItem *item)
 void Explorer::OnDroppedToDirectory(ExplorerItem *item)
 {
     BANG_UNUSED(item);
-
-    Path itemPath = item->GetPath();
-    if (itemPath.Exists())
-    {
-        OnPathRemoved(itemPath);
-        ForceCheckFileChanges();
-    }
+    ForceCheckFileChanges();
 }
 
 ExplorerItem *Explorer::GetSelectedItem() const

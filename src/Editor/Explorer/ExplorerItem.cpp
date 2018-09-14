@@ -248,7 +248,7 @@ void ExplorerItem::OnDrop(EventEmitter<IEventsDragDrop> *dd_, bool inside)
         {
             Path newDir = GetPath();
             Path droppedPath = expItem->GetPath();
-            if (droppedPath.IsFile())
+            if (droppedPath.Exists())
             {
                 File::Rename(droppedPath,
                              newDir.Append(droppedPath.GetNameExt()));
@@ -256,10 +256,10 @@ void ExplorerItem::OnDrop(EventEmitter<IEventsDragDrop> *dd_, bool inside)
                 // Move import file if any
                 if ( MetaFilesManager::HasMetaFile(droppedPath) )
                 {
-                    Path importDroppedPath =
+                    Path metaDroppedPath =
                             MetaFilesManager::GetMetaFilepath(droppedPath);
-                    File::Rename(importDroppedPath,
-                                 newDir.Append(importDroppedPath.GetNameExt()));
+                    File::Rename(metaDroppedPath,
+                                 newDir.Append(metaDroppedPath.GetNameExt()));
                 }
 
                 EventEmitter<IEventsExplorerItem>::PropagateToListeners(

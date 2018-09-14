@@ -22,7 +22,7 @@ USING_NAMESPACE_BANG_EDITOR
 
 EditorBehaviourManager::EditorBehaviourManager()
 {
-    m_compileThreadPool.SetMaxThreadCount(4);
+    m_compileThreadPool.SetMaxThreadCount(2);
     m_compileThreadPool.SetName("BehaviourCompileThread");
 }
 
