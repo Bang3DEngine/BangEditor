@@ -98,20 +98,25 @@ void Console::Clear()
     p_messageList->Clear();
 }
 
-void Console::OnMessage(DebugMessageType msgType, const String &str,
-                        int line, const String &fileName)
+void Console::OnMessage(DebugMessageType msgType,
+                        const String &str,
+                        int line,
+                        const String &fileName)
 {
     bool isMainThread = (Thread::GetCurrentThreadId() ==
                          Application::GetMainThreadId());
     if (isMainThread)
     {
-        ConsoleMessage cMsg;
-        cMsg.msgType = msgType;
-        cMsg.msgStr = str;
-        cMsg.line = line;
-        cMsg.fileName = fileName;
+        if (msgType != DebugMessageType::DLOG)
+        {
+            ConsoleMessage cMsg;
+            cMsg.msgType = msgType;
+            cMsg.msgStr = str;
+            cMsg.line = line;
+            cMsg.fileName = fileName;
 
-        AddMessage(cMsg);
+            AddMessage(cMsg);
+        }
     }
 }
 

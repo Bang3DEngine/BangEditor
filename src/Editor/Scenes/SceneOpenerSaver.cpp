@@ -261,7 +261,8 @@ void SceneOpenerSaver::OnPlayStateChanged(PlayState, PlayState newPlayState)
 
 bool SceneOpenerSaver::IsCurrentSceneSaved() const
 {
-    return (m_numActionsDoneSinceLastSave == 0);
+    return (m_numActionsDoneSinceLastSave == 0) &&
+            GetLoadedScenePath().IsFile();
 }
 
 bool SceneOpenerSaver::OpenSceneInEditor(const Path &scenePath)

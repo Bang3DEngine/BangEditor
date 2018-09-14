@@ -22,7 +22,7 @@ USING_NAMESPACE_BANG_EDITOR
 
 EditorBehaviourManager::EditorBehaviourManager()
 {
-    m_compileThreadPool.SetMaxThreadCount(1);
+    m_compileThreadPool.SetMaxThreadCount(4);
     m_compileThreadPool.SetName("BehaviourCompileThread");
 }
 
@@ -92,7 +92,8 @@ bool EditorBehaviourManager::PrepareBehavioursLibrary()
             if (!IsBehavioursLibraryReady())
             {
                 Debug_Error("Can not prepare behaviours library. "
-                      "Could not link all behaviours into behaviours library.");
+                            "Could not link all behaviours into "
+                            "behaviours library.");
                 return false;
             }
         }
@@ -245,11 +246,11 @@ CompileBehaviourObjectAsync(const Path &behaviourPath)
     compileRunnable->m_behaviourManager = this;
     compileRunnable->m_behaviourPath = behaviourPath;
 
-    BangPreprocessor::Preprocess(behaviourPath.WithExtension("h"));
     bool compilingThreadStarted = m_compileThreadPool.TryStart(compileRunnable);
     if (compilingThreadStarted)
     {
         MutexLocker ml(GetMutex()); BANG_UNUSED(ml);
+        Debug_DLog("Starting to compile " << behaviourPath);
         m_behavioursBeingCompiled.Add(behaviourPath);
     }
 }
@@ -556,6 +557,8 @@ void EditorBehaviourManager::OnPathRemoved(const Path &path)
 
 void EditorBehaviourManager::BehaviourCompileRunnable::Run()
 {
+    BangPreprocessor::Preprocess(m_behaviourPath.WithExtension("h"));
+
     Compiler::Result compileResult =
                 m_behaviourManager->CompileBehaviourObject(m_behaviourPath);
 

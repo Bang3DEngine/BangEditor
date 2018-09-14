@@ -27,15 +27,25 @@ Path BehaviourCreator::GetNewBehaviourSourceFilepath(const Path &dirPath,
 bool BehaviourCreator::CanCreateNewBehaviour(const Path &dirPath,
                                              const String &behaviourName)
 {
-    if (!dirPath.IsDir()) { return false;  }
+    if (!dirPath.IsDir())
+    {
+        return false;
+    }
 
     Path headerPath = BehaviourCreator::GetNewBehaviourHeaderFilepath(dirPath,
                                                                behaviourName);
     Path sourcePath = BehaviourCreator::GetNewBehaviourSourceFilepath(dirPath,
                                                                behaviourName);
 
-    if (headerPath.IsFile()) { return false; }
-    if (sourcePath.IsFile()) { return false; }
+    if (headerPath.IsFile())
+    {
+        return false;
+    }
+
+    if (sourcePath.IsFile())
+    {
+        return false;
+    }
 
     return true;
 }
