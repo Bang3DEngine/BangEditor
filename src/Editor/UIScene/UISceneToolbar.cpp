@@ -50,9 +50,9 @@ UISceneToolbar::UISceneToolbar()
         (*button)->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
         (*button)->GetIcon()->SetTint(Color::DarkGray);
         (*button)->GetFocusable()->AddEventCallback(
-        [callbackFunc](IFocusable*, const UIEvent &event)
+        [callbackFunc](IFocusable*, const UIEventExt &event)
         {
-            if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
+            if (event.type == UIEventExt::Type::MOUSE_CLICK_FULL)
             {
                 callbackFunc();
                 return UIEventResult::INTERCEPT;

@@ -36,7 +36,7 @@ private:
     bool HaveExistingPath() const;
 
     // IFocusable
-    virtual void OnEvent(IFocusable *focusable, const UIEvent &event) override;
+    virtual void OnUIEvent(IFocusable *focusable, const UIEventExt &event) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

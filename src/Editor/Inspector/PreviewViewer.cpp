@@ -35,7 +35,7 @@ PreviewViewer::PreviewViewer()
     previewAspectRatioSizeFitter->SetAspectRatioMode(AspectRatioMode::KEEP);
 
     p_focusable = AddComponent<UIFocusable>();
-    p_focusable->AddEventCallback([this](IFocusable*, const UIEvent &event)
+    p_focusable->AddEventCallback([this](IFocusable*, const UIEventExt &event)
     {
         switch (event.type)
         {

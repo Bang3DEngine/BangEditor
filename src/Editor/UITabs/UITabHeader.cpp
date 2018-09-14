@@ -31,9 +31,9 @@ UITabHeader::UITabHeader()
     p_titleText->SetContent( GetTitle() );
 
     p_focusable = AddComponent<UIFocusable>();
-    p_focusable->AddEventCallback( [this](IFocusable*, const UIEvent &event)
+    p_focusable->AddEventCallback( [this](IFocusable*, const UIEventExt &event)
     {
-        if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
+        if (event.type == UIEventExt::Type::MOUSE_CLICK_FULL)
         {
             EventEmitter<IEventsTabHeader>::PropagateToListeners(
                         &IEventsTabHeader::OnTabHeaderClicked, this);

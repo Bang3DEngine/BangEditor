@@ -158,9 +158,9 @@ Explorer::Explorer()
     p_contextMenu->AddButtonPart(this);
 
     focusable->AddEventCallback([this](IFocusable *focusable,
-                                       const UIEvent &event)
+                                       const UIEventExt &event)
     {
-        if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
+        if (event.type == UIEventExt::Type::MOUSE_CLICK_FULL)
         {
             SelectPath(Path::Empty);
             return UIEventResult::INTERCEPT;
@@ -362,15 +362,15 @@ void Explorer::AddItem(ExplorerItem *explorerItem)
 
     explorerItem->GetFocusable()->AddEventCallback(
     [this, explorerItem](IFocusable *focusable,
-                         const UIEvent &event)
+                         const UIEventExt &event)
     {
-        if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
+        if (event.type == UIEventExt::Type::MOUSE_CLICK_FULL)
         {
             bool travelToDirectory = (explorerItem->GetPathString() != "..");
             SelectPath( explorerItem->GetPath(), true, travelToDirectory);
             return UIEventResult::INTERCEPT;
         }
-        else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
+        else if (event.type == UIEventExt::Type::MOUSE_CLICK_DOUBLE)
         {
             OnItemDoubleClicked(focusable);
             return UIEventResult::INTERCEPT;

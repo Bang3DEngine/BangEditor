@@ -148,9 +148,9 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
                     }
 
                     expItem->GetFocusable()->AddEventCallback(
-                    [expItem, gridLayoutGo](IFocusable*, const UIEvent &event)
+                    [expItem, gridLayoutGo](IFocusable*, const UIEventExt &event)
                     {
-                        if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
+                        if (event.type == UIEventExt::Type::MOUSE_CLICK_DOWN)
                         {
                             // Save path, and select only the clicked one
                             EditorDialog::s_assetPathResult = expItem->GetPath();
@@ -165,7 +165,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
                             expItem->SetSelected(true);
                             return UIEventResult::INTERCEPT;
                         }
-                        else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
+                        else if (event.type == UIEventExt::Type::MOUSE_CLICK_DOUBLE)
                         {
                             // Directly select
                             EditorDialog::s_accepted = true;

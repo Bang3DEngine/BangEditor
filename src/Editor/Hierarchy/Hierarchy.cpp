@@ -88,9 +88,9 @@ Hierarchy::Hierarchy()
 
     UIFocusable *focusable = AddComponent<UIFocusable>();
     focusable->AddEventCallback([](IFocusable*,
-                                   const UIEvent &event)
+                                   const UIEventExt &event)
     {
-        if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
+        if (event.type == UIEventExt::Type::MOUSE_CLICK_DOWN)
         {
             Editor::SelectGameObject(nullptr);
             return UIEventResult::INTERCEPT;

@@ -170,6 +170,7 @@ void ConsoleUIListEntry::SetConsoleMessage(const ConsoleMessage &cMsg)
     switch (cMsg.msgType)
     {
         case DebugMessageType::LOG:
+        case DebugMessageType::DLOG:
             iconTex = TextureFactory::GetInfoIcon();
         break;
         case DebugMessageType::WARN:
