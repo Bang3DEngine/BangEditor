@@ -22,7 +22,7 @@ PreviewViewer::PreviewViewer()
     p_imgRenderer = AddComponent<UIImageRenderer>();
     p_imgRenderer->SetMode(UIImageRenderer::Mode::TEXTURE);
     p_imgRenderer->SetImageTexture( TextureFactory::GetWhiteTexture() );
-    GameObjectFactory::AddInnerShadow(this, Vector2i(20));
+    p_border = GameObjectFactory::AddInnerShadow(this, Vector2i(20));
 
     UIContentSizeFitter *previewContentSizeFitter =
                                         AddComponent<UIContentSizeFitter>();
@@ -35,16 +35,7 @@ PreviewViewer::PreviewViewer()
     previewAspectRatioSizeFitter->SetAspectRatioMode(AspectRatioMode::KEEP);
 
     p_focusable = AddComponent<UIFocusable>();
-    p_focusable->AddEventCallback([this](UIFocusable*, const UIEvent &event)
-    {
-        switch (event.type)
-        {
-            // case UIEvent::Type::MOUSE_WHEEL:
-            // break;
-            default: break;
-        }
-        return UIEventResult::IGNORE;
-    });
+    p_focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
 }
 
 PreviewViewer::~PreviewViewer()
@@ -75,5 +66,25 @@ void PreviewViewer::SetPreviewImageProvider(
                             PreviewViewer::ImageProviderFunc previewImgProvider)
 {
     m_previewImageProviderFunc = previewImgProvider;
+}
+
+UIEventResult PreviewViewer::OnUIEvent(UIFocusable*, const UIEvent &event)
+{
+    switch (event.type)
+    {
+        case UIEvent::Type::FOCUS_TAKEN:
+            p_border->SetTint(Color::Orange);
+            return UIEventResult::INTERCEPT;
+        break;
+
+        case UIEvent::Type::FOCUS_LOST:
+            p_border->SetTint(Color::Black);
+            return UIEventResult::INTERCEPT;
+        break;
+
+        default:
+        break;
+    }
+    return UIEventResult::IGNORE;
 }
 

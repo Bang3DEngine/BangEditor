@@ -840,10 +840,14 @@ void MenuBar::OnCreatePlane(MenuItem*)
 void MenuBar::OnEndCreateGameObjectFromMenuBar(GameObject *go)
 {
     GameObject *parentGo = Editor::GetSelectedGameObject();
-    if (!parentGo) { parentGo = EditorSceneManager::GetOpenScene(); }
+    if (!parentGo)
+    {
+        parentGo = EditorSceneManager::GetOpenScene();
+    }
+
     if (parentGo)
     {
-        go->SetParent(parentGo);
+        go->SetParent(parentGo, -1, true);
 
         UndoRedoManager::PushAction( new UndoRedoCreateGameObject(go) );
 

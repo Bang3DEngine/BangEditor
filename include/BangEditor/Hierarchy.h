@@ -37,6 +37,9 @@ public:
 
     bool IsItemCollapsed(HierarchyItem *item) const;
 
+    HierarchyItem* GetItemFromGameObject(GameObject *go) const;
+    GameObject* GetGameObjectFromItem(GOItem *item) const;
+
     // Object
     void Update() override;
 
@@ -46,6 +49,7 @@ public:
 
     // IEditorListener
     void OnGameObjectSelected(GameObject *selectedGameObject) override;
+    void DuplicateSelectedItem();
 
     // IEventsHierarchyItem
     virtual void OnRename(HierarchyItem *item) override;
@@ -91,9 +95,6 @@ private:
 
     GOItem *GetSelectedGameObject() const;
     GOItem *GetSelectedItem() const;
-
-    HierarchyItem* GetItemFromGameObject(GameObject *go) const;
-    GameObject* GetGameObjectFromItem(GOItem *item) const;
 
     UITree *GetUITree() const;
 

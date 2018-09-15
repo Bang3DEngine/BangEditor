@@ -5,6 +5,7 @@
 #include "Bang/UIButton.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIComboBox.h"
+#include "Bang/RectTransform.h"
 #include "Bang/TextureFactory.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -15,6 +16,7 @@
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/TransformGizmo.h"
+#include "BangEditor/UISceneEditContainer.h"
 #include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
@@ -64,17 +66,13 @@ UISceneToolbar::UISceneToolbar()
     };
 
     AddToolbarButton(&p_translateButton, translateIcon,
-                     [&]() { TransformGizmo::GetInstance()->SetTransformMode(
-                             TransformGizmo::TransformMode::TRANSLATE); });
+                     [&]() { SetTransformGizmoMode( TransformGizmoMode::TRANSLATE); });
     AddToolbarButton(&p_rotateButton, rotateIcon,
-                     [&]() { TransformGizmo::GetInstance()->SetTransformMode(
-                             TransformGizmo::TransformMode::ROTATE); });
+                     [&]() { SetTransformGizmoMode( TransformGizmoMode::ROTATE); });
     AddToolbarButton(&p_scaleButton, scaleIcon,
-                     [&]() { TransformGizmo::GetInstance()->SetTransformMode(
-                             TransformGizmo::TransformMode::SCALE); });
+                     [&]() { SetTransformGizmoMode( TransformGizmoMode::SCALE); });
     AddToolbarButton(&p_rectTransformButton, rectTransformIcon,
-                     [&]() { TransformGizmo::GetInstance()->SetTransformMode(
-                             TransformGizmo::TransformMode::RECT); });
+                     [&]() { SetTransformGizmoMode( TransformGizmoMode::RECT); });
 
     GameObjectFactory::CreateUIHSpacer()->SetParent(this);
 
@@ -129,41 +127,66 @@ void UISceneToolbar::Update()
     GameObject::Update();
 
     GameObject *selGO = Editor::GetSelectedGameObject();
+    if (selGO)
+    {
+        if (selGO->HasComponent<RectTransform>())
+        {
+            SetTransformGizmoMode(TransformGizmoMode::RECT);
+        }
+        else if (GetTransformGizmoMode() == TransformGizmoMode::RECT)
+        {
+            SetTransformGizmoMode(TransformGizmoMode::TRANSLATE);
+        }
+    }
+
     p_translateButton->GetGameObject()->SetVisible(selGO && selGO->GetTransform());
     p_rotateButton->GetGameObject()->SetVisible(selGO && selGO->GetTransform());
     p_scaleButton->GetGameObject()->SetVisible(selGO && selGO->GetTransform());
     p_rectTransformButton->GetGameObject()->SetVisible(selGO && selGO->GetRectTransform());
 
-    switch (TransformGizmo::GetInstance()->GetTransformMode())
+    switch (GetTransformGizmoMode())
     {
-        case TransformGizmo::TransformMode::TRANSLATE:
+        case TransformGizmoMode::TRANSLATE:
             p_translateButton->SetBlocked(true);
             p_rotateButton->SetBlocked(false);
             p_scaleButton->SetBlocked(false);
             p_rectTransformButton->SetBlocked(false);
         break;
 
-        case TransformGizmo::TransformMode::ROTATE:
+        case TransformGizmoMode::ROTATE:
             p_translateButton->SetBlocked(false);
             p_rotateButton->SetBlocked(true);
             p_scaleButton->SetBlocked(false);
             p_rectTransformButton->SetBlocked(false);
         break;
 
-        case TransformGizmo::TransformMode::SCALE:
+        case TransformGizmoMode::SCALE:
             p_translateButton->SetBlocked(false);
             p_rotateButton->SetBlocked(false);
             p_scaleButton->SetBlocked(true);
             p_rectTransformButton->SetBlocked(false);
         break;
 
-        case TransformGizmo::TransformMode::RECT:
+        case TransformGizmoMode::RECT:
             p_translateButton->SetBlocked(false);
             p_rotateButton->SetBlocked(false);
             p_scaleButton->SetBlocked(false);
             p_rectTransformButton->SetBlocked(true);
         break;
     }
+}
+
+void UISceneToolbar::SetTransformGizmoMode(TransformGizmoMode transformMode)
+{
+    if (transformMode != GetTransformGizmoMode())
+    {
+        m_transformGizmoMode = transformMode;
+    }
+}
+
+TransformGizmoMode UISceneToolbar::GetTransformGizmoMode() const
+{
+    return m_transformGizmoMode;
 }
 
 bool UISceneToolbar::IsShowDebugStatsChecked() const
@@ -174,6 +197,11 @@ bool UISceneToolbar::IsShowDebugStatsChecked() const
 UIComboBox *UISceneToolbar::GetRenderModeComboBox() const
 {
     return p_renderModeInput;
+}
+
+UISceneToolbar *UISceneToolbar::GetActive()
+{
+    return UISceneEditContainer::GetActive()->GetSceneToolbar();
 }
 
 void UISceneToolbar::OnPlayScene()

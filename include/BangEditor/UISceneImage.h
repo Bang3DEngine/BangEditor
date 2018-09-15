@@ -39,7 +39,10 @@ public:
 
 private:
     class UISceneImageRenderer : public UIImageRenderer
-    { public:  void OnRender() override; };
+    {
+        public:
+        void OnRender() override;
+    };
 
     Camera *p_currentCamera = nullptr;
     RenderMode m_renderMode = RenderMode::COLOR;

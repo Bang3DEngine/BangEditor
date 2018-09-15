@@ -32,8 +32,6 @@ UISceneImage::UISceneImage()
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetFlexibleHeight(1.0f);
 
-    AddComponent<UIFocusable>();
-
     UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
     BANG_UNUSED(vl);
 
@@ -45,7 +43,6 @@ UISceneImage::UISceneImage()
                         EPATH("Shaders/UIImageRenderer.vert"),
                         EditorPaths::GetEditorAssetsDir().
                             Append("Shaders").Append("UISceneImage.frag")));
-    GameObjectFactory::AddOuterShadow(sceneImgGo, Vector2i(2));
 
     UILayoutElement *imgLE = sceneImgGo->AddComponent<UILayoutElement>();
     imgLE->SetFlexibleSize( Vector2(1) );

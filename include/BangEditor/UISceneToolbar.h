@@ -8,6 +8,7 @@
 
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ScenePlayer.h"
+#include "BangEditor/TransformGizmo.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIButton;
@@ -32,9 +33,14 @@ public:
 	virtual ~UISceneToolbar();
 
     void Update() override;
+    void SetTransformGizmoMode(TransformGizmoMode transformMode);
+
+    TransformGizmoMode GetTransformGizmoMode() const;
 
     bool IsShowDebugStatsChecked() const;
     UIComboBox* GetRenderModeComboBox() const;
+
+    static UISceneToolbar *GetActive();
 
 private:
     UIButton *p_playButton  = nullptr;
@@ -42,6 +48,7 @@ private:
     UIButton *p_stepButton  = nullptr;
     UIButton *p_stopButton  = nullptr;
 
+    TransformGizmoMode m_transformGizmoMode = TransformGizmoMode::TRANSLATE;
     UIButton *p_translateButton      = nullptr;
     UIButton *p_rotateButton         = nullptr;
     UIButton *p_scaleButton          = nullptr;

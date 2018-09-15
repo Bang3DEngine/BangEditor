@@ -151,15 +151,22 @@ void Hierarchy::OnGameObjectSelected(GameObject *selectedGameObject)
         if (HierarchyItem *selectedHItem = GetItemFromGameObject(selectedGameObject))
         {
             GetUITree()->SetSelection(selectedHItem);
-            if (UICanvas *canvas = UICanvas::GetActive(this))
-            {
-                canvas->SetFocus( selectedHItem->GetFocusable() );
-            }
         }
     }
     else
     {
         GetUITree()->GetUIList()->ClearSelection();
+    }
+}
+
+void Hierarchy::DuplicateSelectedItem()
+{
+    if (GOItem *selectedItem = GetSelectedItem())
+    {
+        if (HierarchyItem *selectedHItem = DCAST<HierarchyItem*>(selectedItem))
+        {
+            OnDuplicate(selectedHItem);
+        }
     }
 }
 

@@ -13,13 +13,19 @@ FORWARD class RotateGizmo;
 FORWARD class TranslateGizmo;
 FORWARD class RectTransformSelectionGizmo;
 
+enum class TransformGizmoMode
+{
+    TRANSLATE,
+    ROTATE,
+    SCALE,
+    RECT
+};
+
 class TransformGizmo : public SelectionGizmo
 {
     GAMEOBJECT_EDITOR(TransformGizmo);
 
 public:
-    enum class TransformMode { TRANSLATE, ROTATE, SCALE, RECT };
-
     // GameObject
     void Update() override;
     void Render(RenderPass rp, bool renderChildren) override;
@@ -32,16 +38,12 @@ public:
     void OnGrabEnd() override;
     void SetReferencedGameObject(GameObject *referencedGameObject) override;
 
-    void SetTransformMode(TransformMode transformMode);
-
     float GetScaleFactor() const;
-    TransformMode GetTransformMode() const;
 
     static TransformGizmo *GetInstance();
 
 private:
     MetaNode m_transformUndoMetaBefore;
-    TransformMode m_transformMode = TransformMode::TRANSLATE;
 
     GameObject                  *p_worldGizmoContainer  = nullptr;
     GameObject                  *p_canvasGizmoContainer = nullptr;

@@ -219,8 +219,6 @@ void EditorScene::Update()
 
         GetEditSceneGameObjects()->Update();
 
-        GetSceneEditContainer()->HandleSelection();
-
         UnBindOpenScene();
     }
 

@@ -17,12 +17,14 @@
 #include "Bang/UILayoutIgnorer.h"
 #include "Bang/GameObjectFactory.h"
 
+#include "BangEditor/Hierarchy.h"
 #include "BangEditor/Selection.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/GizmosManager.h"
+#include "BangEditor/UISceneToolbar.h"
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/SelectionFramebuffer.h"
@@ -39,11 +41,17 @@ UISceneEditContainer::UISceneEditContainer()
     SceneManager::GetActive()->
             EventEmitter<IEventsSceneManager>::RegisterListener(this);
 
+    UIFocusable *focusable = AddComponent<UIFocusable>();
+    focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
+    focusable->SetConsiderForTabbing(true);
+
     GameObject *cameraPreviewGo = GameObjectFactory::CreateUIGameObject();
     p_cameraPreviewImg = cameraPreviewGo->AddComponent<UIImageRenderer>();
     p_cameraPreviewImg->SetMode(UIImageRenderer::Mode::TEXTURE);
     cameraPreviewGo->SetVisible(false);
     GameObjectFactory::AddOuterBorder(cameraPreviewGo, Vector2i(2));
+
+    p_border = GameObjectFactory::AddOuterBorder(GetSceneImage(), Vector2i(2));
 
     m_cameraPreviewGBuffer = new GBuffer(1,1);
 
@@ -110,26 +118,6 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
     }
 
     GameObject::Render(rp, renderChildren);
-}
-
-void UISceneEditContainer::HandleSelection()
-{
-    if (Input::GetMouseButtonDown(MouseButton::LEFT))
-    {
-        UICanvas *canvas = UICanvas::GetActive(this);
-        bool isOverScene = canvas->IsMouseOver(GetSceneImage(), true);
-        if (isOverScene)
-        {
-            if (GameObject *selectedGo = Selection::GetOveredGameObject())
-            {
-                Editor::SelectGameObject(selectedGo, true);
-            }
-            else
-            {
-                Editor::SelectGameObject(nullptr, true);
-            }
-        }
-    }
 }
 
 bool UISceneEditContainer::IsMouseOver()
@@ -217,6 +205,7 @@ Camera* UISceneEditContainer::GetSceneCamera(Scene *scene)
 
 bool UISceneEditContainer::NeedsToRenderScene(Scene *scene)
 {
+    BANG_UNUSED(scene);
     return IsVisible();
 }
 
@@ -290,6 +279,107 @@ void UISceneEditContainer::OnVisibilityChanged(GameObject*)
     {
         edCamGo->RequestBlockBy(this);
     }
+}
+
+UIEventResult UISceneEditContainer::OnUIEvent(UIFocusable*, const UIEvent &event)
+{
+    switch (event.type)
+    {
+        case UIEvent::Type::FOCUS_TAKEN:
+            p_border->SetTint(Color::Orange);
+            return UIEventResult::INTERCEPT;
+        break;
+
+        case UIEvent::Type::FOCUS_LOST:
+            p_border->SetTint(Color::Black);
+            return UIEventResult::INTERCEPT;
+        break;
+
+        case UIEvent::Type::MOUSE_CLICK_DOWN:
+        {
+            if (event.mouse.button == MouseButton::LEFT)
+            {
+                if (GameObject *selectedGo = Selection::GetOveredGameObject())
+                {
+                    Editor::SelectGameObject(selectedGo, true);
+                }
+                else
+                {
+                    Editor::SelectGameObject(nullptr, true);
+                }/*
+                UICanvas *canvas = UICanvas::GetActive(this);
+                bool isOverScene = canvas->IsMouseOver(GetSceneImage(), true);
+                if (isOverScene)
+                {
+                }*/
+                return UIEventResult::INTERCEPT;
+            }
+        }
+        break;
+
+        case UIEvent::Type::KEY_DOWN:
+            if (event.key.modifiers.IsOn(KeyModifier::LCTRL))
+            {
+                switch (event.key.key)
+                {
+                    case Key::D:
+                    {
+                        if (Hierarchy *hierarchy = Hierarchy::GetInstance())
+                        {
+                            hierarchy->OnDuplicate(
+                                        hierarchy->GetItemFromGameObject(
+                                            Editor::GetSelectedGameObject()));
+                            return UIEventResult::INTERCEPT;
+                        }
+                    }
+                    break;
+
+                    default:
+                    break;
+                }
+            }
+            else
+            {
+                UISceneToolbar *toolbar = GetSceneToolbar();
+                TransformGizmoMode newTrMode;
+                switch (event.key.key)
+                {
+                    case Key::W:
+                    {
+                        newTrMode = TransformGizmoMode::TRANSLATE;
+                    }
+                    break;
+
+                    case Key::E:
+                    {
+                        newTrMode = TransformGizmoMode::ROTATE;
+                    }
+                    break;
+
+                    case Key::R:
+                    {
+                        newTrMode = TransformGizmoMode::SCALE;
+                    }
+                    break;
+
+                    case Key::T:
+                    {
+                        newTrMode = TransformGizmoMode::RECT;
+                    }
+                    break;
+
+                    default:
+                    break;
+                }
+                toolbar->SetTransformGizmoMode(newTrMode);
+                return UIEventResult::INTERCEPT;
+            }
+        break;
+
+        default:
+        break;
+    }
+    return UIEventResult::IGNORE;
 }
 
 void UISceneEditContainer::OnDragStarted(EventEmitter<IEventsDragDrop> *dd_)

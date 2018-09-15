@@ -14,6 +14,7 @@
 #include "BangEditor/RotateGizmo.h"
 #include "BangEditor/GizmosManager.h"
 #include "BangEditor/TranslateGizmo.h"
+#include "BangEditor/UISceneToolbar.h"
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/NotSelectableInEditor.h"
@@ -68,50 +69,52 @@ void TransformGizmo::Update()
     SelectionGizmo::Update();
 
     GameObject *refGo = GetReferencedGameObject();
-    if (!refGo || !refGo->GetTransform()) { return; }
-
-    if      (Input::GetKeyDown(Key::W)) { m_transformMode = TransformMode::TRANSLATE; }
-    else if (Input::GetKeyDown(Key::E)) { m_transformMode = TransformMode::ROTATE; }
-    else if (Input::GetKeyDown(Key::R)) { m_transformMode = TransformMode::SCALE; }
-    else if (Input::GetKeyDown(Key::T)) { m_transformMode = TransformMode::RECT; }
-
-    switch (m_transformMode)
+    if (!refGo || !refGo->GetTransform())
     {
-        case TransformMode::RECT:
+        return;
+    }
+
+    UISceneToolbar *toolbar = UISceneToolbar::GetActive();
+    TransformGizmoMode transformGizmoMode = toolbar->GetTransformGizmoMode();
+
+    switch (transformGizmoMode)
+    {
+        case TransformGizmoMode::RECT:
             GetTransform()->SetLocalPosition(Vector3::Zero);
             GetTransform()->SetLocalRotation(Quaternion::Identity);
             GetTransform()->SetLocalScale(Vector3::One);
         break;
+
         default:
             GetTransform()->SetPosition( refGo->GetTransform()->GetPosition() );
             GetTransform()->SetRotation( refGo->GetTransform()->GetRotation() );
             GetTransform()->SetScale( GetScaleFactor() );
     }
 
-    switch (m_transformMode)
+    switch (transformGizmoMode)
     {
-        case TransformMode::TRANSLATE:
+        case TransformGizmoMode::TRANSLATE:
             p_translateGizmo->SetEnabled(true);
             p_rotateGizmo->SetEnabled(false);
             p_scaleGizmo->SetEnabled(false);
             p_rectTransformGizmo->SetEnabled(false);
             break;
 
-        case TransformMode::ROTATE:
+        case TransformGizmoMode::ROTATE:
             p_translateGizmo->SetEnabled(false);
             p_rotateGizmo->SetEnabled(true);
             p_scaleGizmo->SetEnabled(false);
             p_rectTransformGizmo->SetEnabled(false);
             break;
 
-        case TransformMode::SCALE:
+        case TransformGizmoMode::SCALE:
             p_translateGizmo->SetEnabled(false);
             p_rotateGizmo->SetEnabled(false);
             p_scaleGizmo->SetEnabled(true);
             p_rectTransformGizmo->SetEnabled(false);
             break;
 
-        case TransformMode::RECT:
+        case TransformGizmoMode::RECT:
             p_translateGizmo->SetEnabled(false);
             p_rotateGizmo->SetEnabled(false);
             p_scaleGizmo->SetEnabled(false);
@@ -166,35 +169,11 @@ void TransformGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
     p_rotateGizmo->SetReferencedGameObject(referencedGameObject);
     p_scaleGizmo->SetReferencedGameObject(referencedGameObject);
     p_rectTransformGizmo->SetReferencedGameObject(referencedGameObject);
-
-    // Change transform mode depending on if it has rect transform or not
-    if (referencedGameObject)
-    {
-        if (referencedGameObject->HasComponent<RectTransform>())
-        {
-            m_transformMode = TransformMode::RECT;
-        }
-        else if (m_transformMode == TransformMode::RECT)
-        {
-            m_transformMode = TransformMode::TRANSLATE;
-        }
-        Update(); // To avoid a bit of flickering
-    }
-}
-
-void TransformGizmo::SetTransformMode(TransformGizmo::TransformMode transformMode)
-{
-    m_transformMode = transformMode;
 }
 
 float TransformGizmo::GetScaleFactor() const
 {
     return 0.15f * SelectionGizmo::GetScaleFactor();
-}
-
-TransformGizmo::TransformMode TransformGizmo::GetTransformMode() const
-{
-    return m_transformMode;
 }
 
 TransformGizmo *TransformGizmo::GetInstance()

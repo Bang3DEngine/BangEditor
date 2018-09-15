@@ -30,6 +30,7 @@ class UISceneEditContainer :
         public EventListener<IEventsGameObjectVisibilityChanged>,
         public EventListener<IEventsScenePlayer>,
         public EventListener<IEventsSceneManager>,
+        public EventListener<IEventsFocus>,
         public EventListener<IEventsDragDrop>
 {
     GAMEOBJECT_EDITOR(UISceneEditContainer);
@@ -42,11 +43,11 @@ public:
     void Update() override;
     void Render(RenderPass rp, bool renderChildren) override;
 
-    void HandleSelection();
     static bool IsMouseOver();
     static Vector2i GetMousePositionInOpenScene();
 
 private:
+    UIImageRenderer *p_border = nullptr;
     bool m_needToRenderPreviewImg = false;
     UIImageRenderer *p_cameraPreviewImg = nullptr;
     GBuffer *m_cameraPreviewGBuffer = nullptr;
@@ -72,6 +73,9 @@ private:
     // IEventsGameObjectVisibilityChanged
     void OnVisibilityChanged(GameObject *go) override;
 
+    // IEventsFocus
+    virtual UIEventResult OnUIEvent(UIFocusable *focusable,
+                                    const UIEvent &event) override;
     // IEventsDestroy
     virtual void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
@@ -88,6 +92,8 @@ private:
     // IEventsSceneManager
     void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
     static UISceneEditContainer *GetActive();
+
+    friend class UISceneToolbar;
 };
 
 NAMESPACE_BANG_EDITOR_END
