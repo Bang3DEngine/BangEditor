@@ -27,7 +27,8 @@ HierarchyItem::HierarchyItem()
     SetName("HierarchyItem");
 
     GameObjectFactory::CreateUIGameObjectInto(this);
-    AddComponent<UIFocusable>();
+    p_focusable = AddComponent<UIFocusable>();
+    p_focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
 
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
@@ -37,6 +38,7 @@ HierarchyItem::HierarchyItem()
 
     UIHorizontalLayout *hLayout = AddComponent<UIHorizontalLayout>();
     hLayout->SetChildrenHorizontalStretch(Stretch::FULL);
+
 
     GameObject *textGo = GameObjectFactory::CreateUIGameObject();
     textGo->SetName("HierarchyItemText");
@@ -144,6 +146,11 @@ void HierarchyItem::UpdateEnabledDisabledColor()
     {
         p_textRenderer->SetTextColor(Color::DarkGray);
     }
+}
+
+UIFocusable *HierarchyItem::GetFocusable() const
+{
+    return p_focusable;
 }
 
 void HierarchyItem::OnEnabled(Object *obj)
@@ -261,6 +268,65 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
     {
         Editor::SelectGameObject(refGo);
     }
+}
+
+UIEventResult HierarchyItem::OnUIEvent(UIFocusable*, const UIEvent &event)
+{
+    switch (event.type)
+    {
+        case UIEvent::Type::KEY_DOWN:
+            if (event.key.modifiers.IsOn(KeyModifier::LCTRL))
+            {
+                switch (event.key.key)
+                {
+                    case Key::C:
+                        Copy();
+                        return UIEventResult::INTERCEPT;
+                    break;
+
+                    case Key::X:
+                        Cut();
+                        return UIEventResult::INTERCEPT;
+                    break;
+
+                    case Key::V:
+                        Paste();
+                        return UIEventResult::INTERCEPT;
+                    break;
+
+                    case Key::D:
+                        Duplicate();
+                        return UIEventResult::INTERCEPT;
+                    break;
+
+                    default:
+                    break;
+                }
+            }
+            else
+            {
+                switch (event.key.key)
+                {
+                    case Key::DELETE:
+                        Remove();
+                        return UIEventResult::INTERCEPT;
+                    break;
+
+                    case Key::F2:
+                        Rename();
+                        return UIEventResult::INTERCEPT;
+                    break;
+
+                    default:
+                    break;
+                }
+            }
+        break;
+
+        default:
+        break;
+    }
+    return UIEventResult::IGNORE;
 }
 
 String HierarchyItem::ToString() const

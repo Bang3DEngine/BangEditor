@@ -5,6 +5,7 @@
 #include "Bang/UIList.h"
 #include "Bang/GameObject.h"
 #include "Bang/EventEmitter.h"
+#include "Bang/IEventsFocus.h"
 
 #include "BangEditor/UIContextMenu.h"
 #include "BangEditor/IEventsHierarchyItem.h"
@@ -20,6 +21,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class HierarchyItem : public GameObject,
                       public EventListener<IEventsName>,
+                      public EventListener<IEventsFocus>,
                       public EventEmitter<IEventsHierarchyItem>
 {
     GAMEOBJECT_EDITOR(HierarchyItem);
@@ -33,7 +35,6 @@ public:
     void Update() override;
 
     void SetReferencedGameObject(GameObject *referencedGameObject);
-    GameObject *GetReferencedGameObject() const;
 
     void Rename();
     void Remove();
@@ -44,6 +45,9 @@ public:
     void CreatePrefab();
 
     void UpdateEnabledDisabledColor();
+
+    UIFocusable *GetFocusable() const;
+    GameObject *GetReferencedGameObject() const;
 
     // IEventsObject
     void OnEnabled(Object *obj) override;
@@ -60,9 +64,14 @@ public:
     // UIList Item
     void OnSelectionCallback(UIList::Action action);
 
+    // IEventsFocus
+    virtual UIEventResult OnUIEvent(UIFocusable *focusable,
+                                    const UIEvent &event) override;
+
     String ToString() const override;
 
 private:
+    UIFocusable *p_focusable = nullptr;
     GameObject *p_refGameObject = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
     UITextRenderer *p_textRenderer = nullptr;

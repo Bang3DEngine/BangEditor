@@ -17,9 +17,14 @@ class Shortcut
 public:
     Shortcut(Key firstKey, const String &name = "",
              bool autoRepeat = false);
-    Shortcut(Key firstKey, Key secondKey, const String &name = "",
+    Shortcut(Key firstKey,
+             Key secondKey,
+             const String &name = "",
              bool autoRepeat = false);
-    Shortcut(Key firstKey, Key secondKey, Key thirdKey, const String &name = "",
+    Shortcut(Key firstKey,
+             Key secondKey,
+             Key thirdKey,
+             const String &name = "",
              bool autoRepeat = false);
 
     Shortcut(const Array<Key> &keys,

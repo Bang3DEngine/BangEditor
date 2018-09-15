@@ -95,8 +95,6 @@ private:
     HierarchyItem* GetItemFromGameObject(GameObject *go) const;
     GameObject* GetGameObjectFromItem(GOItem *item) const;
 
-    static void OnShortcutPressed(const Shortcut &shortcut);
-
     UITree *GetUITree() const;
 
     friend class HierarchyItem;

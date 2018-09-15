@@ -103,19 +103,6 @@ Hierarchy::Hierarchy()
         OnCreateContextMenu(menuRootItem);
     });
     p_contextMenu->AddButtonPart(this);
-
-    ShortcutManager::RegisterShortcut(Shortcut(Key::F2, "Rename"),
-                                      &Hierarchy::OnShortcutPressed);
-    ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::C, "Copy"),
-                                      &Hierarchy::OnShortcutPressed);
-    ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::X, "Cut"),
-                                      &Hierarchy::OnShortcutPressed);
-    ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::V, "Paste"),
-                                      &Hierarchy::OnShortcutPressed);
-    ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::D, "Duplicate"),
-                                      &Hierarchy::OnShortcutPressed);
-    ShortcutManager::RegisterShortcut(Shortcut(Key::DELETE, "Delete"),
-                                      &Hierarchy::OnShortcutPressed);
 }
 
 Hierarchy::~Hierarchy()
@@ -164,6 +151,10 @@ void Hierarchy::OnGameObjectSelected(GameObject *selectedGameObject)
         if (HierarchyItem *selectedHItem = GetItemFromGameObject(selectedGameObject))
         {
             GetUITree()->SetSelection(selectedHItem);
+            if (UICanvas *canvas = UICanvas::GetActive(this))
+            {
+                canvas->SetFocus( selectedHItem->GetFocusable() );
+            }
         }
     }
     else
@@ -514,46 +505,6 @@ GameObject *Hierarchy::GetGameObjectFromItem(GOItem *item) const
     ASSERT(DCAST<HierarchyItem*>(item));
     HierarchyItem *hItem = SCAST<HierarchyItem*>(item);
     return hItem->GetReferencedGameObject();
-}
-
-void Hierarchy::OnShortcutPressed(const Shortcut &shortcut)
-{
-    Hierarchy *h = Hierarchy::GetInstance();
-
-    HierarchyItem *selectedItem =
-            h->GetItemFromGameObject( h->GetSelectedGameObject() );
-    if (selectedItem)
-    {
-        if (shortcut.GetName() == "Rename")
-        {
-            selectedItem->Rename();
-        }
-
-        if (shortcut.GetName() == "Copy")
-        {
-            selectedItem->Copy();
-        }
-
-        if (shortcut.GetName() == "Cut")
-        {
-            selectedItem->Cut();
-        }
-
-        if (shortcut.GetName() == "Paste")
-        {
-            selectedItem->Paste();
-        }
-
-        if (shortcut.GetName() == "Duplicate")
-        {
-            selectedItem->Duplicate();
-        }
-
-        if (shortcut.GetName() == "Delete")
-        {
-            selectedItem->Remove();
-        }
-    }
 }
 
 UITree *Hierarchy::GetUITree() const
