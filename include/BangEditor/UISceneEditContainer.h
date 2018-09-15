@@ -43,6 +43,7 @@ public:
     void Update() override;
     void Render(RenderPass rp, bool renderChildren) override;
 
+    static bool HasFocus();
     static bool IsMouseOver();
     static Vector2i GetMousePositionInOpenScene();
 
@@ -52,6 +53,7 @@ private:
     UIImageRenderer *p_cameraPreviewImg = nullptr;
     GBuffer *m_cameraPreviewGBuffer = nullptr;
 
+    UIFocusable *p_focusable = nullptr;
     RH<Material> m_currentMaterialBeingDragged;
     GameObject *p_lastOveredGameObject = nullptr;
     MetaNode m_prevGameObjectMetaBeforeDraggingMaterial;

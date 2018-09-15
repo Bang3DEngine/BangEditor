@@ -159,34 +159,38 @@ void EditorCamera::HandleKeyMovement(Vector3 *moveStep, bool *hasMoved)
     m_keysCurrentMoveSpeed += m_keysMoveAccel;
     m_keysCurrentMoveSpeed = Math::Min(m_keysCurrentMoveSpeed, m_maxMoveSpeed);
 
-    if (Input::GetKey(Key::LCTRL) || Input::GetKey(Key::LSHIFT)) { return; }
+    if (!Input::GetKey(Key::LCTRL) && !Input::GetKey(Key::LSHIFT))
+    {
+        Vector3 m = Vector3::Zero;
+        if (Input::GetKey(Key::W))
+        {
+            m += m_keysCurrentMoveSpeed * Time::GetDeltaTime() * p_camt->GetForward();
+        }
+        else if (Input::GetKey(Key::S))
+        {
+            m -= m_keysCurrentMoveSpeed * Time::GetDeltaTime() * p_camt->GetForward();
+        }
 
-    Vector3 m = Vector3::Zero;
-    if (Input::GetKey(Key::W))
-    {
-        m += m_keysCurrentMoveSpeed * Time::GetDeltaTime() * p_camt->GetForward();
-    }
-    else if (Input::GetKey(Key::S))
-    {
-        m -= m_keysCurrentMoveSpeed * Time::GetDeltaTime() * p_camt->GetForward();
-    }
+        if (Input::GetKey(Key::A))
+        {
+            m -= m_keysCurrentMoveSpeed * Time::GetDeltaTime() * p_camt->GetRight();
+        }
+        else if (Input::GetKey(Key::D))
+        {
+            m += m_keysCurrentMoveSpeed * Time::GetDeltaTime() * p_camt->GetRight();
+        }
 
-    if (Input::GetKey(Key::A))
-    {
-        m -= m_keysCurrentMoveSpeed * Time::GetDeltaTime() * p_camt->GetRight();
+        *moveStep += m;
+        *hasMoved = *hasMoved || (m.Length() > 0);
     }
-    else if (Input::GetKey(Key::D))
-    {
-        m += m_keysCurrentMoveSpeed * Time::GetDeltaTime() * p_camt->GetRight();
-    }
-
-    *moveStep += m;
-    *hasMoved = *hasMoved || (m.Length() > 0);
 }
 
 void EditorCamera::HandleLookAtFocus()
 {
-    if (!p_currentFocus) { return; }
+    if (!p_currentFocus)
+    {
+        return;
+    }
 
     Camera *cam = GetCamera();
     Sphere focusBSphere = p_currentFocus->GetBoundingSphere();
@@ -305,7 +309,10 @@ void EditorCamera::Update()
         GetCamera()->SetClearColor(Color::LightBlue);
     }
 
-    if (unwrapMouse) { Input::SetMouseWrapping(false); }
+    if (unwrapMouse)
+    {
+        Input::SetMouseWrapping(false);
+    }
 }
 
 void EditorCamera::AlignViewWithGameObject(GameObject *selected)

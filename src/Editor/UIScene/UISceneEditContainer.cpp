@@ -10,6 +10,7 @@
 #include "Bang/Resources.h"
 #include "Bang/Extensions.h"
 #include "Bang/Framebuffer.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIDragDroppable.h"
@@ -41,17 +42,17 @@ UISceneEditContainer::UISceneEditContainer()
     SceneManager::GetActive()->
             EventEmitter<IEventsSceneManager>::RegisterListener(this);
 
-    UIFocusable *focusable = AddComponent<UIFocusable>();
-    focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
-    focusable->SetConsiderForTabbing(true);
+    p_focusable = AddComponent<UIFocusable>();
+    p_focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
+    p_focusable->SetConsiderForTabbing(true);
 
     GameObject *cameraPreviewGo = GameObjectFactory::CreateUIGameObject();
     p_cameraPreviewImg = cameraPreviewGo->AddComponent<UIImageRenderer>();
     p_cameraPreviewImg->SetMode(UIImageRenderer::Mode::TEXTURE);
     cameraPreviewGo->SetVisible(false);
-    GameObjectFactory::AddOuterBorder(cameraPreviewGo, Vector2i(2));
 
-    p_border = GameObjectFactory::AddOuterBorder(GetSceneImage(), Vector2i(2));
+    GameObjectFactory::AddOuterBorder(cameraPreviewGo, Vector2i(2));
+    p_border = GameObjectFactory::AddOuterShadow(GetSceneImage(), Vector2i(2));
 
     m_cameraPreviewGBuffer = new GBuffer(1,1);
 
@@ -120,10 +121,16 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
     GameObject::Render(rp, renderChildren);
 }
 
+bool UISceneEditContainer::HasFocus()
+{
+    UISceneEditContainer *uisec = UISceneEditContainer::GetActive();
+    return uisec->p_focusable->HasFocus();
+}
+
 bool UISceneEditContainer::IsMouseOver()
 {
     UISceneEditContainer *uisec = UISceneEditContainer::GetActive();
-    return UICanvas::GetActive(uisec)->IsMouseOver( uisec->GetSceneImage(), true );
+    return UICanvas::GetActive(uisec)->IsMouseOver(uisec->p_focusable);
 }
 
 Vector2i UISceneEditContainer::GetMousePositionInOpenScene()
