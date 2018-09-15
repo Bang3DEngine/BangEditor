@@ -84,7 +84,8 @@ bool UIInputFileWithPreview::HaveExistingPath() const
     return (GetPath().IsFile() || Resources::IsEmbeddedResource( GetPath() ));
 }
 
-void UIInputFileWithPreview::OnUIEvent(UIFocusable*, const UIEvent &event)
+UIEventResult UIInputFileWithPreview::OnUIEvent(UIFocusable*,
+                                                const UIEvent &event)
 {
     if (event.type == UIEvent::Type::MOUSE_ENTER)
     {
@@ -92,9 +93,12 @@ void UIInputFileWithPreview::OnUIEvent(UIFocusable*, const UIEvent &event)
         {
             p_bigPreviewImg->GetGameObject()->SetVisible(true);
         }
+        return UIEventResult::INTERCEPT;
     }
     else if (event.type == UIEvent::Type::MOUSE_EXIT)
     {
         p_bigPreviewImg->GetGameObject()->SetVisible(false);
+        return UIEventResult::INTERCEPT;
     }
+    return UIEventResult::IGNORE;
 }

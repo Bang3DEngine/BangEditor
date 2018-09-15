@@ -90,7 +90,7 @@ ExplorerItem::~ExplorerItem()
 {
 }
 
-void ExplorerItem::OnUIEvent(UIFocusable*, const UIEvent &event)
+UIEventResult ExplorerItem::OnUIEvent(UIFocusable*, const UIEvent &event)
 {
     if (event.type == UIEvent::Type::MOUSE_ENTER)
     {
@@ -98,6 +98,8 @@ void ExplorerItem::OnUIEvent(UIFocusable*, const UIEvent &event)
         {
             p_bg->SetTint(Color::LightBlue.WithAlpha(0.6f));
         }
+
+        return UIEventResult::INTERCEPT;
     }
     else if (event.type == UIEvent::Type::MOUSE_EXIT)
     {
@@ -105,7 +107,11 @@ void ExplorerItem::OnUIEvent(UIFocusable*, const UIEvent &event)
         {
             p_bg->SetTint(Color::Zero);
         }
+
+        return UIEventResult::INTERCEPT;
     }
+
+    return UIEventResult::IGNORE;
 }
 
 void ExplorerItem::SetPath(const Path &path)
