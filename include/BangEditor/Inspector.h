@@ -37,7 +37,6 @@ public:
     virtual ~Inspector();
 
     // GameObject
-    void OnStart() override;
     void Update() override;
 
     void ShowSerializable(Serializable *serializable);

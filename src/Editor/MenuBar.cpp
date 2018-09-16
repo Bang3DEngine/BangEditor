@@ -475,6 +475,11 @@ void MenuBar::OnCreateMaterial(MenuItem*)
     OnCreateAssetFile<Material>("Material", Extensions::GetMaterialExtension());
 }
 
+void MenuBar::OnCreateBehaviour(MenuItem *item)
+{
+    OnAddNewBehaviour(item);
+}
+
 void MenuBar::OnCreatePhysicsMaterial(MenuItem*)
 {
     OnCreateAssetFile<PhysicsMaterial>("PhysicsMaterial",
@@ -524,7 +529,7 @@ void MenuBar::OnAddAudioSource(MenuItem*)
 
 void MenuBar::OnAddNewBehaviour(MenuItem*)
 {
-    Path behaviourDir = Paths::GetProjectAssetsDir();
+    Path behaviourDir = Explorer::GetInstance()->GetCurrentPath();
     String behaviourName = "";
     do
     {

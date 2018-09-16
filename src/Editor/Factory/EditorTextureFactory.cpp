@@ -22,15 +22,17 @@ Texture2D* EditorTextureFactory::GetIconForPath(const Path &path)
     {
         EditorTextureFactory *etf = EditorTextureFactory::GetInstance();
 
-        if (etf->m_iconCacheMap.ContainsKey(path))
-        {
-            return etf->m_iconCacheMap.Get(path).Get();
-        }
-
         RH<Texture2D> icon;
         if ( path.HasExtension(Extensions::GetImageExtensions()) )
         {
-            icon = Resources::Load<Texture2D>(path);
+            if (etf->m_iconCacheMap.ContainsKey(path))
+            {
+                return etf->m_iconCacheMap.Get(path).Get();
+            }
+            else
+            {
+                icon = Resources::Load<Texture2D>(path);
+            }
         }
         else if ( path.HasExtension(Extensions::GetModelExtensions()) )
         {

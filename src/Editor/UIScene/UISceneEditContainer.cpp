@@ -26,6 +26,7 @@
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/GizmosManager.h"
 #include "BangEditor/UISceneToolbar.h"
+#include "BangEditor/EditorClipboard.h"
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/SelectionFramebuffer.h"
@@ -288,7 +289,8 @@ void UISceneEditContainer::OnVisibilityChanged(GameObject*)
     }
 }
 
-UIEventResult UISceneEditContainer::OnUIEvent(UIFocusable*, const UIEvent &event)
+UIEventResult UISceneEditContainer::OnUIEvent(UIFocusable *focusable,
+                                              const UIEvent &event)
 {
     switch (event.type)
     {
@@ -313,73 +315,71 @@ UIEventResult UISceneEditContainer::OnUIEvent(UIFocusable*, const UIEvent &event
                 else
                 {
                     Editor::SelectGameObject(nullptr, true);
-                }/*
-                UICanvas *canvas = UICanvas::GetActive(this);
-                bool isOverScene = canvas->IsMouseOver(GetSceneImage(), true);
-                if (isOverScene)
-                {
-                }*/
+                }
                 return UIEventResult::INTERCEPT;
             }
         }
         break;
 
         case UIEvent::Type::KEY_DOWN:
-            if (event.key.modifiers.IsOn(KeyModifier::LCTRL))
+            switch (event.key.key)
             {
-                switch (event.key.key)
+                case Key::W:
+                case Key::E:
+                case Key::R:
+                case Key::T:
                 {
-                    case Key::D:
+                    UISceneToolbar *toolbar = GetSceneToolbar();
+                    TransformGizmoMode newTrMode;
+                    switch (event.key.key)
                     {
-                        if (Hierarchy *hierarchy = Hierarchy::GetInstance())
+                        case Key::W:
+                            newTrMode = TransformGizmoMode::TRANSLATE;
+                        break;
+
+                        case Key::E:
+                            newTrMode = TransformGizmoMode::ROTATE;
+                        break;
+
+                        case Key::R:
+                            newTrMode = TransformGizmoMode::SCALE;
+                        break;
+
+                        case Key::T:
+                            newTrMode = TransformGizmoMode::RECT;
+                        break;
+
+                        default:
+                            return UIEventResult::IGNORE;
+                        break;
+                    }
+
+                    toolbar->SetTransformGizmoMode(newTrMode);
+                    return UIEventResult::INTERCEPT;
+                }
+                break;
+
+                case Key::C:
+                case Key::X:
+                case Key::V:
+                case Key::D:
+                case Key::DELETE:
+                    if (Hierarchy *hierarchy = Hierarchy::GetInstance())
+                    {
+                        if (GameObject *selGo = Editor::GetSelectedGameObject() )
                         {
-                            hierarchy->OnDuplicate(
-                                        hierarchy->GetItemFromGameObject(
-                                            Editor::GetSelectedGameObject()));
-                            return UIEventResult::INTERCEPT;
+                            if (HierarchyItem *hItem =
+                                    hierarchy->GetItemFromGameObject(selGo))
+                            {
+                                return hItem->OnUIEvent(focusable, event);
+                            }
                         }
+                        return hierarchy->OnUIEvent(focusable, event);
                     }
-                    break;
+                break;
 
-                    default:
-                    break;
-                }
-            }
-            else
-            {
-                UISceneToolbar *toolbar = GetSceneToolbar();
-                TransformGizmoMode newTrMode;
-                switch (event.key.key)
-                {
-                    case Key::W:
-                    {
-                        newTrMode = TransformGizmoMode::TRANSLATE;
-                    }
-                    break;
-
-                    case Key::E:
-                    {
-                        newTrMode = TransformGizmoMode::ROTATE;
-                    }
-                    break;
-
-                    case Key::R:
-                    {
-                        newTrMode = TransformGizmoMode::SCALE;
-                    }
-                    break;
-
-                    case Key::T:
-                    {
-                        newTrMode = TransformGizmoMode::RECT;
-                    }
-                    break;
-
-                    default:
-                    break;
-                }
-                toolbar->SetTransformGizmoMode(newTrMode);
-                return UIEventResult::INTERCEPT;
+                default:
+                break;
             }
         break;
 

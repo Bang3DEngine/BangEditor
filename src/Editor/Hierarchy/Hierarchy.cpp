@@ -87,15 +87,7 @@ Hierarchy::Hierarchy()
             EventEmitter<IEventsSceneManager>::RegisterListener(this);
 
     UIFocusable *focusable = AddComponent<UIFocusable>();
-    focusable->AddEventCallback([](UIFocusable*, const UIEvent &event)
-    {
-        if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
-        {
-            Editor::SelectGameObject(nullptr);
-            return UIEventResult::INTERCEPT;
-        }
-        return UIEventResult::IGNORE;
-    });
+    focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
 
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
@@ -380,6 +372,40 @@ bool Hierarchy::AcceptDragOrDrop(UIDragDroppable *dd)
     return false;
 }
 
+UIEventResult Hierarchy::OnUIEvent(UIFocusable*, const UIEvent &event)
+{
+    switch (event.type)
+    {
+        case UIEvent::Type::MOUSE_CLICK_DOWN:
+        {
+            Editor::SelectGameObject(nullptr);
+            return UIEventResult::INTERCEPT;
+        }
+        break;
+
+        case UIEvent::Type::KEY_DOWN:
+        {
+            if (event.key.modifiers.IsOn(KeyModifier::LCTRL))
+            {
+                switch (event.key.key)
+                {
+                    case Key::V:
+                        OnPaste(nullptr);
+                    break;
+
+                    default:
+                    break;
+                }
+            }
+        }
+        break;
+
+        default:
+        break;
+    }
+    return UIEventResult::IGNORE;
+}
+
 void Hierarchy::OnCreateContextMenu(MenuItem *menuRootItem)
 {
     menuRootItem->SetFontSize(12);
@@ -441,8 +467,8 @@ void Hierarchy::AddGameObject(GameObject *go)
     {
         bool topItem = (go->GetScene() == go->GetParent());
 
-        HierarchyItem *goItem = GameObject::Create<HierarchyItem>();
-        goItem->SetReferencedGameObject( go );
+        HierarchyItem *hItem = GameObject::Create<HierarchyItem>();
+        hItem->SetReferencedGameObject( go );
 
         // Get index inside parent, without counting hidden ones
         HierarchyItem *parentItem = GetItemFromGameObject(go->GetParent());
@@ -457,9 +483,9 @@ void Hierarchy::AddGameObject(GameObject *go)
 
         if (indexInsideParent >= 0)
         {
-            GetUITree()->AddItem(goItem, topItem ? nullptr : parentItem,
+            GetUITree()->AddItem(hItem, topItem ? nullptr : parentItem,
                                  indexInsideParent);
-            m_gameObjectToItem.Add(go, goItem);
+            m_gameObjectToItem.Add(go, hItem);
 
             for (GameObject *child : go->GetChildren()) // Add children too
             {
@@ -469,9 +495,9 @@ void Hierarchy::AddGameObject(GameObject *go)
 
         go->EventEmitter<IEventsChildren>::RegisterListener(this);
         go->EventEmitter<IEventsDestroy>::RegisterListener(this);
-        goItem->EventEmitter<IEventsHierarchyItem>::RegisterListener(this);
+        hItem->EventEmitter<IEventsHierarchyItem>::RegisterListener(this);
 
-        GetUITree()->SetItemCollapsed(goItem, true);
+        GetUITree()->SetItemCollapsed(hItem, true);
     }
 }
 

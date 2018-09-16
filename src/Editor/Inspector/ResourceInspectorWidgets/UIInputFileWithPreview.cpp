@@ -35,7 +35,7 @@ UIInputFileWithPreview::UIInputFileWithPreview()
     bigPreviewImgGo->GetRectTransform()->TranslateLocal( Vector3(0, 0, -0.1f) );
 
     UIFocusable *previewFocusable = previewImgGo->AddComponent<UIFocusable>();
-    previewFocusable->SetConsiderForTabbing(true);
+    previewFocusable->SetConsiderForTabbing(false);
     previewFocusable->EventEmitter<IEventsFocus>::RegisterListener(this);
 
     bigPreviewImgGo->SetParent(hlGo);

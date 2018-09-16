@@ -23,6 +23,7 @@ FORWARD class HierarchyItem;
 class Hierarchy : public GameObject,
                   public EventListener<IEventsEditor>,
                   public EventListener<IEventsDestroy>,
+                  public EventListener<IEventsFocus>,
                   public EventListener<IEventsSceneManager>,
                   public EventListener<IEventsHierarchyItem>,
                   public EventListener<IEventsUITree>
@@ -71,6 +72,10 @@ public:
                                    GameObject *newParentItem,
                                    int newIndexInsideParent) override;
     virtual bool AcceptDragOrDrop(UIDragDroppable *dd) override;
+
+    // IEventsFocus
+    virtual UIEventResult OnUIEvent(UIFocusable *focusable,
+                                    const UIEvent &event) override;
 
     // UIContextMenu
     void OnCreateContextMenu(MenuItem *menuRootItem);

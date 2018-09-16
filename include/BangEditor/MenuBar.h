@@ -72,6 +72,7 @@ private:
     static void OnPhysicsSettings(MenuItem *item);
 
     static void OnCreateMaterial (MenuItem *item);
+    static void OnCreateBehaviour (MenuItem *item);
     static void OnCreateTextureCubeMap (MenuItem *item);
     static void OnCreatePhysicsMaterial (MenuItem *item);
 

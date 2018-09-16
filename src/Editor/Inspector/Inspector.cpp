@@ -3,9 +3,9 @@
 #include "Bang/GL.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
-#include "Bang/MetaNode.h"
 #include "Bang/UILabel.h"
 #include "Bang/Material.h"
+#include "Bang/MetaNode.h"
 #include "Bang/Resources.h"
 #include "Bang/GLUniforms.h"
 #include "Bang/UIFocusable.h"
@@ -135,11 +135,6 @@ Inspector::Inspector()
 Inspector::~Inspector()
 {
 
-}
-
-void Inspector::OnStart()
-{
-    GameObject::OnStart();
 }
 
 void Inspector::Update()
@@ -353,8 +348,16 @@ GameObject *Inspector::GetWidgetsContainer() const
 {
     return GetScrollPanel()->GetScrollArea()->GetContainedGameObject();
 }
-UIVerticalLayout *Inspector::GetMainVL() const { return p_mainVL; }
-UIScrollPanel* Inspector::GetScrollPanel() const { return p_scrollPanel; }
+
+UIVerticalLayout *Inspector::GetMainVL() const
+{
+    return p_mainVL;
+}
+
+UIScrollPanel* Inspector::GetScrollPanel() const
+{
+    return p_scrollPanel;
+}
 
 void Inspector::AddWidget(InspectorWidget *widget, int _index)
 {
