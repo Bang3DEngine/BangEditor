@@ -73,8 +73,7 @@ ExplorerItem::ExplorerItem()
     {
         OnCreateContextMenu(menuRootItem);
     });
-    p_contextMenu->AddButtonPart(this);
-    p_contextMenu->AddButtonPart(bgGo);
+    p_contextMenu->SetFocusable(p_focusable);
 
     p_dragDroppable = AddComponent<UIDragDroppable>();
 
@@ -92,25 +91,37 @@ ExplorerItem::~ExplorerItem()
 
 UIEventResult ExplorerItem::OnUIEvent(UIFocusable*, const UIEvent &event)
 {
-    if (event.type == UIEvent::Type::MOUSE_ENTER)
+    switch (event.type)
     {
-        if (!IsSelected())
-        {
-            p_bg->SetTint(Color::LightBlue.WithAlpha(0.6f));
-        }
+        case UIEvent::Type::FOCUS_TAKEN:
+            Explorer::GetInstance()->SelectPath(GetPath());
+            return UIEventResult::INTERCEPT;
+        break;
 
-        return UIEventResult::INTERCEPT;
+        case UIEvent::Type::FOCUS_LOST:
+            Explorer::GetInstance()->SelectPath(Path::Empty);
+            return UIEventResult::INTERCEPT;
+        break;
+
+        case UIEvent::Type::MOUSE_ENTER:
+            if (!IsSelected() && p_bg)
+            {
+                p_bg->SetTint(UITheme::GetOverColor());
+            }
+            return UIEventResult::INTERCEPT;
+        break;
+
+        case UIEvent::Type::MOUSE_EXIT:
+            if (!IsSelected() && p_bg)
+            {
+                p_bg->SetTint(Color::Zero);
+            }
+            return UIEventResult::INTERCEPT;
+        break;
+
+        default:
+        break;
     }
-    else if (event.type == UIEvent::Type::MOUSE_EXIT)
-    {
-        if (!IsSelected())
-        {
-            p_bg->SetTint(Color::Zero);
-        }
-
-        return UIEventResult::INTERCEPT;
-    }
-
     return UIEventResult::IGNORE;
 }
 
@@ -143,7 +154,11 @@ void ExplorerItem::SetPath(const Path &path)
 void ExplorerItem::SetSelected(bool selected)
 {
     m_selected = selected;
-    p_bg->SetTint(IsSelected() ? Color::LightBlue.WithAlpha(0.8f) : Color::Zero);
+
+    if (p_bg)
+    {
+        p_bg->SetTint(IsSelected() ? UITheme::GetSelectedColor() : Color::Zero);
+    }
 }
 
 void ExplorerItem::SetPathString(const String &string)

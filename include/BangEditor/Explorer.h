@@ -23,6 +23,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class Explorer : public GameObject,
+                 public EventListener<IEventsFocus>,
                  public EventListener<IEventsEditor>,
                  public EventListener<IEventsFileTracker>,
                  public EventListener<IEventsValueChanged>,
@@ -49,6 +50,10 @@ public:
     const Path &GetSelectedPath() const;
 
     void Clear();
+
+    // IEventsFocus
+    virtual UIEventResult OnUIEvent(UIFocusable *focusable,
+                                    const UIEvent &event) override;
 
     // IEventsProjectManager
     void OnProjectOpen(const Project *project) override;

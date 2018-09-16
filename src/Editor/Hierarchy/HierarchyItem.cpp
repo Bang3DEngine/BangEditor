@@ -35,10 +35,10 @@ HierarchyItem::HierarchyItem()
     {
         OnCreateContextMenu(menuRootItem);
     });
+    p_contextMenu->SetFocusable(p_focusable);
 
     UIHorizontalLayout *hLayout = AddComponent<UIHorizontalLayout>();
     hLayout->SetChildrenHorizontalStretch(Stretch::FULL);
-
 
     GameObject *textGo = GameObjectFactory::CreateUIGameObject();
     textGo->SetName("HierarchyItemText");
@@ -52,17 +52,6 @@ HierarchyItem::HierarchyItem()
 
 HierarchyItem::~HierarchyItem()
 {
-}
-
-void HierarchyItem::OnStart()
-{
-    GameObject::OnStart();
-    GetComponent<UIContextMenu>()->AddButtonPart(GetParent());
-}
-
-void HierarchyItem::Update()
-{
-    GameObject::Update();
 }
 
 void HierarchyItem::SetReferencedGameObject(GameObject *referencedGameObject)

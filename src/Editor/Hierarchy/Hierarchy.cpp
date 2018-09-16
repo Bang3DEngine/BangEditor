@@ -94,7 +94,7 @@ Hierarchy::Hierarchy()
     {
         OnCreateContextMenu(menuRootItem);
     });
-    p_contextMenu->AddButtonPart(this);
+    p_contextMenu->SetFocusable(focusable);
 }
 
 Hierarchy::~Hierarchy()

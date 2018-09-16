@@ -71,7 +71,7 @@ void RIWTexture::Init()
     p_imageAspectRatioFitter = imageGo->AddComponent<UIAspectRatioFitter>();
     p_imageAspectRatioFitter->SetAspectRatioMode(AspectRatioMode::KEEP);
     p_textureImageRend = imageGo->AddComponent<UIImageRenderer>();
-    GameObjectFactory::AddOuterBorder(imageGo, Vector2i(1));
+    GameObjectFactory::AddOuterBorder(imageGo);
     imageGo->SetParent(imageContainerGo);
 
     AddWidget(imageGo, 200);

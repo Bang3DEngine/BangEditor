@@ -2,6 +2,7 @@
 #define EXPLORERITEM_H
 
 #include "Bang/Bang.h"
+#include "Bang/DPtr.h"
 #include "Bang/Path.h"
 #include "Bang/GameObject.h"
 #include "Bang/IEventsFocus.h"
@@ -61,18 +62,17 @@ private:
     Path m_path = Path::Empty;
     String m_pathString = "";
 
-    UILabel *p_label = nullptr;
-    UIImageRenderer *p_bg = nullptr;
-    UIImageRenderer *p_icon = nullptr;
-    UIFocusable *p_focusable = nullptr;
-    UIContextMenu *p_contextMenu = nullptr;
-    UIDragDroppable *p_dragDroppable = nullptr;
-    UIAspectRatioFitter *p_aspectRatioFitter = nullptr;
+    DPtr<UILabel> p_label;
+    DPtr<UIImageRenderer> p_bg;
+    DPtr<UIImageRenderer> p_icon;
+    DPtr<UIFocusable> p_focusable;
+    DPtr<UIContextMenu> p_contextMenu;
+    DPtr<UIDragDroppable> p_dragDroppable;
+    DPtr<UIAspectRatioFitter> p_aspectRatioFitter;
 
     // IEventsFocus
     virtual UIEventResult OnUIEvent(UIFocusable *focusable,
                                     const UIEvent &event) override;
-
 };
 
 NAMESPACE_BANG_EDITOR_END

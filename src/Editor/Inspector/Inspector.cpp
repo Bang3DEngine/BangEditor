@@ -113,13 +113,13 @@ Inspector::Inspector()
     p_blockLayer->GetGameObject()->SetParent(GetScrollPanel()->GetGameObject());
     SetCurrentWidgetBlocked(false);
 
-    AddComponent<UIFocusable>();
+    UIFocusable *focusable = AddComponent<UIFocusable>();
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
     {
         OnCreateContextMenu(menuRootItem);
     });
-    p_contextMenu->AddButtonPart(this);
+    p_contextMenu->SetFocusable(focusable);
 
     // Add a bit of margin below...
     GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 150)->

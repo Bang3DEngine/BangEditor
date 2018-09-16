@@ -82,7 +82,7 @@ MenuBar::MenuBar()
 {
     SetName("MenuBar");
     GameObjectFactory::CreateUIGameObjectInto(this);
-    GameObjectFactory::AddInnerBorder(this, Vector2i(1));
+    GameObjectFactory::AddInnerBorder(this);
     GameObjectFactory::AddOuterShadow(this, Vector2i(0, 5), 0.3f);
 
     p_focusable = AddComponent<UIFocusable>();
@@ -364,9 +364,10 @@ void BangEditor::MenuBar::CreateAssetsMenuInto(BangEditor::MenuItem *rootItem)
 {
     MenuItem *createMaterial = rootItem->AddItem("Material");
     MenuItem *createPhysicsMaterial = rootItem->AddItem("Physics Material");
-    MenuItem *createTextureCubeMap = rootItem->AddItem("Texture Cube Map");
+    MenuItem *createBehaviour = rootItem->AddItem("Behaviour"); MenuItem *createTextureCubeMap = rootItem->AddItem("Texture Cube Map");
     createMaterial->SetSelectedCallback(MenuBar::OnCreateMaterial);
     createPhysicsMaterial->SetSelectedCallback(MenuBar::OnCreatePhysicsMaterial);
+    createBehaviour->SetSelectedCallback(MenuBar::OnCreateBehaviour);
     createTextureCubeMap->SetSelectedCallback(MenuBar::OnCreateTextureCubeMap);
 }
 
@@ -477,7 +478,7 @@ void MenuBar::OnCreateMaterial(MenuItem*)
 
 void MenuBar::OnCreateBehaviour(MenuItem *item)
 {
-    OnAddNewBehaviour(item);
+    CreateNewBehaviour();
 }
 
 void MenuBar::OnCreatePhysicsMaterial(MenuItem*)
@@ -529,28 +530,7 @@ void MenuBar::OnAddAudioSource(MenuItem*)
 
 void MenuBar::OnAddNewBehaviour(MenuItem*)
 {
-    Path behaviourDir = Explorer::GetInstance()->GetCurrentPath();
-    String behaviourName = "";
-    do
-    {
-        behaviourName = Dialog::GetString("Specify Behaviour name...",
-                              "Please, the name of the new Behaviour: ",
-                              "NewBehaviour");
-
-        if (behaviourName == "")
-        {
-            return;
-        }
-    }
-    while (!BehaviourCreator::CanCreateNewBehaviour(behaviourDir, behaviourName));
-
-    Path behaviourHeaderPath;
-    Path behaviourSourcePath;
-    BehaviourCreator::CreateNewBehaviour(behaviourDir,
-                                         behaviourName,
-                                        &behaviourHeaderPath,
-                                        &behaviourSourcePath);
-
+    Path behaviourSourcePath = CreateNewBehaviour();
     BehaviourContainer *behaviourContainer = OnAddComponent<BehaviourContainer>();
     behaviourContainer->SetSourceFilepath(behaviourSourcePath);
 }
@@ -882,5 +862,32 @@ void MenuBar::OnEndCreateUIGameObjectFromMenuBar(GameObject *uiGo)
         }
         Editor::GetInstance()->SelectGameObject(uiGo, false);
     }
+}
+
+Path MenuBar::CreateNewBehaviour()
+{
+    Path behaviourDir = Explorer::GetInstance()->GetCurrentPath();
+    String behaviourName = "";
+    do
+    {
+        behaviourName = Dialog::GetString("Specify Behaviour name...",
+                              "Please, the name of the new Behaviour: ",
+                              "NewBehaviour");
+
+        if (behaviourName == "")
+        {
+            return Path::Empty;
+        }
+    }
+    while (!BehaviourCreator::CanCreateNewBehaviour(behaviourDir, behaviourName));
+
+    Path behaviourHeaderPath;
+    Path behaviourSourcePath;
+    BehaviourCreator::CreateNewBehaviour(behaviourDir,
+                                         behaviourName,
+                                        &behaviourHeaderPath,
+                                        &behaviourSourcePath);
+
+    return behaviourSourcePath;
 }
 

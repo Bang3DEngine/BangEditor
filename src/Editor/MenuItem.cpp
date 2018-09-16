@@ -87,7 +87,7 @@ MenuItem::MenuItem(MenuItemType itemType)
     csf->SetHorizontalSizeType(LayoutSizeType::PREFERRED);
     csf->SetVerticalSizeType(LayoutSizeType::PREFERRED);
 
-    GameObjectFactory::AddOuterBorder(childrenListGo, Vector2i(1));
+    GameObjectFactory::AddOuterBorder(childrenListGo);
 
     AdjustToBeInsideScreen();
 
@@ -204,11 +204,11 @@ void MenuItem::Update()
         Color topBgColor = Color::Zero;
         if (tintBg && mouseOver)
         {
-            topBgColor = Color::VeryLightBlue.WithValue(1.2f);
+            topBgColor = UITheme::GetOverColor();
         }
         else if (mustDisplayChildren)
         {
-            topBgColor = Color::VeryLightBlue;
+            topBgColor = UITheme::GetSelectedColor();
         }
         else
         {

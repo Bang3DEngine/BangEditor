@@ -36,9 +36,9 @@ void ComponentInspectorWidget::InitInnerWidgets()
     {
         OnCreateContextMenu(menuRootItem);
     });
-    AddComponent<UIFocusable>();
-    p_contextMenu->AddButtonPart( this );
-    p_contextMenu->AddButtonPart( GetWidgetsContainer() );
+
+    UIFocusable *focusable = AddComponent<UIFocusable>();
+    p_contextMenu->SetFocusable(focusable);
 
     GetInspectorWidgetTitle()->GetEnabledCheckBox()->
                     GetGameObject()->SetEnabled( MustShowEnabledCheckbox() );

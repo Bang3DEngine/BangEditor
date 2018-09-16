@@ -37,6 +37,8 @@ void EditorBehaviourManager::Update()
     Array<Path> sourcesJustStartedToCompile;
     for (const Path &modifiedPath : m_modifiedBehaviourPaths)
     {
+        GetMutex()->UnLock();
+
         if (!IsBeingCompiled(modifiedPath))
         {
             CompileBehaviourObjectAsync(modifiedPath);
@@ -46,11 +48,16 @@ void EditorBehaviourManager::Update()
         {
             sourcesJustStartedToCompile.PushBack(modifiedPath);
         }
+
+        GetMutex()->Lock();
     }
+    GetMutex()->UnLock();
 
     for (const Path &sourceJustStartedToCompile : sourcesJustStartedToCompile)
     {
+        GetMutex()->Lock();
         m_modifiedBehaviourPaths.Remove(sourceJustStartedToCompile);
+        GetMutex()->UnLock();
     }
 }
 

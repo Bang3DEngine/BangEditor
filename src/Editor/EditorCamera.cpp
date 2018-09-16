@@ -116,7 +116,8 @@ void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
 
 bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
 {
-    if (Input::GetMouseButton(MouseButton::RIGHT))
+    if (Input::GetMouseButton(MouseButton::RIGHT) &&
+        UISceneEditContainer::IsMouseOver())
     {
         Vector2 delta = Vector2(Input::GetMouseDelta()) * Vector2(-1, 1) *
                         m_mouseRotDegreesPerPixel;

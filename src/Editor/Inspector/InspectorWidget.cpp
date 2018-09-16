@@ -39,7 +39,7 @@ void InspectorWidget::Init()
     // p_bgRenderer->SetMode(UIImageRenderer::Mode::SLICE_9);
     p_bgRenderer->SetTint(Color::Zero);
 
-    GameObjectFactory::AddInnerBorder(this, Vector2i(1));
+    GameObjectFactory::AddInnerBorder(this);
 
     UIVerticalLayout *mainVL = AddComponent<UIVerticalLayout>();
     mainVL->SetSpacing(1);
@@ -254,7 +254,7 @@ InspectorWidgetTitle::InspectorWidgetTitle()
     bg->SetMode( UIImageRenderer::Mode::SLICE_9_INV_UVY );
     bg->SetTint(Color::White.WithValue(1.1f));
 
-    GameObjectFactory::AddInnerBorder(this, Vector2i(1));
+    GameObjectFactory::AddInnerBorder(this);
 
     p_icon = GameObjectFactory::CreateUIImage(Color::White);
     GameObject *iconGo = p_icon->GetGameObject();

@@ -17,6 +17,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class ContextMenu;
 
 class UIContextMenu : public Component,
+                      public EventListener<IEventsFocus>,
                       public EventListener<IEventsDestroy>
 {
     COMPONENT(UIContextMenu)
@@ -25,21 +26,21 @@ public:
     UIContextMenu() = default;
     virtual ~UIContextMenu() = default;
 
-    // Component
-    void OnUpdate() override;
-
     void ShowMenu();
     bool IsMenuBeingShown() const;
-    void AddButtonPart(GameObject *part);
+    void SetFocusable(UIFocusable *focusable);
 
     using CreateContextMenuCallback = std::function<void(MenuItem *menuRootItem)>;
     void SetCreateContextMenuCallback(CreateContextMenuCallback createCallback);
 
 private:
-    List<GameObject*> m_parts;
     ContextMenu *p_menu = nullptr;
 
     CreateContextMenuCallback m_createContextMenuCallback;
+
+    // IEventsFocus
+    virtual UIEventResult OnUIEvent(UIFocusable *focusable,
+                                    const UIEvent &event) override;
 
     // IEventsDestroy
     void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
@@ -48,6 +49,7 @@ private:
 
 // ContextMenu
 class ContextMenu : public GameObject,
+                    public EventListener<IEventsFocus>,
                     public EventListener<IEventsDestroy>
 {
     GAMEOBJECT_EDITOR(ContextMenu);
@@ -58,15 +60,22 @@ public:
     void Update() override;
 
     MenuItem *GetRootItem() const;
-
-    void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
+    UIFocusable *GetFocusable() const;
 
 private:
-    MenuItem *p_rootItem = nullptr;
     bool m_justCreated = false;
+    MenuItem *p_rootItem = nullptr;
+    UIFocusable *p_focusable = nullptr;
 
     ContextMenu();
     virtual ~ContextMenu() = default;
+
+    // IEventsFocus
+    virtual UIEventResult OnUIEvent(UIFocusable *focusable,
+                                    const UIEvent &event) override;
+
+    // IEventsDestroy
+    void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

@@ -52,16 +52,7 @@ UISceneToolbar::UISceneToolbar()
         (*button)->SetIcon(icon, Vector2i(ToolBarHeight));
         (*button)->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
         (*button)->GetIcon()->SetTint(Color::DarkGray);
-        (*button)->GetFocusable()->AddEventCallback(
-        [callbackFunc](UIFocusable*, const UIEvent &event)
-        {
-            if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
-            {
-                callbackFunc();
-                return UIEventResult::INTERCEPT;
-            }
-            return UIEventResult::IGNORE;
-        });
+        (*button)->AddClickedCallback( [callbackFunc]() { callbackFunc(); });
         (*button)->GetGameObject()->SetParent(this);
     };
 

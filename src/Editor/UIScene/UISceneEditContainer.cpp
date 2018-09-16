@@ -52,7 +52,7 @@ UISceneEditContainer::UISceneEditContainer()
     p_cameraPreviewImg->SetMode(UIImageRenderer::Mode::TEXTURE);
     cameraPreviewGo->SetVisible(false);
 
-    GameObjectFactory::AddOuterBorder(cameraPreviewGo, Vector2i(2));
+    GameObjectFactory::AddOuterBorder(cameraPreviewGo);
     p_border = GameObjectFactory::AddOuterShadow(GetSceneImage(), Vector2i(2));
 
     m_cameraPreviewGBuffer = new GBuffer(1,1);
@@ -295,12 +295,12 @@ UIEventResult UISceneEditContainer::OnUIEvent(UIFocusable *focusable,
     switch (event.type)
     {
         case UIEvent::Type::FOCUS_TAKEN:
-            p_border->SetTint(Color::Orange);
+            GameObjectFactory::MakeBorderFocused(p_border);
             return UIEventResult::INTERCEPT;
         break;
 
         case UIEvent::Type::FOCUS_LOST:
-            p_border->SetTint(Color::Black);
+            GameObjectFactory::MakeBorderNotFocused(p_border);
             return UIEventResult::INTERCEPT;
         break;
 

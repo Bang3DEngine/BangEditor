@@ -94,6 +94,7 @@ Explorer::Explorer()
 
     // Direction label
     p_currentPathLabel = GameObjectFactory::CreateUILabel();
+    p_currentPathLabel->SetSelectable(true);
     p_currentPathLabel->GetText()->SetTextSize(11);
     p_currentPathLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::RIGHT);
 
@@ -150,23 +151,14 @@ Explorer::Explorer()
     p_scrollPanel->SetHorizontalScrollEnabled(false);
 
     UIFocusable *focusable = AddComponent<UIFocusable>();
+    focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
+
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
     {
         OnCreateContextMenu(menuRootItem);
     });
-    p_contextMenu->AddButtonPart(this);
-
-    focusable->AddEventCallback([this](UIFocusable *focusable,
-                                       const UIEvent &event)
-    {
-        if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
-        {
-            SelectPath(Path::Empty);
-            return UIEventResult::INTERCEPT;
-        }
-        return UIEventResult::IGNORE;
-    });
+    p_contextMenu->SetFocusable(focusable);
 
     SetCurrentPath( Paths::GetEngineAssetsDir() );
 
@@ -300,6 +292,21 @@ void Explorer::Clear()
     }
     m_pathsToItem.Clear();
     p_items.Clear();
+}
+
+UIEventResult Explorer::OnUIEvent(UIFocusable*, const UIEvent &event)
+{
+    switch (event.type)
+    {
+        case UIEvent::Type::MOUSE_CLICK_FULL:
+            SelectPath(Path::Empty);
+            return UIEventResult::INTERCEPT;
+        break;
+
+        default:
+        break;
+    }
+    return UIEventResult::IGNORE;
 }
 
 void Explorer::OnProjectOpen(const Project *project)

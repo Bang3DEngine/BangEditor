@@ -20,27 +20,6 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-// UIContextMenu
-void UIContextMenu::OnUpdate()
-{
-    Component::OnUpdate();
-
-    if (Input::GetMouseButtonDown(MouseButton::RIGHT))
-    {
-        List<GameObject*> parts = m_parts;
-        parts.PushBack(GetGameObject());
-
-        for (GameObject *part : m_parts)
-        {
-            if (UICanvas::GetActive(this)->IsMouseOver(part, false))
-            {
-                ShowMenu();
-                break;
-            }
-        }
-    }
-}
-
 void UIContextMenu::ShowMenu()
 {
     if (p_menu)
@@ -56,13 +35,18 @@ void UIContextMenu::ShowMenu()
         {
             m_createContextMenuCallback(p_menu->GetRootItem());
         }
-        p_menu->EventEmitter<IEventsDestroy>::RegisterListener(this);
-        p_menu->SetParent( EditorSceneManager::GetEditorScene() );
-    }
 
-    if (p_menu->GetRootItem()->GetChildrenItems().IsEmpty())
-    {
-        GameObject::Destroy(p_menu);
+        if (p_menu->GetRootItem()->GetChildrenItems().IsEmpty())
+        {
+            GameObject::Destroy(p_menu);
+        }
+        else
+        {
+            p_menu->EventEmitter<IEventsDestroy>::RegisterListener(this);
+            p_menu->SetParent( EditorSceneManager::GetEditorScene() );
+
+            UICanvas::GetActive(this)->SetFocus(p_menu->GetFocusable());
+        }
     }
 }
 
@@ -71,10 +55,10 @@ bool UIContextMenu::IsMenuBeingShown() const
     return p_menu != nullptr;
 }
 
-void UIContextMenu::AddButtonPart(GameObject *part)
+void UIContextMenu::SetFocusable(UIFocusable *focusable)
 {
-    part->EventEmitter<IEventsDestroy>::RegisterListener(this);
-    m_parts.PushBack(part);
+    focusable->EventEmitter<IEventsDestroy>::RegisterListener(this);
+    focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
 }
 
 void UIContextMenu::SetCreateContextMenuCallback(
@@ -83,9 +67,31 @@ void UIContextMenu::SetCreateContextMenuCallback(
     m_createContextMenuCallback = createCallback;
 }
 
+UIEventResult UIContextMenu::OnUIEvent(UIFocusable*, const UIEvent &event)
+{
+    switch (event.type)
+    {
+        // case UIEvent::Type::FOCUS_LOST:
+        //     GameObject::Destroy(p_menu);
+        //     return UIEventResult::INTERCEPT;
+        // break;
+
+        case UIEvent::Type::MOUSE_CLICK_DOWN:
+            if (event.mouse.button == MouseButton::RIGHT)
+            {
+                ShowMenu();
+                return UIEventResult::INTERCEPT;
+            }
+        break;
+
+        default:
+        break;
+    }
+    return UIEventResult::IGNORE;
+}
+
 void UIContextMenu::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
-    m_parts.Remove( DCAST<GameObject*>(object) );
     if (p_menu && object == p_menu)
     {
         p_menu = nullptr;
@@ -105,6 +111,9 @@ ContextMenu::ContextMenu()
     rt->SetAnchors( mousePosNDC );
     rt->TranslateLocal( Vector3(0, 0, -0.001f) );
 
+    p_focusable = AddComponent<UIFocusable>();
+    p_focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
+
     UIContentSizeFitter *csf = GetRootItem()->AddComponent<UIContentSizeFitter>();
     csf->SetHorizontalSizeType(LayoutSizeType::PREFERRED);
     csf->SetVerticalSizeType(LayoutSizeType::PREFERRED);
@@ -115,6 +124,24 @@ ContextMenu::ContextMenu()
     GetRootItem()->SetParent(this);
 
     m_justCreated = true;
+}
+
+UIEventResult ContextMenu::OnUIEvent(UIFocusable*, const UIEvent &event)
+{
+    switch (event.type)
+    {
+        // case UIEvent::Type::FOCUS_TAKEN:
+        // break;
+        //
+        // case UIEvent::Type::FOCUS_LOST:
+        //     GameObject::Destroy(this);
+        //     return UIEventResult::INTERCEPT;
+        // break;
+
+        default:
+        break;
+    }
+    return UIEventResult::IGNORE;
 }
 
 void ContextMenu::Update()
@@ -135,6 +162,11 @@ void ContextMenu::Update()
 MenuItem *ContextMenu::GetRootItem() const
 {
     return p_rootItem;
+}
+
+UIFocusable *ContextMenu::GetFocusable() const
+{
+    return p_focusable;
 }
 
 void ContextMenu::OnDestroyed(EventEmitter<IEventsDestroy> *object)

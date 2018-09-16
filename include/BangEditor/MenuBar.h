@@ -135,6 +135,7 @@ private:
 
     static void OpenProject(const Path& projectFileFilepath);
 
+    static Path CreateNewBehaviour();
     static MenuBar* GetInstance();
 
     friend class ProjectManager;
