@@ -217,6 +217,7 @@ void Explorer::SelectPath(const Path &path,
         if (explorerItem)
         {
             explorerItem->SetSelected(true);
+            UICanvas::GetActive(this)->SetFocus(explorerItem->GetFocusable());
             Editor::OnPathSelected(explorerItem->GetPath());
         }
     }

@@ -62,8 +62,8 @@ void EditorScene::Init()
     m_sceneOpenerSaver = new SceneOpenerSaver();
     m_editorFileTracker = new EditorFileTracker();
 
-    GameObjectFactory::CreateUIGameObjectInto(this);
-    GameObjectFactory::CreateUICanvasInto(this);
+    GameObjectFactory::CreateUISceneInto(this);
+    this->RemoveComponent( GetComponent<Camera>() );
     SetName("EditorScene");
 
     m_mainEditorVLGo = GameObjectFactory::CreateUIGameObjectNamed("MainEditorVL");
