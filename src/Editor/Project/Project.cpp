@@ -67,7 +67,7 @@ bool Project::OpenFirstFoundScene() const
 Path Project::GetFirstFoundScenePath() const
 {
     Array<Path> sceneFilepaths = GetProjectAssetsFilepath()
-                                .GetFiles(Path::FindFlag::RECURSIVE,
+                                .GetFiles(FindFlag::RECURSIVE,
                                            {Extensions::GetSceneExtension()});
     Paths::SortPathsByName(&sceneFilepaths);
     return !sceneFilepaths.IsEmpty() ? sceneFilepaths.Back() : Path::Empty;

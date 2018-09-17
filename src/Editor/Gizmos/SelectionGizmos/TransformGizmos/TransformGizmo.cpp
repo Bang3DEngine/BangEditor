@@ -91,28 +91,35 @@ void TransformGizmo::Update()
             GetTransform()->SetScale( GetScaleFactor() );
     }
 
-    p_translateGizmo->SetEnabled(false);
-    p_rotateGizmo->SetEnabled(false);
-    p_scaleGizmo->SetEnabled(false);
-    p_rectTransformGizmo->SetEnabled(false);
-
     switch (transformGizmoMode)
     {
         case TransformGizmoMode::TRANSLATE:
             p_translateGizmo->SetEnabled(true);
-            break;
+            p_rotateGizmo->SetEnabled(false);
+            p_scaleGizmo->SetEnabled(false);
+            p_rectTransformGizmo->SetEnabled(false);
+        break;
 
         case TransformGizmoMode::ROTATE:
+            p_translateGizmo->SetEnabled(false);
             p_rotateGizmo->SetEnabled(true);
-            break;
+            p_scaleGizmo->SetEnabled(false);
+            p_rectTransformGizmo->SetEnabled(false);
+        break;
 
         case TransformGizmoMode::SCALE:
+            p_translateGizmo->SetEnabled(false);
+            p_rotateGizmo->SetEnabled(false);
             p_scaleGizmo->SetEnabled(true);
-            break;
+            p_rectTransformGizmo->SetEnabled(false);
+        break;
 
         case TransformGizmoMode::RECT:
+            p_translateGizmo->SetEnabled(false);
+            p_rotateGizmo->SetEnabled(false);
+            p_scaleGizmo->SetEnabled(false);
             p_rectTransformGizmo->SetEnabled(true);
-            break;
+        break;
 
         default:
         break;

@@ -26,20 +26,27 @@ ShortcutManager::~ShortcutManager()
 
 void ShortcutManager::Update()
 {
-    if (!Input::GetActive()) { return; }
-
-    // Process pressed keys
-    const Array<Key> pressedKeys = Input::GetPressedKeys();
-    const Array<Key> keysDown = Input::GetKeysDown();
-    const Array<Key> keysDownRepeat = Input::GetKeysDownRepeat();
-    for (const auto &pair : m_shortcuts)
+    if (Input::GetActive())
     {
-        // Trigger callbacks
-        const Shortcut &shortcut = pair.first;
-        if (shortcut.IsTriggered(pressedKeys, keysDown, keysDownRepeat))
+        const Array<InputEvent> &events = Input::GetEnqueuedEvents();
+        for (const InputEvent &event : events)
         {
-            const Array<ShortcutCallback> &shortcutCallbacks = pair.second;
-            for (ShortcutCallback cb : shortcutCallbacks) { cb(shortcut); }
+            if (event.type == InputEvent::Type::KEY_DOWN)
+            {
+                for (const auto &pair : m_shortcuts)
+                {
+                    // Trigger callbacks
+                    const Shortcut &shortcut = pair.first;
+                    if (shortcut.IsTriggered(event))
+                    {
+                        const Array<ShortcutCallback> &shortcutCallbacks = pair.second;
+                        for (ShortcutCallback cb : shortcutCallbacks)
+                        {
+                            cb(shortcut);
+                        }
+                    }
+                }
+            }
         }
     }
 }

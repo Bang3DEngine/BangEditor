@@ -3,8 +3,8 @@
 
 #include <unordered_set>
 
+#include "Bang/Map.h"
 #include "Bang/List.h"
-#include "Bang/UMap.h"
 #include "Bang/USet.h"
 #include "Bang/Input.h"
 #include "Bang/String.h"
@@ -24,7 +24,7 @@ public:
                                  ShortcutCallback callback);
 
 private:
-    UMap<Shortcut, Array<ShortcutCallback>> m_shortcuts;
+    Map<Shortcut, Array<ShortcutCallback>> m_shortcuts;
 
     ShortcutManager();
     virtual ~ShortcutManager();

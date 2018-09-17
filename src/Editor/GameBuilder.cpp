@@ -45,7 +45,7 @@ void GameBuilder::BuildGame(const String &gameName,
                             bool compileBehaviours)
 {
     Array<Path> sceneFiles = Paths::GetProjectAssetsDir()
-                                    .GetFiles(Path::FindFlag::RECURSIVE,
+                                    .GetFiles(FindFlag::RECURSIVE,
                                         {Extensions::GetSceneExtension()});
     if (sceneFiles.IsEmpty())
     {
@@ -183,7 +183,7 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
 
     // Compile every behaviour into its .o
     Array<Path> behavioursSourceFiles = Paths::GetProjectAssetsDir()
-                                        .GetFiles(Path::FindFlag::RECURSIVE,
+                                        .GetFiles(FindFlag::RECURSIVE,
                                          Extensions::GetSourceFileExtensions());
 
     // Preprocess behaviours
@@ -217,7 +217,7 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
 
     // Merge into .so
     Array<Path> behaviourObjectsPaths =
-                         dataLibsDir.GetFiles(Path::FindFlag::SIMPLE, {"o"});
+                         dataLibsDir.GetFiles(FindFlag::SIMPLE, {"o"});
     Path outputLibPath =
                 dataLibsDir.Append("Behaviours")
                        .AppendExtension("so")

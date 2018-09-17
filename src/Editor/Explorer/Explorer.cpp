@@ -168,17 +168,6 @@ Explorer::Explorer()
             EventEmitter<IEventsProjectManager>::RegisterListener(this);
     EditorFileTracker::GetInstance()->
             EventEmitter<IEventsFileTracker>::RegisterListener(this);
-
-    ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::D, "Duplicate"),
-            [this](const Shortcut &shortcut){ OnShortcutPressed(shortcut); } );
-    ShortcutManager::RegisterShortcut(Shortcut(Key::F2, "Rename"),
-            [this](const Shortcut &shortcut){ OnShortcutPressed(shortcut); } );
-    ShortcutManager::RegisterShortcut(Shortcut(Key::DELETE, "Delete"),
-            [this](const Shortcut &shortcut){ OnShortcutPressed(shortcut); } );
-    ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::C, "Copy"),
-            [this](const Shortcut &shortcut){ OnShortcutPressed(shortcut); } );
-    ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::V, "Paste"),
-            [this](const Shortcut &shortcut){ OnShortcutPressed(shortcut); } );
 }
 
 Explorer::~Explorer()
@@ -303,6 +292,20 @@ UIEventResult Explorer::OnUIEvent(UIFocusable*, const UIEvent &event)
             return UIEventResult::INTERCEPT;
         break;
 
+        case UIEvent::Type::KEY_DOWN:
+            if (event.key.key == Key::V &&
+                event.key.modifiers == KeyModifier::LCTRL)
+            {
+                if (EditorClipboard::HasCopiedPath())
+                {
+                    const Path &copiedPath = EditorClipboard::GetCopiedPath();
+                    const Path newDir = GetCurrentPath();
+                    DuplicatePathIntoDir(copiedPath, newDir);
+                    return UIEventResult::INTERCEPT;
+                }
+            }
+        break;
+
         default:
         break;
     }
@@ -421,7 +424,7 @@ void DuplicateImportFiles(const Path &srcPath, const Path &dstPath)
     }
     else // IsDir()
     {
-        Array<Path> srcSubPaths = srcPath.GetSubPaths(Path::FindFlag::SIMPLE);
+        Array<Path> srcSubPaths = srcPath.GetSubPaths(FindFlag::SIMPLE);
         const Path& srcDir = srcPath;
         const Path& dstDir = dstPath;
         for (const Path &srcSubPath : srcSubPaths)
@@ -470,14 +473,14 @@ void Explorer::OnRename(ExplorerItem *explorerItem)
             if (newPath.Exists())
             {
                 Dialog::Error("Can't rename",
-                              "The path '" + newPath.GetAbsolute() +
-                              "' already exists.");
+                              "The path already exists.");
             }
             else
             {
                 File::Rename(path, newPath);
                 EditorFileTracker::GetInstance()->OnPathRenamed(path, newPath);
                 explorerItem->SetPath(newPath);
+                SelectPath(newPath);
             }
         }
     }
@@ -566,47 +569,6 @@ void Explorer::OnItemDoubleClicked(UIFocusable *itemFocusable)
         else if (itemPath.HasExtension(Extensions::GetBehaviourExtensions()))
         {
             QtProjectManager::OpenBehaviourInQtCreator(itemPath);
-        }
-    }
-}
-
-void Explorer::OnShortcutPressed(const Shortcut &shortcut)
-{
-    ExplorerItem *selectedItem = GetSelectedItem();
-    if (selectedItem)
-    {
-        if (shortcut.GetName() == "Rename")
-        {
-            selectedItem->Rename();
-        }
-
-        if (shortcut.GetName() == "Duplicate")
-        {
-            selectedItem->Duplicate();
-        }
-
-        if (shortcut.GetName() == "Delete")
-        {
-            selectedItem->Remove();
-        }
-
-        if (shortcut.GetName() == "Copy")
-        {
-            EditorClipboard::CopyPath( selectedItem->GetPath() );
-        }
-    }
-
-    if (shortcut.GetName() == "Paste" && EditorClipboard::HasCopiedPath())
-    {
-        if (selectedItem)
-        {
-            selectedItem->Paste();
-        }
-        else
-        {
-            const Path &copiedPath = EditorClipboard::GetCopiedPath();
-            const Path newDir = GetCurrentPath();
-            DuplicatePathIntoDir(copiedPath, newDir);
         }
     }
 }

@@ -18,7 +18,11 @@ USING_NAMESPACE_BANG_EDITOR
 
 ScenePlayer::ScenePlayer()
 {
-    ShortcutManager::RegisterShortcut(Shortcut(Key::LCTRL, Key::P, "Play"),
+    ShortcutManager::RegisterShortcut(Shortcut(Key::P, KeyModifier::LCTRL, "Play"),
+                                      &ScenePlayer::OnShortcutPressed);
+    ShortcutManager::RegisterShortcut(Shortcut(Key::P, (KeyModifier::LSHIFT |
+                                                        KeyModifier::LCTRL),
+                                               "Pause", true),
                                       &ScenePlayer::OnShortcutPressed);
 }
 
@@ -44,6 +48,17 @@ void ScenePlayer::OnShortcutPressed(const Shortcut &shortcut)
             StopScene();
         }
         else
+        {
+            PlayScene();
+        }
+    }
+    else if (shortcut.GetName() == "Pause")
+    {
+        if (GetPlayState() == PlayState::PLAYING)
+        {
+            PauseScene();
+        }
+        else if (GetPlayState() == PlayState::PAUSED)
         {
             PlayScene();
         }

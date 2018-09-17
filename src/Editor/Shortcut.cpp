@@ -5,61 +5,48 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-Shortcut::Shortcut(const Array<Key> &keys, const String &name, bool autoRepeat)
+Shortcut::Shortcut(Key key,
+                   KeyModifiers keyModifiers,
+                   const String &name,
+                   bool autoRepeat)
 {
-    m_keys.PushBack(keys);
+    m_key = key;
+    m_keyModifiers = keyModifiers;
     m_name = name;
     m_autoRepeat = autoRepeat;
 }
-Shortcut::Shortcut(Key fk, const String &name, bool autoRepeat)
-                  : Shortcut( Array<Key>({fk}), name, autoRepeat)
-{
-}
 
-Shortcut::Shortcut(Key fk, Key sk, const String &name, bool autoRepeat)
-                  : Shortcut( Array<Key>({fk,sk}), name, autoRepeat)
+bool Shortcut::IsTriggered(const InputEvent &inputEvent) const
 {
-}
-
-Shortcut::Shortcut(Key fk, Key sk, Key tk, const String &name, bool autoRepeat)
-                  : Shortcut( Array<Key>({fk,sk, tk}), name, autoRepeat)
-{
-}
-
-bool Shortcut::IsTriggered(const Array<Key> &pressedKeysNow,
-                           const Array<Key> &downKeysNow,
-                           const Array<Key> &downRepeatKeysNow) const
-{
-    if (GetKeys().Size() == 0) { return false; }
-    if (GetKeys().Size() != pressedKeysNow.Size()) { return false; }
-
-    bool allKeysPressed = true;
-    bool atLeastOneKeyDownNow = false;
-    for (Key k : GetKeys())
+    switch (inputEvent.type)
     {
-        atLeastOneKeyDownNow = atLeastOneKeyDownNow ||
-                              (downKeysNow.Contains(k) ||
-                               (IsAutoRepeat() && downRepeatKeysNow.Contains(k))
-                              );
+        case InputEvent::Type::KEY_DOWN:
+            if (GetAutoRepeat() || (!inputEvent.autoRepeat))
+            {
+                return (inputEvent.key == GetKey() &&
+                        inputEvent.keyModifiers == GetKeyModifiers());
+            }
+        break;
 
-        if (!pressedKeysNow.Contains(k))
-        {
-            allKeysPressed = false;
-            break;
-        }
+        default:
+        break;
     }
-
-    return allKeysPressed && atLeastOneKeyDownNow;
+    return false;
 }
 
-bool Shortcut::IsAutoRepeat() const
+bool Shortcut::GetAutoRepeat() const
 {
     return m_autoRepeat;
 }
 
-const Array<Key> &Shortcut::GetKeys() const
+Key Shortcut::GetKey() const
 {
-    return m_keys;
+    return m_key;
+}
+
+KeyModifiers Shortcut::GetKeyModifiers() const
+{
+    return m_keyModifiers;
 }
 
 const String &Shortcut::GetName() const
@@ -69,21 +56,28 @@ const String &Shortcut::GetName() const
 
 bool Shortcut::operator==(const Shortcut &rhs) const
 {
-    if (GetKeys().Size() != rhs.GetKeys().Size()) { return false; }
-
-    for (int i = 0; i < GetKeys().Size(); ++i)
-    {
-        if (GetKeys()[i] != rhs.GetKeys()[i]) { return false; }
-    }
-    return true;
+    return GetKey() == rhs.GetKey() &&
+           GetKeyModifiers() == rhs.GetKeyModifiers() &&
+           GetName() == rhs.GetName();
 }
 
 bool Shortcut::operator<(const Shortcut &rhs) const
 {
-    for (int i = 0; i < Math::Min(GetKeys().Size(), rhs.GetKeys().Size()); ++i)
+    if (GetKey() < rhs.GetKey())
     {
-        if (GetKeys()[i] < rhs.GetKeys()[i]) { return true; }
-        else if (GetKeys()[i] > rhs.GetKeys()[i]) { return false; }
+        return true;
     }
-    return GetKeys().Size() < rhs.GetKeys().Size();
+    else if (GetKey() == rhs.GetKey())
+    {
+        if (GetKeyModifiers().GetValue() < rhs.GetKeyModifiers().GetValue())
+        {
+            return true;
+        }
+        else if (GetKeyModifiers().GetValue() == rhs.GetKeyModifiers().GetValue())
+        {
+            return GetName() < rhs.GetName();
+        }
+        return false;
+    }
+    return false;
 }

@@ -193,12 +193,12 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
     UITabContainer *tabContainer = GameObject::Create<UITabContainer>();
 
     Array<Path> engineAssetPaths =
-            Paths::GetEngineAssetsDir().GetFiles(Path::FindFlag::RECURSIVE);
+            Paths::GetEngineAssetsDir().GetFiles(FindFlag::RECURSIVE);
     engineAssetPaths.PushFront(Path::Empty);
     GameObject *engineAssetsGo = CreateAssetContainerGameObject(engineAssetPaths);
 
     Array<Path> projectAssetPaths =
-            Paths::GetProjectAssetsDir().GetFiles(Path::FindFlag::RECURSIVE);
+            Paths::GetProjectAssetsDir().GetFiles(FindFlag::RECURSIVE);
     projectAssetPaths.PushFront(Path::Empty);
     GameObject *projectAssetsGo = CreateAssetContainerGameObject(projectAssetPaths);
 

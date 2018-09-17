@@ -145,9 +145,10 @@ MenuBar::MenuBar()
     CreateGameObjectMenuInto(m_gameObjectsItem);
 
     // Shortcuts
-    RegisterShortcut( Shortcut(Key::LCTRL,              Key::S, "SaveScene")   );
-    RegisterShortcut( Shortcut(Key::LCTRL, Key::LSHIFT, Key::S, "SaveSceneAs") );
-    RegisterShortcut( Shortcut(Key::LCTRL,              Key::O, "OpenScene")   );
+    RegisterShortcut( Shortcut(Key::S, KeyModifier::LCTRL, "SaveScene")   );
+    RegisterShortcut( Shortcut(Key::S, (KeyModifier::LCTRL | KeyModifier::LSHIFT),
+                               "SaveSceneAs") );
+    RegisterShortcut( Shortcut(Key::O, KeyModifier::LCTRL, "OpenScene")   );
 }
 
 MenuBar::~MenuBar()

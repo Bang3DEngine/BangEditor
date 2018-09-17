@@ -101,7 +101,6 @@ private:
     ExplorerItem *GetItemFromPath(const Path &path) const;
 
     void OnItemDoubleClicked(UIFocusable*);
-    void OnShortcutPressed(const Shortcut &shortcut);
 
     bool IsInsideRootPath(const Path &path) const;
 

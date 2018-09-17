@@ -103,6 +103,50 @@ UIEventResult ExplorerItem::OnUIEvent(UIFocusable*, const UIEvent &event)
             return UIEventResult::INTERCEPT;
         break;
 
+        case UIEvent::Type::KEY_DOWN:
+            if (event.key.modifiers == KeyModifier::LCTRL)
+            {
+                switch (event.key.key)
+                {
+                    case Key::D:
+                        Duplicate();
+                        return UIEventResult::INTERCEPT;
+                    break;
+
+                    case Key::C:
+                        EditorClipboard::CopyPath( GetPath() );
+                        return UIEventResult::INTERCEPT;
+                    break;
+
+                    case Key::V:
+                        Paste();
+                        return UIEventResult::INTERCEPT;
+                    break;
+
+                    default:
+                    break;
+                }
+            }
+            else
+            {
+                switch (event.key.key)
+                {
+                    case Key::F2:
+                        Rename();
+                        return UIEventResult::INTERCEPT;
+                    break;
+
+                    case Key::DELETE:
+                        Remove();
+                        return UIEventResult::INTERCEPT;
+                    break;
+
+                    default:
+                    break;
+                }
+            }
+        break;
+
         case UIEvent::Type::MOUSE_ENTER:
             if (!IsSelected() && p_bg)
             {
