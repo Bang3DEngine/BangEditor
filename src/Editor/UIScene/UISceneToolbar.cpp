@@ -47,21 +47,29 @@ UISceneToolbar::UISceneToolbar()
 
     auto AddToolbarButton = [&](UIToolButton **button,
                                 Texture2D *icon,
-                                std::function<void()> callbackFunc)
+                                std::function<void()> callbackFunc,
+                                bool forPlayStop = false)
     {
         (*button) = GameObjectFactory::CreateUIToolButton("", icon);
         (*button)->SetIcon(icon, Vector2i(ToolBarHeight));
         (*button)->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
         (*button)->GetIcon()->SetTint(Color::DarkGray);
-        (*button)->AddClickedCallback( [this, callbackFunc, button]()
+        (*button)->AddClickedCallback( [this, callbackFunc, button, forPlayStop]()
         {
-            if ((*button)->GetOn())
+            if (forPlayStop)
             {
                 callbackFunc();
             }
             else
             {
-                SetTransformGizmoMode( TransformGizmoMode::NONE );
+                if ((*button)->GetOn())
+                {
+                    callbackFunc();
+                }
+                else
+                {
+                    SetTransformGizmoMode( TransformGizmoMode::NONE );
+                }
             }
         });
         (*button)->GetGameObject()->SetParent(this);
@@ -79,13 +87,13 @@ UISceneToolbar::UISceneToolbar()
     GameObjectFactory::CreateUIHSpacer()->SetParent(this);
 
     AddToolbarButton(&p_playButton, rightArrowIcon,
-                     [&]() { ScenePlayer::PlayScene(); });
+                     [&]() { ScenePlayer::PlayScene(); }, true);
     AddToolbarButton(&p_pauseButton, doubleBarIcon,
-                     [&]() { ScenePlayer::PauseScene(); });
+                     [&]() { ScenePlayer::PauseScene(); }, true);
     AddToolbarButton(&p_stepButton, rightArrowAndBarIcon,
-                     [&]() { ScenePlayer::StepFrame(); });
+                     [&]() { ScenePlayer::StepFrame(); }, true);
     AddToolbarButton(&p_stopButton, squareIcon,
-                     [&]() { ScenePlayer::StopScene(); });
+                     [&]() { ScenePlayer::StopScene(); }, true);
 
     p_renderModeInput = GameObjectFactory::CreateUIComboBox();
     p_renderModeInput->AddItem("Color",            SCAST<int>(UISceneImage::RenderMode::COLOR));
