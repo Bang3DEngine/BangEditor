@@ -28,7 +28,8 @@ public:
     MenuItem* AddItem();
     MenuItem* GetItem(int i);
 
-    static void CreateGameObjectMenuInto(MenuItem *rootItem);
+    static void CreateGameObjectCreateMenuInto(MenuItem *rootItem);
+    static void CreateGameObjectMiscMenuInto(MenuItem *rootItem);
     static void CreateComponentsMenuInto(MenuItem *rootItem);
     static void CreateAssetsMenuInto(MenuItem *rootItem);
 
@@ -130,6 +131,8 @@ private:
     static void OnCreateUIEmptyGO                (MenuItem *item);
     static void OnCreateUIImageGO                (MenuItem *item);
     static void OnCreateUITextGO                 (MenuItem *item);
+    static void OnAlignGameObjectWithView        (MenuItem *item);
+    static void OnAlignViewWithGameObject        (MenuItem *item);
     static void OnEndCreateGameObjectFromMenuBar   (GameObject *primitive);
     static void OnEndCreateUIGameObjectFromMenuBar (GameObject *uiGo);
 

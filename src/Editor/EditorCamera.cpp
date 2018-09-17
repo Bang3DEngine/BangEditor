@@ -248,8 +248,6 @@ void EditorCamera::OnStart()
     UpdateRotationVariables();
 }
 
-#include "Bang/GBuffer.h"
-#include "Bang/PointLight.h"
 void EditorCamera::Update()
 {
     GameObject::Update();

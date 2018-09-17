@@ -411,7 +411,7 @@ void Hierarchy::OnCreateContextMenu(MenuItem *menuRootItem)
     menuRootItem->SetFontSize(12);
 
     MenuItem *create = menuRootItem->AddItem("Create");
-    MenuBar::CreateGameObjectMenuInto(create);
+    MenuBar::CreateGameObjectCreateMenuInto(create);
 
     menuRootItem->AddSeparator();
 

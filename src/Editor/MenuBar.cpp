@@ -62,6 +62,7 @@
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/GameBuilder.h"
+#include "BangEditor/EditorCamera.h"
 #include "BangEditor/EditorDialog.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/EditorSettings.h"
@@ -72,6 +73,7 @@
 #include "BangEditor/SIWEditorSettings.h"
 #include "BangEditor/SIWPhysicsSettings.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/EditSceneGameObjects.h"
 #include "BangEditor/UndoRedoMoveGameObject.h"
 #include "BangEditor/UndoRedoCreateGameObject.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
@@ -142,7 +144,9 @@ MenuBar::MenuBar()
     // GameObject
     m_gameObjectsItem = AddItem();
     m_gameObjectsItem->GetText()->SetContent("GameObjects");
-    CreateGameObjectMenuInto(m_gameObjectsItem);
+    CreateGameObjectCreateMenuInto(m_gameObjectsItem);
+    m_gameObjectsItem->AddSeparator();
+    CreateGameObjectMiscMenuInto(m_gameObjectsItem);
 
     // Shortcuts
     RegisterShortcut( Shortcut(Key::S, KeyModifier::LCTRL, "SaveScene")   );
@@ -234,7 +238,7 @@ MenuItem* MenuBar::GetItem(int i)
     return m_items[i];
 }
 
-void MenuBar::CreateGameObjectMenuInto(MenuItem *rootItem)
+void MenuBar::CreateGameObjectCreateMenuInto(MenuItem *rootItem)
 {
     MenuItem *createEmpty   = rootItem->AddItem("Empty");
     MenuItem *primitiveGameObjectItem = rootItem->AddItem("Primitives");
@@ -265,6 +269,14 @@ void MenuBar::CreateGameObjectMenuInto(MenuItem *rootItem)
     createUICanvasGO->SetSelectedCallback(MenuBar::OnCreateUICanvasGO);
     createUITextGO->SetSelectedCallback(MenuBar::OnCreateUITextGO);
     createUIImageGO->SetSelectedCallback(MenuBar::OnCreateUIImageGO);
+}
+
+void MenuBar::CreateGameObjectMiscMenuInto(MenuItem *rootItem)
+{
+    MenuItem *alignGameObjectWithView = rootItem->AddItem("Align GameObject with view");
+    MenuItem *alignViewWithGameObject = rootItem->AddItem("Align view with GameObject");
+    alignGameObjectWithView->SetSelectedCallback(MenuBar::OnAlignGameObjectWithView);
+    alignViewWithGameObject->SetSelectedCallback(MenuBar::OnAlignViewWithGameObject);
 }
 
 void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
@@ -815,6 +827,35 @@ void MenuBar::OnCreateUITextGO(MenuItem*)
     UITextRenderer *text = uiGo->AddComponent<UITextRenderer>();
     text->SetContent("UIText");
     MenuBar::OnEndCreateUIGameObjectFromMenuBar(uiGo);
+}
+
+void MenuBar::OnAlignGameObjectWithView(MenuItem*)
+{
+    if (GameObject *go = Editor::GetSelectedGameObject())
+    {
+        if (Transform *tr = go->GetTransform())
+        {
+            EditorCamera *edCam = EditSceneGameObjects::GetInstance()->GetEditorCamera();
+            MetaNode metaBefore = tr->GetMeta();
+
+            tr->SetPosition( edCam->GetTransform()->GetPosition() );
+            tr->SetRotation( edCam->GetTransform()->GetRotation() );
+
+            UndoRedoManager::PushAction(
+                new UndoRedoSerializableChange(tr,
+                                               metaBefore,
+                                               tr->GetMeta()));
+        }
+    }
+}
+
+void MenuBar::OnAlignViewWithGameObject(MenuItem*)
+{
+    if (GameObject *go = Editor::GetSelectedGameObject())
+    {
+        EditSceneGameObjects::GetInstance()->GetEditorCamera()->
+                              AlignViewWithGameObject(go);
+    }
 }
 
 void MenuBar::OnCreatePlane(MenuItem*)

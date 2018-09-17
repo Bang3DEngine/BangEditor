@@ -56,7 +56,7 @@ Vector3 GetAxisedSpherePoint(const Vector3 &spherePoint,
     Vector3 axisedSpherePoint = spherePoint.ProjectedOnPlane(axisWorld,
                                                              sphere.GetCenter());
     return  sphere.GetCenter() +
-           (axisedSpherePoint - sphere.GetCenter()).Normalized() *
+           (axisedSpherePoint - sphere.GetCenter()).NormalizedSafe() *
             sphere.GetRadius();
 }
 
@@ -91,7 +91,10 @@ void RotateGizmoAxis::Update()
 {
     TransformGizmoAxis::Update();
     if (!GetReferencedGameObject() ||
-        !GetReferencedGameObject()->GetTransform()) { return; }
+        !GetReferencedGameObject()->GetTransform())
+    {
+        return;
+    }
 
     if ( IsBeingGrabbed() )
     {
@@ -209,7 +212,10 @@ void RotateGizmoAxis::SetAxis(Axis3DExt axis)
 void RotateGizmoAxis::UpdateCirclePoints()
 {
     if (!GetReferencedGameObject() ||
-        !GetReferencedGameObject()->GetTransform()) { return; }
+        !GetReferencedGameObject()->GetTransform())
+    {
+        return;
+    }
 
     Camera *cam = GetEditorCamera();
     Transform *camT = cam->GetGameObject()->GetTransform();
@@ -236,10 +242,13 @@ void RotateGizmoAxis::UpdateCirclePoints()
         // Cull non-facing to camera
         Vector3 refGoCenter = GetReferencedGameObject()->GetTransform()->GetPosition();
         Vector3 newPointWorld = GetTransform()->FromLocalToWorldPoint(newPoint);
-        Vector3 refGoCenterToLine = (newPointWorld - refGoCenter).Normalized();
-        Vector3 camToLine = (newPointWorld - camT->GetPosition()).Normalized();
+        Vector3 refGoCenterToLine = (newPointWorld - refGoCenter).NormalizedSafe();
+        Vector3 camToLine = (newPointWorld - camT->GetPosition()).NormalizedSafe();
         float dot = Vector3::Dot(camToLine, refGoCenterToLine);
-        if (dot <= 0.2f) { circlePoints.PushBack(newPoint); }
+        if (dot <= 0.2f)
+        {
+            circlePoints.PushBack(newPoint);
+        }
     }
 
     // Fill renderer points

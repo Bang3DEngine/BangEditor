@@ -166,7 +166,7 @@ void HierarchyItem::OnCreateContextMenu(MenuItem *menuRootItem)
     menuRootItem->SetFontSize(12);
 
     MenuItem *create = menuRootItem->AddItem("Create");
-    MenuBar::CreateGameObjectMenuInto(create);
+    MenuBar::CreateGameObjectCreateMenuInto(create);
 
     MenuItem *createPrefab = menuRootItem->AddItem("Create Prefab");
     createPrefab->SetSelectedCallback([this](MenuItem*)
@@ -216,6 +216,9 @@ void HierarchyItem::OnCreateContextMenu(MenuItem *menuRootItem)
     {
         Remove();
     });
+
+    menuRootItem->AddSeparator();
+    MenuBar::CreateGameObjectMiscMenuInto(menuRootItem);
 }
 
 void HierarchyItem::SetText(const String &text)
