@@ -34,30 +34,38 @@ void EditorBehaviourManager::Update()
 {
     BehaviourManager::Update();
 
-    Array<Path> sourcesJustStartedToCompile;
-    for (const Path &modifiedPath : m_modifiedBehaviourPaths)
+    if (ScenePlayer::GetPlayState() == PlayState::EDITING)
     {
-        GetMutex()->UnLock();
-
-        if (!IsBeingCompiled(modifiedPath))
+        if (!AreAllBehavioursCompiledSuccessfully() && GetBehavioursLibrary())
         {
-            CompileBehaviourObjectAsync(modifiedPath);
+            SetBehavioursLibrary(nullptr); // Invalidate current library
         }
 
-        if (IsBeingCompiled(modifiedPath))
+        Array<Path> sourcesJustStartedToCompile;
+        for (const Path &modifiedPath : m_modifiedBehaviourPaths)
         {
-            sourcesJustStartedToCompile.PushBack(modifiedPath);
+            GetMutex()->UnLock();
+
+            if (!IsBeingCompiled(modifiedPath))
+            {
+                CompileBehaviourObjectAsync(modifiedPath);
+            }
+
+            if (IsBeingCompiled(modifiedPath))
+            {
+                sourcesJustStartedToCompile.PushBack(modifiedPath);
+            }
+
+            GetMutex()->Lock();
         }
-
-        GetMutex()->Lock();
-    }
-    GetMutex()->UnLock();
-
-    for (const Path &sourceJustStartedToCompile : sourcesJustStartedToCompile)
-    {
-        GetMutex()->Lock();
-        m_modifiedBehaviourPaths.Remove(sourceJustStartedToCompile);
         GetMutex()->UnLock();
+
+        for (const Path &sourceJustStartedToCompile : sourcesJustStartedToCompile)
+        {
+            GetMutex()->Lock();
+            m_modifiedBehaviourPaths.Remove(sourceJustStartedToCompile);
+            GetMutex()->UnLock();
+        }
     }
 }
 
@@ -526,11 +534,10 @@ void EditorBehaviourManager::OnPathAdded(const Path &path)
 
 void EditorBehaviourManager::OnPathModified(const Path &path)
 {
-    if ( Extensions::Equals(path.GetLastExtension(),
+    if ( !path.IsHiddenFile() &&
+         Extensions::Equals(path.GetLastExtension(),
                             Extensions::GetBehaviourExtensions()) )
     {
-        SetBehavioursLibrary(nullptr); // Invalidate current library
-
         Array<Path> allBehaviourSources = GetBehaviourSourcesPaths();
         Array<Path> affectedBehaviourSources =
            GetAffectedBehaviourSourcesWhenModifying(path, allBehaviourSources);
