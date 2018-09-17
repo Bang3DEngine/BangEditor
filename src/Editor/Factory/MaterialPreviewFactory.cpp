@@ -62,7 +62,7 @@ void MaterialPreviewFactory::OnUpdateTextureBegin(
     BANG_UNUSED_4(params, previewScene, previewCamera, previewGoContainer);
 
     MeshRenderer *mr = previewGoContainer->
-                       GetComponentInChildren<MeshRenderer>(true);
+                       GetComponentInDescendants<MeshRenderer>();
     ASSERT(mr);
     mr->SetMaterial(material);
 }

@@ -47,7 +47,7 @@ void Editor::SelectGameObject_(GameObject *selectedGameObject, bool registerUndo
 {
     bool isSelectable = !selectedGameObject ||
          (!selectedGameObject->GetComponent<NotSelectableInEditor>() &&
-          !selectedGameObject->GetComponentInParent<NotSelectableInEditor>());
+          !selectedGameObject->GetComponentInAncestors<NotSelectableInEditor>());
 
     if (selectedGameObject != GetSelectedGameObject())
     {

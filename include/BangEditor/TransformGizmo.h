@@ -15,6 +15,7 @@ FORWARD class RectTransformSelectionGizmo;
 
 enum class TransformGizmoMode
 {
+    NONE,
     TRANSLATE,
     ROTATE,
     SCALE,

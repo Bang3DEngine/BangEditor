@@ -15,6 +15,7 @@ FORWARD class UIButton;
 FORWARD class Texture2D;
 FORWARD class UICheckBox;
 FORWARD class UIComboBox;
+FORWARD class UIToolButton;
 FORWARD class UITextRenderer;
 FORWARD NAMESPACE_BANG_END
 
@@ -43,19 +44,21 @@ public:
     static UISceneToolbar *GetActive();
 
 private:
-    UIButton *p_playButton  = nullptr;
-    UIButton *p_pauseButton = nullptr;
-    UIButton *p_stepButton  = nullptr;
-    UIButton *p_stopButton  = nullptr;
+    UIToolButton *p_playButton  = nullptr;
+    UIToolButton *p_pauseButton = nullptr;
+    UIToolButton *p_stepButton  = nullptr;
+    UIToolButton *p_stopButton  = nullptr;
 
     TransformGizmoMode m_transformGizmoMode = TransformGizmoMode::TRANSLATE;
-    UIButton *p_translateButton      = nullptr;
-    UIButton *p_rotateButton         = nullptr;
-    UIButton *p_scaleButton          = nullptr;
-    UIButton *p_rectTransformButton  = nullptr;
+    UIToolButton *p_translateButton      = nullptr;
+    UIToolButton *p_rotateButton         = nullptr;
+    UIToolButton *p_scaleButton          = nullptr;
+    UIToolButton *p_rectTransformButton  = nullptr;
 
     UIComboBox *p_renderModeInput = nullptr;
     UICheckBox *p_showDebugStatsCheckbox = nullptr;
+
+    void UpdateToolButtons();
 
     void OnPlayScene();
     void OnPauseScene();

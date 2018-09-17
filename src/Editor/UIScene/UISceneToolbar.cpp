@@ -5,6 +5,7 @@
 #include "Bang/UIButton.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIComboBox.h"
+#include "Bang/UIToolButton.h"
 #include "Bang/RectTransform.h"
 #include "Bang/TextureFactory.h"
 #include "Bang/UITextRenderer.h"
@@ -44,15 +45,25 @@ UISceneToolbar::UISceneToolbar()
     Texture2D *scaleIcon            = EditorTextureFactory::GetAxesIcon();
     Texture2D *rectTransformIcon    = EditorTextureFactory::GetAnchoredRectIcon();
 
-    auto AddToolbarButton = [&](UIButton **button,
+    auto AddToolbarButton = [&](UIToolButton **button,
                                 Texture2D *icon,
                                 std::function<void()> callbackFunc)
     {
-        (*button) = GameObjectFactory::CreateUIButton("", icon);
+        (*button) = GameObjectFactory::CreateUIToolButton("", icon);
         (*button)->SetIcon(icon, Vector2i(ToolBarHeight));
         (*button)->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
         (*button)->GetIcon()->SetTint(Color::DarkGray);
-        (*button)->AddClickedCallback( [callbackFunc]() { callbackFunc(); });
+        (*button)->AddClickedCallback( [this, callbackFunc, button]()
+        {
+            if ((*button)->GetOn())
+            {
+                callbackFunc();
+            }
+            else
+            {
+                SetTransformGizmoMode( TransformGizmoMode::NONE );
+            }
+        });
         (*button)->GetGameObject()->SetParent(this);
     };
 
@@ -116,55 +127,7 @@ UISceneToolbar::~UISceneToolbar()
 void UISceneToolbar::Update()
 {
     GameObject::Update();
-
-    GameObject *selGO = Editor::GetSelectedGameObject();
-    if (selGO)
-    {
-        if (selGO->HasComponent<RectTransform>())
-        {
-            SetTransformGizmoMode(TransformGizmoMode::RECT);
-        }
-        else if (GetTransformGizmoMode() == TransformGizmoMode::RECT)
-        {
-            SetTransformGizmoMode(TransformGizmoMode::TRANSLATE);
-        }
-    }
-
-    p_translateButton->GetGameObject()->SetVisible(selGO && selGO->GetTransform());
-    p_rotateButton->GetGameObject()->SetVisible(selGO && selGO->GetTransform());
-    p_scaleButton->GetGameObject()->SetVisible(selGO && selGO->GetTransform());
-    p_rectTransformButton->GetGameObject()->SetVisible(selGO && selGO->GetRectTransform());
-
-    switch (GetTransformGizmoMode())
-    {
-        case TransformGizmoMode::TRANSLATE:
-            p_translateButton->SetBlocked(true);
-            p_rotateButton->SetBlocked(false);
-            p_scaleButton->SetBlocked(false);
-            p_rectTransformButton->SetBlocked(false);
-        break;
-
-        case TransformGizmoMode::ROTATE:
-            p_translateButton->SetBlocked(false);
-            p_rotateButton->SetBlocked(true);
-            p_scaleButton->SetBlocked(false);
-            p_rectTransformButton->SetBlocked(false);
-        break;
-
-        case TransformGizmoMode::SCALE:
-            p_translateButton->SetBlocked(false);
-            p_rotateButton->SetBlocked(false);
-            p_scaleButton->SetBlocked(true);
-            p_rectTransformButton->SetBlocked(false);
-        break;
-
-        case TransformGizmoMode::RECT:
-            p_translateButton->SetBlocked(false);
-            p_rotateButton->SetBlocked(false);
-            p_scaleButton->SetBlocked(false);
-            p_rectTransformButton->SetBlocked(true);
-        break;
-    }
+    UpdateToolButtons();
 }
 
 void UISceneToolbar::SetTransformGizmoMode(TransformGizmoMode transformMode)
@@ -172,6 +135,7 @@ void UISceneToolbar::SetTransformGizmoMode(TransformGizmoMode transformMode)
     if (transformMode != GetTransformGizmoMode())
     {
         m_transformGizmoMode = transformMode;
+        UpdateToolButtons();
     }
 }
 
@@ -195,8 +159,62 @@ UISceneToolbar *UISceneToolbar::GetActive()
     return UISceneEditContainer::GetActive()->GetSceneToolbar();
 }
 
+void UISceneToolbar::UpdateToolButtons()
+{
+    GameObject *selGo = Editor::GetSelectedGameObject();
+    if (selGo)
+    {
+        bool hasRectTransform = selGo->HasComponent<RectTransform>();
+        if (hasRectTransform)
+        {
+            SetTransformGizmoMode(TransformGizmoMode::RECT);
+        }
+        else if (GetTransformGizmoMode() == TransformGizmoMode::RECT)
+        {
+            SetTransformGizmoMode(TransformGizmoMode::TRANSLATE);
+        }
+    }
+
+    p_translateButton->SetBlocked( !(selGo && selGo->GetTransform()) );
+    p_rotateButton->SetBlocked( !(selGo && selGo->GetTransform()) );
+    p_scaleButton->SetBlocked( !(selGo && selGo->GetTransform()) );
+    p_rectTransformButton->SetBlocked( !(selGo && selGo->GetRectTransform()) );
+
+    p_translateButton->SetOn(false);
+    p_rotateButton->SetOn(false);
+    p_scaleButton->SetOn(false);
+    p_rectTransformButton->SetOn(false);
+
+    switch (GetTransformGizmoMode())
+    {
+        case TransformGizmoMode::TRANSLATE:
+            p_translateButton->SetOn(true);
+        break;
+
+        case TransformGizmoMode::ROTATE:
+            p_rotateButton->SetOn(true);
+        break;
+
+        case TransformGizmoMode::SCALE:
+            p_scaleButton->SetOn(true);
+        break;
+
+        case TransformGizmoMode::RECT:
+            p_rectTransformButton->SetOn(true);
+        break;
+
+        default:
+        break;
+    }
+}
+
 void UISceneToolbar::OnPlayScene()
 {
+    p_playButton->SetOn(true);
+    p_pauseButton->SetOn(false);
+    p_stepButton->SetOn(false);
+    p_stopButton->SetOn(false);
+
     p_playButton->SetBlocked(true);
     p_pauseButton->SetBlocked(false);
     p_stepButton->SetBlocked(false);
@@ -205,6 +223,11 @@ void UISceneToolbar::OnPlayScene()
 
 void UISceneToolbar::OnPauseScene()
 {
+    p_playButton->SetOn(false);
+    p_pauseButton->SetOn(true);
+    p_stepButton->SetOn(false);
+    p_stopButton->SetOn(false);
+
     p_playButton->SetBlocked(false);
     p_pauseButton->SetBlocked(true);
     p_stepButton->SetBlocked(false);
@@ -213,6 +236,11 @@ void UISceneToolbar::OnPauseScene()
 
 void UISceneToolbar::OnStopScene()
 {
+    p_playButton->SetOn(false);
+    p_pauseButton->SetOn(true);
+    p_stepButton->SetOn(true);
+    p_stopButton->SetOn(true);
+
     p_playButton->SetBlocked(false);
     p_pauseButton->SetBlocked(true);
     p_stepButton->SetBlocked(true);
@@ -224,10 +252,32 @@ void UISceneToolbar::OnPlayStateChanged(PlayState,
 {
     switch (newPlayState)
     {
-        case PlayState::EDITING:   OnStopScene();      break;
-        case PlayState::PAUSED:    OnPauseScene();     break;
-        case PlayState::PLAYING:   OnPlayScene();      break;
-        default: break;
+        case PlayState::EDITING:
+            OnStopScene();
+            p_playButton->SetBlocked(false);
+            p_pauseButton->SetBlocked(true);
+            p_stepButton->SetBlocked(true);
+            p_stopButton->SetBlocked(true);
+        break;
+
+        case PlayState::PAUSED:
+            OnPauseScene();
+            p_playButton->SetBlocked(false);
+            p_pauseButton->SetBlocked(true);
+            p_stepButton->SetBlocked(false);
+            p_stopButton->SetBlocked(false);
+        break;
+
+        case PlayState::PLAYING:
+            OnPlayScene();
+            p_playButton->SetBlocked(true);
+            p_pauseButton->SetBlocked(false);
+            p_stepButton->SetBlocked(false);
+            p_stopButton->SetBlocked(false);
+        break;
+
+        default:
+        break;
     }
 }
 

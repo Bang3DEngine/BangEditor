@@ -462,8 +462,7 @@ void Hierarchy::TreeSelectionCallback(GOItem *item, UIList::Action action)
 
 void Hierarchy::AddGameObject(GameObject *go)
 {
-    if (!go->GetComponent<HideInHierarchy>() &&
-        !go->GetComponentInParent<HideInHierarchy>(true))
+    if (!go->GetComponentInAncestorsAndThis<HideInHierarchy>())
     {
         bool topItem = (go->GetScene() == go->GetParent());
 
