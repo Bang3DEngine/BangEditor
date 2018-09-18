@@ -15,8 +15,10 @@
 #include "Bang/UIHorizontalLayout.h"
 
 #include "BangEditor/ScenePlayer.h"
+#include "BangEditor/EditorCamera.h"
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/TransformGizmo.h"
+#include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/UISceneEditContainer.h"
 #include "BangEditor/EditorTextureFactory.h"
 
@@ -36,6 +38,7 @@ UISceneToolbar::UISceneToolbar()
     toolbarLE->SetPreferredHeight(ToolBarHeight);
     toolbarLE->SetFlexibleWidth( 1.0f );
 
+    Texture2D *eyeIcon              = EditorTextureFactory::GetEyeIcon();
     Texture2D *rightArrowIcon       = TextureFactory::GetRightArrowIcon();
     Texture2D *doubleBarIcon        = EditorTextureFactory::GetDoubleBarIcon();
     Texture2D *squareIcon           = EditorTextureFactory::GetSquareIcon();
@@ -83,6 +86,12 @@ UISceneToolbar::UISceneToolbar()
                      [&]() { SetTransformGizmoMode( TransformGizmoMode::SCALE); });
     AddToolbarButton(&p_rectTransformButton, rectTransformIcon,
                      [&]() { SetTransformGizmoMode( TransformGizmoMode::RECT); });
+
+    GameObjectFactory::CreateUIVSeparator(LayoutSizeType::PREFERRED, 10)->
+            SetParent(this);
+
+    AddToolbarButton(&p_resetCamViewButton, eyeIcon,
+                     [&]() { ResetCameraView(); }, true);
 
     GameObjectFactory::CreateUIHSpacer()->SetParent(this);
 
@@ -165,6 +174,14 @@ UIComboBox *UISceneToolbar::GetRenderModeComboBox() const
 UISceneToolbar *UISceneToolbar::GetActive()
 {
     return UISceneEditContainer::GetActive()->GetSceneToolbar();
+}
+
+void UISceneToolbar::ResetCameraView()
+{
+    if (Scene *openScene = EditorSceneManager::GetActive()->GetOpenScene())
+    {
+        EditorCamera::GetInstance()->FocusScene(openScene);
+    }
 }
 
 void UISceneToolbar::UpdateToolButtons()

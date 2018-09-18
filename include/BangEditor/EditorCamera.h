@@ -5,6 +5,7 @@
 #include "Bang/Vector3.h"
 #include "Bang/Quaternion.h"
 #include "Bang/GameObject.h"
+#include "Bang/IEventsSceneManager.h"
 
 #include "BangEditor/BangEditor.h"
 
@@ -18,7 +19,8 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class SelectionFramebuffer;
 
-class EditorCamera : public GameObject
+class EditorCamera : public GameObject,
+                     public EventListener<IEventsSceneManager>
 {
     GAMEOBJECT_EDITOR(EditorCamera);
 
@@ -27,12 +29,12 @@ public:
     virtual ~EditorCamera();
 
     // GameObject
-    void OnStart() override;
     void Update() override;
 
+    void FocusScene(Scene *scene);
     void AlignViewWithGameObject(GameObject *selected);
     void SwitchProjectionModeTo(bool mode3D);
-    void StartLookAt(GameObject *lookAtFocus);
+    void LookAt(GameObject *lookAtFocus);
     void RequestBlockBy(GameObject *go);
     void RequestUnBlockBy(GameObject *go);
 
@@ -53,6 +55,9 @@ private:
     SelectionFramebuffer *m_selectionFramebuffer = nullptr;
     Set<GameObject*> m_blockRequests;
 
+    Vector3 m_targetPosition = Vector3::Zero;
+    Quaternion m_targetRotation = Quaternion::Identity;
+
     // WASD
     float m_keysMoveAccel = 1.0f;
     float m_maxMoveSpeed  = 10.0f;
@@ -62,28 +67,36 @@ private:
     Vector2 m_mousePanPerPixel = Vector2(70.0f);
 
     // Rotation
-    Quaternion m_startingRotation;                     // Starting rot offset
+    Quaternion m_prevRotation;                     // Starting rot offset
     Vector2 m_mouseRotDegreesAccum = Vector2(0.0f);    // User input
     Vector2 m_mouseRotDegreesPerPixel = Vector2(0.0f); // Parameter
 
     // Zoom
-    float m_mouseZoomPerDeltaWheel = 1.0f;
+    float m_mouseZoomPerDeltaWheel = 0.0f;
     float m_zoomCurrentSpeed = 0.0f;
 
     float m_orthoHeight = 30.0f;
 
     // Focus
-    GameObject *p_currentFocus = nullptr;
+    GameObject *p_currentLookAtGo = nullptr;
     float m_lookAtRotSpeed     = 3.0f;
     float m_lookAtMoveSpeed    = 4.0f;
 
+    // IEventsSceneManager
+    virtual void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
+
     void AdjustSpeeds();
     void UpdateRotationVariables();
-    void HandleWheelZoom(Vector3 *moveStep, bool *hasMoved);
-    bool HandleMouseRotation(bool *hasMoved, bool *unwrapMouse);
-    void HandleMousePanning(bool *hasMoved, bool *unwrapMouse);
-    void HandleKeyMovement(Vector3 *moveStep, bool *hasMoved);
+    void HandleWheelZoom();
+    bool HandleMouseRotation();
+    void HandleMousePanning();
+    void HandleKeyMovement();
     void HandleLookAtFocus();
+    void InterpolatePositionAndRotation(float extraInterpolationPos = 0.0f,
+                                        float extraInterpolationRot = 0.0f);
+    void GetLookAtFocusParams(GameObject *lookAtGo,
+                              Vector3 *targetPos,
+                              Quaternion *targetRot);
 };
 
 NAMESPACE_BANG_EDITOR_END

@@ -15,6 +15,7 @@
 #include "BangEditor/MenuBar.h"
 #include "BangEditor/Hierarchy.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorCamera.h"
 #include "BangEditor/EditorClipboard.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorTextureFactory.h"
@@ -247,9 +248,16 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
 
         case UIList::Action::DOUBLE_CLICKED_LEFT:
         {
-            Hierarchy *h = Hierarchy::GetInstance();
-            UITree *t = h->GetUITree();
-            t->SetItemCollapsed(this, !t->IsItemCollapsed(this));
+            if (EditorCamera *edCam = EditorCamera::GetInstance())
+            {
+                if (GameObject *refGo = GetReferencedGameObject())
+                {
+                    edCam->LookAt(refGo);
+                }
+            }
+            // Hierarchy *h = Hierarchy::GetInstance();
+            // UITree *t = h->GetUITree();
+            // t->SetItemCollapsed(this, !t->IsItemCollapsed(this));
         }
         break;
 
@@ -299,6 +307,14 @@ UIEventResult HierarchyItem::OnUIEvent(UIFocusable*, const UIEvent &event)
             {
                 switch (event.key.key)
                 {
+                    case Key::F:
+                        if (EditorCamera *edCam = EditorCamera::GetInstance())
+                        {
+                            edCam->LookAt(GetReferencedGameObject());
+                        }
+                        return UIEventResult::INTERCEPT;
+                    break;
+
                     case Key::DELETE:
                         Remove();
                         return UIEventResult::INTERCEPT;

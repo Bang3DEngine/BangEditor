@@ -48,6 +48,7 @@ private:
     UIToolButton *p_pauseButton = nullptr;
     UIToolButton *p_stepButton  = nullptr;
     UIToolButton *p_stopButton  = nullptr;
+    UIToolButton *p_resetCamViewButton = nullptr;
 
     TransformGizmoMode m_transformGizmoMode = TransformGizmoMode::TRANSLATE;
     UIToolButton *p_translateButton      = nullptr;
@@ -58,6 +59,7 @@ private:
     UIComboBox *p_renderModeInput = nullptr;
     UICheckBox *p_showDebugStatsCheckbox = nullptr;
 
+    void ResetCameraView();
     void UpdateToolButtons();
 
     void OnPlayScene();

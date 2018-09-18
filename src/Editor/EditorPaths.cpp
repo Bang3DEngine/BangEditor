@@ -20,7 +20,7 @@ void EditorPaths::InitEditorPath(const Path &editorRootPath)
 
     if (EditorPaths::GetEditorAssetsDir().IsDir())
     {
-        Debug_Log("Picking as EditorPaths Bang Editor Root: '" <<
+        Debug_DLog("Picking as EditorPaths Bang Editor Root: '" <<
                   EditorPaths::GetEditorDir() << "'");
     }
     else

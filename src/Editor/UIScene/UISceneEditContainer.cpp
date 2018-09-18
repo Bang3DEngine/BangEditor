@@ -363,6 +363,7 @@ UIEventResult UISceneEditContainer::OnUIEvent(UIFocusable *focusable,
                 case Key::X:
                 case Key::V:
                 case Key::D:
+                case Key::F:
                 case Key::DELETE:
                     if (Hierarchy *hierarchy = Hierarchy::GetInstance())
                     {
