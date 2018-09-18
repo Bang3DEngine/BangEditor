@@ -29,7 +29,10 @@ public:
     MenuItem* GetItem(int i);
 
     static void CreateGameObjectCreateMenuInto(MenuItem *rootItem);
-    static void CreateGameObjectMiscMenuInto(MenuItem *rootItem);
+    static void CreateGameObjectMiscMenuInto(
+                        MenuItem *rootItem,
+                        MenuItem **alignGameObjectWithViewItemOut = nullptr,
+                        MenuItem **alignViewWithGameObjectItemOut = nullptr);
     static void CreateComponentsMenuInto(MenuItem *rootItem);
     static void CreateAssetsMenuInto(MenuItem *rootItem);
 
@@ -48,6 +51,8 @@ private:
     MenuItem *m_componentsItem  = nullptr;
     MenuItem *m_gameObjectsItem = nullptr;
     MenuItem *m_projectSettingsItem = nullptr;
+    MenuItem *m_alignGameObjectWithViewItem = nullptr;
+    MenuItem *m_alignViewWithGameObjectItem = nullptr;
 
     Array<MenuItem*> m_items;
     UIFocusable *p_focusable = nullptr;

@@ -73,6 +73,7 @@ BehaviourManager *EditorSceneManager::CreateBehaviourManager() const
 
 void EditorSceneManager::OnSceneLoaded(Scene *scene, const Path &sceneFilepath)
 {
+    BANG_UNUSED_2(scene, sceneFilepath);
     if (GetEditorScene_())
     {
         GetEditorScene_()->SetOpenScene( GetLoadedScene() );

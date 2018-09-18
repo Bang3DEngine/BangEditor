@@ -39,7 +39,10 @@ int main(int argc, char **argv)
 
         projectToBeOpen = SelectProjectWindow::SelectedProjectPath;
     }
-    else { projectToBeOpen = Path(argv[1]); }
+    else
+    {
+        projectToBeOpen = Path(argv[1]);
+    }
 
     if (projectToBeOpen.IsEmpty())
     {

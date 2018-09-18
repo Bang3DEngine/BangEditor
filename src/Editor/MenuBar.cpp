@@ -146,7 +146,9 @@ MenuBar::MenuBar()
     m_gameObjectsItem->GetText()->SetContent("GameObjects");
     CreateGameObjectCreateMenuInto(m_gameObjectsItem);
     m_gameObjectsItem->AddSeparator();
-    CreateGameObjectMiscMenuInto(m_gameObjectsItem);
+    CreateGameObjectMiscMenuInto(m_gameObjectsItem,
+                                 &m_alignGameObjectWithViewItem,
+                                 &m_alignViewWithGameObjectItem);
 
     // Shortcuts
     RegisterShortcut( Shortcut(Key::S, KeyModifier::LCTRL, "SaveScene")   );
@@ -223,6 +225,10 @@ void MenuBar::Update()
     m_redoItem->SetOverAndActionEnabled( UndoRedoManager::CanRedo() );
     m_projectSettingsItem->SetOverAndActionEnabledRecursively(
                             (ProjectManager::GetCurrentProject() != nullptr) );
+
+    bool thereIsGameObjectSelected = (Editor::GetSelectedGameObject());
+    m_alignGameObjectWithViewItem->SetOverAndActionEnabled(thereIsGameObjectSelected);
+    m_alignViewWithGameObjectItem->SetOverAndActionEnabled(thereIsGameObjectSelected);
 }
 
 MenuItem* MenuBar::AddItem()
@@ -271,12 +277,24 @@ void MenuBar::CreateGameObjectCreateMenuInto(MenuItem *rootItem)
     createUIImageGO->SetSelectedCallback(MenuBar::OnCreateUIImageGO);
 }
 
-void MenuBar::CreateGameObjectMiscMenuInto(MenuItem *rootItem)
+void MenuBar::CreateGameObjectMiscMenuInto(MenuItem *rootItem,
+                                           MenuItem **alignGameObjectWithViewItemOut,
+                                           MenuItem **alignViewWithGameObjectItemOut)
 {
-    MenuItem *alignGameObjectWithView = rootItem->AddItem("Align GameObject with view");
-    MenuItem *alignViewWithGameObject = rootItem->AddItem("Align view with GameObject");
-    alignGameObjectWithView->SetSelectedCallback(MenuBar::OnAlignGameObjectWithView);
-    alignViewWithGameObject->SetSelectedCallback(MenuBar::OnAlignViewWithGameObject);
+    MenuItem *alignGameObjectWithViewItem = rootItem->AddItem("Align GameObject with view");
+    MenuItem *alignViewWithGameObjectItem = rootItem->AddItem("Align view with GameObject");
+    alignGameObjectWithViewItem->SetSelectedCallback(MenuBar::OnAlignGameObjectWithView);
+    alignViewWithGameObjectItem->SetSelectedCallback(MenuBar::OnAlignViewWithGameObject);
+
+    if (alignGameObjectWithViewItemOut)
+    {
+        *alignGameObjectWithViewItemOut = alignGameObjectWithViewItem;
+    }
+
+    if (alignViewWithGameObjectItemOut)
+    {
+        *alignViewWithGameObjectItemOut = alignViewWithGameObjectItem;
+    }
 }
 
 void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
@@ -842,9 +860,7 @@ void MenuBar::OnAlignGameObjectWithView(MenuItem*)
             tr->SetRotation( edCam->GetTransform()->GetRotation() );
 
             UndoRedoManager::PushAction(
-                new UndoRedoSerializableChange(tr,
-                                               metaBefore,
-                                               tr->GetMeta()));
+                new UndoRedoSerializableChange(tr, metaBefore, tr->GetMeta()));
         }
     }
 }

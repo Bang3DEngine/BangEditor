@@ -94,13 +94,19 @@ UIEventResult ExplorerItem::OnUIEvent(UIFocusable*, const UIEvent &event)
     switch (event.type)
     {
         case UIEvent::Type::FOCUS_TAKEN:
-            Explorer::GetInstance()->SelectPath(GetPath());
-            return UIEventResult::INTERCEPT;
+            if (Explorer *exp = Explorer::GetInstance())
+            {
+                exp->SelectPath(GetPath());
+                return UIEventResult::INTERCEPT;
+            }
         break;
 
         case UIEvent::Type::FOCUS_LOST:
-            Explorer::GetInstance()->SelectPath(Path::Empty);
-            return UIEventResult::INTERCEPT;
+            if (Explorer *exp = Explorer::GetInstance())
+            {
+                exp->SelectPath(Path::Empty);
+                return UIEventResult::INTERCEPT;
+            }
         break;
 
         case UIEvent::Type::KEY_DOWN:

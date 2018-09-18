@@ -613,5 +613,9 @@ void Explorer::OnCreateContextMenu(MenuItem *menuRootItem)
 
 Explorer *Explorer::GetInstance()
 {
-    return EditorSceneManager::GetEditorScene()->GetExplorer();
+    if (EditorScene *edScene = EditorSceneManager::GetEditorScene())
+    {
+        return edScene->GetExplorer();
+    }
+    return nullptr;
 }
