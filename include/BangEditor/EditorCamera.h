@@ -67,8 +67,6 @@ private:
     Vector2 m_mousePanPerPixel = Vector2(70.0f);
 
     // Rotation
-    Quaternion m_prevRotation;                     // Starting rot offset
-    Vector2 m_mouseRotDegreesAccum = Vector2(0.0f);    // User input
     Vector2 m_mouseRotDegreesPerPixel = Vector2(0.0f); // Parameter
 
     // Zoom
@@ -86,7 +84,6 @@ private:
     virtual void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
 
     void AdjustSpeeds();
-    void UpdateRotationVariables();
     void HandleWheelZoom();
     bool HandleMouseRotation();
     void HandleMousePanning();

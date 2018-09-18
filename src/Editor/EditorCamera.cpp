@@ -89,9 +89,7 @@ void EditorCamera::Update()
         }
         else
         {
-            UpdateRotationVariables();
             HandleLookAtFocus();
-            UpdateRotationVariables();
         }
     }
     InterpolatePositionAndRotation();
@@ -169,11 +167,6 @@ void EditorCamera::InterpolatePositionAndRotation(float extraInterpPos,
     GetTransform()->SetLocalRotation(newRot);
 }
 
-void EditorCamera::UpdateRotationVariables()
-{
-    m_mouseRotDegreesAccum = Vector2::Zero;
-}
-
 void EditorCamera::HandleWheelZoom()
 {
     // Update zoom value
@@ -203,13 +196,14 @@ bool EditorCamera::HandleMouseRotation()
         Vector2 delta = Vector2(Input::GetMouseDelta()) * Vector2(-1, 1) *
                         m_mouseRotDegreesPerPixel;
 
-        m_mouseRotDegreesAccum += delta;
-
-        Quaternion rotX = Quaternion::AngleAxis(Math::DegToRad(m_mouseRotDegreesAccum.x),
+        Quaternion newRot = GetTransform()->GetRotation();
+        Quaternion rotX = Quaternion::AngleAxis(Math::DegToRad(delta.x),
                                                 Vector3::Up);
-        Quaternion rotY = Quaternion::AngleAxis(Math::DegToRad(m_mouseRotDegreesAccum.y),
-                                                rotX * Vector3::Right);
-        Quaternion newRot = (rotY * rotX);
+        newRot = rotX * newRot;
+        Quaternion rotY = Quaternion::AngleAxis(Math::DegToRad(delta.y),
+                                                newRot * Vector3::Right);
+        newRot = rotY * newRot;
+
         m_targetRotation = newRot;
 
         Input::SetMouseWrapping(true);
@@ -282,7 +276,6 @@ void EditorCamera::AlignViewWithGameObject(GameObject *selected)
     m_targetPosition = selected->GetTransform()->GetPosition();
     Vector3 up = Vector3::Up;
     m_targetRotation = Quaternion::LookDirection(selected->GetTransform()->GetForward(), up);
-    UpdateRotationVariables();
 }
 
 void EditorCamera::SwitchProjectionModeTo(bool mode3D)
@@ -315,8 +308,6 @@ void EditorCamera::LookAt(GameObject *lookAtFocus)
 
         m_targetPosition = targetPos;
         m_targetRotation = targetRot;
-
-        UpdateRotationVariables();
     }
 }
 
