@@ -76,12 +76,15 @@ void TransformGizmoAxis::SetColor(SelectionState state)
         EditorCamera *edCam = EditorCamera::GetInstance();
         if (edCam && refGo)
         {
-            Vector3 refGoPos = refGo->GetTransform()->GetPosition();
-            Vector3 edCamPos = edCam->GetTransform()->GetPosition();
-            Vector3 edCamToRefGoDir = (refGoPos - edCamPos).NormalizedSafe();
-            if (edCamToRefGoDir.Length() > 0)
+            if (refGo->GetTransform())
             {
-                dot = Math::Abs( Vector3::Dot(GetAxisVectorWorld(), edCamToRefGoDir) );
+                Vector3 refGoPos = refGo->GetTransform()->GetPosition();
+                Vector3 edCamPos = edCam->GetTransform()->GetPosition();
+                Vector3 edCamToRefGoDir = (refGoPos - edCamPos).NormalizedSafe();
+                if (edCamToRefGoDir.Length() > 0)
+                {
+                    dot = Math::Abs( Vector3::Dot(GetAxisVectorWorld(), edCamToRefGoDir) );
+                }
             }
         }
 

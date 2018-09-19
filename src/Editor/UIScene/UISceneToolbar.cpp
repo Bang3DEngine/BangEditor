@@ -118,7 +118,7 @@ UISceneToolbar::UISceneToolbar()
     p_renderModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_showDebugStatsCheckbox = GameObjectFactory::CreateUICheckBox();
-    p_showDebugStatsCheckbox->SetChecked(true);
+    p_showDebugStatsCheckbox->SetChecked(false);
     p_showDebugStatsCheckbox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     GameObject *showDebugStatsTextGo = GameObjectFactory::CreateUIGameObject();

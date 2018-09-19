@@ -190,10 +190,12 @@ void MenuItem::Update()
 {
     GameObject::Update();
 
-    AdjustToBeInsideScreen();
-
     const bool mustDisplayChildren = MustDisplayChildren();
     GetChildrenList()->GetGameObject()->SetEnabled(mustDisplayChildren);
+    if (mustDisplayChildren)
+    {
+        AdjustToBeInsideScreen();
+    }
 
     if (p_topBg && GetItemType() == MenuItemType::TOP)
     {
