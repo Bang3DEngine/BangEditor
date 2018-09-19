@@ -77,7 +77,11 @@ Array<Path> EditorFileTracker::GetTrackedPathsWithLastExtension(
 
 EditorFileTracker *EditorFileTracker::GetInstance()
 {
-    return EditorSceneManager::GetEditorScene()->GetEditorFileTracker();
+    if (EditorScene *edScene = EditorSceneManager::GetEditorScene())
+    {
+        return edScene->GetEditorFileTracker();
+    }
+    return nullptr;
 }
 
 void EditorFileTracker::CheckForShaderModifications(const Path &modifiedPath)

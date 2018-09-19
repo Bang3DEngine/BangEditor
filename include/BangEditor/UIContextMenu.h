@@ -7,6 +7,7 @@
 #include "Bang/EventListener.h"
 
 #include "BangEditor/MenuItem.h"
+#include "BangEditor/EditorComponentsClassIds.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD NAMESPACE_BANG_END
@@ -20,10 +21,10 @@ class UIContextMenu : public Component,
                       public EventListener<IEventsFocus>,
                       public EventListener<IEventsDestroy>
 {
-    COMPONENT(UIContextMenu)
+    COMPONENT_WITH_FAST_DYNAMIC_CAST(UIContextMenu)
 
 public:
-    UIContextMenu() = default;
+    UIContextMenu();
     virtual ~UIContextMenu() = default;
 
     void ShowMenu();

@@ -20,6 +20,11 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
+UIContextMenu::UIContextMenu()
+{
+    CONSTRUCT_CLASS_ID(UIContextMenu);
+}
+
 void UIContextMenu::ShowMenu()
 {
     if (p_menu)

@@ -4,16 +4,20 @@
 #include "Bang/Component.h"
 
 #include "BangEditor/BangEditor.h"
+#include "BangEditor/EditorComponentsClassIds.h"
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class HideInHierarchy : public Component
 {
-    COMPONENT(HideInHierarchy)
+    COMPONENT_WITH_FAST_DYNAMIC_CAST(HideInHierarchy)
 
 private:
-    HideInHierarchy() = default;
+    HideInHierarchy()
+    {
+        CONSTRUCT_CLASS_ID(HideInHierarchy);
+    }
     virtual ~HideInHierarchy() = default;
 };
 
