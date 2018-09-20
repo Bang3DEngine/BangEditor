@@ -92,6 +92,7 @@ file(GLOB_RECURSE OTHER_FILES "${BANG_EDITOR_INCLUDE_DIR}/BangEditor/*.h"
                               "${BANG_EDITOR_ROOT}/Assets/Shaders/*.geom"
                               "${BANG_EDITOR_ROOT}/Assets/Shaders/*.vert"
                               "${BANG_EDITOR_ROOT}/Assets/Shaders/*.glsl"
+                              "${BANG_EDITOR_ROOT}/Scripts/*.py"
                               "${BANG_EDITOR_ROOT}/Build/BuildPackage/CMakeLists.txt")
 add_misc_files(${OTHER_FILES})
 #=================================================================

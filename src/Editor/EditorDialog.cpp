@@ -446,14 +446,14 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
 
             if (object == p_sliderHue)
             {
-                m_pickedColorHSV.h = p_sliderHue->GetValue();
+                m_pickedColorHSV.r = p_sliderHue->GetValue();
                 m_pickedColorRGB = m_pickedColorHSV.ToRGB();
             }
             else if (object == p_handle)
             {
                 Vector2 sv = p_handle->GetPositionRelativeToColorPanel() * 0.5f + 0.5f;
-                m_pickedColorHSV.s = sv[0];
-                m_pickedColorHSV.v = sv[1];
+                m_pickedColorHSV.g = sv[0];
+                m_pickedColorHSV.b = sv[1];
                 m_pickedColorRGB = m_pickedColorHSV.ToRGB();
             }
             else
@@ -466,17 +466,17 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
                 // known values
                 Color prevColorHSV = m_pickedColorHSV;
                 m_pickedColorHSV = m_pickedColorRGB.ToHSV();
-                if (m_pickedColorHSV.s <= 0.0f)
+                if (m_pickedColorHSV.g <= 0.0f)
                 {
-                    m_pickedColorHSV.h = prevColorHSV.h;
-                    m_pickedColorHSV.v = prevColorHSV.v;
+                    m_pickedColorHSV.r = prevColorHSV.r;
+                    m_pickedColorHSV.b = prevColorHSV.b;
                 }
 
-                if (m_pickedColorHSV.v <= 0.01f)
+                if (m_pickedColorHSV.b <= 0.01f)
                 {
-                    m_pickedColorHSV.h = prevColorHSV.h;
-                    m_pickedColorHSV.s = prevColorHSV.s;
-                    m_pickedColorHSV.v = 0.0f;
+                    m_pickedColorHSV.r = prevColorHSV.r;
+                    m_pickedColorHSV.g = prevColorHSV.g;
+                    m_pickedColorHSV.b = 0.0f;
                 }
             }
             m_pickedColorRGB.a = m_pickedColorHSV.a = p_sliderRGB_A->GetValue();
@@ -486,8 +486,8 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
             p_sliderRGB_G->SetValue(m_pickedColorRGB.g);
             p_sliderRGB_B->SetValue(m_pickedColorRGB.b);
             p_sliderRGB_A->SetValue(m_pickedColorRGB.a);
-            p_sliderHue->SetValue( m_pickedColorHSV.h );
-            Vector2 handlePos = Vector2(m_pickedColorHSV.s, m_pickedColorHSV.v) *
+            p_sliderHue->SetValue( m_pickedColorHSV.r );
+            Vector2 handlePos = Vector2(m_pickedColorHSV.g, m_pickedColorHSV.b) *
                                 2.0f - 1.0f;
             p_handle->GetRectTransform()->SetAnchors(handlePos);
 

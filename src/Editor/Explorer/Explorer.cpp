@@ -199,8 +199,8 @@ void Explorer::SelectPath(const Path &path,
     {
         if (registerUndo)
         {
-            UndoRedoManager::PushAction( new UndoRedoExplorerSelect(
-                                             GetSelectedPath(), path) );
+            // UndoRedoManager::PushAction( new UndoRedoExplorerSelect(
+            //                                  GetSelectedPath(), path) );
         }
 
         for (ExplorerItem *explorerItem : p_items)

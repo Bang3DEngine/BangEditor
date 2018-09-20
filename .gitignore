@@ -48,3 +48,4 @@ CMakeConfig.txt
 # QtCreator
 *.autosave
 *.user
+__pycache__
