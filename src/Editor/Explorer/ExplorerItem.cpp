@@ -96,7 +96,7 @@ UIEventResult ExplorerItem::OnUIEvent(UIFocusable*, const UIEvent &event)
         case UIEvent::Type::FOCUS_TAKEN:
             if (Explorer *exp = Explorer::GetInstance())
             {
-                SetSelected(true);
+                exp->SelectPath( GetPath() );
                 return UIEventResult::INTERCEPT;
             }
         break;
