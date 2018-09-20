@@ -13,8 +13,8 @@ UndoRedoSerializableChange::UndoRedoSerializableChange(Serializable *serializabl
                                                        const MetaNode &metaAfter)
 {
     p_serializable = serializable;
-    m_metaBefore = metaBefore;
-    m_metaAfter = metaAfter;
+    SetMetaBefore(metaBefore);
+    SetMetaAfter(metaAfter);
 
     if (auto *destroyable = DCAST<EventEmitter<IEventsDestroy>*>(p_serializable))
     {

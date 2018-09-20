@@ -124,5 +124,3 @@ def qdump__Bang__Color(d, v):
             d.putSubItem("g", v["g"])
             d.putSubItem("b", v["b"])
             d.putSubItem("a", v["a"])
-
-

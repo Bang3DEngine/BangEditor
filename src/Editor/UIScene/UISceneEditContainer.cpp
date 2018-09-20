@@ -246,8 +246,7 @@ GameObject* UISceneEditContainer::GetCurrentOveredGameObject() const
 
 void UISceneEditContainer::ApplyDraggedMaterialToOveredGameObject()
 {
-    GameObject *overedGameObject = GetCurrentOveredGameObject();
-    if (overedGameObject)
+    if (GameObject *overedGameObject = p_lastOveredGameObject)
     {
         Array<MeshRenderer*> mrs = overedGameObject->GetComponents<MeshRenderer>();
         for (MeshRenderer *mr : mrs)
@@ -402,18 +401,16 @@ void UISceneEditContainer::OnDragStarted(EventEmitter<IEventsDragDrop> *dd_)
         if (draggedPath.HasExtension( Extensions::GetMaterialExtension() ))
         {
             m_currentMaterialBeingDragged = Resources::Load<Material>(draggedPath);
-            p_lastOveredGameObject = GetCurrentOveredGameObject();
+            if (m_currentMaterialBeingDragged)
+            {
+                Camera *edCam = EditorCamera::GetInstance()->GetCamera();
+                edCam->RemoveRenderPass(RenderPass::OVERLAY);
+                GetSelectionFramebuffer()->SetDrawOverlay(false);
+            }
 
-            ApplyDraggedMaterialToOveredGameObject();
         }
     }
 
-    if (m_currentMaterialBeingDragged)
-    {
-        Camera *edCam = EditorCamera::GetInstance()->GetCamera();
-        edCam->RemoveRenderPass(RenderPass::OVERLAY);
-        GetSelectionFramebuffer()->SetDrawOverlay(false);
-    }
 }
 
 void UISceneEditContainer::OnDragUpdate(EventEmitter<IEventsDragDrop> *dd_)
@@ -442,13 +439,18 @@ void UISceneEditContainer::OnDrop(EventEmitter<IEventsDragDrop> *dd_,
 
     if (p_lastOveredGameObject)
     {
+        GUID prevGUID = m_prevGameObjectMetaBeforeDraggingMaterial.Get<GUID>("GUID");
+        GUID currGUID = p_lastOveredGameObject->GetGUID();
+        ASSERT(prevGUID == currGUID);
         UndoRedoManager::PushAction( new UndoRedoSerializableChange(
                                 p_lastOveredGameObject,
                                 m_prevGameObjectMetaBeforeDraggingMaterial,
                                 p_lastOveredGameObject->GetMeta()));
     }
+    p_lastOveredGameObject = nullptr;
     m_currentMaterialBeingDragged.Set(nullptr);
     m_matDragMeshRenderersToPrevMaterials.Clear();
+    m_prevGameObjectMetaBeforeDraggingMaterial = MetaNode();
 
     Camera *edCam = EditorCamera::GetInstance()->GetCamera();
     edCam->AddRenderPass(RenderPass::OVERLAY);
