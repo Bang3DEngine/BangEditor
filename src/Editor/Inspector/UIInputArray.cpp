@@ -34,8 +34,8 @@ UIInputArray::UIInputArray()
     addButton->GetGameObject()->SetParent(m_addNewElementRow);
     addButton->AddClickedCallback([this]()
     {
-        ASSERT(m_getNewElementFunction);
-        GameObject *newElement = m_getNewElementFunction();
+        ASSERT(m_createNewElementFunction);
+        GameObject *newElement = m_createNewElementFunction();
         AddElement(newElement);
     });
 
@@ -122,10 +122,10 @@ void UIInputArray::MoveRow(UIInputArrayRow *row, int displacement)
                 &IEventsValueChanged::OnValueChanged, this);
 }
 
-void UIInputArray::SetGetNewElementFunction(
+void UIInputArray::SetCreateNewElementFunction(
                             UIInputArray::CreateNewElementFunction function)
 {
-    m_getNewElementFunction = function;
+    m_createNewElementFunction = function;
 }
 
 uint UIInputArray::Size() const

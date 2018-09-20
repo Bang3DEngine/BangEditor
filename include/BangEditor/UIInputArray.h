@@ -25,7 +25,7 @@ public:
     void RemoveElement(GameObject *widget);
     void RemoveElement(uint index);
 
-    void SetGetNewElementFunction(CreateNewElementFunction function);
+    void SetCreateNewElementFunction(CreateNewElementFunction function);
 
     uint Size() const;
 
@@ -35,7 +35,7 @@ private:
     Array<GameObject*> m_array;
     GameObject *m_addNewElementRow = nullptr;
 
-    CreateNewElementFunction m_getNewElementFunction;
+    CreateNewElementFunction m_createNewElementFunction;
 
     void AddElement_(GameObject *widget, uint index, bool propagateChangeEvent);
     void RemoveElement_(GameObject *widget, bool propagateChangeEvent);

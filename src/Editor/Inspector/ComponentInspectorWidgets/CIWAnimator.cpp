@@ -29,7 +29,7 @@ void CIWAnimator::InitInnerWidgets()
     SetTitle("Animator");
 
     p_animationsInput = GameObject::Create<UIInputArray>();
-    p_animationsInput->SetGetNewElementFunction([this]()
+    p_animationsInput->SetCreateNewElementFunction([this]()
     {
         return CreateAnimationEntry();
     });
