@@ -203,10 +203,7 @@ void Explorer::SelectPath(const Path &path,
             //                                  GetSelectedPath(), path) );
         }
 
-        for (ExplorerItem *explorerItem : p_items)
-        {
-            explorerItem->SetSelected(false);
-        }
+        m_selectedPath = path;
 
         if (path.GetDirectory().Exists() && travelToDirectory)
         {
@@ -216,7 +213,6 @@ void Explorer::SelectPath(const Path &path,
         ExplorerItem *explorerItem = GetItemFromPath(path);
         if (explorerItem)
         {
-            explorerItem->SetSelected(true);
             UICanvas::GetActive(this)->SetFocus(explorerItem->GetFocusable());
             Editor::OnPathSelected(explorerItem->GetPath());
         }
@@ -270,8 +266,7 @@ const Path &Explorer::GetCurrentPath() const
 
 const Path &Explorer::GetSelectedPath() const
 {
-    ExplorerItem *selectedItem = GetSelectedItem();
-    return selectedItem ? selectedItem->GetPath() : Path::Empty;
+    return m_selectedPath;
 }
 
 void Explorer::Clear()

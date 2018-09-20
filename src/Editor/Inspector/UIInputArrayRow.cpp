@@ -34,7 +34,7 @@ void UIInputArrayRow::Init(UIInputArray *inputArray)
     removeButton->GetGameObject()->SetParent(this);
     removeButton->AddClickedCallback([this, inputArray]()
     {
-        inputArray->RemoveRow(this);
+        inputArray->RemoveRow(this, true);
     });
 
     GameObject *moveButtonsContainer = GameObjectFactory::CreateUIGameObject();

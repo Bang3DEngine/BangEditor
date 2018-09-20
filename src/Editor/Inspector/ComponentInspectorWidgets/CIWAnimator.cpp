@@ -74,12 +74,14 @@ void CIWAnimator::UpdateFromReference()
     const uint minSize = Math::Min(animsRHs.Size(), p_animationsInput->Size());
     for (uint i = 0; i < minSize; ++i)
     {
+        Path animPath = Path::Empty;
         UIInputFileWithPreview *inputFile =
             SCAST<UIInputFileWithPreview*>(p_animationsInput->GetArray()[i]);
         if (Animation *animation = animsRHs[i].Get())
         {
-            inputFile->SetPath( animation->GetResourceFilepath() );
+            animPath = animation->GetResourceFilepath();
         }
+        inputFile->SetPath(animPath);
     }
 
     // Remove if there are more
@@ -121,11 +123,12 @@ void CIWAnimator::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
              i < animator->GetAnimations().Size();
              ++i)
         {
-            animator->RemoveAnimation(i);
+            animator->RemoveAnimationByIndex(i);
         }
     }
     else
     {
+        // Some animation has changed
         ASSERT(p_animationsInput->Size() == animator->GetAnimations().Size());
         for (uint i = 0; i < p_animationsInput->Size(); ++i)
         {
@@ -140,7 +143,6 @@ void CIWAnimator::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
             GetAnimator()->SetPlayOnStart( p_playOnStartInput->IsChecked() );
         }
     }
-
 }
 
 Animator *CIWAnimator::GetAnimator() const

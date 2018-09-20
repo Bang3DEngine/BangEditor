@@ -66,6 +66,7 @@ ExplorerItem::ExplorerItem()
     p_label->SetSelectable(false);
 
     p_focusable = AddComponent<UIFocusable>();
+    p_focusable->SetConsiderForTabbing(true);
     GetFocusable()->EventEmitter<IEventsFocus>::RegisterListener(this);
 
     p_contextMenu = AddComponent<UIContextMenu>();
@@ -94,17 +95,29 @@ UIEventResult ExplorerItem::OnUIEvent(UIFocusable*, const UIEvent &event)
     switch (event.type)
     {
         case UIEvent::Type::FOCUS_TAKEN:
-            if (Explorer *exp = Explorer::GetInstance())
+            SetSelected(true);
+            if (event.focus.type == FocusType::AUTO_TAB)
             {
-                exp->SelectPath( GetPath() );
-                return UIEventResult::INTERCEPT;
+                if(Explorer *exp = Explorer::GetInstance())
+                {
+                    exp->SelectPath( GetPath() );
+                }
             }
+            return UIEventResult::INTERCEPT;
         break;
 
         case UIEvent::Type::FOCUS_LOST:
             if (Explorer *exp = Explorer::GetInstance())
             {
-                exp->SelectPath(Path::Empty);
+                SetSelected(false);
+                return UIEventResult::INTERCEPT;
+            }
+        break;
+
+        case UIEvent::Type::MOUSE_CLICK_FULL:
+            if (Explorer *exp = Explorer::GetInstance())
+            {
+                exp->SelectPath( GetPath() );
                 return UIEventResult::INTERCEPT;
             }
         break;

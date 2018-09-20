@@ -46,7 +46,9 @@ UIInputArray::~UIInputArray()
 {
 }
 
-void UIInputArray::AddElement(GameObject *widget, uint index_)
+void UIInputArray::AddElement_(GameObject *widget,
+                               uint index_,
+                               bool propagateChangeEvent)
 {
     if (!GetArray().Contains(widget))
     {
@@ -58,12 +60,16 @@ void UIInputArray::AddElement(GameObject *widget, uint index_)
         m_array.Insert(widget, index);
 
         MoveAddNewElementRowToEnd();
-        EventEmitter<IEventsValueChanged>::PropagateToListeners(
-                    &IEventsValueChanged::OnValueChanged, this);
+        if (propagateChangeEvent)
+        {
+            EventEmitter<IEventsValueChanged>::PropagateToListeners(
+                        &IEventsValueChanged::OnValueChanged, this);
+        }
     }
 }
 
-void UIInputArray::RemoveElement(GameObject *widget)
+void UIInputArray::RemoveElement_(GameObject *widget,
+                                  bool propagateChangeEvent)
 {
     if (GetArray().Contains(widget))
     {
@@ -73,10 +79,23 @@ void UIInputArray::RemoveElement(GameObject *widget)
             GameObject::Destroy(row);
 
             MoveAddNewElementRowToEnd();
-            EventEmitter<IEventsValueChanged>::PropagateToListeners(
-                        &IEventsValueChanged::OnValueChanged, this);
+            if (propagateChangeEvent)
+            {
+                EventEmitter<IEventsValueChanged>::PropagateToListeners(
+                            &IEventsValueChanged::OnValueChanged, this);
+            }
         }
     }
+}
+
+void UIInputArray::AddElement(GameObject *widget, uint index)
+{
+    AddElement_(widget, index, true);
+}
+
+void UIInputArray::RemoveElement(GameObject *widget)
+{
+    RemoveElement_(widget, true);
 }
 
 void UIInputArray::RemoveElement(uint index)
@@ -86,9 +105,9 @@ void UIInputArray::RemoveElement(uint index)
     RemoveElement(widget);
 }
 
-void UIInputArray::RemoveRow(UIInputArrayRow *row)
+void UIInputArray::RemoveRow(UIInputArrayRow *row, bool propagateChangeEvent)
 {
-    RemoveElement(row->GetContainedGameObject());
+    RemoveElement_(row->GetContainedGameObject(), propagateChangeEvent);
 }
 
 void UIInputArray::MoveRow(UIInputArrayRow *row, int displacement)
@@ -97,8 +116,10 @@ void UIInputArray::MoveRow(UIInputArrayRow *row, int displacement)
     int oldIndex = row->GetIndexInsideParent();
     int newIndex = (oldIndex + displacement + numChildren) % numChildren;
 
-    RemoveRow(row);
-    AddElement(row->GetContainedGameObject(), newIndex);
+    RemoveRow(row, false);
+    AddElement_(row->GetContainedGameObject(), newIndex, false);
+    EventEmitter<IEventsValueChanged>::PropagateToListeners(
+                &IEventsValueChanged::OnValueChanged, this);
 }
 
 void UIInputArray::SetGetNewElementFunction(

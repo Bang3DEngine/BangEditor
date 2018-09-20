@@ -33,7 +33,7 @@ private:
     UIImageRenderer *p_previewImg = nullptr;
     UIImageRenderer *p_bigPreviewImg = nullptr;
 
-    bool HaveExistingPath() const;
+    bool HasExistingPath() const;
 
     // IFocusable
     virtual UIEventResult OnUIEvent(UIFocusable *focusable,

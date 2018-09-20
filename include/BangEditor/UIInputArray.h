@@ -37,8 +37,11 @@ private:
 
     CreateNewElementFunction m_getNewElementFunction;
 
+    void AddElement_(GameObject *widget, uint index, bool propagateChangeEvent);
+    void RemoveElement_(GameObject *widget, bool propagateChangeEvent);
+
     void MoveAddNewElementRowToEnd();
-    void RemoveRow(UIInputArrayRow *row);
+    void RemoveRow(UIInputArrayRow *row, bool propagateChangeEvent);
     void MoveRow(UIInputArrayRow *row, int displacement);
     UIInputArrayRow *GetRowFromElement(GameObject *element) const;
 

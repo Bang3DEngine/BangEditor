@@ -79,6 +79,8 @@ public:
 private:
     Path m_rootPath = Path::Empty;
     Path m_currentPath = Path::Empty;
+    Path m_selectedPath = Path::Empty;
+
     List<ExplorerItem*> p_items;
     UMap<Path, ExplorerItem*> m_pathsToItem;
 

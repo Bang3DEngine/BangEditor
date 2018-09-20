@@ -58,21 +58,12 @@ void UIInputFileWithPreview::SetPath(const Path &path)
     UIInputFile::SetPath(path);
 
     RH<Texture2D> previewTex;
-    if ( HaveExistingPath() )
+    if ( HasExistingPath() )
     {
         previewTex = GetPreviewTextureFromPath(path);
     }
-
-    if (previewTex)
-    {
-        p_bigPreviewImg->SetImageTexture( previewTex.Get() );
-        p_previewImg->SetImageTexture( previewTex.Get() );
-    }
-    else
-    {
-        p_bigPreviewImg->SetImageTexture(nullptr);
-        p_previewImg->SetImageTexture(nullptr);
-    }
+    p_bigPreviewImg->SetImageTexture( previewTex.Get() );
+    p_previewImg->SetImageTexture( previewTex.Get() );
 }
 
 RH<Texture2D> UIInputFileWithPreview::GetPreviewTextureFromPath(const Path &path)
@@ -80,7 +71,7 @@ RH<Texture2D> UIInputFileWithPreview::GetPreviewTextureFromPath(const Path &path
     return RH<Texture2D>( EditorTextureFactory::GetIconForPath(path) );
 }
 
-bool UIInputFileWithPreview::HaveExistingPath() const
+bool UIInputFileWithPreview::HasExistingPath() const
 {
     return (GetPath().IsFile() || Resources::IsEmbeddedResource( GetPath() ));
 }
@@ -90,7 +81,7 @@ UIEventResult UIInputFileWithPreview::OnUIEvent(UIFocusable*,
 {
     if (event.type == UIEvent::Type::MOUSE_ENTER)
     {
-        if (HaveExistingPath() && m_zoomable)
+        if (HasExistingPath() && m_zoomable)
         {
             p_bigPreviewImg->GetGameObject()->SetVisible(true);
         }
