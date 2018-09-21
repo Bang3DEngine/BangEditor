@@ -107,11 +107,8 @@ UIEventResult ExplorerItem::OnUIEvent(UIFocusable*, const UIEvent &event)
         break;
 
         case UIEvent::Type::FOCUS_LOST:
-            if (Explorer *exp = Explorer::GetInstance())
-            {
-                SetSelected(false);
-                return UIEventResult::INTERCEPT;
-            }
+            SetSelected(false);
+            return UIEventResult::INTERCEPT;
         break;
 
         case UIEvent::Type::MOUSE_CLICK_FULL:

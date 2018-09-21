@@ -108,7 +108,7 @@ void EditorCamera::Update()
     else
     {
         GetCamera()->SetClearMode(CameraClearMode::COLOR);
-        GetCamera()->SetClearColor(Color::LightBlue);
+        GetCamera()->SetClearColor(Color::White.WithValue(0.3f));
     }
 
     if (unwrapMouse)
@@ -219,7 +219,8 @@ void EditorCamera::HandleMousePanning()
     if (Input::GetMouseButton(MouseButton::MIDDLE))
     {
         Vector2 delta = -Vector2(Input::GetMouseDelta()) * m_mousePanPerPixel;
-        m_targetPosition += (p_camt->GetRight() * delta.x + p_camt->GetUp() * delta.y);
+        m_targetPosition = GetTransform()->GetPosition() +
+                           (p_camt->GetRight() * delta.x + p_camt->GetUp() * delta.y);
         InterpolatePositionAndRotation(1.0f);
         Input::SetMouseWrapping(true);
     }
@@ -260,12 +261,18 @@ void EditorCamera::FocusScene(Scene *scene)
 {
     if (scene)
     {
-        Sphere bSphere = scene->GetBoundingSphere();
+        float sceneRadius = 1.0f;
+        Vector3 sceneCenter = Vector3::Zero;
 
-        m_targetPosition = (bSphere.GetCenter() +
-                            Vector3::One * bSphere.GetRadius() * 1.1f);
-        m_targetRotation = Quaternion::LookDirection(
-                            (bSphere.GetCenter() - m_targetPosition));
+        Sphere bSphere = scene->GetBoundingSphere();
+        if ( !Math::IsInfinity(bSphere.GetRadius()) )
+        {
+            sceneRadius = bSphere.GetRadius();
+            sceneCenter = bSphere.GetCenter();
+        }
+
+        m_targetPosition = (sceneCenter + Vector3::One * sceneRadius * 1.1f);
+        m_targetRotation = Quaternion::LookDirection(sceneCenter - m_targetPosition);
     }
 }
 

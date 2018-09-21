@@ -1,17 +1,22 @@
 #include "BangEditor/CIWCamera.h"
 
+#include "Bang/Scene.h"
 #include "Bang/Light.h"
 #include "Bang/Camera.h"
 #include "Bang/UISlider.h"
 #include "Bang/Resources.h"
 #include "Bang/Extensions.h"
 #include "Bang/UIComboBox.h"
+#include "Bang/UICheckBox.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/TextureCubeMap.h"
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/UIInputColor.h"
+#include "BangEditor/UndoRedoManager.h"
+#include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/UIInputFileWithPreview.h"
+#include "BangEditor/UndoRedoSerializableChange.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -22,6 +27,10 @@ void CIWCamera::InitInnerWidgets()
 
     SetName("CIWCamera");
     SetTitle("Camera");
+
+    p_isSceneCamera = GameObjectFactory::CreateUICheckBox();
+    p_isSceneCamera->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    AddWidget("Scene Camera", p_isSceneCamera->GetGameObject());
 
     p_zNearInput = GameObjectFactory::CreateUIInputNumber();
     p_zNearInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
@@ -70,6 +79,15 @@ void CIWCamera::InitInnerWidgets()
 void CIWCamera::UpdateFromReference()
 {
     ComponentInspectorWidget::UpdateFromReference();
+
+    if (Scene *openScene = EditorSceneManager::GetOpenScene())
+    {
+        p_isSceneCamera->SetChecked(openScene->GetCamera() == GetCamera());
+    }
+    else
+    {
+        p_isSceneCamera->SetChecked(false);
+    }
 
     if (!p_zNearInput->HasFocus())
     {
@@ -131,6 +149,29 @@ void CIWCamera::LimitValues()
 void CIWCamera::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChangedCIW(object);
+
+    if (object == p_isSceneCamera)
+    {
+        if (Scene *openScene = EditorSceneManager::GetOpenScene())
+        {
+            MetaNode metaBefore = openScene->GetMeta();
+
+            if (p_isSceneCamera->IsChecked())
+            {
+                openScene->SetCamera( GetCamera() );
+            }
+            else
+            {
+                openScene->SetCamera( nullptr );
+            }
+
+            UndoRedoSerializableChange *undoRedo =
+                            new UndoRedoSerializableChange(openScene,
+                                                           metaBefore,
+                                                           openScene->GetMeta());
+            UndoRedoManager::PushAction(undoRedo);
+        }
+    }
 
     GetCamera()->SetZNear( p_zNearInput->GetValue() );
     GetCamera()->SetZFar( p_zFarInput->GetValue() );

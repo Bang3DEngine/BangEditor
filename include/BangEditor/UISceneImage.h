@@ -23,6 +23,11 @@ public:
     enum class RenderMode { COLOR = 0, NORMAL, ALBEDO, DEPTH,
                             ROUGHNESS, METALNESS, RECEIVES_LIGHT,
                             RECEIVES_SHADOWS, SELECTION, WORLD_POSITION };
+    class UISceneImageRenderer : public UIImageRenderer
+    {
+        public:
+        void OnRender() override;
+    };
 
     UISceneImage();
     virtual ~UISceneImage();
@@ -36,13 +41,9 @@ public:
 
     Camera *GetCamera() const;
     RenderMode GetRenderMode() const;
+    UISceneImageRenderer *GetSceneImageRenderer() const;
 
 private:
-    class UISceneImageRenderer : public UIImageRenderer
-    {
-        public:
-        void OnRender() override;
-    };
 
     Camera *p_currentCamera = nullptr;
     RenderMode m_renderMode = RenderMode::COLOR;

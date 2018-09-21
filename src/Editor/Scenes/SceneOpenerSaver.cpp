@@ -48,7 +48,6 @@ bool SceneOpenerSaver::OnNewScene()
         SceneManager::LoadSceneInstantly(defaultScene, false);
 
         GameObjectFactory::CreateDefaultSceneInto(defaultScene);
-        defaultScene->SetFirstFoundCamera();
         return true;
     }
     return false;

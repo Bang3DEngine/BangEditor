@@ -45,7 +45,8 @@ SelectProjectWindow::~SelectProjectWindow()
 void SelectProjectWindow::Init()
 {
     SetTitle("Bang Editor - Select Project");
-    SetMinSize(500, 200);
+    SetMinSize(500, 500);
+    SetMaxSize(500, 500);
 
     Scene *scene = GameObject::Create<SelectProjectScene>();
     EditorSceneManager::LoadScene(scene, true);
@@ -65,7 +66,7 @@ SelectProjectScene::SelectProjectScene()
     UICanvas *canvas = GameObjectFactory::CreateUICanvas();
     GameObject *canvasGo = canvas->GetGameObject();
     UIImageRenderer *bg = canvasGo->AddComponent<UIImageRenderer>();
-    bg->SetTint(Color::DarkGray);
+    bg->SetTint(Color::One.WithValue(0.75f));
     canvas->GetGameObject()->SetParent(this);
 
     GameObject *mainVLGo = GameObjectFactory::CreateUIGameObject();
@@ -99,7 +100,7 @@ SelectProjectScene::SelectProjectScene()
                                        GetComponent<UILayoutElement>();
     recentPLLabelLE->SetFlexibleSize(Vector2::Zero);
     recentPLLabel->GetText()->SetContent("Recent projects:");
-    recentPLLabel->GetText()->SetTextColor(Color::White);
+    recentPLLabel->GetText()->SetTextColor(Color::Black);
     recentPLLabel->GetText()->SetTextSize(16);
     recentPLLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::LEFT);
     recentPLLabel->GetGameObject()->SetParent(mainVLGo);
@@ -189,8 +190,9 @@ void SelectProjectScene::Update()
 
 void SelectProjectScene::NewProject()
 {
-    Path newProjectDirPath = Dialog::OpenDirectory("Create New Project...",
-                                                   EditorPaths::GetHome());
+    Path newProjectDirPath = Dialog::OpenDirectory(
+                            "Create new project. Select parent dir...",
+                            EditorPaths::GetHome());
     if (newProjectDirPath.IsDir())
     {
         String projectName = Dialog::GetString("Choose Project Name",

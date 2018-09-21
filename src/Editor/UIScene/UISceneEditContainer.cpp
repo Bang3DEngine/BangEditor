@@ -439,9 +439,11 @@ void UISceneEditContainer::OnDrop(EventEmitter<IEventsDragDrop> *dd_,
 
     if (p_lastOveredGameObject)
     {
+        #ifdef DEBUG
         GUID prevGUID = m_prevGameObjectMetaBeforeDraggingMaterial.Get<GUID>("GUID");
         GUID currGUID = p_lastOveredGameObject->GetGUID();
         ASSERT(prevGUID == currGUID);
+        #endif
         UndoRedoManager::PushAction( new UndoRedoSerializableChange(
                                 p_lastOveredGameObject,
                                 m_prevGameObjectMetaBeforeDraggingMaterial,

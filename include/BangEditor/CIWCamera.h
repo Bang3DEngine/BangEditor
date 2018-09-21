@@ -44,6 +44,7 @@ private:
     UISlider               *p_fovInput            = nullptr;
     UIComboBox             *p_projectionModeInput = nullptr;
     UIComboBox             *p_clearModeInput      = nullptr;
+    UICheckBox             *p_isSceneCamera       = nullptr;
     UIInputColor           *p_clearColorInput     = nullptr;
     UIInputFileWithPreview *p_textureCubeMapInput = nullptr;
 };

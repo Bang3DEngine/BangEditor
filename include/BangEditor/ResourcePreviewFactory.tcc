@@ -63,7 +63,7 @@ void ResourcePreviewFactory<T>::CreatePreviewScene()
 
     Camera *previewCamera = camGo->AddComponent<Camera>();
     previewCamera->SetClearMode(CameraClearMode::SKY_BOX);
-    previewCamera->SetSkyBoxTexture( TextureFactory::GetDefaultTextureCubeMap() );
+    previewCamera->SetSkyBoxTexture( TextureFactory::GetDefaultSkybox() );
     scene->SetCamera(previewCamera);
 
     GameObject *dLightGo = GameObjectFactory::CreateGameObject();

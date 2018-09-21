@@ -590,7 +590,8 @@ void MenuBar::OnAddExistingBehaviour(MenuItem*)
 
 void MenuBar::OnAddCamera(MenuItem*)
 {
-    OnAddComponent<Camera>();
+    Camera *cam = OnAddComponent<Camera>();
+    GameObjectFactory::CreateDefaultCameraInto(cam);
 }
 
 void MenuBar::OnAddBoxCollider(MenuItem*)
@@ -793,7 +794,7 @@ void MenuBar::OnCreateCamera(MenuItem*)
 {
     GameObject *camGameObject = GameObjectFactory::CreateGameObject();
     camGameObject->SetName("Camera");
-    camGameObject->AddComponent<Camera>();
+    GameObjectFactory::CreateDefaultCameraInto(camGameObject);
     camGameObject->AddComponent<AudioListener>();
     MenuBar::OnEndCreateGameObjectFromMenuBar(camGameObject);
 }

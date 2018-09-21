@@ -416,6 +416,7 @@ Array<Path> EditorBehaviourManager::GetBehaviourSourcesPaths()
         return edf->GetTrackedPathsWithLastExtension(
                         Extensions::GetSourceFileExtensions());
     }
+    return Array<Path>();
 }
 
 Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType,

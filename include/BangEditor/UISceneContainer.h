@@ -47,6 +47,8 @@ private:
     UISceneToolbar *p_sceneToolbar = nullptr;
     UISceneImage *p_sceneImage = nullptr;
 
+    GameObject *p_noCameraOverlay = nullptr;
+
     virtual Camera* GetSceneCamera(Scene *scene) = 0;
     virtual bool NeedsToRenderScene(Scene *scene) = 0;
     virtual void OnRenderNeededSceneFinished();

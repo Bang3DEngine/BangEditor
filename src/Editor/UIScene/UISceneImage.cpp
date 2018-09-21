@@ -168,6 +168,11 @@ UISceneImage::RenderMode UISceneImage::GetRenderMode() const
     return m_renderMode;
 }
 
+UISceneImage::UISceneImageRenderer *UISceneImage::GetSceneImageRenderer() const
+{
+    return p_sceneImg;
+}
+
 void UISceneImage::UISceneImageRenderer::OnRender()
 {
     GL::Push(GL::Pushable::BLEND_STATES);

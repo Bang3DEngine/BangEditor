@@ -122,7 +122,7 @@ UISceneToolbar::UISceneToolbar()
     p_showDebugStatsCheckbox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     GameObject *showDebugStatsTextGo = GameObjectFactory::CreateUIGameObject();
-    UITextRenderer*showDebugStatsText =
+    UITextRenderer *showDebugStatsText =
                         showDebugStatsTextGo->AddComponent<UITextRenderer>();
     showDebugStatsText->SetTextSize(11);
     showDebugStatsText->SetContent("Stats");

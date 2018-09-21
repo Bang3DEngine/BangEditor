@@ -274,7 +274,6 @@ void EditorScene::SetOpenScene(Scene *openScene)
             GetOpenScene()->EventEmitter<IEventsDestroy>::RegisterListener(this);
 
             BindOpenScene();
-            GetOpenScene()->SetFirstFoundCamera();
             GetOpenScene()->InvalidateCanvas();
             UnBindOpenScene();
         }
