@@ -221,8 +221,11 @@ void Inspector::ShowGameObject(GameObject *go)
     int i = 0;
     for (Component *comp : go->GetComponents())
     {
-        OnComponentAdded(comp, i);
-        ++i;
+        if (comp)
+        {
+            OnComponentAdded(comp, i);
+            ++i;
+        }
     }
 }
 

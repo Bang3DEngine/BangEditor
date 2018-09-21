@@ -56,11 +56,12 @@ void ComponentsGizmos::Render(RenderPass rp, bool renderChildren)
         {
             for (Component *comp : selectedGameObject->GetComponents())
             {
-                if (!comp->IsActive()) { continue; }
-
-                if (!Selection::IsBeingRendered())
+                if (comp && comp->IsActive())
                 {
-                    RenderComponentGizmos(comp, true);
+                    if (!Selection::IsBeingRendered())
+                    {
+                        RenderComponentGizmos(comp, true);
+                    }
                 }
             }
         }
@@ -77,12 +78,18 @@ void ComponentsGizmos::RenderComponentGizmosWhenNotSelected(GameObject *go)
 {
     for (Component *comp : go->GetComponents())
     {
-        RenderComponentGizmos(comp, false);
+        if (comp)
+        {
+            RenderComponentGizmos(comp, false);
+        }
     }
 
     for (GameObject *child : go->GetChildren())
     {
-        RenderComponentGizmosWhenNotSelected(child);
+        if (child)
+        {
+            RenderComponentGizmosWhenNotSelected(child);
+        }
     }
 }
 

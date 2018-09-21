@@ -16,7 +16,7 @@
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/UIInputFileWithPreview.h"
-#include "BangEditor/UndoRedoSerializableChange.h"
+#include "BangEditor/UndoRedoObjectProperty.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -154,7 +154,7 @@ void CIWCamera::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
     {
         if (Scene *openScene = EditorSceneManager::GetOpenScene())
         {
-            MetaNode metaBefore = openScene->GetMeta();
+            Camera *prevCam = openScene->GetCamera();
 
             if (p_isSceneCamera->IsChecked())
             {
@@ -165,10 +165,15 @@ void CIWCamera::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
                 openScene->SetCamera( nullptr );
             }
 
-            UndoRedoSerializableChange *undoRedo =
-                            new UndoRedoSerializableChange(openScene,
-                                                           metaBefore,
-                                                           openScene->GetMeta());
+            UndoRedoObjectProperty<Camera*> *undoRedo =
+               new UndoRedoObjectProperty<Camera*>
+                    (openScene,
+                     prevCam,
+                     openScene->GetCamera(),
+                     [&](Object *scene, Camera *cam)
+                     {
+                        SCAST<Scene*>(scene)->SetCamera(cam);
+                     });
             UndoRedoManager::PushAction(undoRedo);
         }
     }
