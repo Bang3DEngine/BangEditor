@@ -143,11 +143,7 @@ void EditorFileTracker::CheckForBehaviourModifications(const Path &modifiedPath)
 
 void EditorFileTracker::OnPathAdded(const Path &addedPath)
 {
-    if (!MetaFilesManager::IsMetaFile(addedPath) &&
-        !MetaFilesManager::HasMetaFile(addedPath))
-    {
-        MetaFilesManager::CreateMetaFileIfMissing(addedPath);
-    }
+    MetaFilesManager::OnPathAdded(addedPath);
 
     EventEmitter<IEventsFileTracker>::PropagateToListeners(
                 &IEventsFileTracker::OnPathAdded, addedPath);

@@ -339,6 +339,10 @@ void Explorer::OnPathRemoved(const Path &removedPath)
 {
     if (!removedPath.Exists())
     {
+        if (removedPath == GetSelectedPath())
+        {
+            SelectPath(Path::Empty, false, false);
+        }
         RemoveItem(removedPath);
     }
 }
@@ -475,8 +479,9 @@ void Explorer::OnRename(ExplorerItem *explorerItem)
             {
                 File::Rename(path, newPath);
                 EditorFileTracker::GetInstance()->OnPathRenamed(path, newPath);
+                OnPathAdded(newPath);
                 explorerItem->SetPath(newPath);
-                SelectPath(newPath);
+                SelectPath(newPath, false, true);
             }
         }
     }
