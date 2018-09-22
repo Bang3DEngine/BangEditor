@@ -318,13 +318,23 @@ void Inspector::OnGameObjectSelected(GameObject *selectedGameObject)
     ShowGameObject(selectedGameObject);
 }
 
-void Inspector::OnComponentAdded(Component *addedComponent, int index)
+void Inspector::OnComponentAdded(Component *addedComponent, int index_)
 {
     if (ComponentInspectorWidget *compWidget =
             ComponentInspectorWidgetFactory::Create(addedComponent))
     {
         m_objToWidget.Add(addedComponent, compWidget);
-        AddWidget(compWidget, index+1);
+
+        int index = (index_ + 1); // +1 to jump the gameObject inspector widget
+        GameObject *go = addedComponent->GetGameObject();
+        for (Component *comp : go->GetComponents())
+        {
+            if (!comp) // Dont take into account removed components for index
+            {
+                --index;
+            }
+        }
+        AddWidget(compWidget, index);
     }
 }
 
