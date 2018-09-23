@@ -3,6 +3,7 @@
 #include "Bang/Scene.h"
 #include "Bang/Physics.h"
 #include "Bang/Behaviour.h"
+#include "Bang/TimeSingleton.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/BehaviourContainer.h"
 
@@ -123,7 +124,7 @@ void ScenePlayer::PlayScene()
                     // Now set the open scene in the editor
                     SceneManager::LoadSceneInstantly(sp->p_playOpenScene, false);
 
-                    Time::SetDeltaTimeReferenceToNow();
+                    TimeSingleton::SetDeltaTimeReferenceToNow();
                     Physics::GetInstance()->SetIgnoreNextFrames(sp->p_playOpenScene, 5);
                     ScenePlayer::SetPlayState(PlayState::PLAYING);
                 }

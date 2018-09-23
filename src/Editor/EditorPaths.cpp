@@ -91,8 +91,8 @@ Bang::Path BangEditor::EditorPaths::GetBangLatestLibPath()
     Path staticLibPath = EditorPaths::GetBangStaticLibPath();
     Path dynamicLibPath = EditorPaths::GetBangDynamicLibPath();
     if (staticLibPath.IsFile() &&
-        (staticLibPath.GetModificationTimeSeconds() >
-         dynamicLibPath.GetModificationTimeSeconds())
+        (staticLibPath.GetModificationTime() >
+         dynamicLibPath.GetModificationTime())
        )
     {
         return staticLibPath;

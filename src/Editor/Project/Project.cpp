@@ -84,7 +84,7 @@ void Project::ImportMeta(const MetaNode &metaNode)
     if (metaNode.Contains("Physics_StepSleepTime"))
     {
         Physics::GetInstance()->SetStepSleepTime(
-                    metaNode.Get<float>("Physics_StepSleepTime") );
+                Time::Seconds(metaNode.Get<float>("Physics_StepSleepTime")) );
     }
 
     if (metaNode.Contains("Physics_MaxSubSteps"))
@@ -105,7 +105,7 @@ void Project::ExportMeta(MetaNode *metaNode) const
     metaNode->SetName("Project");
     metaNode->Set("RandomID", GetProjectRandomId());
     metaNode->Set("Physics_StepSleepTime",
-                 Physics::GetInstance()->GetStepSleepTimeSeconds());
+                 Physics::GetInstance()->GetStepSleepTime().GetSeconds());
     metaNode->Set("Physics_MaxSubSteps",
                  Physics::GetInstance()->GetMaxSubSteps());
     metaNode->Set("Physics_Gravity",

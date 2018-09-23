@@ -219,9 +219,9 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
     Array<Path> behaviourObjectsPaths =
                          dataLibsDir.GetFiles(FindFlag::SIMPLE, {"o"});
     Path outputLibPath =
-                dataLibsDir.Append("Behaviours")
-                       .AppendExtension("so")
-                       .AppendExtension( String::ToString(Time::GetNow_Millis()) );
+        dataLibsDir.Append("Behaviours")
+               .AppendExtension("so")
+               .AppendExtension( String::ToString(Time::GetNow().GetMillis()) );
     Debug_Log("Merging behaviour objects " << behaviourObjectsPaths <<
               " into '" << outputLibPath << "'...");
 

@@ -82,7 +82,7 @@ void CIWBehaviourContainer::UpdateFromReference()
     if (srcPath.IsFile())
     {
         Path headerPath = srcPath.WithExtension("h");
-        Time::TimeT timeHeaderChanged = EditorFileTracker::GetInstance()->
+        Time timeHeaderChanged = EditorFileTracker::GetInstance()->
                                         GetModificationTime(headerPath);
         if (timeHeaderChanged > m_prevTimeHeaderChanged)
         {

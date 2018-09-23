@@ -348,7 +348,7 @@ void EditorBehaviourManager::MergeIntoBehavioursLibrary()
     Path outputLibPath = Paths::GetProjectLibrariesDir().
                               Append("Behaviours").
                               AppendExtension("so").
-                              AppendExtension( String(Time::GetNow_Nanos()) );
+                              AppendExtension( String(Time::GetNow().GetNanos()) );
 
     if (EditorFileTracker *edf  = EditorFileTracker::GetInstance())
     {
@@ -470,7 +470,7 @@ Path EditorBehaviourManager::GetObjectOutputPath(const Path &inputBehaviourPath)
     return Paths::GetProjectLibrariesDir().
                               Append(inputBehaviourPath.GetName()).
                               AppendExtension("o").
-                              AppendExtension( String(Time::GetNow_Nanos()) );
+                              AppendExtension( String(Time::GetNow().GetNanos()) );
 }
 
 Compiler::Job EditorBehaviourManager::CreateCompileBehaviourJob(

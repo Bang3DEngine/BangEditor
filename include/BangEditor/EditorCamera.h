@@ -89,8 +89,8 @@ private:
     void HandleMousePanning();
     void HandleKeyMovement();
     void HandleLookAtFocus();
-    void InterpolatePositionAndRotation(float extraInterpolationPos = 0.0f,
-                                        float extraInterpolationRot = 0.0f);
+    void InterpolatePositionAndRotation(double extraInterpolationPos = 0.0,
+                                        double extraInterpolationRot = 0.0);
     void GetLookAtFocusParams(GameObject *lookAtGo,
                               Vector3 *targetPos,
                               Quaternion *targetRot);

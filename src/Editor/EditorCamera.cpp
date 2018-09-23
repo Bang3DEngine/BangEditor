@@ -147,23 +147,22 @@ void EditorCamera::AdjustSpeeds()
     m_mousePanPerPixel.y = Math::Max(m_mousePanPerPixel.y, 0.05f);
 }
 
-void EditorCamera::InterpolatePositionAndRotation(float extraInterpPos,
-                                                  float extraInterpRot)
+void EditorCamera::InterpolatePositionAndRotation(double extraInterpPos,
+                                                  double extraInterpRot)
 {
-    float dt = Time::GetDeltaTime();
+    Time dt = Time::GetDeltaTime();
+    double dts = dt.GetSeconds();
 
-    float interpPosSpeed = 2.0f;
+    double interpPosSpeed = 2.0;
+    float posT = Math::Min((dts * interpPosSpeed) + extraInterpPos, 1.0);
     Vector3 newPos =
-        Vector3::Lerp(GetTransform()->GetPosition(),
-                      m_targetPosition,
-                      Math::Min((dt * interpPosSpeed) + extraInterpPos, 1.0f));
+        Vector3::Lerp(GetTransform()->GetPosition(), m_targetPosition, posT);
     GetTransform()->SetLocalPosition(newPos);
 
     float interpRotSpeed = 3.0f;
+    float rotT = Math::Min((dts * interpRotSpeed) + extraInterpRot, 1.0);
     Quaternion newRot =
-         Quaternion::SLerp(GetTransform()->GetRotation(),
-                           m_targetRotation,
-                           Math::Min((dt * interpRotSpeed) + extraInterpRot, 1.0f));
+       Quaternion::SLerp(GetTransform()->GetRotation(), m_targetRotation, rotT);
     GetTransform()->SetLocalRotation(newRot);
 }
 
@@ -233,7 +232,7 @@ void EditorCamera::HandleKeyMovement()
 
     if (!Input::GetKey(Key::LCTRL) && !Input::GetKey(Key::LSHIFT))
     {
-        float dt = Time::GetDeltaTime();
+        float dt = Time::GetDeltaTime().GetSeconds();
         Vector3 m = Vector3::Zero;
         if (Input::GetKey(Key::W))
         {

@@ -142,7 +142,7 @@ void CIWReflectionProbe::UpdateFromReference()
 
     if (!p_restTimeInput->HasFocus())
     {
-        p_restTimeInput->SetValue( reflProbe->GetRestTimeSeconds() );
+        p_restTimeInput->SetValue( reflProbe->GetRestTime().GetSeconds() );
     }
 
     p_isBoxedCheckBox->SetChecked( reflProbe->GetIsBoxed() );

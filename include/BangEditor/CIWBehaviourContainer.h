@@ -33,7 +33,7 @@ private:
     UIInputFileWithPreview *p_sourceInputFile = nullptr;
 
     CIWBehaviourHelper m_ciwBehaviourHelper;
-    Time::TimeT m_prevTimeHeaderChanged = 0;
+    Time m_prevTimeHeaderChanged;
 
     CIWBehaviourContainer();
     virtual ~CIWBehaviourContainer();
