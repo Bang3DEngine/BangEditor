@@ -115,7 +115,8 @@ void RotateGizmoAxis::Update()
         {
             m_startingGrabMousePosNDC = Input::GetMousePositionNDC();
             m_startingGrabAxisedSpherePoint =
-                    GetAxisedSpherePointFromMousePosNDC(cam, mousePos,
+                    GetAxisedSpherePointFromMousePosNDC(cam,
+                                                        mousePos,
                                                         GetAxisVectorWorld(),
                                                         rotationSphere);
         }
@@ -124,10 +125,10 @@ void RotateGizmoAxis::Update()
             // Get mouseAxis, and displace from the starting grab mouse pos. With
             // this displaced mouse position, get the new point in the sphere
             Vector2 mouseAxis = Input::GetMouseAxis();
-            Vector2 displacedMousePosition = m_startingGrabMousePosNDC + mouseAxis;
+            Vector2 displacedMousePositionNDC = m_startingGrabMousePosNDC + mouseAxis;
             Vector3 displacedMouseAxisedSpherePoint =
                     GetAxisedSpherePointFromMousePosNDC(cam,
-                                                        displacedMousePosition,
+                                                        displacedMousePositionNDC,
                                                         GetAxisVectorWorld(),
                                                         rotationSphere);
 
@@ -147,7 +148,7 @@ void RotateGizmoAxis::Update()
             newDirLocal.Normalize();
 
             // Only process now if dirs are different enough (avoid NaN's)
-            if ( Math::Abs( Vector3::Dot(startDirLocal, newDirLocal) ) < 0.9999f)
+            if (Math::Abs( Vector3::Dot(startDirLocal, newDirLocal) ) < 0.9999f)
             {
                 // Get the quaternion representing the local rotation displacement
                 Quaternion deltaLocalRot = Quaternion::FromTo(startDirLocal,

@@ -32,6 +32,7 @@
 #include "BangEditor/Inspector.h"
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/EditorCamera.h"
+#include "BangEditor/UISceneImage.h"
 #include "BangEditor/EditorWindow.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/UITabContainer.h"
@@ -219,15 +220,27 @@ void EditorScene::Update()
     if (openScene)
     {
         BindOpenScene();
-        Input::LimitInputIfFocused( GetScenePlayContainer()->GetFocusable() );
+
+        Input::Context openSceneInputContext;
+        openSceneInputContext.focus = GetScenePlayContainer()->GetFocusable();
+        openSceneInputContext.rect  = AARecti(GetScenePlayContainer()->
+                                              GetSceneImage()->
+                                              GetRectTransform()->
+                                              GetViewportAARect());
+        Input::SetContext(openSceneInputContext);
 
         bool updateOpenScene = (ScenePlayer::GetPlayState() == PlayState::PLAYING);
         SceneManager::OnNewFrame(openScene, updateOpenScene);
 
-        Input::LimitInputIfFocused( GetSceneEditContainer()->GetFocusable() );
+        openSceneInputContext.focus = GetSceneEditContainer()->GetFocusable();
+        openSceneInputContext.rect  = AARecti(GetSceneEditContainer()->
+                                              GetSceneImage()->
+                                              GetRectTransform()->
+                                              GetViewportAARect());
+        Input::SetContext(openSceneInputContext);
         GetEditSceneGameObjects()->Update();
 
-        Input::LimitInputIfFocused(nullptr);
+        Input::ClearContext();
         UnBindOpenScene();
     }
 
