@@ -5,6 +5,7 @@
 #include "Bang/UIFocusable.h"
 
 #include "BangEditor/EditorCamera.h"
+#include "BangEditor/UISceneToolbar.h"
 #include "BangEditor/UISceneToolbarDown.h"
 #include "BangEditor/EditorSceneManager.h"
 
@@ -13,6 +14,7 @@ USING_NAMESPACE_BANG_EDITOR
 
 UIScenePlayContainer::UIScenePlayContainer()
 {
+    GetSceneToolbar()->DisableTransformAndCameraControls();
     GetSceneToolbarDown()->SetEnabled(false);
 
     ScenePlayer::GetInstance()->

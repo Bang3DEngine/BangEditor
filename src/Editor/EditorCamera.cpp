@@ -346,13 +346,14 @@ void EditorCamera::GetLookAtFocusParams(GameObject *lookAtGo,
     Vector3 thisPos = GetTransform()->GetPosition();
     Vector3 focusPos = (!Math::IsInfinity(focusBSphere.GetRadius()) ?
             focusBSphere.GetCenter() : lookAtGo->GetTransform()->GetPosition());
-    Vector3 focusDir = (focusPos - thisPos).Normalized();
+    Vector3 focusDir = (focusPos - thisPos).NormalizedSafe();
 
     // LookAt Rotation
     *targetRot = Quaternion::LookDirection(focusDir, Vector3::Up);
 
     // LookAt Move
-    float radius = !Math::IsInfinity(radius) ? focusBSphere.GetRadius() : 0.1f;
+    float radius = focusBSphere.GetRadius();
+    radius = !Math::IsInfinity(radius) ? radius : 0.1f;
     radius = Math::Max(radius, 0.1f);
     float stopDist = radius;
     if (cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)

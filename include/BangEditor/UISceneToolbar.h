@@ -39,22 +39,26 @@ public:
     TransformGizmoMode GetTransformGizmoMode() const;
 
     bool IsShowDebugStatsChecked() const;
+    void DisableTransformAndCameraControls();
     UIComboBox* GetRenderModeComboBox() const;
 
     static UISceneToolbar *GetActive();
 
 private:
-    UIToolButton *p_playButton  = nullptr;
-    UIToolButton *p_pauseButton = nullptr;
-    UIToolButton *p_stepButton  = nullptr;
-    UIToolButton *p_stopButton  = nullptr;
-    UIToolButton *p_resetCamViewButton = nullptr;
-
-    TransformGizmoMode m_transformGizmoMode = TransformGizmoMode::TRANSLATE;
     UIToolButton *p_translateButton      = nullptr;
     UIToolButton *p_rotateButton         = nullptr;
     UIToolButton *p_scaleButton          = nullptr;
     UIToolButton *p_rectTransformButton  = nullptr;
+    GameObject *p_transformCamSeparator = nullptr;
+    GameObject *p_transformCamSpacer = nullptr;
+    UIToolButton *p_resetCamViewButton = nullptr;
+
+    UIToolButton *p_playButton  = nullptr;
+    UIToolButton *p_pauseButton = nullptr;
+    UIToolButton *p_stepButton  = nullptr;
+    UIToolButton *p_stopButton  = nullptr;
+
+    TransformGizmoMode m_transformGizmoMode = TransformGizmoMode::TRANSLATE;
 
     UIComboBox *p_renderModeInput = nullptr;
     UICheckBox *p_showDebugStatsCheckbox = nullptr;

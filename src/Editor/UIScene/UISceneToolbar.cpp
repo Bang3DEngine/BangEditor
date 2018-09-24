@@ -87,13 +87,15 @@ UISceneToolbar::UISceneToolbar()
     AddToolbarButton(&p_rectTransformButton, rectTransformIcon,
                      [&]() { SetTransformGizmoMode( TransformGizmoMode::RECT); });
 
-    GameObjectFactory::CreateUIVSeparator(LayoutSizeType::PREFERRED, 10)->
-            SetParent(this);
+    p_transformCamSeparator = GameObjectFactory::CreateUIVSeparator(
+                                                 LayoutSizeType::PREFERRED, 10);
+    p_transformCamSeparator->SetParent(this);
 
     AddToolbarButton(&p_resetCamViewButton, eyeIcon,
                      [&]() { ResetCameraView(); }, true);
 
-    GameObjectFactory::CreateUIHSpacer()->SetParent(this);
+    p_transformCamSpacer = GameObjectFactory::CreateUIHSpacer();
+    p_transformCamSpacer->SetParent(this);
 
     AddToolbarButton(&p_playButton, rightArrowIcon,
                      [&]() { ScenePlayer::PlayScene(); }, true);
@@ -164,6 +166,16 @@ TransformGizmoMode UISceneToolbar::GetTransformGizmoMode() const
 bool UISceneToolbar::IsShowDebugStatsChecked() const
 {
     return p_showDebugStatsCheckbox->IsChecked();
+}
+
+void UISceneToolbar::DisableTransformAndCameraControls()
+{
+    p_transformCamSeparator->SetVisible(false);
+    p_translateButton->GetGameObject()->SetVisible(false);
+    p_rotateButton->GetGameObject()->SetVisible(false);
+    p_scaleButton->GetGameObject()->SetVisible(false);
+    p_rectTransformButton->GetGameObject()->SetVisible(false);
+    p_resetCamViewButton->GetGameObject()->SetVisible(false);
 }
 
 UIComboBox *UISceneToolbar::GetRenderModeComboBox() const
