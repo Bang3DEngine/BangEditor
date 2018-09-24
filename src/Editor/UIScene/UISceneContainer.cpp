@@ -23,6 +23,7 @@
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/UISceneToolbar.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/UISceneToolbarDown.h"
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/SelectionFramebuffer.h"
 
@@ -61,10 +62,13 @@ UISceneContainer::UISceneContainer()
 
     p_sceneToolbar = GameObject::Create<UISceneToolbar>();
     p_sceneImage = GameObject::Create<UISceneImage>();
+    p_sceneToolbarDown = GameObject::Create<UISceneToolbarDown>();
 
     GetSceneToolbar()->SetParent(vlGo);
     GameObjectFactory::CreateUIVSpacer(LayoutSizeType::PREFERRED, 5)->SetParent(vlGo);
     p_sceneImage->SetParent(vlGo);
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::PREFERRED, 5)->SetParent(vlGo);
+    GetSceneToolbarDown()->SetParent(vlGo);
 
     p_focusable = AddComponent<UIFocusable>();
     p_focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
@@ -143,6 +147,11 @@ UISceneImage *UISceneContainer::GetSceneImage() const
 UIFocusable *UISceneContainer::GetFocusable() const
 {
     return p_focusable;
+}
+
+UISceneToolbarDown *UISceneContainer::GetSceneToolbarDown() const
+{
+    return p_sceneToolbarDown;
 }
 
 void UISceneContainer::OnRenderNeededSceneFinished()

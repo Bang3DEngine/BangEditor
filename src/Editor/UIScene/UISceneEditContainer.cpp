@@ -134,7 +134,8 @@ Vector2i UISceneEditContainer::GetMousePositionInOpenScene()
     if (UISceneEditContainer *sec = UISceneEditContainer::GetActive())
     {
         AARecti vp = GL::GetViewportRect();
-        AARecti sceneVPRect( sec->GetRectTransform()->GetViewportAARect() );
+        AARecti sceneVPRect( sec->GetSceneImage()->GetRectTransform()->
+                             GetViewportAARect() );
         AARecti windowSceneRect = sceneVPRect + vp.GetMin();
         Vector2i vpMousePos( GL::FromWindowPointToViewportPoint(
                                 Vector2(Input::GetMousePositionWindow()),

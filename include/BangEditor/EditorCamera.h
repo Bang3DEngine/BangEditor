@@ -37,6 +37,7 @@ public:
     void LookAt(GameObject *lookAtFocus);
     void RequestBlockBy(GameObject *go);
     void RequestUnBlockBy(GameObject *go);
+    void SetZoomSpeedMultiplier(float zoomSpeedMultiplier);
 
     SelectionFramebuffer *GetSelectionFramebuffer() const;
     Camera *GetCamera() const;
@@ -71,7 +72,7 @@ private:
 
     // Zoom
     float m_mouseZoomPerDeltaWheel = 0.0f;
-    float m_zoomCurrentSpeed = 0.0f;
+    float m_zoomSpeedMultiplier = 0.0f;
 
     float m_orthoHeight = 30.0f;
 

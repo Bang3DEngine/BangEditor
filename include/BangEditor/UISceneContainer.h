@@ -20,6 +20,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UISceneImage;
 FORWARD class UISceneToolbar;
+FORWARD class UISceneToolbarDown;
 
 class UISceneContainer : public GameObject,
                          public EventListener<IEventsFocus>,
@@ -41,6 +42,7 @@ public:
     UISceneToolbar* GetSceneToolbar() const;
     UISceneImage* GetSceneImage() const;
     UIFocusable* GetFocusable() const;
+    UISceneToolbarDown *GetSceneToolbarDown() const;
 
 protected:
     // IEventsDestroy
@@ -55,6 +57,7 @@ private:
 
     Scene *p_containedScene = nullptr;
 
+    UISceneToolbarDown *p_sceneToolbarDown = nullptr;
     UISceneToolbar *p_sceneToolbar = nullptr;
     UISceneImage *p_sceneImage = nullptr;
 

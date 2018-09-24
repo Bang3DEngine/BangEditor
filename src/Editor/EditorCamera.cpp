@@ -172,14 +172,15 @@ void EditorCamera::HandleWheelZoom()
     if (UISceneEditContainer::IsMouseOver())
     {
         float mouseWheel = Input::GetMouseWheel().y * m_mouseZoomPerDeltaWheel;
-        m_zoomCurrentSpeed = mouseWheel + (m_zoomCurrentSpeed * 0.5f); // Lerp
+        float zoomSpeed = mouseWheel * m_zoomSpeedMultiplier;
 
         // Apply zoom
-        if (m_zoomCurrentSpeed != 0.0f)
+        if (zoomSpeed != 0.0f)
         {
             if (p_cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
             {
-                m_targetPosition += m_zoomCurrentSpeed * p_camt->GetForward();
+                m_targetPosition += zoomSpeed * p_camt->GetForward();
+                InterpolatePositionAndRotation(1.0f, 0.0f);
             }
             m_orthoHeight -= 2.75f * mouseWheel; // Magic number here :)
             p_cam->SetOrthoHeight(m_orthoHeight);
@@ -371,6 +372,11 @@ void EditorCamera::RequestBlockBy(GameObject *go)
 void EditorCamera::RequestUnBlockBy(GameObject *go)
 {
     m_blockRequests.Remove(go);
+}
+
+void EditorCamera::SetZoomSpeedMultiplier(float zoomSpeedMultiplier)
+{
+    m_zoomSpeedMultiplier = zoomSpeedMultiplier;
 }
 
 bool EditorCamera::IsBlocked() const

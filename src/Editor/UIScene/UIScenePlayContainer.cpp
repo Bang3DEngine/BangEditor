@@ -5,6 +5,7 @@
 #include "Bang/UIFocusable.h"
 
 #include "BangEditor/EditorCamera.h"
+#include "BangEditor/UISceneToolbarDown.h"
 #include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
@@ -12,6 +13,8 @@ USING_NAMESPACE_BANG_EDITOR
 
 UIScenePlayContainer::UIScenePlayContainer()
 {
+    GetSceneToolbarDown()->SetEnabled(false);
+
     ScenePlayer::GetInstance()->
             EventEmitter<IEventsScenePlayer>::RegisterListener(this);
     SceneManager::GetActive()->
