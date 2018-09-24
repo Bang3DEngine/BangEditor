@@ -14,6 +14,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class UITabHeader;
 
 class UITabContainer : public GameObject,
+                       public EventEmitter<IEventsTabHeader>,
                        public EventListener<IEventsTabHeader>
 {
     GAMEOBJECT_EDITOR(UITabContainer);

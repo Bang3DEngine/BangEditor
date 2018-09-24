@@ -2,6 +2,7 @@
 #define UISCENEPLAYCONTAINER_H
 
 #include "Bang/Bang.h"
+#include "Bang/IEventsFocus.h"
 #include "Bang/SceneManager.h"
 #include "Bang/EventListener.h"
 

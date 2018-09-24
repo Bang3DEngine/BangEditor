@@ -108,27 +108,33 @@ void EditorScene::Init()
 
     // Tab containers creation
     p_topLeftTabContainer = GameObject::Create<UITabContainer>();
-    UILayoutElement *topLeftTabContainerLE = p_topLeftTabContainer->AddComponent<UILayoutElement>();
+    UILayoutElement *topLeftTabContainerLE =
+            p_topLeftTabContainer->AddComponent<UILayoutElement>();
     topLeftTabContainerLE->SetMinSize( Vector2i(300) );
     topLeftTabContainerLE->SetFlexibleSize( Vector2(0.0f, 1.0f) );
 
     p_topCenterTabContainer = GameObject::Create<UITabContainer>();
-    UILayoutElement *topCenterTabContainerLE = p_topCenterTabContainer->AddComponent<UILayoutElement>();
+    UILayoutElement *topCenterTabContainerLE =
+            p_topCenterTabContainer->AddComponent<UILayoutElement>();
     topCenterTabContainerLE->SetMinSize( Vector2i(500, 250) );
     topCenterTabContainerLE->SetFlexibleSize( Vector2(3.0f, 1.0f) );
+    p_topCenterTabContainer->EventEmitter<IEventsTabHeader>::RegisterListener(this);
 
     p_topRightTabContainer = GameObject::Create<UITabContainer>();
-    UILayoutElement *topRightTabContainerLE = p_topRightTabContainer->AddComponent<UILayoutElement>();
+    UILayoutElement *topRightTabContainerLE =
+            p_topRightTabContainer->AddComponent<UILayoutElement>();
     topRightTabContainerLE->SetMinSize( Vector2i(400) );
     topRightTabContainerLE->SetFlexibleSize( Vector2(0.0f, 1.0f) );
 
     p_botLeftTabContainer = GameObject::Create<UITabContainer>();
-    UILayoutElement *botLeftTabContainerLE = p_botLeftTabContainer->AddComponent<UILayoutElement>();
+    UILayoutElement *botLeftTabContainerLE =
+            p_botLeftTabContainer->AddComponent<UILayoutElement>();
     botLeftTabContainerLE->SetMinSize( Vector2i(500, 250) );
     botLeftTabContainerLE->SetFlexibleSize( Vector2(1.0f, 1.0f) );
 
     p_botRightTabContainer = GameObject::Create<UITabContainer>();
-    UILayoutElement *botRightTabContainerLE = p_botRightTabContainer->AddComponent<UILayoutElement>();
+    UILayoutElement *botRightTabContainerLE =
+            p_botRightTabContainer->AddComponent<UILayoutElement>();
     botRightTabContainerLE->SetMinSize( Vector2i(250) );
     botRightTabContainerLE->SetFlexibleSize( Vector2(0.35f, 1.0f) );
 
@@ -213,12 +219,15 @@ void EditorScene::Update()
     if (openScene)
     {
         BindOpenScene();
+        Input::LimitInputIfFocused( GetScenePlayContainer()->GetFocusable() );
 
         bool updateOpenScene = (ScenePlayer::GetPlayState() == PlayState::PLAYING);
         SceneManager::OnNewFrame(openScene, updateOpenScene);
 
+        Input::LimitInputIfFocused( GetSceneEditContainer()->GetFocusable() );
         GetEditSceneGameObjects()->Update();
 
+        Input::LimitInputIfFocused(nullptr);
         UnBindOpenScene();
     }
 
@@ -277,6 +286,20 @@ void EditorScene::SetOpenScene(Scene *openScene)
             GetOpenScene()->InvalidateCanvas();
             UnBindOpenScene();
         }
+    }
+}
+
+void EditorScene::OnTabHeaderClicked(UITabHeader *header)
+{
+    if (header->GetTitle().BeginsWith("Scene"))
+    {
+        UICanvas::GetActive(this)->SetFocus(
+                    GetSceneEditContainer()->GetFocusable());
+    }
+    else if (header->GetTitle() == "Game")
+    {
+        UICanvas::GetActive(this)->SetFocus(
+                    GetScenePlayContainer()->GetFocusable());
     }
 }
 
@@ -404,10 +427,14 @@ void EditorScene::OnPlayStateChanged(PlayState previousPlayState,
     {
         case PlayState::EDITING:
             p_topCenterTabContainer->SetCurrentTabChild( p_sceneEditContainer );
+            UICanvas::GetActive(this)->SetFocus(
+                        GetSceneEditContainer()->GetFocusable());
         break;
 
         case PlayState::PLAYING:
             p_topCenterTabContainer->SetCurrentTabChild( p_scenePlayContainer );
+            UICanvas::GetActive(this)->SetFocus(
+                        GetScenePlayContainer()->GetFocusable());
         break;
 
         default: break;

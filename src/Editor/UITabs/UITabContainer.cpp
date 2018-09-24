@@ -173,6 +173,9 @@ void UITabContainer::OnTabHeaderClicked(UITabHeader *header)
         GameObject *tabbedChild = m_headerToChildren.Get(header);
         SetCurrentTabChild(tabbedChild);
     }
+
+    EventEmitter<IEventsTabHeader>::PropagateToListeners(
+                &IEventsTabHeader::OnTabHeaderClicked, header);
 }
 
 GameObject *UITabContainer::GetHiddenTabsContainer() const

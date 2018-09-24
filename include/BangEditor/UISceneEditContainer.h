@@ -30,7 +30,6 @@ class UISceneEditContainer :
         public EventListener<IEventsGameObjectVisibilityChanged>,
         public EventListener<IEventsScenePlayer>,
         public EventListener<IEventsSceneManager>,
-        public EventListener<IEventsFocus>,
         public EventListener<IEventsDragDrop>
 {
     GAMEOBJECT_EDITOR(UISceneEditContainer);
@@ -48,12 +47,10 @@ public:
     static Vector2i GetMousePositionInOpenScene();
 
 private:
-    UIImageRenderer *p_border = nullptr;
     bool m_needToRenderPreviewImg = false;
     UIImageRenderer *p_cameraPreviewImg = nullptr;
     GBuffer *m_cameraPreviewGBuffer = nullptr;
 
-    UIFocusable *p_focusable = nullptr;
     RH<Material> m_currentMaterialBeingDragged;
     GameObject *p_lastOveredGameObject = nullptr;
     MetaNode m_prevGameObjectMetaBeforeDraggingMaterial;

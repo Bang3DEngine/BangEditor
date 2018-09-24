@@ -2,6 +2,7 @@
 #define UISCENECONTAINER_H
 
 #include "Bang/GameObject.h"
+#include "Bang/IEventsFocus.h"
 #include "Bang/EventListener.h"
 #include "Bang/IEventsTransform.h"
 #include "Bang/IEventsValueChanged.h"
@@ -10,6 +11,8 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Texture2D;
+FORWARD class UIFocusable;
+FORWARD class UIImageRenderer;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -19,6 +22,7 @@ FORWARD class UISceneImage;
 FORWARD class UISceneToolbar;
 
 class UISceneContainer : public GameObject,
+                         public EventListener<IEventsFocus>,
                          public EventListener<IEventsDestroy>,
                          public EventListener<IEventsValueChanged>,
                          public EventListener<IEventsTransform>
@@ -36,12 +40,19 @@ public:
 
     UISceneToolbar* GetSceneToolbar() const;
     UISceneImage* GetSceneImage() const;
+    UIFocusable* GetFocusable() const;
 
 protected:
     // IEventsDestroy
     void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
+    // IEventsFocus
+    UIEventResult OnUIEvent(UIFocusable *focusable, const UIEvent &event);
+
 private:
+    UIFocusable *p_focusable = nullptr;
+    UIImageRenderer *p_border = nullptr;
+
     Scene *p_containedScene = nullptr;
 
     UISceneToolbar *p_sceneToolbar = nullptr;

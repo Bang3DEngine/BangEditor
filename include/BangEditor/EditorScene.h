@@ -9,6 +9,7 @@
 #include "BangEditor/Editor.h"
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/EditorWindow.h"
+#include "BangEditor/IEventsTabHeader.h"
 #include "BangEditor/IEventsScenePlayer.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
@@ -42,6 +43,7 @@ FORWARD class UIScenePlayContainer;
 
 class EditorScene : public Scene,
                     public EventListener<IEventsWindow>,
+                    public EventListener<IEventsTabHeader>,
                     public EventListener<IEventsScenePlayer>,
                     public EventListener<IEventsSceneManager>
 {
@@ -114,6 +116,9 @@ private:
     void UnBindOpenScene();
 
     void SetOpenScene(Scene *openScene);
+
+    // IEventsTabHeader
+    void OnTabHeaderClicked(UITabHeader *header) override;
 
     // IEventsWindow
     void OnFocusGained(Window *w) override;

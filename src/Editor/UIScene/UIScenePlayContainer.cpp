@@ -2,6 +2,7 @@
 
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
+#include "Bang/UIFocusable.h"
 
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/EditorSceneManager.h"

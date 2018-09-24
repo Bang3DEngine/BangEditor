@@ -66,6 +66,12 @@ UISceneContainer::UISceneContainer()
     GameObjectFactory::CreateUIVSpacer(LayoutSizeType::PREFERRED, 5)->SetParent(vlGo);
     p_sceneImage->SetParent(vlGo);
 
+    p_focusable = AddComponent<UIFocusable>();
+    p_focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
+    p_focusable->SetConsiderForTabbing(true);
+
+    p_border = GameObjectFactory::AddOuterShadow(GetSceneImage(), Vector2i(2));
+
     GetSceneToolbar()->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     p_sceneImage->GetRectTransform()->
                   EventEmitter<IEventsTransform>::RegisterListener(this);
@@ -134,6 +140,11 @@ UISceneImage *UISceneContainer::GetSceneImage() const
     return p_sceneImage;
 }
 
+UIFocusable *UISceneContainer::GetFocusable() const
+{
+    return p_focusable;
+}
+
 void UISceneContainer::OnRenderNeededSceneFinished()
 {
 }
@@ -159,5 +170,26 @@ void UISceneContainer::OnValueChanged(EventEmitter<IEventsValueChanged>*)
 void UISceneContainer::OnDestroyed(EventEmitter<IEventsDestroy>*)
 {
     SetScene(nullptr);
+}
+
+UIEventResult UISceneContainer::OnUIEvent(UIFocusable*, const UIEvent &event)
+{
+    switch (event.type)
+    {
+        case UIEvent::Type::FOCUS_TAKEN:
+            GameObjectFactory::MakeBorderFocused(p_border);
+            return UIEventResult::INTERCEPT;
+        break;
+
+        case UIEvent::Type::FOCUS_LOST:
+            GameObjectFactory::MakeBorderNotFocused(p_border);
+            return UIEventResult::INTERCEPT;
+        break;
+
+        default:
+        break;
+    }
+
+    return UIEventResult::IGNORE;
 }
 

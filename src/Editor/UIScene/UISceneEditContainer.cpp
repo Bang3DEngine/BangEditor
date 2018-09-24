@@ -38,28 +38,22 @@ USING_NAMESPACE_BANG_EDITOR
 
 UISceneEditContainer::UISceneEditContainer()
 {
-    ScenePlayer::GetInstance()->
-            EventEmitter<IEventsScenePlayer>::RegisterListener(this);
-    SceneManager::GetActive()->
-            EventEmitter<IEventsSceneManager>::RegisterListener(this);
-
-    p_focusable = AddComponent<UIFocusable>();
-    p_focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
-    p_focusable->SetConsiderForTabbing(true);
-
     GameObject *cameraPreviewGo = GameObjectFactory::CreateUIGameObject();
     p_cameraPreviewImg = cameraPreviewGo->AddComponent<UIImageRenderer>();
     p_cameraPreviewImg->SetMode(UIImageRenderer::Mode::TEXTURE);
     cameraPreviewGo->SetVisible(false);
 
     GameObjectFactory::AddOuterBorder(cameraPreviewGo);
-    p_border = GameObjectFactory::AddOuterShadow(GetSceneImage(), Vector2i(2));
 
     m_cameraPreviewGBuffer = new GBuffer(1,1);
 
     cameraPreviewGo->AddComponent<UILayoutIgnorer>();
     cameraPreviewGo->SetParent(this);
 
+    ScenePlayer::GetInstance()->
+            EventEmitter<IEventsScenePlayer>::RegisterListener(this);
+    SceneManager::GetActive()->
+            EventEmitter<IEventsSceneManager>::RegisterListener(this);
     EventEmitter<IEventsGameObjectVisibilityChanged>::RegisterListener(this);
 }
 
@@ -125,13 +119,13 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
 bool UISceneEditContainer::HasFocus()
 {
     UISceneEditContainer *uisec = UISceneEditContainer::GetActive();
-    return uisec->p_focusable->HasFocus();
+    return uisec->GetFocusable()->HasFocus();
 }
 
 bool UISceneEditContainer::IsMouseOver()
 {
     UISceneEditContainer *uisec = UISceneEditContainer::GetActive();
-    return UICanvas::GetActive(uisec)->IsMouseOver(uisec->p_focusable);
+    return UICanvas::GetActive(uisec)->IsMouseOver(uisec->GetFocusable());
 }
 
 Vector2i UISceneEditContainer::GetMousePositionInOpenScene()
@@ -291,18 +285,13 @@ void UISceneEditContainer::OnVisibilityChanged(GameObject*)
 UIEventResult UISceneEditContainer::OnUIEvent(UIFocusable *focusable,
                                               const UIEvent &event)
 {
+    if (UISceneContainer::OnUIEvent(focusable, event) == UIEventResult::INTERCEPT)
+    {
+        return UIEventResult::INTERCEPT;
+    }
+
     switch (event.type)
     {
-        case UIEvent::Type::FOCUS_TAKEN:
-            GameObjectFactory::MakeBorderFocused(p_border);
-            return UIEventResult::INTERCEPT;
-        break;
-
-        case UIEvent::Type::FOCUS_LOST:
-            GameObjectFactory::MakeBorderNotFocused(p_border);
-            return UIEventResult::INTERCEPT;
-        break;
-
         case UIEvent::Type::MOUSE_CLICK_DOWN:
         {
             if (event.mouse.button == MouseButton::LEFT)
