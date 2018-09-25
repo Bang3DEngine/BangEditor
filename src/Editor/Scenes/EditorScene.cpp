@@ -111,18 +111,6 @@ void EditorScene::Init()
     p_tabStation = GameObject::Create<UITabStation>();
     p_tabStation->SetParent(m_mainEditorVLGo);
 
-    GameObject *wololo = GameObjectFactory::CreateUIGameObject();
-    wololo->AddComponent<UIImageRenderer>()->SetTint(Color::Yellow);
-    UILayoutElement *le = wololo->AddComponent<UILayoutElement>();
-    le->SetMinSize(Vector2i(100));
-    le->SetFlexibleSize(Vector2::One);
-
-    GameObject *wololo2 = GameObjectFactory::CreateUIGameObject();
-    wololo2->AddComponent<UIImageRenderer>()->SetTint(Color::Red);
-    UILayoutElement *le2 = wololo2->AddComponent<UILayoutElement>();
-    le2->SetMinSize(Vector2i(50));
-    le2->SetFlexibleSize(Vector2::One);
-
     p_tabStation->GetTabContainer()->AddTab("Scene", p_sceneEditContainer);
     p_tabStation->GetTabContainer()->AddTab("Game",  p_scenePlayContainer);
     p_tabStation->GetChildStationAndCreateIfNeeded(Side::LEFT)->
@@ -133,61 +121,6 @@ void EditorScene::Init()
                   GetTabContainer()->AddTab("Explorer", p_explorer);
     p_tabStation->GetChildStationAndCreateIfNeeded(Side::BOT)->
                   GetTabContainer()->AddTab("Console", p_console);
-    p_tabStation->GetChildStationAndCreateIfNeeded(Side::BOT)->
-                  GetChildStationAndCreateIfNeeded(Side::RIGHT)->
-                  GetTabContainer()->AddTab("Wololo", wololo);
-    p_tabStation->GetChildStationAndCreateIfNeeded(Side::BOT)->
-                  GetChildStationAndCreateIfNeeded(Side::RIGHT)->
-                  GetChildStationAndCreateIfNeeded(Side::TOP)->
-                  GetTabContainer()->AddTab("Wololo2", wololo2);
-
-    // Tab containers creation
-    p_topLeftTabContainer = GameObject::Create<UITabContainer>();
-    p_topCenterTabContainer = GameObject::Create<UITabContainer>();
-    p_topCenterTabContainer->EventEmitter<IEventsTabHeader>::RegisterListener(this);
-    p_topRightTabContainer = GameObject::Create<UITabContainer>();
-    p_botLeftTabContainer  = GameObject::Create<UITabContainer>();
-    p_botRightTabContainer = GameObject::Create<UITabContainer>();
-
-    /*
-    UILayoutElement *topLeftTabContainerLE =
-            p_topLeftTabContainer->AddComponent<UILayoutElement>();
-    topLeftTabContainerLE->SetMinSize( Vector2i(300) );
-    topLeftTabContainerLE->SetFlexibleSize( Vector2(0.0f, 1.0f) );
-
-    UILayoutElement *topCenterTabContainerLE =
-            p_topCenterTabContainer->AddComponent<UILayoutElement>();
-    topCenterTabContainerLE->SetMinSize( Vector2i(500, 250) );
-    topCenterTabContainerLE->SetFlexibleSize( Vector2(3.0f, 1.0f) );
-
-    UILayoutElement *topRightTabContainerLE =
-            p_topRightTabContainer->AddComponent<UILayoutElement>();
-    topRightTabContainerLE->SetMinSize( Vector2i(400) );
-    topRightTabContainerLE->SetFlexibleSize( Vector2(0.0f, 1.0f) );
-
-    UILayoutElement *botLeftTabContainerLE =
-            p_botLeftTabContainer->AddComponent<UILayoutElement>();
-    botLeftTabContainerLE->SetMinSize( Vector2i(500, 250) );
-    botLeftTabContainerLE->SetFlexibleSize( Vector2(1.0f, 1.0f) );
-
-    UILayoutElement *botRightTabContainerLE =
-            p_botRightTabContainer->AddComponent<UILayoutElement>();
-    botRightTabContainerLE->SetMinSize( Vector2i(250) );
-    botRightTabContainerLE->SetFlexibleSize( Vector2(0.35f, 1.0f) );
-
-    p_topLeftTabContainer->SetParent(topHLGo);
-    GameObjectFactory::CreateUIDirLayoutMovableHSeparator()->GetGameObject()->
-                       SetParent(topHLGo);
-    p_topCenterTabContainer->SetParent(topHLGo);
-    GameObjectFactory::CreateUIDirLayoutMovableHSeparator()->GetGameObject()->
-                       SetParent(topHLGo);
-    p_topRightTabContainer->SetParent(topHLGo);
-
-    p_botLeftTabContainer->SetParent(botHLGo);
-    GameObjectFactory::CreateUIDirLayoutMovableHSeparator()->GetGameObject()->
-                       SetParent(botHLGo);
-    p_botRightTabContainer->SetParent(botHLGo);
-    */
 
     // Editor cam creation
     Camera *cam = GameObjectFactory::CreateUICameraInto(this);
@@ -286,7 +219,8 @@ void EditorScene::Update()
             sceneTabName += " (*)";
         }
     }
-    p_topCenterTabContainer->SetTabTitle(p_sceneEditContainer, sceneTabName);
+    p_tabStation->FindTabStationOf(p_sceneEditContainer)->
+                  GetTabContainer()->SetTabTitle(p_sceneEditContainer, sceneTabName);
 }
 
 void EditorScene::OnResize(int newWidth, int newHeight)
@@ -430,11 +364,6 @@ UndoRedoManager *EditorScene::GetUndoRedoManager() const
     return m_undoRedoManager;
 }
 
-UITabContainer *EditorScene::GetSceneTabContainer() const
-{
-    return p_topCenterTabContainer;
-}
-
 SceneOpenerSaver *EditorScene::GetSceneOpenerSaver() const
 {
     return m_sceneOpenerSaver;
@@ -469,13 +398,17 @@ void EditorScene::OnPlayStateChanged(PlayState previousPlayState,
     switch (newPlayState)
     {
         case PlayState::EDITING:
-            p_topCenterTabContainer->SetCurrentTabChild( p_sceneEditContainer );
+            p_tabStation->FindTabStationOf( GetSceneEditContainer() )->
+                          GetTabContainer()->
+                          SetCurrentTabChild( GetSceneEditContainer() );
             UICanvas::GetActive(this)->SetFocus(
                         GetSceneEditContainer()->GetFocusable());
         break;
 
         case PlayState::PLAYING:
-            p_topCenterTabContainer->SetCurrentTabChild( p_scenePlayContainer );
+            p_tabStation->FindTabStationOf( GetScenePlayContainer() )->
+                          GetTabContainer()->
+                          SetCurrentTabChild( GetScenePlayContainer() );
             UICanvas::GetActive(this)->SetFocus(
                         GetScenePlayContainer()->GetFocusable());
         break;

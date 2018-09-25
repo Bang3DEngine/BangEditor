@@ -27,6 +27,8 @@ public:
     UITabContainer *GetTabContainer() const;
 
     UITabStation *GetChildStation(Side side) const;
+    UITabStation *FindTabStationOf(GameObject *gameObject);
+    UITabStation *FindTabStationOfContainer(UITabContainer *tabContainer);
     UITabStation *GetChildStationAndCreateIfNeeded(Side side);
 
 private:

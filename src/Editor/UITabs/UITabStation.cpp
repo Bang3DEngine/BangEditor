@@ -145,3 +145,53 @@ UITabStation *UITabStation::GetChildStation(Side side) const
     return nullptr;
 }
 
+UITabStation *UITabStation::FindTabStationOf(GameObject *gameObject)
+{
+    const auto &childrenInTabs = GetTabContainer()->GetChildrenInTabs();
+    for (GameObject *childInTabs : childrenInTabs)
+    {
+        if (childInTabs == gameObject)
+        {
+            return this;
+        }
+    }
+
+    for (int sidei = 0; sidei < 4; ++sidei)
+    {
+        Side side = SCAST<Side>(sidei);
+        if (GetChildStation(side))
+        {
+            if (UITabStation *tabStation =
+                GetChildStation(side)->FindTabStationOf(gameObject))
+            {
+                return tabStation;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+UITabStation *UITabStation::FindTabStationOfContainer(UITabContainer *tabContainer)
+{
+    if (tabContainer == GetTabContainer())
+    {
+        return this;
+    }
+
+    for (int sidei = 0; sidei < 4; ++sidei)
+    {
+        Side side = SCAST<Side>(sidei);
+        if (GetChildStation(side))
+        {
+            if (UITabStation *tabStation =
+                GetChildStation(side)->FindTabStationOfContainer(tabContainer))
+            {
+                return tabStation;
+            }
+        }
+    }
+
+    return nullptr;
+}
+

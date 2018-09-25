@@ -69,7 +69,6 @@ public:
     ProjectManager *GetProjectManager() const;
     EditorClipboard *GetEditorClipboard() const;
     UndoRedoManager *GetUndoRedoManager() const;
-    UITabContainer *GetSceneTabContainer() const;
     SceneOpenerSaver *GetSceneOpenerSaver() const;
     EditorFileTracker *GetEditorFileTracker() const;
     UISceneEditContainer *GetSceneEditContainer() const;
@@ -100,11 +99,6 @@ private:
     UIScenePlayContainer *p_scenePlayContainer = nullptr;
 
     UITabStation *p_tabStation = nullptr;
-    UITabContainer *p_topLeftTabContainer = nullptr;
-    UITabContainer *p_topCenterTabContainer = nullptr;
-    UITabContainer *p_topRightTabContainer = nullptr;
-    UITabContainer *p_botLeftTabContainer = nullptr;
-    UITabContainer *p_botRightTabContainer = nullptr;
 
     MenuBar *m_menuBar = nullptr;
     GameObject *m_mainEditorVLGo = nullptr;
