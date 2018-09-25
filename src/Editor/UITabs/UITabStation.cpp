@@ -34,13 +34,6 @@ UITabStation::UITabStation()
     auto leftLE = p_leftTabStationGo->AddComponent<UILayoutElement>();
     leftLE->SetFlexibleSize(Vector2::One);
 
-    static int x = 0;
-    if (x == 0)
-    {
-        SetName("HEHE");
-        p_leftTabStationGo->SetName("LOL");
-    }
-
     p_rightTabStationGo = GameObjectFactory::CreateUIGameObject();
     p_rightTabStationGo->AddComponent<UIVerticalLayout>();
     p_rightTabStationGo->SetEnabled(false);
