@@ -46,8 +46,7 @@ Inspector::Inspector()
     SetName("Inspector");
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetMinWidth(200);
-    le->SetPreferredWidth(400);
+    le->SetMinSize(Vector2i(300));
     le->SetFlexibleSize( Vector2::One );
 
     GameObjectFactory::CreateUIGameObjectInto(this);

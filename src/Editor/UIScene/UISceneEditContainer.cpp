@@ -125,7 +125,8 @@ bool UISceneEditContainer::HasFocus()
 bool UISceneEditContainer::IsMouseOver()
 {
     UISceneEditContainer *uisec = UISceneEditContainer::GetActive();
-    return UICanvas::GetActive(uisec)->IsMouseOver(uisec->GetFocusable());
+    UICanvas *canvas = UICanvas::GetActive(uisec);
+    return canvas ? canvas->IsMouseOver(uisec->GetFocusable()) : false;
 }
 
 Vector2i UISceneEditContainer::GetMousePositionInOpenScene()

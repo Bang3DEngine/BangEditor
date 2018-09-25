@@ -27,6 +27,7 @@ Console::Console()
     SetName("Console");
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
+    le->SetMinSize(Vector2i(100));
     le->SetFlexibleSize( Vector2::One );
 
     GameObjectFactory::CreateUIGameObjectInto(this);

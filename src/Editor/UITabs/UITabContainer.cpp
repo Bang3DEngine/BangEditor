@@ -2,6 +2,7 @@
 
 #include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
+#include "Bang/TextureFactory.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -21,6 +22,9 @@ UITabContainer::UITabContainer()
 
     UIVerticalLayout *mainVL = AddComponent<UIVerticalLayout>();
     BANG_UNUSED(mainVL);
+
+    UILayoutElement *le = AddComponent<UILayoutElement>();
+    le->SetFlexibleSize(Vector2::One);
 
     p_headersBar = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *headerBarHL = p_headersBar->AddComponent<UIHorizontalLayout>();
@@ -88,7 +92,10 @@ void UITabContainer::AddTab(const String &title, GameObject *tabbedChild)
             SetCurrentTabChild(tabbedChild);
             tabbedChild->SetVisible(true);
         }
-        else { tabbedChild->SetVisible(false); }
+        else
+        {
+            tabbedChild->SetVisible(false);
+        }
     }
 }
 
@@ -98,7 +105,9 @@ void UITabContainer::RemoveTab(GameObject *tabbedChild)
 
     UITabHeader *header = nullptr;
     if (m_childrenToHeader.ContainsKey(tabbedChild))
-    { header = m_childrenToHeader.Get(tabbedChild); }
+    {
+        header = m_childrenToHeader.Get(tabbedChild);
+    }
 
     m_childrenToHeader.Remove(tabbedChild);
     m_headerToChildren.Remove(header);

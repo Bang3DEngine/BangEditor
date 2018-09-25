@@ -34,6 +34,7 @@
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/EditorWindow.h"
+#include "BangEditor/UITabStation.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/UITabContainer.h"
 #include "BangEditor/UndoRedoManager.h"
@@ -76,28 +77,28 @@ void EditorScene::Init()
     m_menuBar->GetTransform()->TranslateLocal( Vector3(0, 0, -0.1) );
     m_menuBar->SetParent(m_mainEditorVLGo);
 
-    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 5)->
-                       SetParent(m_mainEditorVLGo);
+    // GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 5)->
+    //                    SetParent(m_mainEditorVLGo);
 
     m_editSceneGameObjects = new EditSceneGameObjects();
 
-    GameObject *topHLGo = GameObjectFactory::CreateUIGameObject();
-    topHLGo->AddComponent<UIHorizontalLayout>();
-    UILayoutElement *topHLLe = topHLGo->AddComponent<UILayoutElement>();
-    topHLLe->SetLayoutPriority(1);
-    topHLLe->SetFlexibleSize(Vector2(1, 1.5f));
-    topHLGo->SetParent(m_mainEditorVLGo);
+    // GameObject *topHLGo = GameObjectFactory::CreateUIGameObject();
+    // topHLGo->AddComponent<UIHorizontalLayout>();
+    // UILayoutElement *topHLLe = topHLGo->AddComponent<UILayoutElement>();
+    // topHLLe->SetLayoutPriority(1);
+    // topHLLe->SetFlexibleSize(Vector2(1, 1.5f));
+    // topHLGo->SetParent(m_mainEditorVLGo);
 
-    GameObjectFactory::CreateUIDirLayoutMovableVSeparator()->GetGameObject()->
-                       SetParent(m_mainEditorVLGo);
+    // GameObjectFactory::CreateUIDirLayoutMovableVSeparator()->GetGameObject()->
+    //                    SetParent(m_mainEditorVLGo);
 
-    GameObject *botHLGo = GameObjectFactory::CreateUIGameObjectNamed("BotHL");
-    botHLGo->AddComponent<UIHorizontalLayout>();
-    UILayoutElement *botHLLe = botHLGo->AddComponent<UILayoutElement>();
-    botHLLe->SetLayoutPriority(1);
-    botHLLe->SetMinSize( Vector2i(1, 300) );
-    botHLLe->SetFlexibleSize( Vector2(1, 1) );
-    botHLGo->SetParent(m_mainEditorVLGo);
+    // GameObject *botHLGo = GameObjectFactory::CreateUIGameObjectNamed("BotHL");
+    // botHLGo->AddComponent<UIHorizontalLayout>();
+    // UILayoutElement *botHLLe = botHLGo->AddComponent<UILayoutElement>();
+    // botHLLe->SetLayoutPriority(1);
+    // botHLLe->SetMinSize( Vector2i(1, 300) );
+    // botHLLe->SetFlexibleSize( Vector2(1, 1) );
+    // botHLGo->SetParent(m_mainEditorVLGo);
 
     // Inspector, Hierarchy, etc. creation
     p_sceneEditContainer = GameObject::Create<UISceneEditContainer>();
@@ -107,33 +108,68 @@ void EditorScene::Init()
     p_console = GameObject::Create<Console>();
     p_explorer = GameObject::Create<Explorer>();
 
+    p_tabStation = GameObject::Create<UITabStation>();
+    p_tabStation->SetParent(m_mainEditorVLGo);
+
+    GameObject *wololo = GameObjectFactory::CreateUIGameObject();
+    wololo->AddComponent<UIImageRenderer>()->SetTint(Color::Yellow);
+    UILayoutElement *le = wololo->AddComponent<UILayoutElement>();
+    le->SetMinSize(Vector2i(100));
+    le->SetFlexibleSize(Vector2::One);
+
+    GameObject *wololo2 = GameObjectFactory::CreateUIGameObject();
+    wololo2->AddComponent<UIImageRenderer>()->SetTint(Color::Red);
+    UILayoutElement *le2 = wololo2->AddComponent<UILayoutElement>();
+    le2->SetMinSize(Vector2i(50));
+    le2->SetFlexibleSize(Vector2::One);
+
+    p_tabStation->GetTabContainer()->AddTab("Scene", p_sceneEditContainer);
+    p_tabStation->GetTabContainer()->AddTab("Game",  p_scenePlayContainer);
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::LEFT)->
+                  GetTabContainer()->AddTab("Hierarchy", p_hierarchy);
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::RIGHT)->
+                  GetTabContainer()->AddTab("Inspector", p_inspector);
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::TOP)->
+                  GetTabContainer()->AddTab("Explorer", p_explorer);
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::BOT)->
+                  GetTabContainer()->AddTab("Console", p_console);
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::BOT)->
+                  GetChildStationAndCreateIfNeeded(Side::RIGHT)->
+                  GetTabContainer()->AddTab("Wololo", wololo);
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::BOT)->
+                  GetChildStationAndCreateIfNeeded(Side::RIGHT)->
+                  GetChildStationAndCreateIfNeeded(Side::TOP)->
+                  GetTabContainer()->AddTab("Wololo2", wololo2);
+
     // Tab containers creation
     p_topLeftTabContainer = GameObject::Create<UITabContainer>();
+    p_topCenterTabContainer = GameObject::Create<UITabContainer>();
+    p_topCenterTabContainer->EventEmitter<IEventsTabHeader>::RegisterListener(this);
+    p_topRightTabContainer = GameObject::Create<UITabContainer>();
+    p_botLeftTabContainer  = GameObject::Create<UITabContainer>();
+    p_botRightTabContainer = GameObject::Create<UITabContainer>();
+
+    /*
     UILayoutElement *topLeftTabContainerLE =
             p_topLeftTabContainer->AddComponent<UILayoutElement>();
     topLeftTabContainerLE->SetMinSize( Vector2i(300) );
     topLeftTabContainerLE->SetFlexibleSize( Vector2(0.0f, 1.0f) );
 
-    p_topCenterTabContainer = GameObject::Create<UITabContainer>();
     UILayoutElement *topCenterTabContainerLE =
             p_topCenterTabContainer->AddComponent<UILayoutElement>();
     topCenterTabContainerLE->SetMinSize( Vector2i(500, 250) );
     topCenterTabContainerLE->SetFlexibleSize( Vector2(3.0f, 1.0f) );
-    p_topCenterTabContainer->EventEmitter<IEventsTabHeader>::RegisterListener(this);
 
-    p_topRightTabContainer = GameObject::Create<UITabContainer>();
     UILayoutElement *topRightTabContainerLE =
             p_topRightTabContainer->AddComponent<UILayoutElement>();
     topRightTabContainerLE->SetMinSize( Vector2i(400) );
     topRightTabContainerLE->SetFlexibleSize( Vector2(0.0f, 1.0f) );
 
-    p_botLeftTabContainer = GameObject::Create<UITabContainer>();
     UILayoutElement *botLeftTabContainerLE =
             p_botLeftTabContainer->AddComponent<UILayoutElement>();
     botLeftTabContainerLE->SetMinSize( Vector2i(500, 250) );
     botLeftTabContainerLE->SetFlexibleSize( Vector2(1.0f, 1.0f) );
 
-    p_botRightTabContainer = GameObject::Create<UITabContainer>();
     UILayoutElement *botRightTabContainerLE =
             p_botRightTabContainer->AddComponent<UILayoutElement>();
     botRightTabContainerLE->SetMinSize( Vector2i(250) );
@@ -151,13 +187,7 @@ void EditorScene::Init()
     GameObjectFactory::CreateUIDirLayoutMovableHSeparator()->GetGameObject()->
                        SetParent(botHLGo);
     p_botRightTabContainer->SetParent(botHLGo);
-
-    p_topLeftTabContainer->AddTab("Hierarchy", p_hierarchy);
-    p_topCenterTabContainer->AddTab("Scene", p_sceneEditContainer);
-    p_topCenterTabContainer->AddTab("Game",  p_scenePlayContainer);
-    p_topRightTabContainer->AddTab("Inspector", p_inspector);
-    p_botLeftTabContainer->AddTab("Explorer", p_explorer);
-    p_botRightTabContainer->AddTab("Console", p_console);
+    */
 
     // Editor cam creation
     Camera *cam = GameObjectFactory::CreateUICameraInto(this);

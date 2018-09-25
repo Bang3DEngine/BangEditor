@@ -29,6 +29,7 @@ FORWARD class Explorer;
 FORWARD class Inspector;
 FORWARD class Hierarchy;
 FORWARD class ScenePlayer;
+FORWARD class UITabStation;
 FORWARD class ProjectManager;
 FORWARD class UITabContainer;
 FORWARD class EditorClipboard;
@@ -98,6 +99,7 @@ private:
     UISceneEditContainer *p_sceneEditContainer = nullptr;
     UIScenePlayContainer *p_scenePlayContainer = nullptr;
 
+    UITabStation *p_tabStation = nullptr;
     UITabContainer *p_topLeftTabContainer = nullptr;
     UITabContainer *p_topCenterTabContainer = nullptr;
     UITabContainer *p_topRightTabContainer = nullptr;

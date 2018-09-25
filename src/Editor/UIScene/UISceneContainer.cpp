@@ -34,10 +34,14 @@ UISceneContainer::UISceneContainer()
 {
     SetName("SceneContainer");
 
+    GameObjectFactory::CreateUIGameObjectInto(this);
+
     UILayoutElement *le = AddComponent<UILayoutElement>();
+    le->SetMinSize(Vector2i(400));
     le->SetFlexibleSize( Vector2::One );
 
-    GameObjectFactory::CreateUIGameObjectInto(this);
+    UIVerticalLayout *mainVL = AddComponent<UIVerticalLayout>();
+    mainVL->SetChildrenHorizontalStretch(Stretch::FULL);
 
     p_noCameraOverlay = GameObjectFactory::CreateUIGameObject();
 
@@ -59,6 +63,9 @@ UISceneContainer::UISceneContainer()
     vl->SetChildrenHorizontalStretch(Stretch::FULL);
     vl->SetPaddings(2);
     vl->SetSpacing(3);
+
+    UILayoutElement *vlLE = vlGo->AddComponent<UILayoutElement>();
+    vlLE->SetFlexibleSize(Vector2::One);
 
     p_sceneToolbar = GameObject::Create<UISceneToolbar>();
     p_sceneImage = GameObject::Create<UISceneImage>();
