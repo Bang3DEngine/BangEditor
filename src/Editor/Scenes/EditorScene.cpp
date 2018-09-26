@@ -117,10 +117,17 @@ void EditorScene::Init()
                   GetTabContainer()->AddTab("Hierarchy", p_hierarchy);
     p_tabStation->GetChildStationAndCreateIfNeeded(Side::RIGHT)->
                   GetTabContainer()->AddTab("Inspector", p_inspector);
-    p_tabStation->GetChildStationAndCreateIfNeeded(Side::TOP)->
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::BOT)->
                   GetTabContainer()->AddTab("Explorer", p_explorer);
     p_tabStation->GetChildStationAndCreateIfNeeded(Side::BOT)->
                   GetTabContainer()->AddTab("Console", p_console);
+
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::LEFT)->GetParent()->
+                  GetComponent<UILayoutElement>()->SetFlexibleWidth(0.1f);
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::RIGHT)->GetParent()->
+                  GetComponent<UILayoutElement>()->SetFlexibleWidth(0.2f);
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::BOT)->GetParent()->
+                  GetComponent<UILayoutElement>()->SetFlexibleHeight(0.3f);
 
     // Editor cam creation
     Camera *cam = GameObjectFactory::CreateUICameraInto(this);

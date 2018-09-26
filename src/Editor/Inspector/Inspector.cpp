@@ -279,7 +279,6 @@ void Inspector::OnCreateContextMenu(MenuItem *menuRootItem)
 
             MenuItem *addComp = menuRootItem->AddItem("Add Component");
             MenuBar::CreateComponentsMenuInto(addComp);
-            addComp->SetSelectedCallback([](MenuItem*){});
 
             MetaNode currentMeta = currentGameObject->GetMeta();
             UndoRedoManager::PushAction(
