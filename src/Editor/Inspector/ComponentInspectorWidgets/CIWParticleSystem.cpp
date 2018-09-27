@@ -15,6 +15,7 @@
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/UIInputVector.h"
+#include "BangEditor/UIInputComplexRandom.h"
 #include "BangEditor/UIInputFileWithPreview.h"
 
 USING_NAMESPACE_BANG
@@ -31,8 +32,8 @@ void CIWParticleSystem::InitInnerWidgets()
     p_meshInputFile->SetExtensions( { Extensions::GetMeshExtension() } );
     p_meshInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_lifetimeInput = GameObjectFactory::CreateUIInputNumber();
-    p_lifetimeInput->SetMinValue(0);
+    p_lifetimeInput = GameObject::Create<UIInputComplexRandom>();
+    p_lifetimeInput->SetRangeMinValue(0);
     p_lifetimeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_numParticlesInput = GameObjectFactory::CreateUIInputNumber();
@@ -41,13 +42,19 @@ void CIWParticleSystem::InitInnerWidgets()
     p_numParticlesInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_generationShapeInput = GameObjectFactory::CreateUIComboBox();
-    p_generationShapeInput->AddItem("Box", SCAST<int>(ParticleGenerationShape::BOX));
+    p_generationShapeInput->AddItem("Box",  SCAST<int>(ParticleGenerationShape::BOX));
+    p_generationShapeInput->AddItem("Cone", SCAST<int>(ParticleGenerationShape::CONE));
     p_generationShapeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_generationShapeBoxSizeInput = GameObject::Create<UIInputVector>();
     p_generationShapeBoxSizeInput->SetSize(3);
     p_generationShapeBoxSizeInput->SetMinValue(Vector4::Zero);
     p_generationShapeBoxSizeInput->EventEmitter<IEventsValueChanged>::
+                                   RegisterListener(this);
+
+    p_generationShapeConeFOVInput = GameObjectFactory::CreateUIInputNumber();
+    p_generationShapeConeFOVInput->SetMinMaxValues(0.0f, 180.0f);
+    p_generationShapeConeFOVInput->EventEmitter<IEventsValueChanged>::
                                    RegisterListener(this);
 
     p_gravityMultiplierInput = GameObjectFactory::CreateUIInputNumber();
@@ -58,22 +65,20 @@ void CIWParticleSystem::InitInnerWidgets()
     p_initialVelocityMultiplier->EventEmitter<IEventsValueChanged>::
                                  RegisterListener(this);
 
-    SetWidgetEnabled(p_materialInputFile, false);
-    SetWidgetEnabled(p_castsShadowsCheckBox->GetGameObject(), false);
-    SetWidgetEnabled(p_receivesShadowsCheckBox->GetGameObject(), false);
-    SetWidgetEnabled(p_useReflectionProbesCheckBox->GetGameObject(), false);
-
     AddWidget("Mesh", p_meshInputFile);
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
-    AddWidget("Lifetime", p_lifetimeInput->GetGameObject());
+    AddWidget("Lifetime", p_lifetimeInput);
     AddWidget("Num. Particles", p_numParticlesInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Generation shape", p_generationShapeInput->GetGameObject());
     AddWidget("Box size", p_generationShapeBoxSizeInput);
+    AddWidget("Cone FOV", p_generationShapeConeFOVInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Gravity multiplier", p_gravityMultiplierInput->GetGameObject());
     AddWidget("Init vel. multiplier", p_initialVelocityMultiplier->GetGameObject());
     SetLabelsWidth(100);
+
+    EnableOnlyNeededWidgets();
 }
 
 void CIWParticleSystem::UpdateFromReference()
@@ -86,7 +91,7 @@ void CIWParticleSystem::UpdateFromReference()
 
     if (!p_lifetimeInput->HasFocus())
     {
-        p_lifetimeInput->SetValue( GetParticleSystem()->GetLifeTime() );
+        p_lifetimeInput->Set( GetParticleSystem()->GetLifeTime() );
     }
 
     if (!p_numParticlesInput->HasFocus())
@@ -106,6 +111,13 @@ void CIWParticleSystem::UpdateFromReference()
                     GetParticleSystem()->GetGenerationShapeBoxSize());
     }
 
+    if (!p_generationShapeConeFOVInput->HasFocus())
+    {
+        p_generationShapeConeFOVInput->SetValue(
+                    Math::RadToDeg(GetParticleSystem()->
+                                   GetGenerationShapeConeFOVRads()));
+    }
+
     if (!p_gravityMultiplierInput->HasFocus())
     {
         p_gravityMultiplierInput->SetValue(
@@ -116,6 +128,43 @@ void CIWParticleSystem::UpdateFromReference()
     {
         p_initialVelocityMultiplier->SetValue(
                     GetParticleSystem()->GetInitialVelocityMultiplier() );
+    }
+
+    EnableOnlyNeededWidgets();
+}
+
+void CIWParticleSystem::EnableOnlyNeededWidgets()
+{
+    SetWidgetEnabled(p_materialInputFile, false);
+    SetWidgetEnabled(p_castsShadowsCheckBox->GetGameObject(), false);
+    SetWidgetEnabled(p_receivesShadowsCheckBox->GetGameObject(), false);
+    SetWidgetEnabled(p_useReflectionProbesCheckBox->GetGameObject(), false);
+
+    Array<GameObject*> allWidgetsToEnableOrDisable;
+    allWidgetsToEnableOrDisable.PushBack(p_generationShapeBoxSizeInput);
+    allWidgetsToEnableOrDisable.PushBack(p_generationShapeConeFOVInput->
+                                         GetGameObject());
+
+    Array<GameObject*> keepWidgetsEnabled;
+    if (GetParticleSystem())
+    {
+        switch (GetParticleSystem()->GetGenerationShape())
+        {
+            case ParticleGenerationShape::BOX:
+                keepWidgetsEnabled.PushBack(p_generationShapeBoxSizeInput);
+            break;
+
+            case ParticleGenerationShape::CONE:
+                keepWidgetsEnabled.PushBack(p_generationShapeConeFOVInput->
+                                            GetGameObject());
+            break;
+        }
+    }
+
+    for (GameObject *widget : allWidgetsToEnableOrDisable)
+    {
+        bool enabled = (keepWidgetsEnabled.Contains(widget));
+        SetWidgetEnabled(widget, enabled);
     }
 }
 
@@ -132,7 +181,7 @@ void CIWParticleSystem::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *obj
 
     if (object == p_lifetimeInput)
     {
-        GetParticleSystem()->SetLifeTime( p_lifetimeInput->GetValue() );
+        GetParticleSystem()->SetLifeTime( p_lifetimeInput->GetComplexRandom() );
     }
 
     if (object == p_numParticlesInput)
@@ -149,6 +198,8 @@ void CIWParticleSystem::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *obj
 
     GetParticleSystem()->SetGenerationShapeBoxSize(
                     p_generationShapeBoxSizeInput->GetVector3() );
+    GetParticleSystem()->SetGenerationShapeConeFOVRads(
+                    Math::DegToRad(p_generationShapeConeFOVInput->GetValue()) );
 
     if (object == p_gravityMultiplierInput)
     {
@@ -161,6 +212,8 @@ void CIWParticleSystem::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *obj
         GetParticleSystem()->SetInitialVelocityMultiplier(
                              p_initialVelocityMultiplier->GetValue());
     }
+
+    EnableOnlyNeededWidgets();
 }
 
 ParticleSystem *CIWParticleSystem::GetParticleSystem() const

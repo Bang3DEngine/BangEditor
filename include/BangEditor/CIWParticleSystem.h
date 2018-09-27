@@ -13,7 +13,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UIInputVector;
-
+FORWARD class UIInputComplexRandom;
 FORWARD class UIInputFileWithPreview;
 
 class CIWParticleSystem : public CIWRenderer
@@ -27,17 +27,21 @@ public:
 
 protected:
     UIInputFileWithPreview *p_meshInputFile = nullptr;
-    UIInputNumber *p_num = nullptr;
-    UIInputNumber *p_lifetimeInput = nullptr;
+
+    UIInputComplexRandom *p_lifetimeInput = nullptr;
     UIInputNumber *p_numParticlesInput = nullptr;
+
     UIComboBox *p_generationShapeInput = nullptr;
     UIInputVector *p_generationShapeBoxSizeInput = nullptr;
+    UIInputNumber *p_generationShapeConeFOVInput = nullptr;
+
     UIInputNumber *p_gravityMultiplierInput = nullptr;
     UIInputNumber *p_initialVelocityMultiplier = nullptr;
 
     CIWParticleSystem() = default;
     virtual ~CIWParticleSystem() = default;
 
+    void EnableOnlyNeededWidgets();
     ParticleSystem *GetParticleSystem() const;
 
     // ComponentInspectorWidget
