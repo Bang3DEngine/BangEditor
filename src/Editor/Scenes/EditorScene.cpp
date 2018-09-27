@@ -191,6 +191,7 @@ void EditorScene::Update()
     {
         BindOpenScene();
 
+        // Update open scene
         Input::Context openSceneInputContext;
         openSceneInputContext.focus = GetScenePlayContainer()->GetFocusable();
         openSceneInputContext.rect  = AARecti(GetScenePlayContainer()->

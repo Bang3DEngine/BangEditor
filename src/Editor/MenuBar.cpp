@@ -38,6 +38,7 @@
 #include "Bang/WaterRenderer.h"
 #include "Bang/SphereCollider.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/ParticleSystem.h"
 #include "Bang/CapsuleCollider.h"
 #include "Bang/ReflectionProbe.h"
 #include "Bang/PhysicsMaterial.h"
@@ -316,6 +317,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addMeshRenderer = addRenderer->AddItem("MeshRenderer");
     MenuItem *addSkinnedMeshRenderer = addRenderer->AddItem("SkinnedMeshRenderer");
     MenuItem *addWaterRenderer = addRenderer->AddItem("WaterRenderer");
+    MenuItem *addParticleSystem = addRenderer->AddItem("ParticleSystem");
     MenuItem *addTransforms = rootItem->AddItem("Transform");
     MenuItem *addTransform = addTransforms->AddItem("Transform");
     MenuItem *addRectTransform = addTransforms->AddItem("RectTransform");
@@ -365,6 +367,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     addMeshRenderer->SetSelectedCallback(MenuBar::OnAddMeshRenderer);
     addSkinnedMeshRenderer->SetSelectedCallback(MenuBar::OnAddSkinnedMeshRenderer);
     addWaterRenderer->SetSelectedCallback(MenuBar::OnAddWaterRenderer);
+    addParticleSystem->SetSelectedCallback(MenuBar::OnAddParticleSystem);
     addReflectionProbe->SetSelectedCallback(MenuBar::OnAddReflectionProbe);
     addTransform->SetSelectedCallback(MenuBar::OnAddTransform);
     addRigidBody->SetSelectedCallback(MenuBar::OnAddRigidBody);
@@ -637,6 +640,11 @@ void MenuBar::OnAddSkinnedMeshRenderer(MenuItem*)
 void MenuBar::OnAddWaterRenderer(MenuItem*)
 {
     OnAddComponent<WaterRenderer>();
+}
+
+void MenuBar::OnAddParticleSystem(MenuItem *item)
+{
+    OnAddComponent<ParticleSystem>();
 }
 
 void MenuBar::OnAddReflectionProbe(MenuItem*)

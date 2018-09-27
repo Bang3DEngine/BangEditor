@@ -192,6 +192,9 @@ void Inspector::ShowPath(const Path &path)
                 AddWidget(fiw);
 
                 bool isEnginePath = Paths::IsEnginePath(m_currentOpenPath);
+                #ifdef DEBUG
+                isEnginePath = false;
+                #endif
                 SetCurrentWidgetBlocked(isEnginePath);
             }
         }

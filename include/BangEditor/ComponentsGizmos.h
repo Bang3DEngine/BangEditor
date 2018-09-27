@@ -8,6 +8,7 @@ FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class PointLight;
 FORWARD class AudioSource;
 FORWARD class BoxCollider;
+FORWARD class ParticleSystem;
 FORWARD class SphereCollider;
 FORWARD class CapsuleCollider;
 FORWARD class ReflectionProbe;
@@ -41,6 +42,8 @@ private:
                                      bool isBeingSelected);
     void RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
                                     bool isBeingSelected);
+    void RenderParticleSystemGizmo(ParticleSystem *particleSystem,
+                                   bool isBeingSelected);
     void RenderAudioSourceGizmo(AudioSource *audioSource, bool isBeingSelected);
 };
 

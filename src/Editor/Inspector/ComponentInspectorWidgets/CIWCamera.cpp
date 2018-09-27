@@ -42,7 +42,7 @@ void CIWCamera::InitInnerWidgets()
 
     p_orthoHeightInput = GameObjectFactory::CreateUIInputNumber();
     p_orthoHeightInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-    p_orthoHeightInput->SetMinMaxValues(0.0f, Math::Infinity<float>());
+    p_orthoHeightInput->SetMinValue(0.0f);
     AddWidget("Ortho Height", p_orthoHeightInput->GetGameObject());
 
     p_fovInput = GameObjectFactory::CreateUISlider();
@@ -143,7 +143,7 @@ Camera *CIWCamera::GetCamera() const
 void CIWCamera::LimitValues()
 {
     p_zNearInput->SetMinMaxValues(0.1f, GetCamera()->GetZFar());
-    p_zFarInput->SetMinMaxValues(GetCamera()->GetZNear(), Math::Infinity<float>());
+    p_zFarInput->SetMinValue(GetCamera()->GetZNear());
 }
 
 void CIWCamera::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)

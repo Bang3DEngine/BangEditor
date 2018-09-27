@@ -30,7 +30,7 @@ void CIWAudioSource::InitInnerWidgets()
 
     p_rangeInput = GameObjectFactory::CreateUIInputNumber();
     p_rangeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-    p_rangeInput->SetMinMaxValues(0.0f, Math::Infinity<float>());
+    p_rangeInput->SetMinValue(0.0f);
 
     p_volumeSlider = GameObjectFactory::CreateUISlider();
     p_volumeSlider->SetMinMaxValues(0.0f, 5.0f);

@@ -28,12 +28,12 @@ void SIWPhysicsSettings::InitInnerWidgets()
 
     p_stepSleepTimeInput = GameObjectFactory::CreateUIInputNumber();
     p_stepSleepTimeInput->SetDecimalPlaces(4);
-    p_stepSleepTimeInput->SetMinMaxValues(0.001f, Math::Infinity<float>());
+    p_stepSleepTimeInput->SetMinValue(0.001f);
     p_stepSleepTimeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_maxSubStepsInput = GameObjectFactory::CreateUIInputNumber();
     p_maxSubStepsInput->SetDecimalPlaces(0);
-    p_maxSubStepsInput->SetMinMaxValues(1.0f, Math::Infinity<float>());
+    p_maxSubStepsInput->SetMinValue(1.0f);
     p_maxSubStepsInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_gravityInput = GameObject::Create<UIInputVector>();

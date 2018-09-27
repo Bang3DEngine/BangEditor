@@ -29,6 +29,10 @@ public:
     void Set(const Vector3 &v);
     void Set(const Vector4 &v);
     void Set(int i, float v);
+    void SetMinValue(const Vector4 &minValue);
+    void SetMaxValue(const Vector4 &maxValue);
+    void SetMinMaxValues(const Vector4 &minValue,
+                         const Vector4 &maxValue);
 
     float Get(int i) const;
     Vector2 GetVector2() const;

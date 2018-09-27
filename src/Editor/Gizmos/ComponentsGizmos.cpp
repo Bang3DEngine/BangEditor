@@ -15,6 +15,7 @@
 #include "Bang/MeshFactory.h"
 #include "Bang/SceneManager.h"
 #include "Bang/RenderFactory.h"
+#include "Bang/ParticleSystem.h"
 #include "Bang/SphereCollider.h"
 #include "Bang/TextureFactory.h"
 #include "Bang/CapsuleCollider.h"
@@ -130,6 +131,10 @@ void ComponentsGizmos::RenderComponentGizmos(Component *comp,
     else if (ReflectionProbe *rp = DCAST<ReflectionProbe*>(comp))
     {
         RenderReflectionProbeGizmo(rp, isBeingSelected);
+    }
+    else if (ParticleSystem *ps = DCAST<ParticleSystem*>(comp))
+    {
+        RenderParticleSystemGizmo(ps, isBeingSelected);
     }
     else if (AudioSource *as = DCAST<AudioSource*>(comp))
     {
@@ -429,6 +434,39 @@ void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
         params.position = Vector3::Zero;
         params.color = params.color.WithAlpha(1.0f);
         RenderFactory::RenderWireframeBox(reflProbeBox, params);
+
+        gb->PopDepthStencilTexture();
+    }
+}
+
+void ComponentsGizmos::RenderParticleSystemGizmo(ParticleSystem *particleSystem,
+                                                 bool isBeingSelected)
+{
+    Vector3 pos = particleSystem->GetGameObject()->GetTransform()->GetPosition();
+
+    RenderFactory::Parameters params;
+    params.color = Color::Green;
+    params.receivesLighting = false;
+
+    if (isBeingSelected)
+    {
+        GBuffer *gb = GEngine::GetActiveGBuffer();
+        gb->PushDepthStencilTexture();
+        gb->SetSceneDepthStencil();
+
+        switch (particleSystem->GetGenerationShape())
+        {
+            case ParticleGenerationShape::BOX:
+            {
+                AABox box;
+                params.wireframe = true;
+                Vector3 boxSize = particleSystem->GetGenerationShapeBoxSize();
+                box.SetMin(pos - boxSize * 0.5f);
+                box.SetMax(pos + boxSize * 0.5f);
+                RenderFactory::RenderBox(box, params);
+            }
+            break;
+        }
 
         gb->PopDepthStencilTexture();
     }

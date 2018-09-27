@@ -26,7 +26,7 @@ void CIWBoxCollider::InitInnerWidgets()
     p_halfExtentsInput = GameObject::Create<UIInputVector>();
     for (UIInputNumber *inputNumber : p_halfExtentsInput->GetInputNumbers())
     {
-        inputNumber->SetMinMaxValues(0.01f, Math::Infinity<float>());
+        inputNumber->SetMinValue(0.01f);
     }
     p_halfExtentsInput->SetSize(3);
     p_halfExtentsInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);

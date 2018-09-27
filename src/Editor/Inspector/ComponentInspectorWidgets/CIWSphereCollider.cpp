@@ -25,7 +25,7 @@ void CIWSphereCollider::InitInnerWidgets()
     SetTitle("SphereCollider");
 
     p_radiusInput = GameObjectFactory::CreateUIInputNumber();
-    p_radiusInput->SetMinMaxValues(0.01f, Math::Infinity<float>());
+    p_radiusInput->SetMinValue(0.01f);
     p_radiusInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     AddWidget("Radius", p_radiusInput->GetGameObject());

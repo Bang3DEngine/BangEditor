@@ -22,7 +22,7 @@ void CIWLight::InitInnerWidgets()
 
     p_intensityInput = GameObjectFactory::CreateUIInputNumber();
     p_intensityInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-    p_intensityInput->SetMinMaxValues(0.0f, Math::Infinity<float>());
+    p_intensityInput->SetMinValue(0.0f);
     AddWidget("Intensity", p_intensityInput->GetGameObject());
 
     p_colorInput = GameObject::Create<UIInputColor>();

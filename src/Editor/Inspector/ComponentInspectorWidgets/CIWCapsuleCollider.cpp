@@ -26,11 +26,11 @@ void CIWCapsuleCollider::InitInnerWidgets()
     SetTitle("CapsuleCollider");
 
     p_radiusInput = GameObjectFactory::CreateUIInputNumber();
-    p_radiusInput->SetMinMaxValues(0.0f, Math::Infinity<float>());
+    p_radiusInput->SetMinValue(0.0f);
     p_radiusInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_heightInput = GameObjectFactory::CreateUIInputNumber();
-    p_heightInput->SetMinMaxValues(0.0f, Math::Infinity<float>());
+    p_heightInput->SetMinValue(0.0f);
     p_heightInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_axisInput = GameObjectFactory::CreateUIComboBox();

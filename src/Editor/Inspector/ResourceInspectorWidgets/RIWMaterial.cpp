@@ -133,7 +133,7 @@ void RIWMaterial::Init()
     p_fragmentShaderInput->SetZoomable(false);
 
     p_lineWidthInput = GameObjectFactory::CreateUIInputNumber();
-    p_lineWidthInput->SetMinMaxValues(1.0f, Math::Infinity<float>());
+    p_lineWidthInput->SetMinValue(1.0f);
     p_lineWidthInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_cullFaceInput = GameObjectFactory::CreateUIComboBox();

@@ -265,7 +265,8 @@ void EditorCamera::FocusScene(Scene *scene)
         Vector3 sceneCenter = Vector3::Zero;
 
         Sphere bSphere = scene->GetBoundingSphere();
-        if ( !Math::IsInfinity(bSphere.GetRadius()) )
+        if ( !Math::IsInfinity(bSphere.GetRadius()) &&
+             !Math::IsNaN(bSphere.GetRadius()) )
         {
             sceneRadius = bSphere.GetRadius();
             sceneCenter = bSphere.GetCenter();
@@ -328,7 +329,7 @@ void EditorCamera::HandleLookAtFocus()
 
         Vector3 thisPos = GetTransform()->GetPosition();
         Vector3 targetDir = targetRot * Vector3::Forward;
-        if( Vector3::Distance(thisPos, targetPos) <= 0.1f &&
+        if( Vector3::Distance(thisPos, targetPos) <= 1.0f &&
             Vector3::Dot(GetTransform()->GetForward(), targetDir) >= 0.9999f)
         {
             p_currentLookAtGo = nullptr;

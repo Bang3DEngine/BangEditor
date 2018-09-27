@@ -29,7 +29,7 @@ void CIWPostProcessEffectSSAO::InitInnerWidgets()
     p_intensityInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_radiusInput = GameObjectFactory::CreateUIInputNumber();
-    p_radiusInput->SetMinMaxValues(0.001f, Math::Infinity<float>());
+    p_radiusInput->SetMinValue(0.001f);
     p_radiusInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_blurRadiusInput = GameObjectFactory::CreateUISlider();

@@ -41,14 +41,12 @@ void CIWReflectionProbe::InitInnerWidgets()
 
     p_sizeInput = GameObject::Create<UIInputVector>();
     p_sizeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-    p_sizeInput->GetInputNumbers()[0]->SetMinMaxValues(0.0f, Math::Infinity<float>());
-    p_sizeInput->GetInputNumbers()[1]->SetMinMaxValues(0.0f, Math::Infinity<float>());
-    p_sizeInput->GetInputNumbers()[2]->SetMinMaxValues(0.0f, Math::Infinity<float>());
+    p_sizeInput->SetMinValue(Vector4::Zero);
     p_sizeInput->SetSize(3);
 
     p_restTimeInput = GameObjectFactory::CreateUIInputNumber();
     p_restTimeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-    p_restTimeInput->SetMinMaxValues(0.0f, Math::Infinity<float>());
+    p_restTimeInput->SetMinValue(0.0f);
     p_restTimeInput->SetDecimalPlaces(1);
 
     p_reflectionProbSizeInput = GameObjectFactory::CreateUIComboBox();
@@ -156,8 +154,7 @@ void CIWReflectionProbe::UpdateFromReference()
 void CIWReflectionProbe::LimitValues()
 {
     p_zNearInput->SetMinMaxValues(0.1f, GetReflectionProbe()->GetCamerasZFar());
-    p_zFarInput->SetMinMaxValues(GetReflectionProbe()->GetCamerasZNear(),
-                                 Math::Infinity<float>());
+    p_zFarInput->SetMinValue(GetReflectionProbe()->GetCamerasZNear());
 }
 
 void CIWReflectionProbe::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)

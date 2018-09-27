@@ -98,6 +98,7 @@ private:
     static void OnAddMeshRenderer          (MenuItem *item);
     static void OnAddSkinnedMeshRenderer   (MenuItem *item);
     static void OnAddWaterRenderer         (MenuItem *item);
+    static void OnAddParticleSystem        (MenuItem *item);
     static void OnAddReflectionProbe       (MenuItem *item);
     static void OnAddTransform             (MenuItem *item);
     static void OnAddRectTransform         (MenuItem *item);

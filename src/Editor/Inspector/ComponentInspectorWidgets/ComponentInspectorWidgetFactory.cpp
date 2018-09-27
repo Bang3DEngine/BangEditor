@@ -15,6 +15,7 @@
 #include "BangEditor/CIWWaterRenderer.h"
 #include "BangEditor/CIWAudioListener.h"
 #include "BangEditor/CIWRectTransform.h"
+#include "BangEditor/CIWParticleSystem.h"
 #include "BangEditor/CIWSphereCollider.h"
 #include "BangEditor/CIWUITextRenderer.h"
 #include "BangEditor/CIWCapsuleCollider.h"
@@ -63,6 +64,10 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     else if (cName == "RigidBody")
     {
         ciw = GameObject::Create<CIWRigidBody>();
+    }
+    else if (cName == "ParticleSystem")
+    {
+        ciw = GameObject::Create<CIWParticleSystem>();
     }
     else if (cName == "BoxCollider")
     {

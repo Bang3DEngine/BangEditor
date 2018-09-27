@@ -32,7 +32,7 @@ protected:
     // ComponentInspectorWidget
     void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 
-private:
+protected:
     UICheckBox *p_visibleCheckBox = nullptr;
     UICheckBox *p_castsShadowsCheckBox = nullptr;
     UICheckBox *p_receivesShadowsCheckBox = nullptr;
