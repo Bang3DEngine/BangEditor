@@ -13,6 +13,7 @@
 #include "Bang/ParticleSystem.h"
 #include "Bang/GameObjectFactory.h"
 
+#include "BangEditor/UIInputColor.h"
 #include "BangEditor/UIInputVector.h"
 #include "BangEditor/UIInputComplexRandom.h"
 #include "BangEditor/UIInputFileWithPreview.h"
@@ -31,9 +32,23 @@ void CIWParticleSystem::InitInnerWidgets()
     p_meshInputFile->SetExtensions( { Extensions::GetMeshExtension() } );
     p_meshInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_lifetimeInput = GameObject::Create<UIInputComplexRandom>();
-    p_lifetimeInput->SetRangeMinValue(0);
-    p_lifetimeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_lifeTimeInput = GameObject::Create<UIInputComplexRandom>();
+    p_lifeTimeInput->SetRangeMinValue(0);
+    p_lifeTimeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_startTimeInput = GameObject::Create<UIInputComplexRandom>();
+    p_startTimeInput->SetRangeMinValue(0);
+    p_startTimeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_startColorInput = GameObject::Create<UIInputColor>();
+    p_startColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_endColorInput = GameObject::Create<UIInputColor>();
+    p_endColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_startSizeInput = GameObject::Create<UIInputComplexRandom>();
+    p_startSizeInput->SetRangeMinValue(0);
+    p_startSizeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_numParticlesInput = GameObjectFactory::CreateUIInputNumber();
     p_numParticlesInput->SetDecimalPlaces(0);
@@ -66,8 +81,13 @@ void CIWParticleSystem::InitInnerWidgets()
 
     AddWidget("Mesh", p_meshInputFile);
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
-    AddWidget("Lifetime", p_lifetimeInput);
+    AddWidget("Life time",      p_lifeTimeInput);
+    AddWidget("Start time",     p_startTimeInput);
     AddWidget("Num. Particles", p_numParticlesInput->GetGameObject());
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
+    AddWidget("Start size",  p_startSizeInput);
+    AddWidget("Start color", p_startColorInput);
+    AddWidget("End color",   p_endColorInput);
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Generation shape", p_generationShapeInput->GetGameObject());
     AddWidget("Box size", p_generationShapeBoxSizeInput);
@@ -88,9 +108,29 @@ void CIWParticleSystem::UpdateFromReference()
     Path meshPath = mesh ? mesh->GetResourceFilepath() : Path::Empty;
     p_meshInputFile->SetPath(meshPath);
 
-    if (!p_lifetimeInput->HasFocus())
+    if (!p_lifeTimeInput->HasFocus())
     {
-        p_lifetimeInput->Set( GetParticleSystem()->GetLifeTime() );
+        p_lifeTimeInput->Set( GetParticleSystem()->GetLifeTime() );
+    }
+
+    if (!p_startTimeInput->HasFocus())
+    {
+        p_startTimeInput->Set( GetParticleSystem()->GetStartTime() );
+    }
+
+    if (!p_startSizeInput->HasFocus())
+    {
+        p_startSizeInput->Set( GetParticleSystem()->GetStartSize() );
+    }
+
+    if (!p_startColorInput->HasFocus())
+    {
+        p_startColorInput->SetColor( GetParticleSystem()->GetStartColor() );
+    }
+
+    if (!p_endColorInput->HasFocus())
+    {
+        p_endColorInput->SetColor( GetParticleSystem()->GetEndColor() );
     }
 
     if (!p_numParticlesInput->HasFocus())
@@ -178,14 +218,34 @@ void CIWParticleSystem::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *obj
         GetParticleSystem()->SetMesh(mesh.Get());
     }
 
-    if (object == p_lifetimeInput)
+    if (object == p_lifeTimeInput)
     {
-        GetParticleSystem()->SetLifeTime( p_lifetimeInput->GetComplexRandom() );
+        GetParticleSystem()->SetLifeTime( p_lifeTimeInput->GetComplexRandom() );
+    }
+
+    if (object == p_startTimeInput)
+    {
+        GetParticleSystem()->SetStartTime( p_startTimeInput->GetComplexRandom() );
+    }
+
+    if (object == p_startColorInput)
+    {
+        GetParticleSystem()->SetStartColor( p_startColorInput->GetColor() );
+    }
+
+    if (object == p_endColorInput)
+    {
+        GetParticleSystem()->SetEndColor( p_endColorInput->GetColor() );
     }
 
     if (object == p_numParticlesInput)
     {
         GetParticleSystem()->SetNumParticles(p_numParticlesInput->GetValue());
+    }
+
+    if (object == p_startSizeInput)
+    {
+        GetParticleSystem()->SetStartSize( p_startSizeInput->GetComplexRandom() );
     }
 
     if (object == p_generationShapeInput)

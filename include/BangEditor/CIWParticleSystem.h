@@ -12,6 +12,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class UIInputColor;
 FORWARD class UIInputVector;
 FORWARD class UIInputComplexRandom;
 FORWARD class UIInputFileWithPreview;
@@ -28,7 +29,11 @@ public:
 protected:
     UIInputFileWithPreview *p_meshInputFile = nullptr;
 
-    UIInputComplexRandom *p_lifetimeInput = nullptr;
+    UIInputComplexRandom *p_lifeTimeInput = nullptr;
+    UIInputComplexRandom *p_startTimeInput = nullptr;
+    UIInputComplexRandom *p_startSizeInput = nullptr;
+    UIInputColor *p_startColorInput = nullptr;
+    UIInputColor *p_endColorInput = nullptr;
     UIInputNumber *p_numParticlesInput = nullptr;
 
     UIComboBox *p_generationShapeInput = nullptr;
