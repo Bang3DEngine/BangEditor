@@ -3,6 +3,7 @@
 #include "Bang/AudioManager.h"
 #include "Bang/IEventsSceneManager.h"
 
+#include "BangEditor/ScenePlayer.h"
 #include "BangEditor/EditorSettings.h"
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/EditorApplication.h"
@@ -94,6 +95,11 @@ void Editor::OnPathSelected(const Path &path)
     ASSERT(ed);
     ed->EventEmitter<IEventsEditor>::PropagateToListeners(
                 &IEventsEditor::OnExplorerPathSelected, path);
+}
+
+bool Editor::IsEditingScene()
+{
+    return ScenePlayer::GetPlayState() == PlayState::EDITING;
 }
 
 EditorSettings *Editor::GetEditorSettings() const

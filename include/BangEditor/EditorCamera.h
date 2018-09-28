@@ -8,6 +8,7 @@
 #include "Bang/IEventsSceneManager.h"
 
 #include "BangEditor/BangEditor.h"
+#include "BangEditor/IEventsScenePlayer.h"
 
 NAMESPACE_BANG_BEGIN
 FORWARD class Input;
@@ -20,6 +21,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class SelectionFramebuffer;
 
 class EditorCamera : public GameObject,
+                     public EventListener<IEventsScenePlayer>,
                      public EventListener<IEventsSceneManager>
 {
     GAMEOBJECT_EDITOR(EditorCamera);
@@ -32,6 +34,8 @@ public:
     void Update() override;
 
     void FocusScene(Scene *scene);
+    void SetPositionDirectly(const Vector3 &position);
+    void SetRotationDirectly(const Quaternion &rotation);
     void AlignViewWithGameObject(GameObject *selected);
     void SwitchProjectionModeTo(bool mode3D);
     void LookAt(GameObject *lookAtFocus);
@@ -59,6 +63,9 @@ private:
     Vector3 m_targetPosition = Vector3::Zero;
     Quaternion m_targetRotation = Quaternion::Identity;
 
+    Vector3 m_previousPlayStateChangePos = Vector3::Zero;
+    Quaternion m_previousPlayStateChangeRot = Quaternion::Identity;
+
     // WASD
     float m_keysMoveAccel = 1.0f;
     float m_maxMoveSpeed  = 10.0f;
@@ -77,9 +84,12 @@ private:
     float m_orthoHeight = 30.0f;
 
     // Focus
-    GameObject *p_currentLookAtGo = nullptr;
     float m_lookAtRotSpeed     = 3.0f;
     float m_lookAtMoveSpeed    = 4.0f;
+
+    // IEventsScenePlayer
+    virtual void OnPlayStateChanged(PlayState previousPlayState,
+                                    PlayState newPlayState) override;
 
     // IEventsSceneManager
     virtual void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
@@ -89,7 +99,6 @@ private:
     bool HandleMouseRotation();
     void HandleMousePanning();
     void HandleKeyMovement();
-    void HandleLookAtFocus();
     void InterpolatePositionAndRotation(double extraInterpolationPos = 0.0,
                                         double extraInterpolationRot = 0.0);
     void GetLookAtFocusParams(GameObject *lookAtGo,

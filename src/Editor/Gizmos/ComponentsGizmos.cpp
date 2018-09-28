@@ -75,6 +75,22 @@ void ComponentsGizmos::Render(RenderPass rp, bool renderChildren)
     }
 }
 
+float ComponentsGizmos::GetCameraDistScale(const Vector3& position) const
+{
+    float camDistScale = 1.0f;
+
+    if (Camera *cam = Camera::GetActive())
+    {
+        Vector3 camPos = cam->GetGameObject()->GetTransform()->GetPosition();
+        if (cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
+        {
+           camDistScale = Vector3::Distance(camPos, position);
+        }
+    }
+
+    return camDistScale;
+}
+
 void ComponentsGizmos::RenderComponentGizmosWhenNotSelected(GameObject *go)
 {
     for (Component *comp : go->GetComponents())
@@ -165,7 +181,7 @@ void ComponentsGizmos::RenderBoxColliderGizmo(BoxCollider *bc,
         params.cullFace = GL::CullFaceExt::BACK;
         Vector3 centerDisplacement = params.rotation * bc->GetCenter();
         Vector3 c = tr->GetPosition() + centerDisplacement;
-        Vector3 hs = tr->GetScale() * bc->GetHalfExtents() + 0.01f;
+        Vector3 hs = tr->GetScale() * bc->GetExtents() + 0.01f;
         RenderFactory::RenderBox(AABox(c - hs, c + hs), params);
 
         gb->PopDepthStencilTexture();
@@ -442,11 +458,19 @@ void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
 void ComponentsGizmos::RenderParticleSystemGizmo(ParticleSystem *particleSystem,
                                                  bool isBeingSelected)
 {
-    Vector3 pos = particleSystem->GetGameObject()->GetTransform()->GetPosition();
+    Transform *tr = particleSystem->GetGameObject()->GetTransform();
+    Vector3 center = tr->GetPosition();
 
     RenderFactory::Parameters params;
-    params.color = Color::Green;
     params.receivesLighting = false;
+    params.scale = Vector3(0.1);
+    params.position = center;
+
+    RenderFactory::RenderIcon(EditorTextureFactory::GetStarsIcon(),
+                              true,
+                              params);
+
+    params.color = Color::Green;
 
     if (isBeingSelected)
     {
@@ -454,16 +478,46 @@ void ComponentsGizmos::RenderParticleSystemGizmo(ParticleSystem *particleSystem,
         gb->PushDepthStencilTexture();
         gb->SetSceneDepthStencil();
 
+        Quaternion rot = tr->GetRotation();
+
         switch (particleSystem->GetGenerationShape())
         {
             case ParticleGenerationShape::BOX:
             {
                 AABox box;
+                params.position = center;
                 params.wireframe = true;
+                params.rotation = rot;
                 Vector3 boxSize = particleSystem->GetGenerationShapeBoxSize();
-                box.SetMin(pos - boxSize * 0.5f);
-                box.SetMax(pos + boxSize * 0.5f);
+                box.SetMin(center - boxSize * 0.5f);
+                box.SetMax(center + boxSize * 0.5f);
                 RenderFactory::RenderBox(box, params);
+            }
+            break;
+
+            case ParticleGenerationShape::CONE:
+            {
+                float hFovR = particleSystem->GetGenerationShapeConeFOVRads() * 0.5f;
+                params.position = center + rot * Vector3(0, 0, -1.0f);
+                params.rotation = tr->GetRotation();
+                params.scale = Vector3::One;
+                float r = 2 * Math::Tan(hFovR);
+                RenderFactory::RenderWireframeCircle(r, params, 32, false);
+
+                params.position = Vector3::Zero;
+                params.rotation = Quaternion::Identity;
+                RenderFactory::RenderLine(center,
+                                          center + rot * Vector3( 0, r, -1),
+                                          params);
+                RenderFactory::RenderLine(center,
+                                          center + rot * Vector3( r, 0, -1),
+                                          params);
+                RenderFactory::RenderLine(center,
+                                          center + rot * Vector3(-r, 0, -1),
+                                          params);
+                RenderFactory::RenderLine(center,
+                                          center + rot * Vector3(0, -r, -1),
+                                          params);
             }
             break;
         }

@@ -20,7 +20,6 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIDragDroppable.h"
 #include "Bang/UIVerticalLayout.h"
-#include "Bang/UIRendererCacher.h"
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/MenuBar.h"
@@ -50,10 +49,6 @@ Hierarchy::Hierarchy()
     le->SetFlexibleSize( Vector2::One );
 
     GameObjectFactory::CreateUIGameObjectInto(this);
-    UIRendererCacher *rendCacher = GameObjectFactory::CreateUIRendererCacherInto(this);
-    GameObject *rendererCacherContainer = rendCacher->GetContainer();
-    rendCacher->GetContainer()->GetRectTransform()->SetMargins(0, 5, 0, 5);
-    rendCacher->SetCachingEnabled(true);
 
     p_tree = GameObjectFactory::CreateUITree();
     GetUITree()->GetUIList()->GetScrollPanel()->SetForceHorizontalFit(true);
@@ -79,7 +74,7 @@ Hierarchy::Hierarchy()
         this->TreeSelectionCallback(item, action);
     } );
     GetUITree()->EventEmitter<IEventsUITree>::RegisterListener(this);
-    treeGo->SetParent(rendererCacherContainer);
+    treeGo->SetParent(this);
 
     Editor::GetInstance()->EventEmitter<IEventsEditor>::RegisterListener(this);
     EditorSceneManager::GetActive()->

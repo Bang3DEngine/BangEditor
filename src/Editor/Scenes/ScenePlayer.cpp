@@ -90,11 +90,6 @@ PlayState ScenePlayer::GetPlayState()
     return sp ? sp->m_currentPlayState : Undef<PlayState>();
 }
 
-bool Editor::IsEditingScene()
-{
-    return ScenePlayer::GetPlayState() == PlayState::EDITING;
-}
-
 void ScenePlayer::PlayScene()
 {
     if (ScenePlayer::GetPlayState() != PlayState::PLAYING)

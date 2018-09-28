@@ -80,6 +80,11 @@ Texture2D *EditorTextureFactory::GetLessIcon()
     return EditorTextureFactory::GetTexture2D("Less.png");
 }
 
+Texture2D *EditorTextureFactory::GetStarsIcon()
+{
+    return EditorTextureFactory::GetTexture2D("Stars.png");
+}
+
 Texture2D* EditorTextureFactory::GetRotateIcon()
 {
     return EditorTextureFactory::GetTexture2D("Rotate.png");

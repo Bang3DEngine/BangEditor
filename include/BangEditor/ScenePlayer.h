@@ -3,6 +3,8 @@
 
 #include "Bang/Bang.h"
 #include "Bang/Path.h"
+#include "Bang/Vector3.h"
+#include "Bang/Quaternion.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventListener.h"
 

@@ -18,7 +18,6 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UIVerticalLayout.h"
-#include "Bang/UIRendererCacher.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIContentSizeFitter.h"
 
@@ -50,11 +49,8 @@ Inspector::Inspector()
     le->SetFlexibleSize( Vector2::One );
 
     GameObjectFactory::CreateUIGameObjectInto(this);
-    UIRendererCacher *rendCacher = GameObjectFactory::CreateUIRendererCacherInto(this);
-    GameObject *rendererCacherContainer = rendCacher->GetContainer();
-    rendCacher->GetContainer()->GetRectTransform()->SetMargins(0, 10, 0, 5);
 
-    GameObject *mainVLGo = rendererCacherContainer;
+    GameObject *mainVLGo = this;
     UIVerticalLayout *mainVL = mainVLGo->AddComponent<UIVerticalLayout>();
     BANG_UNUSED(mainVL);
     UILayoutElement *mainVLLE = mainVLGo->AddComponent<UILayoutElement>();
@@ -74,7 +70,7 @@ Inspector::Inspector()
 
     GameObject *widgetsVLGo = GameObjectFactory::CreateUIGameObjectNamed("MainVL");
     widgetsVLGo->GetRectTransform()->SetPivotPosition( Vector2(-1, 1) );
-    widgetsVLGo->SetParent(rendererCacherContainer);
+    widgetsVLGo->SetParent(this);
 
     UILabel *titleGo = GameObjectFactory::CreateUILabel();
     GameObject *goNameLabelGo = titleGo->GetGameObject();

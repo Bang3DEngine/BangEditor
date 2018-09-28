@@ -414,11 +414,14 @@ void EditorScene::OnPlayStateChanged(PlayState previousPlayState,
         break;
 
         case PlayState::PLAYING:
-            p_tabStation->FindTabStationOf( GetScenePlayContainer() )->
-                          GetTabContainer()->
-                          SetCurrentTabChild( GetScenePlayContainer() );
-            UICanvas::GetActive(this)->SetFocus(
-                        GetScenePlayContainer()->GetFocusable());
+            if (previousPlayState == PlayState::JUST_BEFORE_PLAYING)
+            {
+                p_tabStation->FindTabStationOf( GetScenePlayContainer() )->
+                              GetTabContainer()->
+                              SetCurrentTabChild( GetScenePlayContainer() );
+                UICanvas::GetActive(this)->SetFocus(
+                            GetScenePlayContainer()->GetFocusable());
+            }
         break;
 
         default: break;

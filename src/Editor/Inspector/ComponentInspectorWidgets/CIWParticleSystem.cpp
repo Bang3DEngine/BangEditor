@@ -4,14 +4,13 @@
 #include "Bang/UILabel.h"
 #include "Bang/Resources.h"
 #include "Bang/Extensions.h"
+#include "Bang/GameObject.h"
 #include "Bang/UICheckBox.h"
+#include "Bang/UIComboBox.h"
 #include "Bang/UIInputText.h"
+#include "Bang/UIInputNumber.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/ParticleSystem.h"
-
-#include "Bang/GameObject.h"
-#include "Bang/UIComboBox.h"
-#include "Bang/UIInputNumber.h"
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/UIInputVector.h"

@@ -24,7 +24,7 @@ class CIWBoxCollider : public CIWCollider
     virtual void UpdateFromReference() override;
 
 private:
-    UIInputVector *p_halfExtentsInput = nullptr;
+    UIInputVector *p_extentsInput = nullptr;
 
     CIWBoxCollider();
     virtual ~CIWBoxCollider();

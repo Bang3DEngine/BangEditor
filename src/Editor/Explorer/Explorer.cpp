@@ -19,7 +19,6 @@
 #include "Bang/TextureFactory.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
-#include "Bang/UIRendererCacher.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/MetaFilesManager.h"
@@ -54,10 +53,8 @@ Explorer::Explorer()
     le->SetFlexibleSize( Vector2::One );
 
     GameObjectFactory::CreateUIGameObjectInto(this);
-    UIRendererCacher *rendCacher = GameObjectFactory::CreateUIRendererCacherInto(this);
-    GameObject *rendererCacherContainer = rendCacher->GetContainer();
 
-    GameObject *mainVLGo = rendererCacherContainer;
+    GameObject *mainVLGo = this;
     mainVLGo->AddComponent<UIVerticalLayout>();
 
     // Tool Bar

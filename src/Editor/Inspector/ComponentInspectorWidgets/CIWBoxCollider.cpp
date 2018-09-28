@@ -23,15 +23,15 @@ void CIWBoxCollider::InitInnerWidgets()
     SetName("CIWBoxCollider");
     SetTitle("BoxCollider");
 
-    p_halfExtentsInput = GameObject::Create<UIInputVector>();
-    for (UIInputNumber *inputNumber : p_halfExtentsInput->GetInputNumbers())
+    p_extentsInput = GameObject::Create<UIInputVector>();
+    for (UIInputNumber *inputNumber : p_extentsInput->GetInputNumbers())
     {
         inputNumber->SetMinValue(0.01f);
     }
-    p_halfExtentsInput->SetSize(3);
-    p_halfExtentsInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_extentsInput->SetSize(3);
+    p_extentsInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    AddWidget("Half Extents", p_halfExtentsInput);
+    AddWidget("Extents", p_extentsInput);
 
     SetLabelsWidth(95);
 }
@@ -41,9 +41,9 @@ void CIWBoxCollider::UpdateFromReference()
     CIWCollider::UpdateFromReference();
 
     BoxCollider *boxCollider = GetBoxCollider();
-    if (!p_halfExtentsInput->HasFocus())
+    if (!p_extentsInput->HasFocus())
     {
-        p_halfExtentsInput->Set( boxCollider->GetHalfExtents() );
+        p_extentsInput->Set( boxCollider->GetExtents() );
     }
 }
 
@@ -52,7 +52,7 @@ void CIWBoxCollider::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object
     CIWCollider::OnValueChangedCIW(object);
 
     BoxCollider *boxCollider = GetBoxCollider();
-    boxCollider->SetHalfExtents( p_halfExtentsInput->GetVector3() );
+    boxCollider->SetExtents( p_extentsInput->GetVector3() );
 }
 
 BoxCollider *CIWBoxCollider::GetBoxCollider() const

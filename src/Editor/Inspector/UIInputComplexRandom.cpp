@@ -38,27 +38,28 @@ UIInputComplexRandom::~UIInputComplexRandom()
 
 void UIInputComplexRandom::Set(const ComplexRandom &complexRandom)
 {
-    m_complexRandom = complexRandom;
+    if (complexRandom != GetComplexRandom())
+    {
+        m_complexRandom = complexRandom;
 
-    p_minRangeInputNumber->SetValue( GetComplexRandom().GetMinRangeValue() );
-    p_maxRangeInputNumber->SetValue( GetComplexRandom().GetMaxRangeValue() );
+        p_minRangeInputNumber->SetValue( GetComplexRandom().GetMinRangeValue() );
+        p_maxRangeInputNumber->SetValue( GetComplexRandom().GetMaxRangeValue() );
 
-    SetRangeMaxValue( GetComplexRandom().GetMaxRangeValue() );
-    SetRangeMinValue( GetComplexRandom().GetMinRangeValue() );
+        p_minRangeInputNumber->SetMaxValue( GetComplexRandom().GetMaxRangeValue() );
+        p_maxRangeInputNumber->SetMinValue( GetComplexRandom().GetMinRangeValue() );
+    }
 }
 
 void UIInputComplexRandom::SetRangeMinValue(float minValue)
 {
     p_minRangeInputNumber->SetMinValue(minValue);
-    p_maxRangeInputNumber->SetMinValue(
-                Math::Max(minValue, GetComplexRandom().GetMinRangeValue()) );
+    p_maxRangeInputNumber->SetMinValue(minValue);
 }
 
 void UIInputComplexRandom::SetRangeMaxValue(float maxValue)
 {
+    p_minRangeInputNumber->SetMaxValue(maxValue);
     p_maxRangeInputNumber->SetMaxValue(maxValue);
-    p_minRangeInputNumber->SetMaxValue(
-                Math::Min(maxValue, GetComplexRandom().GetMaxRangeValue()) );
 }
 
 void UIInputComplexRandom::SetRangeMinMaxValues(float minValue, float maxValue)
@@ -80,8 +81,9 @@ const ComplexRandom &UIInputComplexRandom::GetComplexRandom() const
 
 void UIInputComplexRandom::OnValueChanged(EventEmitter<IEventsValueChanged>*)
 {
-    m_complexRandom.SetMinRangeValue( p_minRangeInputNumber->GetValue() );
-    m_complexRandom.SetMaxRangeValue( p_maxRangeInputNumber->GetValue() );
+    ComplexRandom cr(p_minRangeInputNumber->GetValue(),
+                     p_maxRangeInputNumber->GetValue());
+    Set(cr);
 
     EventEmitter<IEventsValueChanged>::PropagateToListeners(
                 &IEventsValueChanged::OnValueChanged, this);

@@ -14,6 +14,7 @@
 #include "Bang/SceneManager.h"
 #include "Bang/GameObjectFactory.h"
 
+#include "BangEditor/ScenePlayer.h"
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditSceneGameObjects.h"
@@ -52,7 +53,10 @@ EditorCamera::EditorCamera()
 
     m_selectionFramebuffer = new SelectionFramebuffer(1,1);
 
-    SceneManager::GetActive()->RegisterListener(this);
+    SceneManager::GetActive()->EventEmitter<IEventsSceneManager>::
+                  RegisterListener(this);
+    ScenePlayer::GetInstance()->EventEmitter<IEventsScenePlayer>::
+                 RegisterListener(this);
 }
 
 EditorCamera::~EditorCamera()
@@ -69,27 +73,20 @@ void EditorCamera::Update()
     bool unwrapMouse = true;
     if (!IsBlocked())
     {
-        if (!p_currentLookAtGo)
+        if ( GL::GetViewportRect().Contains( Input::GetMousePositionWindow() ))
         {
-            if ( GL::GetViewportRect().Contains( Input::GetMousePositionWindow() ))
+            HandleKeyMovement(); //WASD
+
+            //Mouse rot with right click
+            if (!HandleMouseRotation())
             {
-                HandleKeyMovement(); //WASD
-
-                //Mouse rot with right click
-                if (!HandleMouseRotation())
-                {
-                    //Mouse move with mid click
-                    HandleMousePanning();
-                }
-
-                HandleWheelZoom();
-
-                m_keysCurrentMoveSpeed = 0.0f; // Reset speed
+                //Mouse move with mid click
+                HandleMousePanning();
             }
-        }
-        else
-        {
-            HandleLookAtFocus();
+
+            HandleWheelZoom();
+
+            m_keysCurrentMoveSpeed = 0.0f; // Reset speed
         }
     }
     InterpolatePositionAndRotation();
@@ -126,21 +123,6 @@ void EditorCamera::AdjustSpeeds()
     m_mouseRotDegreesPerPixel.y = 360.0f / wHeight;
 
     m_mousePanPerPixel = Vector2(0.01f);
-    if (p_currentLookAtGo)
-    {
-        Transform *ft = p_currentLookAtGo->GetTransform();
-        if (ft)
-        {
-            Vector3 focusPoint = ft->GetPosition();
-            float d = Vector3::Distance(focusPoint, m_targetPosition);
-            float ar = GL::GetViewportAspectRatio();
-            float halfFov = Math::DegToRad(p_cam->GetFovDegrees()/2.0f);
-            float halfHeightInWorldSpace = Math::Tan(halfFov) * d;
-            m_mousePanPerPixel.y = (halfHeightInWorldSpace * 2) / wHeight;
-            m_mousePanPerPixel.x = m_mousePanPerPixel.y * wHeight * ar / wWidth;
-            m_mouseZoomPerDeltaWheel = Math::Clamp(d, 0.1f, 5.0f);
-        }
-    }
 
     m_mouseZoomPerDeltaWheel = 1.0f;
     m_mousePanPerPixel.x = Math::Max(m_mousePanPerPixel.x, 0.05f);
@@ -179,8 +161,8 @@ void EditorCamera::HandleWheelZoom()
         {
             if (p_cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
             {
-                m_targetPosition += zoomSpeed * p_camt->GetForward();
-                InterpolatePositionAndRotation(1.0f, 0.0f);
+                SetPositionDirectly(GetTransform()->GetPosition() +
+                                    (zoomSpeed * p_camt->GetForward()));
             }
             m_orthoHeight -= 2.75f * mouseWheel; // Magic number here :)
             p_cam->SetOrthoHeight(m_orthoHeight);
@@ -204,10 +186,9 @@ bool EditorCamera::HandleMouseRotation()
                                                 newRot * Vector3::Right);
         newRot = rotY * newRot;
 
-        m_targetRotation = newRot;
+        SetRotationDirectly(newRot);
 
         Input::SetMouseWrapping(true);
-        InterpolatePositionAndRotation(0.0f, 1.0f);
 
         return true;
     }
@@ -219,9 +200,9 @@ void EditorCamera::HandleMousePanning()
     if (Input::GetMouseButton(MouseButton::MIDDLE))
     {
         Vector2 delta = -Vector2(Input::GetMouseDelta()) * m_mousePanPerPixel;
-        m_targetPosition = GetTransform()->GetPosition() +
-                           (p_camt->GetRight() * delta.x + p_camt->GetUp() * delta.y);
-        InterpolatePositionAndRotation(1.0f);
+        SetPositionDirectly( GetTransform()->GetPosition() +
+                             (p_camt->GetRight() * delta.x +
+                               p_camt->GetUp() * delta.y) );
         Input::SetMouseWrapping(true);
     }
 }
@@ -277,9 +258,20 @@ void EditorCamera::FocusScene(Scene *scene)
     }
 }
 
+void EditorCamera::SetPositionDirectly(const Vector3 &position)
+{
+    m_targetPosition = position;
+    InterpolatePositionAndRotation(1, 0);
+}
+
+void EditorCamera::SetRotationDirectly(const Quaternion &rotation)
+{
+    m_targetRotation = rotation;
+    InterpolatePositionAndRotation(0, 1);
+}
+
 void EditorCamera::AlignViewWithGameObject(GameObject *selected)
 {
-    p_currentLookAtGo = nullptr;
     p_camt->SetLocalRotation(Quaternion::Identity);
     m_targetPosition = selected->GetTransform()->GetPosition();
     Vector3 up = Vector3::Up;
@@ -306,34 +298,14 @@ void EditorCamera::SwitchProjectionModeTo(bool mode3D)
 
 void EditorCamera::LookAt(GameObject *lookAtFocus)
 {
-    p_currentLookAtGo = lookAtFocus;
-
-    if (p_currentLookAtGo)
+    if (lookAtFocus)
     {
         Vector3 targetPos;
         Quaternion targetRot;
-        GetLookAtFocusParams(p_currentLookAtGo, &targetPos, &targetRot);
+        GetLookAtFocusParams(lookAtFocus, &targetPos, &targetRot);
 
         m_targetPosition = targetPos;
         m_targetRotation = targetRot;
-    }
-}
-
-void EditorCamera::HandleLookAtFocus()
-{
-    if (p_currentLookAtGo)
-    {
-        Vector3 targetPos;
-        Quaternion targetRot;
-        GetLookAtFocusParams(p_currentLookAtGo, &targetPos, &targetRot);
-
-        Vector3 thisPos = GetTransform()->GetPosition();
-        Vector3 targetDir = targetRot * Vector3::Forward;
-        if( Vector3::Distance(thisPos, targetPos) <= 1.0f &&
-            Vector3::Dot(GetTransform()->GetForward(), targetDir) >= 0.9999f)
-        {
-            p_currentLookAtGo = nullptr;
-        }
     }
 }
 
@@ -400,6 +372,34 @@ EditorCamera *EditorCamera::GetInstance()
 {
     EditSceneGameObjects *editSceneGameObject = EditSceneGameObjects::GetInstance();
     return editSceneGameObject ? editSceneGameObject->GetEditorCamera() : nullptr;
+}
+
+void EditorCamera::OnPlayStateChanged(PlayState prevPlayState,
+                                      PlayState newPlayState)
+{
+    switch (newPlayState)
+    {
+        case PlayState::JUST_BEFORE_PLAYING:
+            m_previousPlayStateChangePos = GetTransform()->GetPosition();
+            m_previousPlayStateChangeRot = GetTransform()->GetRotation();
+        break;
+
+        case PlayState::PLAYING:
+        if (prevPlayState == PlayState::JUST_BEFORE_PLAYING)
+        {
+            SetPositionDirectly( m_previousPlayStateChangePos );
+            SetRotationDirectly( m_previousPlayStateChangeRot );
+        }
+        break;
+
+        case PlayState::EDITING:
+            SetPositionDirectly( m_previousPlayStateChangePos );
+            SetRotationDirectly( m_previousPlayStateChangeRot );
+        break;
+
+        default:
+        break;
+    }
 }
 
 void EditorCamera::OnSceneLoaded(Scene *scene, const Path &sceneFilepath)

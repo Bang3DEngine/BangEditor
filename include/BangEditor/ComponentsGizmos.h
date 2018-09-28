@@ -30,6 +30,8 @@ public:
     void Render(RenderPass rp, bool renderChildren) override;
 
 private:
+    float GetCameraDistScale(const Vector3& position) const;
+
     void RenderComponentGizmosWhenNotSelected(GameObject *go);
     void RenderComponentGizmos(Component *comp, bool isBeingSelected);
 
