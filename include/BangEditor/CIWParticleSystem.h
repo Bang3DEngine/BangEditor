@@ -32,6 +32,7 @@ protected:
     UIInputComplexRandom *p_lifeTimeInput = nullptr;
     UIInputComplexRandom *p_startTimeInput = nullptr;
     UIInputComplexRandom *p_startSizeInput = nullptr;
+    UICheckBox *p_billboardInput = nullptr;
     UIInputColor *p_startColorInput = nullptr;
     UIInputColor *p_endColorInput = nullptr;
     UIInputNumber *p_numParticlesInput = nullptr;

@@ -7,6 +7,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIComboBox.h"
+#include "Bang/UICheckBox.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UITextRenderer.h"
@@ -40,15 +41,19 @@ void CIWParticleSystem::InitInnerWidgets()
     p_startTimeInput->SetRangeMinValue(0);
     p_startTimeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
+    p_startSizeInput = GameObject::Create<UIInputComplexRandom>();
+    p_startSizeInput->SetRangeMinValue(0);
+    p_startSizeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_billboardInput = GameObjectFactory::CreateUICheckBox();
+    p_billboardInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
     p_startColorInput = GameObject::Create<UIInputColor>();
     p_startColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_endColorInput = GameObject::Create<UIInputColor>();
     p_endColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_startSizeInput = GameObject::Create<UIInputComplexRandom>();
-    p_startSizeInput->SetRangeMinValue(0);
-    p_startSizeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_numParticlesInput = GameObjectFactory::CreateUIInputNumber();
     p_numParticlesInput->SetDecimalPlaces(0);
@@ -84,6 +89,8 @@ void CIWParticleSystem::InitInnerWidgets()
     AddWidget("Life time",      p_lifeTimeInput);
     AddWidget("Start time",     p_startTimeInput);
     AddWidget("Num. Particles", p_numParticlesInput->GetGameObject());
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
+    AddWidget("Billboard", p_billboardInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Start size",  p_startSizeInput);
     AddWidget("Start color", p_startColorInput);
@@ -122,6 +129,8 @@ void CIWParticleSystem::UpdateFromReference()
     {
         p_startSizeInput->Set( GetParticleSystem()->GetStartSize() );
     }
+
+    p_billboardInput->SetChecked( GetParticleSystem()->GetBillboard() );
 
     if (!p_startColorInput->HasFocus())
     {
@@ -226,6 +235,11 @@ void CIWParticleSystem::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *obj
     if (object == p_startTimeInput)
     {
         GetParticleSystem()->SetStartTime( p_startTimeInput->GetComplexRandom() );
+    }
+
+    if (object == p_billboardInput)
+    {
+        GetParticleSystem()->SetBillboard( p_billboardInput->IsChecked() );
     }
 
     if (object == p_startColorInput)
