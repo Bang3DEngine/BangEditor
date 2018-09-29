@@ -33,6 +33,7 @@ protected:
     UIInputComplexRandom *p_startTimeInput = nullptr;
     UIInputComplexRandom *p_startSizeInput = nullptr;
     UICheckBox *p_billboardInput = nullptr;
+    UIComboBox *p_particleRenderModeInput = nullptr;
     UIInputColor *p_startColorInput = nullptr;
     UIInputColor *p_endColorInput = nullptr;
     UIInputNumber *p_numParticlesInput = nullptr;

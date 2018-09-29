@@ -48,12 +48,18 @@ void CIWParticleSystem::InitInnerWidgets()
     p_billboardInput = GameObjectFactory::CreateUICheckBox();
     p_billboardInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
+    p_particleRenderModeInput = GameObjectFactory::CreateUIComboBox();
+    p_particleRenderModeInput->AddItem("Additive",
+                               SCAST<int>(ParticleRenderMode::ADDITIVE));
+    p_particleRenderModeInput->AddItem("Mesh",
+                               SCAST<int>(ParticleRenderMode::MESH));
+    p_particleRenderModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
     p_startColorInput = GameObject::Create<UIInputColor>();
     p_startColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_endColorInput = GameObject::Create<UIInputColor>();
     p_endColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-
 
     p_numParticlesInput = GameObjectFactory::CreateUIInputNumber();
     p_numParticlesInput->SetDecimalPlaces(0);
@@ -84,13 +90,14 @@ void CIWParticleSystem::InitInnerWidgets()
     p_initialVelocityMultiplier->EventEmitter<IEventsValueChanged>::
                                  RegisterListener(this);
 
-    AddWidget("Mesh", p_meshInputFile);
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Life time",      p_lifeTimeInput);
     AddWidget("Start time",     p_startTimeInput);
     AddWidget("Num. Particles", p_numParticlesInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
+    AddWidget("Mesh", p_meshInputFile);
     AddWidget("Billboard", p_billboardInput->GetGameObject());
+    AddWidget("Render Mode", p_particleRenderModeInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Start size",  p_startSizeInput);
     AddWidget("Start color", p_startColorInput);
@@ -131,6 +138,12 @@ void CIWParticleSystem::UpdateFromReference()
     }
 
     p_billboardInput->SetChecked( GetParticleSystem()->GetBillboard() );
+
+    if (!p_particleRenderModeInput->HasFocus())
+    {
+        p_particleRenderModeInput->SetSelectionByValue(
+                    SCAST<int>(GetParticleSystem()->GetParticleRenderMode()));
+    }
 
     if (!p_startColorInput->HasFocus())
     {
@@ -240,6 +253,13 @@ void CIWParticleSystem::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *obj
     if (object == p_billboardInput)
     {
         GetParticleSystem()->SetBillboard( p_billboardInput->IsChecked() );
+    }
+
+    if (object == p_particleRenderModeInput)
+    {
+        GetParticleSystem()->SetParticleRenderMode(
+                    SCAST<ParticleRenderMode>(
+                        p_particleRenderModeInput->GetSelectedValue()) );
     }
 
     if (object == p_startColorInput)

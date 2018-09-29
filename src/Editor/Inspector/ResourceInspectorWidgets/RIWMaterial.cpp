@@ -309,9 +309,15 @@ void RIWMaterial::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *o
 
     if (obj == p_renderPassInput)
     {
+        // Change renderPass, and shaders if the user has not changed the
+        // material default shaders (if he did, auto changing this is annoying).
         RenderPass rp = SCAST<RenderPass>(p_renderPassInput->GetSelectedValue());
+        if (GetMaterial()->GetShaderProgram() ==
+            ShaderProgramFactory::GetDefault( GetMaterial()->GetRenderPass() ) )
+        {
+            GetMaterial()->SetShaderProgram( ShaderProgramFactory::GetDefault(rp) );
+        }
         GetMaterial()->SetRenderPass(rp);
-        GetMaterial()->SetShaderProgram( ShaderProgramFactory::GetDefault(rp) );
     }
 
     GetMaterial()->SetRenderWireframe( p_renderWireframe->IsChecked() );
