@@ -16,6 +16,7 @@
 
 #include "BangEditor/UIInputColor.h"
 #include "BangEditor/UIInputVector.h"
+#include "BangEditor/UIInputTexture.h"
 #include "BangEditor/UIInputComplexRandom.h"
 #include "BangEditor/UIInputFileWithPreview.h"
 
@@ -47,6 +48,21 @@ void CIWParticleSystem::InitInnerWidgets()
 
     p_billboardInput = GameObjectFactory::CreateUICheckBox();
     p_billboardInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_textureInput = GameObject::Create<UIInputTexture>();
+    p_textureInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_sheetSizeInput = GameObject::Create<UIInputVector>();
+    for (int i = 0; i < 2; ++i)
+    {
+        p_sheetSizeInput->GetInputNumbers()[i]->SetDecimalPlaces(0);
+    }
+    p_sheetSizeInput->SetSize(2);
+    p_sheetSizeInput->SetMinValue(Vector4::One);
+    p_sheetSizeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_animationSpeedInput = GameObjectFactory::CreateUIInputNumber();
+    p_animationSpeedInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_particleRenderModeInput = GameObjectFactory::CreateUIComboBox();
     p_particleRenderModeInput->AddItem("Additive",
@@ -82,6 +98,9 @@ void CIWParticleSystem::InitInnerWidgets()
     p_generationShapeConeFOVInput->EventEmitter<IEventsValueChanged>::
                                    RegisterListener(this);
 
+    p_computeCollisionsInput = GameObjectFactory::CreateUICheckBox();
+    p_computeCollisionsInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
     p_gravityMultiplierInput = GameObjectFactory::CreateUIInputNumber();
     p_gravityMultiplierInput->EventEmitter<IEventsValueChanged>::
                               RegisterListener(this);
@@ -95,8 +114,12 @@ void CIWParticleSystem::InitInnerWidgets()
     AddWidget("Start time",     p_startTimeInput);
     AddWidget("Num. Particles", p_numParticlesInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
-    AddWidget("Mesh", p_meshInputFile);
-    AddWidget("Billboard", p_billboardInput->GetGameObject());
+    AddWidget("Texture",         p_textureInput);
+    AddWidget("Sheet size",      p_sheetSizeInput);
+    AddWidget("Animation speed", p_animationSpeedInput->GetGameObject());
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
+    AddWidget("Mesh",        p_meshInputFile);
+    AddWidget("Billboard",   p_billboardInput->GetGameObject());
     AddWidget("Render Mode", p_particleRenderModeInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Start size",  p_startSizeInput);
@@ -104,10 +127,11 @@ void CIWParticleSystem::InitInnerWidgets()
     AddWidget("End color",   p_endColorInput);
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Generation shape", p_generationShapeInput->GetGameObject());
-    AddWidget("Box size", p_generationShapeBoxSizeInput);
-    AddWidget("Cone FOV", p_generationShapeConeFOVInput->GetGameObject());
+    AddWidget("Box size",         p_generationShapeBoxSizeInput);
+    AddWidget("Cone FOV",         p_generationShapeConeFOVInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
-    AddWidget("Gravity multiplier", p_gravityMultiplierInput->GetGameObject());
+    AddWidget("Compute collisions",   p_computeCollisionsInput->GetGameObject());
+    AddWidget("Gravity multiplier",   p_gravityMultiplierInput->GetGameObject());
     AddWidget("Init vel. multiplier", p_initialVelocityMultiplier->GetGameObject());
     SetLabelsWidth(100);
 
@@ -138,6 +162,21 @@ void CIWParticleSystem::UpdateFromReference()
     }
 
     p_billboardInput->SetChecked( GetParticleSystem()->GetBillboard() );
+    p_computeCollisionsInput->SetChecked(
+                                GetParticleSystem()->GetComputeCollisions() );
+    p_textureInput->SetResource( GetParticleSystem()->GetTexture() );
+
+    if (!p_sheetSizeInput->HasFocus())
+    {
+        p_sheetSizeInput->Set(
+                    Vector2(GetParticleSystem()->GetAnimationSheetSize()) );
+    }
+
+    if (!p_animationSpeedInput->HasFocus())
+    {
+        p_animationSpeedInput->SetValue(
+                            GetParticleSystem()->GetAnimationSpeed() );
+    }
 
     if (!p_particleRenderModeInput->HasFocus())
     {
@@ -250,9 +289,27 @@ void CIWParticleSystem::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *obj
         GetParticleSystem()->SetStartTime( p_startTimeInput->GetComplexRandom() );
     }
 
+    if (object == p_textureInput)
+    {
+        RH<Texture2D> tex = Resources::Load<Texture2D>(p_textureInput->GetPath());
+        GetParticleSystem()->SetTexture( tex.Get() );
+    }
+
     if (object == p_billboardInput)
     {
         GetParticleSystem()->SetBillboard( p_billboardInput->IsChecked() );
+    }
+
+    if (object == p_animationSpeedInput)
+    {
+        GetParticleSystem()->SetAnimationSpeed(
+                                    p_animationSpeedInput->GetValue() );
+    }
+
+    if (object == p_sheetSizeInput)
+    {
+        GetParticleSystem()->SetAnimationSheetSize(
+                                    Vector2i(p_sheetSizeInput->GetVector2()) );
     }
 
     if (object == p_particleRenderModeInput)
@@ -293,6 +350,12 @@ void CIWParticleSystem::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *obj
                     p_generationShapeBoxSizeInput->GetVector3() );
     GetParticleSystem()->SetGenerationShapeConeFOVRads(
                     Math::DegToRad(p_generationShapeConeFOVInput->GetValue()) );
+
+    if (object == p_computeCollisionsInput)
+    {
+        GetParticleSystem()->SetComputeCollisions(
+                             p_computeCollisionsInput->IsChecked() );
+    }
 
     if (object == p_gravityMultiplierInput)
     {

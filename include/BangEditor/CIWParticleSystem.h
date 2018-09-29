@@ -14,6 +14,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UIInputColor;
 FORWARD class UIInputVector;
+FORWARD class UIInputTexture;
 FORWARD class UIInputComplexRandom;
 FORWARD class UIInputFileWithPreview;
 
@@ -33,6 +34,9 @@ protected:
     UIInputComplexRandom *p_startTimeInput = nullptr;
     UIInputComplexRandom *p_startSizeInput = nullptr;
     UICheckBox *p_billboardInput = nullptr;
+    UIInputTexture *p_textureInput = nullptr;
+    UIInputVector *p_sheetSizeInput = nullptr;
+    UIInputNumber *p_animationSpeedInput = nullptr;
     UIComboBox *p_particleRenderModeInput = nullptr;
     UIInputColor *p_startColorInput = nullptr;
     UIInputColor *p_endColorInput = nullptr;
@@ -42,6 +46,7 @@ protected:
     UIInputVector *p_generationShapeBoxSizeInput = nullptr;
     UIInputNumber *p_generationShapeConeFOVInput = nullptr;
 
+    UICheckBox *p_computeCollisionsInput = nullptr;
     UIInputNumber *p_gravityMultiplierInput = nullptr;
     UIInputNumber *p_initialVelocityMultiplier = nullptr;
 

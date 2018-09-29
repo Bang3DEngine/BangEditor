@@ -53,6 +53,18 @@ void UIInputFileWithPreview::SetZoomable(bool zoomable)
     m_zoomable = zoomable;
 }
 
+void UIInputFileWithPreview::SetResource(Resource *resource)
+{
+    if (resource)
+    {
+        SetPath( resource->GetResourceFilepath() );
+    }
+    else
+    {
+        SetPath( Path::Empty );
+    }
+}
+
 void UIInputFileWithPreview::SetPath(const Path &path)
 {
     UIInputFile::SetPath(path);

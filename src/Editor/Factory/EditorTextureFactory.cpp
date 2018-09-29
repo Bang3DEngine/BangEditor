@@ -85,6 +85,11 @@ Texture2D *EditorTextureFactory::GetStarsIcon()
     return EditorTextureFactory::GetTexture2D("Stars.png");
 }
 
+Texture2D *EditorTextureFactory::GetCameraIcon()
+{
+    return EditorTextureFactory::GetTexture2D("Camera.png");
+}
+
 Texture2D* EditorTextureFactory::GetRotateIcon()
 {
     return EditorTextureFactory::GetTexture2D("Rotate.png");
@@ -241,57 +246,66 @@ Texture2D* EditorTextureFactory::GetComponentIcon(const String &componentName)
     {
         return EditorTextureFactory::GetColoredAxesIcon();
     }
-    if (componentName == "Behaviour" || componentName == "BehaviourContainer")
+    else if (componentName == "Behaviour" ||
+             componentName == "BehaviourContainer")
     {
         return EditorTextureFactory::GetBracketsIcon();
     }
-    if (componentName == "RectTransform")
+    else if (componentName == "RectTransform")
     {
         return EditorTextureFactory::GetAnchoredRectIcon();
     }
-    if (componentName == "BoxCollider")
+    else if (componentName == "BoxCollider")
     {
         return EditorTextureFactory::GetGreenCubeIcon();
     }
-    if (componentName == "SphereCollider")
+    else if (componentName == "SphereCollider")
     {
         return EditorTextureFactory::GetGreenSphereIcon();
     }
-    if (componentName == "CapsuleCollider")
+    else if (componentName == "CapsuleCollider")
     {
         return EditorTextureFactory::GetGreenCapsuleIcon();
     }
-    if (componentName == "RigidBody")
+    else if (componentName == "RigidBody")
     {
         return EditorTextureFactory::GetCrashDummyIcon();
     }
-    if (componentName == "PointLight")
+    else if (componentName == "PointLight")
     {
         return TextureFactory::GetLightBulbIcon();
     }
-    if (componentName == "DirectionalLight")
+    else if (componentName == "DirectionalLight")
     {
         return TextureFactory::GetSunIcon();
     }
-    if (componentName == "Behaviour")
+    else if (componentName == "Behaviour")
     {
         return EditorTextureFactory::GetBracketsIcon();
     }
-    if (componentName == "MeshRenderer")
+    else if (componentName == "MeshRenderer")
     {
         return EditorTextureFactory::GetCubeIcon();
     }
-    if (componentName == "Animator")
+    else if (componentName == "Animator")
     {
         return EditorTextureFactory::GetPlayWithCircleIcon();
     }
-    if (componentName == "AudioSource")
+    else if (componentName == "AudioSource")
     {
         return TextureFactory::GetAudioIcon();
     }
-    if (componentName == "AudioListener")
+    else if (componentName == "AudioListener")
     {
         return TextureFactory::GetAudioIcon();
+    }
+    else if (componentName == "ParticleSystem")
+    {
+        return EditorTextureFactory::GetStarsIcon();
+    }
+    else if (componentName == "Camera")
+    {
+        return EditorTextureFactory::GetCameraIcon();
     }
 
     return EditorTextureFactory::GetCubeIcon();
@@ -324,6 +338,14 @@ Color EditorTextureFactory::GetComponentIconTint(const String &componentName)
         return Color::White.WithValue(0.2f);
     }
     else if (componentName == "BehaviourContainer")
+    {
+        return Color::White.WithValue(0.2f);
+    }
+    else if (componentName == "ParticleSystem")
+    {
+        return Color::White.WithValue(0.2f);
+    }
+    else if (componentName == "Camera")
     {
         return Color::White.WithValue(0.2f);
     }

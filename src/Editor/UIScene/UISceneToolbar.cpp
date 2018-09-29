@@ -217,31 +217,44 @@ void UISceneToolbar::UpdateToolButtons()
     p_scaleButton->SetBlocked( !(selGo && selGo->GetTransform()) );
     p_rectTransformButton->SetBlocked( !(selGo && selGo->GetRectTransform()) );
 
-    p_translateButton->SetOn(false);
-    p_rotateButton->SetOn(false);
-    p_scaleButton->SetOn(false);
-    p_rectTransformButton->SetOn(false);
-
-    switch (GetTransformGizmoMode())
+    // W, E, R, T shortcuts handling
+    TransformGizmoMode newTrMode = Undef<TransformGizmoMode>();
+    if (Input::GetKeyDown(Key::W))
     {
-        case TransformGizmoMode::TRANSLATE:
-            p_translateButton->SetOn(true);
-        break;
+        newTrMode = TransformGizmoMode::TRANSLATE;
+        p_translateButton->SetOn(true);
+        p_rotateButton->SetOn(false);
+        p_scaleButton->SetOn(false);
+        p_rectTransformButton->SetOn(false);
+    }
+    else if (Input::GetKeyDown(Key::E))
+    {
+        newTrMode = TransformGizmoMode::ROTATE;
+        p_translateButton->SetOn(false);
+        p_rotateButton->SetOn(true);
+        p_scaleButton->SetOn(false);
+        p_rectTransformButton->SetOn(false);
+    }
+    else if (Input::GetKeyDown(Key::R))
+    {
+        newTrMode = TransformGizmoMode::SCALE;
+        p_translateButton->SetOn(false);
+        p_rotateButton->SetOn(false);
+        p_scaleButton->SetOn(true);
+        p_rectTransformButton->SetOn(false);
+    }
+    else if (Input::GetKeyDown(Key::T))
+    {
+        newTrMode = TransformGizmoMode::RECT;
+        p_translateButton->SetOn(false);
+        p_rotateButton->SetOn(false);
+        p_scaleButton->SetOn(false);
+        p_rectTransformButton->SetOn(true);
+    }
 
-        case TransformGizmoMode::ROTATE:
-            p_rotateButton->SetOn(true);
-        break;
-
-        case TransformGizmoMode::SCALE:
-            p_scaleButton->SetOn(true);
-        break;
-
-        case TransformGizmoMode::RECT:
-            p_rectTransformButton->SetOn(true);
-        break;
-
-        default:
-        break;
+    if (newTrMode != Undef<TransformGizmoMode>())
+    {
+        SetTransformGizmoMode(newTrMode);
     }
 }
 

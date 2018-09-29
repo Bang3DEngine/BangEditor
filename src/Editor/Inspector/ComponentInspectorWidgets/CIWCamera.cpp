@@ -28,9 +28,9 @@ void CIWCamera::InitInnerWidgets()
     SetName("CIWCamera");
     SetTitle("Camera");
 
-    p_isSceneCamera = GameObjectFactory::CreateUICheckBox();
-    p_isSceneCamera->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-    AddWidget("Scene Camera", p_isSceneCamera->GetGameObject());
+    p_isActiveCamera = GameObjectFactory::CreateUICheckBox();
+    p_isActiveCamera->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    AddWidget("Active Camera", p_isActiveCamera->GetGameObject());
 
     p_zNearInput = GameObjectFactory::CreateUIInputNumber();
     p_zNearInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
@@ -82,11 +82,11 @@ void CIWCamera::UpdateFromReference()
 
     if (Scene *openScene = EditorSceneManager::GetOpenScene())
     {
-        p_isSceneCamera->SetChecked(openScene->GetCamera() == GetCamera());
+        p_isActiveCamera->SetChecked(openScene->GetCamera() == GetCamera());
     }
     else
     {
-        p_isSceneCamera->SetChecked(false);
+        p_isActiveCamera->SetChecked(false);
     }
 
     if (!p_zNearInput->HasFocus())
@@ -150,13 +150,13 @@ void CIWCamera::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChangedCIW(object);
 
-    if (object == p_isSceneCamera)
+    if (object == p_isActiveCamera)
     {
         if (Scene *openScene = EditorSceneManager::GetOpenScene())
         {
             Camera *prevCam = openScene->GetCamera();
 
-            if (p_isSceneCamera->IsChecked())
+            if (p_isActiveCamera->IsChecked())
             {
                 openScene->SetCamera( GetCamera() );
             }

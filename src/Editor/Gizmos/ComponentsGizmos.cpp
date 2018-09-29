@@ -254,8 +254,10 @@ void ComponentsGizmos::RenderSphereColliderGizmo(SphereCollider *sc,
         Vector3 center = tr->GetPosition() + centerDisplacement;
         params.position = center;
         RenderFactory::RenderWireframeSphere(sc->GetScaledRadius() + 0.01f,
-                                             false, params,
-                                             2, 2);
+                                             false,
+                                             params,
+                                             2,
+                                             2);
 
         gb->PopDepthStencilTexture();
     }
@@ -268,27 +270,27 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam,
 
     if (!isBeingSelected)
     {
-        static RH<Mesh> cameraMesh = MeshFactory::GetCamera();
-        Transform *camTransform = cam->GetGameObject()->GetTransform();
-        float distScale = 15.0f;
-        /*
-        Camera *sceneCam = SceneManager::GetActiveScene()->GetCamera();
-        Transform *sceneCamTransform = sceneCam->GetGameObject()->GetTransform();
-        float distScale = Vector3::Distance(sceneCamTransform->GetPosition(),
-                                            camTransform->GetPosition());
-        */
-
         RenderFactory::Parameters params;
-        params.receivesLighting = true;
         params.position = camTransform->GetPosition();
-        params.rotation = camTransform->GetRotation();
-        params.scale = Vector3(0.02f * distScale);
-        params.color = Color::White;
-        GL::Disable(GL::Enablable::CULL_FACE);
-        GL::Disable(GL::Enablable::DEPTH_TEST);
-        RenderFactory::RenderCustomMesh(cameraMesh.Get(), params);
-        GL::Enable(GL::Enablable::DEPTH_TEST);
-        GL::Enable(GL::Enablable::CULL_FACE);
+        params.scale = Vector3(0.1f);
+        RenderFactory::RenderIcon(EditorTextureFactory::GetCameraIcon(),
+                                  true,
+                                  params);
+
+        // RH<Mesh> cameraMesh = MeshFactory::GetCamera();
+        // Transform *camTransform = cam->GetGameObject()->GetTransform();
+        // params.receivesLighting = true;
+        // params.rotation = camTransform->GetRotation();
+        // params.scale = Vector3(0.3f);
+        // params.color = Color::White;
+        //
+        // GL::Disable(GL::Enablable::CULL_FACE);
+        // GL::Disable(GL::Enablable::DEPTH_TEST);
+        //
+        // RenderFactory::RenderCustomMesh(cameraMesh.Get(), params);
+        //
+        // GL::Enable(GL::Enablable::DEPTH_TEST);
+        // GL::Enable(GL::Enablable::CULL_FACE);
     }
     else
     {
@@ -466,14 +468,16 @@ void ComponentsGizmos::RenderParticleSystemGizmo(ParticleSystem *particleSystem,
     params.scale = Vector3(0.1);
     params.position = center;
 
-    RenderFactory::RenderIcon(EditorTextureFactory::GetStarsIcon(),
-                              true,
-                              params);
-
-    params.color = Color::Green;
-
-    if (isBeingSelected)
+    if (!isBeingSelected)
     {
+        RenderFactory::RenderIcon(EditorTextureFactory::GetStarsIcon(),
+                                  true,
+                                  params);
+    }
+    else
+    {
+        params.color = Color::Green;
+
         GBuffer *gb = GEngine::GetActiveGBuffer();
         gb->PushDepthStencilTexture();
         gb->SetSceneDepthStencil();

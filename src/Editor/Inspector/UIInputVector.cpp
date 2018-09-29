@@ -149,6 +149,6 @@ void UIInputVector::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     EventEmitter<IEventsValueChanged>::
         PropagateToListeners(&IEventsValueChanged::OnValueChanged,
-                             object);
+                             this);
 }
 

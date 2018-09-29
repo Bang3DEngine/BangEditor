@@ -25,6 +25,7 @@ public:
 	virtual ~UIInputFileWithPreview();
 
     void SetZoomable(bool zoomable);
+    void SetResource(Resource *resource);
     void SetPath(const Path &path) override;
     virtual RH<Texture2D> GetPreviewTextureFromPath(const Path &path);
 

@@ -47,8 +47,11 @@ UISceneEditContainer::UISceneEditContainer()
 
     m_cameraPreviewGBuffer = new GBuffer(1,1);
 
+    cameraPreviewGo->GetRectTransform()->SetAnchors( Vector2(-1),
+                                                     Vector2(-1) );
+    cameraPreviewGo->GetRectTransform()->SetMarginLeftBot( Vector2i(5) );
     cameraPreviewGo->AddComponent<UILayoutIgnorer>();
-    cameraPreviewGo->SetParent(this);
+    cameraPreviewGo->SetParent( GetSceneImage() );
 
     ScenePlayer::GetInstance()->
             EventEmitter<IEventsScenePlayer>::RegisterListener(this);
@@ -155,32 +158,21 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
     // Camera preview handling
     if (selectedCamera)
     {
-        GL::Push(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
-
-        GBuffer *gbuffer = m_cameraPreviewGBuffer;
-
         // Set preview size
-        RectTransform *rt = GetRectTransform();
-        AARecti sceneContainerRect( rt->GetViewportRect() );
-        Vector2i sceneContainerSize = sceneContainerRect.GetSize();
-
-        Vector2i previewRectSize = sceneContainerSize / 4;
-        AARecti previewRectPx(sceneContainerRect.GetMax(),
-                              sceneContainerRect.GetMax() - Vector2i(previewRectSize));
-
-        previewRectPx.SetMin(sceneContainerRect.GetMin());
-        previewRectPx.SetMax(previewRectPx.GetMin() + Vector2i(previewRectSize));
-
-        // Add a bit of margin
-        const Vector2i marginsBotLeft = Vector2i(5);
-        p_cameraPreviewImg->GetGameObject()->GetRectTransform()->SetAnchors(
-           rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMin() + marginsBotLeft),
-           rt->FromViewportPointToLocalPointNDC(previewRectPx.GetMax()));
-
-        if (previewRectPx.IsValid())
+        Vector2i previewRectSize( GetSceneImage()->GetRectTransform()->
+                                  GetViewportAARect().GetSize() / 4.0f );
+        if (previewRectSize.x > 0 && previewRectSize.y > 0)
         {
-            gbuffer->Bind();
-            gbuffer->Resize(previewRectPx.GetWidth(), previewRectPx.GetHeight());
+            GL::Push(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
+
+            GBuffer *gbuffer = m_cameraPreviewGBuffer;
+
+            p_cameraPreviewImg->GetGameObject()->GetRectTransform()->
+                                SetMarginRightTop(-previewRectSize);
+
+            m_cameraPreviewGBuffer->Bind();
+            m_cameraPreviewGBuffer->Resize(previewRectSize.x,
+                                           previewRectSize.y);
 
             Scene *openScene = EditorSceneManager::GetOpenScene();
 
@@ -191,8 +183,9 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
             Texture2D *camColorTexture = gbuffer->GetLastDrawnColorTexture();
             camColorTexture->SetWrapMode( GL::WrapMode::REPEAT );
             p_cameraPreviewImg->SetImageTexture(camColorTexture);
+
+            GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
         }
-        GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
     }
     p_cameraPreviewImg->GetGameObject()->SetVisible( selectedCamera != nullptr );
 }
@@ -314,41 +307,6 @@ UIEventResult UISceneEditContainer::OnUIEvent(UIFocusable *focusable,
         case UIEvent::Type::KEY_DOWN:
             switch (event.key.key)
             {
-                case Key::W:
-                case Key::E:
-                case Key::R:
-                case Key::T:
-                {
-                    UISceneToolbar *toolbar = GetSceneToolbar();
-                    TransformGizmoMode newTrMode;
-                    switch (event.key.key)
-                    {
-                        case Key::W:
-                            newTrMode = TransformGizmoMode::TRANSLATE;
-                        break;
-
-                        case Key::E:
-                            newTrMode = TransformGizmoMode::ROTATE;
-                        break;
-
-                        case Key::R:
-                            newTrMode = TransformGizmoMode::SCALE;
-                        break;
-
-                        case Key::T:
-                            newTrMode = TransformGizmoMode::RECT;
-                        break;
-
-                        default:
-                            return UIEventResult::IGNORE;
-                        break;
-                    }
-
-                    toolbar->SetTransformGizmoMode(newTrMode);
-                    return UIEventResult::INTERCEPT;
-                }
-                break;
-
                 case Key::C:
                 case Key::X:
                 case Key::V:
