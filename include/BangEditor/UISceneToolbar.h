@@ -7,7 +7,6 @@
 #include "Bang/IEventsValueChanged.h"
 
 #include "BangEditor/BangEditor.h"
-#include "BangEditor/ScenePlayer.h"
 #include "BangEditor/TransformGizmo.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
@@ -24,7 +23,6 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 class UISceneToolbar : public GameObject,
                        public EventEmitter<IEventsValueChanged>,
-                       public EventListener<IEventsScenePlayer>,
                        public EventListener<IEventsValueChanged>
 {
     GAMEOBJECT_EDITOR(UISceneToolbar);
@@ -66,15 +64,7 @@ private:
     void ResetCameraView();
     void UpdateToolButtons();
 
-    void OnPlayScene();
-    void OnPauseScene();
-    void OnStopScene();
-
     void SetRenderMode();
-
-    // IEventsScenePlayer
-    void OnPlayStateChanged(PlayState previousPlayState,
-                            PlayState newPlayState) override;
 
     // IEventsValueChanged
     void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;

@@ -67,15 +67,9 @@ UISceneToolbar::UISceneToolbar()
         AddToolbarButton(buttonPtr, icon,
         [this, buttonPtr, callbackFunc]()
         {
-            if ((*buttonPtr)->GetOn())
-            {
-                callbackFunc();
-            }
-            else
-            {
-                SetTransformGizmoMode( TransformGizmoMode::NONE );
-            }
-        } );
+            (*buttonPtr)->SetOn(true);
+            callbackFunc();
+        });
     };
     AddTransformButton(&p_translateButton, translateIcon,
                        [&]() { SetTransformGizmoMode( TransformGizmoMode::TRANSLATE); });
@@ -137,9 +131,6 @@ UISceneToolbar::UISceneToolbar()
     p_renderModeInput->GetGameObject()->SetParent(this);
     showDebugStatsTextGo->SetParent(this);
     p_showDebugStatsCheckbox->GetGameObject()->SetParent(this);
-
-    OnStopScene();
-    ScenePlayer::GetInstance()->EventEmitter<IEventsScenePlayer>::RegisterListener(this);
 }
 
 UISceneToolbar::~UISceneToolbar()
@@ -157,10 +148,6 @@ void UISceneToolbar::SetTransformGizmoMode(TransformGizmoMode transformMode)
     if (transformMode != GetTransformGizmoMode())
     {
         m_transformGizmoMode = transformMode;
-        p_translateButton->SetOn( transformMode == TransformGizmoMode::TRANSLATE );
-        p_rotateButton->SetOn( transformMode == TransformGizmoMode::ROTATE );
-        p_scaleButton->SetOn( transformMode == TransformGizmoMode::SCALE );
-        p_rectTransformButton->SetOn( transformMode == TransformGizmoMode::RECT );
     }
 }
 
@@ -204,129 +191,74 @@ void UISceneToolbar::ResetCameraView()
 
 void UISceneToolbar::UpdateToolButtons()
 {
-    GameObject *selGo = Editor::GetSelectedGameObject();
-    if (selGo)
+    // Play buttons
     {
-        bool hasRectTransform = selGo->HasComponent<RectTransform>();
-        if (hasRectTransform)
+        PlayState playState = ScenePlayer::GetPlayState();
+        p_playButton->SetOn( playState == PlayState::PLAYING );
+        p_stepButton->SetOn( false );
+        p_pauseButton->SetOn( playState == PlayState::PAUSED );
+        p_stopButton->SetOn( playState == PlayState::EDITING );
+        p_playButton->SetBlocked( !(playState == PlayState::EDITING ||
+                                    playState == PlayState::PAUSED) );
+        p_stepButton->SetBlocked(playState == PlayState::EDITING);
+        p_pauseButton->SetBlocked(playState == PlayState::EDITING ||
+                                  playState == PlayState::PAUSED);
+        p_stopButton->SetBlocked(playState == PlayState::EDITING);
+    }
+
+    // Transform mode buttons
+    {
+        GameObject *selGo = Editor::GetSelectedGameObject();
+        if (selGo)
         {
-            SetTransformGizmoMode(TransformGizmoMode::RECT);
+            bool hasRectTransform = selGo->HasComponent<RectTransform>();
+            if (hasRectTransform)
+            {
+                SetTransformGizmoMode(TransformGizmoMode::RECT);
+            }
+            else if (GetTransformGizmoMode() == TransformGizmoMode::RECT)
+            {
+                SetTransformGizmoMode(TransformGizmoMode::TRANSLATE);
+            }
         }
-        else if (GetTransformGizmoMode() == TransformGizmoMode::RECT)
+
+        p_translateButton->SetBlocked( !(selGo && selGo->GetTransform()) );
+        p_rotateButton->SetBlocked( !(selGo && selGo->GetTransform()) );
+        p_scaleButton->SetBlocked( !(selGo && selGo->GetTransform()) );
+        p_rectTransformButton->SetBlocked( !(selGo && selGo->GetRectTransform()) );
+
+        // W, E, R, T shortcuts handling
+        TransformGizmoMode newTrMode = Undef<TransformGizmoMode>();
+        if (Input::GetKeyDown(Key::W))
         {
-            SetTransformGizmoMode(TransformGizmoMode::TRANSLATE);
+            newTrMode = TransformGizmoMode::TRANSLATE;
         }
-    }
+        else if (Input::GetKeyDown(Key::E))
+        {
+            newTrMode = TransformGizmoMode::ROTATE;
+        }
+        else if (Input::GetKeyDown(Key::R))
+        {
+            newTrMode = TransformGizmoMode::SCALE;
+        }
+        else if (Input::GetKeyDown(Key::T))
+        {
+            newTrMode = TransformGizmoMode::RECT;
+        }
 
-    p_translateButton->SetBlocked( !(selGo && selGo->GetTransform()) );
-    p_rotateButton->SetBlocked( !(selGo && selGo->GetTransform()) );
-    p_scaleButton->SetBlocked( !(selGo && selGo->GetTransform()) );
-    p_rectTransformButton->SetBlocked( !(selGo && selGo->GetRectTransform()) );
+        if (newTrMode != Undef<TransformGizmoMode>())
+        {
+            SetTransformGizmoMode(newTrMode);
+        }
 
-    // W, E, R, T shortcuts handling
-    TransformGizmoMode newTrMode = Undef<TransformGizmoMode>();
-    if (Input::GetKeyDown(Key::W))
-    {
-        newTrMode = TransformGizmoMode::TRANSLATE;
-    }
-    else if (Input::GetKeyDown(Key::E))
-    {
-        newTrMode = TransformGizmoMode::ROTATE;
-    }
-    else if (Input::GetKeyDown(Key::R))
-    {
-        newTrMode = TransformGizmoMode::SCALE;
-    }
-    else if (Input::GetKeyDown(Key::T))
-    {
-        newTrMode = TransformGizmoMode::RECT;
-    }
-
-    if (newTrMode != Undef<TransformGizmoMode>())
-    {
-        SetTransformGizmoMode(newTrMode);
-    }
-
-    p_translateButton->SetOn( GetTransformGizmoMode() ==
-                              TransformGizmoMode::TRANSLATE );
-    p_rotateButton->SetOn( GetTransformGizmoMode() ==
-                           TransformGizmoMode::ROTATE );
-    p_scaleButton->SetOn( GetTransformGizmoMode() ==
-                          TransformGizmoMode::SCALE );
-    p_rectTransformButton->SetOn( GetTransformGizmoMode() ==
-                                  TransformGizmoMode::RECT );
-}
-
-void UISceneToolbar::OnPlayScene()
-{
-    p_playButton->SetOn(true);
-    p_pauseButton->SetOn(false);
-    p_stepButton->SetOn(false);
-    p_stopButton->SetOn(false);
-
-    p_playButton->SetBlocked(true);
-    p_pauseButton->SetBlocked(false);
-    p_stepButton->SetBlocked(false);
-    p_stopButton->SetBlocked(false);
-}
-
-void UISceneToolbar::OnPauseScene()
-{
-    p_playButton->SetOn(false);
-    p_pauseButton->SetOn(true);
-    p_stepButton->SetOn(false);
-    p_stopButton->SetOn(false);
-
-    p_playButton->SetBlocked(false);
-    p_pauseButton->SetBlocked(true);
-    p_stepButton->SetBlocked(false);
-    p_stopButton->SetBlocked(false);
-}
-
-void UISceneToolbar::OnStopScene()
-{
-    p_playButton->SetOn(false);
-    p_pauseButton->SetOn(true);
-    p_stepButton->SetOn(true);
-    p_stopButton->SetOn(true);
-
-    p_playButton->SetBlocked(false);
-    p_pauseButton->SetBlocked(true);
-    p_stepButton->SetBlocked(true);
-    p_stopButton->SetBlocked(true);
-}
-
-void UISceneToolbar::OnPlayStateChanged(PlayState,
-                                        PlayState newPlayState)
-{
-    switch (newPlayState)
-    {
-        case PlayState::EDITING:
-            OnStopScene();
-            p_playButton->SetBlocked(false);
-            p_pauseButton->SetBlocked(true);
-            p_stepButton->SetBlocked(true);
-            p_stopButton->SetBlocked(true);
-        break;
-
-        case PlayState::PAUSED:
-            OnPauseScene();
-            p_playButton->SetBlocked(false);
-            p_pauseButton->SetBlocked(true);
-            p_stepButton->SetBlocked(false);
-            p_stopButton->SetBlocked(false);
-        break;
-
-        case PlayState::PLAYING:
-            OnPlayScene();
-            p_playButton->SetBlocked(true);
-            p_pauseButton->SetBlocked(false);
-            p_stepButton->SetBlocked(false);
-            p_stopButton->SetBlocked(false);
-        break;
-
-        default:
-        break;
+        p_translateButton->SetOn( GetTransformGizmoMode() ==
+                                  TransformGizmoMode::TRANSLATE );
+        p_rotateButton->SetOn( GetTransformGizmoMode() ==
+                               TransformGizmoMode::ROTATE );
+        p_scaleButton->SetOn( GetTransformGizmoMode() ==
+                              TransformGizmoMode::SCALE );
+        p_rectTransformButton->SetOn( GetTransformGizmoMode() ==
+                                      TransformGizmoMode::RECT );
     }
 }
 
