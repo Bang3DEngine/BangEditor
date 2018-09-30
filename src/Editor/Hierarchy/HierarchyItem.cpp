@@ -3,6 +3,7 @@
 #include "Bang/Scene.h"
 #include "Bang/UITree.h"
 #include "Bang/UILabel.h"
+#include "Bang/UICanvas.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIDragDroppable.h"
@@ -239,6 +240,7 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
     {
         case UIList::Action::SELECTION_IN:
             selectGameObject = true;
+            UICanvas::GetActive(this)->SetFocus( GetFocusable() );
         break;
 
         case UIList::Action::MOUSE_RIGHT_DOWN:
