@@ -1,7 +1,6 @@
 #ifndef EDITORTEXTUREFACTORY_H
 #define EDITORTEXTUREFACTORY_H
 
-
 #include "Bang/Map.h"
 #include "Bang/Path.h"
 #include "Bang/TextureFactory.h"
@@ -10,6 +9,7 @@
 #include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Component;
 FORWARD class Texture2D;
 FORWARD NAMESPACE_BANG_END
 
@@ -61,7 +61,9 @@ public:
     static Color GetPathIconTint(const Path &path);
     static Color GetExtensionIconTint(const String &extension);
 
+    static Texture2D* GetComponentIcon(const Component *component);
     static Texture2D* GetComponentIcon(const String &componentName);
+    static Color GetComponentIconTint(const Component *component);
     static Color GetComponentIconTint(const String &componentName);
 
 private:

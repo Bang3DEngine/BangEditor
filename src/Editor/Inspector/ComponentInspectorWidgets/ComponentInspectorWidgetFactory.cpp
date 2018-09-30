@@ -12,6 +12,7 @@
 #include "BangEditor/CIWBoxCollider.h"
 #include "BangEditor/CIWAudioSource.h"
 #include "BangEditor/CIWMeshRenderer.h"
+#include "BangEditor/CIWMeshCollider.h"
 #include "BangEditor/CIWWaterRenderer.h"
 #include "BangEditor/CIWAudioListener.h"
 #include "BangEditor/CIWRectTransform.h"
@@ -72,6 +73,10 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     else if (cName == "BoxCollider")
     {
         ciw = GameObject::Create<CIWBoxCollider>();
+    }
+    else if (cName == "MeshCollider")
+    {
+        ciw = GameObject::Create<CIWMeshCollider>();
     }
     else if (cName == "CapsuleCollider")
     {

@@ -2,6 +2,7 @@
 
 #include "Bang/Model.h"
 #include "Bang/Material.h"
+#include "Bang/Behaviour.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Resources.h"
 #include "Bang/Extensions.h"
@@ -311,6 +312,16 @@ Texture2D* EditorTextureFactory::GetComponentIcon(const String &componentName)
     return EditorTextureFactory::GetCubeIcon();
 }
 
+Color EditorTextureFactory::GetComponentIconTint(const Component *component)
+{
+    String className = component->GetClassName();
+    if (DCAST<const Behaviour*>(component))
+    {
+        className = "Behaviour";
+    }
+    return GetComponentIconTint(className);
+}
+
 Color EditorTextureFactory::GetComponentIconTint(const String &componentName)
 {
     if (componentName == "MeshRenderer")
@@ -341,9 +352,18 @@ Color EditorTextureFactory::GetComponentIconTint(const String &componentName)
     {
         return Color::White.WithValue(0.2f);
     }
+    else if (componentName == "Behaviour" ||
+             componentName == "BehaviourContainer")
+    {
+        return Color::White.WithValue(0.2f);
+    }
     else if (componentName == "ParticleSystem")
     {
         return Color::White.WithValue(0.2f);
+    }
+    else if (componentName == "MeshCollider")
+    {
+        return Color::Green.WithValue(0.8f);
     }
     else if (componentName == "Camera")
     {
@@ -414,6 +434,16 @@ Color EditorTextureFactory::GetExtensionIconTint(const String &extension)
         return Color::Black;
     }
     return Color::White;
+}
+
+Texture2D *EditorTextureFactory::GetComponentIcon(const Component *component)
+{
+    String className = component->GetClassName();
+    if (DCAST<const Behaviour*>(component))
+    {
+        className = "Behaviour";
+    }
+    return GetComponentIcon(className);
 }
 
 EditorTextureFactory *EditorTextureFactory::GetInstance()

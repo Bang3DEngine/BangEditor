@@ -116,8 +116,7 @@ Texture2D* ComponentInspectorWidget::GetComponentIconTexture() const
 {
     if (GetComponent())
     {
-        String componentName = GetComponent()->GetClassName();
-        return EditorTextureFactory::GetComponentIcon(componentName);
+        return EditorTextureFactory::GetComponentIcon( GetComponent() );
     }
     return EditorTextureFactory::GetCubeIcon();
 }
@@ -126,8 +125,7 @@ Color ComponentInspectorWidget::GetComponentIconTint() const
 {
     if (GetComponent())
     {
-        String componentName = GetComponent()->GetClassName();
-        return EditorTextureFactory::GetComponentIconTint(componentName);
+        return EditorTextureFactory::GetComponentIconTint( GetComponent() );
     }
     return Color::White;
 }

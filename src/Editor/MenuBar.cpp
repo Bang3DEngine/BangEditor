@@ -28,6 +28,7 @@
 #include "Bang/AudioSource.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/UIInputText.h"
+#include "Bang/MeshCollider.h"
 #include "Bang/SceneManager.h"
 #include "Bang/LineRenderer.h"
 #include "Bang/MeshRenderer.h"
@@ -327,6 +328,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addBoxCollider = addColliders->AddItem("BoxCollider");
     MenuItem *addSphereCollider = addColliders->AddItem("SphereCollider");
     MenuItem *addCapsuleCollider = addColliders->AddItem("CapsuleCollider");
+    MenuItem *addMeshCollider = addColliders->AddItem("MeshCollider");
     MenuItem *addPostProcessEffects = rootItem->AddItem("Post Process Effects");
     MenuItem *addPostProcessEffect = addPostProcessEffects->AddItem("PostProcessEffect");
     MenuItem *addSSAO = addPostProcessEffects->AddItem("SSAO");
@@ -354,6 +356,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     addBoxCollider->SetSelectedCallback(MenuBar::OnAddBoxCollider);
     addCapsuleCollider->SetSelectedCallback(MenuBar::OnAddCapsuleCollider);
     addSphereCollider->SetSelectedCallback(MenuBar::OnAddSphereCollider);
+    addMeshCollider->SetSelectedCallback(MenuBar::OnAddMeshCollider);
     addAnimator->SetSelectedCallback(MenuBar::OnAddAnimator);
     addAudioListener->SetSelectedCallback(MenuBar::OnAddAudioListener);
     addAudioSource->SetSelectedCallback(MenuBar::OnAddAudioSource);
@@ -610,6 +613,16 @@ void MenuBar::OnAddCapsuleCollider(MenuItem*)
 void MenuBar::OnAddSphereCollider(MenuItem*)
 {
     OnAddComponent<SphereCollider>();
+}
+
+void MenuBar::OnAddMeshCollider(MenuItem *item)
+{
+    MeshCollider *meshCollider = OnAddComponent<MeshCollider>();
+    if (MeshRenderer *meshRenderer = meshCollider->GetGameObject()->
+                                     GetComponent<MeshRenderer>())
+    {
+        meshCollider->SetMesh( meshRenderer->GetActiveMesh() );
+    }
 }
 
 void MenuBar::OnAddPointLight(MenuItem*)

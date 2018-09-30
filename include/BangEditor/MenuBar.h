@@ -92,6 +92,7 @@ private:
     static void OnAddBoxCollider           (MenuItem *item);
     static void OnAddCapsuleCollider       (MenuItem *item);
     static void OnAddSphereCollider        (MenuItem *item);
+    static void OnAddMeshCollider          (MenuItem *item);
     static void OnAddPointLight            (MenuItem *item);
     static void OnAddDirectionalLight      (MenuItem *item);
     static void OnAddLineRenderer          (MenuItem *item);
