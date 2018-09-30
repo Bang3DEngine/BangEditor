@@ -48,63 +48,66 @@ UISceneToolbar::UISceneToolbar()
     Texture2D *scaleIcon            = EditorTextureFactory::GetAxesIcon();
     Texture2D *rectTransformIcon    = EditorTextureFactory::GetAnchoredRectIcon();
 
-    auto AddToolbarButton = [&](UIToolButton **button,
+    auto AddToolbarButton = [&](UIToolButton **buttonPtr,
                                 Texture2D *icon,
-                                std::function<void()> callbackFunc,
-                                bool forPlayStop = false)
+                                std::function<void()> callbackFunc)
     {
-        (*button) = GameObjectFactory::CreateUIToolButton("", icon);
-        (*button)->SetIcon(icon, Vector2i(ToolBarHeight));
-        (*button)->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
-        (*button)->GetIcon()->SetTint(Color::DarkGray);
-        (*button)->AddClickedCallback( [this, callbackFunc, button, forPlayStop]()
+        UIToolButton *button = GameObjectFactory::CreateUIToolButton("", icon);
+        button->SetIcon(icon, Vector2i(ToolBarHeight));
+        button->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
+        button->GetIcon()->SetTint(Color::DarkGray);
+        button->AddClickedCallback( [callbackFunc]() { callbackFunc(); } );
+        button->GetGameObject()->SetParent(this);
+        *buttonPtr = button;
+    };
+    auto AddTransformButton = [&](UIToolButton **buttonPtr,
+                                  Texture2D *icon,
+                                  std::function<void()> callbackFunc)
+    {
+        AddToolbarButton(buttonPtr, icon,
+        [this, buttonPtr, callbackFunc]()
         {
-            if (forPlayStop)
+            if ((*buttonPtr)->GetOn())
             {
                 callbackFunc();
             }
             else
             {
-                if ((*button)->GetOn())
-                {
-                    callbackFunc();
-                }
-                else
-                {
-                    SetTransformGizmoMode( TransformGizmoMode::NONE );
-                }
+                SetTransformGizmoMode( TransformGizmoMode::NONE );
             }
-        });
-        (*button)->GetGameObject()->SetParent(this);
+        } );
     };
-
-    AddToolbarButton(&p_translateButton, translateIcon,
-                     [&]() { SetTransformGizmoMode( TransformGizmoMode::TRANSLATE); });
-    AddToolbarButton(&p_rotateButton, rotateIcon,
-                     [&]() { SetTransformGizmoMode( TransformGizmoMode::ROTATE); });
-    AddToolbarButton(&p_scaleButton, scaleIcon,
-                     [&]() { SetTransformGizmoMode( TransformGizmoMode::SCALE); });
-    AddToolbarButton(&p_rectTransformButton, rectTransformIcon,
-                     [&]() { SetTransformGizmoMode( TransformGizmoMode::RECT); });
+    AddTransformButton(&p_translateButton, translateIcon,
+                       [&]() { SetTransformGizmoMode( TransformGizmoMode::TRANSLATE); });
+    AddTransformButton(&p_rotateButton, rotateIcon,
+                       [&]() { SetTransformGizmoMode( TransformGizmoMode::ROTATE); });
+    AddTransformButton(&p_scaleButton, scaleIcon,
+                       [&]() { SetTransformGizmoMode( TransformGizmoMode::SCALE); });
+    AddTransformButton(&p_rectTransformButton, rectTransformIcon,
+                       [&]() { SetTransformGizmoMode( TransformGizmoMode::RECT); });
 
     p_transformCamSeparator = GameObjectFactory::CreateUIVSeparator(
                                                  LayoutSizeType::PREFERRED, 10);
     p_transformCamSeparator->SetParent(this);
 
     AddToolbarButton(&p_resetCamViewButton, eyeIcon,
-                     [&]() { ResetCameraView(); }, true);
+                     [&]()
+                     {
+                         p_resetCamViewButton->SetOn(false);
+                         ResetCameraView();
+                     });
 
     p_transformCamSpacer = GameObjectFactory::CreateUIHSpacer();
     p_transformCamSpacer->SetParent(this);
 
     AddToolbarButton(&p_playButton, rightArrowIcon,
-                     [&]() { ScenePlayer::PlayScene(); }, true);
+                     [&]() { ScenePlayer::PlayScene(); });
     AddToolbarButton(&p_pauseButton, doubleBarIcon,
-                     [&]() { ScenePlayer::PauseScene(); }, true);
+                     [&]() { ScenePlayer::PauseScene(); });
     AddToolbarButton(&p_stepButton, rightArrowAndBarIcon,
-                     [&]() { ScenePlayer::StepFrame(); }, true);
+                     [&]() { ScenePlayer::StepFrame(); });
     AddToolbarButton(&p_stopButton, squareIcon,
-                     [&]() { ScenePlayer::StopScene(); }, true);
+                     [&]() { ScenePlayer::StopScene(); });
 
     p_renderModeInput = GameObjectFactory::CreateUIComboBox();
     p_renderModeInput->AddItem("Color",            SCAST<int>(UISceneImage::RenderMode::COLOR));
@@ -154,7 +157,10 @@ void UISceneToolbar::SetTransformGizmoMode(TransformGizmoMode transformMode)
     if (transformMode != GetTransformGizmoMode())
     {
         m_transformGizmoMode = transformMode;
-        UpdateToolButtons();
+        p_translateButton->SetOn( transformMode == TransformGizmoMode::TRANSLATE );
+        p_rotateButton->SetOn( transformMode == TransformGizmoMode::ROTATE );
+        p_scaleButton->SetOn( transformMode == TransformGizmoMode::SCALE );
+        p_rectTransformButton->SetOn( transformMode == TransformGizmoMode::RECT );
     }
 }
 
@@ -222,40 +228,33 @@ void UISceneToolbar::UpdateToolButtons()
     if (Input::GetKeyDown(Key::W))
     {
         newTrMode = TransformGizmoMode::TRANSLATE;
-        p_translateButton->SetOn(true);
-        p_rotateButton->SetOn(false);
-        p_scaleButton->SetOn(false);
-        p_rectTransformButton->SetOn(false);
     }
     else if (Input::GetKeyDown(Key::E))
     {
         newTrMode = TransformGizmoMode::ROTATE;
-        p_translateButton->SetOn(false);
-        p_rotateButton->SetOn(true);
-        p_scaleButton->SetOn(false);
-        p_rectTransformButton->SetOn(false);
     }
     else if (Input::GetKeyDown(Key::R))
     {
         newTrMode = TransformGizmoMode::SCALE;
-        p_translateButton->SetOn(false);
-        p_rotateButton->SetOn(false);
-        p_scaleButton->SetOn(true);
-        p_rectTransformButton->SetOn(false);
     }
     else if (Input::GetKeyDown(Key::T))
     {
         newTrMode = TransformGizmoMode::RECT;
-        p_translateButton->SetOn(false);
-        p_rotateButton->SetOn(false);
-        p_scaleButton->SetOn(false);
-        p_rectTransformButton->SetOn(true);
     }
 
     if (newTrMode != Undef<TransformGizmoMode>())
     {
         SetTransformGizmoMode(newTrMode);
     }
+
+    p_translateButton->SetOn( GetTransformGizmoMode() ==
+                              TransformGizmoMode::TRANSLATE );
+    p_rotateButton->SetOn( GetTransformGizmoMode() ==
+                           TransformGizmoMode::ROTATE );
+    p_scaleButton->SetOn( GetTransformGizmoMode() ==
+                          TransformGizmoMode::SCALE );
+    p_rectTransformButton->SetOn( GetTransformGizmoMode() ==
+                                  TransformGizmoMode::RECT );
 }
 
 void UISceneToolbar::OnPlayScene()

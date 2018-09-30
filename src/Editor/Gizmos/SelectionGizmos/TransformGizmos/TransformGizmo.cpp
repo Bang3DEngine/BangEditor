@@ -91,38 +91,33 @@ void TransformGizmo::Update()
             GetTransform()->SetScale( GetScaleFactor() );
     }
 
+    GameObject *gizmoToEnable = nullptr;
     switch (transformGizmoMode)
     {
         case TransformGizmoMode::TRANSLATE:
-            p_translateGizmo->SetEnabled(true);
-            p_rotateGizmo->SetEnabled(false);
-            p_scaleGizmo->SetEnabled(false);
-            p_rectTransformGizmo->SetEnabled(false);
+            gizmoToEnable = p_translateGizmo;
         break;
 
         case TransformGizmoMode::ROTATE:
-            p_translateGizmo->SetEnabled(false);
-            p_rotateGizmo->SetEnabled(true);
-            p_scaleGizmo->SetEnabled(false);
-            p_rectTransformGizmo->SetEnabled(false);
+            gizmoToEnable = p_rotateGizmo;
         break;
 
         case TransformGizmoMode::SCALE:
-            p_translateGizmo->SetEnabled(false);
-            p_rotateGizmo->SetEnabled(false);
-            p_scaleGizmo->SetEnabled(true);
-            p_rectTransformGizmo->SetEnabled(false);
+            gizmoToEnable = p_scaleGizmo;
         break;
 
         case TransformGizmoMode::RECT:
-            p_translateGizmo->SetEnabled(false);
-            p_rotateGizmo->SetEnabled(false);
-            p_scaleGizmo->SetEnabled(false);
-            p_rectTransformGizmo->SetEnabled(true);
+            gizmoToEnable = p_rectTransformGizmo;
         break;
 
         default:
         break;
+    }
+    std::array<GameObject*, 4> trGizmos = {p_translateGizmo, p_rotateGizmo,
+                                           p_scaleGizmo, p_rectTransformGizmo};
+    for (GameObject *trGizmo : trGizmos)
+    {
+        trGizmo->SetEnabled( trGizmo == gizmoToEnable );
     }
 }
 
