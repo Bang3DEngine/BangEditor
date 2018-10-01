@@ -40,6 +40,10 @@ void EditorWindow::Update()
 {
     GetShortcutManager()->Update();
     Window::Update();
+
+    float sleepTimeSecs =
+            (ScenePlayer::GetPlayState() != PlayState::PLAYING) ? 1.0f : 0.0f;
+    SetSleepTimeOnBackground( Time::Seconds(sleepTimeSecs) );
 }
 
 void EditorWindow::Render()

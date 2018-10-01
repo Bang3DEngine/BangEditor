@@ -155,6 +155,7 @@ void UITabStation::OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDropEmitter)
         if (UITabHeader *draggedTabHeader =
                             DCAST<UITabHeader*>(comp->GetGameObject()))
         {
+            BANG_UNUSED(draggedTabHeader);
             if (GetTabContainer()->IsWaitingToBeDestroyed())
             {
                 return;
