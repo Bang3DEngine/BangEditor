@@ -284,6 +284,11 @@ void Hierarchy::OnItemMoved(GOItem *item,
 
 void Hierarchy::OnDropOutside(UIDragDroppable *dropped)
 {
+    if (!dropped)
+    {
+        return;
+    }
+
     if (UITreeItemContainer *treeItemCont =
             DCAST<UITreeItemContainer*>(dropped->GetGameObject()))
     {
@@ -320,6 +325,11 @@ void Hierarchy::OnDropFromOutside(UIDragDroppable *dropped,
                                   GameObject *newParentItem,
                                   int newIndexInsideParent)
 {
+    if (!dropped)
+    {
+        return;
+    }
+
     if (ExplorerItem *expItem = DCAST<ExplorerItem*>(dropped->GetGameObject()))
     {
         if (UICanvas::GetActive(this)->IsMouseOver(this, true))

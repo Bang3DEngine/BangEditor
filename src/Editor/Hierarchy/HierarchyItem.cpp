@@ -6,7 +6,6 @@
 #include "Bang/UICanvas.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/UITextRenderer.h"
-#include "Bang/UIDragDroppable.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/GameObjectFactory.h"

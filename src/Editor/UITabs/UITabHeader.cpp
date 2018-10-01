@@ -3,10 +3,13 @@
 #include "Bang/UICanvas.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/UITextRenderer.h"
+#include "Bang/UIDragDroppable.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
+
+#include "BangEditor/UITabContainer.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -43,6 +46,11 @@ UITabHeader::UITabHeader()
     });
     p_focusable->SetCursorType(Cursor::Type::HAND);
 
+    p_dragDroppable = AddComponent<UIDragDroppable>();
+    p_dragDroppable->SetShowDragDropGameObject(true);
+    p_dragDroppable->SetFocusable(nullptr);
+    p_dragDroppable->EventEmitter<IEventsDragDrop>::RegisterListener(this);
+
     titleGo->SetParent(this);
 
     SetInForeground(false);
@@ -56,14 +64,20 @@ void UITabHeader::Update()
 {
     GameObject::Update();
 
-    UICanvas *canvas = UICanvas::GetActive(this);
-    bool mouseOver = (canvas->IsMouseOver(p_focusable));
-    p_bg->SetTint(mouseOver ? m_currentHeaderColor.WithValue(1.5f) :
-                              m_currentHeaderColor);
+    if (!m_inForeground)
+    {
+        if (UICanvas *canvas = UICanvas::GetActive(this))
+        {
+            bool mouseOver = (canvas->IsMouseOver(p_focusable));
+            p_bg->SetTint(mouseOver ? m_currentHeaderColor.WithValue(1.5f) :
+                                      m_currentHeaderColor);
+        }
+    }
 }
 
 void UITabHeader::SetInForeground(bool inForeground)
 {
+    m_inForeground = inForeground;
     m_currentHeaderColor = (inForeground ? ForegroundColor : BackgroundColor);
     p_bg->SetTint(m_currentHeaderColor);
 }
@@ -80,5 +94,74 @@ void UITabHeader::SetTitle(const String &title)
 const String &UITabHeader::GetTitle() const
 {
     return m_title;
+}
+
+GameObject *UITabHeader::GetTabbedChild() const
+{
+    return p_tabbedChild;
+}
+
+UITabContainer *UITabHeader::GetTabContainer() const
+{
+    return p_tabContainer;
+}
+
+UIDragDroppable *UITabHeader::GetDragDroppable() const
+{
+    return p_dragDroppable;
+}
+
+void UITabHeader::SetTabContainer(UITabContainer *tabContainer)
+{
+    p_tabContainer = tabContainer;
+    if (GetTabContainer())
+    {
+        p_lastTabContainer = GetTabContainer();
+        ASSERT(!GetTabContainer()->IsWaitingToBeDestroyed())
+    }
+}
+
+void UITabHeader::SetTabbedChild(GameObject *tabbedChild)
+{
+    p_tabbedChild = tabbedChild;
+}
+
+void UITabHeader::OnDragStarted(EventEmitter<IEventsDragDrop> *dragDropEmitter)
+{
+    BANG_UNUSED(dragDropEmitter);
+
+    if (dragDropEmitter == GetDragDroppable())
+    {
+        ASSERT(GetTabbedChild());
+        p_dragTabContainerDestiny = nullptr;
+    }
+}
+
+void UITabHeader::OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDropEmitter)
+{
+    BANG_UNUSED(dragDropEmitter);
+}
+
+void UITabHeader::OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter,
+                         bool inside)
+{
+    BANG_UNUSED(inside);
+    if (dragDropEmitter == GetDragDroppable())
+    {
+
+        if (GetTabContainer())
+        {
+            GetTabContainer()->RemoveTabByHeader(this, false);
+        }
+
+        UITabContainer *destinyTabContainer = p_dragTabContainerDestiny ?
+                                                    p_dragTabContainerDestiny :
+                                                    p_lastTabContainer;
+        if (destinyTabContainer)
+        {
+            destinyTabContainer->
+                    AddTabByTabHeader(this, m_dragTabContainerDestinyIndex);
+        }
+    }
 }
 

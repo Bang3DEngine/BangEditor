@@ -27,11 +27,14 @@ UITabContainer::UITabContainer()
     le->SetFlexibleSize(Vector2::One);
 
     p_headersBar = GameObjectFactory::CreateUIGameObject();
-    UIHorizontalLayout *headerBarHL = p_headersBar->AddComponent<UIHorizontalLayout>();
+    UIHorizontalLayout *headerBarHL = GetHeadersBar()->AddComponent<UIHorizontalLayout>();
     headerBarHL->SetChildrenVerticalStretch(Stretch::NONE);
     headerBarHL->SetChildrenVerticalAlignment(VerticalAlignment::BOT);
 
-    UILayoutElement *headerBarLE = p_headersBar->AddComponent<UILayoutElement>();
+    // UIImageRenderer *barBg = GetHeadersBar()->AddComponent<UIImageRenderer>();
+    // barBg->SetTint(Color::White.WithValue(0.4f));
+
+    UILayoutElement *headerBarLE = GetHeadersBar()->AddComponent<UILayoutElement>();
     headerBarLE->SetMinHeight(22);
     headerBarLE->SetLayoutPriority(2);
 
@@ -42,9 +45,9 @@ UITabContainer::UITabContainer()
 
     p_currentTabContainer = GameObjectFactory::CreateUIGameObject();
     UILayoutElement *containerLE =
-                    GetCurrentTabContainer()->AddComponent<UILayoutElement>();
+                    GetVisibleContainer()->AddComponent<UILayoutElement>();
     containerLE->SetFlexibleSize(Vector2::One);
-    GetCurrentTabContainer()->AddComponent<UIHorizontalLayout>();
+    GetVisibleContainer()->AddComponent<UIHorizontalLayout>();
 
     /*
     GameObject *hiddenTabsFocusBlocker = GameObjectFactory::CreateUIGameObject();
@@ -53,64 +56,111 @@ UITabContainer::UITabContainer()
     bg->SetTint(Color::Zero);*/
 
     p_hiddenTabsContainer = GameObjectFactory::CreateUIGameObject();
-    GetHiddenTabsContainer()->AddComponent<UIHorizontalLayout>();
-    GetHiddenTabsContainer()->AddComponent<UILayoutIgnorer>();
-    GetHiddenTabsContainer()->SetVisible(false);
+    GetHiddenContainer()->AddComponent<UIHorizontalLayout>();
+    GetHiddenContainer()->AddComponent<UILayoutIgnorer>();
+    GetHiddenContainer()->SetVisible(false);
 
     p_headersBar->SetParent(this);
     // GameObjectFactory::CreateUIHSeparator(LayoutSizeType::Flexible,
     //                                       1, 1.0f)->SetParent(this);
     botPart->SetParent(this);
-    GetHiddenTabsContainer()->SetParent(botPart); // Behind
+    GetHiddenContainer()->SetParent(botPart); // Behind
     // hiddenTabsFocusBlocker->SetParent(botPart); // Between
-    GetCurrentTabContainer()->SetParent(botPart); // Front
+    GetVisibleContainer()->SetParent(botPart); // Front
 }
 
 UITabContainer::~UITabContainer()
 {
 }
 
-void UITabContainer::AddTab(const String &title, GameObject *tabbedChild)
+void UITabContainer::AddTab(const String &title,
+                            GameObject *tabbedChild,
+                            uint index)
 {
-    if (!GetChildrenInTabs().Contains(tabbedChild))
+    if (!GetTabbedChildren().Contains(tabbedChild))
     {
         UITabHeader *tabHeader = GameObject::Create<UITabHeader>();
         tabHeader->SetTitle(title);
+        tabHeader->SetTabbedChild(tabbedChild);
+        AddTabByTabHeader(tabHeader, index);
+    }
+}
 
-        tabHeader->SetParent(p_headersBar);
-        tabbedChild->SetParent( GetCurrentTabContainer() );
+void UITabContainer::AddTabByTabHeader(UITabHeader *tabHeader,
+                                       uint index_)
+{
+    if (!GetTabHeaders().Contains(tabHeader))
+    {
+        uint index = Math::Min(index_, GetTabbedChildren().Size());
 
-        p_childrenInTabs.PushBack(tabbedChild);
+        GameObject *prevCurrentTabbedChild = GetCurrentTabChild();
+
+        GameObject *tabbedChild = tabHeader->GetTabbedChild();
+        tabHeader->SetParent(p_headersBar, index);
+        tabbedChild->SetParent(GetHiddenContainer());
+
+        p_tabbedChildren.Insert(tabbedChild, index);
         m_childrenToHeader.Add(tabbedChild, tabHeader);
-        m_headerToChildren.Add(tabHeader, tabbedChild);
 
+        tabHeader->SetTabContainer(this);
         tabHeader->EventEmitter<IEventsTabHeader>::RegisterListener(this);
 
-        tabbedChild->SetParent( GetHiddenTabsContainer() );
         if (!GetCurrentTabChild())
         {
             SetCurrentTabChild(tabbedChild);
-            tabbedChild->SetVisible(true);
         }
         else
         {
-            tabbedChild->SetVisible(false);
+            // This will update current index if needed because of the insertion
+            SetCurrentTabChild(prevCurrentTabbedChild);
         }
     }
 }
 
-void UITabContainer::RemoveTab(GameObject *tabbedChild)
+void UITabContainer::RemoveTab(GameObject *tabbedChild,
+                               bool destroy)
 {
-    p_childrenInTabs.Remove(tabbedChild);
-
-    UITabHeader *header = nullptr;
-    if (m_childrenToHeader.ContainsKey(tabbedChild))
+    if (UITabHeader *tabHeader = GetTabHeaderFromChild(tabbedChild))
     {
-        header = m_childrenToHeader.Get(tabbedChild);
+        RemoveTabByHeader(tabHeader, destroy);
     }
+}
 
-    m_childrenToHeader.Remove(tabbedChild);
-    m_headerToChildren.Remove(header);
+void UITabContainer::RemoveTabByHeader(UITabHeader *tabHeader,
+                                       bool destroy)
+{
+    if (GameObject *tabbedChild = tabHeader->GetTabbedChild())
+    {
+        uint removedTabIndex = p_tabbedChildren.IndexOf(tabbedChild);
+        if (removedTabIndex == GetCurrentTabIndex())
+        {
+            SetCurrentTabIndex(-1u);
+        }
+
+        tabHeader->EventEmitter<IEventsTabHeader>::UnRegisterListener(this);
+        tabHeader->SetParent(nullptr);
+        tabbedChild->SetParent(nullptr);
+        if (destroy)
+        {
+            GameObject::Destroy(tabbedChild);
+            GameObject::Destroy(tabHeader);
+        }
+        p_tabbedChildren.Remove(tabbedChild);
+        m_childrenToHeader.Remove(tabbedChild);
+
+        // In case indices are changed, reselect current tab child
+        if (GetTabbedChildren().Size() >= 1)
+        {
+            if (GetCurrentTabChild())
+            {
+                SetCurrentTabChild( GetCurrentTabChild() );
+            }
+            else
+            {
+                SetCurrentTabChild( GetTabbedChildren().Front() );
+            }
+        }
+    }
 }
 
 void UITabContainer::SetTabTitle(GameObject *tabbedChild, const String &title)
@@ -125,61 +175,82 @@ void UITabContainer::SetTabTitle(GameObject *tabbedChild, const String &title)
 GameObject *UITabContainer::GetCurrentTabChild() const
 {
     GameObject *currentTabChild = nullptr;
-    if (GetCurrentTabIndex() >= 0 &&
-        GetCurrentTabIndex() <= SCAST<int>(GetChildrenInTabs().Size()))
+    if (GetCurrentTabIndex() < GetTabbedChildren().Size())
     {
-        auto it = p_childrenInTabs.Begin();
+        auto it = p_tabbedChildren.Begin();
         std::advance(it, GetCurrentTabIndex());
         currentTabChild = *it;
     }
     return currentTabChild;
 }
 
-int UITabContainer::GetCurrentTabIndex() const
+Array<UITabHeader *> UITabContainer::GetTabHeaders() const
+{
+    Array<UITabHeader*> tabHeaders;
+    Array<GameObject*> tabChildren = GetTabbedChildren();
+    for (GameObject *tabChild : tabChildren)
+    {
+        tabHeaders.PushBack( GetTabHeaderFromChild(tabChild) );
+    }
+    return tabHeaders;
+}
+
+const Array<GameObject *> &UITabContainer::GetTabbedChildren() const
+{
+    return p_tabbedChildren;
+}
+
+uint UITabContainer::GetCurrentTabIndex() const
 {
     return m_currentTabIndex;
+}
+
+GameObject *UITabContainer::GetHeadersBar() const
+{
+    return p_headersBar;
 }
 
 void UITabContainer::SetCurrentTabIndex(int index)
 {
     if (index != GetCurrentTabIndex())
     {
-        m_currentTabIndex = index;
-
-        int i = 0;
-        for(GameObject *tabbedChild : GetChildrenInTabs())
+        if (index == -1u || index < GetTabbedChildren().Size())
         {
-            UITabHeader *header = m_childrenToHeader.Get(tabbedChild);
+            m_currentTabIndex = index;
+        }
 
-            bool front = (i == index);
-            GameObject *destContainer = front ? GetCurrentTabContainer() :
-                                                GetHiddenTabsContainer();
+        // Hide all tabs
+        for (int i = 0; i < GetTabbedChildren().Size(); ++i)
+        {
+            GameObject *tabbedChild = GetTabbedChildren()[i];
+            UITabHeader *header = GetTabHeaderFromChild(tabbedChild);
+            header->SetInForeground( false );
+            tabbedChild->SetVisible( false );
+            tabbedChild->SetParent( GetHiddenContainer() );
+        }
 
-            header->SetInForeground(front);
-            tabbedChild->SetVisible(front);
-            tabbedChild->SetParent(destContainer);
-
-            ++i;
+        // Show chosen current tab
+        if (index < GetTabbedChildren().Size())
+        {
+            GameObject *tabbedChild = GetTabbedChildren()[index];
+            UITabHeader *header = GetTabHeaderFromChild(tabbedChild);
+            header->SetInForeground(true);
+            tabbedChild->SetVisible(true);
+            tabbedChild->SetParent( GetVisibleContainer() );
         }
     }
 }
 
 void UITabContainer::SetCurrentTabChild(GameObject *currentTabChild)
 {
-    int index = GetChildrenInTabs().IndexOf(currentTabChild);
+    uint index = GetTabbedChildren().IndexOf(currentTabChild);
     SetCurrentTabIndex(index);
-}
-
-const List<GameObject*>& UITabContainer::GetChildrenInTabs() const
-{
-    return p_childrenInTabs;
 }
 
 void UITabContainer::OnTabHeaderClicked(UITabHeader *header)
 {
-    if (m_headerToChildren.ContainsKey(header))
+    if (GameObject *tabbedChild = header->GetTabbedChild())
     {
-        GameObject *tabbedChild = m_headerToChildren.Get(header);
         SetCurrentTabChild(tabbedChild);
     }
 
@@ -187,13 +258,22 @@ void UITabContainer::OnTabHeaderClicked(UITabHeader *header)
                 &IEventsTabHeader::OnTabHeaderClicked, header);
 }
 
-GameObject *UITabContainer::GetHiddenTabsContainer() const
+GameObject *UITabContainer::GetHiddenContainer() const
 {
     return p_hiddenTabsContainer;
 }
 
-GameObject *UITabContainer::GetCurrentTabContainer() const
+GameObject *UITabContainer::GetVisibleContainer() const
 {
     return p_currentTabContainer;
 }
 
+UITabHeader *UITabContainer::GetTabHeaderFromChild(GameObject *tabbedChild) const
+{
+    auto it = m_childrenToHeader.Find(tabbedChild);
+    if (it != m_childrenToHeader.End())
+    {
+        return it->second;
+    }
+    return nullptr;
+}

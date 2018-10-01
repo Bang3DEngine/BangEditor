@@ -94,6 +94,7 @@ Explorer::Explorer()
     p_currentPathLabel = GameObjectFactory::CreateUILabel();
     p_currentPathLabel->SetSelectable(true);
     p_currentPathLabel->GetText()->SetTextSize(11);
+    p_currentPathLabel->GetText()->SetCullByRectTransform(true);
     p_currentPathLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::RIGHT);
 
     GameObject *dirBar = p_currentPathLabel->GetGameObject();

@@ -4,6 +4,7 @@
 #include "Bang/Bang.h"
 #include "Bang/Alignment.h"
 #include "Bang/GameObject.h"
+#include "Bang/IEventsDragDrop.h"
 
 #include "BangEditor/BangEditor.h"
 
@@ -16,7 +17,9 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UITabContainer;
 
-class UITabStation : public GameObject
+class UITabStation : public GameObject,
+                     public EventListener<IEventsDestroy>,
+                     public EventListener<IEventsDragDrop>
 {
     GAMEOBJECT_EDITOR(UITabStation);
 
@@ -30,25 +33,35 @@ public:
     UITabStation *FindTabStationOf(GameObject *gameObject);
     UITabStation *FindTabStationOfContainer(UITabContainer *tabContainer);
     UITabStation *GetChildStationAndCreateIfNeeded(Side side);
+    void RemoveChildStation(Side side);
 
 private:
+    GameObject *p_dragMarker = nullptr;
+
     GameObject *p_tabContainerGo = nullptr;
     UITabContainer *p_tabContainer = nullptr;
 
-    UIDirLayoutMovableSeparator *p_topSeparator   = nullptr;
-    UIDirLayoutMovableSeparator *p_botSeparator   = nullptr;
-    UIDirLayoutMovableSeparator *p_leftSeparator  = nullptr;
-    UIDirLayoutMovableSeparator *p_rightSeparator = nullptr;
+    bool m_dragPutInThisTabContainer = false;
+    int  m_dragPutInThisTabContainerTabIndex = 0;
+    bool m_dragPutInSideTabContainer = false;
+    Side m_dragPutInSideTabContainerSide = Side::LEFT;
 
-    GameObject *p_leftTabStationGo  = nullptr;
-    GameObject *p_rightTabStationGo = nullptr;
-    GameObject *p_topTabStationGo   = nullptr;
-    GameObject *p_botTabStationGo   = nullptr;
+    std::array<UIDirLayoutMovableSeparator*, 4> p_separators;
+    std::array<GameObject*, 4> p_tabStationGos;
+    std::array<UITabStation*, 4> p_tabStations;
 
-    UITabStation *p_leftTabStation  = nullptr;
-    UITabStation *p_rightTabStation = nullptr;
-    UITabStation *p_topTabStation   = nullptr;
-    UITabStation *p_botTabStation   = nullptr;
+    void CleanUpEmptyChildStations();
+
+    // IEventsDragDrop
+    virtual void OnDragStarted(EventEmitter<IEventsDragDrop>
+                               *dragDropEmitter) override;
+    virtual void OnDragUpdate(EventEmitter<IEventsDragDrop>
+                              *dragDropEmitter) override;
+    virtual void OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter,
+                        bool inside) override;
+
+    // IEventsDestroy
+    virtual void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

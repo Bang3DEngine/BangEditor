@@ -227,8 +227,13 @@ void EditorScene::Update()
             sceneTabName += " (*)";
         }
     }
-    p_tabStation->FindTabStationOf(p_sceneEditContainer)->
-                  GetTabContainer()->SetTabTitle(p_sceneEditContainer, sceneTabName);
+
+    if (UITabStation *sceneEditTabStation = p_tabStation->FindTabStationOf(
+                                                        p_sceneEditContainer))
+    {
+        sceneEditTabStation->GetTabContainer()->SetTabTitle(p_sceneEditContainer,
+                                                            sceneTabName);
+    }
 }
 
 void EditorScene::OnResize(int newWidth, int newHeight)
@@ -406,21 +411,25 @@ void EditorScene::OnPlayStateChanged(PlayState previousPlayState,
     switch (newPlayState)
     {
         case PlayState::EDITING:
-            p_tabStation->FindTabStationOf( GetSceneEditContainer() )->
-                          GetTabContainer()->
-                          SetCurrentTabChild( GetSceneEditContainer() );
-            UICanvas::GetActive(this)->SetFocus(
-                        GetSceneEditContainer()->GetFocusable());
+        {
+            UISceneEditContainer *edCont = GetSceneEditContainer();
+            if (auto editTabStation = p_tabStation->FindTabStationOf(edCont))
+            {
+                editTabStation->GetTabContainer()->SetCurrentTabChild(edCont);
+            }
+            UICanvas::GetActive(this)->SetFocus(edCont->GetFocusable());
+        }
         break;
 
         case PlayState::PLAYING:
             if (previousPlayState == PlayState::JUST_BEFORE_PLAYING)
             {
-                p_tabStation->FindTabStationOf( GetScenePlayContainer() )->
-                              GetTabContainer()->
-                              SetCurrentTabChild( GetScenePlayContainer() );
-                UICanvas::GetActive(this)->SetFocus(
-                            GetScenePlayContainer()->GetFocusable());
+                UIScenePlayContainer *playCont = GetScenePlayContainer();
+                if (auto playTabStation = p_tabStation->FindTabStationOf(playCont))
+                {
+                    playTabStation->GetTabContainer()->SetCurrentTabChild(playCont);
+                }
+                UICanvas::GetActive(this)->SetFocus(playCont->GetFocusable());
             }
         break;
 

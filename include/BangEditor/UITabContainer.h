@@ -20,23 +20,26 @@ class UITabContainer : public GameObject,
     GAMEOBJECT_EDITOR(UITabContainer);
 
 public:
-    void AddTab(const String &title, GameObject *tabbedChild);
-    void RemoveTab(GameObject *tabbedChild);
+    void AddTab(const String &title, GameObject *tabbedChild, uint index = -1u);
+    void AddTabByTabHeader(UITabHeader *tabHeader, uint index = -1u);
+    void RemoveTab(GameObject *tabbedChild, bool destroy = true);
+    void RemoveTabByHeader(UITabHeader *tabHeader, bool destroy = true);
 
     void SetCurrentTabIndex(int index);
     void SetCurrentTabChild(GameObject *currentTabChild);
     void SetTabTitle(GameObject *tabbedChild, const String &title);
 
-    int GetCurrentTabIndex() const;
+    uint GetCurrentTabIndex() const;
+    GameObject* GetHeadersBar() const;
     GameObject* GetCurrentTabChild() const;
 
-    const List<GameObject*>& GetChildrenInTabs() const;
+    Array<UITabHeader*> GetTabHeaders() const;
+    const Array<GameObject*>& GetTabbedChildren() const;
 
 private:
-    int m_currentTabIndex = -1;
-    List<GameObject*> p_childrenInTabs;
+    uint m_currentTabIndex = -1u;
+    Array<GameObject*> p_tabbedChildren;
     UMap<GameObject*, UITabHeader*> m_childrenToHeader;
-    UMap<UITabHeader*, GameObject*> m_headerToChildren;
 
     GameObject *p_headersBar = nullptr;
     GameObject *p_hiddenTabsContainer = nullptr;
@@ -45,8 +48,10 @@ private:
     // IEventsTabHeader
     void OnTabHeaderClicked(UITabHeader *header) override;
 
-    GameObject* GetHiddenTabsContainer() const;
-    GameObject* GetCurrentTabContainer() const;
+    GameObject* GetHiddenContainer() const;
+    GameObject* GetVisibleContainer() const;
+    UITabHeader* GetTabHeaderFromChild(GameObject *tabbedChild) const;
+    GameObject* GetChildFromTabHeader(UITabHeader *tabHeader) const;
 
 	UITabContainer();
 	virtual ~UITabContainer();

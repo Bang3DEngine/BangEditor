@@ -1,5 +1,7 @@
 #include "BangEditor/UITabStation.h"
 
+#include "Bang/UITheme.h"
+#include "Bang/RectTransform.h"
 #include "Bang/TextureFactory.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
@@ -8,7 +10,9 @@
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIDirLayoutMovableSeparator.h"
 
+#include "BangEditor/EditorScene.h"
 #include "BangEditor/UITabContainer.h"
+#include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -20,6 +24,13 @@ UITabStation::UITabStation()
     UIHorizontalLayout *mainHL = AddComponent<UIHorizontalLayout>();
     mainHL->SetChildrenVerticalStretch(Stretch::FULL);
 
+    p_dragMarker = GameObjectFactory::CreateUIGameObject();
+    UIImageRenderer *dragMarkerImg = p_dragMarker->AddComponent<UIImageRenderer>();
+    dragMarkerImg->SetTint( UITheme::GetSelectedColor().WithAlpha(0.5f) );
+    p_dragMarker->SetEnabled(false);
+    p_dragMarker->GetRectTransform()->SetLocalPosition( Vector3(0, 0, -0.01f) );
+    p_dragMarker->SetParent( EditorSceneManager::GetEditorScene() );
+
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetFlexibleSize(Vector2::One);
 
@@ -28,55 +39,42 @@ UITabStation::UITabStation()
     auto contLE = p_tabContainerGo->AddComponent<UILayoutElement>();
     contLE->SetFlexibleSize(Vector2::One);
 
-    p_leftTabStationGo = GameObjectFactory::CreateUIGameObject();
-    p_leftTabStationGo->AddComponent<UIVerticalLayout>();
-    p_leftTabStationGo->SetEnabled(false);
-    auto leftLE = p_leftTabStationGo->AddComponent<UILayoutElement>();
-    leftLE->SetFlexibleSize(Vector2::One);
+    for (int s = 0; s < 4; ++s)
+    {
+        p_tabStations[s] = nullptr;
 
-    p_rightTabStationGo = GameObjectFactory::CreateUIGameObject();
-    p_rightTabStationGo->AddComponent<UIVerticalLayout>();
-    p_rightTabStationGo->SetEnabled(false);
-    auto rightLE = p_rightTabStationGo->AddComponent<UILayoutElement>();
-    rightLE->SetFlexibleSize(Vector2::One);
+        p_tabStationGos[s] = GameObjectFactory::CreateUIGameObject();
+        p_tabStationGos[s]->AddComponent<UIVerticalLayout>();
+        p_tabStationGos[s]->SetEnabled(false);
+        auto stationGoLE = p_tabStationGos[s]->AddComponent<UILayoutElement>();
+        stationGoLE->SetFlexibleSize(Vector2::One);
 
-    p_topTabStationGo   = GameObjectFactory::CreateUIGameObject();
-    p_topTabStationGo->AddComponent<UIVerticalLayout>();
-    p_topTabStationGo->SetEnabled(false);
-    auto topLE = p_topTabStationGo->AddComponent<UILayoutElement>();
-    topLE->SetFlexibleSize(Vector2::One);
-
-    p_botTabStationGo   = GameObjectFactory::CreateUIGameObject();
-    p_botTabStationGo->AddComponent<UIVerticalLayout>();
-    p_botTabStationGo->SetEnabled(false);
-    auto botLE = p_botTabStationGo->AddComponent<UILayoutElement>();
-    botLE->SetFlexibleSize(Vector2::One);
+        Side side = SCAST<Side>(s);
+        p_separators[s] = (side == Side::LEFT || side == Side::RIGHT) ?
+                    GameObjectFactory::CreateUIDirLayoutMovableHSeparator() :
+                    GameObjectFactory::CreateUIDirLayoutMovableVSeparator();
+        p_separators[s]->GetGameObject()->SetEnabled(false);
+    }
 
     p_tabContainer = GameObject::Create<UITabContainer>();
 
-    p_leftTabStationGo->SetParent(this);
-    p_leftSeparator = GameObjectFactory::CreateUIDirLayoutMovableHSeparator();
-    p_leftSeparator->GetGameObject()->SetEnabled(false);
-    p_leftSeparator->GetGameObject()->SetParent(this);
+    p_tabStationGos[ SCAST<int>(Side::LEFT) ]->SetParent(this);
+    p_separators[ SCAST<int>(Side::LEFT) ]->GetGameObject()->SetParent(this);
 
     p_tabContainerGo->SetParent(this);
 
-    p_rightSeparator = GameObjectFactory::CreateUIDirLayoutMovableHSeparator();
-    p_rightSeparator->GetGameObject()->SetEnabled(false);
-    p_rightSeparator->GetGameObject()->SetParent(this);
-    p_rightTabStationGo->SetParent(this);
+    p_separators[ SCAST<int>(Side::RIGHT) ]->GetGameObject()->SetParent(this);
+    p_tabStationGos[ SCAST<int>(Side::RIGHT) ]->SetParent(this);
 
-    p_topTabStationGo->SetParent(p_tabContainerGo);
-    p_topSeparator = GameObjectFactory::CreateUIDirLayoutMovableVSeparator();
-    p_topSeparator->GetGameObject()->SetEnabled(false);
-    p_topSeparator->GetGameObject()->SetParent(p_tabContainerGo);
+    p_tabStationGos[ SCAST<int>(Side::TOP) ]->SetParent(p_tabContainerGo);
+    p_separators[ SCAST<int>(Side::TOP) ]->GetGameObject()->
+                                           SetParent(p_tabContainerGo);
 
     p_tabContainer->SetParent(p_tabContainerGo);
 
-    p_botSeparator = GameObjectFactory::CreateUIDirLayoutMovableVSeparator();
-    p_botSeparator->GetGameObject()->SetEnabled(false);
-    p_botSeparator->GetGameObject()->SetParent(p_tabContainerGo);
-    p_botTabStationGo->SetParent(p_tabContainerGo);
+    p_separators[ SCAST<int>(Side::BOT) ]->GetGameObject()->
+                                           SetParent(p_tabContainerGo);
+    p_tabStationGos[ SCAST<int>(Side::BOT) ]->SetParent(p_tabContainerGo);
 }
 
 UITabStation::~UITabStation()
@@ -90,64 +88,274 @@ UITabContainer *UITabStation::GetTabContainer() const
 
 UITabStation *UITabStation::GetChildStationAndCreateIfNeeded(Side side)
 {
-    UITabStation **tabStationPtr = nullptr;
-    GameObject *tabStationGo = nullptr;
-    UIDirLayoutMovableSeparator *separator = nullptr;
-    switch (side)
+    int s = SCAST<int>(side);
+    if (!p_tabStations[s])
     {
-        case Side::LEFT:
-            tabStationPtr = &p_leftTabStation;
-            tabStationGo = p_leftTabStationGo;
-            separator = p_leftSeparator;
-        break;
-
-        case Side::RIGHT:
-            tabStationPtr = &p_rightTabStation;
-            tabStationGo = p_rightTabStationGo;
-            separator = p_rightSeparator;
-        break;
-
-        case Side::TOP:
-            tabStationPtr = &p_topTabStation;
-            tabStationGo = p_topTabStationGo;
-            separator = p_topSeparator;
-        break;
-
-        case Side::BOT:
-            tabStationPtr = &p_botTabStation;
-            tabStationGo = p_botTabStationGo;
-            separator = p_botSeparator;
-        break;
+        p_tabStations[s] = GameObject::Create<UITabStation>();
+        UITabStation *tabStation = p_tabStations[s];
+        p_separators[s]->GetGameObject()->SetEnabled(true);
+        p_tabStationGos[s]->SetEnabled(true);
+        tabStation->SetParent( p_tabStationGos[s] );
     }
+    return p_tabStations[s];
+}
 
-    ASSERT(tabStationPtr)
-    if (!*tabStationPtr)
+void UITabStation::RemoveChildStation(Side side)
+{
+    if (UITabStation *station = GetChildStation(side))
     {
-        *tabStationPtr = GameObject::Create<UITabStation>();
-        UITabStation *tabStation = *tabStationPtr;
-        separator->GetGameObject()->SetEnabled(true);
-        tabStationGo->SetEnabled(true);
-        tabStation->SetParent(tabStationGo);
-    }
+        GameObject::Destroy(station);
 
-    return *tabStationPtr;
+        int s = SCAST<int>(side);
+        p_tabStations[s] = nullptr;
+        p_separators[s]->GetGameObject()->SetEnabled(false);
+        p_tabStationGos[s]->SetEnabled(false);
+    }
+}
+
+void UITabStation::CleanUpEmptyChildStations()
+{
+    for (int s = 0; s < 4; ++s)
+    {
+        Side side = SCAST<Side>(s);
+        if (UITabStation *sideStt = GetChildStation(side))
+        {
+            UITabContainer *sideTabCont = sideStt->GetTabContainer();
+            if (sideTabCont->GetTabbedChildren().Size() == 0 &&
+                !sideStt->GetChildStation(Side::LEFT)  &&
+                !sideStt->GetChildStation(Side::RIGHT) &&
+                !sideStt->GetChildStation(Side::TOP)   &&
+                !sideStt->GetChildStation(Side::BOT))
+            {
+                RemoveChildStation(side);
+            }
+        }
+    }
+}
+
+void UITabStation::OnDragStarted(EventEmitter<IEventsDragDrop> *dragDropEmitter)
+{
+    if (Component *comp = DCAST<Component*>(dragDropEmitter))
+    {
+        if (UITabHeader *tabHeader = DCAST<UITabHeader*>(comp->GetGameObject()))
+        {
+            if (UITabContainer *tabContainer = tabHeader->GetTabContainer())
+            {
+                tabContainer->RemoveTabByHeader(tabHeader, false);
+                CleanUpEmptyChildStations();
+            }
+        }
+    }
+}
+
+void UITabStation::OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDropEmitter)
+{
+    if (Component *comp = DCAST<Component*>(dragDropEmitter))
+    {
+        if (UITabHeader *draggedTabHeader =
+                            DCAST<UITabHeader*>(comp->GetGameObject()))
+        {
+            if (GetTabContainer()->IsWaitingToBeDestroyed())
+            {
+                return;
+            }
+
+            Vector2 mousePos( Input::GetMousePosition() );
+
+            UITabHeader *prevTabHeader = nullptr;
+            UITabHeader *nextTabHeader = nullptr;
+            m_dragPutInThisTabContainer = false;
+            m_dragPutInSideTabContainer = false;
+
+            p_dragMarker->SetEnabled(false);
+            GameObject *headersBar = GetTabContainer()->GetHeadersBar();
+            bool overHeadersBar = (headersBar->GetRectTransform()->IsMouseOver());
+            if (overHeadersBar)
+            {
+                m_dragPutInThisTabContainer = true;
+                float closestDistToPrevTH = Math::Infinity<float>();
+                float closestDistToNextTH = Math::Infinity<float>();
+                auto thisTabHeaders = GetTabContainer()->GetTabHeaders();
+                for (UITabHeader *tabHeader : thisTabHeaders)
+                {
+                    RectTransform *tabHeaderRT = tabHeader->GetRectTransform();
+                    AARect tabHeaderRect = tabHeaderRT->GetViewportAARect();
+                    Vector2 thCenter = tabHeaderRect.GetCenter();
+                    float distToTH = Math::Abs(thCenter.x - mousePos.x);
+                    if (distToTH < closestDistToPrevTH &&
+                        mousePos.x < thCenter.x)
+                    {
+                        nextTabHeader = tabHeader;
+                        closestDistToPrevTH = distToTH;
+                    }
+                    else if (distToTH < closestDistToNextTH &&
+                             mousePos.x >= thCenter.x)
+                    {
+                        prevTabHeader = tabHeader;
+                        closestDistToNextTH = distToTH;
+                    }
+                }
+
+                m_dragPutInThisTabContainerTabIndex =
+                        SCAST<int>(thisTabHeaders.IndexOf(prevTabHeader)) + 1;
+                ASSERT(m_dragPutInThisTabContainerTabIndex >= 0 &&
+                       m_dragPutInThisTabContainerTabIndex <= thisTabHeaders.Size());
+            }
+            else if (GetRectTransform()->IsMouseOver())
+            {
+                UITabStation *leftSt  = GetChildStation(Side::LEFT);
+                UITabStation *rightSt = GetChildStation(Side::RIGHT);
+                UITabStation *topSt   = GetChildStation(Side::TOP);
+                UITabStation *botSt   = GetChildStation(Side::BOT);
+                bool isOverTerminalStation =
+                   (!leftSt  ||  !leftSt->GetRectTransform()->IsMouseOver()) &&
+                   (!rightSt || !rightSt->GetRectTransform()->IsMouseOver()) &&
+                   (!topSt   ||   !topSt->GetRectTransform()->IsMouseOver()) &&
+                   (!botSt   ||   !botSt->GetRectTransform()->IsMouseOver());
+
+                if (isOverTerminalStation)
+                {
+                    AARect stationRect = GetTabContainer()->GetRectTransform()->
+                                         GetViewportAARect();
+                    Vector2 stationCenter = stationRect.GetCenter();
+                    Vector2 stationSize = stationRect.GetSize();
+                    if (!leftSt &&
+                        mousePos.x < stationCenter.x - stationSize.x / 4)
+                    {
+                        m_dragPutInSideTabContainer = true;
+                        m_dragPutInSideTabContainerSide = Side::LEFT;
+                    }
+                    else if (!rightSt &&
+                             mousePos.x >= stationCenter.x + stationSize.x / 4)
+                    {
+                        m_dragPutInSideTabContainer = true;
+                        m_dragPutInSideTabContainerSide = Side::RIGHT;
+                    }
+                    else if (!botSt &&
+                             mousePos.y < stationCenter.y - stationSize.y / 4)
+                    {
+                        m_dragPutInSideTabContainer = true;
+                        m_dragPutInSideTabContainerSide = Side::BOT;
+                    }
+                    else if (!topSt &&
+                             mousePos.y >= stationCenter.y + stationSize.y / 4)
+                    {
+                        m_dragPutInSideTabContainer = true;
+                        m_dragPutInSideTabContainerSide = Side::TOP;
+                    }
+                    else
+                    {
+                        m_dragPutInThisTabContainer = true;
+                        m_dragPutInSideTabContainer = false;
+                    }
+                }
+            }
+
+            if (m_dragPutInThisTabContainer)
+            {
+                if (UITabHeader *tabHeaderToMark = prevTabHeader ? prevTabHeader :
+                                                                   nextTabHeader)
+                {
+                    bool markingPrev = (tabHeaderToMark == prevTabHeader);
+                    float markX = markingPrev ? 1 : -1;
+                    RectTransform *dragMarkerRT = p_dragMarker->GetRectTransform();
+                    dragMarkerRT->SetAnchors( Vector2(markX, -1), Vector2(markX, 1) );
+                    dragMarkerRT->SetMarginLeftBot(  Vector2i(-3, 0) );
+                    dragMarkerRT->SetMarginRightTop( Vector2i(-3, 0) );
+                    p_dragMarker->SetParent(tabHeaderToMark);
+                }
+                else
+                {
+                    p_dragMarker->GetRectTransform()->SetAnchors(-Vector2::One,
+                                                                  Vector2::One);
+                    p_dragMarker->SetParent( GetTabContainer() );
+                }
+                p_dragMarker->SetEnabled(true);
+            }
+            else if (m_dragPutInSideTabContainer)
+            {
+                UITabContainer *dragMarkerParent = GetTabContainer();
+                Vector2 markerAnchorMin;
+                Vector2 markerAnchorMax;
+                switch (m_dragPutInSideTabContainerSide)
+                {
+                    case Side::LEFT:
+                        markerAnchorMin = Vector2(  -1, -1);
+                        markerAnchorMax = Vector2(-0.5,  1);
+                    break;
+
+                    case Side::RIGHT:
+                        markerAnchorMin = Vector2(0.5, -1);
+                        markerAnchorMax = Vector2(  1,  1);
+                    break;
+
+                    case Side::BOT:
+                        markerAnchorMin = Vector2(-1,   -1);
+                        markerAnchorMax = Vector2( 1, -0.5);
+                    break;
+
+                    case Side::TOP:
+                        markerAnchorMin = Vector2(-1, 0.5);
+                        markerAnchorMax = Vector2( 1,   1);
+                    break;
+                }
+
+                RectTransform *dragMarkerRT = p_dragMarker->GetRectTransform();
+                dragMarkerRT->SetAnchorMin(markerAnchorMin);
+                dragMarkerRT->SetAnchorMax(markerAnchorMax);
+                p_dragMarker->SetParent(dragMarkerParent);
+                p_dragMarker->SetEnabled(true);
+            }
+        }
+    }
+}
+
+void UITabStation::OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter,
+                          bool inside)
+{
+    BANG_UNUSED_2(dragDropEmitter, inside);
+    if (Component *comp = DCAST<Component*>(dragDropEmitter))
+    {
+        if (UITabHeader *draggedTabHeader =
+                            DCAST<UITabHeader*>(comp->GetGameObject()))
+        {
+            p_dragMarker->SetEnabled(false);
+            if (m_dragPutInThisTabContainer)
+            {
+                draggedTabHeader->p_dragTabContainerDestiny = GetTabContainer();
+                draggedTabHeader->m_dragTabContainerDestinyIndex =
+                                            m_dragPutInThisTabContainerTabIndex;
+            }
+            else if (m_dragPutInSideTabContainer)
+            {
+                draggedTabHeader->p_dragTabContainerDestiny =
+                        GetChildStationAndCreateIfNeeded(
+                            m_dragPutInSideTabContainerSide)->GetTabContainer();
+                draggedTabHeader->m_dragTabContainerDestinyIndex = -1u;
+            }
+
+            m_dragPutInThisTabContainer = false;
+            m_dragPutInSideTabContainer = false;
+
+            draggedTabHeader->OnDrop(dragDropEmitter, inside);
+
+            CleanUpEmptyChildStations();
+        }
+    }
+}
+
+void UITabStation::OnDestroyed(EventEmitter<IEventsDestroy> *object)
+{
 }
 
 UITabStation *UITabStation::GetChildStation(Side side) const
 {
-    switch (side)
-    {
-        case Side::LEFT:  return p_leftTabStation;
-        case Side::RIGHT: return p_rightTabStation;
-        case Side::TOP:   return p_topTabStation;
-        case Side::BOT:   return p_botTabStation;
-    }
-    return nullptr;
+    return p_tabStations[ SCAST<int>(side) ];
 }
 
 UITabStation *UITabStation::FindTabStationOf(GameObject *gameObject)
 {
-    const auto &childrenInTabs = GetTabContainer()->GetChildrenInTabs();
+    const auto &childrenInTabs = GetTabContainer()->GetTabbedChildren();
     for (GameObject *childInTabs : childrenInTabs)
     {
         if (childInTabs == gameObject)
@@ -179,9 +387,9 @@ UITabStation *UITabStation::FindTabStationOfContainer(UITabContainer *tabContain
         return this;
     }
 
-    for (int sidei = 0; sidei < 4; ++sidei)
+    for (int s = 0; s < 4; ++s)
     {
-        Side side = SCAST<Side>(sidei);
+        Side side = SCAST<Side>(s);
         if (GetChildStation(side))
         {
             if (UITabStation *tabStation =
