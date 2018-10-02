@@ -119,7 +119,6 @@ void ScenePlayer::PlayScene()
                     // Now set the open scene in the editor
                     SceneManager::LoadSceneInstantly(sp->p_playOpenScene, false);
 
-                    TimeSingleton::SetDeltaTimeReferenceToNow();
                     Physics::GetInstance()->SetIgnoreNextFrames(sp->p_playOpenScene, 5);
                     ScenePlayer::SetPlayState(PlayState::PLAYING);
                 }

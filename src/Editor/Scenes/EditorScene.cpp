@@ -181,17 +181,16 @@ void EditorScene::BeforeRender()
 
 void EditorScene::Update()
 {
+    Scene::Update();
+    EditorSceneManager::SetActiveScene(this);
     GetScenePlayer()->Update();
 
-    EditorSceneManager::SetActiveScene(this);
-    Scene::Update();
-
-    Scene *openScene = GetOpenScene();
-    if (openScene)
+    String sceneTabName = "Scene - ";
+    if (Scene *openScene = GetOpenScene())
     {
+        // Update open scene if needed
         BindOpenScene();
 
-        // Update open scene
         Input::Context openSceneInputContext;
         openSceneInputContext.focus = GetScenePlayContainer()->GetFocusable();
         openSceneInputContext.rect  = AARecti(GetScenePlayContainer()->
@@ -203,22 +202,9 @@ void EditorScene::Update()
         bool updateOpenScene = (ScenePlayer::GetPlayState() == PlayState::PLAYING);
         SceneManager::OnNewFrame(openScene, updateOpenScene);
 
-        openSceneInputContext.focus = GetSceneEditContainer()->GetFocusable();
-        openSceneInputContext.rect  = AARecti(GetSceneEditContainer()->
-                                              GetSceneImage()->
-                                              GetRectTransform()->
-                                              GetViewportAARect());
-        Input::SetContext(openSceneInputContext);
-        GetEditSceneGameObjects()->Update();
-
-        Input::ClearContext();
         UnBindOpenScene();
-    }
 
-    // Set scene tab name
-    String sceneTabName = "Scene - ";
-    if (openScene)
-    {
+        // Set scene tab name
         Path loadedScenePath = SceneOpenerSaver::GetInstance()->GetLoadedScenePath();
         sceneTabName += loadedScenePath.GetName();
         if ( Editor::IsEditingScene() &&
@@ -227,6 +213,17 @@ void EditorScene::Update()
             sceneTabName += " (*)";
         }
     }
+
+    // Update editor scene stuff
+    Input::Context editSceneInputContext;
+    editSceneInputContext.focus = GetSceneEditContainer()->GetFocusable();
+    editSceneInputContext.rect  = AARecti(GetSceneEditContainer()->
+                                          GetSceneImage()->
+                                          GetRectTransform()->
+                                          GetViewportAARect());
+    Input::SetContext(editSceneInputContext);
+    GetEditSceneGameObjects()->Update();
+    Input::ClearContext();
 
     if (UITabStation *sceneEditTabStation = p_tabStation->FindTabStationOf(
                                                         p_sceneEditContainer))

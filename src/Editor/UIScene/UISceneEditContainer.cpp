@@ -267,7 +267,7 @@ void UISceneEditContainer::RestoreDraggedMaterialToPreviousGameObjectOvered()
 void UISceneEditContainer::OnVisibilityChanged(GameObject*)
 {
     EditorCamera *edCamGo = EditorCamera::GetInstance();
-    if (IsVisibleRecursively())
+    if (IsVisible())
     {
         edCamGo->RequestUnBlockBy(this);
     }
