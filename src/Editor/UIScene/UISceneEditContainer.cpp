@@ -203,7 +203,7 @@ Camera* UISceneEditContainer::GetSceneCamera(Scene *scene)
 bool UISceneEditContainer::NeedsToRenderScene(Scene *scene)
 {
     BANG_UNUSED(scene);
-    return IsVisible();
+    return IsVisibleRecursively();
 }
 
 void UISceneEditContainer::OnRenderNeededSceneFinished()
@@ -219,7 +219,7 @@ SelectionFramebuffer *UISceneEditContainer::GetSelectionFramebuffer() const
 
 bool UISceneEditContainer::NeedsToRenderSelectionFramebuffer() const
 {
-    return (IsVisible() &&
+    return (IsVisibleRecursively() &&
             GetSceneImage()->GetRectTransform()->IsMouseOver(false));
 }
 
@@ -267,7 +267,7 @@ void UISceneEditContainer::RestoreDraggedMaterialToPreviousGameObjectOvered()
 void UISceneEditContainer::OnVisibilityChanged(GameObject*)
 {
     EditorCamera *edCamGo = EditorCamera::GetInstance();
-    if (IsVisible())
+    if (IsVisibleRecursively())
     {
         edCamGo->RequestUnBlockBy(this);
     }

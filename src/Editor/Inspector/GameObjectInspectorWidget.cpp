@@ -60,7 +60,7 @@ void GameObjectInspectorWidget::InitInnerWidgets()
 void GameObjectInspectorWidget::UpdateFromReference()
 {
     p_nameInput->GetText()->SetContent( GetGameObject()->GetName() );
-    p_enabledInput->SetChecked( GetGameObject()->IsEnabled(false) );
+    p_enabledInput->SetChecked( GetGameObject()->IsEnabled() );
 }
 
 void GameObjectInspectorWidget::OnValueChanged(EventEmitter<IEventsValueChanged> *object)

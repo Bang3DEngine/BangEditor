@@ -49,7 +49,7 @@ void ComponentInspectorWidget::InitInnerWidgets()
 void ComponentInspectorWidget::UpdateFromReference()
 {
     GetInspectorWidgetTitle()->GetEnabledCheckBox()->
-                               SetChecked( GetComponent()->IsEnabled() );
+            SetChecked( GetComponent()->IsEnabled() );
 }
 
 void ComponentInspectorWidget::SetComponent(Component *comp)

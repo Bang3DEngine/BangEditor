@@ -128,7 +128,7 @@ void HierarchyItem::CreatePrefab()
 
 void HierarchyItem::UpdateEnabledDisabledColor()
 {
-    if (GetReferencedGameObject()->IsEnabled(true))
+    if (GetReferencedGameObject()->IsEnabledRecursively())
     {
         p_textRenderer->SetTextColor(Color::Black);
     }

@@ -96,6 +96,7 @@ UITabStation *UITabStation::GetChildStationAndCreateIfNeeded(Side side)
         p_separators[s]->GetGameObject()->SetEnabled(true);
         p_tabStationGos[s]->SetEnabled(true);
         tabStation->SetParent( p_tabStationGos[s] );
+        Debug_Log(p_separators[s]->IsEnabledRecursively());
     }
     return p_tabStations[s];
 }

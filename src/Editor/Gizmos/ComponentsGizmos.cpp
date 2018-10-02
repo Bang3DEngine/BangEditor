@@ -57,7 +57,7 @@ void ComponentsGizmos::Render(RenderPass rp, bool renderChildren)
         {
             for (Component *comp : selectedGameObject->GetComponents())
             {
-                if (comp && comp->IsActive())
+                if (comp && comp->IsActiveRecursively())
                 {
                     if (!Selection::IsBeingRendered())
                     {
@@ -166,7 +166,7 @@ void ComponentsGizmos::RenderComponentGizmos(Component *comp,
 void ComponentsGizmos::RenderBoxColliderGizmo(BoxCollider *bc,
                                               bool isBeingSelected)
 {
-    if (isBeingSelected && bc->IsEnabled())
+    if (isBeingSelected && bc->IsEnabledRecursively())
     {
         GBuffer *gb = GEngine::GetActiveGBuffer();
         gb->PushDepthStencilTexture();
@@ -191,7 +191,7 @@ void ComponentsGizmos::RenderBoxColliderGizmo(BoxCollider *bc,
 void ComponentsGizmos::RenderCapsuleColliderGizmo(CapsuleCollider *cc,
                                                   bool isBeingSelected)
 {
-    if (isBeingSelected && cc->IsEnabled())
+    if (isBeingSelected && cc->IsEnabledRecursively())
     {
         GBuffer *gb = GEngine::GetActiveGBuffer();
         gb->PushDepthStencilTexture();
@@ -237,7 +237,7 @@ void ComponentsGizmos::RenderCapsuleColliderGizmo(CapsuleCollider *cc,
 void ComponentsGizmos::RenderSphereColliderGizmo(SphereCollider *sc,
                                                  bool isBeingSelected)
 {
-    if (isBeingSelected && sc->IsEnabled())
+    if (isBeingSelected && sc->IsEnabledRecursively())
     {
         GBuffer *gb = GEngine::GetActiveGBuffer();
         gb->PushDepthStencilTexture();

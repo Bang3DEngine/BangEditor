@@ -3,8 +3,8 @@
 
 #include "Bang/Array.h"
 #include "Bang/Color.h"
-#include "Bang/Object.h"
 #include "Bang/String.h"
+#include "Bang/GameObject.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/IEventsValueChanged.h"
 
@@ -46,10 +46,10 @@ private:
 };
 
 
-class ColorPickerReporter : public Object,
+class ColorPickerReporter : public GameObject,
                             public EventEmitter<IEventsValueChanged>
 {
-    SERIALIZABLE(ColorPickerReporter);
+    GAMEOBJECT_EDITOR(ColorPickerReporter);
 
 public:
     void SetPickedColor(const Color &color);
