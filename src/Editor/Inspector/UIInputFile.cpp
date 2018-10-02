@@ -104,8 +104,7 @@ void UIInputFile::OnDragUpdate(EventEmitter<IEventsDragDrop> *dd_)
     IEventsDragDrop::OnDragUpdate(dd_);
 
     UIDragDroppable *dragDroppable = DCAST<UIDragDroppable*>(dd_);
-    ExplorerItem *expItem = DCAST<ExplorerItem*>(dragDroppable->GetGameObject());
-    if (expItem)
+    if (ExplorerItem *expItem = DCAST<ExplorerItem*>(dragDroppable->GetGameObject()))
     {
         Path draggedPath = expItem->GetPath();
         bool acceptedFileType = draggedPath.HasExtension(GetExtensions());

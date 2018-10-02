@@ -343,8 +343,7 @@ void UISceneEditContainer::OnDragStarted(EventEmitter<IEventsDragDrop> *dd_)
     IEventsDragDrop::OnDragStarted(dd_);
 
     UIDragDroppable *dragDroppable = DCAST<UIDragDroppable*>(dd_);
-    ExplorerItem *expItem = DCAST<ExplorerItem*>(dragDroppable->GetGameObject());
-    if (expItem)
+    if (ExplorerItem *expItem = DCAST<ExplorerItem*>(dragDroppable->GetGameObject()))
     {
         Path draggedPath = expItem->GetPath();
         if (draggedPath.HasExtension( Extensions::GetMaterialExtension() ))

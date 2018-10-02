@@ -77,6 +77,7 @@ ExplorerItem::ExplorerItem()
     p_contextMenu->SetFocusable(p_focusable);
 
     p_dragDroppable = AddComponent<UIDragDroppable>();
+    p_dragDroppable->SetFocusable(p_focusable);
 
     bgGo->SetParent(this);
     labelGo->SetParent(this);

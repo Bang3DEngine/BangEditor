@@ -41,6 +41,7 @@ protected:
     UIInputColor *p_startColorInput = nullptr;
     UIInputColor *p_endColorInput = nullptr;
     UIInputNumber *p_numParticlesInput = nullptr;
+    UIComboBox *p_physicsStepModeInput = nullptr;
 
     UIComboBox *p_generationShapeInput = nullptr;
     UIInputVector *p_generationShapeBoxSizeInput = nullptr;

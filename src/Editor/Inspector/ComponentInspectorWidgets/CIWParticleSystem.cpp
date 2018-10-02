@@ -101,6 +101,12 @@ void CIWParticleSystem::InitInnerWidgets()
     p_computeCollisionsInput = GameObjectFactory::CreateUICheckBox();
     p_computeCollisionsInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
+    p_physicsStepModeInput = GameObjectFactory::CreateUIComboBox();
+    p_physicsStepModeInput->AddItem("Euler",      SCAST<int>(ParticlePhysicsStepMode::EULER));
+    p_physicsStepModeInput->AddItem("Euler-Semi", SCAST<int>(ParticlePhysicsStepMode::EULER_SEMI));
+    p_physicsStepModeInput->AddItem("Verlet",     SCAST<int>(ParticlePhysicsStepMode::VERLET));
+    p_physicsStepModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
     p_gravityMultiplierInput = GameObjectFactory::CreateUIInputNumber();
     p_gravityMultiplierInput->EventEmitter<IEventsValueChanged>::
                               RegisterListener(this);
@@ -131,6 +137,7 @@ void CIWParticleSystem::InitInnerWidgets()
     AddWidget("Cone FOV",         p_generationShapeConeFOVInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Compute collisions",   p_computeCollisionsInput->GetGameObject());
+    AddWidget("Step mode",            p_physicsStepModeInput->GetGameObject());
     AddWidget("Gravity multiplier",   p_gravityMultiplierInput->GetGameObject());
     AddWidget("Init vel. multiplier", p_initialVelocityMultiplier->GetGameObject());
     SetLabelsWidth(100);
@@ -176,6 +183,12 @@ void CIWParticleSystem::UpdateFromReference()
     {
         p_animationSpeedInput->SetValue(
                             GetParticleSystem()->GetAnimationSpeed() );
+    }
+
+    if (!p_physicsStepModeInput->HasFocus())
+    {
+        p_physicsStepModeInput->SetSelectionByValue(
+                SCAST<int>(GetParticleSystem()->GetPhysicsStepMode()));
     }
 
     if (!p_particleRenderModeInput->HasFocus())
@@ -332,6 +345,13 @@ void CIWParticleSystem::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *obj
     if (object == p_numParticlesInput)
     {
         GetParticleSystem()->SetNumParticles(p_numParticlesInput->GetValue());
+    }
+
+    if (object == p_physicsStepModeInput)
+    {
+        GetParticleSystem()->SetPhysicsStepMode(
+                    SCAST<ParticlePhysicsStepMode>(
+                        p_physicsStepModeInput->GetSelectedValue()));
     }
 
     if (object == p_startSizeInput)

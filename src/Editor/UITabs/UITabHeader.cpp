@@ -48,7 +48,7 @@ UITabHeader::UITabHeader()
 
     p_dragDroppable = AddComponent<UIDragDroppable>();
     p_dragDroppable->SetShowDragDropGameObject(true);
-    p_dragDroppable->SetFocusable(nullptr);
+    p_dragDroppable->SetFocusable(p_focusable);
     p_dragDroppable->EventEmitter<IEventsDragDrop>::RegisterListener(this);
 
     titleGo->SetParent(this);
