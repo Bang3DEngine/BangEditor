@@ -123,10 +123,9 @@ void UIInputFile::OnDragUpdate(EventEmitter<IEventsDragDrop> *dd_)
     }
 }
 
-void UIInputFile::OnDrop(EventEmitter<IEventsDragDrop> *dd_,
-                         bool inside)
+void UIInputFile::OnDrop(EventEmitter<IEventsDragDrop> *dd_)
 {
-    IEventsDragDrop::OnDrop(dd_, inside);
+    IEventsDragDrop::OnDrop(dd_);
 
     if (UICanvas *canvas = UICanvas::GetActive(this))
     {

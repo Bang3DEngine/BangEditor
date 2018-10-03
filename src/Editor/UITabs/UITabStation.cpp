@@ -312,10 +312,9 @@ void UITabStation::OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDropEmitter)
     }
 }
 
-void UITabStation::OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter,
-                          bool inside)
+void UITabStation::OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter)
 {
-    BANG_UNUSED_2(dragDropEmitter, inside);
+    BANG_UNUSED(dragDropEmitter);
     if (Component *comp = DCAST<Component*>(dragDropEmitter))
     {
         if (UITabHeader *draggedTabHeader =
@@ -339,7 +338,7 @@ void UITabStation::OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter,
             m_dragPutInThisTabContainer = false;
             m_dragPutInSideTabContainer = false;
 
-            draggedTabHeader->OnDrop(dragDropEmitter, inside);
+            draggedTabHeader->OnDrop(dragDropEmitter);
 
             CleanUpEmptyChildStations();
         }

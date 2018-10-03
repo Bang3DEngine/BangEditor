@@ -40,8 +40,7 @@ protected:
     // IEventsDragDrop
     virtual void OnDragStarted(EventEmitter<IEventsDragDrop> *dragDroppable) override;
     virtual void OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDroppable) override;
-    virtual void OnDrop(EventEmitter<IEventsDragDrop> *dragDroppable,
-                        bool inside) override;
+    virtual void OnDrop(EventEmitter<IEventsDragDrop> *dragDroppable) override;
 
 private:
     Path m_path = Path("undef"); // Set to empty in constructor

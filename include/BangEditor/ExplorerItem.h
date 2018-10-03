@@ -51,7 +51,7 @@ public:
     virtual void OnCreateContextMenu(MenuItem *menuRootItem);
 
     // IEventsDragDrop
-    void OnDrop(EventEmitter<IEventsDragDrop> *dragDroppable, bool inside) override;
+    void OnDrop(EventEmitter<IEventsDragDrop> *dragDroppable) override;
 
 protected:
     ExplorerItem();

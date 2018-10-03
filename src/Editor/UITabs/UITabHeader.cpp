@@ -142,10 +142,8 @@ void UITabHeader::OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDropEmitter)
     BANG_UNUSED(dragDropEmitter);
 }
 
-void UITabHeader::OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter,
-                         bool inside)
+void UITabHeader::OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter)
 {
-    BANG_UNUSED(inside);
     if (dragDropEmitter == GetDragDroppable())
     {
 

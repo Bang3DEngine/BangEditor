@@ -380,10 +380,9 @@ void UISceneEditContainer::OnDragUpdate(EventEmitter<IEventsDragDrop> *dd_)
     }
 }
 
-void UISceneEditContainer::OnDrop(EventEmitter<IEventsDragDrop> *dd_,
-                                  bool inside)
+void UISceneEditContainer::OnDrop(EventEmitter<IEventsDragDrop> *dd_)
 {
-    IEventsDragDrop::OnDrop(dd_, inside);
+    IEventsDragDrop::OnDrop(dd_);
 
     if (p_lastOveredGameObject)
     {

@@ -311,16 +311,16 @@ void ExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
     }
 }
 
-void ExplorerItem::OnDrop(EventEmitter<IEventsDragDrop> *dd_, bool inside)
+void ExplorerItem::OnDrop(EventEmitter<IEventsDragDrop> *dd_)
 {
-    IEventsDragDrop::OnDrop(dd_, inside);
+    IEventsDragDrop::OnDrop(dd_);
 
-    UIDragDroppable *dd = DCAST<UIDragDroppable*>(dd_);
-    if (!inside)
+    if (!GetRectTransform()->IsMouseOver(true))
     {
         return;
     }
 
+    UIDragDroppable *dd = DCAST<UIDragDroppable*>(dd_);
     if (ExplorerItem *expItem = DCAST<ExplorerItem*>(dd->GetGameObject()))
     {
         if (expItem != this &&

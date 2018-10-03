@@ -57,8 +57,7 @@ private:
                                *dragDropEmitter) override;
     virtual void OnDragUpdate(EventEmitter<IEventsDragDrop>
                               *dragDropEmitter) override;
-    virtual void OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter,
-                        bool inside) override;
+    virtual void OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter) override;
 
     // IEventsDestroy
     virtual void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;

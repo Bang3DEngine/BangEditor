@@ -334,7 +334,7 @@ void EditorCamera::GetLookAtFocusParams(GameObject *lookAtGo,
         float fov = Math::DegToRad(cam->GetFovDegrees() / 2.0f);
         stopDist = radius / std::tan(fov) * 1.5f;
     }
-    stopDist = Math::Max(stopDist, 0.5f);
+    stopDist = Math::Max(stopDist, 1.0f);
     *targetPos = focusPos - (focusDir * stopDist);
 }
 
