@@ -133,6 +133,7 @@ private:
     static void OnCreatePlane                    (MenuItem *item);
     static void OnCreateSphere                   (MenuItem *item);
     static void OnCreateCamera                   (MenuItem *item);
+    static void OnCreateParticleSystemGO         (MenuItem *item);
     static void OnCreateDirectionalLightGO       (MenuItem *item);
     static void OnCreatePointLightGO             (MenuItem *item);
     static UICanvas* OnCreateUICanvasGO          (MenuItem *item);

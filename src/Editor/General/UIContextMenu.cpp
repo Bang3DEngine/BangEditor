@@ -29,7 +29,7 @@ void UIContextMenu::ShowMenu()
 {
     if (p_menu)
     {
-            GameObject::Destroy(p_menu);
+        GameObject::Destroy(p_menu);
         p_menu = nullptr;
     }
 
@@ -109,7 +109,6 @@ ContextMenu::ContextMenu()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     p_rootItem = GameObject::Create<MenuItem>( MenuItem::MenuItemType::ROOT );
-    GetRootItem()->SetDestroyOnClose(true);
 
     RectTransform *rt = GetRootItem()->GetRectTransform();
     Vector2 mousePosNDC = Input::GetMousePositionNDC();
@@ -156,12 +155,6 @@ void ContextMenu::Update()
     if (Input::GetMouseButtonDown(MouseButton::RIGHT) ||
         Input::GetMouseButtonDown(MouseButton::LEFT))
     {
-        Debug_Peek( Input::GetMousePosition() );
-        Debug_Peek( Input::GetMousePositionWindow() );
-        Debug_Peek( GetRootItem()->GetRectTransform()->GetViewportAARect() );
-
-        GetRootItem()->SetName("AAA");
-
         if (!m_justCreated &&
             !GetRootItem()->GetRectTransform()->IsMouseOver(true))
         {

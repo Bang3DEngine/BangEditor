@@ -170,9 +170,18 @@ void MenuBar::RegisterShortcut(const Shortcut &shortcut)
 
 void MenuBar::OnShortcutPressed(const Shortcut &shortcut)
 {
-    if (shortcut.GetName() == "SaveScene") { OnSaveScene(nullptr); }
-    if (shortcut.GetName() == "SaveSceneAs") { OnSaveSceneAs(nullptr); }
-    if (shortcut.GetName() == "OpenScene") { OnOpenScene(nullptr); }
+    if (shortcut.GetName() == "SaveScene")
+    {
+        OnSaveScene(nullptr);
+    }
+    else if (shortcut.GetName() == "SaveSceneAs")
+    {
+        OnSaveSceneAs(nullptr);
+    }
+    else if (shortcut.GetName() == "OpenScene")
+    {
+        OnOpenScene(nullptr);
+    }
 }
 
 void MenuBar::Update()
@@ -188,9 +197,9 @@ void MenuBar::Update()
         item->SetDropDownEnabled(hasFocusRecursive);
 
         // Force show on top item if mouse over and menu bar has focus
-        bool forceShowItem = (hasFocusRecursive &&
-                              canvas->IsMouseOver(item, true));
-        if (forceShowItem && item != p_currentTopItemBeingShown)
+        bool needToShowThisItem = (hasFocusRecursive &&
+                                   canvas->IsMouseOver(item, true));
+        if (needToShowThisItem && item != p_currentTopItemBeingShown)
         {
             if (p_currentTopItemBeingShown) // Unforce show on the other
             {
@@ -249,15 +258,17 @@ MenuItem* MenuBar::GetItem(int i)
 void MenuBar::CreateGameObjectCreateMenuInto(MenuItem *rootItem)
 {
     MenuItem *createEmpty   = rootItem->AddItem("Empty");
-    MenuItem *primitiveGameObjectItem = rootItem->AddItem("Primitives");
-    MenuItem *createCone     = primitiveGameObjectItem->AddItem("Cone");
-    MenuItem *createCube     = primitiveGameObjectItem->AddItem("Cube");
-    MenuItem *createCapsule  = primitiveGameObjectItem->AddItem("Capsule");
-    MenuItem *createSphere   = primitiveGameObjectItem->AddItem("Sphere");
-    MenuItem *createCylinder = primitiveGameObjectItem->AddItem("Cylinder");
-    MenuItem *createPlane    = primitiveGameObjectItem->AddItem("Plane");
-    MenuItem *createCam      = rootItem->AddItem("Camera");
-    MenuItem *lightsGOItem   = rootItem->AddItem("Lights");
+    MenuItem *primitiveGameObjectItem  = rootItem->AddItem("Primitives");
+    MenuItem *createCone               = primitiveGameObjectItem->AddItem("Cone");
+    MenuItem *createCube               = primitiveGameObjectItem->AddItem("Cube");
+    MenuItem *createCapsule            = primitiveGameObjectItem->AddItem("Capsule");
+    MenuItem *createSphere             = primitiveGameObjectItem->AddItem("Sphere");
+    MenuItem *createCylinder           = primitiveGameObjectItem->AddItem("Cylinder");
+    MenuItem *createPlane              = primitiveGameObjectItem->AddItem("Plane");
+    MenuItem *createCam                = rootItem->AddItem("Camera");
+    MenuItem *createRendering          = rootItem->AddItem("Rendering");
+    MenuItem *createParticleSystemGO   = createRendering->AddItem("Particle System");
+    MenuItem *lightsGOItem             = rootItem->AddItem("Lights");
     MenuItem *createDirectionalLightGO = lightsGOItem->AddItem("Directional Light");
     MenuItem *createPointLightGO       = lightsGOItem->AddItem("Point Light");
     MenuItem *uiItemGO         = rootItem->AddItem("UI");
@@ -273,6 +284,7 @@ void MenuBar::CreateGameObjectCreateMenuInto(MenuItem *rootItem)
     createSphere->SetSelectedCallback(MenuBar::OnCreateSphere);
     createCylinder->SetSelectedCallback(MenuBar::OnCreateCylinder);
     createCam->SetSelectedCallback(MenuBar::OnCreateCamera);
+    createParticleSystemGO->SetSelectedCallback(MenuBar::OnCreateParticleSystemGO);
     createDirectionalLightGO->SetSelectedCallback(MenuBar::OnCreateDirectionalLightGO);
     createPointLightGO->SetSelectedCallback(MenuBar::OnCreatePointLightGO);
     createUIEmptyGO->SetSelectedCallback(MenuBar::OnCreateUIEmptyGO);
@@ -826,6 +838,14 @@ void MenuBar::OnCreateCamera(MenuItem*)
     GameObjectFactory::CreateDefaultCameraInto(camGameObject);
     camGameObject->AddComponent<AudioListener>();
     MenuBar::OnEndCreateGameObjectFromMenuBar(camGameObject);
+}
+
+void MenuBar::OnCreateParticleSystemGO(MenuItem *item)
+{
+    GameObject *psGameObject = GameObjectFactory::CreateGameObject();
+    psGameObject->SetName("ParticleSystem");
+    psGameObject->AddComponent<ParticleSystem>();
+    MenuBar::OnEndCreateGameObjectFromMenuBar(psGameObject);
 }
 
 void MenuBar::OnCreateDirectionalLightGO(MenuItem*)

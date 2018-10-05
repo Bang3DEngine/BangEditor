@@ -410,23 +410,53 @@ void MenuItem::SetDropDownEnabledRecursively(bool enabled)
 
 bool MenuItem::MustDisplayChildren() const
 {
-    if (!IsDropDownEnabled()) { return false; }
-
-    if ( GetItemType() == MenuItemType::ROOT ) { return true; }
-    if ( IsForcedShow() ) { return true; }
-    if ( IsSelected() ) { return true; }
-
-    return false;
+    return IsDropDownEnabled() &&
+                (GetItemType() == MenuItemType::ROOT ||
+                 IsForcedShow() ||
+                 IsSelected());
 }
 
-bool MenuItem::IsOverAndActionEnabled() const { return m_overAndActionEnabled; }
-bool MenuItem::IsDropDownEnabled() const { return m_dropDownEnabled; }
-UIList *MenuItem::GetChildrenList() const { return p_childrenList; }
-UITextRenderer *MenuItem::GetText() const { return p_text; }
-UIFocusable *MenuItem::GetFocusable() const { return p_focusable; }
-MenuItem::MenuItemType MenuItem::GetItemType() const { return m_itemType; }
-bool MenuItem::GetDestroyOnClose() const { return m_destroyOnClose; }
-float MenuItem::GetFontSize() const { return m_fontSize; }
-bool MenuItem::IsForcedShow() const { return m_forcedShow; }
-MenuItem *MenuItem::GetParentItem() const { return p_parentItem; }
-const List<MenuItem *> &MenuItem::GetChildrenItems() const { return p_childrenItems; }
+bool MenuItem::IsOverAndActionEnabled() const
+{
+    return m_overAndActionEnabled;
+}
+bool MenuItem::IsDropDownEnabled() const
+{
+    return m_dropDownEnabled;
+}
+UIList *MenuItem::GetChildrenList() const
+{
+    return p_childrenList;
+}
+UITextRenderer *MenuItem::GetText() const
+{
+    return p_text;
+}
+UIFocusable *MenuItem::GetFocusable() const
+{
+    return p_focusable;
+}
+MenuItem::MenuItemType MenuItem::GetItemType() const
+{
+    return m_itemType;
+}
+bool MenuItem::GetDestroyOnClose() const
+{
+    return m_destroyOnClose;
+}
+float MenuItem::GetFontSize() const
+{
+    return m_fontSize;
+}
+bool MenuItem::IsForcedShow() const
+{
+    return m_forcedShow;
+}
+MenuItem *MenuItem::GetParentItem() const
+{
+    return p_parentItem;
+}
+const List<MenuItem *> &MenuItem::GetChildrenItems() const
+{
+    return p_childrenItems;
+}
