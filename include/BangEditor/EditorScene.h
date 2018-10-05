@@ -52,7 +52,9 @@ class EditorScene : public Scene,
     GAMEOBJECT_EDITOR(EditorScene);
 
 public:
+    // GameObject
     void Update() override;
+    void Render(RenderPass rp, bool renderChildren) override;
     void OnResize(int newWidth, int newHeight) override;
 
     void RenderOpenSceneIfNeeded();
@@ -105,9 +107,6 @@ private:
     UIScenePlayContainer *p_scenePlayContainer = nullptr;
 
     void Init();
-
-    // GameObject
-    void BeforeRender() override;
 
     void BindOpenScene();
     void UnBindOpenScene();

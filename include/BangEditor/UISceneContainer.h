@@ -32,6 +32,9 @@ public:
     UISceneContainer();
     virtual ~UISceneContainer();
 
+    // GameObject
+    void Render(RenderPass rp, bool renderChildren) override;
+
     void RenderIfNeeded();
 
     void SetScene(Scene *scene);

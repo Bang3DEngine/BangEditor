@@ -116,7 +116,7 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
         }
     }
 
-    GameObject::Render(rp, renderChildren);
+    UISceneContainer::Render(rp, renderChildren);
 }
 
 bool UISceneEditContainer::HasFocus()

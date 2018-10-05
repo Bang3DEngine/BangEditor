@@ -158,12 +158,6 @@ EditorScene::~EditorScene()
     delete m_editSceneGameObjects;
 }
 
-void EditorScene::BeforeRender()
-{
-    Scene::BeforeRender();
-    RenderOpenSceneIfNeeded();
-}
-
 void EditorScene::Update()
 {
     Scene::Update();
@@ -216,6 +210,16 @@ void EditorScene::Update()
         sceneEditTabStation->GetTabContainer()->SetTabTitle(p_sceneEditContainer,
                                                             sceneTabName);
     }
+}
+
+void EditorScene::Render(RenderPass rp, bool renderChildren)
+{
+    if (rp == RenderPass::CANVAS)
+    {
+        RenderOpenSceneIfNeeded();
+    }
+
+    GameObject::Render(rp, renderChildren);
 }
 
 void EditorScene::OnResize(int newWidth, int newHeight)

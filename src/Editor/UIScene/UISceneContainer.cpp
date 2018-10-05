@@ -95,24 +95,42 @@ UISceneContainer::~UISceneContainer()
 {
 }
 
+void UISceneContainer::Render(RenderPass rp, bool renderChildren)
+{
+    if (rp == RenderPass::CANVAS)
+    {
+        bool showSceneImg = false;
+        if (Camera *cam = GetSceneCamera(GetContainedScene()))
+        {
+            Vector2i sceneImgSize( p_sceneImage->GetRectTransform()->
+                                   GetViewportAARect().GetSize() );
+            bool renderSizeMatches = (sceneImgSize == cam->GetRenderSize());
+            showSceneImg = renderSizeMatches;
+        }
+        p_sceneImage->GetSceneImageRenderer()->SetTint(
+                    showSceneImg ? Color::Blue : Color::Black);
+    }
+
+    GameObject::Render(rp, renderChildren);
+}
+
 void UISceneContainer::RenderIfNeeded()
 {
     if ( NeedsToRenderScene( GetContainedScene() ) )
     {
-        Camera *cam = GetSceneCamera(GetContainedScene());
-        if (cam)
+        if (Camera *cam = GetSceneCamera(GetContainedScene()))
         {
             cam->SetRenderSize( Vector2i(GetSceneImage()->GetRectTransform()->
                                          GetViewportAARect().GetSize()) );
             GEngine::GetInstance()->Render(GetContainedScene(), cam);
             OnRenderNeededSceneFinished();
+            p_noCameraOverlay->SetEnabled(false);
         }
         else
         {
             p_sceneImage->GetSceneImageRenderer()->SetTint(Color::Black);
+            p_noCameraOverlay->SetEnabled(true);
         }
-
-        p_noCameraOverlay->SetEnabled(cam == nullptr);
     }
 }
 
