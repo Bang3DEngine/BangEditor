@@ -129,6 +129,7 @@ private:
     static void OnCreateCone                     (MenuItem *item);
     static void OnCreateCube                     (MenuItem *item);
     static void OnCreateCapsule                  (MenuItem *item);
+    static void OnCreateCylinder                 (MenuItem *item);
     static void OnCreatePlane                    (MenuItem *item);
     static void OnCreateSphere                   (MenuItem *item);
     static void OnCreateCamera                   (MenuItem *item);

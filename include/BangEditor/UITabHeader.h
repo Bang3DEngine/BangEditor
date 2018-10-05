@@ -44,8 +44,8 @@ public:
     UIDragDroppable *GetDragDroppable() const;
 
 private:
-    const Color ForegroundColor = Color::Zero;
-    const Color BackgroundColor = Color::DarkGray;
+    static const Color ForegroundColor;
+    static const Color BackgroundColor;
 
     String m_title = "Tab";
     bool m_inForeground = false;
@@ -54,6 +54,7 @@ private:
     DPtr<UITabContainer> p_tabContainer = nullptr;
 
     UIImageRenderer *p_bg = nullptr;
+    UIImageRenderer *p_border = nullptr;
     UIFocusable *p_focusable = nullptr;
     UITextRenderer *p_titleText = nullptr;
 

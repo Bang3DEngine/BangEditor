@@ -30,6 +30,7 @@ FORWARD class Inspector;
 FORWARD class Hierarchy;
 FORWARD class ScenePlayer;
 FORWARD class UITabStation;
+FORWARD class AnimatorEditor;
 FORWARD class ProjectManager;
 FORWARD class UITabContainer;
 FORWARD class EditorClipboard;
@@ -67,6 +68,7 @@ public:
     Hierarchy *GetHierarchy() const;
     ScenePlayer *GetScenePlayer() const;
     ProjectManager *GetProjectManager() const;
+    AnimatorEditor *GetAnimatorEditor() const;
     EditorClipboard *GetEditorClipboard() const;
     UndoRedoManager *GetUndoRedoManager() const;
     SceneOpenerSaver *GetSceneOpenerSaver() const;
@@ -80,28 +82,27 @@ protected:
     virtual ~EditorScene();
 
 private:
-    EditorFileTracker *m_editorFileTracker = nullptr;
-
-    ScenePlayer *m_scenePlayer = nullptr;
-    ProjectManager *m_projectManager = nullptr;
-    EditorClipboard *m_editorClipboard = nullptr;
-    SceneOpenerSaver *m_sceneOpenerSaver = nullptr;
+    ScenePlayer *m_scenePlayer                   = nullptr;
+    ProjectManager *m_projectManager             = nullptr;
+    EditorClipboard *m_editorClipboard           = nullptr;
+    UndoRedoManager *m_undoRedoManager           = nullptr;
+    SceneOpenerSaver *m_sceneOpenerSaver         = nullptr;
+    EditorFileTracker *m_editorFileTracker       = nullptr;
     EditSceneGameObjects *m_editSceneGameObjects = nullptr;
 
-    Console *p_console     = nullptr;
-    Explorer *p_explorer   = nullptr;
-    Inspector *p_inspector = nullptr;
-    Hierarchy *p_hierarchy = nullptr;
-    UndoRedoManager *m_undoRedoManager = nullptr;
-
     Scene *p_openScene = nullptr;
+
+    MenuBar *m_menuBar           = nullptr;
+    GameObject *m_mainEditorVLGo = nullptr;
+
+    UITabStation *p_tabStation                 = nullptr;
+    Console *p_console                         = nullptr;
+    Explorer *p_explorer                       = nullptr;
+    Inspector *p_inspector                     = nullptr;
+    Hierarchy *p_hierarchy                     = nullptr;
+    AnimatorEditor *p_animatorEditor           = nullptr;
     UISceneEditContainer *p_sceneEditContainer = nullptr;
     UIScenePlayContainer *p_scenePlayContainer = nullptr;
-
-    UITabStation *p_tabStation = nullptr;
-
-    MenuBar *m_menuBar = nullptr;
-    GameObject *m_mainEditorVLGo = nullptr;
 
     void Init();
 

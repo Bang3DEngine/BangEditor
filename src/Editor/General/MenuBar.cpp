@@ -250,13 +250,14 @@ void MenuBar::CreateGameObjectCreateMenuInto(MenuItem *rootItem)
 {
     MenuItem *createEmpty   = rootItem->AddItem("Empty");
     MenuItem *primitiveGameObjectItem = rootItem->AddItem("Primitives");
-    MenuItem *createCone    = primitiveGameObjectItem->AddItem("Cone");
-    MenuItem *createCube    = primitiveGameObjectItem->AddItem("Cube");
-    MenuItem *createCapsule = primitiveGameObjectItem->AddItem("Capsule");
-    MenuItem *createSphere  = primitiveGameObjectItem->AddItem("Sphere");
-    MenuItem *createPlane   = primitiveGameObjectItem->AddItem("Plane");
-    MenuItem *createCam     = rootItem->AddItem("Camera");
-    MenuItem *lightsGOItem  = rootItem->AddItem("Lights");
+    MenuItem *createCone     = primitiveGameObjectItem->AddItem("Cone");
+    MenuItem *createCube     = primitiveGameObjectItem->AddItem("Cube");
+    MenuItem *createCapsule  = primitiveGameObjectItem->AddItem("Capsule");
+    MenuItem *createSphere   = primitiveGameObjectItem->AddItem("Sphere");
+    MenuItem *createCylinder = primitiveGameObjectItem->AddItem("Cylinder");
+    MenuItem *createPlane    = primitiveGameObjectItem->AddItem("Plane");
+    MenuItem *createCam      = rootItem->AddItem("Camera");
+    MenuItem *lightsGOItem   = rootItem->AddItem("Lights");
     MenuItem *createDirectionalLightGO = lightsGOItem->AddItem("Directional Light");
     MenuItem *createPointLightGO       = lightsGOItem->AddItem("Point Light");
     MenuItem *uiItemGO         = rootItem->AddItem("UI");
@@ -270,6 +271,7 @@ void MenuBar::CreateGameObjectCreateMenuInto(MenuItem *rootItem)
     createCapsule->SetSelectedCallback(MenuBar::OnCreateCapsule);
     createPlane->SetSelectedCallback(MenuBar::OnCreatePlane);
     createSphere->SetSelectedCallback(MenuBar::OnCreateSphere);
+    createCylinder->SetSelectedCallback(MenuBar::OnCreateCylinder);
     createCam->SetSelectedCallback(MenuBar::OnCreateCamera);
     createDirectionalLightGO->SetSelectedCallback(MenuBar::OnCreateDirectionalLightGO);
     createPointLightGO->SetSelectedCallback(MenuBar::OnCreatePointLightGO);
@@ -803,6 +805,12 @@ void MenuBar::OnCreateCapsule(MenuItem*)
 {
     MenuBar::OnEndCreateGameObjectFromMenuBar(
                 GameObjectFactory::CreateCapsuleGameObject() );
+}
+
+void MenuBar::OnCreateCylinder(MenuItem *item)
+{
+    MenuBar::OnEndCreateGameObjectFromMenuBar(
+                GameObjectFactory::CreateCylinderGameObject() );
 }
 
 void MenuBar::OnCreateSphere(MenuItem*)

@@ -1,7 +1,9 @@
 #include "BangEditor/UITabHeader.h"
 
+#include "Bang/UITheme.h"
 #include "Bang/UICanvas.h"
 #include "Bang/UIFocusable.h"
+#include "Bang/TextureFactory.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIDragDroppable.h"
 #include "Bang/UILayoutElement.h"
@@ -14,6 +16,10 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
+const Color UITabHeader::ForegroundColor = Color::Zero;
+const Color UITabHeader::BackgroundColor = Color::DarkGray.
+                                           WithValue(1.3f);
+
 UITabHeader::UITabHeader()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
@@ -25,6 +31,11 @@ UITabHeader::UITabHeader()
     le->SetLayoutPriority(1);
 
     p_bg = AddComponent<UIImageRenderer>();
+
+    p_border = AddComponent<UIImageRenderer>();
+    p_border->SetImageTexture( TextureFactory::Get9SliceBorder() );
+    p_border->SetMode( UIImageRenderer::Mode::SLICE_9 );
+    p_border->SetSlice9BorderStrokePx( Vector2i(1) );
 
     GameObject *titleGo = GameObjectFactory::CreateUIGameObject();
     p_titleText = titleGo->AddComponent<UITextRenderer>();
@@ -78,8 +89,10 @@ void UITabHeader::Update()
 void UITabHeader::SetInForeground(bool inForeground)
 {
     m_inForeground = inForeground;
-    m_currentHeaderColor = (inForeground ? ForegroundColor : BackgroundColor);
+    m_currentHeaderColor = (inForeground ? UITabHeader::ForegroundColor :
+                                           UITabHeader::BackgroundColor);
     p_bg->SetTint(m_currentHeaderColor);
+    p_border->SetTint( inForeground ? Color::Zero : Color::Black );
 }
 
 void UITabHeader::SetTitle(const String &title)

@@ -26,7 +26,7 @@ UITabStation::UITabStation()
 
     p_dragMarker = GameObjectFactory::CreateUIGameObject();
     UIImageRenderer *dragMarkerImg = p_dragMarker->AddComponent<UIImageRenderer>();
-    dragMarkerImg->SetTint( UITheme::GetSelectedColor().WithAlpha(0.5f) );
+    dragMarkerImg->SetTint( UITheme::GetSelectedColor().WithAlpha(0.75f) );
     p_dragMarker->SetEnabled(false);
     p_dragMarker->GetRectTransform()->SetLocalPosition( Vector3(0, 0, -0.01f) );
     p_dragMarker->SetParent( EditorSceneManager::GetEditorScene() );

@@ -35,6 +35,7 @@
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/EditorWindow.h"
 #include "BangEditor/UITabStation.h"
+#include "BangEditor/AnimatorEditor.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/UITabContainer.h"
 #include "BangEditor/UndoRedoManager.h"
@@ -82,27 +83,10 @@ void EditorScene::Init()
 
     m_editSceneGameObjects = new EditSceneGameObjects();
 
-    // GameObject *topHLGo = GameObjectFactory::CreateUIGameObject();
-    // topHLGo->AddComponent<UIHorizontalLayout>();
-    // UILayoutElement *topHLLe = topHLGo->AddComponent<UILayoutElement>();
-    // topHLLe->SetLayoutPriority(1);
-    // topHLLe->SetFlexibleSize(Vector2(1, 1.5f));
-    // topHLGo->SetParent(m_mainEditorVLGo);
-
-    // GameObjectFactory::CreateUIDirLayoutMovableVSeparator()->GetGameObject()->
-    //                    SetParent(m_mainEditorVLGo);
-
-    // GameObject *botHLGo = GameObjectFactory::CreateUIGameObjectNamed("BotHL");
-    // botHLGo->AddComponent<UIHorizontalLayout>();
-    // UILayoutElement *botHLLe = botHLGo->AddComponent<UILayoutElement>();
-    // botHLLe->SetLayoutPriority(1);
-    // botHLLe->SetMinSize( Vector2i(1, 300) );
-    // botHLLe->SetFlexibleSize( Vector2(1, 1) );
-    // botHLGo->SetParent(m_mainEditorVLGo);
-
     // Inspector, Hierarchy, etc. creation
     p_sceneEditContainer = GameObject::Create<UISceneEditContainer>();
     p_scenePlayContainer = GameObject::Create<UIScenePlayContainer>();
+    p_animatorEditor = GameObject::Create<AnimatorEditor>();
     p_inspector = GameObject::Create<Inspector>();
     p_hierarchy = GameObject::Create<Hierarchy>();
     p_console = GameObject::Create<Console>();
@@ -113,6 +97,7 @@ void EditorScene::Init()
 
     p_tabStation->GetTabContainer()->AddTab("Scene", p_sceneEditContainer);
     p_tabStation->GetTabContainer()->AddTab("Game",  p_scenePlayContainer);
+    p_tabStation->GetTabContainer()->AddTab("Animator Editor", p_animatorEditor);
     p_tabStation->GetChildStationAndCreateIfNeeded(Side::LEFT)->
                   GetTabContainer()->AddTab("Hierarchy", p_hierarchy);
     p_tabStation->GetChildStationAndCreateIfNeeded(Side::RIGHT)->
@@ -362,6 +347,11 @@ ScenePlayer *EditorScene::GetScenePlayer() const
 ProjectManager *EditorScene::GetProjectManager() const
 {
     return m_projectManager;
+}
+
+AnimatorEditor *EditorScene::GetAnimatorEditor() const
+{
+    return p_animatorEditor;
 }
 
 EditorClipboard *EditorScene::GetEditorClipboard() const
