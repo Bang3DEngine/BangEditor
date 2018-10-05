@@ -260,24 +260,28 @@ void SceneOpenerSaver::OnPlayStateChanged(PlayState, PlayState newPlayState)
 
 bool SceneOpenerSaver::IsCurrentSceneSaved() const
 {
-    return (m_numActionsDoneSinceLastSave == 0) &&
-            GetLoadedScenePath().IsFile();
+    return (m_numActionsDoneSinceLastSave == 0) && GetOpenScenePath().IsFile();
 }
 
 bool SceneOpenerSaver::OpenSceneInEditor(const Path &scenePath)
 {
-    if (!Editor::IsEditingScene())
+    bool alreadyLoadingThisScene = (scenePath == GetOpenScenePath()) &&
+                                    GetLoadedScenePath().IsEmpty();
+    if (!alreadyLoadingThisScene)
     {
-        return false;
-    }
+        if (!Editor::IsEditingScene())
+        {
+            return false;
+        }
 
-    if (CloseScene())
-    {
-        UndoRedoManager::Clear();
-        SceneManager::LoadScene(scenePath, false);
-        m_currentOpenScenePath = scenePath;
-        m_numActionsDoneSinceLastSave = 0;
-        return true;
+        if (CloseScene())
+        {
+            UndoRedoManager::Clear();
+            SceneManager::LoadScene(scenePath, false);
+            m_currentOpenScenePath = scenePath;
+            m_numActionsDoneSinceLastSave = 0;
+            return true;
+        }
     }
     return false;
 }
