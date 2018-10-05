@@ -13,6 +13,8 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class AnimatorEditorScene;
+
 class AnimatorEditor : public GameObject,
                        public EventListener<IEventsDestroy>
 {
@@ -30,6 +32,7 @@ public:
 
 private:
     Animator *p_animator = nullptr;
+    AnimatorEditorScene *p_animatorEditorScene = nullptr;
 
     void Clear();
 

@@ -10,6 +10,8 @@
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIDirLayoutMovableSeparator.h"
 
+#include "BangEditor/AnimatorEditorScene.h"
+
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
@@ -23,16 +25,17 @@ AnimatorEditor::AnimatorEditor()
     UIHorizontalLayout *mainHL = AddComponent<UIHorizontalLayout>();
     mainHL->SetChildrenVerticalStretch(Stretch::FULL);
 
-    GameObject *nodesSceneContainer = GameObjectFactory::CreateUIGameObject();
+    UIFocusable *focusable = AddComponent<UIFocusable>();
+
+    GameObject *animatorEditorSceneContainer = GameObjectFactory::CreateUIGameObject();
     {
-        UILayoutElement *nodesSceneLE = nodesSceneContainer->
+        UILayoutElement *nodesSceneLE = animatorEditorSceneContainer->
                                         AddComponent<UILayoutElement>();
         nodesSceneLE->SetMinSize( Vector2i(200) );
         nodesSceneLE->SetFlexibleSize( Vector2::One );
 
-        UIImageRenderer *nodesSceneBG = nodesSceneContainer->
-                                        AddComponent<UIImageRenderer>();
-        nodesSceneBG->SetTint(Color::DarkGray);
+        p_animatorEditorScene = GameObject::Create<AnimatorEditorScene>();
+        p_animatorEditorScene->SetParent(animatorEditorSceneContainer);
     }
 
     GameObject *inspectorContainer = GameObjectFactory::CreateUIGameObject();
@@ -66,7 +69,7 @@ AnimatorEditor::AnimatorEditor()
         inspectorBG->SetTint(Color::LightGray);
     }
 
-    nodesSceneContainer->SetParent(this);
+    animatorEditorSceneContainer->SetParent(this);
     GameObjectFactory::CreateUIDirLayoutMovableHSeparator()->
                        GetGameObject()->SetParent(this);
     inspectorContainer->SetParent(this);
