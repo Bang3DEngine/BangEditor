@@ -10,7 +10,7 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
-#include "BangEditor/AESTransitionEntry.h"
+#include "BangEditor/AESConnectionPoint.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -36,19 +36,26 @@ AESNode::AESNode()
     textRend->SetTextColor(Color::Black);
     textRend->SetContent("Wololo");
 
-    constexpr int EntrySize = 20;
+    constexpr int CPSize = 20;
 
-    p_inEntry = GameObject::Create<AESTransitionEntry>();
-    p_inEntry->GetRectTransform()->SetAnchors( Vector2(-1.0f, 0.0f) );
-    p_inEntry->GetRectTransform()->SetPivotPosition( Vector2::Zero );
-    p_inEntry->GetRectTransform()->SetSizeFromPivot( Vector2i(EntrySize) );
-    p_inEntry->SetParent(this);
+    p_inConnectionPoint = GameObject::Create<AESConnectionPoint>(
+                                                AESConnectionPoint::Type::IN);
+    p_inConnectionPoint->GetRectTransform()->SetAnchors( Vector2(-1.0f, 0.0f) );
+    p_inConnectionPoint->GetRectTransform()->SetPivotPosition( Vector2::Zero );
+    p_inConnectionPoint->GetRectTransform()->SetSizeFromPivot( Vector2i(CPSize) );
+    p_inConnectionPoint->SetNode(this);
+    p_inConnectionPoint->SetParent(this);
 
-    p_outEntry = GameObject::Create<AESTransitionEntry>();
-    p_outEntry->GetRectTransform()->SetAnchors( Vector2(1.0f, 0.0f) );
-    p_outEntry->GetRectTransform()->SetPivotPosition( Vector2::Zero );
-    p_outEntry->GetRectTransform()->SetSizeFromPivot( Vector2i(EntrySize) );
-    p_outEntry->SetParent(this);
+    p_outConnectionPoint = GameObject::Create<AESConnectionPoint>(
+                                                AESConnectionPoint::Type::OUT);
+    p_outConnectionPoint->GetRectTransform()->SetAnchors( Vector2(1.0f, 0.0f) );
+    p_outConnectionPoint->GetRectTransform()->SetPivotPosition( Vector2::Zero );
+    p_outConnectionPoint->GetRectTransform()->SetSizeFromPivot( Vector2i(CPSize) );
+    p_outConnectionPoint->SetNode(this);
+    p_outConnectionPoint->SetParent(this);
+
+    p_inConnectionPoint->SetSiblingConnectionPoint(p_outConnectionPoint);
+    p_outConnectionPoint->SetSiblingConnectionPoint(p_inConnectionPoint);
 }
 
 AESNode::~AESNode()

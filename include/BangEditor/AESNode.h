@@ -15,7 +15,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class AESTransitionEntry;
+FORWARD class AESConnectionPoint;
 
 class AESNode : public GameObject,
                 public EventListener<IEventsFocus>
@@ -30,8 +30,8 @@ public:
     void Update() override;
 
 private:
-    AESTransitionEntry *p_inEntry  = nullptr;
-    AESTransitionEntry *p_outEntry = nullptr;
+    AESConnectionPoint *p_inConnectionPoint  = nullptr;
+    AESConnectionPoint *p_outConnectionPoint = nullptr;
 
     UIImageRenderer *p_bg = nullptr;
     UIFocusable *p_focusable = nullptr;
