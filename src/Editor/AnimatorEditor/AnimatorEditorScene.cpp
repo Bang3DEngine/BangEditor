@@ -43,6 +43,10 @@ AnimatorEditorScene::AnimatorEditorScene()
     node2->GetRectTransform()->SetLocalPosition( Vector3(200.0f, 400.0f, 0.0f) );
     node2->SetParent(p_mainContainer);
 
+    AESNode *node3 = GameObject::Create<AESNode>();
+    node3->GetRectTransform()->SetLocalPosition( Vector3(200.0f, 700.0f, 0.0f) );
+    node3->SetParent(p_mainContainer);
+
     borderGo->SetParent(this);
 }
 

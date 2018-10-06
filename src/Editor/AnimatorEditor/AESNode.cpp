@@ -36,7 +36,7 @@ AESNode::AESNode()
     textRend->SetTextColor(Color::Black);
     textRend->SetContent("Wololo");
 
-    constexpr int CPSize = 20;
+    constexpr int CPSize = 30;
 
     p_inConnectionPoint = GameObject::Create<AESConnectionPoint>(
                                                 AESConnectionPoint::Type::IN);
@@ -68,9 +68,13 @@ void AESNode::Update()
 
     Color nodeColor = Color::White;
     RectTransform *rt = GetRectTransform();
-    if (p_focusable->IsBeingPressed())
+    if ( p_focusable->IsBeingPressed() &&
+        !Input::GetMouseButton(MouseButton::MIDDLE))
     {
+        RectTransform *parentRT = GetParent()->GetRectTransform();
         Vector2 mouseDelta( Input::GetMouseDelta() );
+        mouseDelta *= (1.0f / parentRT->GetLocalScale().x);
+
         Vector3 newLocalPos = rt->GetLocalPosition();
         newLocalPos += Vector3(mouseDelta, 0.0f);
         newLocalPos.z = -0.01f;
