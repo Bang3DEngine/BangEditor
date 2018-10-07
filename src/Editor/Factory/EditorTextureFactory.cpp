@@ -101,6 +101,11 @@ Texture2D *EditorTextureFactory::GetGreenCubeIcon()
     return EditorTextureFactory::GetTexture2D("GreenCube.png");
 }
 
+Texture2D *EditorTextureFactory::GetAnimatorSMIcon()
+{
+    return EditorTextureFactory::GetTexture2D("AnimatorSMIcon.png");
+}
+
 Texture2D *EditorTextureFactory::GetGreenSphereIcon()
 {
     return EditorTextureFactory::GetTexture2D("GreenSphere.png");
@@ -405,6 +410,11 @@ Texture2D* EditorTextureFactory::GetIconForExtension(const String &ext)
     else if ( Extensions::Equals(ext, Extensions::GetTextureCubeMapExtension()) )
     {
         return EditorTextureFactory::GetCubeMapIcon();
+    }
+    else if ( Extensions::Equals(ext,
+              Extensions::GetAnimatorStateMachineExtension()) )
+    {
+        return EditorTextureFactory::GetAnimatorSMIcon();
     }
     else if ( Extensions::Equals(ext, Extensions::GetAnimationExtension()) )
     {

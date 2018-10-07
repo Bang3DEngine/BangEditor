@@ -415,8 +415,11 @@ void BangEditor::MenuBar::CreateAssetsMenuInto(BangEditor::MenuItem *rootItem)
 {
     MenuItem *createMaterial = rootItem->AddItem("Material");
     MenuItem *createPhysicsMaterial = rootItem->AddItem("Physics Material");
-    MenuItem *createBehaviour = rootItem->AddItem("Behaviour"); MenuItem *createTextureCubeMap = rootItem->AddItem("Texture Cube Map");
+    MenuItem *createAnimatorSM = rootItem->AddItem("Animator State Machine");
+    MenuItem *createBehaviour = rootItem->AddItem("Behaviour");
+    MenuItem *createTextureCubeMap = rootItem->AddItem("Texture Cube Map");
     createMaterial->SetSelectedCallback(MenuBar::OnCreateMaterial);
+    createAnimatorSM->SetSelectedCallback(MenuBar::OnCreateAnimatorStateMachine);
     createPhysicsMaterial->SetSelectedCallback(MenuBar::OnCreatePhysicsMaterial);
     createBehaviour->SetSelectedCallback(MenuBar::OnCreateBehaviour);
     createTextureCubeMap->SetSelectedCallback(MenuBar::OnCreateTextureCubeMap);
@@ -527,7 +530,7 @@ void MenuBar::OnCreateMaterial(MenuItem*)
     OnCreateAssetFile<Material>("Material", Extensions::GetMaterialExtension());
 }
 
-void MenuBar::OnCreateBehaviour(MenuItem *item)
+void MenuBar::OnCreateBehaviour(MenuItem*)
 {
     CreateNewBehaviour();
 }
@@ -535,13 +538,19 @@ void MenuBar::OnCreateBehaviour(MenuItem *item)
 void MenuBar::OnCreatePhysicsMaterial(MenuItem*)
 {
     OnCreateAssetFile<PhysicsMaterial>("PhysicsMaterial",
-                                       Extensions::GetPhysicsMaterialExtension());
+                        Extensions::GetPhysicsMaterialExtension());
+}
+
+void MenuBar::OnCreateAnimatorStateMachine(MenuItem*)
+{
+    OnCreateAssetFile<AnimatorStateMachine>("AnimatorSM",
+                        Extensions::GetAnimatorStateMachineExtension());
 }
 
 void MenuBar::OnCreateTextureCubeMap(MenuItem*)
 {
     OnCreateAssetFile<TextureCubeMap>("CubeMap",
-                                      Extensions::GetTextureCubeMapExtension());
+                        Extensions::GetTextureCubeMapExtension());
 }
 
 template <class T>

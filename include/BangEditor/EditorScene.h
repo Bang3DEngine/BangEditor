@@ -30,11 +30,11 @@ FORWARD class Inspector;
 FORWARD class Hierarchy;
 FORWARD class ScenePlayer;
 FORWARD class UITabStation;
-FORWARD class AnimatorEditor;
 FORWARD class ProjectManager;
 FORWARD class UITabContainer;
 FORWARD class EditorClipboard;
 FORWARD class UndoRedoManager;
+FORWARD class AnimatorSMEditor;
 FORWARD class SceneOpenerSaver;
 FORWARD class UISceneContainer;
 FORWARD class EditorApplication;
@@ -70,9 +70,9 @@ public:
     Hierarchy *GetHierarchy() const;
     ScenePlayer *GetScenePlayer() const;
     ProjectManager *GetProjectManager() const;
-    AnimatorEditor *GetAnimatorEditor() const;
     EditorClipboard *GetEditorClipboard() const;
     UndoRedoManager *GetUndoRedoManager() const;
+    AnimatorSMEditor *GetAnimatorSMEditor() const;
     SceneOpenerSaver *GetSceneOpenerSaver() const;
     EditorFileTracker *GetEditorFileTracker() const;
     UISceneEditContainer *GetSceneEditContainer() const;
@@ -102,7 +102,7 @@ private:
     Explorer *p_explorer                       = nullptr;
     Inspector *p_inspector                     = nullptr;
     Hierarchy *p_hierarchy                     = nullptr;
-    AnimatorEditor *p_animatorEditor           = nullptr;
+    AnimatorSMEditor *p_animatorSMEditor       = nullptr;
     UISceneEditContainer *p_sceneEditContainer = nullptr;
     UIScenePlayContainer *p_scenePlayContainer = nullptr;
 

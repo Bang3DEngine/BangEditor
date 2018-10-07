@@ -1,4 +1,4 @@
-#include "BangEditor/AnimatorEditorScene.h"
+#include "BangEditor/AnimatorSMEditorScene.h"
 
 #include "Bang/Input.h"
 #include "Bang/UITheme.h"
@@ -17,7 +17,7 @@
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-AnimatorEditorScene::AnimatorEditorScene()
+AnimatorSMEditorScene::AnimatorSMEditorScene()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
@@ -56,11 +56,11 @@ AnimatorEditorScene::AnimatorEditorScene()
     PropagateOnZoomScaleChanged();
 }
 
-AnimatorEditorScene::~AnimatorEditorScene()
+AnimatorSMEditorScene::~AnimatorSMEditorScene()
 {
 }
 
-void AnimatorEditorScene::Update()
+void AnimatorSMEditorScene::Update()
 {
     GameObject::Update();
 
@@ -87,7 +87,7 @@ void AnimatorEditorScene::Update()
                 Vector3(Vector2(m_zoomScale), 1.0f) );
 }
 
-void AnimatorEditorScene::PropagateOnZoomScaleChanged()
+void AnimatorSMEditorScene::PropagateOnZoomScaleChanged()
 {
     for (AESNode *node : p_nodes)
     {
@@ -95,7 +95,7 @@ void AnimatorEditorScene::PropagateOnZoomScaleChanged()
     }
 }
 
-UIEventResult AnimatorEditorScene::OnUIEvent(UIFocusable *, const UIEvent &event)
+UIEventResult AnimatorSMEditorScene::OnUIEvent(UIFocusable *, const UIEvent &event)
 {
     switch (event.type)
     {

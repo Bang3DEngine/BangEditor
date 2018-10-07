@@ -35,11 +35,11 @@
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/EditorWindow.h"
 #include "BangEditor/UITabStation.h"
-#include "BangEditor/AnimatorEditor.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/UITabContainer.h"
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/EditorClipboard.h"
+#include "BangEditor/AnimatorSMEditor.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/UISceneContainer.h"
 #include "BangEditor/EditorFileTracker.h"
@@ -86,7 +86,7 @@ void EditorScene::Init()
     // Inspector, Hierarchy, etc. creation
     p_sceneEditContainer = GameObject::Create<UISceneEditContainer>();
     p_scenePlayContainer = GameObject::Create<UIScenePlayContainer>();
-    p_animatorEditor = GameObject::Create<AnimatorEditor>();
+    p_animatorSMEditor = GameObject::Create<AnimatorSMEditor>();
     p_inspector = GameObject::Create<Inspector>();
     p_hierarchy = GameObject::Create<Hierarchy>();
     p_console = GameObject::Create<Console>();
@@ -97,7 +97,7 @@ void EditorScene::Init()
 
     p_tabStation->GetTabContainer()->AddTab("Scene", p_sceneEditContainer);
     p_tabStation->GetTabContainer()->AddTab("Game",  p_scenePlayContainer);
-    p_tabStation->GetTabContainer()->AddTab("Animator Editor", p_animatorEditor);
+    p_tabStation->GetTabContainer()->AddTab("Animator Editor", p_animatorSMEditor);
     p_tabStation->GetChildStationAndCreateIfNeeded(Side::LEFT)->
                   GetTabContainer()->AddTab("Hierarchy", p_hierarchy);
     p_tabStation->GetChildStationAndCreateIfNeeded(Side::RIGHT)->
@@ -353,9 +353,9 @@ ProjectManager *EditorScene::GetProjectManager() const
     return m_projectManager;
 }
 
-AnimatorEditor *EditorScene::GetAnimatorEditor() const
+AnimatorSMEditor *EditorScene::GetAnimatorSMEditor() const
 {
-    return p_animatorEditor;
+    return p_animatorSMEditor;
 }
 
 EditorClipboard *EditorScene::GetEditorClipboard() const
@@ -424,7 +424,8 @@ void EditorScene::OnPlayStateChanged(PlayState previousPlayState,
             }
         break;
 
-        default: break;
+        default:
+        break;
     }
 }
 

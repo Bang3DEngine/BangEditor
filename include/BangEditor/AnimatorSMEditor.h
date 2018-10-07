@@ -1,5 +1,5 @@
-#ifndef ANIMATOREDITOR_H
-#define ANIMATOREDITOR_H
+#ifndef ANIMATORSMEDITOR_H
+#define ANIMATORSMEDITOR_H
 
 #include "Bang/Bang.h"
 #include "Bang/GameObject.h"
@@ -13,16 +13,16 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class AnimatorEditorScene;
+FORWARD class AnimatorSMEditorScene;
 
-class AnimatorEditor : public GameObject,
-                       public EventListener<IEventsDestroy>
+class AnimatorSMEditor : public GameObject,
+                         public EventListener<IEventsDestroy>
 {
-    GAMEOBJECT_EDITOR(AnimatorEditor);
+    GAMEOBJECT_EDITOR(AnimatorSMEditor);
 
 public:
-	AnimatorEditor();
-	virtual ~AnimatorEditor();
+	AnimatorSMEditor();
+	virtual ~AnimatorSMEditor();
 
     // GameObject
     void Update() override;
@@ -32,7 +32,7 @@ public:
 
 private:
     Animator *p_animator = nullptr;
-    AnimatorEditorScene *p_animatorEditorScene = nullptr;
+    AnimatorSMEditorScene *p_animatorEditorScene = nullptr;
 
     void Clear();
 
@@ -42,5 +42,5 @@ private:
 
 NAMESPACE_BANG_EDITOR_END
 
-#endif // ANIMATOREDITOR_H
+#endif // ANIMATORSMEDITOR_H
 

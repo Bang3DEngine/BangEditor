@@ -1,4 +1,4 @@
-#include "BangEditor/AnimatorEditor.h"
+#include "BangEditor/AnimatorSMEditor.h"
 
 #include "Bang/UILabel.h"
 #include "Bang/Animator.h"
@@ -10,12 +10,12 @@
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIDirLayoutMovableSeparator.h"
 
-#include "BangEditor/AnimatorEditorScene.h"
+#include "BangEditor/AnimatorSMEditorScene.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
-AnimatorEditor::AnimatorEditor()
+AnimatorSMEditor::AnimatorSMEditor()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
@@ -34,7 +34,7 @@ AnimatorEditor::AnimatorEditor()
         nodesSceneLE->SetMinSize( Vector2i(200) );
         nodesSceneLE->SetFlexibleSize( Vector2::One );
 
-        p_animatorEditorScene = GameObject::Create<AnimatorEditorScene>();
+        p_animatorEditorScene = GameObject::Create<AnimatorSMEditorScene>();
         p_animatorEditorScene->SetParent(animatorEditorSceneContainer);
     }
 
@@ -75,16 +75,16 @@ AnimatorEditor::AnimatorEditor()
     inspectorContainer->SetParent(this);
 }
 
-AnimatorEditor::~AnimatorEditor()
+AnimatorSMEditor::~AnimatorSMEditor()
 {
 }
 
-void AnimatorEditor::Update()
+void AnimatorSMEditor::Update()
 {
     GameObject::Update();
 }
 
-void AnimatorEditor::SetAnimator(Animator *animator)
+void AnimatorSMEditor::SetAnimator(Animator *animator)
 {
     if (animator != p_animator)
     {
@@ -102,17 +102,17 @@ void AnimatorEditor::SetAnimator(Animator *animator)
     }
 }
 
-Animator* AnimatorEditor::GetAnimator() const
+Animator* AnimatorSMEditor::GetAnimator() const
 {
     return p_animator;
 }
 
-void AnimatorEditor::Clear()
+void AnimatorSMEditor::Clear()
 {
 
 }
 
-void AnimatorEditor::OnDestroyed(EventEmitter<IEventsDestroy> *object)
+void AnimatorSMEditor::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     if (object == GetAnimator())
     {

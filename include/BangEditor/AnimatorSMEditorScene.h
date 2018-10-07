@@ -17,14 +17,14 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class AESNode;
 
-class AnimatorEditorScene : public GameObject,
-                            public EventListener<IEventsFocus>
+class AnimatorSMEditorScene : public GameObject,
+                              public EventListener<IEventsFocus>
 {
-    GAMEOBJECT_EDITOR(AnimatorEditorScene);
+    GAMEOBJECT_EDITOR(AnimatorSMEditorScene);
 
 public:
-	AnimatorEditorScene();
-	virtual ~AnimatorEditorScene();
+    AnimatorSMEditorScene();
+    virtual ~AnimatorSMEditorScene();
 
     // GameObject
     void Update() override;
