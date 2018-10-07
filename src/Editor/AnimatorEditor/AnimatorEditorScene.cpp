@@ -28,6 +28,8 @@ AnimatorEditorScene::AnimatorEditorScene()
 
     GameObject *borderGo = GameObjectFactory::CreateUIGameObject();
     p_border = GameObjectFactory::AddInnerBorder(borderGo);
+    borderGo->GetRectTransform()->SetLocalPosition( Vector3(0, 0, -0.04f) );
+    borderGo->SetParent(this);
 
     p_focusable = AddComponent<UIFocusable>();
     p_focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
@@ -35,9 +37,9 @@ AnimatorEditorScene::AnimatorEditorScene()
     p_mainContainer = GameObjectFactory::CreateUIGameObject();
     p_mainContainer->SetParent(this);
 
-    AESNode *node = GameObject::Create<AESNode>();
-    node->GetRectTransform()->SetLocalPosition( Vector3(50.0f, 50.0f, 0.0f) );
-    node->SetParent(p_mainContainer);
+    AESNode *node1 = GameObject::Create<AESNode>();
+    node1->GetRectTransform()->SetLocalPosition( Vector3(50.0f, 50.0f, 0.0f) );
+    node1->SetParent(p_mainContainer);
 
     AESNode *node2 = GameObject::Create<AESNode>();
     node2->GetRectTransform()->SetLocalPosition( Vector3(200.0f, 400.0f, 0.0f) );
@@ -47,7 +49,11 @@ AnimatorEditorScene::AnimatorEditorScene()
     node3->GetRectTransform()->SetLocalPosition( Vector3(200.0f, 700.0f, 0.0f) );
     node3->SetParent(p_mainContainer);
 
-    borderGo->SetParent(this);
+    p_nodes.PushBack(node1);
+    p_nodes.PushBack(node2);
+    p_nodes.PushBack(node3);
+
+    PropagateOnZoomScaleChanged();
 }
 
 AnimatorEditorScene::~AnimatorEditorScene()
@@ -73,11 +79,20 @@ void AnimatorEditorScene::Update()
         if (mouseWheel != Vector2::Zero)
         {
             m_zoomScale = Math::Clamp(m_zoomScale + mouseWheel.y, 0.1f, 2.0f);
+            PropagateOnZoomScaleChanged();
         }
     }
 
     p_mainContainer->GetRectTransform()->SetLocalScale(
-                     Vector3(Vector2(m_zoomScale), 1.0f) );
+                Vector3(Vector2(m_zoomScale), 1.0f) );
+}
+
+void AnimatorEditorScene::PropagateOnZoomScaleChanged()
+{
+    for (AESNode *node : p_nodes)
+    {
+        node->OnZoomScaleChanged(m_zoomScale);
+    }
 }
 
 UIEventResult AnimatorEditorScene::OnUIEvent(UIFocusable *, const UIEvent &event)

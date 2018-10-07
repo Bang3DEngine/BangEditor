@@ -10,7 +10,8 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
-#include "BangEditor/AESConnectionPoint.h"
+#include "BangEditor/UIContextMenu.h"
+#include "BangEditor/AESConnectionLine.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -21,41 +22,38 @@ AESNode::AESNode()
 
     RectTransform *rt = GetRectTransform();
     rt->SetAnchors(-Vector2::One);
-    rt->SetMarginRightTop(-m_nodeSize);
+    rt->SetMarginRightTop( -Vector2i(180, 65) );
 
     p_focusable = AddComponent<UIFocusable>();
     p_focusable->SetCursorType(Cursor::Type::HAND);
     p_focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
 
-    p_bg = AddComponent<UIImageRenderer>();
-    p_bg->SetTint(Color::White);
+    p_contextMenu = AddComponent<UIContextMenu>();
+    p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
+    {
+        menuRootItem->SetFontSize(12);
+        MenuItem *createTransition = menuRootItem->AddItem("Create transition");
+        createTransition->SetSelectedCallback([this](MenuItem*)
+        {
+            CreateTransition();
+        });
+    });
+    p_contextMenu->SetFocusable(p_focusable);
 
-    p_border = GameObjectFactory::AddInnerBorder(this);
+    GameObject *panelGo = GameObjectFactory::CreateUIGameObject();
+    p_bg = panelGo->AddComponent<UIImageRenderer>();
+    panelGo->GetRectTransform()->SetLocalPosition( Vector3(0, 0, -0.0001f) );
+    panelGo->AddComponent<UIRectMask>();
+    p_border = GameObjectFactory::AddInnerBorder(panelGo);
+    panelGo->SetParent(this);
 
-    UITextRenderer *textRend = AddComponent<UITextRenderer>();
-    textRend->SetTextColor(Color::Black);
-    textRend->SetContent("Wololo");
+    GameObject *textContainer = GameObjectFactory::CreateUIGameObject();
+    p_nameText = textContainer->AddComponent<UITextRenderer>();
+    p_nameText->SetTextColor(Color::Black);
+    p_nameText->SetContent("Animation State");
+    textContainer->SetParent(panelGo);
 
-    constexpr int CPSize = 30;
-
-    p_inConnectionPoint = GameObject::Create<AESConnectionPoint>(
-                                                AESConnectionPoint::Type::IN);
-    p_inConnectionPoint->GetRectTransform()->SetAnchors( Vector2(-1.0f, 0.0f) );
-    p_inConnectionPoint->GetRectTransform()->SetPivotPosition( Vector2::Zero );
-    p_inConnectionPoint->GetRectTransform()->SetSizeFromPivot( Vector2i(CPSize) );
-    p_inConnectionPoint->SetNode(this);
-    p_inConnectionPoint->SetParent(this);
-
-    p_outConnectionPoint = GameObject::Create<AESConnectionPoint>(
-                                                AESConnectionPoint::Type::OUT);
-    p_outConnectionPoint->GetRectTransform()->SetAnchors( Vector2(1.0f, 0.0f) );
-    p_outConnectionPoint->GetRectTransform()->SetPivotPosition( Vector2::Zero );
-    p_outConnectionPoint->GetRectTransform()->SetSizeFromPivot( Vector2i(CPSize) );
-    p_outConnectionPoint->SetNode(this);
-    p_outConnectionPoint->SetParent(this);
-
-    p_inConnectionPoint->SetSiblingConnectionPoint(p_outConnectionPoint);
-    p_outConnectionPoint->SetSiblingConnectionPoint(p_inConnectionPoint);
+    GetRectTransform()->SetLocalPosition( Vector3(0, 0, -0.0005f) );
 }
 
 AESNode::~AESNode()
@@ -66,7 +64,7 @@ void AESNode::Update()
 {
     GameObject::Update();
 
-    Color nodeColor = Color::White;
+    Color nodeColor = Color::White.WithValue(0.95f);
     RectTransform *rt = GetRectTransform();
     if ( p_focusable->IsBeingPressed() &&
         !Input::GetMouseButton(MouseButton::MIDDLE))
@@ -77,18 +75,102 @@ void AESNode::Update()
 
         Vector3 newLocalPos = rt->GetLocalPosition();
         newLocalPos += Vector3(mouseDelta, 0.0f);
-        newLocalPos.z = -0.01f;
         rt->SetLocalPosition(newLocalPos);
         nodeColor = UITheme::GetOverColor();
     }
     else
     {
+        if (Input::GetMouseButtonDown(MouseButton::LEFT))
+        {
+            if (p_toConnectionLineBeingDragged &&
+                m_framesPassedSinceLineDragStarted >= 1)
+            {
+                OnDragConnectionLineEnd();
+            }
+        }
         if (p_focusable->IsMouseOver())
         {
             nodeColor = UITheme::GetOverColor();
         }
     }
     p_bg->SetTint(nodeColor);
+    ++m_framesPassedSinceLineDragStarted;
+}
+
+void AESNode::OnZoomScaleChanged(float zoomScale)
+{
+    p_nameText->SetTextSize(15 * zoomScale);
+}
+
+UIFocusable* AESNode::GetFocusable() const
+{
+    return p_focusable;
+}
+
+void AESNode::Connect(AESNode *fromNode, AESNode *toNode)
+{
+    ASSERT(false); // TODO
+}
+
+void AESNode::CreateTransition()
+{
+    if (p_toConnectionLineBeingDragged)
+    {
+        GameObject::Destroy(p_toConnectionLineBeingDragged);
+        p_toConnectionLineBeingDragged = nullptr;
+    }
+
+    m_framesPassedSinceLineDragStarted = 0;
+    p_toConnectionLineBeingDragged = GameObject::Create<AESConnectionLine>();
+    p_toConnectionLineBeingDragged->SetNodeFrom(this);
+    p_toConnectionLineBeingDragged->SetParent(this);
+}
+
+void AESNode::OnDragConnectionLineEnd()
+{
+    AESNode *nodeToConnectTo = nullptr;
+    if (UICanvas *canvas = UICanvas::GetActive(this))
+    {
+        if (UIFocusable *overedFocus = canvas->GetFocusableUnderMouseTopMost())
+        {
+            GameObject *overedGo = overedFocus->GetGameObject();
+            if (auto overedNode = DCAST<AESNode*>(overedGo))
+            {
+                if (this != overedNode)
+                {
+                    nodeToConnectTo = overedNode;
+                }
+            }
+        }
+    }
+
+    if (nodeToConnectTo)
+    {
+        // Consolidate connection
+        AESConnectionLine *newConnectionLine = p_toConnectionLineBeingDragged;
+        newConnectionLine->SetNodeTo(nodeToConnectTo);
+        p_toConnectionLines.PushBack(newConnectionLine);
+        p_toConnectionLineToConnectedNode.Add(newConnectionLine, nodeToConnectTo);
+        p_toConnectionLineBeingDragged = nullptr;
+    }
+    else
+    {
+        GameObject::Destroy(p_toConnectionLineBeingDragged); // Remove drag line
+        p_toConnectionLineBeingDragged = nullptr;
+    }
+}
+
+void AESNode::OnDestroyed(EventEmitter<IEventsDestroy> *object)
+{
+    if (AESConnectionLine *connectionLine = DCAST<AESConnectionLine*>(object))
+    {
+        if (connectionLine == p_toConnectionLineBeingDragged)
+        {
+            p_toConnectionLineBeingDragged = nullptr;
+        }
+        p_toConnectionLines.Remove(connectionLine);
+        p_toConnectionLineToConnectedNode.Remove(connectionLine);
+    }
 }
 
 UIEventResult AESNode::OnUIEvent(UIFocusable *, const UIEvent &event)

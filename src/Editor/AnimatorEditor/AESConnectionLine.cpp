@@ -1,15 +1,20 @@
 #include "BangEditor/AESConnectionLine.h"
 
+#include "Bang/Debug.h"
 #include "Bang/Input.h"
 #include "Bang/UITheme.h"
 #include "Bang/Material.h"
 #include "Bang/UICanvas.h"
+#include "Bang/Geometry.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/LineRenderer.h"
 #include "Bang/RectTransform.h"
+#include "Bang/TextureFactory.h"
+#include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
 
-#include "BangEditor/AESConnectionPoint.h"
+#include "BangEditor/AESNode.h"
+#include "BangEditor/UIContextMenu.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -18,12 +23,30 @@ AESConnectionLine::AESConnectionLine()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
-    p_lineRend = AddComponent<LineRenderer>();
-    p_lineRend->SetViewProjMode(GL::ViewProjMode::CANVAS);
-    p_lineRend->GetMaterial()->SetRenderPass(RenderPass::CANVAS);
-    p_lineRend->GetMaterial()->SetLineWidth(5.0f);
-    p_lineRend->SetPoints({Vector3::Zero, Vector3::Zero});
+    p_lineRenderer = AddComponent<LineRenderer>();
+    p_lineRenderer->SetViewProjMode(GL::ViewProjMode::CANVAS);
+    p_lineRenderer->GetMaterial()->SetRenderPass(RenderPass::CANVAS);
+    p_lineRenderer->SetPoints({Vector3::Zero, Vector3::Zero});
 
+    GameObject *arrowImgGo = GameObjectFactory::CreateUIGameObject();
+    p_arrowImg = arrowImgGo->AddComponent<UIImageRenderer>();
+    p_arrowImg->SetImageTexture( TextureFactory::GetRightArrowIcon() );
+    arrowImgGo->GetRectTransform()->SetAnchors(Vector2::Zero);
+    arrowImgGo->GetRectTransform()->SetSizeFromPivot( Vector2i(20) );
+    arrowImgGo->GetRectTransform()->SetPivotPosition( Vector2::Zero );
+    arrowImgGo->SetParent(this);
+
+    p_contextMenu = AddComponent<UIContextMenu>();
+    p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
+    {
+        menuRootItem->SetFontSize(12);
+
+        MenuItem *menuItem = menuRootItem->AddItem("Delete Transition");
+        menuItem->SetSelectedCallback([this](MenuItem*)
+        {
+           GameObject::Destroy(this);
+        });
+    });
 }
 
 AESConnectionLine::~AESConnectionLine()
@@ -34,158 +57,175 @@ void AESConnectionLine::BeforeRender()
 {
     GameObject::BeforeRender();
 
+    float lineWidth = 2.0f;
     Color lineColor = Color::White;
-    bool totallyConnected = (GetConnectionPointIn() && GetConnectionPointOut());
-    if (totallyConnected && !p_currentDragOtherConnectionPoint)
+    AESNode *provisionalToNode = nullptr;
+    if (!GetNodeTo())
     {
-        // See if we are disconnecting from one of the connection points...
-        if (GetConnectionPointIn()->GetFocusable()->IsBeingPressed())
+        if (UICanvas *canvas = UICanvas::GetActive(this))
         {
-            SetConnectionPointIn(nullptr);
-            totallyConnected = false;
-        }
-        else if (GetConnectionPointOut()->GetFocusable()->IsBeingPressed())
-        {
-            SetConnectionPointOut(nullptr);
-            totallyConnected = false;
-        }
-        else
-        {
-            lineColor = Color::Green;
-        }
-    }
-
-    if (!totallyConnected)
-    {
-        ASSERT(GetFirstFoundConnectedPoint());
-
-        // Check drag
-        const bool isDraggingLine = (Input::GetMouseButton(MouseButton::LEFT) &&
-                                     !Input::GetMouseButton(MouseButton::MIDDLE));
-        if (isDraggingLine)
-        {
-            p_currentDragOtherConnectionPoint = nullptr;
-            if (UICanvas *canvas = UICanvas::GetActive(this))
+            if (UIFocusable *overedFocus = canvas->GetFocusableUnderMouseTopMost())
             {
-                if (UIFocusable *overedFocus = canvas->GetFocusableUnderMouseTopMost())
+                GameObject *overedGo = overedFocus->GetGameObject();
+                if (auto overedNode = DCAST<AESNode*>(overedGo))
                 {
-                    GameObject *overedGo = overedFocus->GetGameObject();
-                    if (auto overedConnPoint = DCAST<AESConnectionPoint*>(overedGo))
+                    if ( IsValidConnection(GetNodeFrom(), overedNode) )
                     {
-                        auto connectedPoint = GetFirstFoundConnectedPoint();
-                        ASSERT(connectedPoint && overedConnPoint);
-
-                        if ( IsValidConnection(connectedPoint, overedConnPoint) )
-                        {
-                            p_currentDragOtherConnectionPoint = overedConnPoint;
-                            lineColor = Color::Green;
-                        }
-                        else
-                        {
-                            lineColor = Color::Red;
-                        }
+                        provisionalToNode = overedNode;
                     }
                 }
             }
         }
+    }
+    else
+    {
+        bool thickenLine = false;
+        if (IsMouseOverLine())
+        {
+            thickenLine = true;
+            if (Input::GetMouseButtonDown(MouseButton::RIGHT))
+            {
+                p_contextMenu->ShowMenu();
+            }
+
+            if (Input::GetMouseButtonDown(MouseButton::RIGHT) ||
+                Input::GetMouseButtonDown(MouseButton::LEFT))
+            {
+                if (UICanvas *canvas = UICanvas::GetActive(this))
+                {
+                    canvas->SetFocus(nullptr);
+                }
+                m_hasFocus = true;
+            }
+        }
         else
         {
-            // If stopped dragging, connect or destroy
-            if (p_currentDragOtherConnectionPoint)
+            if (Input::GetMouseButtonDown(MouseButton::LEFT))
             {
-                AESConnectionPoint::Connect(GetFirstFoundConnectedPoint(),
-                                            p_currentDragOtherConnectionPoint);
-                if (GetConnectionPointIn())
-                {
-                    SetConnectionPointOut( p_currentDragOtherConnectionPoint );
-                }
-                else
-                {
-                    SetConnectionPointIn( p_currentDragOtherConnectionPoint );
-                }
-                p_currentDragOtherConnectionPoint = nullptr;
-            }
-            else
-            {
-                // Not totally connected and stopped dragging without final
-                // target. Destroy connection line
-                GameObject::Destroy(this);
+                m_hasFocus = false;
             }
         }
 
+        if (thickenLine || m_hasFocus)
+        {
+            lineWidth = 5.0f;
+            lineColor = UITheme::GetSelectedColor();
+        }
     }
-    p_lineRend->GetMaterial()->SetAlbedoColor(lineColor);
 
     // Set line points positions
     {
         Vector2 mousePosition ( Input::GetMousePosition() );
         Vector3 lineMousePos = GetRectTransform()->FromWorldToLocalPoint(
-                                                Vector3(mousePosition, -0.02f));
+                                                Vector3(mousePosition, 0.0f));
         uint i = 0;
-        for (AESConnectionPoint *connPoint : {GetConnectionPointIn(),
-                                              GetConnectionPointOut()})
+        for (AESNode *node : {GetNodeFrom(),
+                             (GetNodeTo() ? GetNodeTo() : provisionalToNode)})
         {
-            if (connPoint)
-            {
-                Vector3 linePos = GetConnectionPointLinePosition(connPoint);
-                p_lineRend->SetPoint(i, linePos);
-            }
-            else
-            {
-                p_lineRend->SetPoint(i, lineMousePos);
-            }
+            Vector3 linePos = node ? GetConnectionPointLinePosition(node) :
+                                     lineMousePos;
+            linePos.z = 0.0f;
+            p_lineRenderer->SetPoint(i, linePos);
             ++i;
         }
     }
-}
 
-void AESConnectionLine::SetConnectionPointIn(AESConnectionPoint *connPointIn)
-{
-    p_connectionPointIn = connPointIn;
-}
+    p_arrowImg->GetMaterial()->SetAlbedoColor(lineColor);
+    p_lineRenderer->GetMaterial()->SetAlbedoColor(lineColor);
+    p_lineRenderer->GetMaterial()->SetLineWidth(lineWidth);
 
-void AESConnectionLine::SetConnectionPointOut(AESConnectionPoint *connPointOut)
-{
-    p_connectionPointOut = connPointOut;
-}
-
-AESConnectionPoint *AESConnectionLine::GetConnectionPointIn() const
-{
-    return p_connectionPointIn;
-}
-
-AESConnectionPoint *AESConnectionLine::GetConnectionPointOut() const
-{
-    return p_connectionPointOut;
-}
-
-AESConnectionPoint *AESConnectionLine::GetFirstFoundConnectedPoint() const
-{
-    if (GetConnectionPointIn())
+    if (RectTransform *arrowRT = p_arrowImg->GetGameObject()->GetRectTransform())
     {
-        return GetConnectionPointIn();
+        Vector2 p0 = p_lineRenderer->GetPoints()[0].xy();
+        Vector2 p1 = p_lineRenderer->GetPoints()[1].xy();
+
+        Vector2 midPoint = (p0 + p1) * 0.5f;
+        arrowRT->SetAnchors(midPoint);
+
+        Vector2 p0w = GetRectTransform()->FromLocalToWorldPoint( Vector3(p0, 0) ).xy();
+        Vector2 p1w = GetRectTransform()->FromLocalToWorldPoint( Vector3(p1, 0) ).xy();
+        float angle = Math::ATan2((p1w-p0w).x, (p1w-p0w).y);
+        angle += (Math::Pi * 1.5f);
+        Quaternion rotation = Quaternion::AngleAxis(angle, Vector3::Forward);
+        arrowRT->SetLocalRotation(rotation);
     }
-    return GetConnectionPointOut();
 }
 
-bool AESConnectionLine::IsValidConnection(AESConnectionPoint *oneConnPoint,
-                                          AESConnectionPoint *otherConnPoint) const
+void AESConnectionLine::SetNodeTo(AESNode *connPointTo)
 {
-    if (oneConnPoint && otherConnPoint)
+    p_nodeTo = connPointTo;
+}
+
+void AESConnectionLine::SetNodeFrom(AESNode *connPointFrom)
+{
+    p_nodeFrom = connPointFrom;
+}
+
+bool AESConnectionLine::HasFocus() const
+{
+    return m_hasFocus;
+}
+
+AESNode *AESConnectionLine::GetNodeTo() const
+{
+    return p_nodeTo;
+}
+
+AESNode *AESConnectionLine::GetNodeFrom() const
+{
+    return p_nodeFrom;
+}
+
+bool AESConnectionLine::IsMouseOverLine() const
+{
+    Vector2 linePosFrom = GetRectTransform()->FromLocalToWorldPoint(
+                            p_lineRenderer->GetPoints()[0]).xy();
+    Vector2 linePosTo   = GetRectTransform()->FromLocalToWorldPoint(
+                            p_lineRenderer->GetPoints()[1]).xy();
+    Vector2 mousePos ( Input::GetMousePosition() );
+
+    bool interactingWithNodeTo = GetNodeTo() &&
+                                 (GetNodeTo()->GetFocusable()->IsMouseOver() ||
+                                  GetNodeTo()->GetFocusable()->IsBeingPressed());
+    bool interactingWithNodeFrom = GetNodeFrom() &&
+                                  (GetNodeFrom()->GetFocusable()->IsMouseOver() ||
+                                   GetNodeFrom()->GetFocusable()->IsBeingPressed());
+
+    float distanceToLine = Geometry::GetPointToLineDistance2D(mousePos,
+                                                              linePosFrom,
+                                                              linePosTo);
+    return (distanceToLine < 10.0f) &&
+            Vector2::Dot(mousePos-linePosFrom, linePosTo-linePosFrom) > 0 &&
+            Vector2::Dot(mousePos-linePosTo,   linePosFrom-linePosTo) > 0 &&
+            !interactingWithNodeTo &&
+            !interactingWithNodeFrom;
+}
+
+AESNode *AESConnectionLine::GetFirstFoundNode() const
+{
+    if (GetNodeTo())
     {
-        return (oneConnPoint->GetType() != otherConnPoint->GetType()) &&
-               (oneConnPoint->GetSiblingConnectionPoint() != otherConnPoint);
+        return GetNodeTo();
+    }
+    return GetNodeFrom();
+}
+
+bool AESConnectionLine::IsValidConnection(AESNode *oneNode,
+                                          AESNode *otherNode) const
+{
+    if (oneNode && otherNode)
+    {
+        return (oneNode != otherNode);
     }
     return false;
 }
 
 Vector3 AESConnectionLine::GetConnectionPointLinePosition(
-                                        AESConnectionPoint *connPoint) const
+                                        AESNode *node) const
 {
     Vector3 linePos = GetRectTransform()->FromWorldToLocalPoint(
-                        connPoint->GetRectTransform()->FromLocalToWorldPoint(
+                        node->GetRectTransform()->FromLocalToWorldPoint(
                             Vector3(0, 0, 0)));
-    linePos.z = -0.02f;
     return linePos;
 }
 

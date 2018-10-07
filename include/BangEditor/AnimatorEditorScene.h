@@ -33,9 +33,12 @@ private:
     UIFocusable *p_focusable = nullptr;
     DPtr<UIImageRenderer> p_border = nullptr;
     GameObject *p_mainContainer = nullptr;
+    Array<AESNode*> p_nodes;
 
     float m_zoomScale = 0.85f;
     Vector2i m_panning = Vector2i::Zero;
+
+    void PropagateOnZoomScaleChanged();
 
     // IEventsFocus
     virtual UIEventResult OnUIEvent(UIFocusable *focusable,

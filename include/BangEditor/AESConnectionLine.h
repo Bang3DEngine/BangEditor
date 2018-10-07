@@ -7,10 +7,15 @@
 
 #include "BangEditor/BangEditor.h"
 
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UIImageRenderer;
+FORWARD NAMESPACE_BANG_END
+
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class AESConnectionPoint;
+FORWARD class AESNode;
+FORWARD class UIContextMenu;
 
 class AESConnectionLine : public GameObject
 {
@@ -23,23 +28,26 @@ public:
     // GameObject
     void BeforeRender() override;
 
-    void SetConnectionPointIn(AESConnectionPoint *connPointIn);
-    void SetConnectionPointOut(AESConnectionPoint *connPointOut);
+    void SetNodeTo(AESNode *nodeTo);
+    void SetNodeFrom(AESNode *nodeFrom);
 
-    AESConnectionPoint *GetConnectionPointIn() const;
-    AESConnectionPoint *GetConnectionPointOut() const;
-    AESConnectionPoint *GetFirstFoundConnectedPoint() const;
+    bool HasFocus() const;
+    AESNode *GetNodeTo() const;
+    AESNode *GetNodeFrom() const;
 
 private:
-    LineRenderer *p_lineRend = nullptr;
+    bool m_hasFocus = false;
+    UIImageRenderer *p_arrowImg = nullptr;
+    UIContextMenu *p_contextMenu = nullptr;
+    LineRenderer *p_lineRenderer = nullptr;
 
-    AESConnectionPoint *p_connectionPointIn  = nullptr;
-    AESConnectionPoint *p_connectionPointOut = nullptr;
-    AESConnectionPoint *p_currentDragOtherConnectionPoint = nullptr;
+    AESNode *p_nodeTo   = nullptr;
+    AESNode *p_nodeFrom = nullptr;
 
-    bool IsValidConnection(AESConnectionPoint *oneConnPoint,
-                           AESConnectionPoint *otherConnPoint) const;
-    Vector3 GetConnectionPointLinePosition(AESConnectionPoint *connPoint) const;
+    bool IsMouseOverLine() const;
+    AESNode *GetFirstFoundNode() const;
+    bool IsValidConnection(AESNode *oneNode, AESNode *otherNode) const;
+    Vector3 GetConnectionPointLinePosition(AESNode *connPoint) const;
 };
 
 NAMESPACE_BANG_EDITOR_END
