@@ -2,6 +2,8 @@
 
 #include "Bang/UILabel.h"
 #include "Bang/Animator.h"
+#include "Bang/Resources.h"
+#include "Bang/Extensions.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIImageRenderer.h"
@@ -10,6 +12,7 @@
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIDirLayoutMovableSeparator.h"
 
+#include "BangEditor/Explorer.h"
 #include "BangEditor/AnimatorSMEditorScene.h"
 
 USING_NAMESPACE_BANG
@@ -25,7 +28,7 @@ AnimatorSMEditor::AnimatorSMEditor()
     UIHorizontalLayout *mainHL = AddComponent<UIHorizontalLayout>();
     mainHL->SetChildrenVerticalStretch(Stretch::FULL);
 
-    UIFocusable *focusable = AddComponent<UIFocusable>();
+    AddComponent<UIFocusable>();
 
     GameObject *animatorEditorSceneContainer = GameObjectFactory::CreateUIGameObject();
     {
@@ -44,8 +47,7 @@ AnimatorSMEditor::AnimatorSMEditor()
                                        AddComponent<UILayoutElement>();
         inspectorLE->SetMinSize( Vector2i(200) );
 
-        UIVerticalLayout *mainVL = inspectorContainer->
-                                   AddComponent<UIVerticalLayout>();
+        inspectorContainer->AddComponent<UIVerticalLayout>();
 
         UILabel *varsLabel = GameObjectFactory::CreateUILabel();
         varsLabel->GetText()->SetContent("Variables");
@@ -57,8 +59,7 @@ AnimatorSMEditor::AnimatorSMEditor()
                            SetParent(inspectorContainer);
 
         GameObject *labeledGosContainer = GameObjectFactory::CreateUIGameObject();
-        UIVerticalLayout *labeledGosVL = labeledGosContainer->
-                                         AddComponent<UIVerticalLayout>();
+        labeledGosContainer->AddComponent<UIVerticalLayout>();
         UILayoutElement *labeledGosLE =
                          labeledGosContainer->AddComponent<UILayoutElement>();
         labeledGosLE->SetFlexibleSize( Vector2(1, 9999) );
@@ -82,41 +83,36 @@ AnimatorSMEditor::~AnimatorSMEditor()
 void AnimatorSMEditor::Update()
 {
     GameObject::Update();
-}
 
-void AnimatorSMEditor::SetAnimator(Animator *animator)
-{
-    if (animator != p_animator)
+    if (Explorer *exp = Explorer::GetInstance())
     {
-        if (GetAnimator())
+        Path selectedPath = exp->GetSelectedPath();
+        if (selectedPath.HasExtension(
+                            Extensions::GetAnimatorStateMachineExtension() ))
         {
-            GetAnimator()->EventEmitter<IEventsDestroy>::UnRegisterListener(this);
-        }
-
-        p_animator = animator;
-
-        if (GetAnimator())
-        {
-            GetAnimator()->EventEmitter<IEventsDestroy>::RegisterListener(this);
+            RH<AnimatorStateMachine> animSMRH =
+                        Resources::Load<AnimatorStateMachine>(selectedPath);
+            SetAnimatorSM(animSMRH.Get());
         }
     }
 }
 
-Animator* AnimatorSMEditor::GetAnimator() const
+void AnimatorSMEditor::SetAnimatorSM(AnimatorStateMachine *animatorSM)
 {
-    return p_animator;
+    if (animatorSM != GetAnimatorSM())
+    {
+        p_animatorSM.Set(animatorSM);
+
+        p_animatorEditorScene->SetAnimatorSM( GetAnimatorSM() );
+    }
+}
+
+AnimatorStateMachine *AnimatorSMEditor::GetAnimatorSM() const
+{
+    return p_animatorSM.Get();
 }
 
 void AnimatorSMEditor::Clear()
 {
-
+    p_animatorEditorScene->Clear();
 }
-
-void AnimatorSMEditor::OnDestroyed(EventEmitter<IEventsDestroy> *object)
-{
-    if (object == GetAnimator())
-    {
-        Clear();
-    }
-}
-

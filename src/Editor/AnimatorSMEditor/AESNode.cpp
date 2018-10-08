@@ -9,9 +9,11 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/AnimatorStateMachineNode.h"
 
 #include "BangEditor/UIContextMenu.h"
 #include "BangEditor/AESConnectionLine.h"
+#include "BangEditor/AnimatorSMEditorScene.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -22,7 +24,8 @@ AESNode::AESNode()
 
     RectTransform *rt = GetRectTransform();
     rt->SetAnchors(-Vector2::One);
-    rt->SetMarginRightTop( -Vector2i(180, 65) );
+    rt->SetPivotPosition( Vector2::Zero );
+    rt->SetSizeFromPivot( Vector2i(180, 65) );
 
     p_focusable = AddComponent<UIFocusable>();
     p_focusable->SetCursorType(Cursor::Type::HAND);
@@ -35,7 +38,19 @@ AESNode::AESNode()
         MenuItem *createTransition = menuRootItem->AddItem("Create transition");
         createTransition->SetSelectedCallback([this](MenuItem*)
         {
-            CreateTransition();
+            CreateAndAddConnectionToBeginDrag();
+        });
+
+        MenuItem *duplicateNode = menuRootItem->AddItem("Duplicate");
+        duplicateNode->SetSelectedCallback([this](MenuItem*)
+        {
+            Duplicate();
+        });
+
+        MenuItem *removeNode = menuRootItem->AddItem("Remove node");
+        removeNode->SetSelectedCallback([this](MenuItem*)
+        {
+            RemoveSelf();
         });
     });
     p_contextMenu->SetFocusable(p_focusable);
@@ -63,6 +78,11 @@ AESNode::~AESNode()
 void AESNode::Update()
 {
     GameObject::Update();
+
+    if (AnimatorStateMachineNode *smNode = GetSMNode())
+    {
+        p_nameText->SetContent(smNode->GetName());
+    }
 
     Color nodeColor = Color::White.WithValue(0.95f);
     RectTransform *rt = GetRectTransform();
@@ -99,7 +119,7 @@ void AESNode::Update()
 
 void AESNode::OnZoomScaleChanged(float zoomScale)
 {
-    p_nameText->SetTextSize(15 * zoomScale);
+    p_nameText->SetTextSize(18 * zoomScale);
 }
 
 UIFocusable* AESNode::GetFocusable() const
@@ -107,23 +127,26 @@ UIFocusable* AESNode::GetFocusable() const
     return p_focusable;
 }
 
-void AESNode::Connect(AESNode *fromNode, AESNode *toNode)
+const Array<AESConnectionLine *> &AESNode::GetConnectionLines() const
 {
-    ASSERT(false); // TODO
+    return p_toConnectionLines;
 }
 
-void AESNode::CreateTransition()
+void AESNode::CreateAndAddConnectionToBeginDrag()
 {
-    if (p_toConnectionLineBeingDragged)
-    {
-        GameObject::Destroy(p_toConnectionLineBeingDragged);
-        p_toConnectionLineBeingDragged = nullptr;
-    }
-
+    DestroyLineUsedForDragging();
     m_framesPassedSinceLineDragStarted = 0;
     p_toConnectionLineBeingDragged = GameObject::Create<AESConnectionLine>();
     p_toConnectionLineBeingDragged->SetNodeFrom(this);
     p_toConnectionLineBeingDragged->SetParent(this);
+}
+
+AESConnectionLine* AESNode::CreateAndAddDefinitiveConnection()
+{
+    AESConnectionLine *connLine = GameObject::Create<AESConnectionLine>();
+    connLine->SetNodeFrom(this);
+    connLine->SetParent(this);
+    return connLine;
 }
 
 void AESNode::OnDragConnectionLineEnd()
@@ -147,17 +170,103 @@ void AESNode::OnDragConnectionLineEnd()
     if (nodeToConnectTo)
     {
         // Consolidate connection
-        AESConnectionLine *newConnectionLine = p_toConnectionLineBeingDragged;
+        DestroyLineUsedForDragging();
+
+        AESConnectionLine *newConnectionLine = CreateAndAddDefinitiveConnection();
         newConnectionLine->SetNodeTo(nodeToConnectTo);
         p_toConnectionLines.PushBack(newConnectionLine);
-        p_toConnectionLineToConnectedNode.Add(newConnectionLine, nodeToConnectTo);
-        p_toConnectionLineBeingDragged = nullptr;
+        p_toConnectionLineToConnectedNode.Add(newConnectionLine,
+                                              nodeToConnectTo);
+        nodeToConnectTo->EventEmitter<IEventsDestroy>::RegisterListener(this);
+
+        AnimatorStateMachineNode *fromNode = GetSMNode();
+        ASSERT(fromNode);
+        AnimatorStateMachineNode *toNode = nodeToConnectTo->GetSMNode();
+        ASSERT(toNode);
+        fromNode->CreateConnectionTo(toNode);
     }
     else
     {
-        GameObject::Destroy(p_toConnectionLineBeingDragged); // Remove drag line
+        DestroyLineUsedForDragging();
+    }
+}
+
+void AESNode::RemoveSelf()
+{
+    uint idx = GetIndexInStateMachine();
+    ASSERT(idx != -1u);
+
+    GetAnimatorSM()->RemoveNode(idx);
+}
+
+void AESNode::Duplicate()
+{
+    uint idx = GetIndexInStateMachine();
+    ASSERT(idx != -1u);
+
+    AnimatorStateMachineNode *newNode = GetAnimatorSM()->CreateAndAddNode();
+    ASSERT(newNode);
+
+    AnimatorStateMachineNode *nodeToCloneFrom = GetSMNode();
+    ASSERT(nodeToCloneFrom);
+
+    nodeToCloneFrom->CloneInto(newNode);
+}
+
+void AESNode::DestroyLineUsedForDragging()
+{
+    if (p_toConnectionLineBeingDragged)
+    {
+        GameObject::Destroy(p_toConnectionLineBeingDragged);
         p_toConnectionLineBeingDragged = nullptr;
     }
+}
+
+uint AESNode::GetIndexInStateMachine() const
+{
+    return p_animatorSMEditorScene->GetAESNodes().IndexOf(
+                const_cast<AESNode*>(this));
+}
+
+AnimatorStateMachine *AESNode::GetAnimatorSM() const
+{
+    return p_animatorSMEditorScene->GetAnimatorSM();
+}
+
+AnimatorStateMachineNode *AESNode::GetSMNode() const
+{
+    return GetAnimatorSM()->GetNode( GetIndexInStateMachine() );
+}
+
+void AESNode::OnConnectionAdded(AnimatorStateMachineNode *node,
+                                AnimatorStateMachineConnection *connection)
+{
+    ASSERT( node == GetSMNode() );
+    ASSERT( connection->GetNodeFromIndex() < p_animatorSMEditorScene->
+                                             GetAESNodes().Size());
+    ASSERT( connection->GetNodeToIndex() < p_animatorSMEditorScene->
+                                           GetAESNodes().Size());
+
+    AESConnectionLine *connLine = CreateAndAddDefinitiveConnection();
+    AESNode *aesNodeFrom = p_animatorSMEditorScene->GetAESNodes()[
+                                                connection->GetNodeFromIndex()];
+    AESNode   *aesNodeTo = p_animatorSMEditorScene->GetAESNodes()[
+                                                connection->GetNodeToIndex()];
+    connLine->SetNodeFrom( aesNodeFrom );
+    connLine->SetNodeTo( aesNodeTo );
+}
+
+void AESNode::OnConnectionRemoved(AnimatorStateMachineNode *node,
+                                  AnimatorStateMachineConnection *connection)
+{
+    ASSERT(node == GetSMNode());
+
+    uint indexOfSMConnection = connection->GetIndexInsideNodeConnections(
+                                                GetIndexInStateMachine());
+    ASSERT(indexOfSMConnection < GetConnectionLines().Size());
+
+    AESConnectionLine *connLine = GetConnectionLines()[indexOfSMConnection];
+    GameObject::Destroy(connLine);
 }
 
 void AESNode::OnDestroyed(EventEmitter<IEventsDestroy> *object)
@@ -170,6 +279,26 @@ void AESNode::OnDestroyed(EventEmitter<IEventsDestroy> *object)
         }
         p_toConnectionLines.Remove(connectionLine);
         p_toConnectionLineToConnectedNode.Remove(connectionLine);
+    }
+    else if (AESNode *node = DCAST<AESNode*>(object))
+    {
+        p_toConnectedNodes.RemoveAll(node);
+        for (auto it = p_toConnectionLines.Begin();
+             it != p_toConnectionLines.End();)
+        {
+            AESConnectionLine *connectedLine = *it;
+            if (connectedLine->GetNodeFrom() == node ||
+                connectedLine->GetNodeTo() == node)
+            {
+                it = p_toConnectionLines.Remove(it);
+                GameObject::Destroy(connectedLine);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+        node->EventEmitter<IEventsDestroy>::UnRegisterListener(this);
     }
 }
 
@@ -186,6 +315,28 @@ UIEventResult AESNode::OnUIEvent(UIFocusable *, const UIEvent &event)
             GameObjectFactory::MakeBorderFocused(p_border);
             return UIEventResult::INTERCEPT;
         break;
+
+        case UIEvent::Type::KEY_DOWN:
+            switch (event.key.key)
+            {
+                case Key::D:
+                if (event.key.modifiers.IsOn(KeyModifier::LCTRL))
+                {
+                    Duplicate();
+                }
+                break;
+
+                case Key::DELETE:
+                    RemoveSelf();
+                break;
+
+                default:
+                break;
+            }
+            GameObjectFactory::MakeBorderNotFocused(p_border);
+            return UIEventResult::INTERCEPT;
+        break;
+
 
         default:
         break;

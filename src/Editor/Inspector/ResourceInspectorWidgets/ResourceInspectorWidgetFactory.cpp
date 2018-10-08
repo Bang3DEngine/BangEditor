@@ -13,6 +13,7 @@
 #include "BangEditor/RIWBehaviour.h"
 #include "BangEditor/RIWTextureCubeMap.h"
 #include "BangEditor/RIWPhysicsMaterial.h"
+#include "BangEditor/RIWAnimatorStateMachine.h"
 #include "BangEditor/ResourceInspectorWidget.h"
 
 USING_NAMESPACE_BANG
@@ -28,6 +29,10 @@ InspectorWidget *ResourceInspectorWidgetFactory::Create(const Path &path)
     else if (path.HasExtension(Extensions::GetPhysicsMaterialExtension()))
     {
         riw = GameObject::Create<RIWPhysicsMaterial>();
+    }
+    else if (path.HasExtension(Extensions::GetAnimatorStateMachineExtension()))
+    {
+        riw = GameObject::Create<RIWAnimatorStateMachine>();
     }
     else if (path.HasExtension(Extensions::GetImageExtensions()))
     {

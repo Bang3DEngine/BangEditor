@@ -32,7 +32,8 @@ public:
     void SetFocusable(UIFocusable *focusable);
 
     using CreateContextMenuCallback = std::function<void(MenuItem *menuRootItem)>;
-    void SetCreateContextMenuCallback(CreateContextMenuCallback createCallback);
+    void SetCreateContextMenuCallback(
+                std::function<void(MenuItem*)> createCallback);
 
 private:
     ContextMenu *p_menu = nullptr;

@@ -32,6 +32,8 @@ public:
     void SetNodeFrom(AESNode *nodeFrom);
 
     bool HasFocus() const;
+    bool IsMouseOver() const;
+
     AESNode *GetNodeTo() const;
     AESNode *GetNodeFrom() const;
 
@@ -44,7 +46,8 @@ private:
     AESNode *p_nodeTo   = nullptr;
     AESNode *p_nodeFrom = nullptr;
 
-    bool IsMouseOverLine() const;
+    void RemoveSelf();
+
     AESNode *GetFirstFoundNode() const;
     bool IsValidConnection(AESNode *oneNode, AESNode *otherNode) const;
     Vector3 GetConnectionPointLinePosition(AESNode *connPoint) const;

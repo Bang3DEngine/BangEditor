@@ -12,6 +12,8 @@
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/AESNode.h"
+#include "BangEditor/UIContextMenu.h"
+#include "BangEditor/AESConnectionLine.h"
 #include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
@@ -37,21 +39,27 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
     p_mainContainer = GameObjectFactory::CreateUIGameObject();
     p_mainContainer->SetParent(this);
 
-    AESNode *node1 = GameObject::Create<AESNode>();
-    node1->GetRectTransform()->SetLocalPosition( Vector3(50.0f, 50.0f, 0.0f) );
-    node1->SetParent(p_mainContainer);
+    p_contextMenu = AddComponent<UIContextMenu>();
+    p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
+    {
+        if (GetAnimatorSM() && !IsMouseOverSomeConnectionLine())
+        {
+            menuRootItem->SetFontSize(12);
 
-    AESNode *node2 = GameObject::Create<AESNode>();
-    node2->GetRectTransform()->SetLocalPosition( Vector3(200.0f, 400.0f, 0.0f) );
-    node2->SetParent(p_mainContainer);
+            MenuItem *createNode = menuRootItem->AddItem("Create new node");
+            createNode->SetSelectedCallback([this](MenuItem*)
+            {
+                GetAnimatorSM()->CreateAndAddNode();
 
-    AESNode *node3 = GameObject::Create<AESNode>();
-    node3->GetRectTransform()->SetLocalPosition( Vector3(200.0f, 700.0f, 0.0f) );
-    node3->SetParent(p_mainContainer);
-
-    p_nodes.PushBack(node1);
-    p_nodes.PushBack(node2);
-    p_nodes.PushBack(node3);
+                AESNode *aesNode = p_nodes[p_nodes.Size()-1];
+                RectTransform *rt = aesNode->GetRectTransform();
+                rt->SetAnchors(
+                    aesNode->GetParent()->GetRectTransform()->FromWorldToLocalPoint(
+                                Vector3(Input::GetMousePosition(), 0)).xy() );
+            });
+        }
+    });
+    p_contextMenu->SetFocusable(p_focusable);
 
     PropagateOnZoomScaleChanged();
 }
@@ -87,12 +95,133 @@ void AnimatorSMEditorScene::Update()
                 Vector3(Vector2(m_zoomScale), 1.0f) );
 }
 
+void AnimatorSMEditorScene::CreateAndAddNode(AnimatorStateMachineNode *smNode,
+                                             uint addIdx)
+{
+    AESNode *aesNode = GameObject::Create<AESNode>();
+    aesNode->p_animatorSMEditorScene = this;
+    aesNode->SetParent(p_mainContainer);
+
+    smNode->EventEmitter<IEventsAnimatorStateMachineNode>::
+            RegisterListener(aesNode);
+    // smNode->EventEmitter<IEventsAnimatorStateMachineNode>::
+    //          RegisterListener(this);
+
+    ASSERT(addIdx <= p_nodes.Size());
+    p_nodes.Insert(aesNode, addIdx);
+
+    PropagateOnZoomScaleChanged();
+}
+
+void AnimatorSMEditorScene::SetAnimatorSM(AnimatorStateMachine *animatorSM)
+{
+    if (animatorSM != GetAnimatorSM())
+    {
+        Clear();
+        p_animatorSM.Set(animatorSM);
+
+        GetAnimatorSM()->EventEmitter<IEventsAnimatorStateMachine>::
+                         RegisterListener(this);
+
+        for (uint i = 0; i < GetAnimatorSM()->GetNodes().Size(); ++i)
+        {
+            ASSERT(i < GetAnimatorSM()->GetNodes().Size());
+
+            AnimatorStateMachineNode *smNode = animatorSM->GetNode(i);
+            ASSERT(smNode);
+
+            OnNodeCreated(GetAnimatorSM(), i, smNode);
+        }
+
+        PropagateOnZoomScaleChanged();
+    }
+}
+
+void AnimatorSMEditorScene::Clear()
+{
+    if (GetAnimatorSM())
+    {
+        GetAnimatorSM()->EventEmitter<IEventsAnimatorStateMachine>::
+                         UnRegisterListener(this);
+    }
+    p_animatorSM.Set(nullptr);
+
+    for (AESNode *node : p_nodes)
+    {
+        GameObject::Destroy(node);
+    }
+    p_nodes.Clear();
+}
+
+const Array<AESNode *> &AnimatorSMEditorScene::GetAESNodes() const
+{
+    return p_nodes;
+}
+
+AnimatorStateMachine *AnimatorSMEditorScene::GetAnimatorSM() const
+{
+    return p_animatorSM.Get();
+}
+
 void AnimatorSMEditorScene::PropagateOnZoomScaleChanged()
 {
     for (AESNode *node : p_nodes)
     {
         node->OnZoomScaleChanged(m_zoomScale);
     }
+}
+
+bool AnimatorSMEditorScene::IsMouseOverSomeConnectionLine() const
+{
+    for (AESNode *aesNode : GetAESNodes())
+    {
+        for (AESConnectionLine *cl : aesNode->GetConnectionLines())
+        {
+            if (cl->IsMouseOver())
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void AnimatorSMEditorScene::OnNodeCreated(AnimatorStateMachine *stateMachine,
+                                          uint newNodeIdx,
+                                          AnimatorStateMachineNode *newNode)
+{
+    ASSERT(stateMachine == GetAnimatorSM());
+    CreateAndAddNode(newNode, newNodeIdx);
+}
+
+void AnimatorSMEditorScene::OnNodeRemoved(AnimatorStateMachine *stateMachine,
+                                          uint removedNodeIdx,
+                                          AnimatorStateMachineNode *removedNode)
+{
+    ASSERT(stateMachine == GetAnimatorSM());
+
+    ASSERT(removedNodeIdx < p_nodes.Size());
+
+    removedNode->EventEmitter<IEventsAnimatorStateMachineNode>::
+                 UnRegisterListener(this);
+
+    AESNode *aesNodeToRemove = p_nodes[removedNodeIdx];
+    p_nodes.RemoveByIndex(removedNodeIdx);
+    GameObject::Destroy(aesNodeToRemove);
+}
+
+void AnimatorSMEditorScene::
+OnConnectionAdded(AnimatorStateMachineNode *node,
+                  AnimatorStateMachineConnection *connection)
+{
+
+}
+
+void AnimatorSMEditorScene::
+OnConnectionRemoved(AnimatorStateMachineNode *node,
+                    AnimatorStateMachineConnection *connection)
+{
+
 }
 
 UIEventResult AnimatorSMEditorScene::OnUIEvent(UIFocusable *, const UIEvent &event)

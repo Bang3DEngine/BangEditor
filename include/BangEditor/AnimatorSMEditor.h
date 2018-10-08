@@ -3,11 +3,13 @@
 
 #include "Bang/Bang.h"
 #include "Bang/GameObject.h"
+#include "Bang/ResourceHandle.h"
 
 #include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Animator;
+FORWARD class AnimatorStateMachine;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -15,8 +17,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class AnimatorSMEditorScene;
 
-class AnimatorSMEditor : public GameObject,
-                         public EventListener<IEventsDestroy>
+class AnimatorSMEditor : public GameObject
 {
     GAMEOBJECT_EDITOR(AnimatorSMEditor);
 
@@ -27,17 +28,14 @@ public:
     // GameObject
     void Update() override;
 
-    void SetAnimator(Animator *animator);
-    Animator* GetAnimator() const;
+    void SetAnimatorSM(AnimatorStateMachine *animatorSM);
+    AnimatorStateMachine* GetAnimatorSM() const;
 
 private:
-    Animator *p_animator = nullptr;
+    RH<AnimatorStateMachine> p_animatorSM;
     AnimatorSMEditorScene *p_animatorEditorScene = nullptr;
 
     void Clear();
-
-    // IEventsDestroy
-    virtual void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 };
 
 NAMESPACE_BANG_EDITOR_END

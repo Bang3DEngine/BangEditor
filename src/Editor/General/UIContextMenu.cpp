@@ -36,6 +36,8 @@ void UIContextMenu::ShowMenu()
     // if (!IsMenuBeingShown())
     {
         p_menu = GameObject::Create<ContextMenu>();
+        p_menu->EventEmitter<IEventsDestroy>::RegisterListener(this);
+
         if (m_createContextMenuCallback)
         {
             m_createContextMenuCallback(p_menu->GetRootItem());
@@ -47,7 +49,6 @@ void UIContextMenu::ShowMenu()
         }
         else
         {
-            p_menu->EventEmitter<IEventsDestroy>::RegisterListener(this);
             p_menu->SetParent( EditorSceneManager::GetEditorScene() );
 
             UICanvas::GetActive(this)->SetFocus(p_menu->GetFocusable());
@@ -176,8 +177,10 @@ UIFocusable *ContextMenu::GetFocusable() const
 
 void ContextMenu::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
-    ASSERT(object == p_rootItem);
-    GameObject::Destroy(this);
-    GetFocusable()->EventEmitter<IEventsDestroy>::UnRegisterListener(this);
-    GetFocusable()->EventEmitter<IEventsFocus>::UnRegisterListener(this);
+    if (object == p_rootItem)
+    {
+        GameObject::Destroy(this);
+        GetFocusable()->EventEmitter<IEventsDestroy>::UnRegisterListener(this);
+        GetFocusable()->EventEmitter<IEventsFocus>::UnRegisterListener(this);
+    }
 }

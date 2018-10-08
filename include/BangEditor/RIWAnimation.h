@@ -39,8 +39,6 @@ private:
     // RIWResource
     void UpdateInputsFromResource() override;
     Texture2D *GetIconTexture() const override;
-
-    // RIWResource
     void OnValueChangedRIWResource(
                         EventEmitter<IEventsValueChanged> *object) override;
 

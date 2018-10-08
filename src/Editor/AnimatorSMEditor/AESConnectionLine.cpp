@@ -41,10 +41,10 @@ AESConnectionLine::AESConnectionLine()
     {
         menuRootItem->SetFontSize(12);
 
-        MenuItem *menuItem = menuRootItem->AddItem("Delete Transition");
+        MenuItem *menuItem = menuRootItem->AddItem("Remove Transition");
         menuItem->SetSelectedCallback([this](MenuItem*)
         {
-           GameObject::Destroy(this);
+            RemoveSelf();
         });
     });
 }
@@ -80,7 +80,7 @@ void AESConnectionLine::BeforeRender()
     else
     {
         bool thickenLine = false;
-        if (IsMouseOverLine())
+        if (IsMouseOver())
         {
             thickenLine = true;
             if (Input::GetMouseButtonDown(MouseButton::RIGHT))
@@ -130,6 +130,14 @@ void AESConnectionLine::BeforeRender()
         }
     }
 
+    if (HasFocus())
+    {
+        if (Input::GetKeyDown(Key::DELETE))
+        {
+            GameObject::Destroy(this);
+        }
+    }
+
     p_arrowImg->GetMaterial()->SetAlbedoColor(lineColor);
     p_lineRenderer->GetMaterial()->SetAlbedoColor(lineColor);
     p_lineRenderer->GetMaterial()->SetLineWidth(lineWidth);
@@ -176,7 +184,7 @@ AESNode *AESConnectionLine::GetNodeFrom() const
     return p_nodeFrom;
 }
 
-bool AESConnectionLine::IsMouseOverLine() const
+bool AESConnectionLine::IsMouseOver() const
 {
     Vector2 linePosFrom = GetRectTransform()->FromLocalToWorldPoint(
                             p_lineRenderer->GetPoints()[0]).xy();
@@ -199,6 +207,11 @@ bool AESConnectionLine::IsMouseOverLine() const
             Vector2::Dot(mousePos-linePosTo,   linePosFrom-linePosTo) > 0 &&
             !interactingWithNodeTo &&
             !interactingWithNodeFrom;
+}
+
+void AESConnectionLine::RemoveSelf()
+{
+    GameObject::Destroy(this);
 }
 
 AESNode *AESConnectionLine::GetFirstFoundNode() const

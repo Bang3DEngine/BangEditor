@@ -60,7 +60,8 @@ public:
     void SetDestroyOnClose(bool destroyOnSelect);
 
     using ItemSelectedCallback = std::function<void(MenuItem *selectedItem)>;
-    void SetSelectedCallback(ItemSelectedCallback selectedCallback);
+    void SetSelectedCallback(
+            std::function<void(MenuItem *selectedItem)> selectedCallback);
 
 protected:
     MenuItem(MenuItemType itemType = MenuItemType::NORMAL);

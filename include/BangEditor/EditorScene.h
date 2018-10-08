@@ -61,6 +61,7 @@ public:
 
     Scene *GetOpenScene() const;
 
+    void OpenTab(GameObject *tabbedChild);
     AARect GetOpenSceneWindowRectNDC() const;
 
     MenuBar *GetMenuBar() const;

@@ -5,6 +5,10 @@
 #include "Bang/DPtr.h"
 #include "Bang/GameObject.h"
 #include "Bang/IEventsFocus.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/AnimatorStateMachine.h"
+#include "Bang/IEventsAnimatorStateMachine.h"
+#include "Bang/IEventsAnimatorStateMachineNode.h"
 
 #include "BangEditor/BangEditor.h"
 
@@ -16,9 +20,12 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class AESNode;
+FORWARD class UIContextMenu;
 
 class AnimatorSMEditorScene : public GameObject,
-                              public EventListener<IEventsFocus>
+                              public EventListener<IEventsFocus>,
+                              public EventListener<IEventsAnimatorStateMachine>,
+                              public EventListener<IEventsAnimatorStateMachineNode>
 {
     GAMEOBJECT_EDITOR(AnimatorSMEditorScene);
 
@@ -29,16 +36,43 @@ public:
     // GameObject
     void Update() override;
 
+    void CreateAndAddNode(AnimatorStateMachineNode *smNode, uint addIdx);
+    void SetAnimatorSM(AnimatorStateMachine *animatorSM);
+    void Clear();
+
+    const Array<AESNode*>& GetAESNodes() const;
+    AnimatorStateMachine* GetAnimatorSM() const;
+
 private:
-    UIFocusable *p_focusable = nullptr;
-    DPtr<UIImageRenderer> p_border = nullptr;
-    GameObject *p_mainContainer = nullptr;
+    RH<AnimatorStateMachine> p_animatorSM;
+
     Array<AESNode*> p_nodes;
+    UIFocusable *p_focusable = nullptr;
+    GameObject *p_mainContainer = nullptr;
+    UIContextMenu *p_contextMenu = nullptr;
+    DPtr<UIImageRenderer> p_border = nullptr;
 
     float m_zoomScale = 0.85f;
     Vector2i m_panning = Vector2i::Zero;
 
     void PropagateOnZoomScaleChanged();
+    bool IsMouseOverSomeConnectionLine() const;
+
+    // IEventsAnimatorStateMachine
+    virtual void OnNodeCreated(AnimatorStateMachine *stateMachine,
+                               uint newNodeIdx,
+                               AnimatorStateMachineNode *newNode) override;
+    virtual void OnNodeRemoved(AnimatorStateMachine *stateMachine,
+                               uint removedNodeIdx,
+                               AnimatorStateMachineNode *removedNode) override;
+
+    // IEventsAnimatorStateMachineNode
+    virtual void OnConnectionAdded(AnimatorStateMachineNode *node,
+                                   AnimatorStateMachineConnection *connection)
+                 override;
+    virtual void OnConnectionRemoved(AnimatorStateMachineNode *node,
+                                     AnimatorStateMachineConnection *connection)
+                 override;
 
     // IEventsFocus
     virtual UIEventResult OnUIEvent(UIFocusable *focusable,
