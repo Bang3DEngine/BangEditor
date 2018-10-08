@@ -2,6 +2,7 @@
 #define AESCONNECTIONLINE_H
 
 #include "Bang/Bang.h"
+#include "Bang/DPtr.h"
 #include "Bang/GameObject.h"
 #include "Bang/LineRenderer.h"
 
@@ -43,8 +44,8 @@ private:
     UIContextMenu *p_contextMenu = nullptr;
     LineRenderer *p_lineRenderer = nullptr;
 
-    AESNode *p_nodeTo   = nullptr;
-    AESNode *p_nodeFrom = nullptr;
+    DPtr<AESNode> p_nodeTo;
+    DPtr<AESNode> p_nodeFrom;
 
     void RemoveSelf();
 

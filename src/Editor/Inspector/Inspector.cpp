@@ -439,6 +439,7 @@ void Inspector::Clear()
         GetCurrentGameObject()->EventEmitter<IEventsComponent>::UnRegisterListener(this);
         p_currentGameObject = nullptr;
     }
+
     m_currentOpenPath = Path::Empty;
     SetCurrentWidgetBlocked(false);
 }

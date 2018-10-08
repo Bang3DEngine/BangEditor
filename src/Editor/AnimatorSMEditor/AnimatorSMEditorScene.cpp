@@ -1,7 +1,9 @@
 #include "BangEditor/AnimatorSMEditorScene.h"
 
+#include "Bang/File.h"
 #include "Bang/Input.h"
 #include "Bang/UITheme.h"
+#include "Bang/MetaNode.h"
 #include "Bang/UICanvas.h"
 #include "Bang/UIRectMask.h"
 #include "Bang/UIFocusable.h"
@@ -9,6 +11,7 @@
 #include "Bang/TextureFactory.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/MetaFilesManager.h"
 #include "Bang/GameObjectFactory.h"
 
 #include "BangEditor/AESNode.h"
@@ -37,6 +40,7 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
     p_focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
 
     p_mainContainer = GameObjectFactory::CreateUIGameObject();
+    p_mainContainer->GetRectTransform()->SetPivotPosition( Vector2::Zero );
     p_mainContainer->SetParent(this);
 
     p_contextMenu = AddComponent<UIContextMenu>();
@@ -52,10 +56,11 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
                 GetAnimatorSM()->CreateAndAddNode();
 
                 AESNode *aesNode = p_nodes[p_nodes.Size()-1];
-                RectTransform *rt = aesNode->GetRectTransform();
-                rt->SetAnchors(
-                    aesNode->GetParent()->GetRectTransform()->FromWorldToLocalPoint(
-                                Vector3(Input::GetMousePosition(), 0)).xy() );
+                RectTransform *nodeRT = aesNode->GetRectTransform();
+                float localPosZ = nodeRT->GetLocalPosition().z;
+                Vector3 localPos = Vector3(GetMousePositionInSceneSpace(),
+                                           localPosZ);
+                nodeRT->SetLocalPosition(localPos);
             });
         }
     });
@@ -76,14 +81,11 @@ void AnimatorSMEditorScene::Update()
     {
         if (Input::GetMouseButton(MouseButton::MIDDLE))
         {
-            Vector2i mouseDelta = Input::GetMouseDelta();
+            Vector2 mouseDelta( Input::GetMouseDelta() );
             m_panning += mouseDelta;
-
-            RectTransform *mainContRT = p_mainContainer->GetRectTransform();
-            mainContRT->SetLocalPosition( Vector3(Vector2(m_panning), 0.0f) );
         }
 
-        Vector2 mouseWheel = (Input::GetMouseWheel() * Vector2(0.015f));
+        Vector2 mouseWheel = (Input::GetMouseWheel() * Vector2(0.05f));
         if (mouseWheel != Vector2::Zero)
         {
             m_zoomScale = Math::Clamp(m_zoomScale + mouseWheel.y, 0.1f, 2.0f);
@@ -91,21 +93,20 @@ void AnimatorSMEditorScene::Update()
         }
     }
 
-    p_mainContainer->GetRectTransform()->SetLocalScale(
-                Vector3(Vector2(m_zoomScale), 1.0f) );
+    RectTransform *mainContRT = p_mainContainer->GetRectTransform();
+    mainContRT->SetLocalPosition( Vector3(Vector2(m_panning), 0.0f) );
+    mainContRT->SetLocalScale( Vector3(Vector2(m_zoomScale), 1.0f) );
 }
 
 void AnimatorSMEditorScene::CreateAndAddNode(AnimatorStateMachineNode *smNode,
                                              uint addIdx)
 {
     AESNode *aesNode = GameObject::Create<AESNode>();
-    aesNode->p_animatorSMEditorScene = this;
+    aesNode->p_aesScene = this;
     aesNode->SetParent(p_mainContainer);
 
     smNode->EventEmitter<IEventsAnimatorStateMachineNode>::
             RegisterListener(aesNode);
-    // smNode->EventEmitter<IEventsAnimatorStateMachineNode>::
-    //          RegisterListener(this);
 
     ASSERT(addIdx <= p_nodes.Size());
     p_nodes.Insert(aesNode, addIdx);
@@ -133,8 +134,37 @@ void AnimatorSMEditorScene::SetAnimatorSM(AnimatorStateMachine *animatorSM)
             OnNodeCreated(GetAnimatorSM(), i, smNode);
         }
 
+        for (uint i = 0; i < GetAnimatorSM()->GetNodes().Size(); ++i)
+        {
+            AESNode *aesNode = GetAESNodes()[i];
+            AnimatorStateMachineNode *smNode = GetAnimatorSM()->GetNode(i);
+            for (const AnimatorStateMachineConnection &conn :
+                 GetAnimatorSM()->GetNode(i)->GetConnections())
+            {
+                aesNode->OnConnectionAdded(smNode, &conn);
+            }
+        }
+
+        ImportCurrentAnimatorStateMachineExtraInformation();
         PropagateOnZoomScaleChanged();
     }
+}
+
+Vector2 AnimatorSMEditorScene::GetMousePositionInSceneSpace() const
+{
+    return GetWorldPositionInSceneSpace( Vector2(Input::GetMousePosition()) );
+}
+
+Vector2 AnimatorSMEditorScene::GetWorldPositionInSceneSpace(
+                                const Vector2 &pos) const
+{
+    RectTransform *contRT = p_mainContainer->GetRectTransform();
+    Vector2 posLocal =
+        contRT->FromLocalPointNDCToLocalPoint(
+            contRT->FromWorldToLocalPoint(
+                Vector3(Vector2(pos), 0) ).xy() );
+    posLocal *= 1.0f / m_zoomScale;
+    return posLocal;
 }
 
 void AnimatorSMEditorScene::Clear()
@@ -186,6 +216,47 @@ bool AnimatorSMEditorScene::IsMouseOverSomeConnectionLine() const
     return false;
 }
 
+void AnimatorSMEditorScene::ImportCurrentAnimatorStateMachineExtraInformation()
+{
+    if (GetAnimatorSM())
+    {
+        Path metaPath = MetaFilesManager::GetMetaFilepath(
+                    GetAnimatorSM()->GetResourceFilepath() );
+        if (metaPath.IsFile())
+        {
+            MetaNode meta;
+            meta.Import( metaPath );
+            Array<Vector2> nodesPos = meta.GetArray<Vector2>("NodePositions");
+            for (uint i = 0; i < nodesPos.Size(); ++i)
+            {
+                GetAESNodes()[i]->ImportPosition(nodesPos[i]);
+            }
+        }
+    }
+}
+
+void AnimatorSMEditorScene::ExportCurrentAnimatorStateMachine()
+{
+    if (GetAnimatorSM() && GetAnimatorSM()->GetResourceFilepath().IsFile())
+    {
+        Path metaPath = MetaFilesManager::GetMetaFilepath(
+                                GetAnimatorSM()->GetResourceFilepath());
+        GetAnimatorSM()->ExportMetaToFile(metaPath);
+
+        {
+            MetaNode meta;
+            meta.Import(metaPath);
+            Array<Vector2> nodesPos;
+            for (AESNode *node : GetAESNodes())
+            {
+                nodesPos.PushBack( node->GetExportPosition() );
+            }
+            meta.SetArray<Vector2>("NodePositions", nodesPos);
+            File::Write(metaPath, meta.ToString());
+        }
+    }
+}
+
 void AnimatorSMEditorScene::OnNodeCreated(AnimatorStateMachine *stateMachine,
                                           uint newNodeIdx,
                                           AnimatorStateMachineNode *newNode)
@@ -199,29 +270,11 @@ void AnimatorSMEditorScene::OnNodeRemoved(AnimatorStateMachine *stateMachine,
                                           AnimatorStateMachineNode *removedNode)
 {
     ASSERT(stateMachine == GetAnimatorSM());
-
     ASSERT(removedNodeIdx < p_nodes.Size());
 
-    removedNode->EventEmitter<IEventsAnimatorStateMachineNode>::
-                 UnRegisterListener(this);
-
     AESNode *aesNodeToRemove = p_nodes[removedNodeIdx];
-    p_nodes.RemoveByIndex(removedNodeIdx);
     GameObject::Destroy(aesNodeToRemove);
-}
-
-void AnimatorSMEditorScene::
-OnConnectionAdded(AnimatorStateMachineNode *node,
-                  AnimatorStateMachineConnection *connection)
-{
-
-}
-
-void AnimatorSMEditorScene::
-OnConnectionRemoved(AnimatorStateMachineNode *node,
-                    AnimatorStateMachineConnection *connection)
-{
-
+    p_nodes.RemoveByIndex(removedNodeIdx);
 }
 
 UIEventResult AnimatorSMEditorScene::OnUIEvent(UIFocusable *, const UIEvent &event)

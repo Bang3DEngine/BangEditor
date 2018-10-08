@@ -44,6 +44,8 @@ public:
     void ShowGameObject(GameObject *gameObject);
     void ShowInspectorWidget(InspectorWidget *inspectorWidget);
 
+    void Clear();
+
     const Path &GetCurrentPath() const;
     GameObject *GetCurrentGameObject() const;
 
@@ -69,7 +71,6 @@ private:
     void RemoveWidget(InspectorWidget *widget);
     void RemoveWidget(int index);
     void SetCurrentWidgetBlocked(bool blocked);
-    void Clear();
 
     // UIContextMenu
     virtual void OnCreateContextMenu(MenuItem *menuRootItem);

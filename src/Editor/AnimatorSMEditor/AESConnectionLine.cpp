@@ -186,6 +186,11 @@ AESNode *AESConnectionLine::GetNodeFrom() const
 
 bool AESConnectionLine::IsMouseOver() const
 {
+    if (!GetNodeFrom() || !GetNodeTo())
+    {
+        return false;
+    }
+
     Vector2 linePosFrom = GetRectTransform()->FromLocalToWorldPoint(
                             p_lineRenderer->GetPoints()[0]).xy();
     Vector2 linePosTo   = GetRectTransform()->FromLocalToWorldPoint(
@@ -241,4 +246,3 @@ Vector3 AESConnectionLine::GetConnectionPointLinePosition(
                             Vector3(0, 0, 0)));
     return linePos;
 }
-

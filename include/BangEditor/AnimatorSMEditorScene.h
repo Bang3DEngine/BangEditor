@@ -24,8 +24,7 @@ FORWARD class UIContextMenu;
 
 class AnimatorSMEditorScene : public GameObject,
                               public EventListener<IEventsFocus>,
-                              public EventListener<IEventsAnimatorStateMachine>,
-                              public EventListener<IEventsAnimatorStateMachineNode>
+                              public EventListener<IEventsAnimatorStateMachine>
 {
     GAMEOBJECT_EDITOR(AnimatorSMEditorScene);
 
@@ -38,6 +37,8 @@ public:
 
     void CreateAndAddNode(AnimatorStateMachineNode *smNode, uint addIdx);
     void SetAnimatorSM(AnimatorStateMachine *animatorSM);
+    Vector2 GetMousePositionInSceneSpace() const;
+    Vector2 GetWorldPositionInSceneSpace(const Vector2 &pos) const;
     void Clear();
 
     const Array<AESNode*>& GetAESNodes() const;
@@ -52,11 +53,14 @@ private:
     UIContextMenu *p_contextMenu = nullptr;
     DPtr<UIImageRenderer> p_border = nullptr;
 
-    float m_zoomScale = 0.85f;
-    Vector2i m_panning = Vector2i::Zero;
+    float m_zoomScale = 1.0f;
+    Vector2 m_panning = Vector2::Zero;
 
     void PropagateOnZoomScaleChanged();
     bool IsMouseOverSomeConnectionLine() const;
+
+    void ImportCurrentAnimatorStateMachineExtraInformation();
+    void ExportCurrentAnimatorStateMachine();
 
     // IEventsAnimatorStateMachine
     virtual void OnNodeCreated(AnimatorStateMachine *stateMachine,
@@ -66,18 +70,11 @@ private:
                                uint removedNodeIdx,
                                AnimatorStateMachineNode *removedNode) override;
 
-    // IEventsAnimatorStateMachineNode
-    virtual void OnConnectionAdded(AnimatorStateMachineNode *node,
-                                   AnimatorStateMachineConnection *connection)
-                 override;
-    virtual void OnConnectionRemoved(AnimatorStateMachineNode *node,
-                                     AnimatorStateMachineConnection *connection)
-                 override;
-
     // IEventsFocus
     virtual UIEventResult OnUIEvent(UIFocusable *focusable,
                                     const UIEvent &event) override;
 
+    friend class AnimatorSMEditor;
 };
 
 NAMESPACE_BANG_EDITOR_END

@@ -2,6 +2,7 @@
 #define AESNODE_H
 
 #include "Bang/Bang.h"
+#include "Bang/DPtr.h"
 #include "Bang/GameObject.h"
 #include "Bang/IEventsFocus.h"
 #include "Bang/IEventsAnimatorStateMachineNode.h"
@@ -37,23 +38,29 @@ public:
     // GameObject
     void Update() override;
 
+    void SetNodeName(const String &nodeName);
     void OnZoomScaleChanged(float zoomScale);
 
+    const String& GetNodeName() const;
     UIFocusable* GetFocusable() const;
     uint GetIndexInStateMachine() const;
-    const Array<AESConnectionLine*>& GetConnectionLines() const;
+    AnimatorStateMachine *GetAnimatorSM() const;
+    AnimatorStateMachineNode *GetSMNode() const;
+    const Array<DPtr<AESConnectionLine>>& GetConnectionLines() const;
 
 private:
+    String m_nodeName = "";
     UIImageRenderer *p_bg = nullptr;
     UIFocusable *p_focusable = nullptr;
     UIImageRenderer *p_border = nullptr;
-    UITextRenderer *p_nameText = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
+    UITextRenderer *p_nodeNameText = nullptr;
 
-    AnimatorSMEditorScene *p_animatorSMEditorScene = nullptr;
+    Vector2 m_grabOffset = Vector2::Zero;
+    AnimatorSMEditorScene *p_aesScene = nullptr;
 
-    Array<AESNode*> p_toConnectedNodes;
-    Array<AESConnectionLine*> p_toConnectionLines;
+    Array<DPtr<AESNode>> p_toConnectedNodes;
+    Array<DPtr<AESConnectionLine>> p_toConnectionLines;
     Map<AESConnectionLine*, AESNode*> p_toConnectionLineToConnectedNode;
 
     int m_framesPassedSinceLineDragStarted = 0;
@@ -66,16 +73,15 @@ private:
     void Duplicate();
     void DestroyLineUsedForDragging();
 
-    AnimatorStateMachine *GetAnimatorSM() const;
-    AnimatorStateMachineNode *GetSMNode() const;
-
+    Vector2 GetExportPosition() const;
+    void ImportPosition(const Vector2 &position);
 
     // IEventsAnimatorStateMachineNode
-    virtual void OnConnectionAdded(AnimatorStateMachineNode *node,
-                                   AnimatorStateMachineConnection *connection)
+    virtual void OnConnectionAdded(const AnimatorStateMachineNode *node,
+                                   const AnimatorStateMachineConnection *connection)
                  override;
-    virtual void OnConnectionRemoved(AnimatorStateMachineNode *node,
-                                     AnimatorStateMachineConnection *connection)
+    virtual void OnConnectionRemoved(const AnimatorStateMachineNode *node,
+                                     const AnimatorStateMachineConnection *connection)
                  override;
 
     // IEventsDestroy

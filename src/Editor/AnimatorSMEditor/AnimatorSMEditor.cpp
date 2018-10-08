@@ -2,6 +2,7 @@
 
 #include "Bang/UILabel.h"
 #include "Bang/Animator.h"
+#include "Bang/MetaNode.h"
 #include "Bang/Resources.h"
 #include "Bang/Extensions.h"
 #include "Bang/UITextRenderer.h"
@@ -94,6 +95,8 @@ void AnimatorSMEditor::Update()
                         Resources::Load<AnimatorStateMachine>(selectedPath);
             SetAnimatorSM(animSMRH.Get());
         }
+
+        p_animatorEditorScene->ExportCurrentAnimatorStateMachine();
     }
 }
 
@@ -102,7 +105,6 @@ void AnimatorSMEditor::SetAnimatorSM(AnimatorStateMachine *animatorSM)
     if (animatorSM != GetAnimatorSM())
     {
         p_animatorSM.Set(animatorSM);
-
         p_animatorEditorScene->SetAnimatorSM( GetAnimatorSM() );
     }
 }

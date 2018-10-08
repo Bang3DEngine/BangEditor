@@ -41,7 +41,9 @@ protected:
     virtual void SetTitle(const String &title);
     void SetLabelsWidth(int labelsWidth);
 
+    // GameObject
     virtual void Update() override;
+
     virtual void UpdateFromReference();
 
     void AddLabel(const String &content, int height = -1, int width = -1);
