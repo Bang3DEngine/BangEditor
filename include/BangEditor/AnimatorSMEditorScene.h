@@ -49,6 +49,8 @@ private:
 
     Array<AESNode*> p_nodes;
     UIFocusable *p_focusable = nullptr;
+    GameObject *p_gridContainer = nullptr;
+    UIImageRenderer *p_gridImg = nullptr;
     GameObject *p_mainContainer = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
     DPtr<UIImageRenderer> p_border = nullptr;

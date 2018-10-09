@@ -166,6 +166,13 @@ Texture2D* EditorTextureFactory::GetCubeMapIcon()
     return EditorTextureFactory::GetTexture2D("CubeMap.png");
 }
 
+Texture2D *EditorTextureFactory::GetGrid2x2()
+{
+    Texture2D *tex = EditorTextureFactory::GetTexture2D("Grid2x2.png");
+    tex->SetWrapMode( GL::WrapMode::REPEAT );
+    return tex;
+}
+
 Texture2D* EditorTextureFactory::GetWhiteSphereIcon()
 {
     return EditorTextureFactory::GetTexture2D("WhiteSphere.png");

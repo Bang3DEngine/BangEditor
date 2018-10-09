@@ -5,6 +5,7 @@
 #include "Bang/UITheme.h"
 #include "Bang/MetaNode.h"
 #include "Bang/UICanvas.h"
+#include "Bang/Material.h"
 #include "Bang/UIRectMask.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/RectTransform.h"
@@ -42,6 +43,16 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
     p_mainContainer = GameObjectFactory::CreateUIGameObject();
     p_mainContainer->GetRectTransform()->SetPivotPosition( Vector2::Zero );
     p_mainContainer->SetParent(this);
+
+    p_gridContainer = GameObjectFactory::CreateUIGameObject();
+    p_gridContainer->GetRectTransform()->SetAnchors( Vector2::Zero );
+    p_gridContainer->GetRectTransform()->SetPivotPosition( Vector2::Zero );
+    p_gridContainer->GetRectTransform()->SetSizeFromPivot( Vector2i(100000) );
+    p_gridContainer->SetParent(this);
+
+    p_gridImg = p_gridContainer->AddComponent<UIImageRenderer>();
+    p_gridImg->SetImageTexture( EditorTextureFactory::GetGrid2x2() );
+    p_gridImg->GetMaterial()->SetAlbedoUvMultiply( Vector2(10000.0f) );
 
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
@@ -96,6 +107,10 @@ void AnimatorSMEditorScene::Update()
     RectTransform *mainContRT = p_mainContainer->GetRectTransform();
     mainContRT->SetLocalPosition( Vector3(Vector2(m_panning), 0.0f) );
     mainContRT->SetLocalScale( Vector3(Vector2(m_zoomScale), 1.0f) );
+    p_gridContainer->GetRectTransform()->SetLocalPosition(
+                               Vector3(Vector2(m_zoomScale), 0) );
+    p_gridContainer->GetRectTransform()->SetLocalPosition(
+                               Vector3(Vector2(m_panning), 0) );
 }
 
 void AnimatorSMEditorScene::CreateAndAddNode(AnimatorStateMachineNode *smNode,

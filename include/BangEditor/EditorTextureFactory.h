@@ -38,6 +38,7 @@ public:
     static Texture2D* GetSquareIcon();
     static Texture2D* GetAnchorIcon();
     static Texture2D* GetCubeMapIcon();
+    static Texture2D* GetGrid2x2();
     static Texture2D* GetWhiteSphereIcon();
     static Texture2D* GetFolderIcon();
     static Texture2D* GetLetterIcon();
