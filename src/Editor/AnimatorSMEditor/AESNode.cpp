@@ -141,9 +141,9 @@ UIFocusable* AESNode::GetFocusable() const
     return p_focusable;
 }
 
-const Array<DPtr<AESConnectionLine>> &AESNode::GetConnectionLines() const
+const Array<AESConnectionLine*> &AESNode::GetConnectionLines() const
 {
-    return p_toConnectionLines;
+    return p_connectionLinesTo;
 }
 
 void AESNode::CreateAndAddConnectionToBeginDrag()
@@ -160,6 +160,7 @@ AESConnectionLine* AESNode::CreateAndAddDefinitiveConnection()
     AESConnectionLine *connLine = GameObject::Create<AESConnectionLine>();
     connLine->SetNodeFrom(this);
     connLine->SetParent(this);
+    p_connectionLinesTo.PushBack(connLine);
     return connLine;
 }
 
@@ -186,18 +187,11 @@ void AESNode::OnDragConnectionLineEnd()
         // Consolidate connection
         DestroyLineUsedForDragging();
 
-        AESConnectionLine *newConnectionLine = CreateAndAddDefinitiveConnection();
-        newConnectionLine->SetNodeTo(nodeToConnectTo);
-        p_toConnectionLines.PushBack(newConnectionLine);
-        p_toConnectionLineToConnectedNode.Add(newConnectionLine,
-                                              nodeToConnectTo);
-        nodeToConnectTo->EventEmitter<IEventsDestroy>::RegisterListener(this);
-
-        AnimatorStateMachineNode *fromNode = GetSMNode();
-        ASSERT(fromNode);
-        AnimatorStateMachineNode *toNode = nodeToConnectTo->GetSMNode();
-        ASSERT(toNode);
-        fromNode->CreateConnectionTo(toNode);
+        AnimatorStateMachineNode *fromSMNode = GetSMNode();
+        AnimatorStateMachineNode *toSMNode = nodeToConnectTo->GetSMNode();
+        ASSERT(fromSMNode);
+        ASSERT(toSMNode);
+        fromSMNode->CreateConnectionTo(toSMNode);
     }
     else
     {
@@ -208,16 +202,11 @@ void AESNode::OnDragConnectionLineEnd()
 void AESNode::RemoveSelf()
 {
     uint idx = GetIndexInStateMachine();
-    ASSERT(idx != -1u);
-
-    // while (!GetConnectionLines().IsEmpty())
-    // {
-    //     AESConnectionLine *connLine = GetConnectionLines().Back();
-    //     GameObject::DestroyImmediate(connLine);
-    // }
-    DestroyLineUsedForDragging();
-
-    GetAnimatorSM()->RemoveNode(idx);
+    if (idx != -1u)
+    {
+        DestroyLineUsedForDragging();
+        GetAnimatorSM()->RemoveNode( GetAnimatorSM()->GetNodes()[idx] );
+    }
 }
 
 void AESNode::Duplicate()
@@ -278,69 +267,33 @@ AnimatorStateMachineNode *AESNode::GetSMNode() const
     return GetAnimatorSM()->GetNode( GetIndexInStateMachine() );
 }
 
-void AESNode::OnConnectionAdded(const AnimatorStateMachineNode *node,
-                                const AnimatorStateMachineConnection *connection)
+void AESNode::OnConnectionAdded(AnimatorStateMachineNode *node,
+                                AnimatorStateMachineConnection *connection)
 {
     ASSERT( node == GetSMNode() );
-    ASSERT( connection->GetNodeFromIndex() < p_aesScene->
-                                             GetAESNodes().Size());
-    ASSERT( connection->GetNodeToIndex() < p_aesScene->
-                                           GetAESNodes().Size());
+    ASSERT( connection->GetNodeTo() );
+    ASSERT( connection->GetNodeFrom() );
 
+    uint nodeFromIdx = GetAnimatorSM()->GetNodes().IndexOf(connection->GetNodeFrom());
+    uint nodeToIdx   = GetAnimatorSM()->GetNodes().IndexOf(connection->GetNodeTo());
     AESConnectionLine *connLine = CreateAndAddDefinitiveConnection();
-    AESNode *aesNodeFrom = p_aesScene->GetAESNodes()[
-                                                connection->GetNodeFromIndex()];
-    AESNode   *aesNodeTo = p_aesScene->GetAESNodes()[
-                                                connection->GetNodeToIndex()];
+    AESNode *aesNodeFrom = p_aesScene->GetAESNodes()[nodeFromIdx];
+    AESNode   *aesNodeTo = p_aesScene->GetAESNodes()[nodeToIdx];
     connLine->SetNodeFrom( aesNodeFrom );
     connLine->SetNodeTo( aesNodeTo );
 }
 
-void AESNode::OnConnectionRemoved(const AnimatorStateMachineNode *node,
-                                  const AnimatorStateMachineConnection *connection)
+void AESNode::OnConnectionRemoved(AnimatorStateMachineNode *node,
+                                  AnimatorStateMachineConnection *connection)
 {
     ASSERT(node == GetSMNode());
 
-    uint indexOfSMConnection = connection->GetIndexInsideNodeConnections(
-                                                GetIndexInStateMachine());
-
+    uint indexOfSMConnection = node->GetConnections().IndexOf(connection);
     if (indexOfSMConnection < GetConnectionLines().Size())
     {
         AESConnectionLine *connLine = GetConnectionLines()[indexOfSMConnection];
         GameObject::Destroy(connLine);
-    }
-}
-
-void AESNode::OnDestroyed(EventEmitter<IEventsDestroy> *object)
-{
-    if (AESConnectionLine *connectionLine = DCAST<AESConnectionLine*>(object))
-    {
-        if (connectionLine == p_toConnectionLineBeingDragged)
-        {
-            p_toConnectionLineBeingDragged = nullptr;
-        }
-        p_toConnectionLines.Remove(connectionLine);
-        p_toConnectionLineToConnectedNode.Remove(connectionLine);
-    }
-    else if (AESNode *node = DCAST<AESNode*>(object))
-    {
-        p_toConnectedNodes.RemoveAll(node);
-        for (auto it = p_toConnectionLines.Begin();
-             it != p_toConnectionLines.End();)
-        {
-            AESConnectionLine *connectedLine = *it;
-            if (connectedLine->GetNodeFrom() == node ||
-                connectedLine->GetNodeTo() == node)
-            {
-                it = p_toConnectionLines.Remove(it);
-                GameObject::Destroy(connectedLine);
-            }
-            else
-            {
-                ++it;
-            }
-        }
-        node->EventEmitter<IEventsDestroy>::UnRegisterListener(this);
+        p_connectionLinesTo.Remove(connLine);
     }
 }
 

@@ -2,7 +2,6 @@
 #define AESNODE_H
 
 #include "Bang/Bang.h"
-#include "Bang/DPtr.h"
 #include "Bang/GameObject.h"
 #include "Bang/IEventsFocus.h"
 #include "Bang/IEventsAnimatorStateMachineNode.h"
@@ -26,7 +25,6 @@ FORWARD class AnimatorSMEditorScene;
 
 class AESNode : public GameObject,
                 public EventListener<IEventsFocus>,
-                public EventListener<IEventsDestroy>,
                 public EventListener<IEventsAnimatorStateMachineNode>
 {
     GAMEOBJECT_EDITOR(AESNode);
@@ -46,7 +44,7 @@ public:
     uint GetIndexInStateMachine() const;
     AnimatorStateMachine *GetAnimatorSM() const;
     AnimatorStateMachineNode *GetSMNode() const;
-    const Array<DPtr<AESConnectionLine>>& GetConnectionLines() const;
+    const Array<AESConnectionLine*>& GetConnectionLines() const;
 
 private:
     String m_nodeName = "";
@@ -58,10 +56,7 @@ private:
 
     Vector2 m_grabOffset = Vector2::Zero;
     AnimatorSMEditorScene *p_aesScene = nullptr;
-
-    Array<DPtr<AESNode>> p_toConnectedNodes;
-    Array<DPtr<AESConnectionLine>> p_toConnectionLines;
-    Map<AESConnectionLine*, AESNode*> p_toConnectionLineToConnectedNode;
+    Array<AESConnectionLine*> p_connectionLinesTo;
 
     int m_framesPassedSinceLineDragStarted = 0;
     AESConnectionLine *p_toConnectionLineBeingDragged = nullptr;
@@ -77,15 +72,12 @@ private:
     void ImportPosition(const Vector2 &position);
 
     // IEventsAnimatorStateMachineNode
-    virtual void OnConnectionAdded(const AnimatorStateMachineNode *node,
-                                   const AnimatorStateMachineConnection *connection)
+    virtual void OnConnectionAdded(AnimatorStateMachineNode *node,
+                                   AnimatorStateMachineConnection *connection)
                  override;
-    virtual void OnConnectionRemoved(const AnimatorStateMachineNode *node,
-                                     const AnimatorStateMachineConnection *connection)
+    virtual void OnConnectionRemoved(AnimatorStateMachineNode *node,
+                                     AnimatorStateMachineConnection *connection)
                  override;
-
-    // IEventsDestroy
-    virtual void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
     // IEventsFocus
     virtual UIEventResult OnUIEvent(UIFocusable *focusable,

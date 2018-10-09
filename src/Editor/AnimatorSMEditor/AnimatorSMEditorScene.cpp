@@ -138,10 +138,10 @@ void AnimatorSMEditorScene::SetAnimatorSM(AnimatorStateMachine *animatorSM)
         {
             AESNode *aesNode = GetAESNodes()[i];
             AnimatorStateMachineNode *smNode = GetAnimatorSM()->GetNode(i);
-            for (const AnimatorStateMachineConnection &conn :
+            for (AnimatorStateMachineConnection *conn :
                  GetAnimatorSM()->GetNode(i)->GetConnections())
             {
-                aesNode->OnConnectionAdded(smNode, &conn);
+                aesNode->OnConnectionAdded(smNode, conn);
             }
         }
 

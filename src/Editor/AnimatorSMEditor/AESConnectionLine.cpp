@@ -12,6 +12,7 @@
 #include "Bang/TextureFactory.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/AnimatorStateMachineNode.h"
 
 #include "BangEditor/AESNode.h"
 #include "BangEditor/UIContextMenu.h"
@@ -134,7 +135,7 @@ void AESConnectionLine::BeforeRender()
     {
         if (Input::GetKeyDown(Key::DELETE))
         {
-            GameObject::Destroy(this);
+            RemoveSelf();
         }
     }
 
@@ -216,7 +217,17 @@ bool AESConnectionLine::IsMouseOver() const
 
 void AESConnectionLine::RemoveSelf()
 {
-    GameObject::Destroy(this);
+    ASSERT(GetNodeFrom());
+    uint connIdx = GetNodeFrom()->GetConnectionLines().IndexOf(this);
+    ASSERT(connIdx != -1u);
+
+    AnimatorStateMachineNode *smNode = GetNodeFrom()->GetSMNode();
+    ASSERT(smNode);
+
+    AnimatorStateMachineConnection *smConn = smNode->GetConnection(connIdx);
+    ASSERT(smConn);
+
+    smNode->RemoveConnection(smConn);
 }
 
 AESNode *AESConnectionLine::GetFirstFoundNode() const
