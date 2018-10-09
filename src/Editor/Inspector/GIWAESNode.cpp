@@ -50,6 +50,7 @@ void GIWAESNode::Init()
 
     AddWidget("Name", p_nameInput->GetGameObject());
     AddWidget("Animation", p_nodeAnimationInput);
+
     SetLabelsWidth(90);
 }
 

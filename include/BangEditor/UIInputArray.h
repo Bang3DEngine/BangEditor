@@ -10,43 +10,82 @@
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+// The GameObject's in each row will use MetaNode's to serialize/deserialize
+// and update array elements
 class UIInputArray : public GameObject,
                      public EventEmitter<IEventsValueChanged>
 {
     GAMEOBJECT_EDITOR(UIInputArray);
 
 public:
-    using CreateNewElementFunction = std::function<GameObject*()>;
-
     UIInputArray();
 	virtual ~UIInputArray();
 
-    void AddElement(GameObject *widget, uint index = -1u);
-    void RemoveElement(GameObject *widget);
-    void RemoveElement(uint index);
+    void AddInputGameObject(GameObject *widget, uint index = -1u);
+    void UpdateInputGameObjects(const Array<MetaNode> &elementsMeta);
+    void RemoveInputGameObjectSerializable(Serializable *widget);
+    void RemoveInputGameObject(GameObject *widget);
+    void RemoveInputGameObject(uint index);
 
-    void SetCreateNewElementFunction(CreateNewElementFunction function);
+    using CreateNewInputGameObjectFunction = std::function<GameObject*()>;
+    void SetCreateNewInputGameObjectFunction(std::function<GameObject*()> function);
 
+    template <class T>
+    static void UpdateElements(
+                    const Array<MetaNode> &referenceMetaNodes,
+                    const Array<T*> &serializablesToUpdate,
+                    std::function<T*()> createNewElementFunction,
+                    std::function<void(T*)> removeElementFunction);
+
+    static void UpdateElementsSerializable(
+                    const Array<MetaNode> &referenceMetaNodes,
+                    const Array<Serializable*> &serializablesToUpdate,
+                    std::function<Serializable*()> createNewElementFunction,
+                    std::function<void(Serializable*)> removeElementFunction);
+
+    void Clear();
     uint Size() const;
 
-    const Array<GameObject*> &GetArray() const;
+    Array<MetaNode> GetInputGameObjectsMetas() const;
+    const Array<GameObject*> &GetInputGameObjectsArray() const;
 
 private:
-    Array<GameObject*> m_array;
+    Array<GameObject*> m_inputGameObjects;
     GameObject *m_addNewElementRow = nullptr;
 
-    CreateNewElementFunction m_createNewElementFunction;
+    CreateNewInputGameObjectFunction m_createNewInputGameObjectFunction;
 
-    void AddElement_(GameObject *widget, uint index, bool propagateChangeEvent);
-    void RemoveElement_(GameObject *widget, bool propagateChangeEvent);
+    void AddInputGameObject_(GameObject *widget, uint index, bool propagateChangeEvent);
+    void RemoveInputGameObject_(GameObject *widget, bool propagateChangeEvent);
 
-    void MoveAddNewElementRowToEnd();
+    void MoveAddNewInputGameObjectRowToEnd();
     void RemoveRow(UIInputArrayRow *row, bool propagateChangeEvent);
     void MoveRow(UIInputArrayRow *row, int displacement);
-    UIInputArrayRow *GetRowFromElement(GameObject *element) const;
+    UIInputArrayRow *GetRowFromInputGameObject(GameObject *element) const;
 
     friend class UIInputArrayRow;
 };
+
+template <class T>
+void UIInputArray::UpdateElements(
+                const Array<MetaNode> &referenceMetaNodes,
+                const Array<T*> &serializablesToUpdate,
+                std::function<T*()> createNewElementFunction,
+                std::function<void(T*)> removeElementFunction)
+{
+    UIInputArray::UpdateElementsSerializable(
+                referenceMetaNodes,
+                serializablesToUpdate.template To<Array, Serializable*>(),
+                [&]()
+                {
+                    T *newObj = createNewElementFunction();
+                    return SCAST<Serializable*>(newObj);
+                },
+                [&](Serializable *s)
+                {
+                    removeElementFunction(SCAST<T*>(s));
+                });
+}
 
 NAMESPACE_BANG_EDITOR_END
 

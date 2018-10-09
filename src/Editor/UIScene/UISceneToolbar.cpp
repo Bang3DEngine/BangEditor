@@ -53,7 +53,7 @@ UISceneToolbar::UISceneToolbar()
                                 std::function<void()> callbackFunc)
     {
         UIToolButton *button = GameObjectFactory::CreateUIToolButton("", icon);
-        button->SetIcon(icon, Vector2i(ToolBarHeight));
+        button->SetIcon(icon, Vector2i(14));
         button->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
         button->GetIcon()->SetTint(Color::DarkGray);
         button->AddClickedCallback( [callbackFunc]() { callbackFunc(); } );

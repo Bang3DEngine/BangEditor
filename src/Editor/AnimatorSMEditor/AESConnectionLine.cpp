@@ -12,10 +12,15 @@
 #include "Bang/TextureFactory.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/AnimatorStateMachine.h"
 #include "Bang/AnimatorStateMachineNode.h"
+#include "Bang/AnimatorStateMachineConnection.h"
 
 #include "BangEditor/AESNode.h"
+#include "BangEditor/Inspector.h"
 #include "BangEditor/UIContextMenu.h"
+#include "BangEditor/GIWAESConnectionLine.h"
+#include "BangEditor/AnimatorSMEditorScene.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -96,7 +101,14 @@ void AESConnectionLine::BeforeRender()
                 {
                     canvas->SetFocus(nullptr);
                 }
+
                 m_hasFocus = true;
+
+                GIWAESConnectionLine *aesConnLine =
+                        GameObject::Create<GIWAESConnectionLine>();
+                aesConnLine->SetAESConnectionLine(this);
+                aesConnLine->Init();
+                Inspector::GetActive()->ShowInspectorWidget(aesConnLine);
             }
         }
         else
@@ -183,6 +195,26 @@ AESNode *AESConnectionLine::GetNodeTo() const
 AESNode *AESConnectionLine::GetNodeFrom() const
 {
     return p_nodeFrom;
+}
+
+AnimatorStateMachine *AESConnectionLine::GetAnimatorSM() const
+{
+    if (GetNodeFrom())
+    {
+        return GetNodeFrom()->GetAnimatorSM();
+    }
+    return GetNodeTo() ? GetNodeTo()->GetAnimatorSM() : nullptr;
+}
+
+AnimatorStateMachineConnection *AESConnectionLine::GetSMConnection() const
+{
+    uint idxInAESNode = GetNodeFrom()->GetConnectionLines().IndexOf(
+                                    const_cast<AESConnectionLine*>(this));
+    if (idxInAESNode < GetNodeFrom()->GetSMNode()->GetConnections().Size())
+    {
+        return GetNodeFrom()->GetSMNode()->GetConnections()[idxInAESNode];
+    }
+    return nullptr;
 }
 
 bool AESConnectionLine::IsMouseOver() const

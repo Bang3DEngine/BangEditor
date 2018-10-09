@@ -10,6 +10,9 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIImageRenderer;
+FORWARD class AnimatorStateMachine;
+FORWARD class AnimatorStateMachineNode;
+FORWARD class AnimatorStateMachineConnection;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -37,6 +40,8 @@ public:
 
     AESNode *GetNodeTo() const;
     AESNode *GetNodeFrom() const;
+    AnimatorStateMachine *GetAnimatorSM() const;
+    AnimatorStateMachineConnection *GetSMConnection() const;
 
 private:
     bool m_hasFocus = false;
