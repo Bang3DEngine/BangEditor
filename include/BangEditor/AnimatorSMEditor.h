@@ -2,6 +2,7 @@
 #define ANIMATORSMEDITOR_H
 
 #include "Bang/Bang.h"
+#include "Bang/UIButton.h"
 #include "Bang/GameObject.h"
 #include "Bang/ResourceHandle.h"
 
@@ -34,6 +35,8 @@ public:
 private:
     RH<AnimatorStateMachine> p_animatorSM;
     AnimatorSMEditorScene *p_animatorEditorScene = nullptr;
+
+    UIButton *p_centerSceneButton = nullptr;
 
     void Clear();
 };

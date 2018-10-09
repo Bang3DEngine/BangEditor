@@ -3,6 +3,7 @@
 #include "Bang/UILabel.h"
 #include "Bang/Animator.h"
 #include "Bang/MetaNode.h"
+#include "Bang/UIButton.h"
 #include "Bang/Resources.h"
 #include "Bang/Extensions.h"
 #include "Bang/UITextRenderer.h"
@@ -14,6 +15,7 @@
 #include "Bang/UIDirLayoutMovableSeparator.h"
 
 #include "BangEditor/Explorer.h"
+#include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/AnimatorSMEditorScene.h"
 
 USING_NAMESPACE_BANG
@@ -23,11 +25,33 @@ AnimatorSMEditor::AnimatorSMEditor()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
+    AddComponent<UIVerticalLayout>();
     UILayoutElement *mainLE = AddComponent<UILayoutElement>();
-    mainLE->SetFlexibleSize(Vector2::One);
+    mainLE->SetFlexibleSize( Vector2::One );
 
-    UIHorizontalLayout *mainHL = AddComponent<UIHorizontalLayout>();
-    mainHL->SetChildrenVerticalStretch(Stretch::FULL);
+    GameObject *toolbar = GameObjectFactory::CreateUIGameObject();
+    UIHorizontalLayout *toolbarHL = toolbar->AddComponent<UIHorizontalLayout>();
+    toolbarHL->SetPaddings(5, 10, 5, 10);
+
+    UILayoutElement *toolbarLE = toolbar->AddComponent<UILayoutElement>();
+    toolbarLE->SetFlexibleSize(Vector2(1.0f, 0.0f));
+    toolbarLE->SetMinHeight(40);
+
+    p_centerSceneButton = GameObjectFactory::CreateUIButton(
+                                "", EditorTextureFactory::GetEyeIcon());
+    p_centerSceneButton->GetIcon()->SetTint(Color::DarkGray);
+    p_centerSceneButton->AddClickedCallback([this]()
+    {
+       p_animatorEditorScene->CenterScene();
+    });
+    p_centerSceneButton->GetGameObject()->SetParent(toolbar);
+
+    GameObject *botHLGo = GameObjectFactory::CreateUIGameObject();
+    UILayoutElement *botHLLE = botHLGo->AddComponent<UILayoutElement>();
+    botHLLE->SetFlexibleSize(Vector2::One);
+
+    UIHorizontalLayout *botHL = botHLGo->AddComponent<UIHorizontalLayout>();
+    botHL->SetChildrenVerticalStretch(Stretch::FULL);
 
     AddComponent<UIFocusable>();
 
@@ -71,10 +95,12 @@ AnimatorSMEditor::AnimatorSMEditor()
         inspectorBG->SetTint(Color::LightGray);
     }
 
-    animatorEditorSceneContainer->SetParent(this);
+    toolbar->SetParent(this);
+    botHLGo->SetParent(this);
+    animatorEditorSceneContainer->SetParent(botHLGo);
     GameObjectFactory::CreateUIDirLayoutMovableHSeparator()->
-                       GetGameObject()->SetParent(this);
-    inspectorContainer->SetParent(this);
+                       GetGameObject()->SetParent(botHLGo);
+    inspectorContainer->SetParent(botHLGo);
 }
 
 AnimatorSMEditor::~AnimatorSMEditor()
@@ -84,6 +110,8 @@ AnimatorSMEditor::~AnimatorSMEditor()
 void AnimatorSMEditor::Update()
 {
     GameObject::Update();
+
+    p_centerSceneButton->SetBlocked( (p_animatorEditorScene == nullptr) );
 
     if (Explorer *exp = Explorer::GetInstance())
     {

@@ -39,6 +39,7 @@ public:
     void SetAnimatorSM(AnimatorStateMachine *animatorSM);
     Vector2 GetMousePositionInSceneSpace() const;
     Vector2 GetWorldPositionInSceneSpace(const Vector2 &pos) const;
+    void CenterScene();
     void Clear();
 
     const Array<AESNode*>& GetAESNodes() const;
@@ -58,7 +59,8 @@ private:
     float m_zoomScale = 1.0f;
     Vector2 m_panning = Vector2::Zero;
 
-    void PropagateOnZoomScaleChanged();
+    void SetZoomScale(float zoomScale);
+    void UpdatePanningAndZoomOnTransforms();
     bool IsMouseOverSomeConnectionLine() const;
 
     void ImportCurrentAnimatorStateMachineExtraInformation();

@@ -77,7 +77,7 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
     });
     p_contextMenu->SetFocusable(p_focusable);
 
-    PropagateOnZoomScaleChanged();
+    UpdatePanningAndZoomOnTransforms();
 }
 
 AnimatorSMEditorScene::~AnimatorSMEditorScene()
@@ -99,18 +99,11 @@ void AnimatorSMEditorScene::Update()
         Vector2 mouseWheel = (Input::GetMouseWheel() * Vector2(0.05f));
         if (mouseWheel != Vector2::Zero)
         {
-            m_zoomScale = Math::Clamp(m_zoomScale + mouseWheel.y, 0.1f, 2.0f);
-            PropagateOnZoomScaleChanged();
+            SetZoomScale( m_zoomScale + mouseWheel.y );
         }
     }
 
-    RectTransform *mainContRT = p_mainContainer->GetRectTransform();
-    mainContRT->SetLocalPosition( Vector3(Vector2(m_panning), 0.0f) );
-    mainContRT->SetLocalScale( Vector3(Vector2(m_zoomScale), 1.0f) );
-    p_gridContainer->GetRectTransform()->SetLocalPosition(
-                               Vector3(Vector2(m_zoomScale), 0) );
-    p_gridContainer->GetRectTransform()->SetLocalPosition(
-                               Vector3(Vector2(m_panning), 0) );
+    UpdatePanningAndZoomOnTransforms();
 }
 
 void AnimatorSMEditorScene::CreateAndAddNode(AnimatorStateMachineNode *smNode,
@@ -126,7 +119,7 @@ void AnimatorSMEditorScene::CreateAndAddNode(AnimatorStateMachineNode *smNode,
     ASSERT(addIdx <= p_nodes.Size());
     p_nodes.Insert(aesNode, addIdx);
 
-    PropagateOnZoomScaleChanged();
+    UpdatePanningAndZoomOnTransforms();
 }
 
 void AnimatorSMEditorScene::SetAnimatorSM(AnimatorStateMachine *animatorSM)
@@ -160,8 +153,12 @@ void AnimatorSMEditorScene::SetAnimatorSM(AnimatorStateMachine *animatorSM)
             }
         }
 
+        m_panning = Vector2::Zero;
+        m_zoomScale = 1.0f;
+
         ImportCurrentAnimatorStateMachineExtraInformation();
-        PropagateOnZoomScaleChanged();
+        UpdatePanningAndZoomOnTransforms();
+        CenterScene();
     }
 }
 
@@ -180,6 +177,28 @@ Vector2 AnimatorSMEditorScene::GetWorldPositionInSceneSpace(
                 Vector3(Vector2(pos), 0) ).xy() );
     posLocal *= 1.0f / m_zoomScale;
     return posLocal;
+}
+
+void AnimatorSMEditorScene::CenterScene()
+{
+    m_panning = Vector2::Zero;
+    SetZoomScale(1.0f);
+    UpdatePanningAndZoomOnTransforms();
+
+    AARect boundingRect;
+    for (AESNode *aesNode : GetAESNodes())
+    {
+        boundingRect = AARect::Union(
+                            boundingRect,
+                            aesNode->GetRectTransform()->GetViewportAARect());
+    }
+
+    RectTransform *contRT = p_mainContainer->GetRectTransform();
+    Vector2 boundingRectCenter = boundingRect.GetCenter();
+    Vector2 contSize = contRT->GetViewportAARectWithoutTransform().GetCenter();
+    m_panning = -boundingRectCenter + contSize;
+    SetZoomScale(1.0f);
+    UpdatePanningAndZoomOnTransforms();
 }
 
 void AnimatorSMEditorScene::Clear()
@@ -208,8 +227,21 @@ AnimatorStateMachine *AnimatorSMEditorScene::GetAnimatorSM() const
     return p_animatorSM.Get();
 }
 
-void AnimatorSMEditorScene::PropagateOnZoomScaleChanged()
+void AnimatorSMEditorScene::SetZoomScale(float zoomScale)
 {
+    m_zoomScale = Math::Clamp(zoomScale, 0.1f, 2.0f);
+}
+
+void AnimatorSMEditorScene::UpdatePanningAndZoomOnTransforms()
+{
+    RectTransform *mainContRT = p_mainContainer->GetRectTransform();
+    mainContRT->SetLocalPosition( Vector3(Vector2(m_panning), 0.0f) );
+    mainContRT->SetLocalScale( Vector3(Vector2(m_zoomScale), 1.0f) );
+    p_gridContainer->GetRectTransform()->SetLocalPosition(
+                               Vector3(Vector2(m_zoomScale), 0) );
+    p_gridContainer->GetRectTransform()->SetLocalPosition(
+                               Vector3(Vector2(m_panning), 0) );
+
     for (AESNode *node : p_nodes)
     {
         node->OnZoomScaleChanged(m_zoomScale);
