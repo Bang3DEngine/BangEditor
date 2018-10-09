@@ -308,6 +308,8 @@ void AnimatorSMEditorScene::ExportCurrentAnimatorStateMachineIfAny()
             }
             meta.SetArray<Vector2>("NodePositions", nodesPos);
             File::Write(metaPath, meta.ToString());
+
+            m_lastTimeAnimatorSMWasExported = Time::GetNow();
         }
     }
 }

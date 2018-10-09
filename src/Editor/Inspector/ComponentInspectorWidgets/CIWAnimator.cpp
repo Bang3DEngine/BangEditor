@@ -57,14 +57,10 @@ void CIWAnimator::UpdateFromReference()
     ComponentInspectorWidget::UpdateFromReference();
 
     Animator *animator = GetAnimator();
+    AnimatorStateMachine *sm = animator->GetStateMachine();
 
-    const Array<RH<Animation>>& animsRHs = animator->GetAnimations();
-
-    p_animatorSMInput->SetPath(
-                GetAnimator()->GetStateMachine() ?
-                    GetAnimator()->GetStateMachine()->GetResourceFilepath() :
-                    Path::Empty);
-    p_playOnStartInput->SetChecked( GetAnimator()->GetPlayOnStart() );
+    p_animatorSMInput->SetPath(sm ? sm->GetResourceFilepath() : Path::Empty);
+    p_playOnStartInput->SetChecked( animator->GetPlayOnStart() );
 }
 
 void CIWAnimator::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
