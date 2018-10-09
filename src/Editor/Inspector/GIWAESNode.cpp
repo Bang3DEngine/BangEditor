@@ -1,5 +1,6 @@
 #include "BangEditor/GIWAESNode.h"
 
+#include "Bang/Resources.h"
 #include "Bang/Extensions.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIInputText.h"
@@ -43,8 +44,7 @@ void GIWAESNode::Init()
     p_nameInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_nodeAnimationInput = GameObject::Create<UIInputFile>();
-    p_nodeAnimationInput->SetExtensions(
-                    {Extensions::GetAnimatorStateMachineExtension()} );
+    p_nodeAnimationInput->SetExtensions( {Extensions::GetAnimationExtension()} );
     p_nodeAnimationInput->EventEmitter<IEventsValueChanged>::
                           RegisterListener(this);
 
@@ -72,6 +72,9 @@ void GIWAESNode::UpdateFromReference()
     if (AnimatorStateMachineNode *smNode = GetAESNode()->GetSMNode())
     {
         p_nameInput->GetText()->SetContent(smNode->GetName());
+        p_nodeAnimationInput->SetPath(
+            smNode->GetAnimation() ?
+                smNode->GetAnimation()->GetResourceFilepath() : Path::Empty);
     }
 }
 
@@ -85,6 +88,9 @@ void GIWAESNode::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
         }
         else if (ee == p_nodeAnimationInput)
         {
+            smNode->SetAnimation(
+                        Resources::Load<Animation>(
+                            p_nodeAnimationInput->GetPath()).Get() );
         }
     }
 }

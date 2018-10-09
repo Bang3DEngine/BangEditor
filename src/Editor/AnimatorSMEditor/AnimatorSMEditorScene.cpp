@@ -101,6 +101,12 @@ void AnimatorSMEditorScene::Update()
         {
             SetZoomScale( m_zoomScale + mouseWheel.y );
         }
+
+        if (Time::GetPassedTimeSince(m_lastTimeAnimatorSMWasExported) >=
+            Time::Seconds(2.0f))
+        {
+            ExportCurrentAnimatorStateMachineIfAny();
+        }
     }
 
     UpdatePanningAndZoomOnTransforms();
@@ -126,6 +132,8 @@ void AnimatorSMEditorScene::SetAnimatorSM(AnimatorStateMachine *animatorSM)
 {
     if (animatorSM != GetAnimatorSM())
     {
+        ExportCurrentAnimatorStateMachineIfAny();
+
         Clear();
         p_animatorSM.Set(animatorSM);
 
@@ -282,7 +290,7 @@ void AnimatorSMEditorScene::ImportCurrentAnimatorStateMachineExtraInformation()
     }
 }
 
-void AnimatorSMEditorScene::ExportCurrentAnimatorStateMachine()
+void AnimatorSMEditorScene::ExportCurrentAnimatorStateMachineIfAny()
 {
     if (GetAnimatorSM() && GetAnimatorSM()->GetResourceFilepath().IsFile())
     {

@@ -55,6 +55,7 @@ private:
     GameObject *p_mainContainer = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
     DPtr<UIImageRenderer> p_border = nullptr;
+    Time m_lastTimeAnimatorSMWasExported = Time(0);
 
     float m_zoomScale = 1.0f;
     Vector2 m_panning = Vector2::Zero;
@@ -64,7 +65,7 @@ private:
     bool IsMouseOverSomeConnectionLine() const;
 
     void ImportCurrentAnimatorStateMachineExtraInformation();
-    void ExportCurrentAnimatorStateMachine();
+    void ExportCurrentAnimatorStateMachineIfAny();
 
     // IEventsAnimatorStateMachine
     virtual void OnNodeCreated(AnimatorStateMachine *stateMachine,

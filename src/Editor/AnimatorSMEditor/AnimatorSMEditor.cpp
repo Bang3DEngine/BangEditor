@@ -123,8 +123,6 @@ void AnimatorSMEditor::Update()
                         Resources::Load<AnimatorStateMachine>(selectedPath);
             SetAnimatorSM(animSMRH.Get());
         }
-
-        p_animatorEditorScene->ExportCurrentAnimatorStateMachine();
     }
 }
 
