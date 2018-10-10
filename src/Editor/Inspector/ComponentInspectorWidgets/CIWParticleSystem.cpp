@@ -249,8 +249,8 @@ void CIWParticleSystem::UpdateFromReference()
 void CIWParticleSystem::EnableOnlyNeededWidgets()
 {
     SetWidgetEnabled(p_materialInputFile, false);
-    SetWidgetEnabled(p_castsShadowsCheckBox->GetGameObject(), false);
-    SetWidgetEnabled(p_receivesShadowsCheckBox->GetGameObject(), false);
+    // SetWidgetEnabled(p_castsShadowsCheckBox->GetGameObject(), false);
+    // SetWidgetEnabled(p_receivesShadowsCheckBox->GetGameObject(), false);
     SetWidgetEnabled(p_useReflectionProbesCheckBox->GetGameObject(), false);
 
     Array<GameObject*> allWidgetsToEnableOrDisable;

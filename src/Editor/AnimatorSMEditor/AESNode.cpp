@@ -67,7 +67,7 @@ AESNode::AESNode()
     GameObject *textContainer = GameObjectFactory::CreateUIGameObject();
     p_nodeNameText = textContainer->AddComponent<UITextRenderer>();
     p_nodeNameText->SetTextColor(Color::Black);
-    SetNodeName("Animation State");
+    SetNodeName("");
     textContainer->SetParent(panelGo);
 
     GetRectTransform()->SetLocalPosition( Vector3(0, 0, -0.0005f) );

@@ -75,7 +75,7 @@ void UISceneEditContainer::Update()
 
 void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
 {
-    if (m_needToRenderPreviewImg)
+    if (m_needToRenderPreviewImg && (rp == RenderPass::CANVAS) )
     {
         RenderCameraPreviewIfSelected();
         m_needToRenderPreviewImg = false;

@@ -219,7 +219,10 @@ AnimatorStateMachineConnection *AESConnectionLine::GetSMConnection() const
 
 bool AESConnectionLine::IsMouseOver() const
 {
-    if (!GetNodeFrom() || !GetNodeTo())
+    if (!GetNodeFrom() ||
+        !GetNodeTo()   ||
+        !IsActiveRecursively() ||
+        !IsVisibleRecursively())
     {
         return false;
     }
