@@ -78,7 +78,10 @@ UIInputColor::~UIInputColor()
 void UIInputColor::Update()
 {
     GameObject::Update();
-    SetColor( m_colorPickerReporter->GetPickedColor() );
+    if (m_colorPickerReporter->IsPicking())
+    {
+        SetColor( m_colorPickerReporter->GetPickedColor() );
+    }
 }
 
 void UIInputColor::OnValueChanged(EventEmitter<IEventsValueChanged> *object)

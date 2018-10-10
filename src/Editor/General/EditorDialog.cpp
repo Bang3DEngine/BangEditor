@@ -500,6 +500,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
 
             GL::Pop(GL::BindTarget::SHADER_PROGRAM);
 
+            p_colorPickerReporter->SetIsPicking(true);
             p_colorPickerReporter->SetPickedColor( m_pickedColorRGB );
             EventListener<IEventsValueChanged>::SetReceiveEvents(true);
         }
@@ -507,6 +508,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(Scene *scene,
         void OnDestroy() override
         {
             GameObject::OnDestroy();
+            p_colorPickerReporter->SetIsPicking(false);
             p_colorPickerReporter->SetHasFinished(true);
         }
     };
@@ -563,4 +565,14 @@ Color ColorPickerReporter::GetPickedColor() const
 bool ColorPickerReporter::HasFinished() const
 {
     return m_hasFinished;
+}
+
+bool ColorPickerReporter::IsPicking() const
+{
+    return m_isPicking;
+}
+
+void ColorPickerReporter::SetIsPicking(bool isPicking)
+{
+    m_isPicking = isPicking;
 }

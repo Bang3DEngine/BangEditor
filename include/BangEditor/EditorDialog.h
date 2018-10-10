@@ -53,14 +53,20 @@ class ColorPickerReporter : public GameObject,
 
 public:
     void SetPickedColor(const Color &color);
-    void SetHasFinished(bool hasFinished);
 
     Color GetPickedColor() const;
     bool HasFinished() const;
+    bool IsPicking() const;
 
 private:
     Color m_pickedColor = Color::White;
+    bool m_isPicking = false;
     bool m_hasFinished = true;
+
+    void SetIsPicking(bool isPicking);
+    void SetHasFinished(bool hasFinished);
+
+    friend class EditorDialog;
 };
 
 NAMESPACE_BANG_EDITOR_END

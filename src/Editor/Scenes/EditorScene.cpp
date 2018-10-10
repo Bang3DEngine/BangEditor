@@ -167,21 +167,23 @@ void EditorScene::Update()
     String sceneTabName = "Scene - ";
     if (Scene *openScene = GetOpenScene())
     {
-        // Update open scene if needed
-        BindOpenScene();
+        if (ScenePlayer::GetPlayState() == PlayState::PLAYING)
+        {
+            // Update open scene if playing
+            BindOpenScene();
 
-        Input::Context openSceneInputContext;
-        openSceneInputContext.focus = GetScenePlayContainer()->GetFocusable();
-        openSceneInputContext.rect  = AARecti(GetScenePlayContainer()->
-                                              GetSceneImage()->
-                                              GetRectTransform()->
-                                              GetViewportAARect());
-        Input::SetContext(openSceneInputContext);
+            Input::Context openSceneInputContext;
+            openSceneInputContext.focus = GetScenePlayContainer()->GetFocusable();
+            openSceneInputContext.rect  = AARecti(GetScenePlayContainer()->
+                                                  GetSceneImage()->
+                                                  GetRectTransform()->
+                                                  GetViewportAARect());
+            Input::SetContext(openSceneInputContext);
 
-        bool updateOpenScene = (ScenePlayer::GetPlayState() == PlayState::PLAYING);
-        SceneManager::OnNewFrame(openScene, updateOpenScene);
+            SceneManager::OnNewFrame(openScene);
 
-        UnBindOpenScene();
+            UnBindOpenScene();
+        }
 
         // Set scene tab name
         Path loadedScenePath = SceneOpenerSaver::GetInstance()->GetLoadedScenePath();
