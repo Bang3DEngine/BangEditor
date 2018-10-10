@@ -27,7 +27,7 @@ public:
 
 private:
     Camera* GetSceneCamera(Scene *scene) override;
-    bool NeedsToRenderScene(Scene *scene) override;
+    bool NeedsToRenderContainedScene(Scene *scene) override;
 
     // IEventsScenePlayer
     void OnPlayStateChanged(PlayState previousPlayState,

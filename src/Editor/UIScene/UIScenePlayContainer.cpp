@@ -46,7 +46,7 @@ void UIScenePlayContainer::OnSceneLoaded(Scene*, const Path&)
 {
 }
 
-bool UIScenePlayContainer::NeedsToRenderScene(Scene *scene)
+bool UIScenePlayContainer::NeedsToRenderContainedScene(Scene *scene)
 {
     return IsVisibleRecursively();
 }

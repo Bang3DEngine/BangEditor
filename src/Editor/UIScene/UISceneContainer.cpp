@@ -95,10 +95,12 @@ UISceneContainer::~UISceneContainer()
 {
 }
 
-void UISceneContainer::Render(RenderPass rp, bool renderChildren)
+void UISceneContainer::BeforeChildrenRender(RenderPass rp)
 {
     if (rp == RenderPass::CANVAS)
     {
+        RenderContainedSceneIfNeeded();
+
         bool showSceneImg = false;
         if (Camera *cam = GetSceneCamera(GetContainedScene()))
         {
@@ -111,19 +113,20 @@ void UISceneContainer::Render(RenderPass rp, bool renderChildren)
                     showSceneImg ? Color::Blue : Color::Black);
     }
 
-    GameObject::Render(rp, renderChildren);
+    GameObject::BeforeChildrenRender(rp);
 }
 
-void UISceneContainer::RenderIfNeeded()
+void UISceneContainer::RenderContainedSceneIfNeeded()
 {
-    if ( NeedsToRenderScene( GetContainedScene() ) )
+    if ( NeedsToRenderContainedScene( GetContainedScene() ) )
     {
         if (Camera *cam = GetSceneCamera(GetContainedScene()))
         {
             cam->SetRenderSize( Vector2i(GetSceneImage()->GetRectTransform()->
                                          GetViewportAARect().GetSize()) );
+            OnRenderContainedSceneBegin();
             GEngine::GetInstance()->Render(GetContainedScene(), cam);
-            OnRenderNeededSceneFinished();
+            OnRenderContainedSceneFinished();
             p_noCameraOverlay->SetEnabled(false);
         }
         else
@@ -179,10 +182,6 @@ UISceneToolbarDown *UISceneContainer::GetSceneToolbarDown() const
     return p_sceneToolbarDown;
 }
 
-void UISceneContainer::OnRenderNeededSceneFinished()
-{
-}
-
 void UISceneContainer::OnTransformChanged()
 {
     Scene *containerScene = GetContainedScene();
@@ -227,3 +226,10 @@ UIEventResult UISceneContainer::OnUIEvent(UIFocusable*, const UIEvent &event)
     return UIEventResult::IGNORE;
 }
 
+void UISceneContainer::OnRenderContainedSceneBegin()
+{
+}
+
+void UISceneContainer::OnRenderContainedSceneFinished()
+{
+}

@@ -58,8 +58,9 @@ private:
 
     void RenderCameraPreviewIfSelected();
     Camera* GetSceneCamera(Scene *scene) override;
-    bool NeedsToRenderScene(Scene *scene) override;
-    void OnRenderNeededSceneFinished() override;
+    bool NeedsToRenderContainedScene(Scene *scene) override;
+    void OnRenderContainedSceneBegin() override;
+    void OnRenderContainedSceneFinished() override;
 
     SelectionFramebuffer *GetSelectionFramebuffer() const;
     bool NeedsToRenderSelectionFramebuffer() const;

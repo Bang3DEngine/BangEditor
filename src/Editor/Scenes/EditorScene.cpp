@@ -214,16 +214,6 @@ void EditorScene::Update()
     }
 }
 
-void EditorScene::Render(RenderPass rp, bool renderChildren)
-{
-    if (rp == RenderPass::CANVAS)
-    {
-        RenderOpenSceneIfNeeded();
-    }
-
-    GameObject::Render(rp, renderChildren);
-}
-
 void EditorScene::OnResize(int newWidth, int newHeight)
 {
     Scene::OnResize(newWidth, newHeight);
@@ -231,22 +221,6 @@ void EditorScene::OnResize(int newWidth, int newHeight)
     {
         BindOpenScene();
         GetOpenScene()->OnResize(newWidth, newHeight);
-        UnBindOpenScene();
-    }
-}
-
-void EditorScene::RenderOpenSceneIfNeeded()
-{
-    if ( GetOpenScene() )
-    {
-        BindOpenScene();
-
-        GetEditSceneGameObjects()->OnBeginRender( GetOpenScene() );
-        GetSceneEditContainer()->RenderIfNeeded();
-        GetEditSceneGameObjects()->OnEndRender( GetOpenScene() );
-
-        GetScenePlayContainer()->RenderIfNeeded();
-
         UnBindOpenScene();
     }
 }

@@ -18,6 +18,7 @@
 #include "Bang/UILayoutIgnorer.h"
 #include "Bang/GameObjectFactory.h"
 
+
 #include "BangEditor/Hierarchy.h"
 #include "BangEditor/Selection.h"
 #include "BangEditor/EditorScene.h"
@@ -29,6 +30,7 @@
 #include "BangEditor/EditorClipboard.h"
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/EditSceneGameObjects.h"
 #include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
@@ -200,14 +202,25 @@ Camera* UISceneEditContainer::GetSceneCamera(Scene *scene)
     return scene->GetCamera();
 }
 
-bool UISceneEditContainer::NeedsToRenderScene(Scene *scene)
+bool UISceneEditContainer::NeedsToRenderContainedScene(Scene *scene)
 {
     BANG_UNUSED(scene);
     return IsVisibleRecursively();
 }
 
-void UISceneEditContainer::OnRenderNeededSceneFinished()
+void UISceneEditContainer::OnRenderContainedSceneBegin()
 {
+    EditorSceneManager::GetActive()->GetEditorScene()->
+          GetEditSceneGameObjects()->OnBeginRender(
+                EditorSceneManager::GetActive()->GetOpenScene() );
+}
+
+void UISceneEditContainer::OnRenderContainedSceneFinished()
+{
+    EditorSceneManager::GetActive()->GetEditorScene()->
+          GetEditSceneGameObjects()->OnEndRender(
+                EditorSceneManager::GetActive()->GetOpenScene() );
+
     m_needToRenderPreviewImg = true;
 }
 

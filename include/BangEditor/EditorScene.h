@@ -54,10 +54,7 @@ class EditorScene : public Scene,
 public:
     // GameObject
     void Update() override;
-    void Render(RenderPass rp, bool renderChildren) override;
     void OnResize(int newWidth, int newHeight) override;
-
-    void RenderOpenSceneIfNeeded();
 
     Scene *GetOpenScene() const;
 

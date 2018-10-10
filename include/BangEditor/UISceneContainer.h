@@ -33,9 +33,9 @@ public:
     virtual ~UISceneContainer();
 
     // GameObject
-    void Render(RenderPass rp, bool renderChildren) override;
+    void BeforeChildrenRender(RenderPass rp) override;
 
-    void RenderIfNeeded();
+    void RenderContainedSceneIfNeeded();
 
     void SetScene(Scene *scene);
 
@@ -67,8 +67,9 @@ private:
     GameObject *p_noCameraOverlay = nullptr;
 
     virtual Camera* GetSceneCamera(Scene *scene) = 0;
-    virtual bool NeedsToRenderScene(Scene *scene) = 0;
-    virtual void OnRenderNeededSceneFinished();
+    virtual bool NeedsToRenderContainedScene(Scene *scene) = 0;
+    virtual void OnRenderContainedSceneBegin();
+    virtual void OnRenderContainedSceneFinished();
 
     // IEventsTransform
     void OnTransformChanged() override;
