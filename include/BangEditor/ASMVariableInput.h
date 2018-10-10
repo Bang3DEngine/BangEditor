@@ -19,6 +19,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class ASMVariableInput : public GameObject,
+                         public EventEmitter<IEventsValueChanged>,
                          public EventListener<IEventsValueChanged>
 {
     GAMEOBJECT_EDITOR(ASMVariableInput);

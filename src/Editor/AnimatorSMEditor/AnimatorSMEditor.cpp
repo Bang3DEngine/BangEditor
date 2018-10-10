@@ -86,7 +86,7 @@ AnimatorSMEditor::AnimatorSMEditor()
                            SetParent(inspectorContainer);
 
         p_variablesInput = GameObject::Create<UIInputArray>();
-        p_variablesInput->SetCreateNewInputGameObjectFunction([]()
+        p_variablesInput->SetCreateNewRowGameObjectFunction([]()
         {
             ASMVariableInput *varInput = GameObject::Create<ASMVariableInput>();
             return varInput;
@@ -137,13 +137,7 @@ void AnimatorSMEditor::Update()
         if (Time::GetPassedTimeSince(m_lastVariablesInputUpdateTime) >=
             Time::Seconds(0.2f))
         {
-            Array<MetaNode> varsMetaNodes;
-            for (const auto &pair : GetAnimatorSM()->GetNameToVariables())
-            {
-                AnimatorStateMachineVariable *var = pair.second;
-                varsMetaNodes.PushBack( var->GetMeta() );
-            }
-            p_variablesInput->UpdateInputGameObjects(varsMetaNodes);
+            p_variablesInput->UpdateRows(GetAnimatorSM()->GetVariables());
             m_lastVariablesInputUpdateTime = Time::GetNow();
         }
     }
@@ -180,23 +174,19 @@ void AnimatorSMEditor::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 
     if (ee == p_variablesInput)
     {
-        UIInputArray::UpdateElements<AnimatorStateMachineVariable>(
-                    p_variablesInput->GetInputGameObjectsMetas(),
-                    GetAnimatorSM()->GetVariables(),
-                    [this]()
-                    {
-                        ASSERT(GetAnimatorSM());
-                        auto newVar = GetAnimatorSM()->CreateNewVariable();
-                        // String newVarName = GetAnimatorSM()->
-                        //                     GetVariableName(newVar);
-                        return newVar;
-                    },
-                    [this](AnimatorStateMachineVariable *varToRemove)
-                    {
+        p_variablesInput->UpdateReferences<AnimatorStateMachineVariable>(
+                        GetAnimatorSM()->GetVariables(),
+                        [this]()
+                        {
                             ASSERT(GetAnimatorSM());
-                        GetAnimatorSM()->RemoveVariable(varToRemove);
-                    }
+                            auto newVar = GetAnimatorSM()->CreateNewVariable();
+                            return newVar;
+                        },
+                        [this](AnimatorStateMachineVariable *varToRemove)
+                        {
+                                ASSERT(GetAnimatorSM());
+                            GetAnimatorSM()->RemoveVariable(varToRemove);
+                        }
                     );
-
     }
 }

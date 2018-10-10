@@ -75,7 +75,8 @@ void ASMCTransitionConditionInput::SetVariableType(
 void ASMCTransitionConditionInput::OnValueChanged(
                                     EventEmitter<IEventsValueChanged> *ee)
 {
-
+    EventEmitter<IEventsValueChanged>::PropagateToListeners(
+                 &IEventsValueChanged::OnValueChanged, this);
 }
 
 void ASMCTransitionConditionInput::ImportMeta(const MetaNode &metaNode)

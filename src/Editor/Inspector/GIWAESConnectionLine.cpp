@@ -28,7 +28,7 @@ void GIWAESConnectionLine::Init()
     SetName("GIWAESConnectionLine");
 
     p_transitionConditionsInput = GameObject::Create<UIInputArray>();
-    p_transitionConditionsInput->SetCreateNewInputGameObjectFunction([]()
+    p_transitionConditionsInput->SetCreateNewRowGameObjectFunction([]()
     {
         ASMCTransitionConditionInput *transitionConditionInput =
                             GameObject::Create<ASMCTransitionConditionInput>();
@@ -60,21 +60,15 @@ void GIWAESConnectionLine::UpdateFromReference()
     InspectorWidget::UpdateFromReference();
 
     Array<MetaNode> metaNodes;
-    AnimatorStateMachineConnection *smConn =
-                                GetAESConnectionLine()->GetSMConnection();
-    for (const ASMCTransitionCondition *transitionCondition :
-         smConn->GetTransitionConditions())
-    {
-        metaNodes.PushBack( transitionCondition->GetMeta() );
-    }
-    p_transitionConditionsInput->UpdateInputGameObjects( metaNodes );
+    AnimatorStateMachineConnection *smConn = GetAESConnectionLine()->
+                                             GetSMConnection();
+    p_transitionConditionsInput->UpdateRows( smConn->GetTransitionConditions() );
 }
 
 void GIWAESConnectionLine::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 {
     BANG_UNUSED(ee);
-    UIInputArray::UpdateElements<ASMCTransitionCondition>(
-            p_transitionConditionsInput->GetInputGameObjectsMetas(),
+    p_transitionConditionsInput->UpdateReferences<ASMCTransitionCondition>(
             p_aesConnectionLine->GetSMConnection()->GetTransitionConditions(),
             [this]()
             {

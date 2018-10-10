@@ -24,44 +24,49 @@ UIInputArray::UIInputArray()
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetFlexibleWidth(1.0f);
 
-    m_addNewElementRow = GameObjectFactory::CreateUIGameObject();
-    UIHorizontalLayout *newRowHL = m_addNewElementRow->AddComponent<UIHorizontalLayout>();
+    m_addNewRowButtonRow = GameObjectFactory::CreateUIGameObject();
+    UIHorizontalLayout *newRowHL = m_addNewRowButtonRow->AddComponent<UIHorizontalLayout>();
     newRowHL->SetChildrenHorizontalAlignment(HorizontalAlignment::RIGHT);
 
     UIButton *addButton = GameObjectFactory::CreateUIButton("",
                                 EditorTextureFactory::GetAddIcon());
     addButton->GetIcon()->SetTint(Color::Green.WithValue(0.75f));
-    addButton->GetGameObject()->SetParent(m_addNewElementRow);
+    addButton->GetGameObject()->SetParent(m_addNewRowButtonRow);
     addButton->AddClickedCallback([this]()
     {
-        ASSERT(m_createNewInputGameObjectFunction);
-        GameObject *newElement = m_createNewInputGameObjectFunction();
-        AddInputGameObject(newElement);
+        ASSERT(m_createNewRowGameObjectFunction);
+        GameObject *newElement = m_createNewRowGameObjectFunction();
+        AddRow(newElement);
     });
 
-    GameObjectFactory::CreateUIHSpacer()->SetParent(m_addNewElementRow);
+    GameObjectFactory::CreateUIHSpacer()->SetParent(m_addNewRowButtonRow);
 
-    MoveAddNewInputGameObjectRowToEnd();
+    MoveAddNewRowButtonRowToEnd();
 }
 
 UIInputArray::~UIInputArray()
 {
 }
 
-void UIInputArray::AddInputGameObject_(GameObject *widget,
-                                    uint index_,
-                                    bool propagateChangeEvent)
+void UIInputArray::AddRow_(GameObject *rowGameObject,
+                           uint index_,
+                           bool propagateChangeEvent)
 {
-    if (!GetInputGameObjectsArray().Contains(widget))
+    if (!GetRowGameObjects().Contains(rowGameObject))
     {
-        uint index = (index_ == -1u) ? m_inputGameObjects.Size() : index_;
+        uint index = (index_ == -1u) ? m_rowGameObjects.Size() : index_;
         UIInputArrayRow *row = GameObject::Create<UIInputArrayRow>();
         row->Init(this);
-        row->SetContainedGameObject(widget);
+        row->SetContainedGameObject(rowGameObject);
         row->SetParent(this, index);
-        m_inputGameObjects.Insert(widget, index);
+        m_rowGameObjects.Insert(rowGameObject, index);
 
-        MoveAddNewInputGameObjectRowToEnd();
+        if (auto *ee = DCAST<EventEmitter<IEventsValueChanged>*>(rowGameObject))
+        {
+            ee->RegisterListener(this);
+        }
+
+        MoveAddNewRowButtonRowToEnd();
         if (propagateChangeEvent)
         {
             EventEmitter<IEventsValueChanged>::PropagateToListeners(
@@ -70,17 +75,22 @@ void UIInputArray::AddInputGameObject_(GameObject *widget,
     }
 }
 
-void UIInputArray::RemoveInputGameObject_(GameObject *widget,
-                                       bool propagateChangeEvent)
+void UIInputArray::RemoveRow_(GameObject *rowGameObject,
+                              bool propagateChangeEvent)
 {
-    if (GetInputGameObjectsArray().Contains(widget))
+    if (GetRowGameObjects().Contains(rowGameObject))
     {
-        if (UIInputArrayRow *row = GetRowFromInputGameObject(widget))
+        if (UIInputArrayRow *row = GetRowFromRowGameObject(rowGameObject))
         {
-            m_inputGameObjects.Remove(widget);
+            if (auto *ee = DCAST<EventEmitter<IEventsValueChanged>*>(rowGameObject))
+            {
+                ee->RegisterListener(this);
+            }
+
+            m_rowGameObjects.Remove(rowGameObject);
             GameObject::Destroy(row);
 
-            MoveAddNewInputGameObjectRowToEnd();
+            MoveAddNewRowButtonRowToEnd();
             if (propagateChangeEvent)
             {
                 EventEmitter<IEventsValueChanged>::PropagateToListeners(
@@ -90,103 +100,76 @@ void UIInputArray::RemoveInputGameObject_(GameObject *widget,
     }
 }
 
-void UIInputArray::UpdateElementsSerializable(
-                    const Array<MetaNode> &referenceMetaNodes,
-                    const Array<Serializable*> &serializablesToUpdate,
-                    std::function<Serializable*()> createNewElementFunction,
-                    std::function<void(Serializable*)> removeElementFunction)
+void UIInputArray::UpdateSerializables(
+             Array<Serializable *> serializablesToUpdate,
+             Array<Serializable *> serializablesToUpdateFrom,
+             std::function<Serializable *()> createNewSerializableFunction,
+             std::function<void (Serializable *)> removeSerializableFunction,
+             bool newCreatedSerializablesUpdateTheFromSerializable)
 {
-    Array<Serializable*> serializablesToUpdateCopy = serializablesToUpdate;
-
     // Add or remove needed or unneeded elements (if any)
-    uint prevSerializablesToUpdateSize = serializablesToUpdateCopy.Size();
-    while (referenceMetaNodes.Size() != serializablesToUpdateCopy.Size())
+    uint prevSerializablesToUpdateSize = serializablesToUpdate.Size();
+    while (serializablesToUpdateFrom.Size() != serializablesToUpdate.Size())
     {
-        if (serializablesToUpdateCopy.Size() < referenceMetaNodes.Size())
+        if (serializablesToUpdate.Size() < serializablesToUpdateFrom.Size())
         {
-            Serializable *newSerializable = createNewElementFunction();
-            serializablesToUpdateCopy.PushBack(newSerializable);
+            Serializable *newSerializable = createNewSerializableFunction();
+            serializablesToUpdate.PushBack(newSerializable);
         }
         else
         {
-            removeElementFunction(serializablesToUpdateCopy.Back());
-            serializablesToUpdateCopy.PopBack();
+            removeSerializableFunction(serializablesToUpdate.Back());
+            serializablesToUpdate.PopBack();
         }
     }
 
     // Update all non-new elements
-    ASSERT(serializablesToUpdateCopy.Size() == referenceMetaNodes.Size());
-    for (uint i = 0; i < serializablesToUpdateCopy.Size(); ++i)
+    ASSERT(serializablesToUpdate.Size() == serializablesToUpdateFrom.Size());
+    for (uint i = 0; i < serializablesToUpdate.Size(); ++i)
     {
-        ASSERT(i < referenceMetaNodes.Size());
-        ASSERT(i < serializablesToUpdateCopy.Size());
+        ASSERT(i < serializablesToUpdate.Size());
+        ASSERT(i < serializablesToUpdateFrom.Size());
 
-        Serializable *serializableToUpdate = serializablesToUpdateCopy[i];
+        Serializable *serializableToUpdate     = serializablesToUpdate[i];
+        Serializable *serializableToUpdateFrom = serializablesToUpdateFrom[i];
 
         bool isNewElement = (i >= prevSerializablesToUpdateSize);
-        if (isNewElement)
+        if (isNewElement && newCreatedSerializablesUpdateTheFromSerializable)
         {
+            const MetaNode &newSerializableMeta = serializableToUpdate->GetMeta();
+            serializableToUpdateFrom->ImportMeta(newSerializableMeta);
         }
         else
         {
-            const MetaNode &elementMeta = referenceMetaNodes[i];
-            serializableToUpdate->ImportMeta(elementMeta);
-
+            const MetaNode &updateFromMeta = serializableToUpdateFrom->GetMeta();
+            serializableToUpdate->ImportMeta(updateFromMeta);
         }
     }
 }
 
 void UIInputArray::Clear()
 {
-    while (!GetInputGameObjectsArray().IsEmpty())
+    while (!GetRowGameObjects().IsEmpty())
     {
-        RemoveInputGameObject( GetInputGameObjectsArray().Size() - 1 );
+        RemoveRow( GetRowGameObjects().Size() - 1 );
     }
 }
 
-void UIInputArray::AddInputGameObject(GameObject *widget, uint index)
+void UIInputArray::AddRow(GameObject *rowGameObject, uint index)
 {
-    AddInputGameObject_(widget, index, true);
+    AddRow_(rowGameObject, index, true);
 }
 
-void UIInputArray::UpdateInputGameObjects(const Array<MetaNode> &elementsMeta)
+void UIInputArray::RemoveRow(GameObject *rowGameObject)
 {
-    ASSERT(m_createNewInputGameObjectFunction);
-    UIInputArray::UpdateElementsSerializable(
-                elementsMeta,
-                m_inputGameObjects.To<Array, Serializable*>(),
-                [this]()
-                {
-                    GameObject *newGo = m_createNewInputGameObjectFunction();
-                    return SCAST<Serializable*>(newGo);
-                },
-                [this](Serializable *s)
-                {
-                    RemoveInputGameObjectSerializable(s);
-                }
-            );
+    RemoveRow_(rowGameObject, true);
 }
 
-void UIInputArray::RemoveInputGameObjectSerializable(Serializable *widget)
+void UIInputArray::RemoveRow(uint index)
 {
-    RemoveInputGameObject(DCAST<GameObject*>(widget));
-}
-
-void UIInputArray::RemoveInputGameObject(GameObject *widget)
-{
-    RemoveInputGameObject_(widget, true);
-}
-
-void UIInputArray::RemoveInputGameObject(uint index)
-{
-    ASSERT(index <= GetInputGameObjectsArray().Size());
-    GameObject *widget = GetInputGameObjectsArray()[index];
-    RemoveInputGameObject(widget);
-}
-
-void UIInputArray::RemoveRow(UIInputArrayRow *row, bool propagateChangeEvent)
-{
-    RemoveInputGameObject_(row->GetContainedGameObject(), propagateChangeEvent);
+    ASSERT(index <= GetRowGameObjects().Size());
+    GameObject *rowGameObject = GetRowGameObjects()[index];
+    RemoveRow(rowGameObject);
 }
 
 void UIInputArray::MoveRow(UIInputArrayRow *row, int displacement)
@@ -196,46 +179,45 @@ void UIInputArray::MoveRow(UIInputArrayRow *row, int displacement)
     int newIndex = (oldIndex + displacement + numChildren) % numChildren;
 
     RemoveRow(row, false);
-    AddInputGameObject_(row->GetContainedGameObject(), newIndex, false);
+    AddRow_(row->GetContainedGameObject(), newIndex, false);
     EventEmitter<IEventsValueChanged>::PropagateToListeners(
                 &IEventsValueChanged::OnValueChanged, this);
 }
 
-void UIInputArray::SetCreateNewInputGameObjectFunction(
-                        UIInputArray::CreateNewInputGameObjectFunction function)
+void UIInputArray::RemoveRow(UIInputArrayRow *row, bool propagateChangeEvent)
 {
-    m_createNewInputGameObjectFunction = function;
+    RemoveRow_(row->GetContainedGameObject(), propagateChangeEvent);
+}
+
+void UIInputArray::SetCreateNewRowGameObjectFunction(
+                        UIInputArray::CreateNewRowGameObjectFunction function)
+{
+    m_createNewRowGameObjectFunction = function;
 }
 
 uint UIInputArray::Size() const
 {
-    return GetInputGameObjectsArray().Size();
+    return GetRowGameObjects().Size();
 }
 
-Array<MetaNode> UIInputArray::GetInputGameObjectsMetas() const
+const Array<GameObject*>& UIInputArray::GetRowGameObjects() const
 {
-    Array<MetaNode> metas;
-
-    for (GameObject *inputGo : GetInputGameObjectsArray())
-    {
-        metas.PushBack( inputGo->GetMeta() );
-    }
-
-    return metas;
+    return m_rowGameObjects;
 }
 
-const Array<GameObject*>& UIInputArray::GetInputGameObjectsArray() const
+void UIInputArray::MoveAddNewRowButtonRowToEnd()
 {
-    return m_inputGameObjects;
+    m_addNewRowButtonRow->SetParent(this, -1);
 }
 
-void UIInputArray::MoveAddNewInputGameObjectRowToEnd()
+UIInputArrayRow *UIInputArray::GetRowFromRowGameObject(GameObject *rowGameObject) const
 {
-    m_addNewElementRow->SetParent(this, -1);
+    return rowGameObject->GetParent() ?
+                DCAST<UIInputArrayRow*>(rowGameObject->GetParent()) : nullptr;
 }
 
-UIInputArrayRow *UIInputArray::GetRowFromInputGameObject(GameObject *element) const
+void UIInputArray::OnValueChanged(EventEmitter<IEventsValueChanged>*)
 {
-    return element->GetParent() ? DCAST<UIInputArrayRow*>(element->GetParent()) :
-                                  nullptr;
+    EventEmitter<IEventsValueChanged>::PropagateToListeners(
+                        &IEventsValueChanged::OnValueChanged, this);
 }

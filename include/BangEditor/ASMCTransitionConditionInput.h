@@ -17,6 +17,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class ASMCTransitionConditionInput : public GameObject,
+                                     public EventEmitter<IEventsValueChanged>,
                                      public EventListener<IEventsValueChanged>
 {
 public:

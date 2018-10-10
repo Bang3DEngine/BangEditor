@@ -108,6 +108,9 @@ void ASMVariableInput::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
             SCAST<AnimatorStateMachineVariable::Type>(
                                         p_varTypeInput->GetSelectedValue()));
     }
+
+    EventEmitter<IEventsValueChanged>::PropagateToListeners(
+                 &IEventsValueChanged::OnValueChanged, this);
 }
 
 void ASMVariableInput::ImportMeta(const MetaNode &metaNode)
