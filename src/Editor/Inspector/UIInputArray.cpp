@@ -99,6 +99,7 @@ void UIInputArray::UpdateElementsSerializable(
     Array<Serializable*> serializablesToUpdateCopy = serializablesToUpdate;
 
     // Add or remove needed or unneeded elements (if any)
+    uint prevSerializablesToUpdateSize = serializablesToUpdateCopy.Size();
     while (referenceMetaNodes.Size() != serializablesToUpdateCopy.Size())
     {
         if (serializablesToUpdateCopy.Size() < referenceMetaNodes.Size())
@@ -113,7 +114,7 @@ void UIInputArray::UpdateElementsSerializable(
         }
     }
 
-    // Update all elements
+    // Update all non-new elements
     ASSERT(serializablesToUpdateCopy.Size() == referenceMetaNodes.Size());
     for (uint i = 0; i < serializablesToUpdateCopy.Size(); ++i)
     {
@@ -121,8 +122,17 @@ void UIInputArray::UpdateElementsSerializable(
         ASSERT(i < serializablesToUpdateCopy.Size());
 
         Serializable *serializableToUpdate = serializablesToUpdateCopy[i];
-        const MetaNode &elementMeta = referenceMetaNodes[i];
-        serializableToUpdate->ImportMeta(elementMeta);
+
+        bool isNewElement = (i >= prevSerializablesToUpdateSize);
+        if (isNewElement)
+        {
+        }
+        else
+        {
+            const MetaNode &elementMeta = referenceMetaNodes[i];
+            serializableToUpdate->ImportMeta(elementMeta);
+
+        }
     }
 }
 

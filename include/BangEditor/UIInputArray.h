@@ -32,7 +32,7 @@ public:
 
     template <class T>
     static void UpdateElements(
-                    const Array<MetaNode> &referenceMetaNodes,
+                    const Array<T*> &referenceMetaNodes,
                     const Array<T*> &serializablesToUpdate,
                     std::function<T*()> createNewElementFunction,
                     std::function<void(T*)> removeElementFunction);

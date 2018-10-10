@@ -32,10 +32,10 @@ ASMVariableInput::ASMVariableInput()
     UILayoutElement *varNameGoLE = varNameGo->AddComponent<UILayoutElement>();
     varNameGoLE->SetFlexibleSize(Vector2::One);
     varNameGoLE->SetMinHeight(20);
-    varNameGoLE->SetMinWidth(100);
+    varNameGoLE->SetMinWidth(120);
 
     p_varNameInput = GameObjectFactory::CreateUIInputText();
-    p_varNameInput->GetText()->SetContent("NewVariable");
+    p_varNameInput->GetText()->SetContent("New Variable Name");
     p_varNameInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_varTypeInput = GameObjectFactory::CreateUIComboBox();
@@ -45,10 +45,13 @@ ASMVariableInput::ASMVariableInput()
                                                  Type::BOOL));
     p_varTypeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
+    GameObject *varInputGo = GameObjectFactory::CreateUIGameObject();
+    UIHorizontalLayout *varHL = varInputGo->AddComponent<UIHorizontalLayout>();
+    UILayoutElement *varInputLE = varInputGo->AddComponent<UILayoutElement>();
+    varInputLE->SetFlexibleWidth(1.0f);
+    varInputLE->SetMinWidth(100);
+
     p_floatInput = GameObjectFactory::CreateUIInputNumber();
-    UILayoutElement *floatLE = p_floatInput->GetGameObject()->
-                               AddComponent<UILayoutElement>();
-    floatLE->SetMinWidth(100);
     p_floatInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_boolInput = GameObjectFactory::CreateUICheckBox();
@@ -56,13 +59,12 @@ ASMVariableInput::ASMVariableInput()
 
     varNameGo->SetParent(this);
     p_varNameInput->GetGameObject()->SetParent(varNameGo);
-    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::MIN, 5.0f)->
-                       SetParent(this);
     p_varTypeInput->GetGameObject()->SetParent(this);
-    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::FLEXIBLE, 999.0f)->
-                       SetParent(this);
-    p_floatInput->GetGameObject()->SetParent(this);
-    p_boolInput->GetGameObject()->SetParent(this);
+    varInputGo->SetParent(this);
+    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::FLEXIBLE, 0.001f)->
+                       SetParent(varInputGo);
+    p_floatInput->GetGameObject()->SetParent(varInputGo);
+    p_boolInput->GetGameObject()->SetParent(varInputGo);
 
     SetVarType( AnimatorStateMachineVariable::Type::FLOAT );
 }
@@ -110,7 +112,7 @@ void ASMVariableInput::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 
 void ASMVariableInput::ImportMeta(const MetaNode &metaNode)
 {
-    GameObject::ImportMeta(metaNode);
+    Serializable::ImportMeta(metaNode);
 
     if (metaNode.Contains("VariableName"))
     {
@@ -136,7 +138,7 @@ void ASMVariableInput::ImportMeta(const MetaNode &metaNode)
 
 void ASMVariableInput::ExportMeta(MetaNode *metaNode) const
 {
-    GameObject::ExportMeta(metaNode);
+    Serializable::ExportMeta(metaNode);
 
     metaNode->Set("VariableName", p_varNameInput->GetText()->GetContent());
     metaNode->Set("VariableType", p_varTypeInput->GetSelectedValue());

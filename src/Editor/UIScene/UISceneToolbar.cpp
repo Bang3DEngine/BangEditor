@@ -35,7 +35,7 @@ UISceneToolbar::UISceneToolbar()
     constexpr int ToolBarHeight = 20;
 
     UILayoutElement *toolbarLE = AddComponent<UILayoutElement>();
-    toolbarLE->SetPreferredHeight(ToolBarHeight);
+    toolbarLE->SetMinHeight(ToolBarHeight);
     toolbarLE->SetFlexibleWidth( 1.0f );
 
     Texture2D *eyeIcon              = EditorTextureFactory::GetEyeIcon();
@@ -56,7 +56,7 @@ UISceneToolbar::UISceneToolbar()
         button->SetIcon(icon, Vector2i(14));
         button->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
         button->GetIcon()->SetTint(Color::DarkGray);
-        button->AddClickedCallback( [callbackFunc]() { callbackFunc(); } );
+        button->AddClickedCallback(callbackFunc);
         button->GetGameObject()->SetParent(this);
         *buttonPtr = button;
     };

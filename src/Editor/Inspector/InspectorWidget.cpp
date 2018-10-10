@@ -201,7 +201,7 @@ UILabel *InspectorWidget::CreateWidgetLabel(const String &content,
                                             int _width)
 {
     int height = _height >= 0 ? _height : DefaultWidgetHeight;
-    int width  = _width >= 0 ? _width : GetLabelsWidth();
+    int width  = _width  >= 0 ? _width  : GetLabelsWidth();
 
     UILabel *label = GameObjectFactory::CreateUILabel();
     label->GetText()->SetContent(content);
@@ -210,10 +210,12 @@ UILabel *InspectorWidget::CreateWidgetLabel(const String &content,
     label->SetSelectable(false);
 
     UILayoutElement *labelLE =
-                  label->GetGameObject()->GetComponent<UILayoutElement>();
+                  label->GetGameObject()->AddComponent<UILayoutElement>();
+    labelLE->SetMinWidth( width );
     labelLE->SetPreferredWidth( width );
     labelLE->SetPreferredHeight( height );
     labelLE->SetFlexibleWidth(0);
+    labelLE->SetLayoutPriority(2);
 
     m_labelToLabelLE.Add(label, labelLE);
 

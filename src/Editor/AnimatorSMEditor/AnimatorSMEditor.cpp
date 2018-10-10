@@ -132,17 +132,20 @@ void AnimatorSMEditor::Update()
         }
     }
 
-    if (Time::GetPassedTimeSince(m_lastVariablesInputUpdateTime) <
-        Time::Seconds(0.2f))
+    if (GetAnimatorSM())
     {
-        Array<MetaNode> varsMetaNodes;
-        for (const auto &pair : GetAnimatorSM()->GetNameToVariables())
+        if (Time::GetPassedTimeSince(m_lastVariablesInputUpdateTime) >=
+            Time::Seconds(0.2f))
         {
-            AnimatorStateMachineVariable *var = pair.second;
-            varsMetaNodes.PushBack( var->GetMeta() );
+            Array<MetaNode> varsMetaNodes;
+            for (const auto &pair : GetAnimatorSM()->GetNameToVariables())
+            {
+                AnimatorStateMachineVariable *var = pair.second;
+                varsMetaNodes.PushBack( var->GetMeta() );
+            }
+            p_variablesInput->UpdateInputGameObjects(varsMetaNodes);
+            m_lastVariablesInputUpdateTime = Time::GetNow();
         }
-        p_variablesInput->UpdateInputGameObjects(varsMetaNodes);
-        m_lastVariablesInputUpdateTime = Time::GetNow();
     }
 }
 
@@ -170,5 +173,30 @@ void AnimatorSMEditor::Clear()
 
 void AnimatorSMEditor::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 {
+    if (!GetAnimatorSM())
+    {
+        return;
+    }
 
+    if (ee == p_variablesInput)
+    {
+        UIInputArray::UpdateElements<AnimatorStateMachineVariable>(
+                    p_variablesInput->GetInputGameObjectsMetas(),
+                    GetAnimatorSM()->GetVariables(),
+                    [this]()
+                    {
+                        ASSERT(GetAnimatorSM());
+                        auto newVar = GetAnimatorSM()->CreateNewVariable();
+                        // String newVarName = GetAnimatorSM()->
+                        //                     GetVariableName(newVar);
+                        return newVar;
+                    },
+                    [this](AnimatorStateMachineVariable *varToRemove)
+                    {
+                            ASSERT(GetAnimatorSM());
+                        GetAnimatorSM()->RemoveVariable(varToRemove);
+                    }
+                    );
+
+    }
 }
