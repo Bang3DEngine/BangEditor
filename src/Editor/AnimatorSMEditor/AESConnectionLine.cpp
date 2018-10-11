@@ -141,6 +141,7 @@ void AESConnectionLine::BeforeRender()
             p_lineRenderer->SetPoint(i, linePos);
             ++i;
         }
+        OffsetLinePositions();
     }
 
     if (HasFocus())
@@ -243,7 +244,7 @@ bool AESConnectionLine::IsMouseOver() const
     float distanceToLine = Geometry::GetPointToLineDistance2D(mousePos,
                                                               linePosFrom,
                                                               linePosTo);
-    return (distanceToLine < 10.0f) &&
+    return (distanceToLine < 5.0f) &&
             Vector2::Dot(mousePos-linePosFrom, linePosTo-linePosFrom) > 0 &&
             Vector2::Dot(mousePos-linePosTo,   linePosFrom-linePosTo) > 0 &&
             !interactingWithNodeTo &&
@@ -287,8 +288,42 @@ bool AESConnectionLine::IsValidConnection(AESNode *oneNode,
 Vector3 AESConnectionLine::GetConnectionPointLinePosition(
                                         AESNode *node) const
 {
+    RectTransform *nodeRT = node->GetRectTransform();
+
     Vector3 linePos = GetRectTransform()->FromWorldToLocalPoint(
-                        node->GetRectTransform()->FromLocalToWorldPoint(
-                            Vector3(0, 0, 0)));
+                        nodeRT->FromLocalToWorldPoint( Vector3(0, 0, 0) ) );
     return linePos;
+}
+
+void AESConnectionLine::OffsetLinePositions() const
+{
+    bool isLesserNode = GetNodeTo() ?
+                       (GetNodeFrom()->GetIndexInStateMachine() <
+                        GetNodeTo()->GetIndexInStateMachine()) : true;
+
+    Vector3 lineFromPos = p_lineRenderer->GetPoints()[0];
+    Vector3 lineToPos   = p_lineRenderer->GetPoints()[1];
+    Vector3 lineFromTo  = (lineToPos - lineFromPos) * (isLesserNode ? 1.0f : -1.0f);
+
+    constexpr int OffsetPxPerIndex = 20;
+    Vector3 offsetAnchorPerIndex (
+                    (1.0f / GetRectTransform()->GetViewportAARect().GetSize()) *
+                    Vector2(OffsetPxPerIndex), 0.0f);
+
+    Vector3 offsetDir = Vector3(lineFromTo.xy().Perpendicular(), 0.0f);
+    offsetDir = offsetDir.NormalizedSafe();
+
+    if (GetNodeFrom())
+    {
+        float sign = (isLesserNode ? 1.0f : -1.0f);
+        lineFromPos += offsetDir * offsetAnchorPerIndex * sign;
+        p_lineRenderer->SetPoint(0, lineFromPos);
+    }
+
+    if (GetNodeTo())
+    {
+        float sign = (isLesserNode ? 1.0f : -1.0f);
+        lineToPos += offsetDir * offsetAnchorPerIndex * sign;
+        p_lineRenderer->SetPoint(1, lineToPos);
+    }
 }

@@ -57,6 +57,7 @@ private:
     AESNode *GetFirstFoundNode() const;
     bool IsValidConnection(AESNode *oneNode, AESNode *otherNode) const;
     Vector3 GetConnectionPointLinePosition(AESNode *connPoint) const;
+    void OffsetLinePositions() const;
 };
 
 NAMESPACE_BANG_EDITOR_END
