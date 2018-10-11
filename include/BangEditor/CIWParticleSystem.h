@@ -4,6 +4,7 @@
 #include "BangEditor/CIWRenderer.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UISlider;
 FORWARD class UIComboBox;
 FORWARD class UIInputNumber;
 FORWARD class ParticleSystem;
@@ -36,6 +37,7 @@ protected:
     UICheckBox *p_billboardInput = nullptr;
     UIInputTexture *p_textureInput = nullptr;
     UIInputVector *p_sheetSizeInput = nullptr;
+    UISlider *p_bouncinessInput = nullptr;
     UIInputNumber *p_animationSpeedInput = nullptr;
     UIComboBox *p_particleRenderModeInput = nullptr;
     UIInputColor *p_startColorInput = nullptr;

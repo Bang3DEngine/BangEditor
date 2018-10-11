@@ -2,6 +2,7 @@
 
 #include "Bang/Mesh.h"
 #include "Bang/UILabel.h"
+#include "Bang/UISlider.h"
 #include "Bang/Resources.h"
 #include "Bang/Extensions.h"
 #include "Bang/GameObject.h"
@@ -82,6 +83,10 @@ void CIWParticleSystem::InitInnerWidgets()
     p_numParticlesInput->SetMinValue(0);
     p_numParticlesInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
+    p_bouncinessInput = GameObjectFactory::CreateUISlider();
+    p_bouncinessInput->SetMinMaxValues(0.0f, 1.0f);
+    p_bouncinessInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
     p_generationShapeInput = GameObjectFactory::CreateUIComboBox();
     p_generationShapeInput->AddItem("Box",  SCAST<int>(ParticleGenerationShape::BOX));
     p_generationShapeInput->AddItem("Cone", SCAST<int>(ParticleGenerationShape::CONE));
@@ -137,6 +142,7 @@ void CIWParticleSystem::InitInnerWidgets()
     AddWidget("Cone FOV",         p_generationShapeConeFOVInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("Compute collisions",   p_computeCollisionsInput->GetGameObject());
+    AddWidget("Bounciness",           p_bouncinessInput->GetGameObject());
     AddWidget("Step mode",            p_physicsStepModeInput->GetGameObject());
     AddWidget("Gravity multiplier",   p_gravityMultiplierInput->GetGameObject());
     AddWidget("Init vel. multiplier", p_initialVelocityMultiplier->GetGameObject());
@@ -210,6 +216,11 @@ void CIWParticleSystem::UpdateFromReference()
     if (!p_numParticlesInput->HasFocus())
     {
         p_numParticlesInput->SetValue( GetParticleSystem()->GetNumParticles() );
+    }
+
+    if (!p_bouncinessInput->HasFocus())
+    {
+        p_bouncinessInput->SetValue( GetParticleSystem()->GetBounciness() );
     }
 
     if (!p_generationShapeInput->HasFocus())
@@ -311,6 +322,11 @@ void CIWParticleSystem::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *obj
     if (object == p_billboardInput)
     {
         GetParticleSystem()->SetBillboard( p_billboardInput->IsChecked() );
+    }
+
+    if (object == p_bouncinessInput)
+    {
+        GetParticleSystem()->SetBounciness( p_bouncinessInput->GetValue() );
     }
 
     if (object == p_animationSpeedInput)
