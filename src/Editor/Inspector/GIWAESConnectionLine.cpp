@@ -24,9 +24,9 @@ GIWAESConnectionLine::~GIWAESConnectionLine()
 {
 }
 
-void GIWAESConnectionLine::Init()
+void GIWAESConnectionLine::InitInnerWidgets()
 {
-    InspectorWidget::Init();
+    InspectorWidget::InitInnerWidgets();
 
     SetTitle("Transition");
     SetName("GIWAESConnectionLine");
@@ -51,8 +51,8 @@ void GIWAESConnectionLine::Init()
     AddWidget(p_notificationLabel->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), -1);
 
-    EnableNeededWidgets();
     SetLabelsWidth(95);
+    UpdateFromReference();
 }
 
 void GIWAESConnectionLine::SetAESConnectionLine(AESConnectionLine *connLine)
@@ -69,11 +69,14 @@ AESConnectionLine *GIWAESConnectionLine::GetAESConnectionLine() const
 
 void GIWAESConnectionLine::EnableNeededWidgets()
 {
-    bool atLeastOneVar = (GetAESConnectionLine()->GetAnimatorSM()->
-                          GetVariables().Size() >= 1);
+    if (GetAESConnectionLine())
+    {
+        bool atLeastOneVar = (GetAESConnectionLine()->GetAnimatorSM()->
+                              GetVariables().Size() >= 1);
 
-    SetWidgetEnabled(p_transitionConditionsInput, atLeastOneVar);
-    SetWidgetEnabled(p_notificationLabel->GetGameObject(), !atLeastOneVar);
+        SetWidgetEnabled(p_transitionConditionsInput, atLeastOneVar);
+        SetWidgetEnabled(p_notificationLabel->GetGameObject(), !atLeastOneVar);
+    }
 }
 
 void GIWAESConnectionLine::UpdateFromReference()
@@ -85,15 +88,17 @@ void GIWAESConnectionLine::UpdateFromReference()
                                              GetSMConnection();
     p_transitionConditionsInput->UpdateRows( smConn->GetTransitionConditions() );
 
+    uint i = 0;
     for (GameObject *transCondInputGo :
                             p_transitionConditionsInput->GetRowGameObjects())
     {
         ASMCTransitionConditionInput *transCondInput =
                 SCAST<ASMCTransitionConditionInput*>(transCondInputGo);
-
         transCondInput->SetAnimatorStateMachine(
                     GetAESConnectionLine()->GetAnimatorSM() );
+        ++i;
     }
+    p_transitionConditionsInput->UpdateRows( smConn->GetTransitionConditions() );
 
     EnableNeededWidgets();
 }

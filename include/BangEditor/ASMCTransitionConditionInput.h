@@ -25,7 +25,8 @@ public:
 	ASMCTransitionConditionInput();
 	virtual ~ASMCTransitionConditionInput();
 
-    void Update() override;
+    // GameObject
+    void BeforeRender() override;
 
     void SetVariableType(AnimatorStateMachineVariable::Type type);
     void SetAnimatorStateMachine(AnimatorStateMachine *animatorSM);

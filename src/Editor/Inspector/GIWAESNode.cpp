@@ -27,9 +27,9 @@ GIWAESNode::~GIWAESNode()
 {
 }
 
-void GIWAESNode::Init()
+void GIWAESNode::InitInnerWidgets()
 {
-    InspectorWidget::Init();
+    InspectorWidget::InitInnerWidgets();
 
     SetTitle("Animation State Node");
     SetName("GIWAESNode");
@@ -48,10 +48,15 @@ void GIWAESNode::Init()
     p_nodeAnimationInput->EventEmitter<IEventsValueChanged>::
                           RegisterListener(this);
 
+    p_immediateTransitionInput = GameObjectFactory::CreateUICheckBox();
+    p_immediateTransitionInput->EventEmitter<IEventsValueChanged>::
+                           RegisterListener(this);
+
     AddWidget("Name", p_nameInput->GetGameObject());
     AddWidget("Animation", p_nodeAnimationInput);
+    AddWidget("Immediate transition", p_immediateTransitionInput->GetGameObject());
 
-    SetLabelsWidth(90);
+    SetLabelsWidth(100);
 }
 
 void GIWAESNode::SetAESNode(AESNode *node)
@@ -73,6 +78,8 @@ void GIWAESNode::UpdateFromReference()
     if (AnimatorStateMachineNode *smNode = GetAESNode()->GetSMNode())
     {
         p_nameInput->GetText()->SetContent(smNode->GetName());
+        p_immediateTransitionInput->SetChecked(
+                                        smNode->GetImmediateTransition() );
         p_nodeAnimationInput->SetPath(
             smNode->GetAnimation() ?
                 smNode->GetAnimation()->GetResourceFilepath() : Path::Empty);
@@ -86,6 +93,11 @@ void GIWAESNode::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
         if (ee == p_nameInput)
         {
             smNode->SetName(p_nameInput->GetText()->GetContent());
+        }
+        else if (ee == p_immediateTransitionInput)
+        {
+            smNode->SetImmediateTransition(
+                        p_immediateTransitionInput->IsChecked() );
         }
         else if (ee == p_nodeAnimationInput)
         {

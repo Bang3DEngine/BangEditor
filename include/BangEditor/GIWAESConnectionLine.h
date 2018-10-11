@@ -27,7 +27,7 @@ public:
 	virtual ~GIWAESConnectionLine();
 
     // InspectorWidget
-    virtual void Init() override;
+    virtual void InitInnerWidgets() override;
 
     void SetAESConnectionLine(AESConnectionLine *connLine);
 

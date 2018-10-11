@@ -32,7 +32,7 @@ ASMVariableInput::ASMVariableInput()
     UILayoutElement *varNameGoLE = varNameGo->AddComponent<UILayoutElement>();
     varNameGoLE->SetFlexibleSize(Vector2::One);
     varNameGoLE->SetMinHeight(20);
-    varNameGoLE->SetMinWidth(120);
+    varNameGoLE->SetMinWidth(60);
 
     p_varNameInput = GameObjectFactory::CreateUIInputText();
     p_varNameInput->GetText()->SetContent("New Variable Name");
@@ -49,7 +49,7 @@ ASMVariableInput::ASMVariableInput()
     UIHorizontalLayout *varHL = varInputGo->AddComponent<UIHorizontalLayout>();
     UILayoutElement *varInputLE = varInputGo->AddComponent<UILayoutElement>();
     varInputLE->SetFlexibleWidth(1.0f);
-    varInputLE->SetMinWidth(100);
+    varInputLE->SetMinWidth(60);
 
     p_floatInput = GameObjectFactory::CreateUIInputNumber();
     p_floatInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);

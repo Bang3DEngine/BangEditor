@@ -44,9 +44,9 @@ ASMCTransitionConditionInput::~ASMCTransitionConditionInput()
 {
 }
 
-void ASMCTransitionConditionInput::Update()
+void ASMCTransitionConditionInput::BeforeRender()
 {
-    GameObject::Update();
+    GameObject::BeforeRender();
 
     if (p_animatorSM)
     {
@@ -110,7 +110,7 @@ void ASMCTransitionConditionInput::UpdateFromVariable()
         }
 
         if (AnimatorStateMachineVariable *var =
-                p_animatorSM->GetVariable(m_selectedVarName))
+                                 p_animatorSM->GetVariable(m_selectedVarName))
         {
             SetVariableType(var->GetType());
         }
@@ -124,8 +124,8 @@ void ASMCTransitionConditionInput::OnValueChanged(
     if (ee == p_varNameInput)
     {
         m_selectedVarName = p_varNameInput->GetSelectedLabel();
-        UpdateFromVariable();
     }
+    UpdateFromVariable();
 
     EventEmitter<IEventsValueChanged>::PropagateToListeners(
                  &IEventsValueChanged::OnValueChanged, this);
@@ -138,6 +138,7 @@ void ASMCTransitionConditionInput::ImportMeta(const MetaNode &metaNode)
     if (metaNode.Contains("VariableName"))
     {
         m_selectedVarName = metaNode.Get<String>("VariableName");
+        p_varNameInput->SetSelectionByLabel(m_selectedVarName);
     }
 
     if (metaNode.Contains("Comparator"))
