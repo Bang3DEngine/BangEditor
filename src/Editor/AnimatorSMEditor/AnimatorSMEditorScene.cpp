@@ -101,12 +101,12 @@ void AnimatorSMEditorScene::Update()
         {
             SetZoomScale( m_zoomScale + mouseWheel.y );
         }
+    }
 
-        if (Time::GetPassedTimeSince(m_lastTimeAnimatorSMWasExported) >=
-            Time::Seconds(2.0f))
-        {
-            ExportCurrentAnimatorStateMachineIfAny();
-        }
+    if (Time::GetPassedTimeSince(m_lastTimeAnimatorSMWasExported) >=
+        Time::Seconds(2.0f))
+    {
+        ExportCurrentAnimatorStateMachineIfAny();
     }
 
     UpdatePanningAndZoomOnTransforms();

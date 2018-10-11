@@ -32,10 +32,13 @@ public:
     void SetAESConnectionLine(AESConnectionLine *connLine);
 
 private:
+    UILabel *p_notificationLabel = nullptr;
     UIInputArray *p_transitionConditionsInput = nullptr;
     AESConnectionLine *p_aesConnectionLine =  nullptr;
 
     AESConnectionLine* GetAESConnectionLine() const;
+
+    void EnableNeededWidgets();
 
     // InspectorWidget
     virtual void UpdateFromReference() override;

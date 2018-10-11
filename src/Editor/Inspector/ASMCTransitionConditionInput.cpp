@@ -8,6 +8,7 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
+#include "Bang/AnimatorStateMachine.h"
 #include "Bang/AnimatorStateMachineConnectionTransitionCondition.h"
 
 USING_NAMESPACE_BANG
@@ -31,6 +32,7 @@ ASMCTransitionConditionInput::ASMCTransitionConditionInput()
     p_comparatorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_floatInput = GameObjectFactory::CreateUIInputNumber();
+    p_floatInput->SetValue(0.0f);
     p_floatInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_varNameInput->GetGameObject()->SetParent(this);
@@ -40,6 +42,17 @@ ASMCTransitionConditionInput::ASMCTransitionConditionInput()
 
 ASMCTransitionConditionInput::~ASMCTransitionConditionInput()
 {
+}
+
+void ASMCTransitionConditionInput::Update()
+{
+    GameObject::Update();
+
+    if (p_animatorSM)
+    {
+        UpdateFromVariable();
+        p_varNameInput->SetSelectionByLabel(m_selectedVarName);
+    }
 }
 
 void ASMCTransitionConditionInput::SetVariableType(
@@ -72,9 +85,48 @@ void ASMCTransitionConditionInput::SetVariableType(
     }
 }
 
+void ASMCTransitionConditionInput::SetAnimatorStateMachine(
+                                        AnimatorStateMachine *animatorSM)
+{
+    if (animatorSM != p_animatorSM)
+    {
+        p_animatorSM = animatorSM;
+        UpdateFromVariable();
+    }
+}
+
+void ASMCTransitionConditionInput::UpdateFromVariable()
+{
+    if (p_animatorSM && !m_updatingFromVariable)
+    {
+        m_updatingFromVariable = true;
+        if (p_animatorSM->GetVariables().Size() != p_varNameInput->GetNumItems())
+        {
+            p_varNameInput->ClearItems();
+            for (AnimatorStateMachineVariable *var : p_animatorSM->GetVariables())
+            {
+                p_varNameInput->AddItem(var->GetName(), 0);
+            }
+        }
+
+        if (AnimatorStateMachineVariable *var =
+                p_animatorSM->GetVariable(m_selectedVarName))
+        {
+            SetVariableType(var->GetType());
+        }
+        m_updatingFromVariable = false;
+    }
+}
+
 void ASMCTransitionConditionInput::OnValueChanged(
                                     EventEmitter<IEventsValueChanged> *ee)
 {
+    if (ee == p_varNameInput)
+    {
+        m_selectedVarName = p_varNameInput->GetSelectedLabel();
+        UpdateFromVariable();
+    }
+
     EventEmitter<IEventsValueChanged>::PropagateToListeners(
                  &IEventsValueChanged::OnValueChanged, this);
 }
@@ -85,16 +137,7 @@ void ASMCTransitionConditionInput::ImportMeta(const MetaNode &metaNode)
 
     if (metaNode.Contains("VariableName"))
     {
-        String previousSelectedValue = p_varNameInput->GetSelectedLabel();
-        String newSelectedVarName = metaNode.Get<String>("VariableName");
-
-        p_varNameInput->SetSelectionByLabel(newSelectedVarName);
-    }
-
-    if (metaNode.Contains("VariableType"))
-    {
-        SetVariableType(
-            metaNode.Get<AnimatorStateMachineVariable::Type>("VariableType") );
+        m_selectedVarName = metaNode.Get<String>("VariableName");
     }
 
     if (metaNode.Contains("Comparator"))
@@ -105,7 +148,10 @@ void ASMCTransitionConditionInput::ImportMeta(const MetaNode &metaNode)
     if (metaNode.Contains("CompareValueFloat"))
     {
         p_floatInput->SetValue( metaNode.Get<float>("CompareValueFloat") );
-    }}
+    }
+
+    UpdateFromVariable();
+}
 
 void ASMCTransitionConditionInput::ExportMeta(MetaNode *metaNode) const
 {

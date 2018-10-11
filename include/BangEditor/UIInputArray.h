@@ -43,6 +43,7 @@ public:
     const Array<GameObject*> &GetRowGameObjects() const;
 
 private:
+    bool m_updatingRowsOrReferences = false;
     Array<GameObject*> m_rowGameObjects;
     GameObject *m_addNewRowButtonRow = nullptr;
 
@@ -72,19 +73,29 @@ private:
 template <class T>
 void UIInputArray::UpdateRows(const Array<T*> &referenceSerializables)
 {
-    UpdateSerializables(
-                GetRowGameObjects().template To<Array, Serializable*>(),
-                referenceSerializables.template To<Array, Serializable*>(),
-                [this]()
-                {
-                    GameObject *newObj = m_createNewRowGameObjectFunction();
-                    return SCAST<Serializable*>(newObj);
-                },
-                [this](Serializable *s)
-                {
-                    RemoveRow(SCAST<GameObject*>(s));
-                },
-                false);
+    if (!m_updatingRowsOrReferences)
+    {
+        m_updatingRowsOrReferences = true;
+        auto rowGameObjectsCasted =
+                GetRowGameObjects().template To<Array, Serializable*>();
+        auto referenceSerializablesCasted =
+                referenceSerializables.template To<Array, Serializable*>();
+        UpdateSerializables(
+                    rowGameObjectsCasted,
+                    referenceSerializablesCasted,
+                    [this]()
+                    {
+                        GameObject *newObj = m_createNewRowGameObjectFunction();
+                        AddRow_(newObj, -1u, false);
+                        return SCAST<Serializable*>(newObj);
+                    },
+                    [this](Serializable *s)
+                    {
+                        RemoveRow_(SCAST<GameObject*>(s), false);
+                    },
+                    false);
+        m_updatingRowsOrReferences = false;
+    }
 }
 
 template <class T>
@@ -92,19 +103,28 @@ void UIInputArray::UpdateReferences(const Array<T*> &referenceSerializables,
                                     std::function<T*()> createNewReferenceFunction,
                                     std::function<void(T*)> removeReferenceFunction)
 {
-    UpdateSerializables(
-                referenceSerializables.template To<Array, Serializable*>(),
-                GetRowGameObjects().template To<Array, Serializable*>(),
-                [&]()
-                {
-                    T *newObj = createNewReferenceFunction();
-                    return SCAST<Serializable*>(newObj);
-                },
-                [&](Serializable *s)
-                {
-                    removeReferenceFunction(SCAST<T*>(s));
-                },
-                true);
+    if (!m_updatingRowsOrReferences)
+    {
+        m_updatingRowsOrReferences = true;
+        auto rowGameObjectsCasted =
+                GetRowGameObjects().template To<Array, Serializable*>();
+        auto referenceSerializablesCasted =
+                referenceSerializables.template To<Array, Serializable*>();
+        UpdateSerializables(
+                    referenceSerializablesCasted,
+                    rowGameObjectsCasted,
+                    [&]()
+                    {
+                        T *newObj = createNewReferenceFunction();
+                        return SCAST<Serializable*>(newObj);
+                    },
+                    [&](Serializable *s)
+                    {
+                        removeReferenceFunction(SCAST<T*>(s));
+                    },
+                    true);
+        m_updatingRowsOrReferences = false;
+    }
 }
 
 NAMESPACE_BANG_EDITOR_END

@@ -1,8 +1,12 @@
 #include "BangEditor/GIWAESConnectionLine.h"
 
 #include "Bang/Assert.h"
+#include "Bang/UILabel.h"
 #include "Bang/MetaNode.h"
+#include "Bang/UITextRenderer.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/AnimatorStateMachine.h"
+#include "Bang/AnimatorStateMachineNode.h"
 #include "Bang/AnimatorStateMachineConnection.h"
 
 #include "BangEditor/UIInputArray.h"
@@ -37,9 +41,17 @@ void GIWAESConnectionLine::Init()
     p_transitionConditionsInput->EventEmitter<IEventsValueChanged>::
                                  RegisterListener(this);
 
+    p_notificationLabel = GameObjectFactory::CreateUILabel();
+    p_notificationLabel->GetText()->SetContent("Create at least one variable to "
+                                               "add transition conditions");
+    p_notificationLabel->GetText()->SetTextColor(Color::Red);
+
     AddLabel("Conditions");
     AddWidget(p_transitionConditionsInput, -1);
+    AddWidget(p_notificationLabel->GetGameObject());
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), -1);
 
+    EnableNeededWidgets();
     SetLabelsWidth(95);
 }
 
@@ -55,6 +67,15 @@ AESConnectionLine *GIWAESConnectionLine::GetAESConnectionLine() const
     return p_aesConnectionLine;
 }
 
+void GIWAESConnectionLine::EnableNeededWidgets()
+{
+    bool atLeastOneVar = (GetAESConnectionLine()->GetAnimatorSM()->
+                          GetVariables().Size() >= 1);
+
+    SetWidgetEnabled(p_transitionConditionsInput, atLeastOneVar);
+    SetWidgetEnabled(p_notificationLabel->GetGameObject(), !atLeastOneVar);
+}
+
 void GIWAESConnectionLine::UpdateFromReference()
 {
     InspectorWidget::UpdateFromReference();
@@ -63,6 +84,18 @@ void GIWAESConnectionLine::UpdateFromReference()
     AnimatorStateMachineConnection *smConn = GetAESConnectionLine()->
                                              GetSMConnection();
     p_transitionConditionsInput->UpdateRows( smConn->GetTransitionConditions() );
+
+    for (GameObject *transCondInputGo :
+                            p_transitionConditionsInput->GetRowGameObjects())
+    {
+        ASMCTransitionConditionInput *transCondInput =
+                SCAST<ASMCTransitionConditionInput*>(transCondInputGo);
+
+        transCondInput->SetAnimatorStateMachine(
+                    GetAESConnectionLine()->GetAnimatorSM() );
+    }
+
+    EnableNeededWidgets();
 }
 
 void GIWAESConnectionLine::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)

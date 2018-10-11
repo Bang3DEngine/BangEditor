@@ -11,6 +11,7 @@
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIComboBox;
 FORWARD class UIInputNumber;
+FORWARD class AnimatorStateMachine;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -24,14 +25,22 @@ public:
 	ASMCTransitionConditionInput();
 	virtual ~ASMCTransitionConditionInput();
 
+    void Update() override;
+
     void SetVariableType(AnimatorStateMachineVariable::Type type);
+    void SetAnimatorStateMachine(AnimatorStateMachine *animatorSM);
 
 private:
-    UIComboBox    *p_varNameInput    = nullptr;
-    UIComboBox    *p_comparatorInput = nullptr;
-    UIInputNumber *p_floatInput      = nullptr;
+    String m_selectedVarName = "";
+    bool m_updatingFromVariable = false;
+    AnimatorStateMachine *p_animatorSM = nullptr;
+    UIComboBox    *p_varNameInput      = nullptr;
+    UIComboBox    *p_comparatorInput   = nullptr;
+    UIInputNumber *p_floatInput        = nullptr;
     AnimatorStateMachineVariable::Type m_varType =
             Undef<AnimatorStateMachineVariable::Type>();
+
+    void UpdateFromVariable();
 
     // IEventsValueChanged
     virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *ee) override;

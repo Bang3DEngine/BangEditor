@@ -72,7 +72,7 @@ AnimatorSMEditor::AnimatorSMEditor()
     {
         UILayoutElement *inspectorLE = inspectorContainer->
                                        AddComponent<UILayoutElement>();
-        inspectorLE->SetFlexibleSize( Vector2(1.0f, 1.0f) );
+        inspectorLE->SetFlexibleSize( Vector2(0.5f, 1.0f) );
 
         inspectorContainer->AddComponent<UIVerticalLayout>();
 
