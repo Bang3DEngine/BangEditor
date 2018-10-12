@@ -286,11 +286,15 @@ Texture2D* EditorTextureFactory::GetComponentIcon(const String &componentName)
     }
     else if (componentName == "PointLight")
     {
-        return TextureFactory::GetLightBulbIcon();
+        Texture2D *tex = TextureFactory::GetLightBulbIcon();
+        tex->SetAlphaCutoff(0.5f);
+        return tex;
     }
     else if (componentName == "DirectionalLight")
     {
-        return TextureFactory::GetSunIcon();
+        Texture2D *tex = TextureFactory::GetSunIcon();
+        tex->SetAlphaCutoff(0.5f);
+        return tex;
     }
     else if (componentName == "Behaviour")
     {
@@ -304,21 +308,23 @@ Texture2D* EditorTextureFactory::GetComponentIcon(const String &componentName)
     {
         return EditorTextureFactory::GetPlayWithCircleIcon();
     }
-    else if (componentName == "AudioSource")
+    else if (componentName == "AudioSource" || componentName == "AudioListener")
     {
-        return TextureFactory::GetAudioIcon();
-    }
-    else if (componentName == "AudioListener")
-    {
-        return TextureFactory::GetAudioIcon();
+        Texture2D *tex = TextureFactory::GetAudioIcon();
+        tex->SetAlphaCutoff(0.5f);
+        return tex;
     }
     else if (componentName == "ParticleSystem")
     {
-        return EditorTextureFactory::GetStarsIcon();
+        Texture2D *tex = EditorTextureFactory::GetStarsIcon();
+        tex->SetAlphaCutoff(0.5f);
+        return tex;
     }
     else if (componentName == "Camera")
     {
-        return EditorTextureFactory::GetCameraIcon();
+        Texture2D *tex = EditorTextureFactory::GetCameraIcon();
+        tex->SetAlphaCutoff(0.5f);
+        return tex;
     }
 
     return EditorTextureFactory::GetCubeIcon();
@@ -470,8 +476,9 @@ EditorTextureFactory *EditorTextureFactory::GetInstance()
 
 Texture2D* EditorTextureFactory::GetTexture2D(const String &filename)
 {
-    return TextureFactory::GetTexture2D(filename,
+    Texture2D *tex = TextureFactory::GetTexture2D(filename,
                                         EditorPaths::GetEditorAssetsDir().
                                         Append("Textures"));
+    return tex;
 }
 

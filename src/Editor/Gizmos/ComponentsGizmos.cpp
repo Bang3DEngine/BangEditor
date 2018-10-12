@@ -17,7 +17,6 @@
 #include "Bang/RenderFactory.h"
 #include "Bang/ParticleSystem.h"
 #include "Bang/SphereCollider.h"
-#include "Bang/TextureFactory.h"
 #include "Bang/CapsuleCollider.h"
 #include "Bang/ReflectionProbe.h"
 #include "Bang/DirectionalLight.h"
@@ -273,7 +272,7 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam,
         RenderFactory::Parameters params;
         params.position = camTransform->GetPosition();
         params.scale = Vector3(0.1f);
-        RenderFactory::RenderIcon(EditorTextureFactory::GetCameraIcon(),
+        RenderFactory::RenderIcon(EditorTextureFactory::GetComponentIcon(cam),
                                   true,
                                   params);
 
@@ -343,9 +342,10 @@ void ComponentsGizmos::RenderPointLightGizmo(PointLight *pointLight,
     if (!isBeingSelected)
     {
         params.scale = Vector3(0.1f);
-        RenderFactory::RenderIcon(TextureFactory::GetLightBulbIcon(),
-                                  true,
-                                  params);
+        RenderFactory::RenderIcon(
+                    EditorTextureFactory::GetComponentIcon(pointLight),
+                    true,
+                    params);
     }
     else
     {
@@ -376,9 +376,10 @@ void ComponentsGizmos::RenderDirectionalLightGizmo(DirectionalLight *dirLight,
         params.position = dirLight->GetGameObject()->
                           GetTransform()->GetPosition();
         params.scale = Vector3(0.1f);
-        RenderFactory::RenderIcon(TextureFactory::GetSunIcon(),
-                                  true,
-                                  params);
+        RenderFactory::RenderIcon(
+                    EditorTextureFactory::GetComponentIcon(dirLight),
+                    true,
+                    params);
     }
     else
     {
@@ -470,9 +471,10 @@ void ComponentsGizmos::RenderParticleSystemGizmo(ParticleSystem *particleSystem,
 
     if (!isBeingSelected)
     {
-        RenderFactory::RenderIcon(EditorTextureFactory::GetStarsIcon(),
-                                  true,
-                                  params);
+        RenderFactory::RenderIcon(
+                    EditorTextureFactory::GetComponentIcon(particleSystem),
+                    true,
+                    params);
     }
     else
     {
@@ -542,9 +544,10 @@ void ComponentsGizmos::RenderAudioSourceGizmo(AudioSource *audioSource,
     if (!isBeingSelected)
     {
         params.scale = Vector3(0.1f);
-        RenderFactory::RenderIcon(TextureFactory::GetAudioIcon(),
-                                  true,
-                                  params);
+        RenderFactory::RenderIcon(
+                    EditorTextureFactory::GetComponentIcon(audioSource),
+                    true,
+                    params);
     }
     else
     {
