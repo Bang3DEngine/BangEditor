@@ -74,7 +74,9 @@ AnimatorSMEditor::AnimatorSMEditor()
                                        AddComponent<UILayoutElement>();
         inspectorLE->SetFlexibleSize( Vector2(0.5f, 1.0f) );
 
-        inspectorContainer->AddComponent<UIVerticalLayout>();
+        UIVerticalLayout *inspVL = inspectorContainer->
+                                   AddComponent<UIVerticalLayout>();
+        inspVL->SetPaddingLeft(10);
 
         UILabel *varsLabel = GameObjectFactory::CreateUILabel();
         varsLabel->GetText()->SetContent("Variables");
@@ -105,8 +107,9 @@ AnimatorSMEditor::AnimatorSMEditor()
     toolbar->SetParent(this);
     botHLGo->SetParent(this);
     animatorEditorSceneContainer->SetParent(botHLGo);
-    GameObjectFactory::CreateUIDirLayoutMovableHSeparator()->
-                       GetGameObject()->SetParent(botHLGo);
+    // GameObjectFactory::CreateUIDirLayoutMovableHSeparator()->
+    //                    GetGameObject()->SetParent(botHLGo);
+    GameObjectFactory::CreateUIVSeparator()->SetParent(botHLGo);
     inspectorContainer->SetParent(botHLGo);
 }
 

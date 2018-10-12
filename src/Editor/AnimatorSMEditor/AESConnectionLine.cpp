@@ -34,13 +34,16 @@ AESConnectionLine::AESConnectionLine()
     p_lineRenderer->GetMaterial()->SetRenderPass(RenderPass::CANVAS);
     p_lineRenderer->SetPoints({Vector3::Zero, Vector3::Zero});
 
-    GameObject *arrowImgGo = GameObjectFactory::CreateUIGameObject();
-    p_arrowImg = arrowImgGo->AddComponent<UIImageRenderer>();
-    p_arrowImg->SetImageTexture( TextureFactory::GetRightArrowIcon() );
-    arrowImgGo->GetRectTransform()->SetAnchors(Vector2::Zero);
-    arrowImgGo->GetRectTransform()->SetSizeFromPivot( Vector2i(20) );
-    arrowImgGo->GetRectTransform()->SetPivotPosition( Vector2::Zero );
-    arrowImgGo->SetParent(this);
+    for (uint i : {0u, 1u, 2u})
+    {
+        GameObject *arrowImgGo = GameObjectFactory::CreateUIGameObject();
+        p_arrowImgs[i] = arrowImgGo->AddComponent<UIImageRenderer>();
+        p_arrowImgs[i]->SetImageTexture( TextureFactory::GetRightArrowIcon() );
+        arrowImgGo->GetRectTransform()->SetAnchors(Vector2::Zero);
+        arrowImgGo->GetRectTransform()->SetSizeFromPivot( Vector2i(20) );
+        arrowImgGo->GetRectTransform()->SetPivotPosition( Vector2::Zero );
+        arrowImgGo->SetParent(this);
+    }
 
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
@@ -122,7 +125,8 @@ void AESConnectionLine::BeforeRender()
         if (thickenLine || m_hasFocus)
         {
             lineWidth = 5.0f;
-            lineColor = UITheme::GetSelectedColor();
+            lineColor = m_hasFocus ? UITheme::GetSelectedColor() :
+                                     UITheme::GetOverColor();
         }
     }
 
@@ -152,17 +156,25 @@ void AESConnectionLine::BeforeRender()
         }
     }
 
-    p_arrowImg->GetMaterial()->SetAlbedoColor(lineColor);
+    for (UIImageRenderer *arrowImg : p_arrowImgs)
+    {
+        arrowImg->GetMaterial()->SetAlbedoColor(lineColor);
+    }
     p_lineRenderer->GetMaterial()->SetAlbedoColor(lineColor);
     p_lineRenderer->GetMaterial()->SetLineWidth(lineWidth);
 
-    if (RectTransform *arrowRT = p_arrowImg->GetGameObject()->GetRectTransform())
+    for (uint i : {0u, 1u, 2u})
     {
+        RectTransform *arrowRT = p_arrowImgs[i]->GetGameObject()->
+                                 GetRectTransform();
+
         Vector2 p0 = p_lineRenderer->GetPoints()[0].xy();
         Vector2 p1 = p_lineRenderer->GetPoints()[1].xy();
 
-        Vector2 midPoint = (p0 + p1) * 0.5f;
-        arrowRT->SetAnchors(midPoint);
+        constexpr float iLineStep = 0.05f;
+        Vector2 pointForArrow = p0 + (p1 - p0) * ( (0.5f - iLineStep) +
+                                                   (i * iLineStep));
+        arrowRT->SetAnchors(pointForArrow);
 
         Vector2 p0w = GetRectTransform()->FromLocalToWorldPoint( Vector3(p0, 0) ).xy();
         Vector2 p1w = GetRectTransform()->FromLocalToWorldPoint( Vector3(p1, 0) ).xy();
@@ -170,6 +182,11 @@ void AESConnectionLine::BeforeRender()
         angle += (Math::Pi * 1.5f);
         Quaternion rotation = Quaternion::AngleAxis(angle, Vector3::Forward);
         arrowRT->SetLocalRotation(rotation);
+
+        if (i != 1)
+        {
+            p_arrowImgs[i]->SetEnabled(GetSMConnections().Size() >= 2);
+        }
     }
 }
 
@@ -209,10 +226,13 @@ AnimatorStateMachine *AESConnectionLine::GetAnimatorSM() const
 
 Array<AnimatorStateMachineConnection*> AESConnectionLine::GetSMConnections() const
 {
-    AnimatorStateMachineNode *smNodeFrom = GetAESNodeFrom()->GetSMNode();
-    AnimatorStateMachineNode *smNodeTo   = GetAESNodeTo()->GetSMNode();
-    Array<AnimatorStateMachineConnection*> connections =
-                                smNodeFrom->GetConnectionsTo(smNodeTo);
+    Array<AnimatorStateMachineConnection*> connections;
+    if (GetAESNodeFrom() && GetAESNodeTo())
+    {
+        AnimatorStateMachineNode *smNodeFrom = GetAESNodeFrom()->GetSMNode();
+        AnimatorStateMachineNode *smNodeTo   = GetAESNodeTo()->GetSMNode();
+        connections = smNodeFrom->GetConnectionsTo(smNodeTo);
+    }
     return connections;
 }
 
@@ -242,7 +262,7 @@ bool AESConnectionLine::IsMouseOver() const
     float distanceToLine = Geometry::GetPointToLineDistance2D(mousePos,
                                                               linePosFrom,
                                                               linePosTo);
-    return (distanceToLine < 5.0f) &&
+    return (distanceToLine < 8.0f) &&
             Vector2::Dot(mousePos-linePosFrom, linePosTo-linePosFrom) > 0 &&
             Vector2::Dot(mousePos-linePosTo,   linePosFrom-linePosTo) > 0 &&
             !interactingWithNodeTo &&
@@ -251,17 +271,14 @@ bool AESConnectionLine::IsMouseOver() const
 
 void AESConnectionLine::RemoveSelf()
 {
-    ASSERT(GetAESNodeFrom());
-    uint connIdx = GetAESNodeFrom()->GetConnectionLines().IndexOf(this);
-    ASSERT(connIdx != -1u);
-
     AnimatorStateMachineNode *smNode = GetAESNodeFrom()->GetSMNode();
     ASSERT(smNode);
 
-    AnimatorStateMachineConnection *smConn = smNode->GetConnection(connIdx);
-    ASSERT(smConn);
-
-    smNode->RemoveConnection(smConn);
+    const auto connections = GetSMConnections();
+    for (AnimatorStateMachineConnection *smConn : connections)
+    {
+        smNode->RemoveConnection(smConn);
+    }
 }
 
 AESNode *AESConnectionLine::GetFirstFoundNode() const
@@ -303,7 +320,7 @@ void AESConnectionLine::OffsetLinePositions() const
     Vector3 lineToPos   = p_lineRenderer->GetPoints()[1];
     Vector3 lineFromTo  = (lineToPos - lineFromPos) * (isLesserNode ? 1.0f : -1.0f);
 
-    constexpr int OffsetPxPerIndex = 20;
+    constexpr int OffsetPxPerIndex = 30;
     Vector3 offsetAnchorPerIndex (
                     (1.0f / GetRectTransform()->GetViewportAARect().GetSize()) *
                     Vector2(OffsetPxPerIndex), 0.0f);

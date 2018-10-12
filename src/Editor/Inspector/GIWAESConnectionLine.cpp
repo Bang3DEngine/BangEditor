@@ -4,6 +4,7 @@
 #include "Bang/UIList.h"
 #include "Bang/UILabel.h"
 #include "Bang/MetaNode.h"
+#include "Bang/UICheckBox.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/UITextRenderer.h"
@@ -48,6 +49,20 @@ void GIWAESConnectionLine::InitInnerWidgets()
         {
             case UIList::Action::PRESSED:
             case UIList::Action::SELECTION_IN:
+            {
+                uint itemIdx = p_transitionsList->GetItems().IndexOf(item);
+                ASSERT(itemIdx != -1u);
+
+                auto connectionsToNodeTo = GetSMNodeFrom()->GetConnectionsTo(
+                                            GetSMNodeTo());
+                ASSERT(itemIdx < connectionsToNodeTo.Size());
+
+                AnimatorStateMachineConnection *selectedConn =
+                                        connectionsToNodeTo.At(itemIdx);
+                ASSERT(selectedConn);
+
+                SetSelectedSMConnection(selectedConn);
+            }
             break;
 
             default:
@@ -78,8 +93,14 @@ void GIWAESConnectionLine::InitInnerWidgets()
                                                "add transition conditions");
     p_notificationLabel->GetText()->SetTextColor(Color::Red);
 
+    p_immediateTransitionInput = GameObjectFactory::CreateUICheckBox();
+    p_immediateTransitionInput->EventEmitter<IEventsValueChanged>::
+                                RegisterListener(this);
+
     AddWidget(p_transitionsList->GetGameObject(), 70);
     AddWidget(p_transitionsListSeparator, 20);
+    AddWidget("Can do immediate transition", p_immediateTransitionInput->GetGameObject());
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 20);
     AddLabel("Conditions");
     AddWidget(p_transitionConditionsInput, -1);
     AddWidget(p_notificationLabel->GetGameObject());
@@ -100,8 +121,18 @@ void GIWAESConnectionLine::SetAESConnectionLine(AESConnectionLine *connLine)
                          EventEmitter<IEventsDestroy>::RegisterListener(this);
     p_aesConnectionLine->GetAESNodeFrom()->
                          EventEmitter<IEventsDestroy>::RegisterListener(this);
-    p_aesConnectionLine->GetAESNodeFrom()->GetSMNode()->
-                         EventEmitter<IEventsDestroy>::RegisterListener(this);
+    GetSMNodeFrom()->EventEmitter<IEventsDestroy>::RegisterListener(this);
+    GetSMNodeTo()->EventEmitter<IEventsDestroy>::RegisterListener(this);
+
+    const Array<AnimatorStateMachineConnection*> smConnections =
+                                    p_aesConnectionLine->GetSMConnections();
+    for (AnimatorStateMachineConnection *smConn : smConnections)
+    {
+        smConn->EventEmitter<IEventsDestroy>::RegisterListener(this);
+    }
+
+    ASSERT(smConnections.Size() >= 1);
+    SetSelectedSMConnection(smConnections[0]);
 }
 
 AESConnectionLine *GIWAESConnectionLine::GetAESConnectionLine() const
@@ -119,12 +150,37 @@ void GIWAESConnectionLine::EnableNeededWidgets()
                          moreThanOneTransition);
         SetWidgetEnabled(p_transitionsListSeparator, moreThanOneTransition);
 
-        bool atLeastOneVar = (GetAESConnectionLine()->GetAnimatorSM()->
+        bool atLeastOneVar = GetSelectedSMConnection() &&
+                            (GetAESConnectionLine()->GetAnimatorSM()->
                               GetVariables().Size() >= 1);
 
         SetWidgetEnabled(p_transitionConditionsInput, atLeastOneVar);
         SetWidgetEnabled(p_notificationLabel->GetGameObject(), !atLeastOneVar);
     }
+}
+
+void GIWAESConnectionLine::SetSelectedSMConnection(
+                        AnimatorStateMachineConnection *connection)
+{
+    if (connection != GetSelectedSMConnection())
+    {
+        p_selectedSMConnection = connection;
+    }
+}
+
+AnimatorStateMachineNode *GIWAESConnectionLine::GetSMNodeTo() const
+{
+    return GetAESConnectionLine()->GetAESNodeTo()->GetSMNode();
+}
+
+AnimatorStateMachineNode *GIWAESConnectionLine::GetSMNodeFrom() const
+{
+    return GetAESConnectionLine()->GetAESNodeFrom()->GetSMNode();
+}
+
+AnimatorStateMachineConnection *GIWAESConnectionLine::GetSelectedSMConnection() const
+{
+    return p_selectedSMConnection;
 }
 
 void GIWAESConnectionLine::UpdateFromReference()
@@ -139,8 +195,6 @@ void GIWAESConnectionLine::UpdateFromReference()
         p_transitionsList->Clear();
 
         uint i = 0;
-        auto *toSMNode   = GetAESConnectionLine()->GetAESNodeTo()->GetSMNode();
-        auto *fromSMNode = GetAESConnectionLine()->GetAESNodeFrom()->GetSMNode();
         for (AnimatorStateMachineConnection *smConn : smConns)
         {
             BANG_UNUSED(smConn);
@@ -149,7 +203,8 @@ void GIWAESConnectionLine::UpdateFromReference()
             UILabel *listItemLabel = GameObjectFactory::CreateUILabel();
             listItemLabel->GetText()->SetContent(
                         "Transition " + String::ToString(i) + " from " +
-                        fromSMNode->GetName() + " -> " + toSMNode->GetName());
+                        GetSMNodeFrom()->GetName() + " -> " +
+                        GetSMNodeTo()->GetName());
             UILayoutElement *itemLE = listItemGo->AddComponent<UILayoutElement>();
             itemLE->SetMinHeight(30);
             listItemLabel->GetGameObject()->SetParent(listItemGo);
@@ -160,10 +215,13 @@ void GIWAESConnectionLine::UpdateFromReference()
         }
     }
 
-    if (p_selectedSMConnection)
+    if (GetSelectedSMConnection())
     {
+        p_immediateTransitionInput->SetChecked(
+                         GetSelectedSMConnection()->GetImmediateTransition() );
+
         p_transitionConditionsInput->UpdateRows(
-                    p_selectedSMConnection->GetTransitionConditions() );
+                    GetSelectedSMConnection()->GetTransitionConditions() );
 
         uint i = 0;
         for (GameObject *transCondInputGo :
@@ -176,7 +234,7 @@ void GIWAESConnectionLine::UpdateFromReference()
             ++i;
         }
         p_transitionConditionsInput->UpdateRows(
-                    p_selectedSMConnection->GetTransitionConditions() );
+                    GetSelectedSMConnection()->GetTransitionConditions() );
     }
     EnableNeededWidgets();
 }
@@ -184,20 +242,26 @@ void GIWAESConnectionLine::UpdateFromReference()
 void GIWAESConnectionLine::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 {
     BANG_UNUSED(ee);
-    if (p_selectedSMConnection)
+    if (GetSelectedSMConnection())
     {
+        if (ee == p_immediateTransitionInput)
+        {
+            GetSelectedSMConnection()->SetImmediateTransition(
+                        p_immediateTransitionInput->IsChecked() );
+        }
+
         p_transitionConditionsInput->UpdateReferences<ASMCTransitionCondition>(
-                p_selectedSMConnection->GetTransitionConditions(),
+                GetSelectedSMConnection()->GetTransitionConditions(),
                 [this]()
                 {
-                    auto smConnection = p_selectedSMConnection;
+                    auto smConnection = GetSelectedSMConnection();
                     ASMCTransitionCondition *transCond =
                                 smConnection->CreateAndAddTransitionCondition();
                     return transCond;
                 },
                 [this](ASMCTransitionCondition *transitionCond)
                 {
-                    auto smConnection = p_selectedSMConnection;
+                    auto smConnection = GetSelectedSMConnection();
                     smConnection->RemoveTransitionCondition(transitionCond);
                 });
     }
@@ -205,6 +269,13 @@ void GIWAESConnectionLine::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 
 void GIWAESConnectionLine::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
-    Inspector::GetActive()->Clear();
+    if (object == GetSelectedSMConnection())
+    {
+        SetSelectedSMConnection(nullptr);
+    }
+    else
+    {
+        Inspector::GetActive()->Clear();
+    }
 }
 

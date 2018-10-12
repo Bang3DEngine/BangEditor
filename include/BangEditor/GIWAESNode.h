@@ -33,7 +33,6 @@ public:
 private:
     AESNode *p_aesNode =  nullptr;
     UIInputText *p_nameInput = nullptr;
-    UICheckBox *p_immediateTransitionInput = nullptr;
     UIInputFile *p_nodeAnimationInput = nullptr;
 
     AESNode* GetAESNode() const;

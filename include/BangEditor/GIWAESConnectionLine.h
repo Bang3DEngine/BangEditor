@@ -11,6 +11,7 @@
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIList;
 FORWARD class UIInputText;
+FORWARD class AnimatorStateMachineNode;
 FORWARD class AnimatorStateMachineConnection;
 FORWARD NAMESPACE_BANG_END
 
@@ -39,12 +40,18 @@ private:
 
     UIList *p_transitionsList = nullptr;
     GameObject *p_transitionsListSeparator = nullptr;
+
+    UICheckBox *p_immediateTransitionInput = nullptr;
     UILabel *p_notificationLabel = nullptr;
     UIInputArray *p_transitionConditionsInput = nullptr;
 
-    AESConnectionLine* GetAESConnectionLine() const;
-
     void EnableNeededWidgets();
+    void SetSelectedSMConnection(AnimatorStateMachineConnection *connection);
+
+    AnimatorStateMachineNode *GetSMNodeTo() const;
+    AnimatorStateMachineNode *GetSMNodeFrom() const;
+    AESConnectionLine* GetAESConnectionLine() const;
+    AnimatorStateMachineConnection *GetSelectedSMConnection() const;
 
     // InspectorWidget
     virtual void UpdateFromReference() override;
