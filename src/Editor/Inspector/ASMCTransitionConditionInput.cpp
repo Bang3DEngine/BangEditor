@@ -100,7 +100,25 @@ void ASMCTransitionConditionInput::UpdateFromVariable()
     if (p_animatorSM && !m_updatingFromVariable)
     {
         m_updatingFromVariable = true;
-        if (p_animatorSM->GetVariables().Size() != p_varNameInput->GetNumItems())
+
+        bool updateVariablesComboBox = false;
+        updateVariablesComboBox |= (p_animatorSM->GetVariables().Size() !=
+                                    p_varNameInput->GetNumItems());
+        if (!updateVariablesComboBox)
+        {
+            const auto &refVars = p_animatorSM->GetVariables();
+            const auto &comboLabels = p_varNameInput->GetLabels();
+            for (uint i = 0; i < refVars.Size(); ++i)
+            {
+                if (refVars[i]->GetName() != comboLabels[i])
+                {
+                    updateVariablesComboBox = true;
+                    break;
+                }
+            }
+        }
+
+        if (updateVariablesComboBox)
         {
             p_varNameInput->ClearItems();
             for (AnimatorStateMachineVariable *var : p_animatorSM->GetVariables())
@@ -109,11 +127,13 @@ void ASMCTransitionConditionInput::UpdateFromVariable()
             }
         }
 
+
         if (AnimatorStateMachineVariable *var =
                                  p_animatorSM->GetVariable(m_selectedVarName))
         {
             SetVariableType(var->GetType());
         }
+
         m_updatingFromVariable = false;
     }
 }

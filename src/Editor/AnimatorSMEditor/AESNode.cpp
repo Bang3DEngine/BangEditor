@@ -90,7 +90,7 @@ void AESNode::Update()
     {
         float localPosZ = rt->GetLocalPosition().z;
         Vector3 newLocalPos =
-             Vector3(p_aesScene->GetMousePositionInSceneSpace() - m_grabOffset,
+             Vector3(GetAESScene()->GetMousePositionInSceneSpace() - m_grabOffset,
                      localPosZ);
         rt->SetLocalPosition(newLocalPos);
         nodeColor = UITheme::GetOverColor();
@@ -166,6 +166,11 @@ Animator *AESNode::GetCurrentAnimator() const
                                 nullptr;
 }
 
+AnimatorSMEditorScene *AESNode::GetAESScene() const
+{
+    return p_aesScene;
+}
+
 void AESNode::CreateAndAddConnectionToBeginDrag()
 {
     DestroyLineUsedForDragging();
@@ -235,7 +240,7 @@ void AESNode::Duplicate()
     ASSERT(idx != -1u);
 
     AnimatorStateMachineNode *newNode = GetAnimatorSM()->CreateAndAddNode();
-    AESNode *newAESNode = p_aesScene->GetAESNodes().Back();
+    AESNode *newAESNode = GetAESScene()->GetAESNodes().Back();
     ASSERT(newNode);
 
     AnimatorStateMachineNode *nodeToCloneFrom = GetSMNode();
@@ -244,7 +249,7 @@ void AESNode::Duplicate()
     nodeToCloneFrom->CloneInto(newNode);
     float localPosZ = newAESNode->GetRectTransform()->GetLocalPosition().z;
     newAESNode->GetRectTransform()->SetLocalPosition(
-                Vector3(p_aesScene->GetMousePositionInSceneSpace(), localPosZ) );
+            Vector3(GetAESScene()->GetMousePositionInSceneSpace(), localPosZ) );
     if (UICanvas *canvas = UICanvas::GetActive(this))
     {
         canvas->SetFocus( newAESNode->GetFocusable() );
@@ -273,13 +278,12 @@ void AESNode::ImportPosition(const Vector2 &position)
 
 uint AESNode::GetIndexInStateMachine() const
 {
-    return p_aesScene->GetAESNodes().IndexOf(
-                const_cast<AESNode*>(this));
+    return GetAESScene()->GetAESNodes().IndexOf( const_cast<AESNode*>(this) );
 }
 
 AnimatorStateMachine *AESNode::GetAnimatorSM() const
 {
-    return p_aesScene->GetAnimatorSM();
+    return GetAESScene()->GetAnimatorSM();
 }
 
 AnimatorStateMachineNode *AESNode::GetSMNode() const
@@ -302,8 +306,8 @@ void AESNode::OnConnectionAdded(AnimatorStateMachineNode *node,
         uint nodeFromIdx = sm->GetNodes().IndexOf(connection->GetNodeFrom());
         uint nodeToIdx   = sm->GetNodes().IndexOf(connection->GetNodeTo());
         AESConnectionLine *connLine = CreateAndAddDefinitiveConnection();
-        AESNode *aesNodeFrom = p_aesScene->GetAESNodes()[nodeFromIdx];
-        AESNode   *aesNodeTo = p_aesScene->GetAESNodes()[nodeToIdx];
+        AESNode *aesNodeFrom = GetAESScene()->GetAESNodes()[nodeFromIdx];
+        AESNode   *aesNodeTo = GetAESScene()->GetAESNodes()[nodeToIdx];
         connLine->SetNodeFrom( aesNodeFrom );
         connLine->SetNodeTo( aesNodeTo );
         p_nodeConnectedToToConnectionLine.Add(nodeTo, connLine);
@@ -366,8 +370,8 @@ UIEventResult AESNode::OnUIEvent(UIFocusable *, const UIEvent &event)
         if (event.mouse.button == MouseButton::LEFT)
         {
             m_grabOffset =
-                p_aesScene->GetMousePositionInSceneSpace() -
-                p_aesScene->GetWorldPositionInSceneSpace(
+                GetAESScene()->GetMousePositionInSceneSpace() -
+                GetAESScene()->GetWorldPositionInSceneSpace(
                     GetRectTransform()->GetViewportAARect().GetCenter() );
         }
         break;

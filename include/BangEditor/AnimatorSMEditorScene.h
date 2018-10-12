@@ -42,6 +42,7 @@ public:
     void CenterScene();
     void Clear();
 
+    float GetZoomScale() const;
     const Array<AESNode*>& GetAESNodes() const;
     AnimatorStateMachine* GetAnimatorSM() const;
 

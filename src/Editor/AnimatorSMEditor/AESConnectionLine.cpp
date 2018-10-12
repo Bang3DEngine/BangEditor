@@ -335,10 +335,11 @@ void AESConnectionLine::OffsetLinePositions() const
     Vector3 lineToPos   = p_lineRenderer->GetPoints()[1];
     Vector3 lineFromTo  = (lineToPos - lineFromPos) * (isLesserNode ? 1.0f : -1.0f);
 
-    constexpr int OffsetPxPerIndex = 30;
+    const float zoomScale = GetAESNodeFrom()->GetAESScene()->GetZoomScale();
+    const int offsetPx = (30 * zoomScale);
     Vector3 offsetAnchorPerIndex (
                     (1.0f / GetRectTransform()->GetViewportAARect().GetSize()) *
-                    Vector2(OffsetPxPerIndex), 0.0f);
+                    Vector2(offsetPx), 0.0f);
 
     Vector3 offsetDir = Vector3(lineFromTo.xy().Perpendicular(), 0.0f);
     offsetDir = offsetDir.NormalizedSafe();

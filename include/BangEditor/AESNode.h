@@ -44,6 +44,7 @@ public:
     UIFocusable* GetFocusable() const;
     uint GetIndexInStateMachine() const;
     Animator *GetCurrentAnimator() const;
+    AnimatorSMEditorScene *GetAESScene() const;
     AnimatorStateMachine *GetAnimatorSM() const;
     AnimatorStateMachineNode *GetSMNode() const;
     const Array<AESConnectionLine*>& GetConnectionLines() const;
