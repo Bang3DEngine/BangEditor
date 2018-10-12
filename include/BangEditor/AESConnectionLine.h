@@ -38,10 +38,10 @@ public:
     bool HasFocus() const;
     bool IsMouseOver() const;
 
-    AESNode *GetNodeTo() const;
-    AESNode *GetNodeFrom() const;
+    AESNode *GetAESNodeTo() const;
+    AESNode *GetAESNodeFrom() const;
     AnimatorStateMachine *GetAnimatorSM() const;
-    AnimatorStateMachineConnection *GetSMConnection() const;
+    Array<AnimatorStateMachineConnection*> GetSMConnections() const;
 
 private:
     bool m_hasFocus = false;
@@ -49,8 +49,8 @@ private:
     UIContextMenu *p_contextMenu = nullptr;
     LineRenderer *p_lineRenderer = nullptr;
 
-    DPtr<AESNode> p_nodeTo;
-    DPtr<AESNode> p_nodeFrom;
+    DPtr<AESNode> p_aesNodeTo;
+    DPtr<AESNode> p_aesNodeFrom;
 
     void RemoveSelf();
 

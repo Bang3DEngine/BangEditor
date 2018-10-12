@@ -57,6 +57,8 @@ private:
     Vector2 m_grabOffset = Vector2::Zero;
     AnimatorSMEditorScene *p_aesScene = nullptr;
     Array<AESConnectionLine*> p_connectionLinesTo;
+    Map<AnimatorStateMachineNode*, AESConnectionLine*>
+        p_nodeConnectedToToConnectionLine;
 
     int m_framesPassedSinceLineDragStarted = 0;
     AESConnectionLine *p_toConnectionLineBeingDragged = nullptr;

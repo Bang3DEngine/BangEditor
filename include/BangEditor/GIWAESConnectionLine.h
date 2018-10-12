@@ -9,7 +9,9 @@
 #include "BangEditor/InspectorWidget.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UIList;
 FORWARD class UIInputText;
+FORWARD class AnimatorStateMachineConnection;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -32,9 +34,13 @@ public:
     void SetAESConnectionLine(AESConnectionLine *connLine);
 
 private:
+    AESConnectionLine *p_aesConnectionLine = nullptr;
+    AnimatorStateMachineConnection *p_selectedSMConnection = nullptr;
+
+    UIList *p_transitionsList = nullptr;
+    GameObject *p_transitionsListSeparator = nullptr;
     UILabel *p_notificationLabel = nullptr;
     UIInputArray *p_transitionConditionsInput = nullptr;
-    AESConnectionLine *p_aesConnectionLine =  nullptr;
 
     AESConnectionLine* GetAESConnectionLine() const;
 

@@ -66,7 +66,7 @@ void AESConnectionLine::BeforeRender()
     float lineWidth = 2.0f;
     Color lineColor = Color::White;
     AESNode *provisionalToNode = nullptr;
-    if (!GetNodeTo())
+    if (!GetAESNodeTo())
     {
         if (UICanvas *canvas = UICanvas::GetActive(this))
         {
@@ -75,7 +75,7 @@ void AESConnectionLine::BeforeRender()
                 GameObject *overedGo = overedFocus->GetGameObject();
                 if (auto overedNode = DCAST<AESNode*>(overedGo))
                 {
-                    if ( IsValidConnection(GetNodeFrom(), overedNode) )
+                    if ( IsValidConnection(GetAESNodeFrom(), overedNode) )
                     {
                         provisionalToNode = overedNode;
                     }
@@ -132,8 +132,8 @@ void AESConnectionLine::BeforeRender()
         Vector3 lineMousePos = GetRectTransform()->FromWorldToLocalPoint(
                                                 Vector3(mousePosition, 0.0f));
         uint i = 0;
-        for (AESNode *node : {GetNodeFrom(),
-                             (GetNodeTo() ? GetNodeTo() : provisionalToNode)})
+        for (AESNode *node : {GetAESNodeFrom(),
+                             (GetAESNodeTo() ? GetAESNodeTo() : provisionalToNode)})
         {
             Vector3 linePos = node ? GetConnectionPointLinePosition(node) :
                                      lineMousePos;
@@ -175,12 +175,12 @@ void AESConnectionLine::BeforeRender()
 
 void AESConnectionLine::SetNodeTo(AESNode *connPointTo)
 {
-    p_nodeTo = connPointTo;
+    p_aesNodeTo = connPointTo;
 }
 
 void AESConnectionLine::SetNodeFrom(AESNode *connPointFrom)
 {
-    p_nodeFrom = connPointFrom;
+    p_aesNodeFrom = connPointFrom;
 }
 
 bool AESConnectionLine::HasFocus() const
@@ -188,40 +188,38 @@ bool AESConnectionLine::HasFocus() const
     return m_hasFocus;
 }
 
-AESNode *AESConnectionLine::GetNodeTo() const
+AESNode *AESConnectionLine::GetAESNodeTo() const
 {
-    return p_nodeTo;
+    return p_aesNodeTo;
 }
 
-AESNode *AESConnectionLine::GetNodeFrom() const
+AESNode *AESConnectionLine::GetAESNodeFrom() const
 {
-    return p_nodeFrom;
+    return p_aesNodeFrom;
 }
 
 AnimatorStateMachine *AESConnectionLine::GetAnimatorSM() const
 {
-    if (GetNodeFrom())
+    if (GetAESNodeFrom())
     {
-        return GetNodeFrom()->GetAnimatorSM();
+        return GetAESNodeFrom()->GetAnimatorSM();
     }
-    return GetNodeTo() ? GetNodeTo()->GetAnimatorSM() : nullptr;
+    return GetAESNodeTo() ? GetAESNodeTo()->GetAnimatorSM() : nullptr;
 }
 
-AnimatorStateMachineConnection *AESConnectionLine::GetSMConnection() const
+Array<AnimatorStateMachineConnection*> AESConnectionLine::GetSMConnections() const
 {
-    uint idxInAESNode = GetNodeFrom()->GetConnectionLines().IndexOf(
-                                    const_cast<AESConnectionLine*>(this));
-    if (idxInAESNode < GetNodeFrom()->GetSMNode()->GetConnections().Size())
-    {
-        return GetNodeFrom()->GetSMNode()->GetConnections()[idxInAESNode];
-    }
-    return nullptr;
+    AnimatorStateMachineNode *smNodeFrom = GetAESNodeFrom()->GetSMNode();
+    AnimatorStateMachineNode *smNodeTo   = GetAESNodeTo()->GetSMNode();
+    Array<AnimatorStateMachineConnection*> connections =
+                                smNodeFrom->GetConnectionsTo(smNodeTo);
+    return connections;
 }
 
 bool AESConnectionLine::IsMouseOver() const
 {
-    if (!GetNodeFrom() ||
-        !GetNodeTo()   ||
+    if (!GetAESNodeFrom() ||
+        !GetAESNodeTo()   ||
         !IsActiveRecursively() ||
         !IsVisibleRecursively())
     {
@@ -234,12 +232,12 @@ bool AESConnectionLine::IsMouseOver() const
                             p_lineRenderer->GetPoints()[1]).xy();
     Vector2 mousePos ( Input::GetMousePosition() );
 
-    bool interactingWithNodeTo = GetNodeTo() &&
-                                 (GetNodeTo()->GetFocusable()->IsMouseOver() ||
-                                  GetNodeTo()->GetFocusable()->IsBeingPressed());
-    bool interactingWithNodeFrom = GetNodeFrom() &&
-                                  (GetNodeFrom()->GetFocusable()->IsMouseOver() ||
-                                   GetNodeFrom()->GetFocusable()->IsBeingPressed());
+    bool interactingWithNodeTo = GetAESNodeTo() &&
+                                 (GetAESNodeTo()->GetFocusable()->IsMouseOver() ||
+                                  GetAESNodeTo()->GetFocusable()->IsBeingPressed());
+    bool interactingWithNodeFrom = GetAESNodeFrom() &&
+                                  (GetAESNodeFrom()->GetFocusable()->IsMouseOver() ||
+                                   GetAESNodeFrom()->GetFocusable()->IsBeingPressed());
 
     float distanceToLine = Geometry::GetPointToLineDistance2D(mousePos,
                                                               linePosFrom,
@@ -253,11 +251,11 @@ bool AESConnectionLine::IsMouseOver() const
 
 void AESConnectionLine::RemoveSelf()
 {
-    ASSERT(GetNodeFrom());
-    uint connIdx = GetNodeFrom()->GetConnectionLines().IndexOf(this);
+    ASSERT(GetAESNodeFrom());
+    uint connIdx = GetAESNodeFrom()->GetConnectionLines().IndexOf(this);
     ASSERT(connIdx != -1u);
 
-    AnimatorStateMachineNode *smNode = GetNodeFrom()->GetSMNode();
+    AnimatorStateMachineNode *smNode = GetAESNodeFrom()->GetSMNode();
     ASSERT(smNode);
 
     AnimatorStateMachineConnection *smConn = smNode->GetConnection(connIdx);
@@ -268,11 +266,11 @@ void AESConnectionLine::RemoveSelf()
 
 AESNode *AESConnectionLine::GetFirstFoundNode() const
 {
-    if (GetNodeTo())
+    if (GetAESNodeTo())
     {
-        return GetNodeTo();
+        return GetAESNodeTo();
     }
-    return GetNodeFrom();
+    return GetAESNodeFrom();
 }
 
 bool AESConnectionLine::IsValidConnection(AESNode *oneNode,
@@ -297,9 +295,9 @@ Vector3 AESConnectionLine::GetConnectionPointLinePosition(
 
 void AESConnectionLine::OffsetLinePositions() const
 {
-    bool isLesserNode = GetNodeTo() ?
-                       (GetNodeFrom()->GetIndexInStateMachine() <
-                        GetNodeTo()->GetIndexInStateMachine()) : true;
+    bool isLesserNode = GetAESNodeTo() ?
+                       (GetAESNodeFrom()->GetIndexInStateMachine() <
+                        GetAESNodeTo()->GetIndexInStateMachine()) : true;
 
     Vector3 lineFromPos = p_lineRenderer->GetPoints()[0];
     Vector3 lineToPos   = p_lineRenderer->GetPoints()[1];
@@ -313,14 +311,14 @@ void AESConnectionLine::OffsetLinePositions() const
     Vector3 offsetDir = Vector3(lineFromTo.xy().Perpendicular(), 0.0f);
     offsetDir = offsetDir.NormalizedSafe();
 
-    if (GetNodeFrom())
+    if (GetAESNodeFrom())
     {
         float sign = (isLesserNode ? 1.0f : -1.0f);
         lineFromPos += offsetDir * offsetAnchorPerIndex * sign;
         p_lineRenderer->SetPoint(0, lineFromPos);
     }
 
-    if (GetNodeTo())
+    if (GetAESNodeTo())
     {
         float sign = (isLesserNode ? 1.0f : -1.0f);
         lineToPos += offsetDir * offsetAnchorPerIndex * sign;

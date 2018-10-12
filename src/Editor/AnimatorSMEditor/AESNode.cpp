@@ -274,26 +274,48 @@ void AESNode::OnConnectionAdded(AnimatorStateMachineNode *node,
     ASSERT( connection->GetNodeTo() );
     ASSERT( connection->GetNodeFrom() );
 
-    uint nodeFromIdx = GetAnimatorSM()->GetNodes().IndexOf(connection->GetNodeFrom());
-    uint nodeToIdx   = GetAnimatorSM()->GetNodes().IndexOf(connection->GetNodeTo());
-    AESConnectionLine *connLine = CreateAndAddDefinitiveConnection();
-    AESNode *aesNodeFrom = p_aesScene->GetAESNodes()[nodeFromIdx];
-    AESNode   *aesNodeTo = p_aesScene->GetAESNodes()[nodeToIdx];
-    connLine->SetNodeFrom( aesNodeFrom );
-    connLine->SetNodeTo( aesNodeTo );
+    AnimatorStateMachineNode *nodeTo = connection->GetNodeTo();
+    ASSERT(nodeTo);
+    if (!p_nodeConnectedToToConnectionLine.ContainsKey(nodeTo))
+    {
+        AnimatorStateMachine *sm = GetAnimatorSM();
+        uint nodeFromIdx = sm->GetNodes().IndexOf(connection->GetNodeFrom());
+        uint nodeToIdx   = sm->GetNodes().IndexOf(connection->GetNodeTo());
+        AESConnectionLine *connLine = CreateAndAddDefinitiveConnection();
+        AESNode *aesNodeFrom = p_aesScene->GetAESNodes()[nodeFromIdx];
+        AESNode   *aesNodeTo = p_aesScene->GetAESNodes()[nodeToIdx];
+        connLine->SetNodeFrom( aesNodeFrom );
+        connLine->SetNodeTo( aesNodeTo );
+        p_nodeConnectedToToConnectionLine.Add(nodeTo, connLine);
+    }
 }
 
 void AESNode::OnConnectionRemoved(AnimatorStateMachineNode *node,
-                                  AnimatorStateMachineConnection *connection)
+                                  AnimatorStateMachineConnection *connToRemove)
 {
     ASSERT(node == GetSMNode());
 
-    uint indexOfSMConnection = node->GetConnections().IndexOf(connection);
-    if (indexOfSMConnection < GetConnectionLines().Size())
+    AnimatorStateMachineNode *nodeTo = connToRemove->GetNodeTo();
+    ASSERT(nodeTo);
+    if (p_nodeConnectedToToConnectionLine.ContainsKey(nodeTo))
     {
-        AESConnectionLine *connLine = GetConnectionLines()[indexOfSMConnection];
-        GameObject::Destroy(connLine);
-        p_connectionLinesTo.Remove(connLine);
+        bool theresStillSomeConnectionToNodeTo = false;
+        for (AnimatorStateMachineConnection *conn : node->GetConnections())
+        {
+            if (conn->GetNodeTo() == node)
+            {
+                theresStillSomeConnectionToNodeTo = true;
+                break;
+            }
+        }
+
+        if (!theresStillSomeConnectionToNodeTo)
+        {
+            AESConnectionLine *connLine = p_nodeConnectedToToConnectionLine.Get(nodeTo);
+            GameObject::Destroy(connLine);
+            p_connectionLinesTo.Remove(connLine);
+            p_nodeConnectedToToConnectionLine.Remove(nodeTo);
+        }
     }
 }
 
