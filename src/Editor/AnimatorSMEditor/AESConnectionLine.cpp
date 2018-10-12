@@ -3,6 +3,7 @@
 #include "Bang/Debug.h"
 #include "Bang/Input.h"
 #include "Bang/UITheme.h"
+#include "Bang/Animator.h"
 #include "Bang/Material.h"
 #include "Bang/UICanvas.h"
 #include "Bang/Geometry.h"
@@ -14,6 +15,7 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/AnimatorStateMachine.h"
 #include "Bang/AnimatorStateMachineNode.h"
+#include "Bang/AnimatorStateMachinePlayer.h"
 #include "Bang/AnimatorStateMachineConnection.h"
 
 #include "BangEditor/AESNode.h"
@@ -129,6 +131,19 @@ void AESConnectionLine::BeforeRender()
                                      UITheme::GetOverColor();
         }
     }
+
+    if (Animator *animator = GetAESNodeFrom()->GetCurrentAnimator())
+    {
+        if (AnimatorStateMachinePlayer *player = animator->GetPlayer())
+        {
+            if (player->GetCurrentTransition() &&
+                GetSMConnections().Contains(player->GetCurrentTransition()))
+            {
+                lineColor = Color::Green;
+            }
+        }
+    }
+
 
     // Set line points positions
     {

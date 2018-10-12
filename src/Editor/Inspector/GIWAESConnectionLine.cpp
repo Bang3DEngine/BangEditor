@@ -4,8 +4,10 @@
 #include "Bang/UIList.h"
 #include "Bang/UILabel.h"
 #include "Bang/MetaNode.h"
+#include "Bang/UISlider.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIFocusable.h"
+#include "Bang/UIInputNumber.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIImageRenderer.h"
@@ -97,16 +99,22 @@ void GIWAESConnectionLine::InitInnerWidgets()
     p_immediateTransitionInput->EventEmitter<IEventsValueChanged>::
                                 RegisterListener(this);
 
+    p_transitionDurationInput = GameObjectFactory::CreateUIInputNumber();
+    p_transitionDurationInput->SetMinValue(0.0f);
+    p_transitionDurationInput->EventEmitter<IEventsValueChanged>::
+                               RegisterListener(this);
+
     AddWidget(p_transitionsList->GetGameObject(), 70);
     AddWidget(p_transitionsListSeparator, 20);
     AddWidget("Can do immediate transition", p_immediateTransitionInput->GetGameObject());
+    AddWidget("Transition duration", p_transitionDurationInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 20);
     AddLabel("Conditions");
     AddWidget(p_transitionConditionsInput, -1);
     AddWidget(p_notificationLabel->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 20);
 
-    SetLabelsWidth(95);
+    SetLabelsWidth(120);
     UpdateFromReference();
 }
 
@@ -218,10 +226,13 @@ void GIWAESConnectionLine::UpdateFromReference()
     if (GetSelectedSMConnection())
     {
         p_immediateTransitionInput->SetChecked(
-                         GetSelectedSMConnection()->GetImmediateTransition() );
+            GetSelectedSMConnection()->GetImmediateTransition() );
+
+        p_transitionDurationInput->SetValue(
+            GetSelectedSMConnection()->GetTransitionDuration().GetSeconds());
 
         p_transitionConditionsInput->UpdateRows(
-                    GetSelectedSMConnection()->GetTransitionConditions() );
+            GetSelectedSMConnection()->GetTransitionConditions() );
 
         uint i = 0;
         for (GameObject *transCondInputGo :
@@ -248,6 +259,12 @@ void GIWAESConnectionLine::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
         {
             GetSelectedSMConnection()->SetImmediateTransition(
                         p_immediateTransitionInput->IsChecked() );
+        }
+
+        if (ee == p_transitionDurationInput)
+        {
+            GetSelectedSMConnection()->SetTransitionDuration(
+                        Time::Seconds(p_transitionDurationInput->GetValue()) );
         }
 
         p_transitionConditionsInput->UpdateReferences<ASMCTransitionCondition>(

@@ -10,7 +10,9 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIList;
+FORWARD class UISlider;
 FORWARD class UIInputText;
+FORWARD class UIInputNumber;
 FORWARD class AnimatorStateMachineNode;
 FORWARD class AnimatorStateMachineConnection;
 FORWARD NAMESPACE_BANG_END
@@ -42,6 +44,7 @@ private:
     GameObject *p_transitionsListSeparator = nullptr;
 
     UICheckBox *p_immediateTransitionInput = nullptr;
+    UIInputNumber *p_transitionDurationInput = nullptr;
     UILabel *p_notificationLabel = nullptr;
     UIInputArray *p_transitionConditionsInput = nullptr;
 

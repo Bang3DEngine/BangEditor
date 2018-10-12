@@ -9,6 +9,7 @@
 #include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Animator;
 FORWARD class UIFocusable;
 FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
@@ -42,6 +43,7 @@ public:
     const String& GetNodeName() const;
     UIFocusable* GetFocusable() const;
     uint GetIndexInStateMachine() const;
+    Animator *GetCurrentAnimator() const;
     AnimatorStateMachine *GetAnimatorSM() const;
     AnimatorStateMachineNode *GetSMNode() const;
     const Array<AESConnectionLine*>& GetConnectionLines() const;

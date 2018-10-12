@@ -2,6 +2,7 @@
 
 #include "Bang/Input.h"
 #include "Bang/UITheme.h"
+#include "Bang/Animator.h"
 #include "Bang/UICanvas.h"
 #include "Bang/UIRectMask.h"
 #include "Bang/UIFocusable.h"
@@ -10,6 +11,7 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/AnimatorStateMachineNode.h"
+#include "Bang/AnimatorStateMachinePlayer.h"
 
 #include "BangEditor/Inspector.h"
 #include "BangEditor/GIWAESNode.h"
@@ -81,11 +83,6 @@ void AESNode::Update()
 {
     GameObject::Update();
 
-    if (AnimatorStateMachineNode *smNode = GetSMNode())
-    {
-        SetNodeName(smNode->GetName());
-    }
-
     Color nodeColor = Color::White.WithValue(0.95f);
     RectTransform *rt = GetRectTransform();
     if ( p_focusable->IsBeingPressed() &&
@@ -113,6 +110,22 @@ void AESNode::Update()
             nodeColor = UITheme::GetOverColor();
         }
     }
+
+    if (AnimatorStateMachineNode *smNode = GetSMNode())
+    {
+        SetNodeName(smNode->GetName());
+        if (Animator *animator = GetCurrentAnimator())
+        {
+            if (AnimatorStateMachinePlayer *player = animator->GetPlayer())
+            {
+                if (player->GetCurrentNode() == smNode)
+                {
+                    nodeColor = Color::Green;
+                }
+            }
+        }
+    }
+
     p_bg->SetTint(nodeColor);
     ++m_framesPassedSinceLineDragStarted;
 }
@@ -144,6 +157,13 @@ UIFocusable* AESNode::GetFocusable() const
 const Array<AESConnectionLine*> &AESNode::GetConnectionLines() const
 {
     return p_connectionLinesTo;
+}
+
+Animator *AESNode::GetCurrentAnimator() const
+{
+    GameObject *selectedGameObject = Editor::GetInstance()->GetSelectedGameObject();
+    return selectedGameObject ? selectedGameObject->GetComponent<Animator>() :
+                                nullptr;
 }
 
 void AESNode::CreateAndAddConnectionToBeginDrag()
