@@ -60,7 +60,7 @@ ExplorerItem::ExplorerItem()
     p_label->GetText()->SetTextSize(11);
     p_label->GetText()->SetContent("");
     p_label->GetText()->SetWrapping(true);
-    p_label->GetFocusable()->SetFocusEnabled(false);
+    p_label->GetFocusable()->SetEnabled(false);
     p_label->GetText()->SetVerticalAlign(VerticalAlignment::TOP);
     p_label->GetText()->SetHorizontalAlign(HorizontalAlignment::CENTER);
     p_label->SetSelectable(false);

@@ -229,7 +229,7 @@ void GIWAESConnectionLine::UpdateFromReference()
             });
 
             UILabel *listItemLabel = GameObjectFactory::CreateUILabel();
-            listItemLabel->GetFocusable()->SetFocusEnabled(false);
+            listItemLabel->GetFocusable()->SetEnabled(false);
             listItemLabel->GetText()->SetContent(
                         "Transition " + String::ToString(i) + " from " +
                         GetSMNodeFrom()->GetName() + " -> " +
