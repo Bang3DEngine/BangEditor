@@ -310,6 +310,8 @@ void GIWAESConnectionLine::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 
 void GIWAESConnectionLine::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
+    GameObject::OnDestroyed(object);
+
     if (object == GetSelectedSMConnection())
     {
         SetSelectedSMConnection(nullptr);

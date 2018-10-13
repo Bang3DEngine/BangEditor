@@ -15,8 +15,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class SelectionGizmo : public GameObject,
-                       public EventListener<IEventsDestroy>
+class SelectionGizmo : public GameObject
 {
 public:
     enum class SelectionState { IDLE, OVER, GRABBED };

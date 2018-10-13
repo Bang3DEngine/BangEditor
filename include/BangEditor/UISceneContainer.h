@@ -24,7 +24,6 @@ FORWARD class UISceneToolbarDown;
 
 class UISceneContainer : public GameObject,
                          public EventListener<IEventsFocus>,
-                         public EventListener<IEventsDestroy>,
                          public EventListener<IEventsValueChanged>,
                          public EventListener<IEventsTransform>
 {
@@ -52,7 +51,7 @@ protected:
     void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
     // IEventsFocus
-    UIEventResult OnUIEvent(UIFocusable *focusable, const UIEvent &event);
+    UIEventResult OnUIEvent(UIFocusable *focusable, const UIEvent &event) override;
 
 private:
     UIFocusable *p_focusable = nullptr;

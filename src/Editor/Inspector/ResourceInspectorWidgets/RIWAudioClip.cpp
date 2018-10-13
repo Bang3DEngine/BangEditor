@@ -121,7 +121,8 @@ void RIWAudioClip::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *
 
 void RIWAudioClip::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
-    BANG_UNUSED(object);
+    GameObject::OnDestroyed(object);
+
     ASSERT(object == p_alAudioSourceBeingPlayed);
     p_alAudioSourceBeingPlayed = nullptr;
     Stop();

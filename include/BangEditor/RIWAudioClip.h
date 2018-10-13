@@ -17,8 +17,7 @@ FORWARD NAMESPACE_BANG_END
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-class RIWAudioClip : public RIWResource<AudioClip>,
-                     public EventListener<IEventsDestroy>
+class RIWAudioClip : public RIWResource<AudioClip>
 {
     GAMEOBJECT_EDITOR(RIWAudioClip);
 

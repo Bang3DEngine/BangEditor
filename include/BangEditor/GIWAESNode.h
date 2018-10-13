@@ -18,7 +18,6 @@ FORWARD class AESNode;
 FORWARD class UIInputFileWithPreview;
 
 class GIWAESNode : public InspectorWidget,
-                   public EventListener<IEventsDestroy>,
                    public EventListener<IEventsValueChanged>
 {
 public:

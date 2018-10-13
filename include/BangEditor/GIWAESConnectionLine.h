@@ -24,7 +24,6 @@ FORWARD class UIInputArray;
 FORWARD class AESConnectionLine;
 
 class GIWAESConnectionLine : public InspectorWidget,
-                             public EventListener<IEventsDestroy>,
                              public EventListener<IEventsValueChanged>
 {
 public:

@@ -25,7 +25,6 @@ FORWARD class InspectorWidget;
 
 class Inspector : public GameObject,
                   public EventListener<IEventsEditor>,
-                  public EventListener<IEventsDestroy>,
                   public EventListener<IEventsComponent>,
                   public EventListener<IEventsFileTracker>,
                   public EventListener<IEventsSceneManager>

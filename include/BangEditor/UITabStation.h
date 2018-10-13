@@ -18,7 +18,6 @@ NAMESPACE_BANG_EDITOR_BEGIN
 FORWARD class UITabContainer;
 
 class UITabStation : public GameObject,
-                     public EventListener<IEventsDestroy>,
                      public EventListener<IEventsDragDrop>
 {
     GAMEOBJECT_EDITOR(UITabStation);

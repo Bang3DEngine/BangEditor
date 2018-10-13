@@ -439,8 +439,9 @@ void Hierarchy::OnSceneLoaded(Scene *scene, const Path&)
 
 void Hierarchy::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
-    GameObject *destroyedGo = DCAST<GameObject*>(object);
-    if (destroyedGo)
+    GameObject::OnDestroyed(object);
+
+    if (GameObject *destroyedGo = DCAST<GameObject*>(object))
     {
         HierarchyItem *hItem = GetItemFromGameObject(destroyedGo);
         RemoveGameObjectItem(hItem);

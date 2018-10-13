@@ -51,8 +51,7 @@ private:
 
 // ContextMenu
 class ContextMenu : public GameObject,
-                    public EventListener<IEventsFocus>,
-                    public EventListener<IEventsDestroy>
+                    public EventListener<IEventsFocus>
 {
     GAMEOBJECT_EDITOR(ContextMenu);
 

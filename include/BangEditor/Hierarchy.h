@@ -22,7 +22,6 @@ FORWARD class HierarchyItem;
 
 class Hierarchy : public GameObject,
                   public EventListener<IEventsEditor>,
-                  public EventListener<IEventsDestroy>,
                   public EventListener<IEventsFocus>,
                   public EventListener<IEventsSceneManager>,
                   public EventListener<IEventsHierarchyItem>,
