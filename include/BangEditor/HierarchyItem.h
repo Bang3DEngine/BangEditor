@@ -3,6 +3,7 @@
 
 #include "Bang/Bang.h"
 #include "Bang/UIList.h"
+#include "Bang/ITreeItem.h"
 #include "Bang/GameObject.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/IEventsFocus.h"
@@ -20,6 +21,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class HierarchyItem : public GameObject,
+                      public ITreeItem,
                       public EventListener<IEventsName>,
                       public EventListener<IEventsFocus>,
                       public EventEmitter<IEventsHierarchyItem>
@@ -56,6 +58,9 @@ public:
 
     // UIContextMenu callback
     void OnCreateContextMenu(MenuItem *menuRootItem);
+
+    // ITreeItem
+    virtual UIFocusable *GetTreeItemFocusable() override;
 
     // UIList Item
     void OnSelectionCallback(UIList::Action action);

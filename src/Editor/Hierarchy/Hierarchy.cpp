@@ -21,6 +21,7 @@
 #include "Bang/UIDragDroppable.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/UITreeItemContainer.h"
 
 #include "BangEditor/MenuBar.h"
 #include "BangEditor/Explorer.h"

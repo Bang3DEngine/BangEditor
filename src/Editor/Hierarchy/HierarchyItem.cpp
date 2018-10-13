@@ -222,6 +222,11 @@ void HierarchyItem::OnCreateContextMenu(MenuItem *menuRootItem)
     MenuBar::CreateGameObjectMiscMenuInto(menuRootItem);
 }
 
+UIFocusable *HierarchyItem::GetTreeItemFocusable()
+{
+    return GetFocusable();
+}
+
 void HierarchyItem::SetText(const String &text)
 {
     if (text != p_textRenderer->GetContent())
@@ -239,7 +244,7 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
     {
         case UIList::Action::SELECTION_IN:
             selectGameObject = true;
-            UICanvas::GetActive(this)->SetFocus( GetFocusable() );
+            UICanvas::GetActive(this)->SetFocus( GetTreeItemFocusable() );
         break;
 
         case UIList::Action::MOUSE_RIGHT_DOWN:
@@ -256,9 +261,6 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
                     edCam->LookAt(refGo);
                 }
             }
-            // Hierarchy *h = Hierarchy::GetInstance();
-            // UITree *t = h->GetUITree();
-            // t->SetItemCollapsed(this, !t->IsItemCollapsed(this));
         }
         break;
 
