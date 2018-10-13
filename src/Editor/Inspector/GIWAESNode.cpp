@@ -13,8 +13,8 @@
 
 #include "BangEditor/AESNode.h"
 #include "BangEditor/Inspector.h"
-#include "BangEditor/UIInputFile.h"
 #include "BangEditor/EditorTextureFactory.h"
+#include "BangEditor/UIInputFileWithPreview.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
@@ -43,7 +43,7 @@ void GIWAESNode::InitInnerWidgets()
     p_nameInput = GameObjectFactory::CreateUIInputText();
     p_nameInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_nodeAnimationInput = GameObject::Create<UIInputFile>();
+    p_nodeAnimationInput = GameObject::Create<UIInputFileWithPreview>();
     p_nodeAnimationInput->SetExtensions( {Extensions::GetAnimationExtension()} );
     p_nodeAnimationInput->EventEmitter<IEventsValueChanged>::
                           RegisterListener(this);

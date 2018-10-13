@@ -4,6 +4,7 @@
 #include "Bang/UIList.h"
 #include "Bang/UILabel.h"
 #include "Bang/MetaNode.h"
+#include "Bang/UIButton.h"
 #include "Bang/UISlider.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIFocusable.h"
@@ -23,6 +24,7 @@
 #include "BangEditor/Inspector.h"
 #include "BangEditor/UIInputArray.h"
 #include "BangEditor/AESConnectionLine.h"
+#include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/ASMCTransitionConditionInput.h"
 
 USING_NAMESPACE_BANG
@@ -71,6 +73,7 @@ void GIWAESConnectionLine::InitInnerWidgets()
             break;
         }
     });
+    p_transitionsList->SetWideSelectionMode(false);
     p_transitionsList->GetScrollPanel()->SetVerticalShowScrollMode(
                                             ShowScrollMode::WHEN_NEEDED);
     p_transitionsList->GetScrollPanel()->SetForceHorizontalFit(true);
@@ -208,14 +211,35 @@ void GIWAESConnectionLine::UpdateFromReference()
             BANG_UNUSED(smConn);
             GameObject *listItemGo = GameObjectFactory::CreateUIGameObject();
             listItemGo->AddComponent<UIFocusable>();
+            auto hl = listItemGo->AddComponent<UIHorizontalLayout>();
+            hl->SetPaddingRight(10);
+            hl->SetPaddingLeft(10);
+            hl->SetPaddingTop(5);
+            hl->SetPaddingBot(5);
+            hl->SetSpacing(10);
+
+            UIButton *removeButton = GameObjectFactory::CreateUIButton();
+            removeButton->SetIcon(EditorTextureFactory::GetLessIcon(),
+                                  Vector2i(12));
+            removeButton->GetDirLayout()->SetPaddings(5, 0, 5, 0);
+            removeButton->GetIcon()->SetTint(Color::Red);
+            removeButton->AddClickedCallback([this, smConn]()
+            {
+                GetSMNodeFrom()->RemoveConnection(smConn);
+            });
+
             UILabel *listItemLabel = GameObjectFactory::CreateUILabel();
+            listItemLabel->GetFocusable()->SetFocusEnabled(false);
             listItemLabel->GetText()->SetContent(
                         "Transition " + String::ToString(i) + " from " +
                         GetSMNodeFrom()->GetName() + " -> " +
                         GetSMNodeTo()->GetName());
+
             UILayoutElement *itemLE = listItemGo->AddComponent<UILayoutElement>();
             itemLE->SetMinHeight(30);
+
             listItemLabel->GetGameObject()->SetParent(listItemGo);
+            removeButton->GetGameObject()->SetParent(listItemGo);
             p_transitionsList->AddItem(listItemGo);
 
             p_transitionsList->SetSelection(0);

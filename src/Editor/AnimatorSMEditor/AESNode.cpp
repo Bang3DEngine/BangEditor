@@ -288,7 +288,8 @@ AnimatorStateMachine *AESNode::GetAnimatorSM() const
 
 AnimatorStateMachineNode *AESNode::GetSMNode() const
 {
-    return GetAnimatorSM()->GetNode( GetIndexInStateMachine() );
+    return GetAnimatorSM() ?
+                GetAnimatorSM()->GetNode( GetIndexInStateMachine() ) : nullptr;
 }
 
 void AESNode::OnConnectionAdded(AnimatorStateMachineNode *node,
@@ -317,6 +318,11 @@ void AESNode::OnConnectionAdded(AnimatorStateMachineNode *node,
 void AESNode::OnConnectionRemoved(AnimatorStateMachineNode *node,
                                   AnimatorStateMachineConnection *connToRemove)
 {
+    if (!GetAnimatorSM())
+    {
+        return;
+    }
+
     ASSERT(node == GetSMNode());
 
     AnimatorStateMachineNode *nodeTo = connToRemove->GetNodeTo();
@@ -326,7 +332,7 @@ void AESNode::OnConnectionRemoved(AnimatorStateMachineNode *node,
         bool theresStillSomeConnectionToNodeTo = false;
         for (AnimatorStateMachineConnection *conn : node->GetConnections())
         {
-            if (conn->GetNodeTo() == node)
+            if (conn->GetNodeTo() == nodeTo)
             {
                 theresStillSomeConnectionToNodeTo = true;
                 break;

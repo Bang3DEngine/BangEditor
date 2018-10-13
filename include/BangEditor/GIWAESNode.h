@@ -15,7 +15,7 @@ USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class AESNode;
-FORWARD class UIInputFile;
+FORWARD class UIInputFileWithPreview;
 
 class GIWAESNode : public InspectorWidget,
                    public EventListener<IEventsDestroy>,
@@ -33,7 +33,7 @@ public:
 private:
     AESNode *p_aesNode =  nullptr;
     UIInputText *p_nameInput = nullptr;
-    UIInputFile *p_nodeAnimationInput = nullptr;
+    UIInputFileWithPreview *p_nodeAnimationInput = nullptr;
 
     AESNode* GetAESNode() const;
 
