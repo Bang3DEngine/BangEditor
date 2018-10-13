@@ -39,6 +39,7 @@ AESNode::AESNode()
     p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
     {
         menuRootItem->SetFontSize(12);
+
         MenuItem *createTransition = menuRootItem->AddItem("Create transition");
         createTransition->SetSelectedCallback([this](MenuItem*)
         {
@@ -56,6 +57,15 @@ AESNode::AESNode()
         {
             RemoveSelf();
         });
+
+        menuRootItem->AddSeparator();
+
+        MenuItem *setAsEntry = menuRootItem->AddItem("Set as entry");
+        setAsEntry->SetSelectedCallback([this](MenuItem*)
+        {
+            SetAsEntryNode();
+        });
+
     });
     p_contextMenu->SetFocusable(p_focusable);
 
@@ -66,13 +76,23 @@ AESNode::AESNode()
     p_border = GameObjectFactory::AddInnerBorder(panelGo);
     panelGo->SetParent(this);
 
-    GameObject *textContainer = GameObjectFactory::CreateUIGameObject();
-    p_nodeNameText = textContainer->AddComponent<UITextRenderer>();
+    GameObject *nameTextContainer = GameObjectFactory::CreateUIGameObject();
+    p_nodeNameText = nameTextContainer->AddComponent<UITextRenderer>();
     p_nodeNameText->SetTextColor(Color::Black);
-    SetNodeName("");
-    textContainer->SetParent(panelGo);
+    nameTextContainer->SetParent(panelGo);
+
+    GameObject *entryNodeTextContainer = GameObjectFactory::CreateUIGameObject();
+    p_entryNodeText = entryNodeTextContainer->AddComponent<UITextRenderer>();
+    p_entryNodeText->SetTextColor(Color::Black);
+    p_entryNodeText->SetContent("-Entry-");
+    p_entryNodeText->SetHorizontalAlign(HorizontalAlignment::LEFT);
+    p_entryNodeText->SetVerticalAlign(VerticalAlignment::TOP);
+    entryNodeTextContainer->GetRectTransform()->SetMarginTop(5);
+    entryNodeTextContainer->GetRectTransform()->SetMarginLeft(10);
+    entryNodeTextContainer->SetParent(panelGo);
 
     GetRectTransform()->SetLocalPosition( Vector3(0, 0, -0.0005f) );
+    SetNodeName("");
 }
 
 AESNode::~AESNode()
@@ -114,6 +134,7 @@ void AESNode::Update()
     if (AnimatorStateMachineNode *smNode = GetSMNode())
     {
         SetNodeName(smNode->GetName());
+        p_entryNodeText->SetEnabled( GetAnimatorSM()->GetEntryNode() == smNode );
         if (Animator *animator = GetCurrentAnimator())
         {
             if (AnimatorStateMachinePlayer *player = animator->GetPlayer())
@@ -130,6 +151,11 @@ void AESNode::Update()
     ++m_framesPassedSinceLineDragStarted;
 }
 
+void AESNode::SetAsEntryNode()
+{
+    GetAnimatorSM()->SetEntryNode( GetSMNode() );
+}
+
 void AESNode::SetNodeName(const String &nodeName)
 {
     if (nodeName != GetNodeName())
@@ -142,6 +168,7 @@ void AESNode::SetNodeName(const String &nodeName)
 void AESNode::OnZoomScaleChanged(float zoomScale)
 {
     p_nodeNameText->SetTextSize(18 * zoomScale);
+    p_entryNodeText->SetTextSize(12 * zoomScale);
 }
 
 const String &AESNode::GetNodeName() const

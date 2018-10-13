@@ -95,12 +95,6 @@ void AnimatorSMEditorScene::Update()
             Vector2 mouseDelta( Input::GetMouseDelta() );
             m_panning += mouseDelta;
         }
-
-        Vector2 mouseWheel = (Input::GetMouseWheel() * Vector2(0.05f));
-        if (mouseWheel != Vector2::Zero)
-        {
-            SetZoomScale( GetZoomScale() + mouseWheel.y );
-        }
     }
 
     if (Time::GetPassedTimeSince(m_lastTimeAnimatorSMWasExported) >=
@@ -351,6 +345,17 @@ UIEventResult AnimatorSMEditorScene::OnUIEvent(UIFocusable *, const UIEvent &eve
         case UIEvent::Type::FOCUS_TAKEN:
             GameObjectFactory::MakeBorderFocused(p_border);
             return UIEventResult::INTERCEPT;
+        break;
+
+        case UIEvent::Type::WHEEL:
+        {
+            Vector2 mouseWheel = (Input::GetMouseWheel() * Vector2(0.05f));
+            if (mouseWheel != Vector2::Zero)
+            {
+                SetZoomScale( GetZoomScale() + mouseWheel.y );
+                return UIEventResult::INTERCEPT;
+            }
+        }
         break;
 
         default:

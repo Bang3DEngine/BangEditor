@@ -37,6 +37,7 @@ public:
     // GameObject
     void Update() override;
 
+    void SetAsEntryNode();
     void SetNodeName(const String &nodeName);
     void OnZoomScaleChanged(float zoomScale);
 
@@ -56,6 +57,7 @@ private:
     UIImageRenderer *p_border = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
     UITextRenderer *p_nodeNameText = nullptr;
+    UITextRenderer *p_entryNodeText = nullptr;
 
     Vector2 m_grabOffset = Vector2::Zero;
     AnimatorSMEditorScene *p_aesScene = nullptr;
