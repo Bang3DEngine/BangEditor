@@ -3,6 +3,7 @@
 #include "Bang/Behaviour.h"
 #include "Bang/Component.h"
 
+#include "BangEditor/CIWRope.h"
 #include "BangEditor/CIWCamera.h"
 #include "BangEditor/CIWAnimator.h"
 #include "BangEditor/CIWBehaviour.h"
@@ -65,6 +66,10 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     else if (cName == "RigidBody")
     {
         ciw = GameObject::Create<CIWRigidBody>();
+    }
+    else if (cName == "Rope")
+    {
+        ciw = GameObject::Create<CIWRope>();
     }
     else if (cName == "ParticleSystem")
     {

@@ -1,6 +1,7 @@
 #include "BangEditor/MenuBar.h"
 
 #include "Bang/Path.h"
+#include "Bang/Rope.h"
 #include "Bang/Input.h"
 #include "Bang/Scene.h"
 #include "Bang/Thread.h"
@@ -343,6 +344,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addSphereCollider = addColliders->AddItem("SphereCollider");
     MenuItem *addCapsuleCollider = addColliders->AddItem("CapsuleCollider");
     MenuItem *addMeshCollider = addColliders->AddItem("MeshCollider");
+    MenuItem *addRope = addPhysics->AddItem("Rope");
     MenuItem *addPostProcessEffects = rootItem->AddItem("Post Process Effects");
     MenuItem *addPostProcessEffect = addPostProcessEffects->AddItem("PostProcessEffect");
     MenuItem *addSSAO = addPostProcessEffects->AddItem("SSAO");
@@ -371,6 +373,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     addCapsuleCollider->SetSelectedCallback(MenuBar::OnAddCapsuleCollider);
     addSphereCollider->SetSelectedCallback(MenuBar::OnAddSphereCollider);
     addMeshCollider->SetSelectedCallback(MenuBar::OnAddMeshCollider);
+    addRope->SetSelectedCallback(MenuBar::OnAddRope);
     addAnimator->SetSelectedCallback(MenuBar::OnAddAnimator);
     addAudioListener->SetSelectedCallback(MenuBar::OnAddAudioListener);
     addAudioSource->SetSelectedCallback(MenuBar::OnAddAudioSource);
@@ -791,6 +794,11 @@ void MenuBar::OnAddUILabel(MenuItem*)
 void MenuBar::OnAddPostProcessEffect(MenuItem*)
 {
     OnAddComponent<PostProcessEffect>();
+}
+
+void MenuBar::OnAddRope(MenuItem*)
+{
+    OnAddComponent<Rope>();
 }
 
 void MenuBar::OnAddSSAO(MenuItem*)
