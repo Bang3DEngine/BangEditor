@@ -107,9 +107,9 @@ void CIWParticleSystem::InitInnerWidgets()
     p_computeCollisionsInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_physicsStepModeInput = GameObjectFactory::CreateUIComboBox();
-    p_physicsStepModeInput->AddItem("Euler",      SCAST<int>(ParticlePhysicsStepMode::EULER));
-    p_physicsStepModeInput->AddItem("Euler-Semi", SCAST<int>(ParticlePhysicsStepMode::EULER_SEMI));
-    p_physicsStepModeInput->AddItem("Verlet",     SCAST<int>(ParticlePhysicsStepMode::VERLET));
+    p_physicsStepModeInput->AddItem("Euler",      SCAST<int>(Particle::PhysicsStepMode::EULER));
+    p_physicsStepModeInput->AddItem("Euler-Semi", SCAST<int>(Particle::PhysicsStepMode::EULER_SEMI));
+    p_physicsStepModeInput->AddItem("Verlet",     SCAST<int>(Particle::PhysicsStepMode::VERLET));
     p_physicsStepModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_gravityMultiplierInput = GameObjectFactory::CreateUIInputNumber();
@@ -366,7 +366,7 @@ void CIWParticleSystem::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *obj
     if (object == p_physicsStepModeInput)
     {
         GetParticleSystem()->SetPhysicsStepMode(
-                    SCAST<ParticlePhysicsStepMode>(
+                    SCAST<Particle::PhysicsStepMode>(
                         p_physicsStepModeInput->GetSelectedValue()));
     }
 
