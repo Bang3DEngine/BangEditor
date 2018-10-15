@@ -1,5 +1,11 @@
 #include "BangEditor/CIWRope.h"
 
+#include "Bang/Rope.h"
+#include "Bang/UISlider.h"
+#include "Bang/UICheckBox.h"
+#include "Bang/UIInputNumber.h"
+#include "Bang/GameObjectFactory.h"
+
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 
@@ -9,16 +15,81 @@ void CIWRope::InitInnerWidgets()
 
     SetName("CIWRope");
     SetTitle("Rope");
+
+    p_numPointsInput = GameObjectFactory::CreateUIInputNumber();
+    p_numPointsInput->SetMinValue(2.0f);
+    p_numPointsInput->SetDecimalPlaces(0);
+    p_numPointsInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_bouncinessInput = GameObjectFactory::CreateUISlider();
+    p_bouncinessInput->SetMinMaxValues(0.0f, 1.0f);
+    p_bouncinessInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_dampingInput = GameObjectFactory::CreateUISlider();
+    p_dampingInput->SetMinMaxValues(0.0f, 1.0f);
+    p_dampingInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_ropeLengthInput = GameObjectFactory::CreateUIInputNumber();
+    p_ropeLengthInput->SetMinValue(0.05f);
+    p_ropeLengthInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_springsForceInput = GameObjectFactory::CreateUIInputNumber();
+    p_springsForceInput->SetMinValue(0.0f);
+    p_springsForceInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    p_seeDebugPointsInput = GameObjectFactory::CreateUICheckBox();
+    p_seeDebugPointsInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+
+    AddWidget("Num. Points",   p_numPointsInput->GetGameObject());
+    AddWidget("Bounciness",    p_bouncinessInput->GetGameObject());
+    AddWidget("Damping",       p_dampingInput->GetGameObject());
+    AddWidget("Rope Length",   p_ropeLengthInput->GetGameObject());
+    AddWidget("Springs force", p_springsForceInput->GetGameObject());
+    AddWidget("See points",    p_seeDebugPointsInput->GetGameObject());
+
+    SetLabelsWidth(95);
 }
 
 void CIWRope::UpdateFromReference()
 {
     CIWRenderer::UpdateFromReference();
+
+    p_numPointsInput->SetValue( GetRope()->GetNumPoints() );
+    p_bouncinessInput->SetValue( GetRope()->GetBounciness() );
+    p_ropeLengthInput->SetValue( GetRope()->GetRopeLength() );
+    p_dampingInput->SetValue( GetRope()->GetDamping() );
+    p_springsForceInput->SetValue( GetRope()->GetSpringsForce() );
+    p_seeDebugPointsInput->SetChecked( GetRope()->GetSeeDebugPoints() );
 }
 
 void CIWRope::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
     CIWRenderer::OnValueChangedCIW(object);
+
+    if (object == p_numPointsInput)
+    {
+        GetRope()->SetNumPoints( SCAST<uint>(p_numPointsInput->GetValue()) );
+    }
+    else if (object == p_bouncinessInput)
+    {
+        GetRope()->SetBounciness( p_bouncinessInput->GetValue() );
+    }
+    else if (object == p_dampingInput)
+    {
+        GetRope()->SetDamping( p_dampingInput->GetValue() );
+    }
+    else if (object == p_springsForceInput)
+    {
+        GetRope()->SetSpringsForce( p_springsForceInput->GetValue() );
+    }
+    else if (object == p_ropeLengthInput)
+    {
+        GetRope()->SetRopeLength( p_ropeLengthInput->GetValue() );
+    }
+    else if (object == p_seeDebugPointsInput)
+    {
+        GetRope()->SetSeeDebugPoints(p_seeDebugPointsInput->IsChecked());
+    }
 }
 
 CIWRope::CIWRope()
@@ -27,5 +98,10 @@ CIWRope::CIWRope()
 
 CIWRope::~CIWRope()
 {
+}
+
+Rope *CIWRope::GetRope() const
+{
+    return SCAST<Rope*>( GetComponent() );
 }
 
