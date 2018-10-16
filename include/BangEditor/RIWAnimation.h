@@ -1,16 +1,31 @@
 #ifndef RIWANIMATION_H
 #define RIWANIMATION_H
 
-#include "Bang/Bang.h"
-#include "Bang/Animation.h"
+#include <vector>
 
+#include "Bang/Animation.h"
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/IEvents.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
+namespace Bang {
+class IEventsValueChanged;
+class Texture2D;
+template <class > class EventEmitter;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UISlider;
 FORWARD class UIComboBox;
-FORWARD class UIInputText;
 FORWARD class UIInputNumber;
+FORWARD class UIInputText;
+FORWARD class UISlider;
+
 FORWARD NAMESPACE_BANG_END
 
 

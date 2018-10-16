@@ -2,14 +2,27 @@
 #define CIWREFLECTIONPROBE_H
 
 #include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/String.h"
 #include "Bang/UIInputNumber.h"
-
-#include "BangEditor/UIInputVector.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
+#include "BangEditor/UIInputVector.h"
+
+namespace BangEditor {
+class UIInputVector;
+}  // namespace BangEditor
+namespace Bang {
+class IEventsValueChanged;
+class UICheckBox;
+class UIInputNumber;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class ReflectionProbe;
 FORWARD class UIComboBox;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

@@ -2,10 +2,12 @@
 #define COMPONENTINSPECTORWIDGETFACTORY_H
 
 #include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
 #include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Component;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

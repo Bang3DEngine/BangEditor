@@ -2,13 +2,20 @@
 #define RIWBEHAVIOUR_H
 
 #include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/Color.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
-
 #include "BangEditor/ResourceInspectorWidget.h"
+
+namespace Bang {
+class Texture2D;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIButton;
 FORWARD class UITextRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

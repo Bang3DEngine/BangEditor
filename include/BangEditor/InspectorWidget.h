@@ -1,17 +1,24 @@
 #ifndef INSPECTORWIDGET_H
 #define INSPECTORWIDGET_H
 
-#include "Bang/UMap.h"
+#include "Bang/BangDefines.h"
 #include "Bang/GameObject.h"
-
+#include "Bang/List.h"
+#include "Bang/String.h"
+#include "Bang/UMap.h"
 #include "BangEditor/BangEditor.h"
 
+namespace Bang {
+class Color;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UILabel;
 FORWARD class UICheckBox;
-FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
+FORWARD class UILabel;
 FORWARD class UILayoutElement;
+FORWARD class UITextRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

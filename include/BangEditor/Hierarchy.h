@@ -1,18 +1,46 @@
 #ifndef HIERARCHY_H
 #define HIERARCHY_H
 
-#include "Bang/UMap.h"
-#include "Bang/UIList.h"
-#include "Bang/SceneManager.h"
-#include "Bang/IEventsUITree.h"
-#include "Bang/IEventsChildren.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsChildren.h"
+#include "Bang/IEventsFocus.h"
+#include "Bang/IEventsUITree.h"
+#include "Bang/SceneManager.h"
+#include "Bang/String.h"
+#include "Bang/UIList.h"
+#include "Bang/UMap.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/Editor.h"
 #include "BangEditor/HierarchyItem.h"
 #include "BangEditor/ShortcutManager.h"
 
+namespace BangEditor {
+class IEventsEditor;
+class IEventsHierarchyItem;
+class MenuItem;
+class UIContextMenu;
+}  // namespace BangEditor
+namespace Bang {
+class IEventsDestroy;
+class IEventsSceneManager;
+class IEventsUITree;
+class Path;
+class Scene;
+class UIDragDroppable;
+class UIFocusable;
+template <class T> class EventEmitter;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UITree;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

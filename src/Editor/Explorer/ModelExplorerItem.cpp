@@ -1,16 +1,13 @@
 #include "BangEditor/ModelExplorerItem.h"
 
-#include "Bang/Mesh.h"
-#include "Bang/Model.h"
-#include "Bang/Scene.h"
-#include "Bang/ModelIO.h"
-#include "Bang/Material.h"
-#include "Bang/Resources.h"
 #include "Bang/GameObject.h"
-#include "Bang/MeshRenderer.h"
-#include "Bang/GameObjectFactory.h"
-
+#include "Bang/Model.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/Resources.h"
+#include "Bang/Resources.tcc"
+#include "Bang/Scene.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/MenuItem.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

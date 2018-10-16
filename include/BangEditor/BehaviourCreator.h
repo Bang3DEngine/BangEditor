@@ -1,6 +1,7 @@
 #ifndef BEHAVIOURCREATOR_H
 #define BEHAVIOURCREATOR_H
 
+#include "Bang/BangDefines.h"
 #include "Bang/Path.h"
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"

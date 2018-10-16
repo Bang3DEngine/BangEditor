@@ -1,21 +1,34 @@
 #include "BangEditor/SceneOpenerSaver.h"
 
-#include "Bang/Debug.h"
 #include "Bang/Dialog.h"
-#include "Bang/MetaNode.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
 #include "Bang/Extensions.h"
+#include "Bang/GameObject.h"
 #include "Bang/GameObjectFactory.h"
-
+#include "Bang/IEventsSceneManager.h"
+#include "Bang/Paths.h"
+#include "Bang/Scene.h"
+#include "Bang/SceneManager.h"
+#include "Bang/String.h"
 #include "BangEditor/Editor.h"
-#include "BangEditor/MenuBar.h"
-#include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/IEventsScenePlayer.h"
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UndoRedoManager.h"
-#include "BangEditor/UndoRedoMoveGameObject.h"
 #include "BangEditor/UndoRedoCreateGameObject.h"
+#include "BangEditor/UndoRedoMoveGameObject.h"
 #include "BangEditor/UndoRedoRemoveGameObject.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
+
+namespace BangEditor {
+class UndoRedoAction;
+class UndoRedoCreateGameObject;
+class UndoRedoMoveGameObject;
+class UndoRedoRemoveGameObject;
+class UndoRedoSerializableChange;
+}  // namespace BangEditor
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

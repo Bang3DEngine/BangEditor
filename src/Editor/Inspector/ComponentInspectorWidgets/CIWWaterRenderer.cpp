@@ -2,6 +2,11 @@
 
 #include "Bang/WaterRenderer.h"
 
+namespace Bang {
+class IEventsValueChanged;
+template <class > class EventEmitter;
+}  // namespace Bang
+
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
 

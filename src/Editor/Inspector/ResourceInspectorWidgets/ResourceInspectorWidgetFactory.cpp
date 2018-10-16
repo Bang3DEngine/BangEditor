@@ -1,19 +1,19 @@
 #include "BangEditor/ResourceInspectorWidgetFactory.h"
 
-#include "Bang/Path.h"
-#include "Bang/String.h"
 #include "Bang/Extensions.h"
-
-#include "BangEditor/RIWMesh.h"
-#include "BangEditor/RIWModel.h"
-#include "BangEditor/RIWTexture.h"
-#include "BangEditor/RIWMaterial.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/Path.h"
 #include "BangEditor/RIWAnimation.h"
+#include "BangEditor/RIWAnimatorStateMachine.h"
 #include "BangEditor/RIWAudioClip.h"
 #include "BangEditor/RIWBehaviour.h"
-#include "BangEditor/RIWTextureCubeMap.h"
+#include "BangEditor/RIWMaterial.h"
+#include "BangEditor/RIWMesh.h"
+#include "BangEditor/RIWModel.h"
 #include "BangEditor/RIWPhysicsMaterial.h"
-#include "BangEditor/RIWAnimatorStateMachine.h"
+#include "BangEditor/RIWTexture.h"
+#include "BangEditor/RIWTextureCubeMap.h"
 #include "BangEditor/ResourceInspectorWidget.h"
 
 USING_NAMESPACE_BANG

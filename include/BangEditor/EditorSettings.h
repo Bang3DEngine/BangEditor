@@ -1,9 +1,9 @@
 #ifndef EDITORSETTINGS_H
 #define EDITORSETTINGS_H
 
-#include "Bang/Path.h"
 #include "Bang/Array.h"
-
+#include "Bang/BangDefines.h"
+#include "Bang/Path.h"
 #include "BangEditor/BangEditor.h"
 
 USING_NAMESPACE_BANG

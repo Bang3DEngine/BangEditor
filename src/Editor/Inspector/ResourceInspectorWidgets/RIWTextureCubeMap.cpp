@@ -1,14 +1,29 @@
 #include "BangEditor/RIWTextureCubeMap.h"
 
-#include "Bang/UILabel.h"
-#include "Bang/Resources.h"
-#include "Bang/Texture2D.h"
+#include "Bang/Color.h"
+#include "Bang/EventEmitter.h"
 #include "Bang/Extensions.h"
-#include "Bang/UITextRenderer.h"
+#include "Bang/GL.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
-
+#include "Bang/Image.tcc"
+#include "Bang/ImageIO.h"
+#include "Bang/Path.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/Texture2D.h"
+#include "Bang/UILabel.h"
+#include "Bang/UITextRenderer.h"
+#include "Bang/Vector.tcc"
+#include "BangEditor/RIWResource.tcc"
+#include "BangEditor/ResourceInspectorWidget.h"
+#include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputTexture.h"
 #include "BangEditor/UITextureCubeMapPreviewer.h"
+
+namespace Bang {
+class IEventsValueChanged;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

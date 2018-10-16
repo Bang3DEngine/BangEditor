@@ -2,7 +2,12 @@
 #define FILEINSPECTORWIDGETFACTORY_H
 
 #include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
 #include "BangEditor/BangEditor.h"
+
+namespace Bang {
+class Path;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN

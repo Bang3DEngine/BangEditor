@@ -1,35 +1,41 @@
 #include "BangEditor/RIWMaterial.h"
 
-#include "Bang/Model.h"
-#include "Bang/Shader.h"
-#include "Bang/Material.h"
-#include "Bang/UISlider.h"
-#include "Bang/Resources.h"
-#include "Bang/Texture2D.h"
-#include "Bang/RenderPass.h"
+#include "Bang/EventEmitter.h"
 #include "Bang/Extensions.h"
+#include "Bang/Flags.h"
+#include "Bang/GL.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/Material.h"
+#include "Bang/NeededUniformFlags.h"
+#include "Bang/Path.h"
+#include "Bang/RenderPass.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/Resources.h"
+#include "Bang/Resources.tcc"
+#include "Bang/Shader.h"
+#include "Bang/ShaderProgram.h"
+#include "Bang/ShaderProgramFactory.h"
+#include "Bang/Texture2D.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIComboBox.h"
-#include "Bang/ShaderProgram.h"
 #include "Bang/UIInputNumber.h"
-#include "Bang/RectTransform.h"
-#include "Bang/TextureFactory.h"
-#include "Bang/UIImageRenderer.h"
-#include "Bang/UILayoutElement.h"
-#include "Bang/MetaFilesManager.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/NeededUniformFlags.h"
-#include "Bang/UIHorizontalLayout.h"
-#include "Bang/UIContentSizeFitter.h"
-#include "Bang/UIAspectRatioFitter.h"
-#include "Bang/ShaderProgramFactory.h"
-
-#include "BangEditor/UIInputColor.h"
-#include "BangEditor/PreviewViewer.h"
-#include "BangEditor/UIInputVector.h"
-#include "BangEditor/UIInputTexture.h"
+#include "Bang/UISlider.h"
 #include "BangEditor/MaterialPreviewFactory.h"
+#include "BangEditor/PreviewViewer.h"
+#include "BangEditor/RIWResource.tcc"
+#include "BangEditor/UIInputColor.h"
 #include "BangEditor/UIInputFileWithPreview.h"
+#include "BangEditor/UIInputTexture.h"
+#include "BangEditor/UIInputVector.h"
+
+namespace BangEditor {
+struct ResourcePreviewFactoryParameters;
+}  // namespace BangEditor
+namespace Bang {
+class IEventsValueChanged;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

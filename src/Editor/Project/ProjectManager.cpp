@@ -1,20 +1,22 @@
 #include "BangEditor/ProjectManager.h"
 
-#include "Bang/Path.h"
-#include "Bang/File.h"
-#include "Bang/Debug.h"
-#include "Bang/String.h"
-#include "Bang/MetaNode.h"
-#include "Bang/Extensions.h"
-#include "Bang/MetaFilesManager.h"
+#include <ostream>
 
-#include "BangEditor/Project.h"
-#include "BangEditor/EditorPaths.h"
+#include "Bang/Debug.h"
+#include "Bang/Extensions.h"
+#include "Bang/File.h"
+#include "Bang/MetaFilesManager.h"
+#include "Bang/Path.h"
+#include "Bang/Paths.h"
+#include "Bang/StreamOperators.h"
+#include "Bang/String.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorSettings.h"
+#include "BangEditor/IEventsProjectManager.h"
+#include "BangEditor/Project.h"
 #include "BangEditor/QtProjectManager.h"
 #include "BangEditor/SceneOpenerSaver.h"
-#include "BangEditor/EditorSceneManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

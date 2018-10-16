@@ -1,8 +1,8 @@
 #include "BangEditor/ResourceInspectorWidget.h"
 
+#include "Bang/GameObject.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIImageRenderer.h"
-
 #include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG

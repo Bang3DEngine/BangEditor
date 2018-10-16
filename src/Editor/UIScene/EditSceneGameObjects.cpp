@@ -1,9 +1,13 @@
 #include "BangEditor/EditSceneGameObjects.h"
 
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/Scene.h"
+#include "BangEditor/EditorCamera.h"
 #include "BangEditor/EditorFloor.h"
 #include "BangEditor/EditorScene.h"
-#include "BangEditor/EditorCamera.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/GizmosManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

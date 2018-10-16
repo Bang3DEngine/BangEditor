@@ -1,24 +1,29 @@
 #include "BangEditor/HierarchyItem.h"
 
-#include "Bang/Scene.h"
-#include "Bang/UITree.h"
-#include "Bang/UILabel.h"
+#include "Bang/Alignment.h"
+#include "Bang/Assert.h"
+#include "Bang/Color.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEventsName.h"
+#include "Bang/Key.h"
+#include "Bang/Stretch.h"
 #include "Bang/UICanvas.h"
 #include "Bang/UIFocusable.h"
-#include "Bang/UITextRenderer.h"
-#include "Bang/UIImageRenderer.h"
-#include "Bang/UILayoutElement.h"
-#include "Bang/GameObjectFactory.h"
 #include "Bang/UIHorizontalLayout.h"
-
+#include "Bang/UITextRenderer.h"
 #include "BangEditor/Editor.h"
-#include "BangEditor/MenuBar.h"
-#include "BangEditor/Hierarchy.h"
-#include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/EditorClipboard.h"
-#include "BangEditor/EditorSceneManager.h"
-#include "BangEditor/EditorTextureFactory.h"
+#include "BangEditor/IEventsHierarchyItem.h"
+#include "BangEditor/MenuBar.h"
+#include "BangEditor/MenuItem.h"
+#include "BangEditor/UIContextMenu.h"
+
+namespace Bang {
+class IEventsObject;
+class Object;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

@@ -1,15 +1,25 @@
 #include "BangEditor/RotateGizmo.h"
 
-#include "Bang/Mesh.h"
+#include <sys/types.h>
+
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/Axis.h"
 #include "Bang/Camera.h"
+#include "Bang/Color.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/LineRenderer.h"
 #include "Bang/Material.h"
-#include "Bang/Transform.h"
+#include "Bang/MaterialFactory.h"
+#include "Bang/Math.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
-#include "Bang/LineRenderer.h"
-#include "Bang/MaterialFactory.h"
-#include "Bang/GameObjectFactory.h"
-
+#include "Bang/ResourceHandle.h"
+#include "Bang/Transform.h"
+#include "Bang/Vector.tcc"
+#include "Bang/Vector3.h"
 #include "BangEditor/RotateGizmoAxis.h"
 
 USING_NAMESPACE_BANG

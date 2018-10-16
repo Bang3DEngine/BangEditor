@@ -1,18 +1,33 @@
 #ifndef AESCONNECTIONLINE_H
 #define AESCONNECTIONLINE_H
 
-#include "Bang/Bang.h"
-#include "Bang/DPtr.h"
-#include "Bang/GameObject.h"
-#include "Bang/LineRenderer.h"
+#include <array>
+#include <vector>
 
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/DPtr.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/LineRenderer.h"
+#include "Bang/String.h"
+#include "BangEditor/AESNode.h"
 #include "BangEditor/BangEditor.h"
 
+namespace Bang {
+class LineRenderer;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIImageRenderer;
 FORWARD class AnimatorStateMachine;
-FORWARD class AnimatorStateMachineNode;
 FORWARD class AnimatorStateMachineConnection;
+FORWARD class AnimatorStateMachineNode;
+FORWARD class UIImageRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

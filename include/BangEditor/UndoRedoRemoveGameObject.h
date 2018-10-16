@@ -1,13 +1,24 @@
 #ifndef UNDOREDOREMOVEGAMEOBJECT_H
 #define UNDOREDOREMOVEGAMEOBJECT_H
 
-#include "Bang/Bang.h"
-#include "Bang/EventEmitter.h"
-#include "Bang/EventListener.h"
-#include "Bang/IEventsDestroy.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsDestroy.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UndoRedoAction.h"
+
+namespace Bang {
+class GameObject;
+class IEventsDestroy;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN

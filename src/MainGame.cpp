@@ -1,16 +1,21 @@
-#include "Bang/Application.h"
+#include <ostream>
 
-#include "Bang/Debug.h"
-#include "Bang/Paths.h"
-#include "Bang/Scene.h"
-#include "Bang/Window.h"
-#include "Bang/Library.h"
-#include "Bang/Extensions.h"
-#include "Bang/SceneManager.h"
-#include "Bang/WindowManager.h"
+#include "Bang/Application.h"
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
 #include "Bang/BehaviourManager.h"
+#include "Bang/Debug.h"
+#include "Bang/Extensions.h"
 #include "Bang/MetaFilesManager.h"
-#include "Bang/BehaviourContainer.h"
+#include "Bang/Path.h"
+#include "Bang/Paths.h"
+#include "Bang/SceneManager.h"
+#include "Bang/StreamOperators.h"
+#include "Bang/String.h"
+#include "Bang/Window.h"
+#include "Bang/WindowManager.h"
+#include "Bang/WindowManager.tcc"
 
 USING_NAMESPACE_BANG
 

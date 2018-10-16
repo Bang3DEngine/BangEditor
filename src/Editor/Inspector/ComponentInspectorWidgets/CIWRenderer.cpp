@@ -1,15 +1,30 @@
 #include "BangEditor/CIWRenderer.h"
 
-#include "Bang/UILabel.h"
-#include "Bang/Material.h"
-#include "Bang/Renderer.h"
-#include "Bang/Resources.h"
-#include "Bang/Extensions.h"
-#include "Bang/UICheckBox.h"
-#include "Bang/UITextRenderer.h"
-#include "Bang/GameObjectFactory.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/Extensions.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEvents.h"
+#include "Bang/Material.h"
+#include "Bang/Path.h"
+#include "Bang/Renderer.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/Resources.h"
+#include "Bang/Resources.tcc"
+#include "Bang/String.h"
+#include "Bang/UICheckBox.h"
 #include "BangEditor/UIInputFileWithPreview.h"
+
+namespace Bang {
+class IEventsValueChanged;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

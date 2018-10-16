@@ -1,16 +1,21 @@
 #include "BangEditor/UITabContainer.h"
 
-#include "Bang/UIFocusable.h"
-#include "Bang/RectTransform.h"
-#include "Bang/TextureFactory.h"
-#include "Bang/UITextRenderer.h"
-#include "Bang/UIImageRenderer.h"
+#include <iterator>
+#include <unordered_map>
+#include <utility>
+
+#include "Bang/Alignment.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/Math.h"
+#include "Bang/Stretch.h"
+#include "Bang/UIHorizontalLayout.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UILayoutIgnorer.h"
 #include "Bang/UIVerticalLayout.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/UIHorizontalLayout.h"
-
+#include "Bang/UMap.tcc"
+#include "BangEditor/IEventsTabHeader.h"
 #include "BangEditor/UITabHeader.h"
 
 USING_NAMESPACE_BANG

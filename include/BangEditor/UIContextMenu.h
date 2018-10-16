@@ -1,13 +1,33 @@
 #ifndef UICONTEXTMENU_H
 #define UICONTEXTMENU_H
 
-#include "Bang/Component.h"
-#include "Bang/GameObject.h"
-#include "Bang/EventEmitter.h"
-#include "Bang/EventListener.h"
+#include <functional>
+#include <vector>
 
-#include "BangEditor/MenuItem.h"
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/Component.h"
+#include "Bang/ComponentMacros.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsFocus.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/EditorComponentsClassIds.h"
+#include "BangEditor/MenuItem.h"
+
+namespace BangEditor {
+class MenuItem;
+}  // namespace BangEditor
+namespace Bang {
+class IEventsDestroy;
+class UIFocusable;
+template <class T> class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD NAMESPACE_BANG_END

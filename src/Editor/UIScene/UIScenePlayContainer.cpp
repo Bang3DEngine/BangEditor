@@ -1,13 +1,21 @@
 #include "BangEditor/UIScenePlayContainer.h"
 
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/IEventsSceneManager.h"
 #include "Bang/Scene.h"
-#include "Bang/Camera.h"
-#include "Bang/UIFocusable.h"
-
-#include "BangEditor/EditorCamera.h"
+#include "Bang/SceneManager.h"
+#include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/IEventsScenePlayer.h"
+#include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneToolbar.h"
 #include "BangEditor/UISceneToolbarDown.h"
-#include "BangEditor/EditorSceneManager.h"
+
+namespace Bang {
+class Camera;
+class Path;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

@@ -1,21 +1,35 @@
 #ifndef RIWTEXTURE_H
 #define RIWTEXTURE_H
 
-#include "Bang/Path.h"
-#include "Bang/Texture2D.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/IEventsValueChanged.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/Path.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/String.h"
+#include "Bang/Texture2D.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
+namespace Bang {
+class IEventsValueChanged;
+template <class > class EventEmitter;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UISlider;
 FORWARD class Texture2D;
-FORWARD class UIComboBox;
-FORWARD class UICheckBox;
-FORWARD class UIInputText;
-FORWARD class UIImageRenderer;
 FORWARD class UIAspectRatioFitter;
+FORWARD class UICheckBox;
+FORWARD class UIComboBox;
+FORWARD class UIImageRenderer;
+FORWARD class UIInputText;
+FORWARD class UISlider;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

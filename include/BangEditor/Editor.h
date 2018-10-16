@@ -1,18 +1,37 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
-#include "Bang/Bang.h"
-#include "Bang/Object.h"
-#include "Bang/GameObject.h"
-#include "Bang/SceneManager.h"
-#include "Bang/EventEmitter.h"
-#include "Bang/IEventsDestroy.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsDestroy.h"
+#include "Bang/Object.h"
+#include "Bang/SceneManager.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/IEventsEditor.h"
 
+namespace BangEditor {
+class EditorSettings;
+class IEventsEditor;
+}  // namespace BangEditor
+namespace Bang {
+class GameObject;
+class IEventsDestroy;
+class IEventsSceneManager;
+class Path;
+}  // namespace Bang
+
 NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
+
 NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

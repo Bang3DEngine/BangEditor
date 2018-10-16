@@ -1,13 +1,26 @@
 #ifndef SIWPHYSICSSETTINGS_H
 #define SIWPHYSICSSETTINGS_H
 
-#include "Bang/Bang.h"
-#include "Bang/IEventsValueChanged.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsValueChanged.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/SettingsInspectorWidget.h"
+
+namespace Bang {
+class IEventsValueChanged;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIInputNumber;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

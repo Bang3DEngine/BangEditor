@@ -1,17 +1,31 @@
 #ifndef ASMCTRANSITIONCONDITIONINPUT_H
 #define ASMCTRANSITIONCONDITIONINPUT_H
 
-#include "Bang/Bang.h"
-#include "Bang/GameObject.h"
-#include "Bang/IEventsValueChanged.h"
-#include "Bang/AnimatorStateMachineVariable.h"
+#include <vector>
 
+#include "Bang/AnimatorStateMachineVariable.h"
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/MetaNode.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
+namespace Bang {
+class IEventsValueChanged;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class AnimatorStateMachine;
 FORWARD class UIComboBox;
 FORWARD class UIInputNumber;
-FORWARD class AnimatorStateMachine;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

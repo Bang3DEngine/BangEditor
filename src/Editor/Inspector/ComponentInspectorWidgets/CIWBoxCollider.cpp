@@ -1,9 +1,21 @@
 #include "BangEditor/CIWBoxCollider.h"
 
-#include "Bang/BoxCollider.h"
-#include "Bang/UIInputNumber.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/BoxCollider.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/IEvents.h"
+#include "Bang/UIInputNumber.h"
 #include "BangEditor/UIInputVector.h"
+
+namespace Bang {
+class IEventsValueChanged;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

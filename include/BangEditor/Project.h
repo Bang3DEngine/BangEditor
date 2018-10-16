@@ -1,11 +1,12 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
+#include "Bang/BangDefines.h"
 #include "Bang/GUID.h"
+#include "Bang/MetaNode.h"
 #include "Bang/Path.h"
-#include "Bang/String.h"
 #include "Bang/Serializable.h"
-
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
 USING_NAMESPACE_BANG

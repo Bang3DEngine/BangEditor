@@ -1,15 +1,22 @@
 #include "BangEditor/RIWAnimation.h"
 
-#include "Bang/UILabel.h"
-#include "Bang/UISlider.h"
-#include "Bang/UIComboBox.h"
+#include "Bang/EventEmitter.h"
 #include "Bang/Extensions.h"
-#include "Bang/UIInputText.h"
-#include "Bang/UIInputNumber.h"
-#include "Bang/UITextRenderer.h"
 #include "Bang/GameObjectFactory.h"
-
+#include "Bang/LayoutSizeType.h"
+#include "Bang/Math.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/UIComboBox.h"
+#include "Bang/UIInputNumber.h"
+#include "Bang/UIInputText.h"
+#include "Bang/UITextRenderer.h"
 #include "BangEditor/EditorTextureFactory.h"
+#include "BangEditor/RIWResource.tcc"
+
+namespace Bang {
+class IEventsValueChanged;
+class Texture2D;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

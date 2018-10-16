@@ -2,18 +2,20 @@
 #define EDITSCENEGAMEOBJECTS_H
 
 #include "Bang/Bang.h"
-
+#include "Bang/BangDefines.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/GizmosManager.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class EditorFloor;
 FORWARD class EditorCamera;
+FORWARD class EditorFloor;
 FORWARD class GizmosManager;
 
 class EditSceneGameObjects

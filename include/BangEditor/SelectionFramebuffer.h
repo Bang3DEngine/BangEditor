@@ -1,18 +1,34 @@
 #ifndef SELECTIONFRAMEBUFFER_H
 #define SELECTIONFRAMEBUFFER_H
 
-#include "Bang/UMap.h"
-#include "Bang/Framebuffer.h"
-#include "Bang/IEventsDestroy.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/Color.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/Framebuffer.h"
+#include "Bang/GL.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsDestroy.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/UMap.h"
 #include "BangEditor/BangEditor.h"
 
+namespace Bang {
+class IEventsDestroy;
+class Texture2D;
+template <class T> class EventEmitter;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Scene;
-FORWARD class Renderer;
-FORWARD class Material;
 FORWARD class GameObject;
+FORWARD class Material;
+FORWARD class Renderer;
+FORWARD class Scene;
 FORWARD class ShaderProgram;
+
 FORWARD NAMESPACE_BANG_END
 
 NAMESPACE_BANG_EDITOR_BEGIN

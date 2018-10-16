@@ -1,24 +1,39 @@
 #include "BangEditor/AnimatorSMEditorScene.h"
 
+#include "Bang/AnimatorStateMachine.h"
+#include "Bang/AnimatorStateMachineNode.h"
+#include "Bang/Assert.h"
+#include "Bang/Color.h"
+#include "Bang/EventEmitter.h"
 #include "Bang/File.h"
-#include "Bang/Input.h"
-#include "Bang/UITheme.h"
-#include "Bang/MetaNode.h"
-#include "Bang/UICanvas.h"
-#include "Bang/Material.h"
-#include "Bang/UIRectMask.h"
-#include "Bang/UIFocusable.h"
-#include "Bang/RectTransform.h"
-#include "Bang/TextureFactory.h"
-#include "Bang/UITextRenderer.h"
-#include "Bang/UIImageRenderer.h"
-#include "Bang/MetaFilesManager.h"
+#include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
-
-#include "BangEditor/AESNode.h"
-#include "BangEditor/UIContextMenu.h"
+#include "Bang/IEventsAnimatorStateMachine.h"
+#include "Bang/Input.h"
+#include "Bang/Material.h"
+#include "Bang/Math.h"
+#include "Bang/MetaFilesManager.h"
+#include "Bang/MetaNode.h"
+#include "Bang/MetaNode.tcc"
+#include "Bang/MouseButton.h"
+#include "Bang/Path.h"
+#include "Bang/RectTransform.h"
+#include "Bang/UICanvas.h"
+#include "Bang/UIFocusable.h"
+#include "Bang/UIImageRenderer.h"
+#include "Bang/UIRectMask.h"
+#include "Bang/Vector.tcc"
+#include "Bang/Vector2.h"
 #include "BangEditor/AESConnectionLine.h"
+#include "BangEditor/AESNode.h"
 #include "BangEditor/EditorTextureFactory.h"
+#include "BangEditor/MenuItem.h"
+#include "BangEditor/UIContextMenu.h"
+
+namespace Bang {
+class AnimatorStateMachineConnection;
+class IEventsAnimatorStateMachineNode;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

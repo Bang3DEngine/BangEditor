@@ -1,9 +1,11 @@
 #ifndef UNDOREDOFILECHANGE_H
 #define UNDOREDOFILECHANGE_H
 
-#include "Bang/Bang.h"
-#include "Bang/Path.h"
+#include <cstddef>
 
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/Path.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UndoRedoAction.h"
 

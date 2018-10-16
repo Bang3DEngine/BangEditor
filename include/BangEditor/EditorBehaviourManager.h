@@ -2,21 +2,35 @@
 #define EDITORBEHAVIOURMANAGER_H
 
 #include <queue>
+#include <vector>
 
-#include "Bang/Map.h"
-#include "Bang/Path.h"
-#include "Bang/Mutex.h"
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/BehaviourManager.h"
 #include "Bang/BinType.h"
 #include "Bang/Compiler.h"
-#include "Bang/ThreadPool.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
 #include "Bang/FileTracker.h"
-#include "Bang/BehaviourManager.h"
-
+#include "Bang/IEvents.h"
+#include "Bang/Map.h"
+#include "Bang/Mutex.h"
+#include "Bang/Path.h"
+#include "Bang/String.h"
+#include "Bang/Thread.h"
+#include "Bang/ThreadPool.h"
+#include "Bang/USet.h"
 #include "BangEditor/BangEditor.h"
 
+namespace Bang {
+class IEventsFileTracker;
+}  // namespace Bang
+
 NAMESPACE_BANG_BEGIN
-FORWARD class Library;
 FORWARD class Behaviour;
+FORWARD class Library;
+
 NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

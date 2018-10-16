@@ -1,13 +1,17 @@
 #include "BangEditor/GameObjectSelectionGizmo.h"
 
+#include "Bang/Color.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
+#include "Bang/GL.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/HideFlags.h"
 #include "Bang/RenderFactory.h"
-
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/HideInHierarchy.h"
-#include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/NotSelectableInEditor.h"
+#include "BangEditor/SelectionFramebuffer.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

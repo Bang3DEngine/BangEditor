@@ -1,9 +1,10 @@
 #ifndef GAMEBUILDER_H
 #define GAMEBUILDER_H
 
-#include "Bang/Path.h"
+#include "Bang/BangDefines.h"
 #include "Bang/BinType.h"
-
+#include "Bang/Path.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
 USING_NAMESPACE_BANG

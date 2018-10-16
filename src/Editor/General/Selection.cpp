@@ -1,18 +1,13 @@
 #include "BangEditor/Selection.h"
 
-#include "Bang/Scene.h"
-#include "Bang/Input.h"
-#include "Bang/Camera.h"
-#include "Bang/GEngine.h"
-#include "Bang/SceneManager.h"
-#include "Bang/RectTransform.h"
-
-#include "BangEditor/EditorScene.h"
+#include "Bang/GL.h"
 #include "BangEditor/EditorCamera.h"
-#include "BangEditor/UISceneImage.h"
-#include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/UISceneEditContainer.h"
+
+namespace Bang {
+class GameObject;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

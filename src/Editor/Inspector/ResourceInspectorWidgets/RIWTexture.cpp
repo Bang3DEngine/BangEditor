@@ -1,20 +1,30 @@
 #include "BangEditor/RIWTexture.h"
 
-#include "Bang/UILabel.h"
-#include "Bang/UISlider.h"
-#include "Bang/Resources.h"
-#include "Bang/Texture2D.h"
-#include "Bang/UIComboBox.h"
-#include "Bang/UICheckBox.h"
-#include "Bang/UIInputText.h"
-#include "Bang/RectTransform.h"
-#include "Bang/UIInputNumber.h"
-#include "Bang/UITextRenderer.h"
-#include "Bang/UIImageRenderer.h"
-#include "Bang/UILayoutIgnorer.h"
+#include "Bang/AspectRatioMode.h"
+#include "Bang/Color.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/GL.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/UIHorizontalLayout.h"
+#include "Bang/MetaFilesManager.h"
+#include "Bang/Path.h"
+#include "Bang/RectTransform.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/Texture2D.h"
 #include "Bang/UIAspectRatioFitter.h"
+#include "Bang/UICheckBox.h"
+#include "Bang/UIComboBox.h"
+#include "Bang/UIImageRenderer.h"
+#include "Bang/UIInputText.h"
+#include "Bang/UISlider.h"
+#include "Bang/UITextRenderer.h"
+#include "BangEditor/RIWResource.tcc"
+#include "BangEditor/ResourceInspectorWidget.h"
+
+namespace Bang {
+class IEventsValueChanged;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

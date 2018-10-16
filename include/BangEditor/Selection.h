@@ -2,11 +2,17 @@
 #define SELECTION_H
 
 #include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
 #include "BangEditor/BangEditor.h"
 
+namespace Bang {
+class GameObject;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Scene;
 FORWARD class Camera;
+FORWARD class Scene;
+
 FORWARD NAMESPACE_BANG_END
 
 NAMESPACE_BANG_EDITOR_BEGIN

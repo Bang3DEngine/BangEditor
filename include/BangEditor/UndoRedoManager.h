@@ -1,14 +1,24 @@
 #ifndef UNDOREDOMANAGER_H
 #define UNDOREDOMANAGER_H
 
+#include <vector>
+
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
 #include "Bang/Bang.h"
-#include "Bang/IEvents.h"
+#include "Bang/BangDefines.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventListener.h"
-
+#include "Bang/EventListener.tcc"
+#include "Bang/IEvents.h"
+#include "Bang/List.h"
 #include "BangEditor/BangEditor.h"
-#include "BangEditor/UndoRedoAction.h"
 #include "BangEditor/ShortcutManager.h"
+#include "BangEditor/UndoRedoAction.h"
+
+namespace BangEditor {
+class UndoRedoAction;
+}  // namespace BangEditor
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN

@@ -1,25 +1,25 @@
 #include "BangEditor/TransformGizmo.h"
 
-#include "Bang/GL.h"
-#include "Bang/Input.h"
-#include "Bang/Scene.h"
+#include <array>
+
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
-#include "Bang/Vector3.h"
-#include "Bang/Transform.h"
-#include "Bang/RectTransform.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
-
-#include "BangEditor/ScaleGizmo.h"
-#include "BangEditor/RotateGizmo.h"
+#include "Bang/HideFlags.h"
+#include "Bang/Scene.h"
+#include "Bang/Transform.h"
 #include "BangEditor/GizmosManager.h"
+#include "BangEditor/HideInHierarchy.h"
+#include "BangEditor/NotSelectableInEditor.h"
+#include "BangEditor/RectTransformSelectionGizmo.h"
+#include "BangEditor/RotateGizmo.h"
+#include "BangEditor/ScaleGizmo.h"
 #include "BangEditor/TranslateGizmo.h"
 #include "BangEditor/UISceneToolbar.h"
-#include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/UndoRedoManager.h"
-#include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
-#include "BangEditor/RectTransformSelectionGizmo.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

@@ -1,18 +1,39 @@
 #ifndef EDITORCAMERA_H
 #define EDITORCAMERA_H
 
+#include <functional>
+#include <vector>
+
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsSceneManager.h"
+#include "Bang/Quaternion.h"
+#include "Bang/Set.h"
+#include "Bang/String.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
-#include "Bang/Quaternion.h"
-#include "Bang/GameObject.h"
-#include "Bang/IEventsSceneManager.h"
-
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/IEventsScenePlayer.h"
+#include "BangEditor/PlayState.h"
+
+namespace BangEditor {
+class IEventsScenePlayer;
+}  // namespace BangEditor
+namespace Bang {
+class IEventsSceneManager;
+class Path;
+class Scene;
+class Transform;
+}  // namespace Bang
 
 NAMESPACE_BANG_BEGIN
-FORWARD class Input;
 FORWARD class Camera;
+FORWARD class Input;
+
 NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

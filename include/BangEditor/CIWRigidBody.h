@@ -2,8 +2,15 @@
 #define CIWRIGIDBODY_H
 
 #include "Bang/Bang.h"
-
+#include "Bang/BangDefines.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
+
+namespace Bang {
+class IEventsValueChanged;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class RigidBody;
@@ -11,6 +18,7 @@ FORWARD class UICheckBox;
 FORWARD class UIComboBox;
 FORWARD class UIInputNumber;
 FORWARD class UIInputVector;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

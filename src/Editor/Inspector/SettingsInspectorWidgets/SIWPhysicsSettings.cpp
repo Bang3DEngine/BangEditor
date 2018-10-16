@@ -1,12 +1,16 @@
 #include "BangEditor/SIWPhysicsSettings.h"
 
-#include "Bang/Physics.h"
-#include "Bang/UIInputNumber.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
-
-#include "BangEditor/Project.h"
-#include "BangEditor/UIInputVector.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/Physics.h"
+#include "Bang/Time.h"
+#include "Bang/UIInputNumber.h"
 #include "BangEditor/ProjectManager.h"
+#include "BangEditor/UIInputVector.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

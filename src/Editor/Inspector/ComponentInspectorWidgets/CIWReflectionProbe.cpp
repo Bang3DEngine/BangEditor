@@ -1,19 +1,35 @@
 #include "BangEditor/CIWReflectionProbe.h"
 
+#include <vector>
+
+#include "Bang/Array.tcc"
 #include "Bang/Camera.h"
-#include "Bang/GBuffer.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
 #include "Bang/Extensions.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEvents.h"
+#include "Bang/Path.h"
+#include "Bang/ReflectionProbe.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/Resources.h"
+#include "Bang/Resources.tcc"
+#include "Bang/TextureCubeMap.h"
+#include "Bang/Time.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIComboBox.h"
-#include "Bang/RectTransform.h"
 #include "Bang/UIInputNumber.h"
-#include "Bang/ReflectionProbe.h"
-#include "Bang/GameObjectFactory.h"
-
 #include "BangEditor/UIInputColor.h"
-#include "BangEditor/UIInputVector.h"
 #include "BangEditor/UIInputFileWithPreview.h"
+#include "BangEditor/UIInputVector.h"
 #include "BangEditor/UITextureCubeMapPreviewer.h"
+
+namespace Bang {
+class IEventsValueChanged;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

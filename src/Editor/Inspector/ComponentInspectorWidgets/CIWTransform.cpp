@@ -1,19 +1,20 @@
 #include "BangEditor/CIWTransform.h"
 
-#include "Bang/UILabel.h"
-#include "Bang/UICanvas.h"
-#include "Bang/Transform.h"
-#include "Bang/GameObject.h"
-#include "Bang/UIInputNumber.h"
-#include "Bang/UITextRenderer.h"
-#include "Bang/UIImageRenderer.h"
-#include "Bang/UILayoutElement.h"
-#include "Bang/UIVerticalLayout.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/UIHorizontalLayout.h"
-#include "Bang/UIContentSizeFitter.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/IEvents.h"
+#include "Bang/Transform.h"
 #include "BangEditor/UIInputVector.h"
+
+namespace Bang {
+class IEventsValueChanged;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

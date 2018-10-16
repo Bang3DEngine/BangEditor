@@ -1,28 +1,32 @@
 #include "BangEditor/UIInputFile.h"
 
+#include "Bang/Color.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEventsDragDrop.h"
+#include "Bang/IEventsValueChanged.h"
 #include "Bang/Paths.h"
-#include "Bang/Dialog.h"
-#include "Bang/UILabel.h"
+#include "Bang/Resources.h"
+#include "Bang/Stretch.h"
+#include "Bang/TextureFactory.h"
 #include "Bang/UIButton.h"
 #include "Bang/UICanvas.h"
-#include "Bang/Resources.h"
-#include "Bang/Texture2D.h"
-#include "Bang/UIInputText.h"
-#include "Bang/RectTransform.h"
-#include "Bang/UITextRenderer.h"
-#include "Bang/TextureFactory.h"
-#include "Bang/UIImageRenderer.h"
 #include "Bang/UIDragDroppable.h"
-#include "Bang/UILayoutElement.h"
-#include "Bang/GameObjectFactory.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/UIHorizontalLayout.h"
-
-#include "BangEditor/Explorer.h"
-#include "BangEditor/Inspector.h"
+#include "Bang/UIImageRenderer.h"
+#include "Bang/UIInputText.h"
+#include "Bang/UILayoutElement.h"
+#include "Bang/UITextRenderer.h"
 #include "BangEditor/EditorDialog.h"
-#include "BangEditor/ExplorerItem.h"
 #include "BangEditor/EditorTextureFactory.h"
-#include "BangEditor/ResourceInspectorWidgetFactory.h"
+#include "BangEditor/Explorer.h"
+#include "BangEditor/ExplorerItem.h"
+#include "BangEditor/Inspector.h"
+
+namespace Bang {
+class Texture2D;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

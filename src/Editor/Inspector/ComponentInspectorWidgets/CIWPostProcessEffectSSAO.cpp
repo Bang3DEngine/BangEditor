@@ -1,10 +1,21 @@
 #include "BangEditor/CIWPostProcessEffectSSAO.h"
 
-#include "Bang/UISlider.h"
+#include <vector>
+
+#include "Bang/Array.tcc"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEvents.h"
+#include "Bang/PostProcessEffectSSAO.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIInputNumber.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/PostProcessEffectSSAO.h"
+#include "Bang/UISlider.h"
+
+namespace Bang {
+class IEventsValueChanged;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

@@ -1,7 +1,9 @@
 #include "BangEditor/ScaleGizmo.h"
 
+#include "Bang/Axis.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
 #include "Bang/Transform.h"
-
 #include "BangEditor/ScaleGizmoAxis.h"
 
 USING_NAMESPACE_BANG

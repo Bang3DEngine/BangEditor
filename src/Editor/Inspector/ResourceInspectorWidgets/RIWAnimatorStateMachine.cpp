@@ -1,14 +1,22 @@
 #include "BangEditor/RIWAnimatorStateMachine.h"
 
-#include "Bang/UIButton.h"
-#include "Bang/UITextRenderer.h"
-#include "Bang/UILayoutElement.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
-
-#include "BangEditor/EditorScene.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/UIButton.h"
+#include "Bang/UILayoutElement.h"
 #include "BangEditor/AnimatorSMEditor.h"
+#include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorTextureFactory.h"
+#include "BangEditor/RIWResource.tcc"
+
+namespace Bang {
+class IEventsValueChanged;
+class Texture2D;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

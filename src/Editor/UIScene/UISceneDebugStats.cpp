@@ -1,12 +1,13 @@
 #include "BangEditor/UISceneDebugStats.h"
 
-#include "Bang/RectTransform.h"
-#include "Bang/UITextRenderer.h"
-#include "Bang/UIImageRenderer.h"
+#include "Bang/Alignment.h"
+#include "Bang/Color.h"
+#include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
-
-#include "BangEditor/EditorScene.h"
-#include "BangEditor/EditorSceneManager.h"
+#include "Bang/Object.h"
+#include "Bang/RectTransform.h"
+#include "Bang/UIImageRenderer.h"
+#include "Bang/UITextRenderer.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

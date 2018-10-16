@@ -1,19 +1,40 @@
 #ifndef ANIMATOREDITORSCENE_H
 #define ANIMATOREDITORSCENE_H
 
-#include "Bang/Bang.h"
-#include "Bang/DPtr.h"
-#include "Bang/GameObject.h"
-#include "Bang/IEventsFocus.h"
-#include "Bang/ResourceHandle.h"
+#include <sys/types.h>
+#include <vector>
+
 #include "Bang/AnimatorStateMachine.h"
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/DPtr.h"
+#include "Bang/DPtr.tcc"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
 #include "Bang/IEventsAnimatorStateMachine.h"
 #include "Bang/IEventsAnimatorStateMachineNode.h"
-
+#include "Bang/IEventsFocus.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/String.h"
+#include "Bang/Time.h"
+#include "Bang/UIImageRenderer.h"
 #include "BangEditor/BangEditor.h"
+
+namespace Bang {
+class AnimatorStateMachine;
+class AnimatorStateMachineNode;
+class IEventsAnimatorStateMachine;
+class UIFocusable;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIImageRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

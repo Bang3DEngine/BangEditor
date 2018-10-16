@@ -1,10 +1,9 @@
 #include "BangEditor/BehaviourCreator.h"
 
-#include "Bang/File.h"
-#include "Bang/Debug.h"
+#include "Bang/Assert.h"
 #include "Bang/Extensions.h"
+#include "Bang/File.h"
 #include "Bang/MetaFilesManager.h"
-
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/QtProjectManager.h"
 

@@ -1,28 +1,43 @@
 #ifndef RIWMATERIAL_H
 #define RIWMATERIAL_H
 
-#include "Bang/Path.h"
-#include "Bang/Material.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/IEventsValueChanged.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/Material.h"
+#include "Bang/Path.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
+namespace Bang {
+class IEventsValueChanged;
+class Texture2D;
+template <class > class EventEmitter;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UISlider;
 FORWARD class UICheckBox;
 FORWARD class UIComboBox;
 FORWARD class UIInputNumber;
+FORWARD class UISlider;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputColor;
-FORWARD class UIInputVector;
 FORWARD class PreviewViewer;
-FORWARD class UIInputTexture;
+FORWARD class UIInputColor;
 FORWARD class UIInputFileWithPreview;
+FORWARD class UIInputTexture;
+FORWARD class UIInputVector;
 
 class RIWMaterial : public RIWResource<Material>
 {

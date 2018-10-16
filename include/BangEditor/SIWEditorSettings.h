@@ -2,7 +2,8 @@
 #define SIWEDITORSETTINGS_H
 
 #include "Bang/Bang.h"
-
+#include "Bang/BangDefines.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/SettingsInspectorWidget.h"
 
 USING_NAMESPACE_BANG

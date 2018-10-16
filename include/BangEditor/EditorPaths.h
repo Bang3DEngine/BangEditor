@@ -1,8 +1,11 @@
 #ifndef EDITORPATHS_H
 #define EDITORPATHS_H
 
+#include "Bang/BangDefines.h"
+#include "Bang/List.h"
+#include "Bang/Path.h"
 #include "Bang/Paths.h"
-
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
 #define EDPATH(path) BangEditor::EditorPaths::CreateEditorPath(path)  // Engine assets path

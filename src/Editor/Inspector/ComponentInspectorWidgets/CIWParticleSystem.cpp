@@ -1,25 +1,39 @@
 #include "BangEditor/CIWParticleSystem.h"
 
-#include "Bang/Mesh.h"
-#include "Bang/UILabel.h"
-#include "Bang/UISlider.h"
-#include "Bang/Resources.h"
+#include <vector>
+
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
 #include "Bang/Extensions.h"
 #include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEvents.h"
+#include "Bang/Math.h"
+#include "Bang/Mesh.h"
+#include "Bang/Particle.h"
+#include "Bang/ParticleSystem.h"
+#include "Bang/Path.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/Resources.h"
+#include "Bang/Resources.tcc"
+#include "Bang/Texture2D.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIComboBox.h"
-#include "Bang/UICheckBox.h"
-#include "Bang/UIInputText.h"
 #include "Bang/UIInputNumber.h"
-#include "Bang/UITextRenderer.h"
-#include "Bang/ParticleSystem.h"
-#include "Bang/GameObjectFactory.h"
-
+#include "Bang/UISlider.h"
 #include "BangEditor/UIInputColor.h"
-#include "BangEditor/UIInputVector.h"
-#include "BangEditor/UIInputTexture.h"
 #include "BangEditor/UIInputComplexRandom.h"
 #include "BangEditor/UIInputFileWithPreview.h"
+#include "BangEditor/UIInputTexture.h"
+#include "BangEditor/UIInputVector.h"
+
+namespace Bang {
+class IEventsValueChanged;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

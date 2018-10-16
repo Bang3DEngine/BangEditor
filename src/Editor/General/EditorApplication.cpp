@@ -1,22 +1,21 @@
 #include "BangEditor/EditorApplication.h"
 
-#include "Bang/Paths.h"
-#include "Bang/Debug.h"
-#include "Bang/Scene.h"
-#include "Bang/Window.h"
-#include "Bang/SceneManager.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
 #include "Bang/MetaFilesManager.h"
-
 #include "BangEditor/Editor.h"
-#include "BangEditor/Project.h"
 #include "BangEditor/EditorDebug.h"
 #include "BangEditor/EditorPaths.h"
-#include "BangEditor/EditorScene.h"
-#include "BangEditor/EditorWindow.h"
-#include "BangEditor/ProjectManager.h"
 #include "BangEditor/EditorResources.h"
+#include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
-#include "BangEditor/EditorBehaviourManager.h"
+
+namespace Bang {
+class Debug;
+class Path;
+class Paths;
+class Resources;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

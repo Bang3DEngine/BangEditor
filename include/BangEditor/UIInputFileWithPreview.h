@@ -1,17 +1,30 @@
 #ifndef UIINPUTFILEWITHPREVIEW_H
 #define UIINPUTFILEWITHPREVIEW_H
 
+#include <vector>
+
+#include "Bang/Array.tcc"
 #include "Bang/Bang.h"
-#include "Bang/Texture2D.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/IEvents.h"
 #include "Bang/IEventsFocus.h"
 #include "Bang/ResourceHandle.h"
-
+#include "Bang/Texture2D.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UIInputFile.h"
+
+namespace Bang {
+class Path;
+class Resource;
+class UIFocusable;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Texture2D;
 FORWARD class UIImageRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

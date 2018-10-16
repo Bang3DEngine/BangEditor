@@ -2,12 +2,15 @@
 #define EDITORFLOOR_H
 
 #include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
 #include "Bang/GameObject.h"
-
+#include "Bang/RenderPass.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class LineRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 

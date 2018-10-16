@@ -1,28 +1,45 @@
 #ifndef AESNODE_H
 #define AESNODE_H
 
-#include "Bang/Bang.h"
-#include "Bang/GameObject.h"
-#include "Bang/IEventsFocus.h"
-#include "Bang/IEventsAnimatorStateMachineNode.h"
+#include <sys/types.h>
+#include <functional>
+#include <vector>
 
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsAnimatorStateMachineNode.h"
+#include "Bang/IEventsFocus.h"
+#include "Bang/Map.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
+
+namespace Bang {
+class AnimatorStateMachineConnection;
+class IEventsAnimatorStateMachineNode;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Animator;
-FORWARD class UIFocusable;
-FORWARD class UITextRenderer;
-FORWARD class UIImageRenderer;
 FORWARD class AnimatorStateMachine;
 FORWARD class AnimatorStateMachineNode;
+FORWARD class UIFocusable;
+FORWARD class UIImageRenderer;
+FORWARD class UITextRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIContextMenu;
 FORWARD class AESConnectionLine;
 FORWARD class AnimatorSMEditorScene;
+FORWARD class UIContextMenu;
 
 class AESNode : public GameObject,
                 public EventListener<IEventsFocus>,

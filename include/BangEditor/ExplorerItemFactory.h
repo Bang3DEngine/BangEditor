@@ -1,8 +1,14 @@
 #ifndef EXPLORERITEMFACTORY_H
 #define EXPLORERITEMFACTORY_H
 
+#include "Bang/Array.h"
 #include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
 #include "BangEditor/BangEditor.h"
+
+namespace Bang {
+class Path;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN

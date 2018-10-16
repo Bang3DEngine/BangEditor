@@ -1,16 +1,28 @@
 #ifndef UIINPUTVECTOR_H
 #define UIINPUTVECTOR_H
 
-#include "Bang/Array.h"
-#include "Bang/GameObject.h"
-#include "Bang/EventEmitter.h"
-#include "Bang/IEventsValueChanged.h"
+#include <vector>
 
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
+namespace Bang {
+class IEventsValueChanged;
+}  // namespace Bang
+
 NAMESPACE_BANG_BEGIN
-FORWARD class UILabel;
 FORWARD class UIInputNumber;
+FORWARD class UILabel;
+
 NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

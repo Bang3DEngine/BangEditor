@@ -1,22 +1,29 @@
 #include "BangEditor/RIWBehaviour.h"
 
-#include "Bang/File.h"
-#include "Bang/Path.h"
-#include "Bang/UILabel.h"
-#include "Bang/UIButton.h"
+#include "Bang/Alignment.h"
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
 #include "Bang/Extensions.h"
-#include "Bang/UIScrollBar.h"
-#include "Bang/UIScrollArea.h"
+#include "Bang/File.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/LayoutSizeType.h"
 #include "Bang/RectTransform.h"
+#include "Bang/Stretch.h"
+#include "Bang/UIButton.h"
+#include "Bang/UIContentSizeFitter.h"
+#include "Bang/UIHorizontalLayout.h"
+#include "Bang/UILayoutElement.h"
+#include "Bang/UIScrollArea.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/UITextRenderer.h"
-#include "Bang/UILayoutElement.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/UIHorizontalLayout.h"
-#include "Bang/UIContentSizeFitter.h"
-
-#include "BangEditor/QtProjectManager.h"
 #include "BangEditor/EditorTextureFactory.h"
+#include "BangEditor/QtProjectManager.h"
+
+namespace Bang {
+class Texture2D;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

@@ -1,7 +1,15 @@
 #include "BangEditor/UndoRedoSerializableChange.h"
 
+#include "Bang/Component.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/IEventsDestroy.h"
+#include "Bang/Path.h"
 #include "Bang/Resource.h"
-
+#include "Bang/Serializable.h"
+#include "Bang/String.h"
+#include "BangEditor/Editor.h"
 #include "BangEditor/Explorer.h"
 #include "BangEditor/Inspector.h"
 

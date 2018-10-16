@@ -1,18 +1,25 @@
 #include "BangEditor/EditorFloor.h"
 
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/Color.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
-#include "Bang/Material.h"
-#include "Bang/Transform.h"
+#include "Bang/GameObject.tcc"
 #include "Bang/LineRenderer.h"
-#include "Bang/ShaderProgram.h"
+#include "Bang/Material.h"
 #include "Bang/MaterialFactory.h"
-#include "Bang/GameObjectFactory.h"
+#include "Bang/Path.h"
+#include "Bang/ResourceHandle.h"
 #include "Bang/ShaderProgramFactory.h"
-
+#include "Bang/Transform.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/NotSelectableInEditor.h"
+
+namespace Bang {
+class ShaderProgram;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

@@ -1,17 +1,22 @@
 #include "BangEditor/ExplorerItemFactory.h"
 
-#include "Bang/Mesh.h"
-#include "Bang/Path.h"
-#include "Bang/Model.h"
-#include "Bang/Material.h"
-#include "Bang/Resources.h"
+#include "Bang/Array.tcc"
 #include "Bang/Extensions.h"
 #include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/Model.h"
+#include "Bang/Path.h"
+#include "Bang/Paths.h"
 #include "Bang/ResourceHandle.h"
-
+#include "Bang/Resources.h"
+#include "Bang/Resources.tcc"
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/ModelExplorerItem.h"
 #include "BangEditor/PrefabExplorerItem.h"
+
+namespace Bang {
+class String;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

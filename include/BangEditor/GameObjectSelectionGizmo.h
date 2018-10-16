@@ -1,7 +1,11 @@
 #ifndef GAMEOBJECTSELECTIONGIZMO_H
 #define GAMEOBJECTSELECTIONGIZMO_H
 
+#include "Bang/BangDefines.h"
 #include "Bang/GameObject.h"
+#include "Bang/RenderPass.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
 
 USING_NAMESPACE_BANG

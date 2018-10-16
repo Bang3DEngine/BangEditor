@@ -1,6 +1,7 @@
 #include "BangEditor/Shortcut.h"
 
-#include "Bang/Math.h"
+#include "Bang/Flags.h"
+#include "Bang/Input.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

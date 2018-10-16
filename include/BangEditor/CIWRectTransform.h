@@ -1,12 +1,20 @@
 #ifndef CIWRECTTRANSFORM_H
 #define CIWRECTTRANSFORM_H
 
+#include "Bang/BangDefines.h"
 #include "Bang/IEventsValueChanged.h"
-
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWTransform.h"
+
+namespace Bang {
+class IEventsValueChanged;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class RectTransform;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

@@ -1,7 +1,8 @@
 #include "BangEditor/EditorClipboard.h"
 
 #include "Bang/Component.h"
-
+#include "Bang/ComponentMacros.h"
+#include "Bang/GameObject.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
 

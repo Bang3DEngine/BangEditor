@@ -1,15 +1,20 @@
 #include "BangEditor/Editor.h"
 
-#include "Bang/AudioManager.h"
+#include "Bang/Assert.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/IEventsDestroy.h"
 #include "Bang/IEventsSceneManager.h"
-
-#include "BangEditor/ScenePlayer.h"
-#include "BangEditor/EditorSettings.h"
-#include "BangEditor/UndoRedoManager.h"
+#include "Bang/Path.h"
+#include "Bang/SceneManager.h"
 #include "BangEditor/EditorApplication.h"
-#include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/EditorSettings.h"
+#include "BangEditor/IEventsEditor.h"
 #include "BangEditor/NotSelectableInEditor.h"
+#include "BangEditor/PlayState.h"
+#include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UndoRedoGameObjectSelection.h"
+#include "BangEditor/UndoRedoManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

@@ -1,10 +1,13 @@
 #include "BangEditor/UIInputComplexRandom.h"
 
 #include "Bang/ComplexRandom.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UILayoutElement.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/UIHorizontalLayout.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

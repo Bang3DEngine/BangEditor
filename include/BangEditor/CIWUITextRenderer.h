@@ -1,15 +1,23 @@
 #ifndef CIWTEXTRENDERER_H
 #define CIWTEXTRENDERER_H
 
+#include "Bang/BangDefines.h"
 #include "Bang/IEventsValueChanged.h"
-
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
+namespace Bang {
+class IEventsValueChanged;
+template <class > class EventEmitter;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIInputText;
-FORWARD class UIInputNumber;
-FORWARD class UITextRenderer;
 FORWARD class UIComboBox;
+FORWARD class UIInputNumber;
+FORWARD class UIInputText;
+FORWARD class UITextRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

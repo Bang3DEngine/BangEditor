@@ -1,15 +1,22 @@
 #ifndef SELECTIONGIZMO_H
 #define SELECTIONGIZMO_H
 
-#include "Bang/MetaNode.h"
-#include "Bang/GameObject.h"
+#include "Bang/BangDefines.h"
 #include "Bang/EventListener.h"
+#include "Bang/GameObject.h"
 #include "Bang/IEventsDestroy.h"
-
+#include "Bang/MetaNode.h"
 #include "BangEditor/BangEditor.h"
+
+namespace Bang {
+class IEventsDestroy;
+class Object;
+template <class T> class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Camera;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

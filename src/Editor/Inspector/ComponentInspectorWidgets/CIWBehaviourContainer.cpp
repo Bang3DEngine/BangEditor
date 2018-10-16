@@ -1,22 +1,33 @@
 #include "BangEditor/CIWBehaviourContainer.h"
 
-#include "Bang/UIButton.h"
-#include "Bang/Extensions.h"
-#include "Bang/UICheckBox.h"
-#include "Bang/UIInputText.h"
-#include "Bang/UIInputNumber.h"
-#include "Bang/UITextRenderer.h"
-#include "Bang/BangPreprocessor.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/BehaviourContainer.h"
+#include <functional>
+#include <vector>
 
-#include "BangEditor/EditorPaths.h"
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/BPReflectedStruct.h"
+#include "Bang/BPReflectedVariable.h"
+#include "Bang/BangPreprocessor.h"
+#include "Bang/BehaviourContainer.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/Extensions.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEvents.h"
+#include "Bang/Map.h"
+#include "Bang/Map.tcc"
+#include "Bang/MetaNode.h"
+#include "Bang/Path.h"
 #include "BangEditor/CIWBehaviour.h"
-#include "BangEditor/UIInputColor.h"
-#include "BangEditor/UIInputVector.h"
 #include "BangEditor/EditorFileTracker.h"
-#include "BangEditor/EditorBehaviourManager.h"
 #include "BangEditor/UIInputFileWithPreview.h"
+
+namespace Bang {
+class IEventsValueChanged;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

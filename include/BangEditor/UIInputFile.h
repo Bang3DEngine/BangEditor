@@ -1,19 +1,33 @@
 #ifndef UIINPUTFILE_H
 #define UIINPUTFILE_H
 
-#include "Bang/Path.h"
+#include <vector>
+
 #include "Bang/Array.h"
-#include "Bang/GameObject.h"
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
 #include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
 #include "Bang/IEventsDragDrop.h"
 #include "Bang/IEventsValueChanged.h"
-
+#include "Bang/Path.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
+
+namespace Bang {
+class IEventsDragDrop;
+class IEventsValueChanged;
+}  // namespace Bang
 
 NAMESPACE_BANG_BEGIN
 FORWARD class UIButton;
-FORWARD class UIInputText;
 FORWARD class UIInputNumber;
+FORWARD class UIInputText;
+
 NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

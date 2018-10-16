@@ -1,13 +1,22 @@
 #include "BangEditor/PreviewViewer.h"
 
+#include "Bang/AspectRatioMode.h"
+#include "Bang/Color.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
 #include "Bang/Input.h"
-#include "Bang/UIFocusable.h"
+#include "Bang/LayoutSizeType.h"
+#include "Bang/Math.h"
 #include "Bang/RectTransform.h"
 #include "Bang/TextureFactory.h"
-#include "Bang/UIImageRenderer.h"
-#include "Bang/GameObjectFactory.h"
 #include "Bang/UIAspectRatioFitter.h"
 #include "Bang/UIContentSizeFitter.h"
+#include "Bang/UIFocusable.h"
+#include "Bang/UIImageRenderer.h"
+#include "Bang/Vector.tcc"
+#include "Bang/Vector2.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

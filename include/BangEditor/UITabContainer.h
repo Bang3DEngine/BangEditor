@@ -1,12 +1,26 @@
 #ifndef UITABCONTAINER_H
 #define UITABCONTAINER_H
 
-#include "Bang/List.h"
-#include "Bang/UMap.h"
-#include "Bang/GameObject.h"
-#include "Bang/EventListener.h"
+#include <sys/types.h>
+#include <vector>
 
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/List.h"
+#include "Bang/String.h"
+#include "Bang/UMap.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/UITabHeader.h"
+
+namespace BangEditor {
+class IEventsTabHeader;
+}  // namespace BangEditor
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN

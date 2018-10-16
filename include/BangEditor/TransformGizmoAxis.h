@@ -2,13 +2,20 @@
 #define TRANSFORMGIZMOAXIS_H
 
 #include "Bang/Axis.h"
+#include "Bang/BangDefines.h"
 #include "Bang/GameObject.h"
-
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
+
+namespace Bang {
+class Color;
+class Object;
+}  // namespace Bang
 
 NAMESPACE_BANG_BEGIN
 FORWARD class LineRenderer;
 FORWARD class MeshRenderer;
+
 NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

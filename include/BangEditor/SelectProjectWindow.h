@@ -2,16 +2,19 @@
 #define SELECTPROJECTWINDOW_H
 
 #include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/GameObject.h"
+#include "Bang/IEventsFocus.h"
 #include "Bang/Path.h"
 #include "Bang/Scene.h"
-#include "Bang/Window.h"
+#include "Bang/String.h"
 #include "Bang/UIFocusable.h"
-#include "Bang/IEventsFocus.h"
-
+#include "Bang/Window.h"
 #include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIButton;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

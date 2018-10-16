@@ -2,7 +2,9 @@
 #define CIWSKINNEDMESHRENDERER_H
 
 #include "Bang/Bang.h"
-
+#include "Bang/BangDefines.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWMeshRenderer.h"
 
 USING_NAMESPACE_BANG

@@ -1,12 +1,15 @@
 #ifndef FILEINSPECTORWIDGET_H
 #define FILEINSPECTORWIDGET_H
 
+#include "Bang/BangDefines.h"
+#include "Bang/Color.h"
 #include "Bang/Path.h"
-
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/InspectorWidget.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Texture2D;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

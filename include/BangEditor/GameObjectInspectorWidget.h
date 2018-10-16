@@ -1,15 +1,31 @@
 #ifndef GAMEOBJECTINSPECTORWIDGET_H
 #define GAMEOBJECTINSPECTORWIDGET_H
 
-#include "Bang/Bang.h"
-#include "Bang/IEventsFocus.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/IEventsValueChanged.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsFocus.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/InspectorWidget.h"
+
+namespace Bang {
+class GameObject;
+class IEventsValueChanged;
+class UICheckBox;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIInputText;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

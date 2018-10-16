@@ -1,31 +1,34 @@
 #include "BangEditor/UISceneContainer.h"
 
-#include "Bang/Scene.h"
-#include "Bang/AARect.h"
+#include "Bang/Alignment.h"
 #include "Bang/Camera.h"
-#include "Bang/GBuffer.h"
+#include "Bang/Color.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
 #include "Bang/GEngine.h"
-#include "Bang/UIButton.h"
-#include "Bang/Texture2D.h"
-#include "Bang/UICheckBox.h"
-#include "Bang/UIComboBox.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEventsTransform.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/LayoutSizeType.h"
 #include "Bang/RectTransform.h"
-#include "Bang/UITextRenderer.h"
-#include "Bang/TextureFactory.h"
+#include "Bang/Scene.h"
+#include "Bang/Stretch.h"
+#include "Bang/UIComboBox.h"
+#include "Bang/UIFocusable.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
-#include "Bang/UILayoutIgnorer.h"
+#include "Bang/UITextRenderer.h"
 #include "Bang/UIVerticalLayout.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/UIHorizontalLayout.h"
-
-#include "BangEditor/ScenePlayer.h"
+#include "Bang/Vector.tcc"
+#include "Bang/Vector2.h"
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/UISceneToolbar.h"
-#include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/UISceneToolbarDown.h"
-#include "BangEditor/EditorTextureFactory.h"
-#include "BangEditor/SelectionFramebuffer.h"
+
+namespace Bang {
+class IEventsDestroy;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

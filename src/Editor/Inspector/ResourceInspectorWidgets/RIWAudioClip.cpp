@@ -1,15 +1,28 @@
 #include "BangEditor/RIWAudioClip.h"
 
-#include "Bang/UIButton.h"
-#include "Bang/Extensions.h"
-#include "Bang/UIInputText.h"
-#include "Bang/AudioManager.h"
 #include "Bang/ALAudioSource.h"
-#include "Bang/UIInputNumber.h"
-#include "Bang/UITextRenderer.h"
+#include "Bang/Array.h"
+#include "Bang/Assert.h"
+#include "Bang/AudioManager.h"
+#include "Bang/AudioParams.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/Extensions.h"
+#include "Bang/GameObject.h"
 #include "Bang/GameObjectFactory.h"
-
+#include "Bang/LayoutSizeType.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/UIButton.h"
+#include "Bang/UIInputNumber.h"
+#include "Bang/UIInputText.h"
+#include "Bang/UITextRenderer.h"
 #include "BangEditor/EditorTextureFactory.h"
+#include "BangEditor/RIWResource.tcc"
+
+namespace Bang {
+class IEventsDestroy;
+class IEventsValueChanged;
+class Texture2D;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

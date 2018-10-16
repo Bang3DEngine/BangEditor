@@ -1,7 +1,10 @@
 #include "BangEditor/UndoRedoCreateGameObject.h"
 
+#include "Bang/Assert.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
 #include "Bang/GameObject.h"
-
+#include "Bang/IEventsDestroy.h"
 #include "BangEditor/Editor.h"
 
 USING_NAMESPACE_BANG

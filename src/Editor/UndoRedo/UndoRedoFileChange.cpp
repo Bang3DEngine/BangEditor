@@ -1,9 +1,11 @@
 #include "BangEditor/UndoRedoFileChange.h"
 
 #include <fstream>
+#include <string>
 
-#include "Bang/File.h"
 #include "Bang/Assert.h"
+#include "Bang/File.h"
+#include "Bang/String.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

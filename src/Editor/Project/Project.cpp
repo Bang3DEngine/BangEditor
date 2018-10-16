@@ -1,14 +1,15 @@
 #include "BangEditor/Project.h"
 
-#include <string>
+#include <istream>
 
-#include "Bang/Time.h"
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/Extensions.h"
+#include "Bang/MetaNode.h"
+#include "Bang/MetaNode.tcc"
 #include "Bang/Paths.h"
 #include "Bang/Physics.h"
-#include "Bang/MetaNode.h"
-#include "Bang/Extensions.h"
-#include "Bang/SceneManager.h"
-
+#include "Bang/Time.h"
 #include "BangEditor/SceneOpenerSaver.h"
 
 USING_NAMESPACE_BANG

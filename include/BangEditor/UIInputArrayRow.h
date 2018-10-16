@@ -1,8 +1,9 @@
 #ifndef UIINPUTARRAYROW_H
 #define UIINPUTARRAYROW_H
 
+#include "Bang/BangDefines.h"
 #include "Bang/GameObject.h"
-
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
 USING_NAMESPACE_BANG

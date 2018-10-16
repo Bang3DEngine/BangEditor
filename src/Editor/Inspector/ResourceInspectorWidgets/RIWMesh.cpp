@@ -1,15 +1,30 @@
 #include "BangEditor/RIWMesh.h"
 
-#include "Bang/UIInputText.h"
-#include "Bang/RectTransform.h"
-#include "Bang/TextureFactory.h"
-#include "Bang/UIImageRenderer.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/UIAspectRatioFitter.h"
-#include "Bang/UIContentSizeFitter.h"
+#include <functional>
 
-#include "BangEditor/PreviewViewer.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/LayoutSizeType.h"
+#include "Bang/Map.h"
+#include "Bang/Map.tcc"
+#include "Bang/RectTransform.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/Texture2D.h"
+#include "Bang/UIInputNumber.h"
+#include "Bang/UIInputText.h"
 #include "BangEditor/MeshPreviewFactory.h"
+#include "BangEditor/PreviewViewer.h"
+#include "BangEditor/RIWResource.tcc"
+#include "BangEditor/ResourceInspectorWidget.h"
+
+namespace BangEditor {
+struct ResourcePreviewFactoryParameters;
+}  // namespace BangEditor
+namespace Bang {
+class IEventsValueChanged;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

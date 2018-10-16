@@ -1,23 +1,33 @@
 #ifndef CIWPARTICLESYSTEM_H
 #define CIWPARTICLESYSTEM_H
 
+#include "Bang/BangDefines.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWRenderer.h"
 
+namespace Bang {
+class IEventsValueChanged;
+class UICheckBox;
+template <class > class EventEmitter;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UISlider;
+FORWARD class ParticleSystem;
 FORWARD class UIComboBox;
 FORWARD class UIInputNumber;
-FORWARD class ParticleSystem;
+FORWARD class UISlider;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UIInputColor;
-FORWARD class UIInputVector;
-FORWARD class UIInputTexture;
 FORWARD class UIInputComplexRandom;
 FORWARD class UIInputFileWithPreview;
+FORWARD class UIInputTexture;
+FORWARD class UIInputVector;
 
 class CIWParticleSystem : public CIWRenderer
 {

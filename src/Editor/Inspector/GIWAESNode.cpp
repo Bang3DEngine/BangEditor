@@ -1,20 +1,33 @@
 #include "BangEditor/GIWAESNode.h"
 
-#include "Bang/Resources.h"
+#include "Bang/Animation.h"
+#include "Bang/AnimatorStateMachineNode.h"
+#include "Bang/Assert.h"
+#include "Bang/Color.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
 #include "Bang/Extensions.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/Path.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/Resources.h"
+#include "Bang/Resources.tcc"
+#include "Bang/String.h"
 #include "Bang/UICheckBox.h"
+#include "Bang/UIImageRenderer.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UITextRenderer.h"
-#include "Bang/TextureFactory.h"
-#include "Bang/UIImageRenderer.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/AnimatorStateMachine.h"
-#include "Bang/AnimatorStateMachineNode.h"
-
 #include "BangEditor/AESNode.h"
-#include "BangEditor/Inspector.h"
 #include "BangEditor/EditorTextureFactory.h"
+#include "BangEditor/Inspector.h"
 #include "BangEditor/UIInputFileWithPreview.h"
+
+namespace Bang {
+class IEventsDestroy;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

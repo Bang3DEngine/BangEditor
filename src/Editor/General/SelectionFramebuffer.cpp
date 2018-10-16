@@ -1,22 +1,29 @@
 #include "BangEditor/SelectionFramebuffer.h"
 
-#include "Bang/GL.h"
-#include "Bang/Paths.h"
-#include "Bang/Input.h"
-#include "Bang/Scene.h"
+#include "Bang/Array.h"
+#include "Bang/Assert.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
 #include "Bang/GEngine.h"
-#include "Bang/Vector3.h"
+#include "Bang/GL.h"
+#include "Bang/GameObject.h"
+#include "Bang/IEventsDestroy.h"
 #include "Bang/Material.h"
+#include "Bang/Paths.h"
+#include "Bang/RenderPass.h"
 #include "Bang/Renderer.h"
 #include "Bang/Resources.h"
-#include "Bang/Texture2D.h"
-#include "Bang/GameObject.h"
+#include "Bang/Resources.tcc"
+#include "Bang/Scene.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/ShaderProgramFactory.h"
-
+#include "Bang/Texture2D.h"
+#include "Bang/UMap.tcc"
 #include "BangEditor/BangEditor.h"
-#include "BangEditor/EditorCamera.h"
-#include "BangEditor/NotSelectableInEditor.h"
+
+namespace Bang {
+class IEventsResource;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

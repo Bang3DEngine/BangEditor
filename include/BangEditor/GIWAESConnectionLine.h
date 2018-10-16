@@ -1,27 +1,43 @@
 #ifndef GIWAESCONNECTIONLINE_H
 #define GIWAESCONNECTIONLINE_H
 
+#include <vector>
+
+#include "Bang/Array.tcc"
 #include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/IEvents.h"
 #include "Bang/IEventsDestroy.h"
 #include "Bang/IEventsValueChanged.h"
-
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/InspectorWidget.h"
 
+namespace Bang {
+class GameObject;
+class IEventsDestroy;
+class IEventsValueChanged;
+class UICheckBox;
+class UILabel;
+template <class > class EventEmitter;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class AnimatorStateMachineConnection;
+FORWARD class AnimatorStateMachineNode;
+FORWARD class UIInputNumber;
+FORWARD class UIInputText;
 FORWARD class UIList;
 FORWARD class UISlider;
-FORWARD class UIInputText;
-FORWARD class UIInputNumber;
-FORWARD class AnimatorStateMachineNode;
-FORWARD class AnimatorStateMachineConnection;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputArray;
 FORWARD class AESConnectionLine;
+FORWARD class UIInputArray;
 
 class GIWAESConnectionLine : public InspectorWidget,
                              public EventListener<IEventsValueChanged>

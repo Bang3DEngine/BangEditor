@@ -1,19 +1,29 @@
 #ifndef COMPONENTSGIZMOS_H
 #define COMPONENTSGIZMOS_H
 
+#include "Bang/BangDefines.h"
 #include "Bang/GameObject.h"
+#include "Bang/RenderPass.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
 
+namespace Bang {
+class Camera;
+class Component;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Rope;
-FORWARD class PointLight;
 FORWARD class AudioSource;
 FORWARD class BoxCollider;
-FORWARD class ParticleSystem;
-FORWARD class SphereCollider;
 FORWARD class CapsuleCollider;
-FORWARD class ReflectionProbe;
 FORWARD class DirectionalLight;
+FORWARD class ParticleSystem;
+FORWARD class PointLight;
+FORWARD class ReflectionProbe;
+FORWARD class Rope;
+FORWARD class SphereCollider;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

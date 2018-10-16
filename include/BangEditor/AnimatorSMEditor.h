@@ -1,24 +1,39 @@
 #ifndef ANIMATORSMEDITOR_H
 #define ANIMATORSMEDITOR_H
 
-#include "Bang/Bang.h"
-#include "Bang/UIButton.h"
-#include "Bang/GameObject.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/IEventsValueChanged.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/String.h"
+#include "Bang/Time.h"
+#include "Bang/UIButton.h"
 #include "BangEditor/BangEditor.h"
+
+namespace Bang {
+class IEventsValueChanged;
+class UIButton;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Animator;
 FORWARD class AnimatorStateMachine;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputArray;
 FORWARD class AnimatorSMEditorScene;
+FORWARD class UIInputArray;
 
 class AnimatorSMEditor : public GameObject,
                          public EventListener<IEventsValueChanged>

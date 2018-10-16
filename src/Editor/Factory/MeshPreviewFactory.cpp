@@ -1,14 +1,20 @@
 #include "BangEditor/MeshPreviewFactory.h"
 
-#include "Bang/Mesh.h"
-#include "Bang/Scene.h"
-#include "Bang/Camera.h"
-#include "Bang/Material.h"
-#include "Bang/Transform.h"
+#include "Bang/Assert.h"
+#include "Bang/GL.h"
 #include "Bang/GameObject.h"
 #include "Bang/GameObjectFactory.h"
-
+#include "Bang/Material.h"
+#include "Bang/Mesh.h"
+#include "Bang/MeshRenderer.h"
+#include "Bang/Scene.h"
+#include "Bang/Texture2D.h"
 #include "BangEditor/EditorResources.h"
+#include "BangEditor/ResourcePreviewFactory.tcc"
+
+namespace Bang {
+class Camera;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

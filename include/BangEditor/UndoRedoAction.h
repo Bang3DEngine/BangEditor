@@ -2,6 +2,7 @@
 #define UNDOREDOACTION_H
 
 #include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
 #include "BangEditor/BangEditor.h"
 
 USING_NAMESPACE_BANG

@@ -1,13 +1,25 @@
 #ifndef ROTATEGIZMOAXIS_H
 #define ROTATEGIZMOAXIS_H
 
+#include "Bang/Axis.h"
+#include "Bang/BangDefines.h"
+#include "Bang/RenderPass.h"
 #include "Bang/ResourceHandle.h"
-
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
+#include "BangEditor/SelectionGizmo.h"
 #include "BangEditor/TransformGizmoAxis.h"
 
+namespace Bang {
+class Color;
+class GameObject;
+class Mesh;
+}  // namespace Bang
+
 NAMESPACE_BANG_BEGIN
-FORWARD class MeshRenderer;
 FORWARD class LineRenderer;
+FORWARD class MeshRenderer;
+
 NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

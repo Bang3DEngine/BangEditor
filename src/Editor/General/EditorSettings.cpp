@@ -1,9 +1,10 @@
 #include "BangEditor/EditorSettings.h"
 
+#include "Bang/Array.tcc"
+#include "Bang/Assert.h"
 #include "Bang/File.h"
-#include "Bang/Debug.h"
 #include "Bang/MetaNode.h"
-
+#include "Bang/MetaNode.tcc"
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorPaths.h"
 

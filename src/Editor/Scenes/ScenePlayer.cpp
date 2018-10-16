@@ -1,18 +1,22 @@
 #include "BangEditor/ScenePlayer.h"
 
-#include "Bang/Scene.h"
-#include "Bang/Physics.h"
-#include "Bang/Behaviour.h"
-#include "Bang/TimeSingleton.h"
+#include "Bang/AudioManager.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/Flags.h"
+#include "Bang/GameObject.h"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/BehaviourContainer.h"
-
+#include "Bang/Key.h"
+#include "Bang/Physics.h"
+#include "Bang/Scene.h"
+#include "Bang/SceneManager.h"
+#include "Bang/String.h"
 #include "BangEditor/Editor.h"
-#include "BangEditor/EditorScene.h"
-#include "BangEditor/EditorCamera.h"
-#include "BangEditor/SceneOpenerSaver.h"
-#include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorBehaviourManager.h"
+#include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/IEventsScenePlayer.h"
+#include "BangEditor/Shortcut.h"
+#include "BangEditor/ShortcutManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

@@ -1,25 +1,30 @@
 #include "BangEditor/TranslateGizmoAxis.h"
 
-#include "Bang/GL.h"
-#include "Bang/Ray.h"
-#include "Bang/Mesh.h"
-#include "Bang/Input.h"
-#include "Bang/Plane.h"
+#include "Bang/Array.tcc"
 #include "Bang/Camera.h"
-#include "Bang/GBuffer.h"
-#include "Bang/GEngine.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
 #include "Bang/Geometry.h"
+#include "Bang/Input.h"
+#include "Bang/Key.h"
+#include "Bang/LineRenderer.h"
 #include "Bang/Material.h"
-#include "Bang/Transform.h"
+#include "Bang/MaterialFactory.h"
+#include "Bang/Math.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
-#include "Bang/LineRenderer.h"
-#include "Bang/AxisFunctions.h"
-#include "Bang/DebugRenderer.h"
-#include "Bang/MaterialFactory.h"
-#include "Bang/GameObjectFactory.h"
-
+#include "Bang/Plane.h"
+#include "Bang/Ray.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/Transform.h"
+#include "Bang/Vector.tcc"
+#include "Bang/Vector3.h"
 #include "BangEditor/Selection.h"
+
+namespace Bang {
+class Color;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

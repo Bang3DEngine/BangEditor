@@ -2,12 +2,19 @@
 #define CIWMESHCOLLIDER_H
 
 #include "Bang/Bang.h"
-
+#include "Bang/BangDefines.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWCollider.h"
 
+namespace Bang {
+class IEventsValueChanged;
+template <class > class EventEmitter;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class MeshCollider;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

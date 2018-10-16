@@ -1,13 +1,28 @@
 #ifndef RIWMESH_H
 #define RIWMESH_H
 
-#include "Bang/Path.h"
-#include "Bang/Mesh.h"
-#include "Bang/UIInputNumber.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/IEventsValueChanged.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/Mesh.h"
+#include "Bang/Path.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/String.h"
+#include "Bang/UIInputNumber.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
+
+namespace Bang {
+class IEventsValueChanged;
+class Texture2D;
+class UIInputNumber;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN

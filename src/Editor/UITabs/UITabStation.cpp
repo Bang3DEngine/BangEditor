@@ -1,18 +1,36 @@
 #include "BangEditor/UITabStation.h"
 
-#include "Bang/UITheme.h"
+#include "Bang/Array.h"
+#include "Bang/Assert.h"
+#include "Bang/Color.h"
+#include "Bang/Component.h"
+#include "Bang/DPtr.h"
+#include "Bang/DPtr.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEventsDragDrop.h"
+#include "Bang/Input.h"
+#include "Bang/Math.h"
 #include "Bang/RectTransform.h"
-#include "Bang/TextureFactory.h"
+#include "Bang/Stretch.h"
+#include "Bang/UIDirLayoutMovableSeparator.h"
+#include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/UITheme.h"
 #include "Bang/UIVerticalLayout.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/UIHorizontalLayout.h"
-#include "Bang/UIDirLayoutMovableSeparator.h"
-
+#include "Bang/Vector.tcc"
+#include "Bang/Vector2.h"
 #include "BangEditor/EditorScene.h"
-#include "BangEditor/UITabContainer.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/UITabContainer.h"
+#include "BangEditor/UITabHeader.h"
+
+namespace Bang {
+class IEventsDestroy;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

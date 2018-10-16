@@ -1,19 +1,16 @@
 #include "BangEditor/EditorWindow.h"
 
-#include "Bang/GL.h"
-#include "Bang/Scene.h"
-#include "Bang/Camera.h"
-#include "Bang/GBuffer.h"
-#include "Bang/GEngine.h"
-#include "Bang/Texture2D.h"
-#include "Bang/SceneManager.h"
-#include "Bang/UILayoutManager.h"
-
-#include "BangEditor/EditorScene.h"
-#include "BangEditor/EditorResources.h"
-#include "BangEditor/ShortcutManager.h"
-#include "BangEditor/SceneOpenerSaver.h"
+#include "Bang/String.h"
+#include "Bang/Time.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/PlayState.h"
+#include "BangEditor/SceneOpenerSaver.h"
+#include "BangEditor/ScenePlayer.h"
+#include "BangEditor/ShortcutManager.h"
+
+namespace Bang {
+class SceneManager;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG_EDITOR
 

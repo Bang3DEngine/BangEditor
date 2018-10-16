@@ -1,7 +1,13 @@
 #include "BangEditor/UIInputTexture.h"
 
-#include "Bang/Resources.h"
 #include "Bang/Extensions.h"
+#include "Bang/Resources.h"
+#include "Bang/Resources.tcc"
+#include "Bang/Texture2D.h"
+
+namespace Bang {
+class Path;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

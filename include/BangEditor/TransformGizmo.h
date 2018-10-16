@@ -1,17 +1,26 @@
 #ifndef TRANSFORMGIZMO_H
 #define TRANSFORMGIZMO_H
 
+#include "Bang/BangDefines.h"
 #include "Bang/GameObject.h"
-
+#include "Bang/MetaNode.h"
+#include "Bang/RenderPass.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
+
+namespace Bang {
+class GameObject;
+class Scene;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class ScaleGizmo;
-FORWARD class RotateGizmo;
-FORWARD class TranslateGizmo;
 FORWARD class RectTransformSelectionGizmo;
+FORWARD class RotateGizmo;
+FORWARD class ScaleGizmo;
+FORWARD class TranslateGizmo;
 
 enum class TransformGizmoMode
 {

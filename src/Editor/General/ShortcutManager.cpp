@@ -1,5 +1,10 @@
 #include "BangEditor/ShortcutManager.h"
 
+#include <utility>
+
+#include "Bang/Array.tcc"
+#include "Bang/Input.h"
+#include "Bang/Map.tcc"
 #include "BangEditor/EditorWindow.h"
 
 USING_NAMESPACE_BANG

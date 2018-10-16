@@ -2,18 +2,30 @@
 #define PREVIEWVIEWER_H
 
 #include <functional>
+#include <vector>
 
+#include "Bang/Array.tcc"
 #include "Bang/Bang.h"
-#include "Bang/Texture2D.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
 #include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
 #include "Bang/IEventsFocus.h"
 #include "Bang/ResourceHandle.h"
-
+#include "Bang/String.h"
+#include "Bang/Texture2D.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/ResourcePreviewFactory.h"
+
+namespace Bang {
+class Texture2D;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIFocusable;
 FORWARD class UIImageRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

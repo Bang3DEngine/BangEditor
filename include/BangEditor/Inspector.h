@@ -1,27 +1,54 @@
 ﻿#ifndef INSPECTOR_H
 #define INSPECTOR_H
 
-#include "Bang/UMap.h"
-#include "Bang/SceneManager.h"
-#include "Bang/IEventsDestroy.h"
-#include "Bang/IEventsComponent.h"
-#include "Bang/IEventsFileTracker.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsComponent.h"
+#include "Bang/IEventsDestroy.h"
+#include "Bang/IEventsFileTracker.h"
+#include "Bang/List.h"
+#include "Bang/Path.h"
+#include "Bang/SceneManager.h"
+#include "Bang/String.h"
+#include "Bang/UMap.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/Editor.h"
 
+namespace BangEditor {
+class IEventsEditor;
+}  // namespace BangEditor
+namespace Bang {
+class Component;
+class IEventsComponent;
+class IEventsDestroy;
+class IEventsFileTracker;
+class IEventsSceneManager;
+class Object;
+class Scene;
+class Serializable;
+template <class > class EventEmitter;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class UIImageRenderer;
 FORWARD class UIScrollPanel;
 FORWARD class UITextRenderer;
-FORWARD class UIImageRenderer;
 FORWARD class UIVerticalLayout;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class InspectorWidget;
 FORWARD class MenuItem;
 FORWARD class UIContextMenu;
-FORWARD class InspectorWidget;
 
 class Inspector : public GameObject,
                   public EventListener<IEventsEditor>,

@@ -1,23 +1,53 @@
 #ifndef UISCENEEDITCONTAINER_H
 #define UISCENEEDITCONTAINER_H
 
+#include <functional>
+#include <vector>
+
+#include "Bang/Array.tcc"
 #include "Bang/Bang.h"
-#include "Bang/MetaNode.h"
-#include "Bang/Material.h"
-#include "Bang/UIFocusable.h"
-#include "Bang/SceneManager.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
 #include "Bang/EventListener.h"
-#include "Bang/ResourceHandle.h"
+#include "Bang/IEvents.h"
 #include "Bang/IEventsDestroy.h"
 #include "Bang/IEventsDragDrop.h"
-
+#include "Bang/IEventsFocus.h"
+#include "Bang/Map.h"
+#include "Bang/Material.h"
+#include "Bang/MetaNode.h"
+#include "Bang/RenderPass.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/SceneManager.h"
+#include "Bang/String.h"
+#include "Bang/UIFocusable.h"
+#include "BangEditor/BangEditor.h"
+#include "BangEditor/PlayState.h"
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneContainer.h"
+
+namespace BangEditor {
+class IEventsScenePlayer;
+}  // namespace BangEditor
+namespace Bang {
+class Camera;
+class GameObject;
+class IEventsDestroy;
+class IEventsDragDrop;
+class IEventsGameObjectVisibilityChanged;
+class IEventsSceneManager;
+class Material;
+class Path;
+class Scene;
+class UIFocusable;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class GBuffer;
 FORWARD class MeshRenderer;
 FORWARD class UIImageRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

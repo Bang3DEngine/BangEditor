@@ -2,15 +2,22 @@
 #define MENUBAR_H
 
 #include "Bang/Array.h"
+#include "Bang/BangDefines.h"
 #include "Bang/GameObject.h"
-
+#include "Bang/Path.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ShortcutManager.h"
+
+namespace BangEditor {
+class Shortcut;
+}  // namespace BangEditor
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UICanvas;
 FORWARD class UIFocusable;
 FORWARD class UIHorizontalLayout;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

@@ -2,14 +2,20 @@
 #define UISCENEDEBUGSTATS_H
 
 #include "Bang/Array.h"
-#include "Bang/Scene.h"
+#include "Bang/BangDefines.h"
 #include "Bang/FPSChrono.h"
 #include "Bang/GameObject.h"
-
+#include "Bang/Scene.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
+
+namespace Bang {
+class Object;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UITextRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

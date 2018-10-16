@@ -2,11 +2,20 @@
 #define CIWANIMATOR_H
 
 #include "Bang/Bang.h"
-
+#include "Bang/BangDefines.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
+
+namespace Bang {
+class IEventsValueChanged;
+class UICheckBox;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Animator;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

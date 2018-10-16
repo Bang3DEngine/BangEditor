@@ -1,15 +1,30 @@
 #ifndef RIWMODEL_H
 #define RIWMODEL_H
 
-#include "Bang/Path.h"
-#include "Bang/Model.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/IEventsValueChanged.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/Model.h"
+#include "Bang/Path.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
+
+namespace Bang {
+class IEventsValueChanged;
+class Texture2D;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIInputNumber;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

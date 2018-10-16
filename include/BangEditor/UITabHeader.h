@@ -1,20 +1,39 @@
 #ifndef UITABHEADER_H
 #define UITABHEADER_H
 
-#include "Bang/Bang.h"
-#include "Bang/DPtr.h"
-#include "Bang/String.h"
-#include "Bang/GameObject.h"
-#include "Bang/IEventsDragDrop.h"
+#include <sys/types.h>
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/Color.h"
+#include "Bang/DPtr.h"
+#include "Bang/DPtr.tcc"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsDragDrop.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/IEventsTabHeader.h"
 
+namespace BangEditor {
+class IEventsTabHeader;
+}  // namespace BangEditor
+namespace Bang {
+class IEventsDragDrop;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIFocusable;
-FORWARD class UITextRenderer;
 FORWARD class UIDragDroppable;
+FORWARD class UIFocusable;
 FORWARD class UIImageRenderer;
+FORWARD class UITextRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

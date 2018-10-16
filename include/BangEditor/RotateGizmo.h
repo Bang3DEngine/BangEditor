@@ -2,13 +2,21 @@
 #define ROTATEGIZMO_H
 
 #include "Bang/Axis.h"
+#include "Bang/BangDefines.h"
 #include "Bang/GameObject.h"
-
+#include "Bang/RenderPass.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
+
+namespace Bang {
+class GameObject;
+}  // namespace Bang
 
 NAMESPACE_BANG_BEGIN
 FORWARD class LineRenderer;
 FORWARD class MeshRenderer;
+
 NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

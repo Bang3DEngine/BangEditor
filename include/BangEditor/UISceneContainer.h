@@ -1,18 +1,34 @@
 #ifndef UISCENECONTAINER_H
 #define UISCENECONTAINER_H
 
-#include "Bang/GameObject.h"
-#include "Bang/IEventsFocus.h"
+#include <vector>
+
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
 #include "Bang/EventListener.h"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsFocus.h"
 #include "Bang/IEventsTransform.h"
 #include "Bang/IEventsValueChanged.h"
-
+#include "Bang/RenderPass.h"
 #include "BangEditor/BangEditor.h"
+
+namespace Bang {
+class Camera;
+class IEventsDestroy;
+class IEventsTransform;
+class IEventsValueChanged;
+class Scene;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Texture2D;
 FORWARD class UIFocusable;
 FORWARD class UIImageRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

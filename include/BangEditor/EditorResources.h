@@ -1,16 +1,23 @@
 #ifndef EDITORRESOURCES_H
 #define EDITORRESOURCES_H
 
+#include "Bang/Array.h"
+#include "Bang/BangDefines.h"
 #include "Bang/Resources.h"
-
 #include "BangEditor/BangEditor.h"
+
+namespace Bang {
+class MeshFactory;
+class Path;
+class TextureFactory;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class MaterialPreviewFactory;
 FORWARD class MeshPreviewFactory;
 FORWARD class ModelPreviewFactory;
-FORWARD class MaterialPreviewFactory;
 
 class EditorResources : public Resources
 {

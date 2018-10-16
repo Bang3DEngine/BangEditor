@@ -1,15 +1,22 @@
 #include "BangEditor/ASMCTransitionConditionInput.h"
 
-#include "Bang/MetaNode.h"
-#include "Bang/UIComboBox.h"
-#include "Bang/UIInputText.h"
-#include "Bang/UIInputNumber.h"
-#include "Bang/UILayoutElement.h"
-#include "Bang/UIImageRenderer.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/UIHorizontalLayout.h"
+#include <sys/types.h>
+#include <ostream>
+
 #include "Bang/AnimatorStateMachine.h"
 #include "Bang/AnimatorStateMachineConnectionTransitionCondition.h"
+#include "Bang/Array.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/MetaNode.h"
+#include "Bang/MetaNode.tcc"
+#include "Bang/Serializable.h"
+#include "Bang/UIComboBox.h"
+#include "Bang/UIHorizontalLayout.h"
+#include "Bang/UIInputNumber.h"
+#include "Bang/UILayoutElement.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

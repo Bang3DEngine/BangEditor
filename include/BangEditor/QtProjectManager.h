@@ -1,10 +1,10 @@
 #ifndef QTPROJECTMANAGER_H
 #define QTPROJECTMANAGER_H
 
+#include "Bang/BangDefines.h"
 #include "Bang/Path.h"
 #include "Bang/String.h"
 #include "Bang/ThreadPool.h"
-
 #include "BangEditor/BangEditor.h"
 
 USING_NAMESPACE_BANG

@@ -1,16 +1,17 @@
 #include "BangEditor/EditorSceneManager.h"
 
-#include "Bang/Time.h"
-#include "Bang/Debug.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/IEventsSceneManager.h"
 #include "Bang/Scene.h"
-#include "Bang/Camera.h"
-#include "Bang/GEngine.h"
-#include "Bang/AudioManager.h"
-#include "Bang/UILayoutManager.h"
-
-#include "BangEditor/Editor.h"
-#include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorBehaviourManager.h"
+#include "BangEditor/EditorScene.h"
+
+namespace Bang {
+class BehaviourManager;
+class Path;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

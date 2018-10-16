@@ -1,12 +1,16 @@
 #include "BangEditor/GameObjectInspectorWidget.h"
 
+#include "Bang/Assert.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEventsValueChanged.h"
 #include "Bang/MetaNode.h"
 #include "Bang/UICheckBox.h"
+#include "Bang/UIImageRenderer.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UITextRenderer.h"
-#include "Bang/UIImageRenderer.h"
-#include "Bang/GameObjectFactory.h"
-
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
 

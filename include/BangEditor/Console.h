@@ -1,15 +1,32 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
-#include "Bang/Debug.h"
-#include "Bang/Mutex.h"
-#include "Bang/UIList.h"
-#include "Bang/GameObject.h"
+#include <vector>
 
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/Debug.h"
+#include "Bang/DebugMessageType.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/List.h"
+#include "Bang/Mutex.h"
+#include "Bang/String.h"
+#include "Bang/UIList.h"
 #include "BangEditor/BangEditor.h"
+
+namespace Bang {
+class IEventsDebug;
+class UIImageRenderer;
+class UIList;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UITextRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

@@ -1,11 +1,31 @@
 ﻿#ifndef UIINPUTARRAY_H
 #define UIINPUTARRAY_H
 
-#include "Bang/Bang.h"
-#include "Bang/GameObject.h"
-#include "Bang/IEventsValueChanged.h"
+#include <sys/types.h>
+#include <functional>
+#include <vector>
 
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/UIInputArrayRow.h"
+
+namespace BangEditor {
+class UIInputArrayRow;
+}  // namespace BangEditor
+namespace Bang {
+class IEventsValueChanged;
+class Serializable;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN

@@ -1,10 +1,19 @@
 #ifndef CIWMESHRENDERER_H
 #define CIWMESHRENDERER_H
 
+#include "Bang/BangDefines.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWRenderer.h"
+
+namespace Bang {
+class IEventsValueChanged;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class MeshRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

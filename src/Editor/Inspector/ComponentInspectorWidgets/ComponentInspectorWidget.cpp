@@ -1,20 +1,24 @@
 #include "BangEditor/ComponentInspectorWidget.h"
 
-#include "Bang/Debug.h"
+#include "Bang/Array.h"
+#include "Bang/Assert.h"
 #include "Bang/Component.h"
+#include "Bang/ComponentMacros.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/IEventsValueChanged.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIFocusable.h"
-#include "Bang/UITextRenderer.h"
-#include "Bang/MaterialFactory.h"
 #include "Bang/UIImageRenderer.h"
-#include "Bang/UILayoutElement.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/UIHorizontalLayout.h"
-#include "BangEditor/UndoRedoManager.h"
-#include "BangEditor/UndoRedoSerializableChange.h"
-
+#include "Bang/UITextRenderer.h"
 #include "BangEditor/EditorClipboard.h"
 #include "BangEditor/EditorTextureFactory.h"
+#include "BangEditor/MenuItem.h"
+#include "BangEditor/UIContextMenu.h"
+#include "BangEditor/UndoRedoManager.h"
+#include "BangEditor/UndoRedoSerializableChange.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

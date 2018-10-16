@@ -1,16 +1,25 @@
 #ifndef CIWBEHAVIOURCONTAINER_H
 #define CIWBEHAVIOURCONTAINER_H
 
-#include "Bang/Time.h"
-#include "Bang/IEventsValueChanged.h"
 #include "Bang/BPReflectedVariable.h"
-
+#include "Bang/BangDefines.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/String.h"
+#include "Bang/Time.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWBehaviour.h"
 #include "BangEditor/ComponentInspectorWidget.h"
+
+namespace Bang {
+class BPReflectedStruct;
+class IEventsValueChanged;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class BehaviourContainer;
 FORWARD class UIInputFileWithPreview;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

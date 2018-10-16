@@ -1,15 +1,29 @@
 #ifndef RIWANIMATORSTATEMACHINE_H
 #define RIWANIMATORSTATEMACHINE_H
 
-#include "Bang/Bang.h"
-#include "Bang/AnimatorStateMachine.h"
+#include <vector>
 
+#include "Bang/AnimatorStateMachine.h"
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/IEvents.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
+namespace Bang {
+class IEventsValueChanged;
+class Texture2D;
+template <class > class EventEmitter;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIButton;
 FORWARD class AnimatorStateMachine;
+FORWARD class UIButton;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

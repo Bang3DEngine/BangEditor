@@ -1,15 +1,15 @@
 #include "BangEditor/QtProjectManager.h"
 
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
 #include "Bang/File.h"
 #include "Bang/List.h"
-#include "Bang/Array.h"
+#include "Bang/List.tcc"
 #include "Bang/Paths.h"
-#include "Bang/Debug.h"
-#include "Bang/Thread.h"
+#include "Bang/String.h"
 #include "Bang/SystemUtils.h"
-
+#include "Bang/Thread.h"
 #include "BangEditor/Project.h"
-#include "BangEditor/EditorWindow.h"
 #include "BangEditor/ProjectManager.h"
 
 USING_NAMESPACE_BANG

@@ -1,11 +1,17 @@
 #include "BangEditor/RIWPhysicsMaterial.h"
 
-#include "Bang/UISlider.h"
+#include "Bang/EventEmitter.h"
 #include "Bang/Extensions.h"
-#include "Bang/UIComboBox.h"
 #include "Bang/GameObjectFactory.h"
-
+#include "Bang/UIComboBox.h"
+#include "Bang/UISlider.h"
 #include "BangEditor/EditorTextureFactory.h"
+#include "BangEditor/RIWResource.tcc"
+
+namespace Bang {
+class IEventsValueChanged;
+class Texture2D;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

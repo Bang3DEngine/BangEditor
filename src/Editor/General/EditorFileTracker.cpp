@@ -1,19 +1,36 @@
 #include "BangEditor/EditorFileTracker.h"
 
-#include "Bang/File.h"
-#include "Bang/Paths.h"
-#include "Bang/Shader.h"
-#include "Bang/Resources.h"
-#include "Bang/Extensions.h"
-#include "Bang/ShaderProgram.h"
+#include <array>
+#include <functional>
+
 #include "Bang/CodePreprocessor.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/Extensions.h"
+#include "Bang/File.h"
+#include "Bang/FileTracker.h"
 #include "Bang/IEventsFileTracker.h"
 #include "Bang/MetaFilesManager.h"
-
+#include "Bang/Path.h"
+#include "Bang/Paths.h"
+#include "Bang/Resources.h"
+#include "Bang/Resources.tcc"
+#include "Bang/Set.h"
+#include "Bang/Set.tcc"
+#include "Bang/Shader.h"
+#include "Bang/ShaderProgram.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorScene.h"
-#include "BangEditor/EditorResources.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/IEventsProjectManager.h"
+#include "BangEditor/ProjectManager.h"
+
+namespace BangEditor {
+class Project;
+}  // namespace BangEditor
+namespace Bang {
+class Resource;
+class String;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

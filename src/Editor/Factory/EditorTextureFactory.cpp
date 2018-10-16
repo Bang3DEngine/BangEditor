@@ -1,18 +1,26 @@
 #include "BangEditor/EditorTextureFactory.h"
 
-#include "Bang/Model.h"
-#include "Bang/Material.h"
 #include "Bang/Behaviour.h"
-#include "Bang/Texture2D.h"
-#include "Bang/Resources.h"
+#include "Bang/Component.h"
 #include "Bang/Extensions.h"
-#include "Bang/MeshFactory.h"
+#include "Bang/GL.h"
+#include "Bang/Map.tcc"
+#include "Bang/Material.h"
+#include "Bang/Mesh.h"
+#include "Bang/Model.h"
+#include "Bang/Resources.h"
+#include "Bang/Resources.tcc"
+#include "Bang/Serializable.h"
+#include "Bang/Texture2D.h"
 #include "Bang/TextureFactory.h"
-
 #include "BangEditor/EditorPaths.h"
+#include "BangEditor/MaterialPreviewFactory.h"
 #include "BangEditor/MeshPreviewFactory.h"
 #include "BangEditor/ModelPreviewFactory.h"
-#include "BangEditor/MaterialPreviewFactory.h"
+
+namespace Bang {
+class Behaviour;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

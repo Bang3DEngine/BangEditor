@@ -1,10 +1,17 @@
 #include "BangEditor/UndoRedoManager.h"
 
-#include "Bang/Input.h"
-
+#include "Bang/Assert.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/Flags.h"
+#include "Bang/Key.h"
+#include "Bang/List.tcc"
 #include "BangEditor/EditorScene.h"
-#include "BangEditor/ScenePlayer.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/PlayState.h"
+#include "BangEditor/ScenePlayer.h"
+#include "BangEditor/Shortcut.h"
+#include "BangEditor/ShortcutManager.h"
+#include "BangEditor/UndoRedoAction.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

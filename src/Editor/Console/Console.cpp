@@ -1,22 +1,30 @@
 #include "BangEditor/Console.h"
 
-#include "Bang/Thread.h"
-#include "Bang/UIList.h"
-#include "Bang/Window.h"
-#include "Bang/UIButton.h"
-#include "Bang/Application.h"
-#include "Bang/UIScrollArea.h"
-#include "Bang/WindowManager.h"
-#include "Bang/UIScrollPanel.h"
+#include "Bang/Alignment.h"
+#include "Bang/Color.h"
+#include "Bang/Debug.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEventsDebug.h"
+#include "Bang/LayoutSizeType.h"
+#include "Bang/List.tcc"
+#include "Bang/Stretch.h"
 #include "Bang/TextureFactory.h"
-#include "Bang/UITextRenderer.h"
+#include "Bang/UIButton.h"
+#include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/UIList.h"
+#include "Bang/UIScrollArea.h"
+#include "Bang/UIScrollPanel.h"
+#include "Bang/UITextRenderer.h"
 #include "Bang/UIVerticalLayout.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/UIHorizontalLayout.h"
 
-#include "BangEditor/EditorTextureFactory.h"
+namespace Bang {
+class Texture2D;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

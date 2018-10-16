@@ -1,13 +1,17 @@
 #include "BangEditor/GizmosManager.h"
 
-#include "Bang/RenderFactory.h"
-
-#include "BangEditor/EditorScene.h"
-#include "BangEditor/TransformGizmo.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/IEventsDestroy.h"
+#include "Bang/Scene.h"
 #include "BangEditor/ComponentsGizmos.h"
-#include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditSceneGameObjects.h"
+#include "BangEditor/Editor.h"
 #include "BangEditor/GameObjectSelectionGizmo.h"
+#include "BangEditor/IEventsEditor.h"
+#include "BangEditor/TransformGizmo.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

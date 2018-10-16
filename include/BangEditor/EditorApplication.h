@@ -2,24 +2,32 @@
 #define EDITORAPPLICATION_H
 
 #include "Bang/Application.h"
-
+#include "Bang/BangDefines.h"
 #include "BangEditor/BangEditor.h"
 
+namespace Bang {
+class Debug;
+class Path;
+class Paths;
+class Resources;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class DialogWindow;
 FORWARD class Scene;
 FORWARD class Texture2D;
-FORWARD class DialogWindow;
 FORWARD class UIImageRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class Editor;
-FORWARD class EditorScene;
 FORWARD class EditorDebug;
 FORWARD class EditorPaths;
 FORWARD class EditorResources;
+FORWARD class EditorScene;
 
 class EditorApplication : public Application
 {

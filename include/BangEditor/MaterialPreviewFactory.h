@@ -1,10 +1,29 @@
 #ifndef MATERIALPREVIEWFACTORY_H
 #define MATERIALPREVIEWFACTORY_H
 
-#include "Bang/Bang.h"
-#include "Bang/Material.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.tcc"
+#include "Bang/IEvents.h"
+#include "Bang/Material.h"
+#include "Bang/Quaternion.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/UMap.tcc"
+#include "Bang/Vector.tcc"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/ResourcePreviewFactory.h"
+
+namespace Bang {
+class Camera;
+class GameObject;
+class Scene;
+class Texture2D;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN

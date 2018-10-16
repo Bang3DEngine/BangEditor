@@ -1,15 +1,30 @@
 #ifndef UITABSTATION_H
 #define UITABSTATION_H
 
-#include "Bang/Bang.h"
-#include "Bang/Alignment.h"
-#include "Bang/GameObject.h"
-#include "Bang/IEventsDragDrop.h"
+#include <array>
+#include <vector>
 
+#include "Bang/Alignment.h"
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsDragDrop.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
+
+namespace Bang {
+class IEventsDestroy;
+class IEventsDragDrop;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIDirLayoutMovableSeparator;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

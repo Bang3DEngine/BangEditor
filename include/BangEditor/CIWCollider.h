@@ -2,19 +2,28 @@
 #define CIWCOLLIDER_H
 
 #include "Bang/Bang.h"
-
+#include "Bang/BangDefines.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
+
+namespace Bang {
+class IEventsValueChanged;
+class UICheckBox;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Collider;
 FORWARD class UIInputNumber;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputVector;
 FORWARD class UIInputFileWithPreview;
+FORWARD class UIInputVector;
 
 class CIWCollider : public ComponentInspectorWidget
 {

@@ -1,17 +1,29 @@
 #ifndef EDITORDIALOG_H
 #define EDITORDIALOG_H
 
-#include "Bang/Array.h"
-#include "Bang/Color.h"
-#include "Bang/String.h"
-#include "Bang/GameObject.h"
-#include "Bang/EventEmitter.h"
-#include "Bang/IEventsValueChanged.h"
+#include <vector>
 
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/Color.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
+
+namespace Bang {
+class IEventsValueChanged;
+class Path;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

@@ -1,16 +1,14 @@
 #include "BangEditor/UIInputVector.h"
 
-#include "Bang/Vector2.h"
-#include "Bang/Vector3.h"
-#include "Bang/Vector4.h"
-#include "Bang/UILabel.h"
-#include "Bang/UICanvas.h"
-#include "Bang/UIInputText.h"
-#include "Bang/UIInputNumber.h"
-#include "Bang/UITextRenderer.h"
-#include "Bang/UILayoutElement.h"
+#include "Bang/Assert.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/IEventsValueChanged.h"
 #include "Bang/UIHorizontalLayout.h"
+#include "Bang/UIInputNumber.h"
+#include "Bang/UILayoutElement.h"
+#include "Bang/Vector.tcc"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

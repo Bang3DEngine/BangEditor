@@ -2,8 +2,8 @@
 #define UNDOREDOEXPLORERSELECT_H
 
 #include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
 #include "Bang/Path.h"
-
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UndoRedoAction.h"
 

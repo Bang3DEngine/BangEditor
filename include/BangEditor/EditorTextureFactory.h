@@ -1,16 +1,21 @@
 #ifndef EDITORTEXTUREFACTORY_H
 #define EDITORTEXTUREFACTORY_H
 
+#include <functional>
+
+#include "Bang/BangDefines.h"
+#include "Bang/Color.h"
 #include "Bang/Map.h"
 #include "Bang/Path.h"
-#include "Bang/TextureFactory.h"
 #include "Bang/ResourceHandle.h"
-
+#include "Bang/String.h"
+#include "Bang/TextureFactory.h"
 #include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Component;
 FORWARD class Texture2D;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

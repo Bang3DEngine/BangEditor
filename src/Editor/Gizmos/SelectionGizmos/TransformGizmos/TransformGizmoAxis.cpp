@@ -1,13 +1,18 @@
 #include "BangEditor/TransformGizmoAxis.h"
 
-#include "Bang/Ray.h"
-#include "Bang/Input.h"
-#include "Bang/Camera.h"
-#include "Bang/Transform.h"
 #include "Bang/AxisFunctions.h"
-
+#include "Bang/Color.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/Math.h"
+#include "Bang/Transform.h"
+#include "Bang/Vector.tcc"
+#include "Bang/Vector3.h"
 #include "BangEditor/EditorCamera.h"
-#include "BangEditor/TransformGizmoAxis.h"
+
+namespace Bang {
+class Object;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

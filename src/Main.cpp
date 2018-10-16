@@ -1,18 +1,18 @@
-#include "BangEditor/EditorApplication.h"
+#include <ostream>
 
-#include "Bang/Path.h"
+#include "Bang/Application.h"
+#include "Bang/BangDefines.h"
 #include "Bang/Debug.h"
+#include "Bang/Path.h"
 #include "Bang/Paths.h"
-#include "Bang/Scene.h"
+#include "Bang/StreamOperators.h"
 #include "Bang/Window.h"
 #include "Bang/WindowManager.h"
-
-#include "BangEditor/Project.h"
-#include "BangEditor/EditorScene.h"
+#include "Bang/WindowManager.tcc"
+#include "BangEditor/BangEditor.h"
+#include "BangEditor/EditorApplication.h"
 #include "BangEditor/EditorWindow.h"
-#include "BangEditor/EditorSettings.h"
 #include "BangEditor/ProjectManager.h"
-#include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/SelectProjectWindow.h"
 
 USING_NAMESPACE_BANG

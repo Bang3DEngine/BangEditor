@@ -2,8 +2,8 @@
 #define EDITORDEBUG_H
 
 #include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
 #include "Bang/Debug.h"
-
 #include "BangEditor/BangEditor.h"
 
 USING_NAMESPACE_BANG

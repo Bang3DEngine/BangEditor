@@ -1,17 +1,33 @@
 #ifndef RIWAUDIOCLIP_H
 #define RIWAUDIOCLIP_H
 
-#include "Bang/Bang.h"
-#include "Bang/AudioClip.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/AudioClip.h"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/Color.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/IEvents.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
+namespace Bang {
+class IEventsDestroy;
+class IEventsValueChanged;
+class Texture2D;
+template <class > class EventEmitter;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIButton;
-FORWARD class UIInputText;
 FORWARD class ALAudioSource;
+FORWARD class UIButton;
 FORWARD class UIInputNumber;
+FORWARD class UIInputText;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

@@ -2,13 +2,22 @@
 #define CIWROPE_H
 
 #include "Bang/Bang.h"
-
+#include "Bang/BangDefines.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWRenderer.h"
+
+namespace Bang {
+class IEventsValueChanged;
+class UICheckBox;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Rope;
-FORWARD class UISlider;
 FORWARD class UIInputNumber;
+FORWARD class UISlider;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

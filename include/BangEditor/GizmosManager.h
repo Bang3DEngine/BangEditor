@@ -1,18 +1,34 @@
 #ifndef GIZMOSMANAGER_H
 #define GIZMOSMANAGER_H
 
-#include "Bang/Bang.h"
-#include "Bang/EventListener.h"
-#include "Bang/IEventsDestroy.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsDestroy.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/Editor.h"
+
+namespace BangEditor {
+class IEventsEditor;
+}  // namespace BangEditor
+namespace Bang {
+class GameObject;
+class IEventsDestroy;
+class Scene;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class TransformGizmo;
 FORWARD class ComponentsGizmos;
 FORWARD class GameObjectSelectionGizmo;
+FORWARD class TransformGizmo;
 
 class GizmosManager : public EventListener<IEventsEditor>,
                                public EventListener<IEventsDestroy>

@@ -1,24 +1,37 @@
 #ifndef UIINPUTCOLOR_H
 #define UIINPUTCOLOR_H
 
-#include "Bang/Vector4.h"
-#include "Bang/GameObject.h"
-#include "Bang/EventEmitter.h"
-#include "Bang/IEventsValueChanged.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/Color.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/String.h"
+#include "Bang/Vector4.h"
 #include "BangEditor/BangEditor.h"
+
+namespace Bang {
+class IEventsValueChanged;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIButton;
 FORWARD class UIImageRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class UIInputVector;
 FORWARD class ColorPickerReporter;
+FORWARD class UIInputVector;
 
 class UIInputColor : public GameObject,
                      public EventListener<IEventsValueChanged>,

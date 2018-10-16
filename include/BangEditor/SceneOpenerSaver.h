@@ -1,14 +1,31 @@
 #ifndef SCENEOPENERSAVER_H
 #define SCENEOPENERSAVER_H
 
-#include "Bang/Path.h"
-#include "Bang/Dialog.h"
-#include "Bang/EventListener.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/Dialog.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/IEvents.h"
+#include "Bang/Path.h"
+#include "BangEditor/BangEditor.h"
+#include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/IEventsScenePlayer.h"
+#include "BangEditor/PlayState.h"
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UndoRedoManager.h"
-#include "BangEditor/IEventsScenePlayer.h"
-#include "BangEditor/EditorSceneManager.h"
+
+namespace BangEditor {
+class IEventsScenePlayer;
+class IEventsUndoRedo;
+class UndoRedoAction;
+}  // namespace BangEditor
+namespace Bang {
+class IEventsSceneManager;
+class Scene;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN

@@ -1,11 +1,19 @@
 #include "BangEditor/EditorResources.h"
 
-#include "BangEditor/EditorPaths.h"
+#include "Bang/Array.tcc"
+#include "Bang/Path.h"
 #include "BangEditor/EditorMeshFactory.h"
-#include "BangEditor/MeshPreviewFactory.h"
-#include "BangEditor/ModelPreviewFactory.h"
+#include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/MaterialPreviewFactory.h"
+#include "BangEditor/MeshPreviewFactory.h"
+#include "BangEditor/ModelPreviewFactory.h"
+#include "BangEditor/ResourcePreviewFactory.tcc"
+
+namespace Bang {
+class MeshFactory;
+class TextureFactory;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

@@ -1,14 +1,16 @@
 #ifndef SHORTCUTMANAGER_H
 #define SHORTCUTMANAGER_H
 
+#include <functional>
 #include <unordered_set>
 
-#include "Bang/Map.h"
-#include "Bang/List.h"
-#include "Bang/USet.h"
+#include "Bang/Array.h"
+#include "Bang/BangDefines.h"
 #include "Bang/Input.h"
+#include "Bang/List.h"
+#include "Bang/Map.h"
 #include "Bang/String.h"
-
+#include "Bang/USet.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/Shortcut.h"
 

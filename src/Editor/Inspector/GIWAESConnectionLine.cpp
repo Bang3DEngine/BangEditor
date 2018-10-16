@@ -1,31 +1,45 @@
 #include "BangEditor/GIWAESConnectionLine.h"
 
+#include <sys/types.h>
+
+#include "Bang/AnimatorStateMachine.h"
+#include "Bang/AnimatorStateMachineConnection.h"
+#include "Bang/AnimatorStateMachineConnectionTransitionCondition.h"
+#include "Bang/AnimatorStateMachineNode.h"
+#include "Bang/Array.h"
 #include "Bang/Assert.h"
-#include "Bang/UIList.h"
-#include "Bang/UILabel.h"
+#include "Bang/Color.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEventsValueChanged.h"
 #include "Bang/MetaNode.h"
+#include "Bang/String.h"
+#include "Bang/Time.h"
 #include "Bang/UIButton.h"
-#include "Bang/UISlider.h"
 #include "Bang/UICheckBox.h"
+#include "Bang/UIDirLayout.h"
 #include "Bang/UIFocusable.h"
+#include "Bang/UIHorizontalLayout.h"
+#include "Bang/UIImageRenderer.h"
 #include "Bang/UIInputNumber.h"
+#include "Bang/UILabel.h"
+#include "Bang/UILayoutElement.h"
+#include "Bang/UIList.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/UITextRenderer.h"
-#include "Bang/UIImageRenderer.h"
-#include "Bang/UILayoutElement.h"
-#include "Bang/UIVerticalLayout.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/UIHorizontalLayout.h"
-#include "Bang/AnimatorStateMachine.h"
-#include "Bang/AnimatorStateMachineNode.h"
-#include "Bang/AnimatorStateMachineConnection.h"
-
+#include "BangEditor/AESConnectionLine.h"
 #include "BangEditor/AESNode.h"
+#include "BangEditor/ASMCTransitionConditionInput.h"
+#include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/Inspector.h"
 #include "BangEditor/UIInputArray.h"
-#include "BangEditor/AESConnectionLine.h"
-#include "BangEditor/EditorTextureFactory.h"
-#include "BangEditor/ASMCTransitionConditionInput.h"
+
+namespace Bang {
+class IEventsDestroy;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

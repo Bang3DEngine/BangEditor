@@ -1,21 +1,32 @@
 #ifndef UISCENETOOLBAR_H
 #define UISCENETOOLBAR_H
 
-#include "Bang/GameObject.h"
+#include <vector>
+
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventListener.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
 #include "Bang/IEventsValueChanged.h"
-
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/TransformGizmo.h"
 
+namespace Bang {
+class IEventsValueChanged;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIButton;
 FORWARD class Texture2D;
+FORWARD class UIButton;
 FORWARD class UICheckBox;
 FORWARD class UIComboBox;
-FORWARD class UIToolButton;
 FORWARD class UITextRenderer;
+FORWARD class UIToolButton;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

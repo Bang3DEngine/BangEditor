@@ -1,16 +1,26 @@
 #ifndef MENUITEM_H
 #define MENUITEM_H
 
+#include <sys/types.h>
+#include <functional>
+
+#include "Bang/BangDefines.h"
+#include "Bang/GameObject.h"
+#include "Bang/List.h"
+#include "Bang/String.h"
+#include "Bang/UIList.h"
 #include "BangEditor/BangEditor.h"
 
-#include "Bang/UIList.h"
-#include "Bang/GameObject.h"
+namespace Bang {
+class UIImageRenderer;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIList;
 FORWARD class IFocusable;
 FORWARD class UIFocusable;
+FORWARD class UIList;
 FORWARD class UITextRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

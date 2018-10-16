@@ -1,19 +1,26 @@
 #include "BangEditor/UIInputColor.h"
 
-#include "Bang/UIButton.h"
+#include "Bang/Cursor.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEventsFocus.h"
+#include "Bang/IEventsValueChanged.h"
 #include "Bang/Material.h"
-#include "Bang/Resources.h"
+#include "Bang/Object.h"
+#include "Bang/Stretch.h"
 #include "Bang/TextureFactory.h"
-#include "Bang/UIInputNumber.h"
-#include "Bang/UITextRenderer.h"
+#include "Bang/UIButton.h"
+#include "Bang/UIFocusable.h"
+#include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/UIHorizontalLayout.h"
-
 #include "BangEditor/EditorDialog.h"
-#include "BangEditor/UIInputVector.h"
 #include "BangEditor/EditorTextureFactory.h"
+
+namespace Bang {
+class Texture2D;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

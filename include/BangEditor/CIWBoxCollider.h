@@ -2,12 +2,22 @@
 #define CIWBOXCOLLIDER_H
 
 #include "Bang/Bang.h"
-
+#include "Bang/BangDefines.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWCollider.h"
 
+namespace BangEditor {
+class UIInputVector;
+}  // namespace BangEditor
+namespace Bang {
+class IEventsValueChanged;
+template <class > class EventEmitter;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class BoxCollider;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

@@ -1,10 +1,23 @@
 #ifndef SCALEGIZMOAXIS_H
 #define SCALEGIZMOAXIS_H
 
+#include "Bang/Axis.h"
+#include "Bang/BangDefines.h"
+#include "Bang/RenderPass.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
+#include "BangEditor/SelectionGizmo.h"
 #include "BangEditor/TransformGizmoAxis.h"
+
+namespace Bang {
+class Color;
+class GameObject;
+class MeshRenderer;
+}  // namespace Bang
 
 NAMESPACE_BANG_BEGIN
 FORWARD class LineRenderer;
+
 NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

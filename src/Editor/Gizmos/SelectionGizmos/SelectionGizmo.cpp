@@ -1,12 +1,26 @@
 #include "BangEditor/SelectionGizmo.h"
 
-#include "Bang/Input.h"
-#include "Bang/Camera.h"
-#include "Bang/Transform.h"
-#include "Bang/GameObject.h"
+#include <vector>
 
-#include "BangEditor/Selection.h"
+#include "Bang/Array.tcc"
+#include "Bang/Assert.h"
+#include "Bang/Camera.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/Input.h"
+#include "Bang/MouseButton.h"
+#include "Bang/Transform.h"
+#include "Bang/Vector.tcc"
 #include "BangEditor/EditorCamera.h"
+#include "BangEditor/Selection.h"
+
+namespace Bang {
+class IEventsDestroy;
+class Object;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

@@ -1,15 +1,35 @@
 #ifndef EDITORFILETRACKER_H
 #define EDITORFILETRACKER_H
 
-#include "Bang/Bang.h"
-#include "Bang/FileTracker.h"
-#include "Bang/EventListener.h"
+#include <vector>
 
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/FileTracker.h"
+#include "Bang/IEvents.h"
+#include "Bang/Time.h"
+#include "Bang/USet.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ProjectManager.h"
 
+namespace BangEditor {
+class IEventsProjectManager;
+class Project;
+}  // namespace BangEditor
+namespace Bang {
+class IEventsFileTracker;
+class Path;
+class String;
+}  // namespace Bang
+
 NAMESPACE_BANG_BEGIN
 FORWARD class FileTracker;
+
 NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

@@ -1,18 +1,21 @@
 #include "BangEditor/GameBuilder.h"
 
-#include "Bang/File.h"
-#include "Bang/Time.h"
-#include "Bang/Paths.h"
-#include "Bang/Debug.h"
-#include "Bang/Scene.h"
-#include "Bang/Extensions.h"
-#include "Bang/SystemProcess.h"
-#include "Bang/BangPreprocessor.h"
+#include <ostream>
 
-#include "BangEditor/Project.h"
-#include "BangEditor/EditorPaths.h"
-#include "BangEditor/ProjectManager.h"
+#include "Bang/Array.h"
+#include "Bang/Array.tcc"
+#include "Bang/BangPreprocessor.h"
+#include "Bang/Compiler.h"
+#include "Bang/Debug.h"
+#include "Bang/Extensions.h"
+#include "Bang/File.h"
+#include "Bang/Paths.h"
+#include "Bang/StreamOperators.h"
+#include "Bang/Time.h"
 #include "BangEditor/EditorBehaviourManager.h"
+#include "BangEditor/EditorPaths.h"
+#include "BangEditor/Project.h"
+#include "BangEditor/ProjectManager.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

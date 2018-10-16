@@ -1,17 +1,19 @@
 #include "BangEditor/RectTransformCornerSelectionGizmo.h"
 
+#include "Bang/Color.h"
+#include "Bang/GL.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
 #include "Bang/Input.h"
-#include "Bang/AARect.h"
-#include "Bang/GEngine.h"
+#include "Bang/Key.h"
 #include "Bang/Material.h"
 #include "Bang/RectTransform.h"
-#include "Bang/RenderFactory.h"
 #include "Bang/UIImageRenderer.h"
-#include "Bang/MaterialFactory.h"
-#include "Bang/GameObjectFactory.h"
-
-#include "BangEditor/Selection.h"
+#include "Bang/Vector.tcc"
+#include "Bang/Vector2.h"
 #include "BangEditor/EditorTextureFactory.h"
+#include "BangEditor/Selection.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

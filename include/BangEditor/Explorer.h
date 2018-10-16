@@ -1,22 +1,51 @@
 #ifndef EXPLORER_H
 #define EXPLORER_H
 
-#include "Bang/UMap.h"
-#include "Bang/Path.h"
-#include "Bang/UIButton.h"
-#include "Bang/FileTracker.h"
-#include "Bang/IEventsValueChanged.h"
+#include <vector>
 
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/FileTracker.h"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsFocus.h"
+#include "Bang/IEventsValueChanged.h"
+#include "Bang/List.h"
+#include "Bang/Path.h"
+#include "Bang/String.h"
+#include "Bang/UIButton.h"
+#include "Bang/UMap.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/Editor.h"
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/ShortcutManager.h"
 
+namespace BangEditor {
+class ExplorerItem;
+class IEventsEditor;
+class IEventsExplorerItem;
+class IEventsProjectManager;
+class MenuItem;
+class Project;
+class UIContextMenu;
+}  // namespace BangEditor
+namespace Bang {
+class IEventsFileTracker;
+class IEventsValueChanged;
+class UIButton;
+class UIFocusable;
+template <class > class EventEmitter;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UILabel;
-FORWARD class UISlider;
 FORWARD class UIGridLayout;
+FORWARD class UILabel;
 FORWARD class UIScrollPanel;
+FORWARD class UISlider;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

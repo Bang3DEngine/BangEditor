@@ -1,20 +1,30 @@
 #ifndef SCENEPLAYER_H
 #define SCENEPLAYER_H
 
+#include <vector>
+
+#include "Bang/Array.tcc"
 #include "Bang/Bang.h"
-#include "Bang/Path.h"
-#include "Bang/Vector3.h"
-#include "Bang/Quaternion.h"
+#include "Bang/BangDefines.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventListener.h"
-
-#include "BangEditor/PlayState.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/Path.h"
+#include "Bang/Quaternion.h"
+#include "Bang/Vector3.h"
 #include "BangEditor/BangEditor.h"
-#include "BangEditor/ShortcutManager.h"
 #include "BangEditor/IEventsScenePlayer.h"
+#include "BangEditor/PlayState.h"
+#include "BangEditor/ShortcutManager.h"
+
+namespace BangEditor {
+class IEventsScenePlayer;
+class Shortcut;
+}  // namespace BangEditor
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

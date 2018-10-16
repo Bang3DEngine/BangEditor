@@ -2,8 +2,8 @@
 #define EDITORMESHFACTORY_H
 
 #include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
 #include "Bang/MeshFactory.h"
-
 #include "BangEditor/BangEditor.h"
 
 USING_NAMESPACE_BANG

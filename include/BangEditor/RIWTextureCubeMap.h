@@ -1,15 +1,30 @@
 #ifndef RIWTEXTURECUBEMAP_H
 #define RIWTEXTURECUBEMAP_H
 
+#include <vector>
+
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsValueChanged.h"
 #include "Bang/Path.h"
 #include "Bang/ResourceHandle.h"
+#include "Bang/String.h"
 #include "Bang/TextureCubeMap.h"
-#include "Bang/IEventsValueChanged.h"
-
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
+
+namespace Bang {
+class IEventsValueChanged;
+class UILabel;
+template <class > class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Texture2D;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

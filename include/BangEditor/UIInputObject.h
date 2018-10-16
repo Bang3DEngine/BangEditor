@@ -2,12 +2,15 @@
 #define UIINPUTOBJECT_H
 
 #include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
 #include "Bang/GameObject.h"
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Object;
 FORWARD class UIInputText;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

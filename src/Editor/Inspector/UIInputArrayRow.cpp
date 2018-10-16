@@ -1,14 +1,16 @@
 #include "BangEditor/UIInputArrayRow.h"
 
+#include "Bang/Color.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/TextureFactory.h"
 #include "Bang/UIButton.h"
+#include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UIVerticalLayout.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/UIHorizontalLayout.h"
-
-#include "BangEditor/UIInputArray.h"
 #include "BangEditor/EditorTextureFactory.h"
+#include "BangEditor/UIInputArray.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

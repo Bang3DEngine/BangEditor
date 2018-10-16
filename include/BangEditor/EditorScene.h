@@ -1,47 +1,71 @@
 #ifndef EDITORSCENE_H
 #define EDITORSCENE_H
 
-#include "Bang/Scene.h"
-#include "Bang/AARect.h"
-#include "Bang/SceneManager.h"
-#include "Bang/IEventsDestroy.h"
+#include <vector>
 
+#include "Bang/AARect.h"
+#include "Bang/Array.tcc"
+#include "Bang/BangDefines.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsDestroy.h"
+#include "Bang/Scene.h"
+#include "Bang/SceneManager.h"
+#include "Bang/String.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/Editor.h"
-#include "BangEditor/ScenePlayer.h"
 #include "BangEditor/EditorWindow.h"
-#include "BangEditor/IEventsTabHeader.h"
 #include "BangEditor/IEventsScenePlayer.h"
+#include "BangEditor/IEventsTabHeader.h"
+#include "BangEditor/PlayState.h"
+#include "BangEditor/ScenePlayer.h"
+
+namespace BangEditor {
+class IEventsScenePlayer;
+class IEventsTabHeader;
+class UITabHeader;
+}  // namespace BangEditor
+namespace Bang {
+class IEventsDestroy;
+class IEventsSceneManager;
+class IEventsWindow;
+class Path;
+class Window;
+template <class T> class EventEmitter;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class GameObject;
 FORWARD class Scene;
 FORWARD class Texture2D;
-FORWARD class GameObject;
-FORWARD class UITextRenderer;
 FORWARD class UIImageRenderer;
+FORWARD class UITextRenderer;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
-FORWARD class Console;
-FORWARD class MenuBar;
-FORWARD class Explorer;
-FORWARD class Inspector;
-FORWARD class Hierarchy;
-FORWARD class ScenePlayer;
-FORWARD class UITabStation;
-FORWARD class ProjectManager;
-FORWARD class UITabContainer;
-FORWARD class EditorClipboard;
-FORWARD class UndoRedoManager;
 FORWARD class AnimatorSMEditor;
-FORWARD class SceneOpenerSaver;
-FORWARD class UISceneContainer;
-FORWARD class EditorApplication;
-FORWARD class EditorFileTracker;
+FORWARD class Console;
 FORWARD class EditSceneGameObjects;
+FORWARD class EditorApplication;
+FORWARD class EditorClipboard;
+FORWARD class EditorFileTracker;
+FORWARD class Explorer;
+FORWARD class Hierarchy;
+FORWARD class Inspector;
+FORWARD class MenuBar;
+FORWARD class ProjectManager;
+FORWARD class SceneOpenerSaver;
+FORWARD class ScenePlayer;
+FORWARD class UISceneContainer;
 FORWARD class UISceneEditContainer;
 FORWARD class UIScenePlayContainer;
+FORWARD class UITabContainer;
+FORWARD class UITabStation;
+FORWARD class UndoRedoManager;
 
 class EditorScene : public Scene,
                     public EventListener<IEventsWindow>,

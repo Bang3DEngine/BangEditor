@@ -1,12 +1,16 @@
 #ifndef SHORTCUT_H
 #define SHORTCUT_H
 
-#include "Bang/Key.h"
 #include "Bang/Array.h"
+#include "Bang/BangDefines.h"
 #include "Bang/Input.h"
+#include "Bang/Key.h"
 #include "Bang/String.h"
-
 #include "BangEditor/BangEditor.h"
+
+namespace Bang {
+struct InputEvent;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 

@@ -1,6 +1,12 @@
 #include "BangEditor/EditorPaths.h"
 
+#include <ostream>
+
+#include "Bang/Application.h"
 #include "Bang/Debug.h"
+#include "Bang/List.tcc"
+#include "Bang/StreamOperators.h"
+#include "Bang/Time.h"
 #include "BangEditor/EditorApplication.h"
 
 USING_NAMESPACE_BANG

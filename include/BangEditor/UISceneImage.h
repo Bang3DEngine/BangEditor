@@ -1,13 +1,22 @@
 #ifndef UISCENEIMAGE_H
 #define UISCENEIMAGE_H
 
+#include "Bang/BangDefines.h"
 #include "Bang/GL.h"
+#include "Bang/GameObject.h"
+#include "Bang/RenderPass.h"
+#include "Bang/String.h"
 #include "Bang/UIImageRenderer.h"
-
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/Editor.h"
+
+namespace Bang {
+class Camera;
+}  // namespace Bang
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Texture2D;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

@@ -1,18 +1,33 @@
 #include "BangEditor/CIWUITextRenderer.h"
 
-#include "Bang/Font.h"
-#include "Bang/UICanvas.h"
-#include "Bang/Resources.h"
-#include "Bang/GameObject.h"
-#include "Bang/Extensions.h"
-#include "Bang/UIComboBox.h"
-#include "Bang/UIInputText.h"
-#include "Bang/UIInputNumber.h"
-#include "Bang/UITextRenderer.h"
-#include "Bang/GameObjectFactory.h"
+#include <vector>
 
+#include "Bang/Alignment.h"
+#include "Bang/Array.tcc"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.tcc"
+#include "Bang/Extensions.h"
+#include "Bang/Font.h"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEvents.h"
+#include "Bang/Path.h"
+#include "Bang/ResourceHandle.h"
+#include "Bang/Resources.h"
+#include "Bang/Resources.tcc"
+#include "Bang/UICanvas.h"
+#include "Bang/UIComboBox.h"
+#include "Bang/UIInputNumber.h"
+#include "Bang/UIInputText.h"
+#include "Bang/UITextRenderer.h"
 #include "BangEditor/UIInputColor.h"
 #include "BangEditor/UIInputFileWithPreview.h"
+
+namespace Bang {
+class IEventsValueChanged;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

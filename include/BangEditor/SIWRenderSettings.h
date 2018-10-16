@@ -1,8 +1,9 @@
 #ifndef PROJECTSETTINGSDIALOG_H
 #define PROJECTSETTINGSDIALOG_H
 
+#include "Bang/BangDefines.h"
 #include "Bang/Scene.h"
-
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/SettingsInspectorWidget.h"
 
 FORWARD NAMESPACE_BANG_BEGIN

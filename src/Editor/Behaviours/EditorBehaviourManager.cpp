@@ -1,21 +1,28 @@
 #include "BangEditor/EditorBehaviourManager.h"
 
-#include "Bang/File.h"
-#include "Bang/Paths.h"
-#include "Bang/Debug.h"
-#include "Bang/Library.h"
-#include "Bang/Behaviour.h"
-#include "Bang/Extensions.h"
-#include "Bang/Application.h"
+#include <ostream>
+#include <unordered_map>
+
 #include "Bang/BangPreprocessor.h"
 #include "Bang/CodePreprocessor.h"
-
-#include "BangEditor/Editor.h"
-#include "BangEditor/Project.h"
-#include "BangEditor/EditorPaths.h"
-#include "BangEditor/EditorScene.h"
+#include "Bang/Debug.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/Extensions.h"
+#include "Bang/File.h"
+#include "Bang/IEventsFileTracker.h"
+#include "Bang/Library.h"
+#include "Bang/List.h"
+#include "Bang/List.tcc"
+#include "Bang/MetaFilesManager.h"
+#include "Bang/MutexLocker.h"
+#include "Bang/Paths.h"
+#include "Bang/StreamOperators.h"
+#include "Bang/Time.h"
+#include "Bang/USet.tcc"
 #include "BangEditor/EditorFileTracker.h"
-#include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/EditorPaths.h"
+#include "BangEditor/PlayState.h"
+#include "BangEditor/ScenePlayer.h"
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

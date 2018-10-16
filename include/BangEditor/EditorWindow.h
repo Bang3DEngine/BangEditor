@@ -1,9 +1,15 @@
 #ifndef EDITORWINDOW_H
 #define EDITORWINDOW_H
 
-#include "Bang/Window.h"
+#include <sys/types.h>
 
+#include "Bang/BangDefines.h"
+#include "Bang/Window.h"
 #include "BangEditor/BangEditor.h"
+
+namespace Bang {
+class SceneManager;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN

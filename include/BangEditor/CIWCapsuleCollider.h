@@ -2,16 +2,23 @@
 #define CIWCAPSULECOLLIDER_H
 
 #include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/IEventsValueChanged.h"
-
+#include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWCollider.h"
 
+namespace Bang {
+class IEventsValueChanged;
+template <class > class EventEmitter;
+}  // namespace Bang
+
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class CapsuleCollider;
 FORWARD class UIComboBox;
 FORWARD class UIInputNumber;
-FORWARD class CapsuleCollider;
+
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG

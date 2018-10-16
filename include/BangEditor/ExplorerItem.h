@@ -1,25 +1,49 @@
 #ifndef EXPLORERITEM_H
 #define EXPLORERITEM_H
 
-#include "Bang/Bang.h"
-#include "Bang/DPtr.h"
-#include "Bang/Path.h"
-#include "Bang/GameObject.h"
-#include "Bang/IEventsFocus.h"
-#include "Bang/IEventsDragDrop.h"
+#include <vector>
 
-#include "BangEditor/UIContextMenu.h"
+#include "Bang/Array.tcc"
+#include "Bang/Bang.h"
+#include "Bang/BangDefines.h"
+#include "Bang/DPtr.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.tcc"
+#include "Bang/EventListener.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/IEvents.h"
+#include "Bang/IEventsDragDrop.h"
+#include "Bang/IEventsFocus.h"
+#include "Bang/Path.h"
+#include "Bang/String.h"
+#include "Bang/UIAspectRatioFitter.h"
+#include "Bang/UIDragDroppable.h"
+#include "Bang/UIFocusable.h"
+#include "Bang/UIImageRenderer.h"
+#include "Bang/UILabel.h"
+#include "BangEditor/BangEditor.h"
 #include "BangEditor/IEventsExplorerItem.h"
+#include "BangEditor/UIContextMenu.h"
+
+namespace BangEditor {
+class IEventsExplorerItem;
+class MenuItem;
+}  // namespace BangEditor
+namespace Bang {
+class IEventsDragDrop;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UILabel;
 FORWARD class IFocusable;
+FORWARD class UIAspectRatioFitter;
+FORWARD class UIDragDroppable;
 FORWARD class UIFocusable;
 FORWARD class UIImageRenderer;
-FORWARD class UIDragDroppable;
-FORWARD class UIAspectRatioFitter;
+FORWARD class UILabel;
+
 FORWARD NAMESPACE_BANG_END
 
 NAMESPACE_BANG_EDITOR_BEGIN

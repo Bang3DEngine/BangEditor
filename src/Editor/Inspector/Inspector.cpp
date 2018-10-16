@@ -1,41 +1,65 @@
 #include "BangEditor/Inspector.h"
 
-#include "Bang/GL.h"
-#include "Bang/Input.h"
-#include "Bang/Scene.h"
-#include "Bang/UILabel.h"
-#include "Bang/Material.h"
+#include <iterator>
+#include <list>
+
+#include "Bang/Alignment.h"
+#include "Bang/Array.h"
+#include "Bang/Assert.h"
+#include "Bang/Color.h"
+#include "Bang/Component.h"
+#include "Bang/ComponentMacros.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/IEventsComponent.h"
+#include "Bang/IEventsDragDrop.h"
+#include "Bang/IEventsFileTracker.h"
+#include "Bang/IEventsSceneManager.h"
+#include "Bang/LayoutSizeType.h"
+#include "Bang/List.tcc"
 #include "Bang/MetaNode.h"
-#include "Bang/Resources.h"
-#include "Bang/GLUniforms.h"
-#include "Bang/UIFocusable.h"
-#include "Bang/SceneManager.h"
-#include "Bang/UIScrollArea.h"
+#include "Bang/Paths.h"
+#include "Bang/EventEmitter.h"
 #include "Bang/RectTransform.h"
+#include "Bang/Resource.h"
+#include "Bang/SceneManager.h"
+#include "Bang/UIContentSizeFitter.h"
+#include "Bang/UIFocusable.h"
+#include "Bang/UIImageRenderer.h"
+#include "Bang/UILabel.h"
+#include "Bang/UILayoutElement.h"
+#include "Bang/UIScrollArea.h"
 #include "Bang/UIScrollPanel.h"
 #include "Bang/UITextRenderer.h"
-#include "Bang/IEventsDragDrop.h"
-#include "Bang/UILayoutElement.h"
-#include "Bang/UIImageRenderer.h"
 #include "Bang/UIVerticalLayout.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/UIContentSizeFitter.h"
-
+#include "Bang/UMap.tcc"
+#include "BangEditor/ComponentInspectorWidget.h"
+#include "BangEditor/ComponentInspectorWidgetFactory.h"
+#include "BangEditor/Editor.h"
+#include "BangEditor/EditorClipboard.h"
+#include "BangEditor/EditorFileTracker.h"
+#include "BangEditor/EditorScene.h"
+#include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/GameObjectInspectorWidget.h"
+#include "BangEditor/IEventsEditor.h"
+#include "BangEditor/InspectorWidget.h"
 #include "BangEditor/MenuBar.h"
 #include "BangEditor/MenuItem.h"
-#include "BangEditor/Selection.h"
-#include "BangEditor/EditorScene.h"
-#include "BangEditor/UIContextMenu.h"
-#include "BangEditor/EditorClipboard.h"
-#include "BangEditor/InspectorWidget.h"
-#include "BangEditor/UndoRedoManager.h"
-#include "BangEditor/EditorFileTracker.h"
-#include "BangEditor/EditorSceneManager.h"
-#include "BangEditor/ComponentInspectorWidget.h"
-#include "BangEditor/GameObjectInspectorWidget.h"
-#include "BangEditor/UndoRedoSerializableChange.h"
 #include "BangEditor/ResourceInspectorWidgetFactory.h"
-#include "BangEditor/ComponentInspectorWidgetFactory.h"
+#include "BangEditor/UIContextMenu.h"
+#include "BangEditor/UndoRedoManager.h"
+#include "BangEditor/UndoRedoSerializableChange.h"
+
+namespace Bang {
+class IEventsDestroy;
+class IEventsDragDrop;
+class IEventsFocus;
+class Object;
+class Scene;
+class Serializable;
+}  // namespace Bang
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

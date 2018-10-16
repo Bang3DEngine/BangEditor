@@ -1,15 +1,20 @@
 #include "BangEditor/UIInputFileWithPreview.h"
 
-#include "Bang/UICanvas.h"
-#include "Bang/Resources.h"
-#include "Bang/UIFocusable.h"
+#include "Bang/EventEmitter.h"
+#include "Bang/EventListener.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
+#include "Bang/Path.h"
 #include "Bang/RectTransform.h"
+#include "Bang/Resource.h"
+#include "Bang/Resources.h"
+#include "Bang/Texture2D.h"
+#include "Bang/UIFocusable.h"
+#include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UILayoutIgnorer.h"
-#include "Bang/GameObjectFactory.h"
-#include "Bang/UIHorizontalLayout.h"
-
 #include "BangEditor/EditorTextureFactory.h"
 
 USING_NAMESPACE_BANG
