@@ -29,10 +29,10 @@
 #include "BangEditor/UndoRedoObjectProperty.h"
 #include "BangEditor/UndoRedoObjectProperty.tcc"
 
-namespace Bang {
-class IEventsValueChanged;
-class Object;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsValueChanged;
+FORWARD class Object;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

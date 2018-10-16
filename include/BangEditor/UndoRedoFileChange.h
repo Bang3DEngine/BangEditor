@@ -16,7 +16,7 @@ class UndoRedoFileChange : public UndoRedoAction
 {
 public:
     UndoRedoFileChange(const Path &path);
-	virtual ~UndoRedoFileChange();
+	virtual ~UndoRedoFileChange() override;
 
     void ReadBefore();
     void ReadAfter();
@@ -28,10 +28,10 @@ private:
     Path m_path;
 
     Byte *m_previousContents = nullptr;
-    std::size_t m_previousContentsSize = -1;
+    std::size_t m_previousContentsSize = -1u;
 
     Byte *m_newContents = nullptr;
-    std::size_t m_newContentsSize = -1;
+    std::size_t m_newContentsSize = -1u;
 
     void Read(Byte **bytePointer, std::size_t *sizePointer);
 };

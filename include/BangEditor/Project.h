@@ -18,7 +18,7 @@ class Project : public Serializable
 
 public:
     Project();
-    virtual ~Project();
+    virtual ~Project() override;
 
     Path GetProjectDirectory() const;
     Path GetProjectAssetsFilepath() const;

@@ -49,10 +49,10 @@
 #include "BangEditor/UITabStation.h"
 #include "BangEditor/UndoRedoManager.h"
 
-namespace Bang {
-class IEventsDestroy;
-class IEventsFileTracker;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsDestroy;
+FORWARD class IEventsFileTracker;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

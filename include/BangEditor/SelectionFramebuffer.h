@@ -16,19 +16,15 @@
 #include "Bang/UMap.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class IEventsDestroy;
-class Texture2D;
-template <class T> class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class GameObject;
-FORWARD class Material;
-FORWARD class Renderer;
-FORWARD class Scene;
-FORWARD class ShaderProgram;
-
+FORWARD   class IEventsDestroy;
+FORWARD   class GameObject;
+FORWARD   class Material;
+FORWARD   class Renderer;
+FORWARD   class Scene;
+FORWARD   class ShaderProgram;
+FORWARD   class Texture2D;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -40,7 +36,7 @@ public:
     static const GL::Attachment AttColor = GL::Attachment::COLOR0;
 
     SelectionFramebuffer(int width, int height);
-    virtual ~SelectionFramebuffer();
+    virtual ~SelectionFramebuffer() override;
 
     void PrepareNewFrameForRender(const GameObject *go);
     void SetNextRenderSelectable(GameObject *go);
@@ -52,6 +48,7 @@ public:
 
     // IEventsDestroy
     void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
+
 private:
     using IdType = unsigned long long;
 

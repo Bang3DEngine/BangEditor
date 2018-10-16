@@ -16,16 +16,12 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/InspectorWidget.h"
 
-namespace Bang {
-class GameObject;
-class IEventsValueChanged;
-class UICheckBox;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIInputText;
-
+FORWARD   class UIInputText;
+FORWARD   class GameObject;
+FORWARD   class IEventsValueChanged;
+FORWARD   class UICheckBox;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -38,7 +34,7 @@ class GameObjectInspectorWidget : public InspectorWidget,
 
 public:
 	GameObjectInspectorWidget();
-	virtual ~GameObjectInspectorWidget();
+	virtual ~GameObjectInspectorWidget() override;
 
     void SetGameObject(GameObject *gameObject);
     GameObject *GetGameObject() const;

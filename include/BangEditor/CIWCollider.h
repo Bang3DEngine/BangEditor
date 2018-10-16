@@ -7,16 +7,12 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-namespace Bang {
-class IEventsValueChanged;
-class UICheckBox;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Collider;
-FORWARD class UIInputNumber;
-
+FORWARD   class Collider;
+FORWARD   class UIInputNumber;
+FORWARD   class IEventsValueChanged;
+FORWARD   class UICheckBox;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -38,7 +34,7 @@ public:
 
 protected:
     CIWCollider();
-    virtual ~CIWCollider();
+    virtual ~CIWCollider() override;
 
     // ComponentInspectorWidget
     virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;

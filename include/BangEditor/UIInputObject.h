@@ -10,7 +10,6 @@
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Object;
 FORWARD class UIInputText;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -27,7 +26,7 @@ public:
 
 protected:
     UIInputObject();
-    virtual ~UIInputObject();
+    virtual ~UIInputObject() override;
 
 private:
     UIInputText *p_objectInputText = nullptr;

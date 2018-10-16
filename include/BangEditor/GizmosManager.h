@@ -13,29 +13,27 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/Editor.h"
 
-namespace BangEditor {
-class IEventsEditor;
-}  // namespace BangEditor
-namespace Bang {
-class GameObject;
-class IEventsDestroy;
-class Scene;
-template <class > class EventEmitter;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD   class GameObject;
+FORWARD   class IEventsDestroy;
+FORWARD   class Scene;
+FORWARD_T class EventEmitter;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class ComponentsGizmos;
 FORWARD class GameObjectSelectionGizmo;
+FORWARD class IEventsEditor;
 FORWARD class TransformGizmo;
 
 class GizmosManager : public EventListener<IEventsEditor>,
-                               public EventListener<IEventsDestroy>
+                      public EventListener<IEventsDestroy>
 {
 public:
     GizmosManager();
-    virtual ~GizmosManager();
+    virtual ~GizmosManager() override;
 
     void Update();
 

@@ -15,16 +15,12 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UIInputFile.h"
 
-namespace Bang {
-class Path;
-class Resource;
-class UIFocusable;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Path;
+FORWARD class Resource;
 FORWARD class Texture2D;
+FORWARD class UIFocusable;
 FORWARD class UIImageRenderer;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -35,7 +31,7 @@ class UIInputFileWithPreview : public UIInputFile,
 {
 public:
 	UIInputFileWithPreview();
-	virtual ~UIInputFileWithPreview();
+	virtual ~UIInputFileWithPreview() override;
 
     void SetZoomable(bool zoomable);
     void SetResource(Resource *resource);

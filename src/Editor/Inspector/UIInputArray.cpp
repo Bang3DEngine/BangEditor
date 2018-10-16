@@ -17,9 +17,9 @@
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/UIInputArrayRow.h"
 
-namespace Bang {
-class MetaNode;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class MetaNode;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG_EDITOR
 

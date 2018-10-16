@@ -9,16 +9,12 @@
 #include "BangEditor/SelectionGizmo.h"
 #include "BangEditor/TransformGizmoAxis.h"
 
-namespace Bang {
-class Color;
-class GameObject;
-class MeshRenderer;
-}  // namespace Bang
-
-NAMESPACE_BANG_BEGIN
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Color;
+FORWARD class GameObject;
 FORWARD class LineRenderer;
-
-NAMESPACE_BANG_END
+FORWARD class MeshRenderer;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -52,7 +48,7 @@ private:
     MeshRenderer *p_selectionRenderer = nullptr;
 
     ScaleGizmoAxis();
-    virtual ~ScaleGizmoAxis();
+    virtual ~ScaleGizmoAxis() override;
 
     void UpdatePoints(float localAxisLength);
 

@@ -7,16 +7,12 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
 
-namespace Bang {
-class Color;
-class Object;
-}  // namespace Bang
-
-NAMESPACE_BANG_BEGIN
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Color;
 FORWARD class LineRenderer;
 FORWARD class MeshRenderer;
-
-NAMESPACE_BANG_END
+FORWARD class Object;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -36,7 +32,7 @@ public:
 
 protected:
     TransformGizmoAxis();
-    virtual ~TransformGizmoAxis();
+    virtual ~TransformGizmoAxis() override;
 
     virtual bool ApplyAlignmentAlpha() const;
 

@@ -26,9 +26,9 @@
 #include "BangEditor/UISceneToolbar.h"
 #include "BangEditor/UISceneToolbarDown.h"
 
-namespace Bang {
-class IEventsDestroy;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsDestroy;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

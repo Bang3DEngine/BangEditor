@@ -26,27 +26,21 @@
 #include "BangEditor/IEventsExplorerItem.h"
 #include "BangEditor/UIContextMenu.h"
 
-namespace BangEditor {
-class IEventsExplorerItem;
-class MenuItem;
-}  // namespace BangEditor
-namespace Bang {
-class IEventsDragDrop;
-}  // namespace Bang
-
-USING_NAMESPACE_BANG
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsDragDrop;
 FORWARD class IFocusable;
 FORWARD class UIAspectRatioFitter;
 FORWARD class UIDragDroppable;
 FORWARD class UIFocusable;
 FORWARD class UIImageRenderer;
 FORWARD class UILabel;
-
 FORWARD NAMESPACE_BANG_END
 
+USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
+
+FORWARD class IEventsExplorerItem;
+FORWARD class MenuItem;
 
 class ExplorerItem : public GameObject,
                      public EventListener<IEventsFocus>,
@@ -79,7 +73,7 @@ public:
 
 protected:
     ExplorerItem();
-    virtual ~ExplorerItem();
+    virtual ~ExplorerItem() override;
 
 private:
     bool m_selected = false;

@@ -13,7 +13,7 @@ class EditorMeshFactory : public MeshFactory
 {
 private:
     EditorMeshFactory();
-    virtual ~EditorMeshFactory();
+    virtual ~EditorMeshFactory() override;
 
     friend class EditorResources;
 };

@@ -16,15 +16,11 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
-namespace Bang {
-class IEventsValueChanged;
-class Texture2D;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIInputNumber;
-
+FORWARD   class IEventsValueChanged;
+FORWARD   class Texture2D;
+FORWARD   class UIInputNumber;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -51,7 +47,7 @@ private:
     UIInputNumber *p_numAnimations = nullptr;
 
     RIWModel();
-    virtual ~RIWModel();
+    virtual ~RIWModel() override;
 
     Model *GetModel() const;
 

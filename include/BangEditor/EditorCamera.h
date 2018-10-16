@@ -20,25 +20,19 @@
 #include "BangEditor/IEventsScenePlayer.h"
 #include "BangEditor/PlayState.h"
 
-namespace BangEditor {
-class IEventsScenePlayer;
-}  // namespace BangEditor
-namespace Bang {
-class IEventsSceneManager;
-class Path;
-class Scene;
-class Transform;
-}  // namespace Bang
-
-NAMESPACE_BANG_BEGIN
+FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Camera;
+FORWARD class IEventsSceneManager;
 FORWARD class Input;
-
-NAMESPACE_BANG_END
+FORWARD class Path;
+FORWARD class Scene;
+FORWARD class Transform;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class IEventsScenePlayer;
 FORWARD class SelectionFramebuffer;
 
 class EditorCamera : public GameObject,
@@ -49,7 +43,7 @@ class EditorCamera : public GameObject,
 
 public:
     EditorCamera();
-    virtual ~EditorCamera();
+    virtual ~EditorCamera() override;
 
     // GameObject
     void Update() override;

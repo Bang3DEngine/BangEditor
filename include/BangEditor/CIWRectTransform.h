@@ -7,14 +7,10 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWTransform.h"
 
-namespace Bang {
-class IEventsValueChanged;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class RectTransform;
-
+FORWARD   class IEventsValueChanged;
+FORWARD   class RectTransform;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -52,7 +48,7 @@ private:
     UIInputVector *p_pivotPositionInput = nullptr;
 
     CIWRectTransform() = default;
-    virtual ~CIWRectTransform() = default;
+    virtual ~CIWRectTransform() override = default;
 };
 
 NAMESPACE_BANG_EDITOR_END

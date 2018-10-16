@@ -6,8 +6,9 @@
 #include "BangEditor/BangEditor.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Path;
-FORWARD class GameObject;
+FORWARD   class Path;
+FORWARD   class GameObject;
+FORWARD_T class EventListener;
 FORWARD NAMESPACE_BANG_END
 
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -19,12 +20,14 @@ class IEventsEditor
     IEVENTS_NS(IEventsEditor);
 
 public:
-    virtual void OnGameObjectSelected(GameObject *selectedGameObject)
+    virtual void OnGameObjectSelected(Bang::GameObject *selectedGameObject)
     {
+        BANG_UNUSED(selectedGameObject);
     }
 
-    virtual void OnExplorerPathSelected(const Path &selectedPath)
+    virtual void OnExplorerPathSelected(const Bang::Path &selectedPath)
     {
+        BANG_UNUSED(selectedPath);
     }
 };
 

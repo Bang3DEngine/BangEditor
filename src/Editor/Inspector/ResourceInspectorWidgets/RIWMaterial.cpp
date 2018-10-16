@@ -30,12 +30,13 @@
 #include "BangEditor/UIInputTexture.h"
 #include "BangEditor/UIInputVector.h"
 
-namespace BangEditor {
-struct ResourcePreviewFactoryParameters;
-}  // namespace BangEditor
-namespace Bang {
-class IEventsValueChanged;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsValueChanged;
+FORWARD NAMESPACE_BANG_END
+
+FORWARD NAMESPACE_BANG_EDITOR_BEGIN
+FORWARD class ResourcePreviewFactoryParameters;
+FORWARD NAMESPACE_BANG_EDITOR_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

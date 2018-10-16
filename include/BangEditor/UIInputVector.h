@@ -15,15 +15,11 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class IEventsValueChanged;
-}  // namespace Bang
-
-NAMESPACE_BANG_BEGIN
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsValueChanged;
 FORWARD class UIInputNumber;
 FORWARD class UILabel;
-
-NAMESPACE_BANG_END
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -62,7 +58,7 @@ public:
 protected:
     UIInputVector();
     UIInputVector(int size);
-    virtual ~UIInputVector();
+    virtual ~UIInputVector() override;
 
 private:
     int m_size = 4;

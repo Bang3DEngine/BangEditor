@@ -5,9 +5,9 @@
 #include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/UISceneEditContainer.h"
 
-namespace Bang {
-class GameObject;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class GameObject;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

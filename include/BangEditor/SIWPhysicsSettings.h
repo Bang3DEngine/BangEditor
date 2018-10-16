@@ -13,14 +13,10 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SettingsInspectorWidget.h"
 
-namespace Bang {
-class IEventsValueChanged;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIInputNumber;
-
+FORWARD   class IEventsValueChanged;
+FORWARD   class UIInputNumber;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -33,7 +29,7 @@ class SIWPhysicsSettings : public SettingsInspectorWidget,
 {
 public:
 	SIWPhysicsSettings();
-	virtual ~SIWPhysicsSettings();
+	virtual ~SIWPhysicsSettings() override;
 
     // SettingsInspectorWidget
     virtual void InitInnerWidgets() override;

@@ -32,9 +32,9 @@
 #include "BangEditor/Selection.h"
 #include "BangEditor/TransformGizmo.h"
 
-namespace Bang {
-class Color;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Color;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

@@ -17,7 +17,7 @@ class GameObjectSelectionGizmo : public SelectionGizmo
 
 public:
     GameObjectSelectionGizmo();
-    virtual ~GameObjectSelectionGizmo();
+    virtual ~GameObjectSelectionGizmo() override;
 
     // GameObject
     void Render(RenderPass rp, bool renderChildren) override;

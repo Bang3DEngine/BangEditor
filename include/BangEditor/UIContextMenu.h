@@ -20,22 +20,17 @@
 #include "BangEditor/EditorComponentsClassIds.h"
 #include "BangEditor/MenuItem.h"
 
-namespace BangEditor {
-class MenuItem;
-}  // namespace BangEditor
-namespace Bang {
-class IEventsDestroy;
-class UIFocusable;
-template <class T> class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD   class IEventsDestroy;
+FORWARD   class UIFocusable;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class ContextMenu;
+FORWARD class MenuItem;
 
 class UIContextMenu : public Component,
                       public EventListener<IEventsFocus>,

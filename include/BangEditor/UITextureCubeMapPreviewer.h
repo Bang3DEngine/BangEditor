@@ -17,17 +17,13 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ResourcePreviewFactory.h"
 
-namespace Bang {
-class IEventsValueChanged;
-class Material;
-class TextureCubeMap;
-class UIFocusable;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsValueChanged;
+FORWARD class Material;
+FORWARD class TextureCubeMap;
+FORWARD class UIFocusable;
 FORWARD class UIAspectRatioFitter;
 FORWARD class UIImageRenderer;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -40,7 +36,7 @@ class UITextureCubeMapPreviewer : public GameObject,
 
 public:
 	UITextureCubeMapPreviewer();
-	virtual ~UITextureCubeMapPreviewer();
+	virtual ~UITextureCubeMapPreviewer() override;
 
     // GameObject
     void Update() override;

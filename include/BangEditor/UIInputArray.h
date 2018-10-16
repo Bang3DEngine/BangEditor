@@ -19,16 +19,15 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UIInputArrayRow.h"
 
-namespace BangEditor {
-class UIInputArrayRow;
-}  // namespace BangEditor
-namespace Bang {
-class IEventsValueChanged;
-class Serializable;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsValueChanged;
+FORWARD class Serializable;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
+
+FORWARD class UIInputArrayRow;
 
 // The GameObject's in each row will use MetaNode's to serialize/deserialize
 // and update array elements
@@ -40,7 +39,7 @@ class UIInputArray : public GameObject,
 
 public:
     UIInputArray();
-	virtual ~UIInputArray();
+	virtual ~UIInputArray() override;
 
     void AddRow(GameObject *rowGameObject, uint index = -1u);
     void RemoveRow(GameObject *rowGameObject);

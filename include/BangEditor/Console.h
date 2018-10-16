@@ -18,15 +18,11 @@
 #include "Bang/UIList.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class IEventsDebug;
-class UIImageRenderer;
-class UIList;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsDebug;
+FORWARD class UIImageRenderer;
+FORWARD class UIList;
 FORWARD class UITextRenderer;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -57,7 +53,7 @@ private:
     Array<ConsoleMessage> m_queuedMessages;
 
     Console();
-    virtual ~Console();
+    virtual ~Console() override;
 
     void AddMessage(const ConsoleMessage &cMsg);
     void Clear();
@@ -77,7 +73,7 @@ class ConsoleUIListEntry : public GameObject
 
 public:
     ConsoleUIListEntry();
-    virtual ~ConsoleUIListEntry();
+    virtual ~ConsoleUIListEntry() override;
 
     void SetConsoleMessage(const ConsoleMessage &cMsg);
 

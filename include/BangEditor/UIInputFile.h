@@ -18,16 +18,12 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class IEventsDragDrop;
-class IEventsValueChanged;
-}  // namespace Bang
-
 NAMESPACE_BANG_BEGIN
+FORWARD class IEventsDragDrop;
+FORWARD class IEventsValueChanged;
 FORWARD class UIButton;
 FORWARD class UIInputNumber;
 FORWARD class UIInputText;
-
 NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -49,7 +45,7 @@ public:
 
 protected:
 	UIInputFile();
-    virtual ~UIInputFile();
+    virtual ~UIInputFile() override;
 
     // IEventsDragDrop
     virtual void OnDragStarted(EventEmitter<IEventsDragDrop> *dragDroppable) override;

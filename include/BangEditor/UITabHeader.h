@@ -21,24 +21,18 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/IEventsTabHeader.h"
 
-namespace BangEditor {
-class IEventsTabHeader;
-}  // namespace BangEditor
-namespace Bang {
-class IEventsDragDrop;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsDragDrop;
 FORWARD class UIDragDroppable;
 FORWARD class UIFocusable;
 FORWARD class UIImageRenderer;
 FORWARD class UITextRenderer;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class IEventsTabHeader;
 FORWARD class UITabContainer;
 
 class UITabHeader : public GameObject,
@@ -49,7 +43,7 @@ class UITabHeader : public GameObject,
 
 public:
 	UITabHeader();
-	virtual ~UITabHeader();
+	virtual ~UITabHeader() override;
 
     // GameObject
     void Update() override;

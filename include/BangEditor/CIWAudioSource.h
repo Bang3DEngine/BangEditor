@@ -7,18 +7,14 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-namespace Bang {
-class IEventsValueChanged;
-class UICheckBox;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class AudioSource;
-FORWARD class UIButton;
-FORWARD class UIInputNumber;
-FORWARD class UISlider;
-
+FORWARD   class AudioSource;
+FORWARD   class IEventsValueChanged;
+FORWARD   class UICheckBox;
+FORWARD   class UIButton;
+FORWARD   class UIInputNumber;
+FORWARD   class UISlider;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -54,7 +50,7 @@ private:
     AudioSource *GetAudioSource() const;
 
     CIWAudioSource() = default;
-    virtual ~CIWAudioSource() = default;
+    virtual ~CIWAudioSource() override = default;
 };
 
 NAMESPACE_BANG_EDITOR_END

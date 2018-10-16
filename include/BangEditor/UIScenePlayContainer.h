@@ -17,18 +17,17 @@
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneContainer.h"
 
-namespace BangEditor {
-class IEventsScenePlayer;
-}  // namespace BangEditor
-namespace Bang {
-class Camera;
-class IEventsSceneManager;
-class Path;
-class Scene;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Camera;
+FORWARD class IEventsSceneManager;
+FORWARD class Path;
+FORWARD class Scene;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
+
+FORWARD class IEventsScenePlayer;
 
 class UIScenePlayContainer : public UISceneContainer,
                              public EventListener<IEventsScenePlayer>,
@@ -38,7 +37,7 @@ class UIScenePlayContainer : public UISceneContainer,
 
 public:
 	UIScenePlayContainer();
-	virtual ~UIScenePlayContainer();
+	virtual ~UIScenePlayContainer() override;
 
     // GameObject
     void Update() override;

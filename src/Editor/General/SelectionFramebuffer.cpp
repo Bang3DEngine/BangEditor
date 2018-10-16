@@ -21,9 +21,9 @@
 #include "Bang/UMap.tcc"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class IEventsResource;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsResource;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

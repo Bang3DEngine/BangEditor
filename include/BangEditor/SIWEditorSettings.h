@@ -13,7 +13,7 @@ class SIWEditorSettings : public SettingsInspectorWidget
 {
 public:
     SIWEditorSettings();
-    virtual ~SIWEditorSettings();
+    virtual ~SIWEditorSettings() override;
 
     // SettingsInspectorWidget
     virtual void InitInnerWidgets() override;

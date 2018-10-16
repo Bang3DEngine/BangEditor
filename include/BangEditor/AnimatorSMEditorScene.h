@@ -25,16 +25,12 @@
 #include "Bang/UIImageRenderer.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class AnimatorStateMachine;
-class AnimatorStateMachineNode;
-class IEventsAnimatorStateMachine;
-class UIFocusable;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class AnimatorStateMachine;
+FORWARD class AnimatorStateMachineNode;
+FORWARD class IEventsAnimatorStateMachine;
+FORWARD class UIFocusable;
 FORWARD class UIImageRenderer;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -51,7 +47,7 @@ class AnimatorSMEditorScene : public GameObject,
 
 public:
     AnimatorSMEditorScene();
-    virtual ~AnimatorSMEditorScene();
+    virtual ~AnimatorSMEditorScene() override;
 
     // GameObject
     void Update() override;

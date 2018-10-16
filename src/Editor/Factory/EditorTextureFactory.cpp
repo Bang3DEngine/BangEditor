@@ -18,9 +18,9 @@
 #include "BangEditor/MeshPreviewFactory.h"
 #include "BangEditor/ModelPreviewFactory.h"
 
-namespace Bang {
-class Behaviour;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Behaviour;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

@@ -17,16 +17,12 @@
 #include "Bang/UIButton.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class IEventsValueChanged;
-class UIButton;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Animator;
-FORWARD class AnimatorStateMachine;
-
+FORWARD   class Animator;
+FORWARD   class AnimatorStateMachine;
+FORWARD_T class EventEmitter;
+FORWARD   class IEventsValueChanged;
+FORWARD   class UIButton;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -42,7 +38,7 @@ class AnimatorSMEditor : public GameObject,
 
 public:
 	AnimatorSMEditor();
-	virtual ~AnimatorSMEditor();
+	virtual ~AnimatorSMEditor() override;
 
     // GameObject
     void Update() override;

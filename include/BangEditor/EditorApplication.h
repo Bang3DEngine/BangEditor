@@ -5,19 +5,15 @@
 #include "Bang/BangDefines.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class Debug;
-class Path;
-class Paths;
-class Resources;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Debug;
 FORWARD class DialogWindow;
+FORWARD class Path;
+FORWARD class Paths;
+FORWARD class Resources;
 FORWARD class Scene;
 FORWARD class Texture2D;
 FORWARD class UIImageRenderer;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -33,7 +29,7 @@ class EditorApplication : public Application
 {
 public:
     EditorApplication();
-    virtual ~EditorApplication();
+    virtual ~EditorApplication() override;
 
     void InitEditorApplication(const Path &engineRootPath, 
                                const Path &editorRootPath);

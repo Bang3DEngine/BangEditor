@@ -7,15 +7,11 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWCollider.h"
 
-namespace Bang {
-class IEventsValueChanged;
-class UIInputNumber;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class SphereCollider;
-
+FORWARD   class IEventsValueChanged;
+FORWARD   class SphereCollider;
+FORWARD   class UIInputNumber;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -35,7 +31,7 @@ private:
     UIInputNumber *p_radiusInput = nullptr;
 
     CIWSphereCollider();
-    virtual ~CIWSphereCollider();
+    virtual ~CIWSphereCollider() override;
 
     // ComponentInspectorWidget
     virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;

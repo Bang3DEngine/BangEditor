@@ -9,16 +9,12 @@
 #include "BangEditor/SelectionGizmo.h"
 #include "BangEditor/TransformGizmoAxis.h"
 
-namespace Bang {
-class Color;
-class GameObject;
-}  // namespace Bang
-
-NAMESPACE_BANG_BEGIN
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Color;
+FORWARD class GameObject;
 FORWARD class LineRenderer;
 FORWARD class MeshRenderer;
-
-NAMESPACE_BANG_END
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -48,7 +44,7 @@ private:
     void SetColor(const Color &color) override;
 
     TranslateGizmoAxis();
-    virtual ~TranslateGizmoAxis();
+    virtual ~TranslateGizmoAxis() override;
 };
 
 

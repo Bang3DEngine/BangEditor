@@ -15,20 +15,16 @@
 #include "Bang/RenderPass.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class Camera;
-class IEventsDestroy;
-class IEventsTransform;
-class IEventsValueChanged;
-class Scene;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Texture2D;
-FORWARD class UIFocusable;
-FORWARD class UIImageRenderer;
-
+FORWARD   class Camera;
+FORWARD   class IEventsDestroy;
+FORWARD   class IEventsTransform;
+FORWARD   class IEventsValueChanged;
+FORWARD   class Scene;
+FORWARD   class Texture2D;
+FORWARD   class UIFocusable;
+FORWARD   class UIImageRenderer;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -45,7 +41,7 @@ class UISceneContainer : public GameObject,
 {
 public:
     UISceneContainer();
-    virtual ~UISceneContainer();
+    virtual ~UISceneContainer() override;
 
     // GameObject
     void BeforeChildrenRender(RenderPass rp) override;

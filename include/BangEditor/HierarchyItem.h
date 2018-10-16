@@ -20,27 +20,22 @@
 #include "BangEditor/IEventsHierarchyItem.h"
 #include "BangEditor/UIContextMenu.h"
 
-namespace BangEditor {
-class IEventsHierarchyItem;
-class MenuItem;
-class UIContextMenu;
-}  // namespace BangEditor
-namespace Bang {
-class IEventsName;
-class Object;
-class UIFocusable;
-class UITextRenderer;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsName;
+FORWARD class Object;
+FORWARD class UIFocusable;
 FORWARD class UIDragDroppable;
 FORWARD class UILabel;
+FORWARD class UITextRenderer;
 FORWARD class UITree;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
+
+FORWARD class IEventsHierarchyItem;
+FORWARD class MenuItem;
+FORWARD class UIContextMenu;
 
 class HierarchyItem : public GameObject,
                       public ITreeItem,
@@ -52,7 +47,7 @@ class HierarchyItem : public GameObject,
 
 public:
     HierarchyItem();
-    virtual ~HierarchyItem();
+    virtual ~HierarchyItem() override;
 
     void SetReferencedGameObject(GameObject *referencedGameObject);
 

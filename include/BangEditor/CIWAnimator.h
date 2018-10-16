@@ -7,15 +7,11 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-namespace Bang {
-class IEventsValueChanged;
-class UICheckBox;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Animator;
-
+FORWARD   class Animator;
+FORWARD   class IEventsValueChanged;
+FORWARD   class UICheckBox;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -40,7 +36,7 @@ private:
     UIInputFileWithPreview *p_animatorSMInput = nullptr;
 
     CIWAnimator();
-    virtual ~CIWAnimator();
+    virtual ~CIWAnimator() override;
 
     UIInputFileWithPreview* CreateAnimationEntry();
 

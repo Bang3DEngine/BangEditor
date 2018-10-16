@@ -7,17 +7,13 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWRenderer.h"
 
-namespace Bang {
-class IEventsValueChanged;
-class UICheckBox;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Rope;
-FORWARD class UIInputNumber;
-FORWARD class UISlider;
-
+FORWARD   class IEventsValueChanged;
+FORWARD   class Rope;
+FORWARD   class UIInputNumber;
+FORWARD   class UICheckBox;
+FORWARD   class UISlider;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -44,7 +40,7 @@ private:
     UICheckBox    *p_seeDebugPointsInput = nullptr;
 
     CIWRope();
-    virtual ~CIWRope();
+    virtual ~CIWRope() override;
 
     Rope *GetRope() const;
 };

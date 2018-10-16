@@ -10,16 +10,12 @@
 #include "BangEditor/CIWBehaviour.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-namespace Bang {
-class BPReflectedStruct;
-class IEventsValueChanged;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class BehaviourContainer;
-FORWARD class UIInputFileWithPreview;
-
+FORWARD   class BehaviourContainer;
+FORWARD   class BPReflectedStruct;
+FORWARD   class IEventsValueChanged;
+FORWARD   class UIInputFileWithPreview;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -45,7 +41,7 @@ private:
     Time m_prevTimeHeaderChanged;
 
     CIWBehaviourContainer();
-    virtual ~CIWBehaviourContainer();
+    virtual ~CIWBehaviourContainer() override;
 
     void UpdateFromReflection(const BPReflectedStruct &reflectStruct);
     void UpdateInitializationMetaFromWidgets();

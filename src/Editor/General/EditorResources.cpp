@@ -10,10 +10,10 @@
 #include "BangEditor/ModelPreviewFactory.h"
 #include "BangEditor/ResourcePreviewFactory.tcc"
 
-namespace Bang {
-class MeshFactory;
-class TextureFactory;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class MeshFactory;
+FORWARD class TextureFactory;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

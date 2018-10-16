@@ -35,7 +35,7 @@ private:
     Path c_editorRoot  = Path::Empty;
 
     EditorPaths();
-    virtual ~EditorPaths();
+    virtual ~EditorPaths() override;
 
     static EditorPaths* GetInstance();
 

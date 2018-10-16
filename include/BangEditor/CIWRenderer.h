@@ -6,15 +6,11 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-namespace Bang {
-class IEventsValueChanged;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Renderer;
-FORWARD class UICheckBox;
-
+FORWARD   class IEventsValueChanged;
+FORWARD   class Renderer;
+FORWARD   class UICheckBox;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -32,7 +28,7 @@ public:
 
 protected:
     CIWRenderer();
-    virtual ~CIWRenderer();
+    virtual ~CIWRenderer() override;
 
     Renderer *GetRenderer() const;
 

@@ -6,11 +6,11 @@
 #include "Bang/Resources.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class MeshFactory;
-class Path;
-class TextureFactory;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class MeshFactory;
+FORWARD class Path;
+FORWARD class TextureFactory;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -23,7 +23,7 @@ class EditorResources : public Resources
 {
 public:
 	EditorResources();
-	virtual ~EditorResources();
+	virtual ~EditorResources() override;
 
     MeshPreviewFactory *GetMeshPreviewFactory() const;
     ModelPreviewFactory *GetModelPreviewFactory() const;

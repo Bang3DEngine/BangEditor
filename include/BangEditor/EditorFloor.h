@@ -10,9 +10,7 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class LineRenderer;
-
 FORWARD NAMESPACE_BANG_END
-
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -23,7 +21,7 @@ class EditorFloor : public GameObject
 
 public:
 	EditorFloor();
-	virtual ~EditorFloor();
+	virtual ~EditorFloor() override;
 
     void Render(RenderPass renderPass, bool renderChildren) override;
 

@@ -17,23 +17,18 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ProjectManager.h"
 
-namespace BangEditor {
-class IEventsProjectManager;
-class Project;
-}  // namespace BangEditor
-namespace Bang {
-class IEventsFileTracker;
-class Path;
-class String;
-}  // namespace Bang
-
-NAMESPACE_BANG_BEGIN
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsFileTracker;
 FORWARD class FileTracker;
-
-NAMESPACE_BANG_END
+FORWARD class Path;
+FORWARD class String;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
+
+FORWARD class IEventsProjectManager;
+FORWARD class Project;
 
 class EditorFileTracker : public EventListener<IEventsFileTracker>,
                           public EventListener<IEventsProjectManager>,
@@ -41,7 +36,7 @@ class EditorFileTracker : public EventListener<IEventsFileTracker>,
 {
 public:
 	EditorFileTracker();
-	virtual ~EditorFileTracker();
+	virtual ~EditorFileTracker() override;
 
     void CheckFiles();
     void OnPathRenamed(const Path &previousPath, const Path &newPath);

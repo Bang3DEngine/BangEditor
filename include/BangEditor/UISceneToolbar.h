@@ -15,18 +15,14 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/TransformGizmo.h"
 
-namespace Bang {
-class IEventsValueChanged;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsValueChanged;
 FORWARD class Texture2D;
 FORWARD class UIButton;
 FORWARD class UICheckBox;
 FORWARD class UIComboBox;
 FORWARD class UITextRenderer;
 FORWARD class UIToolButton;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -40,7 +36,7 @@ class UISceneToolbar : public GameObject,
 
 public:
 	UISceneToolbar();
-	virtual ~UISceneToolbar();
+	virtual ~UISceneToolbar() override;
 
     void Update() override;
     void SetTransformGizmoMode(TransformGizmoMode transformMode);

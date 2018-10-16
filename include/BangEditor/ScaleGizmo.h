@@ -8,9 +8,9 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
 
-namespace Bang {
-class GameObject;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class GameObject;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -32,7 +32,7 @@ private:
     ScaleGizmoAxis *p_axisXYZ = nullptr;
 
     ScaleGizmo();
-    virtual ~ScaleGizmo();
+    virtual ~ScaleGizmo() override;
 };
 
 NAMESPACE_BANG_EDITOR_END

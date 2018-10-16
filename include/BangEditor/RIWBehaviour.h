@@ -8,14 +8,10 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ResourceInspectorWidget.h"
 
-namespace Bang {
-class Texture2D;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Texture2D;
 FORWARD class UIButton;
 FORWARD class UITextRenderer;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -31,7 +27,7 @@ public:
 
 private:
 	RIWBehaviour();
-	virtual ~RIWBehaviour();
+	virtual ~RIWBehaviour() override;
 
     // ResourceInspectorWidget
     void UpdateFromFileWhenChanged() override;

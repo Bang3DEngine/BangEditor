@@ -9,13 +9,9 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class Object;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Object;
 FORWARD class UITextRenderer;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -27,7 +23,7 @@ class UISceneDebugStats : public GameObject
 
 public:
 	UISceneDebugStats();
-	virtual ~UISceneDebugStats();
+	virtual ~UISceneDebugStats() override;
 
     // GameObject
     void Update() override;

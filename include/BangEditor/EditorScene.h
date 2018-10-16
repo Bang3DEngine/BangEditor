@@ -21,27 +21,18 @@
 #include "BangEditor/PlayState.h"
 #include "BangEditor/ScenePlayer.h"
 
-namespace BangEditor {
-class IEventsScenePlayer;
-class IEventsTabHeader;
-class UITabHeader;
-}  // namespace BangEditor
-namespace Bang {
-class IEventsDestroy;
-class IEventsSceneManager;
-class IEventsWindow;
-class Path;
-class Window;
-template <class T> class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class GameObject;
-FORWARD class Scene;
-FORWARD class Texture2D;
-FORWARD class UIImageRenderer;
-FORWARD class UITextRenderer;
-
+FORWARD   class GameObject;
+FORWARD   class Scene;
+FORWARD   class Texture2D;
+FORWARD   class UIImageRenderer;
+FORWARD   class UITextRenderer;
+FORWARD   class IEventsDestroy;
+FORWARD   class IEventsSceneManager;
+FORWARD   class IEventsWindow;
+FORWARD   class Path;
+FORWARD   class Window;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -55,6 +46,8 @@ FORWARD class EditorClipboard;
 FORWARD class EditorFileTracker;
 FORWARD class Explorer;
 FORWARD class Hierarchy;
+FORWARD class IEventsScenePlayer;
+FORWARD class IEventsTabHeader;
 FORWARD class Inspector;
 FORWARD class MenuBar;
 FORWARD class ProjectManager;
@@ -64,6 +57,7 @@ FORWARD class UISceneContainer;
 FORWARD class UISceneEditContainer;
 FORWARD class UIScenePlayContainer;
 FORWARD class UITabContainer;
+FORWARD class UITabHeader;
 FORWARD class UITabStation;
 FORWARD class UndoRedoManager;
 
@@ -103,7 +97,7 @@ public:
 
 protected:
     EditorScene();
-    virtual ~EditorScene();
+    virtual ~EditorScene() override;
 
 private:
     ScenePlayer *m_scenePlayer                   = nullptr;

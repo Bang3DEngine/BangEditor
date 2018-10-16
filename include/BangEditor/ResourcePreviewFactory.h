@@ -42,7 +42,7 @@ public:
 
 protected:
     ResourcePreviewFactory();
-    virtual ~ResourcePreviewFactory();
+    virtual ~ResourcePreviewFactory() override;
 
     virtual void OnCreateSceneFirstTime(Scene *previewScene,
                                         Camera *previewCamera,

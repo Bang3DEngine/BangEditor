@@ -14,23 +14,19 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/InspectorWidget.h"
 
-namespace Bang {
-class GameObject;
-class IEventsDestroy;
-class IEventsValueChanged;
-class UICheckBox;
-class UILabel;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class AnimatorStateMachineConnection;
-FORWARD class AnimatorStateMachineNode;
-FORWARD class UIInputNumber;
-FORWARD class UIInputText;
-FORWARD class UIList;
-FORWARD class UISlider;
-
+FORWARD   class AnimatorStateMachineConnection;
+FORWARD   class AnimatorStateMachineNode;
+FORWARD   class GameObject;
+FORWARD   class IEventsDestroy;
+FORWARD   class IEventsValueChanged;
+FORWARD   class UICheckBox;
+FORWARD   class UIInputNumber;
+FORWARD   class UIInputText;
+FORWARD   class UILabel;
+FORWARD   class UIList;
+FORWARD   class UISlider;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -44,7 +40,7 @@ class GIWAESConnectionLine : public InspectorWidget,
 {
 public:
 	GIWAESConnectionLine();
-	virtual ~GIWAESConnectionLine();
+	virtual ~GIWAESConnectionLine() override;
 
     // InspectorWidget
     virtual void InitInnerWidgets() override;

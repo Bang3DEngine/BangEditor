@@ -7,18 +7,14 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-namespace Bang {
-class Camera;
-class IEventsValueChanged;
-class UICheckBox;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIComboBox;
-FORWARD class UIInputNumber;
-FORWARD class UISlider;
-
+FORWARD  class Camera;
+FORWARD  class IEventsValueChanged;
+FORWARD  class UICheckBox;
+FORWARD  class UIComboBox;
+FORWARD  class UIInputNumber;
+FORWARD  class UISlider;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -38,7 +34,7 @@ public:
 
 protected:
     CIWCamera() = default;
-    virtual ~CIWCamera() = default;
+    virtual ~CIWCamera() override = default;
 
     Camera *GetCamera() const;
 

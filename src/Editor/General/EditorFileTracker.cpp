@@ -24,13 +24,14 @@
 #include "BangEditor/IEventsProjectManager.h"
 #include "BangEditor/ProjectManager.h"
 
-namespace BangEditor {
-class Project;
-}  // namespace BangEditor
-namespace Bang {
-class Resource;
-class String;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Resource;
+FORWARD class String;
+FORWARD NAMESPACE_BANG_END
+
+FORWARD NAMESPACE_BANG_EDITOR_BEGIN
+FORWARD class Project;
+FORWARD NAMESPACE_BANG_EDITOR_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

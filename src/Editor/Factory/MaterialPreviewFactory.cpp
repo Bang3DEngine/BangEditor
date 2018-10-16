@@ -9,10 +9,11 @@
 #include "BangEditor/EditorResources.h"
 #include "BangEditor/ResourcePreviewFactory.tcc"
 
-namespace Bang {
-class Camera;
-class Scene;
-}  // namespace Bang
+
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Camera;
+FORWARD class Scene;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

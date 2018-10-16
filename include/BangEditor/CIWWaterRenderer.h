@@ -7,14 +7,10 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWRenderer.h"
 
-namespace Bang {
-class IEventsValueChanged;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class WaterRenderer;
-
+FORWARD   class IEventsValueChanged;
+FORWARD   class WaterRenderer;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -31,7 +27,7 @@ public:
 
 private:
 	CIWWaterRenderer();
-	virtual ~CIWWaterRenderer();
+	virtual ~CIWWaterRenderer() override;
 
     WaterRenderer *GetWaterRenderer() const;
 

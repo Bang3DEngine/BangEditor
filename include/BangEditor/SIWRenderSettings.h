@@ -6,9 +6,6 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SettingsInspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD NAMESPACE_BANG_END
-
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
@@ -18,7 +15,7 @@ class SIWRenderSettings : public SettingsInspectorWidget
 {
 public:
 	SIWRenderSettings();
-	virtual ~SIWRenderSettings();
+	virtual ~SIWRenderSettings() override;
 
     // SettingsInspectorWidget
     virtual void InitInnerWidgets() override;

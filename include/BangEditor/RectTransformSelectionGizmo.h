@@ -8,14 +8,10 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
 
-namespace Bang {
-class GameObject;
-}  // namespace Bang
-
-NAMESPACE_BANG_BEGIN
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class GameObject;
 FORWARD class UIImageRenderer;
-
-NAMESPACE_BANG_END
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -49,7 +45,7 @@ private:
     RectTransformAnchorSelectionGizmo *p_rightBotAnchor = nullptr;
 
 	RectTransformSelectionGizmo();
-	virtual ~RectTransformSelectionGizmo();
+	virtual ~RectTransformSelectionGizmo() override;
 };
 
 NAMESPACE_BANG_EDITOR_END

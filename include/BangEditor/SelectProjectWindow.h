@@ -14,7 +14,6 @@
 
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UIButton;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -26,7 +25,7 @@ public:
     static Path SelectedProjectPath;
 
     SelectProjectWindow();
-    virtual ~SelectProjectWindow();
+    virtual ~SelectProjectWindow() override;
 
     void Init();
 };
@@ -37,7 +36,7 @@ class SelectProjectScene : public Scene
 {
 public:
     SelectProjectScene();
-    virtual ~SelectProjectScene();
+    virtual ~SelectProjectScene() override;
 
 private:
     class RecentProjectListEntry : public GameObject
@@ -47,7 +46,7 @@ private:
     public:
         RecentProjectListEntry();
         RecentProjectListEntry(const Path &projectPath);
-        virtual ~RecentProjectListEntry();
+        virtual ~RecentProjectListEntry() override;
 
         Path m_projectPath = Path::Empty;
     };

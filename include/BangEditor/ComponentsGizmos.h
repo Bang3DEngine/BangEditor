@@ -8,22 +8,18 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
 
-namespace Bang {
-class Camera;
-class Component;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class AudioSource;
 FORWARD class BoxCollider;
+FORWARD class Camera;
 FORWARD class CapsuleCollider;
+FORWARD class Component;
 FORWARD class DirectionalLight;
 FORWARD class ParticleSystem;
 FORWARD class PointLight;
 FORWARD class ReflectionProbe;
 FORWARD class Rope;
 FORWARD class SphereCollider;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -35,7 +31,7 @@ class ComponentsGizmos : public GameObject
 
 public:
     ComponentsGizmos();
-    virtual ~ComponentsGizmos();
+    virtual ~ComponentsGizmos() override;
 
     // GameObject
     void Render(RenderPass rp, bool renderChildren) override;

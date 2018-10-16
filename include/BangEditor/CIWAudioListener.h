@@ -21,7 +21,7 @@ public:
 
 public:
     CIWAudioListener() = default;
-    virtual ~CIWAudioListener() = default;
+    virtual ~CIWAudioListener() override = default;
 };
 
 NAMESPACE_BANG_EDITOR_END

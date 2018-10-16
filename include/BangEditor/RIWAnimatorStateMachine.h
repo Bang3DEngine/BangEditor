@@ -14,16 +14,12 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
-namespace Bang {
-class IEventsValueChanged;
-class Texture2D;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class AnimatorStateMachine;
-FORWARD class UIButton;
-
+FORWARD   class AnimatorStateMachine;
+FORWARD   class IEventsValueChanged;
+FORWARD   class Texture2D;
+FORWARD   class UIButton;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -41,7 +37,7 @@ private:
     UIButton *p_openInEditorButton = nullptr;
 
     RIWAnimatorStateMachine();
-    virtual ~RIWAnimatorStateMachine();
+    virtual ~RIWAnimatorStateMachine() override;
 
     // RIWResource
     void UpdateInputsFromResource() override;

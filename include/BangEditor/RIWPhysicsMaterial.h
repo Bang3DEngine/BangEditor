@@ -15,18 +15,14 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
-namespace Bang {
-class IEventsValueChanged;
-class Texture2D;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIComboBox;
-FORWARD class UISlider;
-
+FORWARD   class IEventsValueChanged;
+FORWARD   class Texture2D;
+FORWARD   class UIComboBox;
+FORWARD   class UIInputNumber;
+FORWARD   class UISlider;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
-
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -49,7 +45,7 @@ private:
     UIComboBox *p_restitutionCombineModeInput = nullptr;
 
     RIWPhysicsMaterial();
-    virtual ~RIWPhysicsMaterial();
+    virtual ~RIWPhysicsMaterial() override;
 
     PhysicsMaterial *GetPhysicsMaterial() const;
 

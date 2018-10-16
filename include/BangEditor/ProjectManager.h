@@ -14,16 +14,15 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/IEventsProjectManager.h"
 
-namespace BangEditor {
-class IEventsProjectManager;
-class Project;
-}  // namespace BangEditor
-namespace Bang {
-class Path;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Path;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
+
+FORWARD class IEventsProjectManager;
+FORWARD class Project;
 
 class ProjectManager : public EventEmitter<IEventsProjectManager>
 {

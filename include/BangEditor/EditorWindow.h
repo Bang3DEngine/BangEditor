@@ -7,9 +7,9 @@
 #include "Bang/Window.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class SceneManager;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class SceneManager;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -21,7 +21,7 @@ class EditorWindow : public Window
 {
 public:
     EditorWindow();
-    virtual ~EditorWindow();
+    virtual ~EditorWindow() override;
 
     void Create(uint flags) override;
     virtual void Update() override;

@@ -15,7 +15,7 @@ class UndoRedoExplorerSelect : public UndoRedoAction
 public:
     UndoRedoExplorerSelect(const Path &previousSelectedPath,
                            const Path &newSelectedPath);
-	virtual ~UndoRedoExplorerSelect();
+	virtual ~UndoRedoExplorerSelect() override;
 
     // UndoRedoAction
     void Undo() override;

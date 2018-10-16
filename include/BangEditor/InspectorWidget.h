@@ -8,17 +8,13 @@
 #include "Bang/UMap.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class Color;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Color;
 FORWARD class UICheckBox;
 FORWARD class UIImageRenderer;
 FORWARD class UILabel;
 FORWARD class UILayoutElement;
 FORWARD class UITextRenderer;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -41,7 +37,7 @@ protected:
     static constexpr int DefaultWidgetHeight = 20;
 
     InspectorWidget();
-    virtual ~InspectorWidget();
+    virtual ~InspectorWidget() override;
 
     virtual void InitInnerWidgets();
 
@@ -95,7 +91,7 @@ class InspectorWidgetTitle : public GameObject
 
 public:
     InspectorWidgetTitle();
-    virtual ~InspectorWidgetTitle();
+    virtual ~InspectorWidgetTitle() override;
 
     UITextRenderer *GetText() const;
     UIImageRenderer *GetIcon() const;

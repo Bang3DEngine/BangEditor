@@ -14,20 +14,16 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class IEventsValueChanged;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Texture2D;
-FORWARD class UIButton;
-FORWARD class UICheckBox;
-FORWARD class UIComboBox;
-FORWARD class UISlider;
-FORWARD class UITextRenderer;
-FORWARD class UIToolButton;
-
+FORWARD   class IEventsValueChanged;
+FORWARD   class Texture2D;
+FORWARD   class UIButton;
+FORWARD   class UICheckBox;
+FORWARD   class UIComboBox;
+FORWARD   class UISlider;
+FORWARD   class UITextRenderer;
+FORWARD   class UIToolButton;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -40,7 +36,7 @@ class UISceneToolbarDown : public GameObject,
 
 public:
 	UISceneToolbarDown();
-	virtual ~UISceneToolbarDown();
+	virtual ~UISceneToolbarDown() override;
 
 private:
     UISlider *p_zoomSpeedSlider = nullptr;

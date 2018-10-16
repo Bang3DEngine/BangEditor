@@ -13,7 +13,7 @@ class SettingsInspectorWidget : public InspectorWidget
 {
 public:
     SettingsInspectorWidget();
-    virtual ~SettingsInspectorWidget();
+    virtual ~SettingsInspectorWidget() override;
 
     // InspectorWidget
     virtual void InitInnerWidgets() override;

@@ -26,33 +26,27 @@
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneContainer.h"
 
-namespace BangEditor {
-class IEventsScenePlayer;
-}  // namespace BangEditor
-namespace Bang {
-class Camera;
-class GameObject;
-class IEventsDestroy;
-class IEventsDragDrop;
-class IEventsGameObjectVisibilityChanged;
-class IEventsSceneManager;
-class Material;
-class Path;
-class Scene;
-class UIFocusable;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class GBuffer;
-FORWARD class MeshRenderer;
-FORWARD class UIImageRenderer;
-
+FORWARD   class Camera;
+FORWARD   class GameObject;
+FORWARD   class GBuffer;
+FORWARD   class IEventsDestroy;
+FORWARD   class IEventsDragDrop;
+FORWARD   class IEventsGameObjectVisibilityChanged;
+FORWARD   class IEventsSceneManager;
+FORWARD   class Material;
+FORWARD   class MeshRenderer;
+FORWARD   class Path;
+FORWARD   class Scene;
+FORWARD   class UIFocusable;
+FORWARD   class UIImageRenderer;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class IEventsScenePlayer;
 FORWARD class SelectionFramebuffer;
 
 class UISceneEditContainer :
@@ -66,7 +60,7 @@ class UISceneEditContainer :
 
 public:
 	UISceneEditContainer();
-	virtual ~UISceneEditContainer();
+	virtual ~UISceneEditContainer() override;
 
     // GameObject
     void Update() override;

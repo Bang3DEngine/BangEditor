@@ -23,13 +23,14 @@
 #include "BangEditor/RIWResource.tcc"
 #include "BangEditor/ResourceInspectorWidget.h"
 
-namespace BangEditor {
-struct ResourcePreviewFactoryParameters;
-}  // namespace BangEditor
-namespace Bang {
-class IEventsValueChanged;
-template <class > class EventEmitter;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD   class IEventsValueChanged;
+FORWARD_T class EventEmitter;
+FORWARD NAMESPACE_BANG_END
+
+FORWARD NAMESPACE_BANG_EDITOR_BEGIN
+FORWARD struct ResourcePreviewFactoryParameters;
+FORWARD NAMESPACE_BANG_EDITOR_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

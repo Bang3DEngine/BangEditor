@@ -6,14 +6,10 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWRenderer.h"
 
-namespace Bang {
-class IEventsValueChanged;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class MeshRenderer;
-
+FORWARD   class IEventsValueChanged;
+FORWARD   class MeshRenderer;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -34,7 +30,7 @@ protected:
     UIInputFileWithPreview *p_meshInputFile = nullptr;
 
     CIWMeshRenderer() = default;
-    virtual ~CIWMeshRenderer() = default;
+    virtual ~CIWMeshRenderer() override = default;
 
     MeshRenderer *GetMeshRenderer() const;
 

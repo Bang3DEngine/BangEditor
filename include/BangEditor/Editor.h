@@ -18,24 +18,19 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/IEventsEditor.h"
 
-namespace BangEditor {
-class EditorSettings;
-class IEventsEditor;
-}  // namespace BangEditor
-namespace Bang {
-class GameObject;
-class IEventsDestroy;
-class IEventsSceneManager;
-class Path;
-}  // namespace Bang
-
-NAMESPACE_BANG_BEGIN
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class GameObject;
+FORWARD class IEventsDestroy;
+FORWARD class IEventsSceneManager;
+FORWARD class Path;
 FORWARD class Scene;
-
-NAMESPACE_BANG_END
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
+
+FORWARD class EditorSettings;
+FORWARD class IEventsEditor;
 
 class Editor : public EventEmitter<IEventsEditor>,
                public EventListener<IEventsSceneManager>,
@@ -55,7 +50,7 @@ private:
     EditorSettings *m_editorSettings = nullptr;
 
     Editor();
-    virtual ~Editor();
+    virtual ~Editor() override;
 
     void Init();
 

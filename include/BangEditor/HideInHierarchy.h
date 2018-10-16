@@ -18,7 +18,7 @@ private:
     {
         CONSTRUCT_CLASS_ID(HideInHierarchy);
     }
-    virtual ~HideInHierarchy() = default;
+    virtual ~HideInHierarchy() override = default;
 };
 
 NAMESPACE_BANG_EDITOR_END

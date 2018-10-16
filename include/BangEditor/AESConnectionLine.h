@@ -18,16 +18,12 @@
 #include "BangEditor/AESNode.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class LineRenderer;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class LineRenderer;
 FORWARD class AnimatorStateMachine;
 FORWARD class AnimatorStateMachineConnection;
 FORWARD class AnimatorStateMachineNode;
 FORWARD class UIImageRenderer;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -42,7 +38,7 @@ class AESConnectionLine : public GameObject
 
 public:
 	AESConnectionLine();
-	virtual ~AESConnectionLine();
+    virtual ~AESConnectionLine() override;
 
     // GameObject
     void BeforeRender() override;

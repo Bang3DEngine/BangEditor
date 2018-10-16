@@ -21,32 +21,26 @@
 #include "BangEditor/HierarchyItem.h"
 #include "BangEditor/ShortcutManager.h"
 
-namespace BangEditor {
-class IEventsEditor;
-class IEventsHierarchyItem;
-class MenuItem;
-class UIContextMenu;
-}  // namespace BangEditor
-namespace Bang {
-class IEventsDestroy;
-class IEventsSceneManager;
-class IEventsUITree;
-class Path;
-class Scene;
-class UIDragDroppable;
-class UIFocusable;
-template <class T> class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UITree;
-
+FORWARD   class IEventsDestroy;
+FORWARD   class IEventsSceneManager;
+FORWARD   class IEventsUITree;
+FORWARD   class Path;
+FORWARD   class Scene;
+FORWARD   class UIDragDroppable;
+FORWARD   class UIFocusable;
+FORWARD   class UITree;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class HierarchyItem;
+FORWARD class IEventsEditor;
+FORWARD class IEventsHierarchyItem;
+FORWARD class MenuItem;
+FORWARD class UIContextMenu;
 
 class Hierarchy : public GameObject,
                   public EventListener<IEventsEditor>,
@@ -59,7 +53,7 @@ class Hierarchy : public GameObject,
 
 public:
     Hierarchy();
-    virtual ~Hierarchy();
+    virtual ~Hierarchy() override;
 
     void Clear();
 

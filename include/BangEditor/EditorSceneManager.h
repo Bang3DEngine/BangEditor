@@ -11,15 +11,11 @@
 #include "Bang/SceneManager.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class BehaviourManager;
-class IEventsSceneManager;
-class Path;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class BehaviourManager;
+FORWARD class IEventsSceneManager;
+FORWARD class Path;
 FORWARD class Scene;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -33,7 +29,7 @@ class EditorSceneManager : public SceneManager,
 {
 public:
     EditorSceneManager();
-    virtual ~EditorSceneManager();
+    virtual ~EditorSceneManager() override;
 
     static Scene *GetOpenScene();
     static EditorScene *GetEditorScene();

@@ -18,12 +18,12 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ResourcePreviewFactory.h"
 
-namespace Bang {
-class Camera;
-class GameObject;
-class Scene;
-class Texture2D;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Camera;
+FORWARD class GameObject;
+FORWARD class Scene;
+FORWARD class Texture2D;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -32,7 +32,7 @@ class ModelPreviewFactory : public ResourcePreviewFactory<Model>
 {
 public:
 	ModelPreviewFactory();
-	virtual ~ModelPreviewFactory();
+	virtual ~ModelPreviewFactory() override;
 
     static RH<Texture2D> GetPreviewTextureFor(Model *model);
     static RH<Texture2D> GetPreviewTextureFor(

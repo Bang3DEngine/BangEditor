@@ -16,13 +16,9 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class IEventsValueChanged;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsValueChanged;
 FORWARD class UIInputNumber;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -36,7 +32,7 @@ class UIInputComplexRandom : public GameObject,
 
 public:
 	UIInputComplexRandom();
-	virtual ~UIInputComplexRandom();
+	virtual ~UIInputComplexRandom() override;
 
     void Set(const ComplexRandom &complexRandom);
 

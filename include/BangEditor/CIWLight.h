@@ -7,17 +7,13 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-namespace Bang {
-class IEventsValueChanged;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Light;
-FORWARD class UIComboBox;
-FORWARD class UIInputNumber;
-FORWARD class UISlider;
-
+FORWARD   class IEventsValueChanged;
+FORWARD   class Light;
+FORWARD   class UIComboBox;
+FORWARD   class UIInputNumber;
+FORWARD   class UISlider;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -36,7 +32,7 @@ public:
 
 protected:
     CIWLight() = default;
-    virtual ~CIWLight() = default;
+    virtual ~CIWLight() override = default;
 
     Light *GetLight() const;
 

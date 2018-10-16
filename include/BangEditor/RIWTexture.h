@@ -16,20 +16,16 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
-namespace Bang {
-class IEventsValueChanged;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Texture2D;
-FORWARD class UIAspectRatioFitter;
-FORWARD class UICheckBox;
-FORWARD class UIComboBox;
-FORWARD class UIImageRenderer;
-FORWARD class UIInputText;
-FORWARD class UISlider;
-
+FORWARD   class IEventsValueChanged;
+FORWARD   class Texture2D;
+FORWARD   class UIAspectRatioFitter;
+FORWARD   class UICheckBox;
+FORWARD   class UIComboBox;
+FORWARD   class UIImageRenderer;
+FORWARD   class UIInputText;
+FORWARD   class UISlider;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -55,7 +51,7 @@ private:
     UIAspectRatioFitter *p_imageAspectRatioFitter = nullptr;
 
 	RIWTexture();
-	virtual ~RIWTexture();
+	virtual ~RIWTexture() override;
 
     Texture2D *GetTexture() const;
 

@@ -11,16 +11,12 @@
 #include "Bang/UIList.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class UIImageRenderer;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class IFocusable;
 FORWARD class UIFocusable;
+FORWARD class UIImageRenderer;
 FORWARD class UIList;
 FORWARD class UITextRenderer;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -75,7 +71,7 @@ public:
 
 protected:
     MenuItem(MenuItemType itemType = MenuItemType::NORMAL);
-    virtual ~MenuItem();
+    virtual ~MenuItem() override;
 
 private:
     ItemSelectedCallback m_selectedCallback;

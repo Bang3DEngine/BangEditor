@@ -17,15 +17,11 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class IEventsValueChanged;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class AnimatorStateMachine;
+FORWARD class IEventsValueChanged;
 FORWARD class UIComboBox;
 FORWARD class UIInputNumber;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -37,7 +33,7 @@ class ASMCTransitionConditionInput : public GameObject,
 {
 public:
 	ASMCTransitionConditionInput();
-	virtual ~ASMCTransitionConditionInput();
+	virtual ~ASMCTransitionConditionInput() override;
 
     // GameObject
     void BeforeRender() override;

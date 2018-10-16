@@ -17,18 +17,15 @@
 #include "BangEditor/PlayState.h"
 #include "BangEditor/ShortcutManager.h"
 
-namespace BangEditor {
-class IEventsScenePlayer;
-class Shortcut;
-}  // namespace BangEditor
-
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Scene;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
+
+FORWARD class IEventsScenePlayer;
+FORWARD class Shortcut;
 
 class ScenePlayer : public EventEmitter<IEventsScenePlayer>
 {
@@ -51,7 +48,7 @@ private:
     Scene *p_playOpenScene = nullptr;
 
     ScenePlayer();
-    virtual ~ScenePlayer();
+    virtual ~ScenePlayer() override;
 
     void Update();
 

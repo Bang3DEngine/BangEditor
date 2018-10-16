@@ -23,33 +23,28 @@
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/ShortcutManager.h"
 
-namespace BangEditor {
-class ExplorerItem;
-class IEventsEditor;
-class IEventsExplorerItem;
-class IEventsProjectManager;
-class MenuItem;
-class Project;
-class UIContextMenu;
-}  // namespace BangEditor
-namespace Bang {
-class IEventsFileTracker;
-class IEventsValueChanged;
-class UIButton;
-class UIFocusable;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIGridLayout;
-FORWARD class UILabel;
-FORWARD class UIScrollPanel;
-FORWARD class UISlider;
-
+FORWARD   class IEventsFileTracker;
+FORWARD   class IEventsValueChanged;
+FORWARD   class UIButton;
+FORWARD   class UIFocusable;
+FORWARD   class UIGridLayout;
+FORWARD   class UILabel;
+FORWARD   class UIScrollPanel;
+FORWARD   class UISlider;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
+
+FORWARD class ExplorerItem;
+FORWARD class IEventsEditor;
+FORWARD class IEventsExplorerItem;
+FORWARD class IEventsProjectManager;
+FORWARD class MenuItem;
+FORWARD class Project;
+FORWARD class UIContextMenu;
 
 class Explorer : public GameObject,
                  public EventListener<IEventsFocus>,
@@ -63,7 +58,7 @@ class Explorer : public GameObject,
 
 public:
     Explorer();
-    virtual ~Explorer();
+    virtual ~Explorer() override;
 
     void Update() override;
 

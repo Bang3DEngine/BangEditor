@@ -19,15 +19,12 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class AnimatorStateMachineConnection;
-class IEventsAnimatorStateMachineNode;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Animator;
 FORWARD class AnimatorStateMachine;
+FORWARD class AnimatorStateMachineConnection;
 FORWARD class AnimatorStateMachineNode;
+FORWARD class IEventsAnimatorStateMachineNode;
 FORWARD class UIFocusable;
 FORWARD class UIImageRenderer;
 FORWARD class UITextRenderer;
@@ -49,7 +46,7 @@ class AESNode : public GameObject,
 
 public:
 	AESNode();
-    virtual ~AESNode();
+    virtual ~AESNode() override;
 
     // GameObject
     void Update() override;

@@ -10,13 +10,9 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/Editor.h"
 
-namespace Bang {
-class Camera;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Camera;
 FORWARD class Texture2D;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -29,9 +25,19 @@ class UISceneImage : public GameObject
     GAMEOBJECT_EDITOR(UISceneImage);
 
 public:
-    enum class RenderMode { COLOR = 0, NORMAL, ALBEDO, DEPTH,
-                            ROUGHNESS, METALNESS, RECEIVES_LIGHT,
-                            RECEIVES_SHADOWS, SELECTION, WORLD_POSITION };
+    enum class RenderMode
+    { COLOR = 0,
+      NORMAL,
+      ALBEDO,
+      DEPTH,
+      ROUGHNESS,
+      METALNESS,
+      RECEIVES_LIGHT,
+      RECEIVES_SHADOWS,
+      SELECTION,
+      WORLD_POSITION
+    };
+
     class UISceneImageRenderer : public UIImageRenderer
     {
         public:
@@ -39,7 +45,7 @@ public:
     };
 
     UISceneImage();
-    virtual ~UISceneImage();
+    virtual ~UISceneImage() override;
 
     void Update() override;
     void Render(RenderPass renderPass, bool renderChildren) override;

@@ -10,12 +10,12 @@
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
 
-namespace Bang {
-class Debug;
-class Path;
-class Paths;
-class Resources;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Debug;
+FORWARD class Path;
+FORWARD class Paths;
+FORWARD class Resources;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

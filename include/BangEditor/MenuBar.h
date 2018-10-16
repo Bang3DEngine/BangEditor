@@ -9,21 +9,17 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ShortcutManager.h"
 
-namespace BangEditor {
-class Shortcut;
-}  // namespace BangEditor
-
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class UICanvas;
 FORWARD class UIFocusable;
 FORWARD class UIHorizontalLayout;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class MenuItem;
+FORWARD class Shortcut;
 
 class MenuBar : public GameObject
 {
@@ -47,7 +43,7 @@ public:
 
 protected:
     MenuBar();
-    virtual ~MenuBar();
+    virtual ~MenuBar() override;
 
 private:
     MenuItem *m_fileItem = nullptr;

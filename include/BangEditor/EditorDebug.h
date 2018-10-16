@@ -13,7 +13,7 @@ class EditorDebug : public Debug
 {
 public:
 	EditorDebug();
-	virtual ~EditorDebug();
+	virtual ~EditorDebug() override;
 
     friend class EditorApplication;
 };

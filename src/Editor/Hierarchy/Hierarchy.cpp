@@ -56,13 +56,14 @@
 #include "BangEditor/UndoRedoRemoveGameObject.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
 
-namespace BangEditor {
-class UndoRedoAction;
-}  // namespace BangEditor
-namespace Bang {
-class IEventsChildren;
-class IEventsDestroy;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsChildren;
+FORWARD class IEventsDestroy;
+FORWARD NAMESPACE_BANG_END
+
+FORWARD NAMESPACE_BANG_EDITOR_BEGIN
+FORWARD class UndoRedoAction;
+FORWARD NAMESPACE_BANG_EDITOR_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

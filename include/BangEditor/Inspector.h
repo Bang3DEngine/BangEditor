@@ -20,32 +20,26 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/Editor.h"
 
-namespace BangEditor {
-class IEventsEditor;
-}  // namespace BangEditor
-namespace Bang {
-class Component;
-class IEventsComponent;
-class IEventsDestroy;
-class IEventsFileTracker;
-class IEventsSceneManager;
-class Object;
-class Scene;
-class Serializable;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIImageRenderer;
-FORWARD class UIScrollPanel;
-FORWARD class UITextRenderer;
-FORWARD class UIVerticalLayout;
-
+FORWARD   class Component;
+FORWARD   class IEventsComponent;
+FORWARD   class IEventsDestroy;
+FORWARD   class IEventsFileTracker;
+FORWARD   class IEventsSceneManager;
+FORWARD   class Object;
+FORWARD   class Scene;
+FORWARD   class Serializable;
+FORWARD   class UIImageRenderer;
+FORWARD   class UITextRenderer;
+FORWARD   class UIScrollPanel;
+FORWARD   class UIVerticalLayout;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class IEventsEditor;
 FORWARD class InspectorWidget;
 FORWARD class MenuItem;
 FORWARD class UIContextMenu;
@@ -60,7 +54,7 @@ class Inspector : public GameObject,
 
 public:
     Inspector();
-    virtual ~Inspector();
+    virtual ~Inspector() override;
 
     // GameObject
     void Update() override;

@@ -8,12 +8,11 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-struct InputEvent;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD struct InputEvent;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
-
 NAMESPACE_BANG_EDITOR_BEGIN
 
 class Shortcut

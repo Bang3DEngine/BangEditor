@@ -7,12 +7,10 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ExplorerItem.h"
 
-namespace BangEditor {
-class MenuItem;
-}  // namespace BangEditor
-
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
+
+FORWARD class MenuItem;
 
 class PrefabExplorerItem : public ExplorerItem
 {
@@ -20,7 +18,7 @@ class PrefabExplorerItem : public ExplorerItem
 
 public:
 	PrefabExplorerItem();
-	virtual ~PrefabExplorerItem();
+	virtual ~PrefabExplorerItem() override;
 
     // UIContextMenu callback
     void OnCreateContextMenu(MenuItem *menuRootItem) override;

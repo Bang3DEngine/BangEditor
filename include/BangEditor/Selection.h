@@ -5,14 +5,10 @@
 #include "Bang/BangDefines.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class GameObject;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Camera;
+FORWARD class GameObject;
 FORWARD class Scene;
-
 FORWARD NAMESPACE_BANG_END
 
 NAMESPACE_BANG_EDITOR_BEGIN

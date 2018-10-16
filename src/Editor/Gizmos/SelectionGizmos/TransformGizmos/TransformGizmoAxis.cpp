@@ -10,9 +10,9 @@
 #include "Bang/Vector3.h"
 #include "BangEditor/EditorCamera.h"
 
-namespace Bang {
-class Object;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Object;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

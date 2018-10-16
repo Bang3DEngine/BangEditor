@@ -33,9 +33,9 @@
 #include "BangEditor/Project.h"
 #include "BangEditor/ProjectManager.h"
 
-namespace Bang {
-template <class > class Array;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD_T class Array;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

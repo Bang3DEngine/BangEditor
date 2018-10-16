@@ -17,18 +17,17 @@
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UndoRedoManager.h"
 
-namespace BangEditor {
-class IEventsScenePlayer;
-class IEventsUndoRedo;
-class UndoRedoAction;
-}  // namespace BangEditor
-namespace Bang {
-class IEventsSceneManager;
-class Scene;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsSceneManager;
+FORWARD class Scene;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
+
+FORWARD class IEventsScenePlayer;
+FORWARD class IEventsUndoRedo;
+FORWARD class UndoRedoAction;
 
 class SceneOpenerSaver : public EventListener<IEventsSceneManager>,
                          public EventListener<IEventsScenePlayer>,
@@ -36,7 +35,7 @@ class SceneOpenerSaver : public EventListener<IEventsSceneManager>,
 {
 public:
     SceneOpenerSaver();
-    virtual ~SceneOpenerSaver();
+    virtual ~SceneOpenerSaver() override;
 
     bool OnNewScene();
     bool OnOpenScene();

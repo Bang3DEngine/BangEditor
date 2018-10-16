@@ -20,7 +20,7 @@ public:
 
 protected:
 	CIWSkinnedMeshRenderer();
-	virtual ~CIWSkinnedMeshRenderer();
+	virtual ~CIWSkinnedMeshRenderer() override;
 };
 
 NAMESPACE_BANG_EDITOR_END

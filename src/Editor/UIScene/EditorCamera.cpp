@@ -36,9 +36,9 @@
 #include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/UISceneEditContainer.h"
 
-namespace Bang {
-class Path;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Path;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

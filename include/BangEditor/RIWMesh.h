@@ -17,12 +17,12 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
-namespace Bang {
-class IEventsValueChanged;
-class Texture2D;
-class UIInputNumber;
-template <class > class EventEmitter;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD   class IEventsValueChanged;
+FORWARD   class Texture2D;
+FORWARD   class UIInputNumber;
+FORWARD_T class EventEmitter;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -44,7 +44,7 @@ private:
     UIInputNumber *p_numBones = nullptr;
 
     RIWMesh();
-    virtual ~RIWMesh();
+    virtual ~RIWMesh() override;
 
     Mesh *GetMesh() const;
 

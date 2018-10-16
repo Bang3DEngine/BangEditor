@@ -18,14 +18,10 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ResourcePreviewFactory.h"
 
-namespace Bang {
-class Texture2D;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Texture2D;
 FORWARD class UIFocusable;
 FORWARD class UIImageRenderer;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -41,7 +37,7 @@ public:
                                      const ResourcePreviewFactoryParameters&)>;
 
 	PreviewViewer();
-	virtual ~PreviewViewer();
+	virtual ~PreviewViewer() override;
 
     // GameObject
     void Update() override;

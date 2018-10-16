@@ -28,11 +28,10 @@
 #include "BangEditor/UIInputColor.h"
 #include "BangEditor/UIInputVector.h"
 
-namespace Bang {
-class IEventsValueChanged;
-template <class > class EventListener;
-}  // namespace Bang
-
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD   class IEventsValueChanged;
+FORWARD_T class EventListener;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

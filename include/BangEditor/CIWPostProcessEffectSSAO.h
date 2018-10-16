@@ -7,18 +7,14 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-namespace Bang {
-class IEventsValueChanged;
-class UICheckBox;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class PostProcessEffectSSAO;
-FORWARD class UIComboBox;
-FORWARD class UIInputNumber;
-FORWARD class UISlider;
-
+FORWARD   class IEventsValueChanged;
+FORWARD   class PostProcessEffectSSAO;
+FORWARD   class UIComboBox;
+FORWARD   class UICheckBox;
+FORWARD   class UIInputNumber;
+FORWARD   class UISlider;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -46,7 +42,7 @@ private:
     UICheckBox *p_separableInput = nullptr;
 
     CIWPostProcessEffectSSAO();
-    virtual ~CIWPostProcessEffectSSAO();
+    virtual ~CIWPostProcessEffectSSAO() override;
 
     PostProcessEffectSSAO* GetPostProcessEffectSSAO() const;
 };

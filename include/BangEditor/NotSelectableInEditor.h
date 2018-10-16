@@ -18,7 +18,7 @@ private:
     {
         CONSTRUCT_CLASS_ID(NotSelectableInEditor)
     }
-    virtual ~NotSelectableInEditor() = default;
+    virtual ~NotSelectableInEditor() override = default;
 };
 
 NAMESPACE_BANG_EDITOR_END

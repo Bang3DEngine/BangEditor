@@ -7,16 +7,12 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-namespace Bang {
-class IEventsValueChanged;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class PostProcessEffect;
-FORWARD class UIComboBox;
-FORWARD class UIInputNumber;
-
+FORWARD   class IEventsValueChanged;
+FORWARD   class PostProcessEffect;
+FORWARD   class UIComboBox;
+FORWARD   class UIInputNumber;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -44,7 +40,7 @@ private:
     virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 
     CIWPostProcessEffect() = default;
-    virtual ~CIWPostProcessEffect() = default;
+    virtual ~CIWPostProcessEffect() override = default;
 };
 
 NAMESPACE_BANG_EDITOR_END

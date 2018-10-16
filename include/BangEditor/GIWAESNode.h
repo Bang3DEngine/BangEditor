@@ -13,15 +13,11 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/InspectorWidget.h"
 
-namespace Bang {
-class IEventsDestroy;
-class IEventsValueChanged;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIInputText;
-
+FORWARD   class IEventsDestroy;
+FORWARD   class IEventsValueChanged;
+FORWARD   class UIInputText;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -35,7 +31,7 @@ class GIWAESNode : public InspectorWidget,
 {
 public:
 	GIWAESNode();
-	virtual ~GIWAESNode();
+	virtual ~GIWAESNode() override;
 
     // InspectorWidget
     virtual void InitInnerWidgets() override;

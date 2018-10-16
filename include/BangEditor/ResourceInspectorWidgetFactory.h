@@ -5,9 +5,9 @@
 #include "Bang/BangDefines.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class Path;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Path;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN

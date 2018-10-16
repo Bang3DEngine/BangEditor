@@ -17,7 +17,7 @@ class UIInputArrayRow : public GameObject
 
 public:
     UIInputArrayRow();
-    virtual ~UIInputArrayRow();
+    virtual ~UIInputArrayRow() override;
 
     void Init(UIInputArray *inputArray);
     void SetContainedGameObject(GameObject *containedGo);

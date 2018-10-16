@@ -17,11 +17,8 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class IEventsValueChanged;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsValueChanged;
 FORWARD class UICheckBox;
 FORWARD class UIComboBox;
 FORWARD class UIInputNumber;
@@ -40,7 +37,7 @@ class ASMVariableInput : public GameObject,
 
 public:
 	ASMVariableInput();
-	virtual ~ASMVariableInput();
+	virtual ~ASMVariableInput() override;
 
 private:
     UIInputText   *p_varNameInput = nullptr;

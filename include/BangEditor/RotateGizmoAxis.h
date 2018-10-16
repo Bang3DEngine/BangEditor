@@ -10,17 +10,13 @@
 #include "BangEditor/SelectionGizmo.h"
 #include "BangEditor/TransformGizmoAxis.h"
 
-namespace Bang {
-class Color;
-class GameObject;
-class Mesh;
-}  // namespace Bang
-
-NAMESPACE_BANG_BEGIN
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Color;
+FORWARD class GameObject;
 FORWARD class LineRenderer;
+FORWARD class Mesh;
 FORWARD class MeshRenderer;
-
-NAMESPACE_BANG_END
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -49,7 +45,7 @@ private:
     LineRenderer *p_circleRenderer = nullptr;
 
     RotateGizmoAxis();
-    virtual ~RotateGizmoAxis();
+    virtual ~RotateGizmoAxis() override;
 
     void UpdateCirclePoints();
     static Quaternion GetQuaternionAxised(const Quaternion &q, Axis3DExt axis);

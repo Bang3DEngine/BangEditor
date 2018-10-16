@@ -15,19 +15,15 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
-namespace Bang {
-class IEventsDestroy;
-class IEventsValueChanged;
-class Texture2D;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class ALAudioSource;
-FORWARD class UIButton;
-FORWARD class UIInputNumber;
-FORWARD class UIInputText;
-
+FORWARD   class ALAudioSource;
+FORWARD   class IEventsDestroy;
+FORWARD   class IEventsValueChanged;
+FORWARD   class Texture2D;
+FORWARD   class UIButton;
+FORWARD   class UIInputNumber;
+FORWARD   class UIInputText;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -52,7 +48,7 @@ private:
     UIInputNumber *p_numChannels = nullptr;
 
 	RIWAudioClip();
-	virtual ~RIWAudioClip();
+	virtual ~RIWAudioClip() override;
 
     void Play();
     void Stop();

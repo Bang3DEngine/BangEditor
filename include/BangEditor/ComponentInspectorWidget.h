@@ -19,25 +19,20 @@
 #include "BangEditor/InspectorWidget.h"
 #include "BangEditor/UIContextMenu.h"
 
-namespace BangEditor {
-class MenuItem;
-class UIContextMenu;
-}  // namespace BangEditor
-namespace Bang {
-class Component;
-class GameObject;
-class IEventsValueChanged;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Texture2D;
-FORWARD class UICheckBox;
-
+FORWARD   class Component;
+FORWARD   class GameObject;
+FORWARD   class IEventsValueChanged;
+FORWARD   class Texture2D;
+FORWARD   class UICheckBox;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
+
+FORWARD class MenuItem;
+FORWARD class UIContextMenu;
 
 class ComponentInspectorWidget : public InspectorWidget,
                                  public EventListener<IEventsValueChanged>
@@ -46,7 +41,7 @@ class ComponentInspectorWidget : public InspectorWidget,
 
 protected:
     ComponentInspectorWidget();
-    virtual ~ComponentInspectorWidget();
+    virtual ~ComponentInspectorWidget() override;
 
     // InspectorWidget
     virtual void InitInnerWidgets() override;

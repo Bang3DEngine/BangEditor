@@ -16,14 +16,10 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class IEventsValueChanged;
-class Path;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsValueChanged;
+FORWARD class Path;
 FORWARD class Scene;
-
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -35,7 +31,7 @@ class EditorDialog
 {
 public:
 	EditorDialog();
-	virtual ~EditorDialog();
+    virtual ~EditorDialog();
 
     static void GetAsset(const String &title,
                          const Array<String> &extensions,

@@ -18,13 +18,10 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UITabHeader.h"
 
-namespace BangEditor {
-class IEventsTabHeader;
-}  // namespace BangEditor
-
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class IEventsTabHeader;
 FORWARD class UITabHeader;
 
 class UITabContainer : public GameObject,
@@ -68,7 +65,7 @@ private:
     GameObject* GetChildFromTabHeader(UITabHeader *tabHeader) const;
 
 	UITabContainer();
-	virtual ~UITabContainer();
+	virtual ~UITabContainer() override;
 };
 
 NAMESPACE_BANG_EDITOR_END

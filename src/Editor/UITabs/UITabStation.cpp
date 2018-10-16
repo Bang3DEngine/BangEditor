@@ -27,10 +27,10 @@
 #include "BangEditor/UITabContainer.h"
 #include "BangEditor/UITabHeader.h"
 
-namespace Bang {
-class IEventsDestroy;
-template <class > class EventEmitter;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD   class IEventsDestroy;
+FORWARD_T class EventEmitter;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

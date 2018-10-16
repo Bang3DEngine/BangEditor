@@ -16,16 +16,14 @@
 #include "BangEditor/ShortcutManager.h"
 #include "BangEditor/UndoRedoAction.h"
 
-namespace BangEditor {
-class UndoRedoAction;
-}  // namespace BangEditor
-
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
 
+FORWARD class UndoRedoAction;
+
 class IEventsUndoRedo
 {
-    IEVENTS_NS(IEventsUndoRedo)
+    IEVENTS_NS(IEventsUndoRedo);
 
 public:
     virtual void OnActionPushed(UndoRedoAction *action) { BANG_UNUSED(action); }
@@ -37,7 +35,7 @@ class UndoRedoManager : public EventEmitter<IEventsUndoRedo>
 {
 public:
 	UndoRedoManager();
-	virtual ~UndoRedoManager();
+	virtual ~UndoRedoManager() override;
 
     static void Undo();
     static void Redo();

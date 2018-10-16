@@ -9,16 +9,12 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWCollider.h"
 
-namespace Bang {
-class IEventsValueChanged;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class CapsuleCollider;
-FORWARD class UIComboBox;
-FORWARD class UIInputNumber;
-
+FORWARD   class CapsuleCollider;
+FORWARD   class IEventsValueChanged;
+FORWARD   class UIComboBox;
+FORWARD   class UIInputNumber;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -40,7 +36,7 @@ private:
     UIComboBox *p_axisInput = nullptr;
 
     CIWCapsuleCollider();
-    virtual ~CIWCapsuleCollider();
+    virtual ~CIWCapsuleCollider() override;
 
     // ComponentInspectorWidget
     virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;

@@ -16,15 +16,11 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class IEventsDestroy;
-class IEventsDragDrop;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIDirLayoutMovableSeparator;
-
+FORWARD   class IEventsDestroy;
+FORWARD   class IEventsDragDrop;
+FORWARD   class UIDirLayoutMovableSeparator;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -39,7 +35,7 @@ class UITabStation : public GameObject,
 
 public:
 	UITabStation();
-    virtual ~UITabStation();
+    virtual ~UITabStation() override;
 
     UITabContainer *GetTabContainer() const;
 

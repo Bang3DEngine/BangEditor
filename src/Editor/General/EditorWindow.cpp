@@ -8,9 +8,9 @@
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/ShortcutManager.h"
 
-namespace Bang {
-class SceneManager;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class SceneManager;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG_EDITOR
 

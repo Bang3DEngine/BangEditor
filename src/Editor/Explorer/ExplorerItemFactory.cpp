@@ -14,9 +14,9 @@
 #include "BangEditor/ModelExplorerItem.h"
 #include "BangEditor/PrefabExplorerItem.h"
 
-namespace Bang {
-class String;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class String;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

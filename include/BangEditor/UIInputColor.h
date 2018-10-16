@@ -16,16 +16,11 @@
 #include "Bang/Vector4.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class IEventsValueChanged;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsValueChanged;
 FORWARD class UIButton;
 FORWARD class UIImageRenderer;
-
 FORWARD NAMESPACE_BANG_END
-
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -47,7 +42,7 @@ public:
 
 protected:
 	UIInputColor();
-    virtual ~UIInputColor();
+    virtual ~UIInputColor() override;
 
     // GameObject
     void Update() override;

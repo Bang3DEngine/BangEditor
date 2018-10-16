@@ -23,15 +23,11 @@
 #include "Bang/USet.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class IEventsFileTracker;
-}  // namespace Bang
-
-NAMESPACE_BANG_BEGIN
+FORWARD NAMESPACE_BANG_BEGIN
 FORWARD class Behaviour;
 FORWARD class Library;
-
-NAMESPACE_BANG_END
+FORWARD class IEventsFileTracker;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -41,7 +37,7 @@ class EditorBehaviourManager : public BehaviourManager,
 {
 public:
     EditorBehaviourManager();
-    virtual ~EditorBehaviourManager();
+    virtual ~EditorBehaviourManager() override;
 
     void Update() override;
 

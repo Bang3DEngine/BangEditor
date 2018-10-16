@@ -16,11 +16,11 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UndoRedoAction.h"
 
-namespace Bang {
-class IEventsDestroy;
-class Serializable;
-template <class T> class EventEmitter;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD   class IEventsDestroy;
+FORWARD   class Serializable;
+FORWARD_T class EventEmitter;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 NAMESPACE_BANG_EDITOR_BEGIN
@@ -32,7 +32,7 @@ public:
     UndoRedoSerializableChange(Serializable *serializable,
                                const MetaNode &metaBefore,
                                const MetaNode &metaAfter);
-	virtual ~UndoRedoSerializableChange();
+    virtual ~UndoRedoSerializableChange() override;
 
     void SetMetaBefore(const MetaNode &metaBefore);
     void SetMetaAfter(const MetaNode &metaAfter);

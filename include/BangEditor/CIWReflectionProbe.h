@@ -9,20 +9,13 @@
 #include "BangEditor/ComponentInspectorWidget.h"
 #include "BangEditor/UIInputVector.h"
 
-namespace BangEditor {
-class UIInputVector;
-}  // namespace BangEditor
-namespace Bang {
-class IEventsValueChanged;
-class UICheckBox;
-class UIInputNumber;
-template <class > class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class ReflectionProbe;
-FORWARD class UIComboBox;
-
+FORWARD   class IEventsValueChanged;
+FORWARD   class ReflectionProbe;
+FORWARD   class UIComboBox;
+FORWARD   class UICheckBox;
+FORWARD   class UIInputNumber;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -30,6 +23,7 @@ NAMESPACE_BANG_EDITOR_BEGIN
 
 FORWARD class UIInputColor;
 FORWARD class UIInputFileWithPreview;
+FORWARD class UIInputVector;
 FORWARD class UITextureCubeMapPreviewer;
 
 class CIWReflectionProbe : public ComponentInspectorWidget
@@ -59,7 +53,7 @@ private:
     UITextureCubeMapPreviewer *p_previewCMRenderer = nullptr;
 
     CIWReflectionProbe();
-    virtual ~CIWReflectionProbe();
+    virtual ~CIWReflectionProbe() override;
 
     ReflectionProbe *GetReflectionProbe() const;
 

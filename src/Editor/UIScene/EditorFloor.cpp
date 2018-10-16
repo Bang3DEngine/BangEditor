@@ -17,9 +17,9 @@
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/NotSelectableInEditor.h"
 
-namespace Bang {
-class ShaderProgram;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class ShaderProgram;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

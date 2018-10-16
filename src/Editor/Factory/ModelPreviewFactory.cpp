@@ -14,9 +14,9 @@
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/ResourcePreviewFactory.tcc"
 
-namespace Bang {
-class Camera;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Camera;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

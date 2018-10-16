@@ -30,10 +30,10 @@
 #include "BangEditor/MenuItem.h"
 #include "BangEditor/UIContextMenu.h"
 
-namespace Bang {
-class AnimatorStateMachineConnection;
-class IEventsAnimatorStateMachineNode;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class AnimatorStateMachineConnection;
+FORWARD class IEventsAnimatorStateMachineNode;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

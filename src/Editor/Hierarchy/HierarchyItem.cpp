@@ -20,10 +20,10 @@
 #include "BangEditor/MenuItem.h"
 #include "BangEditor/UIContextMenu.h"
 
-namespace Bang {
-class IEventsObject;
-class Object;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsObject;
+FORWARD class Object;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR

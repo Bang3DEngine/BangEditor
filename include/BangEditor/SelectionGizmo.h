@@ -8,15 +8,11 @@
 #include "Bang/MetaNode.h"
 #include "BangEditor/BangEditor.h"
 
-namespace Bang {
-class IEventsDestroy;
-class Object;
-template <class T> class EventEmitter;
-}  // namespace Bang
-
 FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Camera;
-
+FORWARD   class IEventsDestroy;
+FORWARD   class Camera;
+FORWARD   class Object;
+FORWARD_T class EventEmitter;
 FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
@@ -28,7 +24,7 @@ public:
     enum class SelectionState { IDLE, OVER, GRABBED };
 
     SelectionGizmo() = default;
-    virtual ~SelectionGizmo() = default;
+    virtual ~SelectionGizmo() override = default;
 
     // GameObject
     void Update() override;

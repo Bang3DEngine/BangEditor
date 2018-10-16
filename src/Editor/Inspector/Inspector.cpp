@@ -52,14 +52,14 @@
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
 
-namespace Bang {
-class IEventsDestroy;
-class IEventsDragDrop;
-class IEventsFocus;
-class Object;
-class Scene;
-class Serializable;
-}  // namespace Bang
+FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class IEventsDestroy;
+FORWARD class IEventsDragDrop;
+FORWARD class IEventsFocus;
+FORWARD class Object;
+FORWARD class Scene;
+FORWARD class Serializable;
+FORWARD NAMESPACE_BANG_END
 
 USING_NAMESPACE_BANG
 USING_NAMESPACE_BANG_EDITOR
