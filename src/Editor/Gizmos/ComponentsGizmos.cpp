@@ -2,6 +2,7 @@
 
 #include "Bang/GL.h"
 #include "Bang/Mesh.h"
+#include "Bang/Rope.h"
 #include "Bang/AABox.h"
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
@@ -150,6 +151,10 @@ void ComponentsGizmos::RenderComponentGizmos(Component *comp,
     else if (ParticleSystem *ps = DCAST<ParticleSystem*>(comp))
     {
         RenderParticleSystemGizmo(ps, isBeingSelected);
+    }
+    else if (Rope *rope = DCAST<Rope*>(comp))
+    {
+        RenderRopeGizmo(rope, isBeingSelected);
     }
     else if (AudioSource *as = DCAST<AudioSource*>(comp))
     {
@@ -529,6 +534,25 @@ void ComponentsGizmos::RenderParticleSystemGizmo(ParticleSystem *particleSystem,
         }
 
         gb->PopDepthStencilTexture();
+    }
+}
+
+void ComponentsGizmos::RenderRopeGizmo(Rope *rope, bool isBeingSelected)
+{
+    Transform *tr = rope->GetGameObject()->GetTransform();
+    Vector3 center = tr->GetPosition();
+
+    RenderFactory::Parameters params;
+    params.receivesLighting = false;
+    params.scale = Vector3(0.1);
+    params.position = center;
+
+    if (!isBeingSelected)
+    {
+        RenderFactory::RenderIcon(
+                    EditorTextureFactory::GetComponentIcon(rope),
+                    true,
+                    params);
     }
 }
 

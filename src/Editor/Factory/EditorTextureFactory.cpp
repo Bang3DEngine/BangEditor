@@ -314,7 +314,7 @@ Texture2D* EditorTextureFactory::GetComponentIcon(const String &componentName)
         tex->SetAlphaCutoff(0.5f);
         return tex;
     }
-    else if (componentName == "ParticleSystem")
+    else if (componentName == "ParticleSystem" || componentName == "Rope")
     {
         Texture2D *tex = EditorTextureFactory::GetStarsIcon();
         tex->SetAlphaCutoff(0.5f);

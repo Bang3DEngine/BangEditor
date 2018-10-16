@@ -5,6 +5,7 @@
 #include "BangEditor/SelectionGizmo.h"
 
 FORWARD NAMESPACE_BANG_BEGIN
+FORWARD class Rope;
 FORWARD class PointLight;
 FORWARD class AudioSource;
 FORWARD class BoxCollider;
@@ -46,6 +47,7 @@ private:
                                     bool isBeingSelected);
     void RenderParticleSystemGizmo(ParticleSystem *particleSystem,
                                    bool isBeingSelected);
+    void RenderRopeGizmo(Rope *rope, bool isBeingSelected);
     void RenderAudioSourceGizmo(AudioSource *audioSource, bool isBeingSelected);
 };
 
