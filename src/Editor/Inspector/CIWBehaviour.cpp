@@ -118,15 +118,15 @@ void CIWBehaviourHelper::RecreateWidgetsFromReflection(
     {
         GameObject *widgetToAdd = nullptr;
         String widgetName = reflVar.GetName();
-        if(reflVar.IsOfType(BangPreprocessor::VarTypeFloat) ||
-           reflVar.IsOfType(BangPreprocessor::VarTypeDouble) ||
-           reflVar.IsOfType(BangPreprocessor::VarTypeInt))
+        if(reflVar.GetType() == BPReflectedVariable::Type::FLOAT ||
+           reflVar.GetType() == BPReflectedVariable::Type::DOUBLE ||
+           reflVar.GetType() == BPReflectedVariable::Type::INT)
         {
             UIInputNumber *inputNumber =
                 GameObjectFactory::CreateUIInputNumber();
             inputNumber->SetValue(
-                String::ToFloat(reflVar.GetVariableInitValue()));
-            if(reflVar.IsOfType(BangPreprocessor::VarTypeInt))
+                String::ToFloat(reflVar.GetInitValue()));
+            if(reflVar.GetType() == BPReflectedVariable::Type::INT)
             {
                 inputNumber->SetDecimalPlaces(0);
             }
@@ -134,34 +134,34 @@ void CIWBehaviourHelper::RecreateWidgetsFromReflection(
                 listener);
             widgetToAdd = inputNumber->GetGameObject();
         }
-        else if(reflVar.IsOfType(BangPreprocessor::VarTypeBool))
+        else if(reflVar.GetType() == BPReflectedVariable::Type::BOOL)
         {
             UICheckBox *checkBox = GameObjectFactory::CreateUICheckBox();
             checkBox->SetChecked(
-                (reflVar.GetVariableInitValue().EqualsNoCase("True")));
+                (reflVar.GetInitValue().EqualsNoCase("True")));
             checkBox->EventEmitter<IEventsValueChanged>::RegisterListener(
                 listener);
             widgetToAdd = checkBox->GetGameObject();
         }
-        else if(reflVar.IsOfType(BangPreprocessor::VarTypeString))
+        else if(reflVar.GetType() == BPReflectedVariable::Type::STRING)
         {
             UIInputText *inputText = GameObjectFactory::CreateUIInputText();
-            inputText->GetText()->SetContent(reflVar.GetVariableInitValue());
+            inputText->GetText()->SetContent(reflVar.GetInitValue());
             inputText->EventEmitter<IEventsValueChanged>::RegisterListener(
                 listener);
             widgetToAdd = inputText->GetGameObject();
         }
-        else if(reflVar.IsOfType(BangPreprocessor::VarTypeVector2) ||
-                reflVar.IsOfType(BangPreprocessor::VarTypeVector3) ||
-                reflVar.IsOfType(BangPreprocessor::VarTypeVector4) ||
-                reflVar.IsOfType(BangPreprocessor::VarTypeQuaternion))
+        else if(reflVar.GetType() == BPReflectedVariable::Type::VECTOR2 ||
+                reflVar.GetType() == BPReflectedVariable::Type::VECTOR3 ||
+                reflVar.GetType() == BPReflectedVariable::Type::VECTOR4 ||
+                reflVar.GetType() == BPReflectedVariable::Type::QUATERNION)
         {
             int numComps = 4;
-            if(reflVar.IsOfType(BangPreprocessor::VarTypeVector2))
+            if(reflVar.GetType() == BPReflectedVariable::Type::VECTOR2)
             {
                 numComps = 2;
             }
-            else if(reflVar.IsOfType(BangPreprocessor::VarTypeVector3))
+            else if(reflVar.GetType() == BPReflectedVariable::Type::VECTOR3)
             {
                 numComps = 3;
             }
@@ -172,7 +172,7 @@ void CIWBehaviourHelper::RecreateWidgetsFromReflection(
                 listener);
             widgetToAdd = inputVec;
         }
-        else if(reflVar.IsOfType(BangPreprocessor::VarTypeColor))
+        else if(reflVar.GetType() == BPReflectedVariable::Type::COLOR)
         {
             UIInputColor *inputColor = GameObject::Create<UIInputColor>();
             inputColor->SetColor(Color::White);
