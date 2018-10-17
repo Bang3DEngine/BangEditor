@@ -7,16 +7,18 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWLight.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class PointLight;
-FORWARD   class UIInputNumber;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class PointLight;
+class UIInputNumber;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class CIWPointLight : public CIWLight
 {
     GAMEOBJECT_EDITOR(CIWPointLight);
@@ -37,8 +39,6 @@ private:
     CIWPointLight() = default;
     virtual ~CIWPointLight() override = default;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWPOINTLIGHT_H
-
+#endif  // CIWPOINTLIGHT_H

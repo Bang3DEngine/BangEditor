@@ -1,7 +1,7 @@
 #include "BangEditor/SIWEditorSettings.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 SIWEditorSettings::SIWEditorSettings()
 {
@@ -23,4 +23,3 @@ void SIWEditorSettings::UpdateFromReference()
 {
     SettingsInspectorWidget::UpdateFromReference();
 }
-

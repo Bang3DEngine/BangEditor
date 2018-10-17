@@ -15,19 +15,20 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/TransformGizmo.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD class Texture2D;
-FORWARD class UIButton;
-FORWARD class UICheckBox;
-FORWARD class UIComboBox;
-FORWARD class UITextRenderer;
-FORWARD class UIToolButton;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class Texture2D;
+class UIButton;
+class UICheckBox;
+class UIComboBox;
+class UITextRenderer;
+class UIToolButton;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class UISceneToolbar : public GameObject,
                        public EventEmitter<IEventsValueChanged>,
                        public EventListener<IEventsValueChanged>
@@ -35,8 +36,8 @@ class UISceneToolbar : public GameObject,
     GAMEOBJECT_EDITOR(UISceneToolbar);
 
 public:
-	UISceneToolbar();
-	virtual ~UISceneToolbar() override;
+    UISceneToolbar();
+    virtual ~UISceneToolbar() override;
 
     void Update() override;
     void SetTransformGizmoMode(TransformGizmoMode transformMode);
@@ -45,23 +46,23 @@ public:
 
     bool IsShowDebugStatsChecked() const;
     void DisableTransformAndCameraControls();
-    UIComboBox* GetRenderModeComboBox() const;
+    UIComboBox *GetRenderModeComboBox() const;
 
     static UISceneToolbar *GetActive();
 
 private:
-    UIToolButton *p_translateButton      = nullptr;
-    UIToolButton *p_rotateButton         = nullptr;
-    UIToolButton *p_scaleButton          = nullptr;
-    UIToolButton *p_rectTransformButton  = nullptr;
+    UIToolButton *p_translateButton = nullptr;
+    UIToolButton *p_rotateButton = nullptr;
+    UIToolButton *p_scaleButton = nullptr;
+    UIToolButton *p_rectTransformButton = nullptr;
     GameObject *p_transformCamSeparator = nullptr;
     GameObject *p_transformCamSpacer = nullptr;
     UIToolButton *p_resetCamViewButton = nullptr;
 
-    UIToolButton *p_playButton  = nullptr;
+    UIToolButton *p_playButton = nullptr;
     UIToolButton *p_pauseButton = nullptr;
-    UIToolButton *p_stepButton  = nullptr;
-    UIToolButton *p_stopButton  = nullptr;
+    UIToolButton *p_stepButton = nullptr;
+    UIToolButton *p_stopButton = nullptr;
 
     TransformGizmoMode m_transformGizmoMode = TransformGizmoMode::TRANSLATE;
 
@@ -76,8 +77,6 @@ private:
     // IEventsValueChanged
     void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UISCENETOOLBAR_H
-
+#endif  // UISCENETOOLBAR_H

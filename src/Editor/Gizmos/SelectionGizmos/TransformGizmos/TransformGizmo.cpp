@@ -21,8 +21,8 @@
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 TransformGizmo::TransformGizmo()
 {
@@ -44,9 +44,9 @@ TransformGizmo::TransformGizmo()
     p_worldGizmoContainer->SetParent(this);
     p_canvasGizmoContainer->SetParent(this);
 
-    p_translateGizmo     = GameObject::Create<TranslateGizmo>();
-    p_rotateGizmo        = GameObject::Create<RotateGizmo>();
-    p_scaleGizmo         = GameObject::Create<ScaleGizmo>();
+    p_translateGizmo = GameObject::Create<TranslateGizmo>();
+    p_rotateGizmo = GameObject::Create<RotateGizmo>();
+    p_scaleGizmo = GameObject::Create<ScaleGizmo>();
     p_rectTransformGizmo = GameObject::Create<RectTransformSelectionGizmo>();
 
     p_translateGizmo->SetParent(p_worldGizmoContainer);
@@ -69,7 +69,7 @@ void TransformGizmo::Update()
     SelectionGizmo::Update();
 
     GameObject *refGo = GetReferencedGameObject();
-    if (!refGo || !refGo->GetTransform())
+    if(!refGo || !refGo->GetTransform())
     {
         return;
     }
@@ -77,47 +77,42 @@ void TransformGizmo::Update()
     UISceneToolbar *toolbar = UISceneToolbar::GetActive();
     TransformGizmoMode transformGizmoMode = toolbar->GetTransformGizmoMode();
 
-    switch (transformGizmoMode)
+    switch(transformGizmoMode)
     {
         case TransformGizmoMode::RECT:
             GetTransform()->SetLocalPosition(Vector3::Zero);
             GetTransform()->SetLocalRotation(Quaternion::Identity);
             GetTransform()->SetLocalScale(Vector3::One);
-        break;
+            break;
 
         default:
-            GetTransform()->SetPosition( refGo->GetTransform()->GetPosition() );
-            GetTransform()->SetRotation( refGo->GetTransform()->GetRotation() );
-            GetTransform()->SetScale( GetScaleFactor() );
+            GetTransform()->SetPosition(refGo->GetTransform()->GetPosition());
+            GetTransform()->SetRotation(refGo->GetTransform()->GetRotation());
+            GetTransform()->SetScale(GetScaleFactor());
     }
 
     GameObject *gizmoToEnable = nullptr;
-    switch (transformGizmoMode)
+    switch(transformGizmoMode)
     {
         case TransformGizmoMode::TRANSLATE:
             gizmoToEnable = p_translateGizmo;
-        break;
+            break;
 
-        case TransformGizmoMode::ROTATE:
-            gizmoToEnable = p_rotateGizmo;
-        break;
+        case TransformGizmoMode::ROTATE: gizmoToEnable = p_rotateGizmo; break;
 
-        case TransformGizmoMode::SCALE:
-            gizmoToEnable = p_scaleGizmo;
-        break;
+        case TransformGizmoMode::SCALE: gizmoToEnable = p_scaleGizmo; break;
 
         case TransformGizmoMode::RECT:
             gizmoToEnable = p_rectTransformGizmo;
-        break;
+            break;
 
-        default:
-        break;
+        default: break;
     }
-    std::array<GameObject*, 4> trGizmos = {p_translateGizmo, p_rotateGizmo,
-                                           p_scaleGizmo, p_rectTransformGizmo};
-    for (GameObject *trGizmo : trGizmos)
+    std::array<GameObject *, 4> trGizmos = {p_translateGizmo, p_rotateGizmo,
+                                            p_scaleGizmo, p_rectTransformGizmo};
+    for(GameObject *trGizmo : trGizmos)
     {
-        trGizmo->SetEnabled( trGizmo == gizmoToEnable );
+        trGizmo->SetEnabled(trGizmo == gizmoToEnable);
     }
 }
 
@@ -146,7 +141,8 @@ void TransformGizmo::OnEndRender(Scene *)
 
 void TransformGizmo::OnGrabBegin()
 {
-    m_transformUndoMetaBefore = GetReferencedGameObject()->GetTransform()->GetMeta();
+    m_transformUndoMetaBefore =
+        GetReferencedGameObject()->GetTransform()->GetMeta();
 }
 
 void TransformGizmo::OnGrabEnd()
@@ -154,9 +150,8 @@ void TransformGizmo::OnGrabEnd()
     Transform *transform = GetReferencedGameObject()->GetTransform();
     MetaNode newUndoMeta = transform->GetMeta();
 
-    UndoRedoManager::PushAction(
-        new UndoRedoSerializableChange(transform, m_transformUndoMetaBefore,
-                                       newUndoMeta) );
+    UndoRedoManager::PushAction(new UndoRedoSerializableChange(
+        transform, m_transformUndoMetaBefore, newUndoMeta));
 }
 
 void TransformGizmo::SetReferencedGameObject(GameObject *referencedGameObject)

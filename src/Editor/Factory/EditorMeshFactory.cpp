@@ -1,7 +1,7 @@
 #include "BangEditor/EditorMeshFactory.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 EditorMeshFactory::EditorMeshFactory()
 {
@@ -10,4 +10,3 @@ EditorMeshFactory::EditorMeshFactory()
 EditorMeshFactory::~EditorMeshFactory()
 {
 }
-

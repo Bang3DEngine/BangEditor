@@ -11,17 +11,18 @@
 #include "Bang/UIList.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IFocusable;
-FORWARD class UIFocusable;
-FORWARD class UIImageRenderer;
-FORWARD class UIList;
-FORWARD class UITextRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IFocusable;
+class UIFocusable;
+class UIImageRenderer;
+class UIList;
+class UITextRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class MenuItem : public GameObject
 {
     GAMEOBJECT(MenuItem);
@@ -40,7 +41,7 @@ public:
 
     void AddSeparator();
     void AddItem(MenuItem *childItem);
-    MenuItem* AddItem(const String &text);
+    MenuItem *AddItem(const String &text);
 
     void Close(bool recursiveUp);
     void SetForceShow(bool forceShow);
@@ -59,7 +60,7 @@ public:
     float GetFontSize() const;
     bool IsForcedShow() const;
     MenuItem *GetParentItem() const;
-    const List<MenuItem*>& GetChildrenItems() const;
+    const List<MenuItem *> &GetChildrenItems() const;
 
     bool MustDisplayChildren() const;
     void SetFontSize(uint fontSize);
@@ -67,7 +68,7 @@ public:
 
     using ItemSelectedCallback = std::function<void(MenuItem *selectedItem)>;
     void SetSelectedCallback(
-            std::function<void(MenuItem *selectedItem)> selectedCallback);
+        std::function<void(MenuItem *selectedItem)> selectedCallback);
 
 protected:
     MenuItem(MenuItemType itemType = MenuItemType::NORMAL);
@@ -87,8 +88,8 @@ private:
     UIFocusable *p_focusable = nullptr;
     UITextRenderer *p_text = nullptr;
 
-    List<MenuItem*> p_childrenItems;
-    MenuItem* p_parentItem = nullptr;
+    List<MenuItem *> p_childrenItems;
+    MenuItem *p_parentItem = nullptr;
     UIList *p_childrenList = nullptr;
     UIImageRenderer *p_topBg = nullptr;
     UIImageRenderer *p_rightArrow = nullptr;
@@ -96,9 +97,9 @@ private:
     MenuItem *GetTopOrRootItem() const;
     bool IsSelected() const;
     void AdjustToBeInsideScreen();
-    static void OnListSelectionCallback(GameObject *item, UIList::Action action);
+    static void OnListSelectionCallback(GameObject *item,
+                                        UIList::Action action);
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // MENUITEM_H
+#endif  // MENUITEM_H

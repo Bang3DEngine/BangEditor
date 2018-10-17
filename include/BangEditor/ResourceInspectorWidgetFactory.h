@@ -5,25 +5,24 @@
 #include "Bang/BangDefines.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Path;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Path;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class InspectorWidget;
+using namespace Bang;
+namespace BangEditor
+{
+class InspectorWidget;
 
 class ResourceInspectorWidgetFactory
 {
 public:
-    static InspectorWidget* Create(const Path &path);
+    static InspectorWidget *Create(const Path &path);
 
     ResourceInspectorWidgetFactory() = delete;
     virtual ~ResourceInspectorWidgetFactory() = delete;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // FILEINSPECTORWIDGETFACTORY_H
-
+#endif  // FILEINSPECTORWIDGETFACTORY_H

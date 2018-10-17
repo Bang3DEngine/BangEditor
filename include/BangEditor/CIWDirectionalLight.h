@@ -7,16 +7,18 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWLight.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class DirectionalLight;
-FORWARD   class IEventsValueChanged;
-FORWARD   class UIInputNumber;
-FORWARD   class UISlider;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class DirectionalLight;
+class IEventsValueChanged;
+class UIInputNumber;
+class UISlider;
+template <class>
+class EventEmitter;
+}
 
-NAMESPACE_BANG_EDITOR_BEGIN
-
+namespace BangEditor
+{
 class CIWDirectionalLight : public CIWLight
 {
     GAMEOBJECT_EDITOR(CIWDirectionalLight);
@@ -37,8 +39,6 @@ private:
     CIWDirectionalLight() = default;
     virtual ~CIWDirectionalLight() override = default;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWDIRECTIONALLIGHT_H
-
+#endif  // CIWDIRECTIONALLIGHT_H

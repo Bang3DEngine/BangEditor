@@ -13,7 +13,7 @@
 #include "Bang/EventEmitter.tcc"
 #include "Bang/EventListener.h"
 #include "Bang/FileTracker.h"
-#include "Bang/IEvents.h"
+#include "Bang/IEventsFileTracker.h"
 #include "Bang/Map.h"
 #include "Bang/Mutex.h"
 #include "Bang/Path.h"
@@ -23,15 +23,16 @@
 #include "Bang/USet.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Behaviour;
-FORWARD class Library;
-FORWARD class IEventsFileTracker;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Behaviour;
+class Library;
+class IEventsFileTracker;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class EditorBehaviourManager : public BehaviourManager,
                                public EventListener<IEventsFileTracker>
 {
@@ -43,15 +44,15 @@ public:
 
     void WaitForAsyncCompileJobs();
     bool PrepareBehavioursLibrary();
-    bool IsCompiled(const Path& behaviourFilepath) const;
-    bool IsCompiledWithError(const Path& behaviourFilepath) const;
-    bool IsCompiledSuccessfully(const Path& behaviourFilepath) const;
-    bool IsBeingCompiled(const Path& behaviourFilepath) const;
+    bool IsCompiled(const Path &behaviourFilepath) const;
+    bool IsCompiledWithError(const Path &behaviourFilepath) const;
+    bool IsCompiledSuccessfully(const Path &behaviourFilepath) const;
+    bool IsBeingCompiled(const Path &behaviourFilepath) const;
     bool AreAllBehavioursCompiled() const;
     bool IsSomeBehaviourBeingCompiled() const;
     bool AreAllBehavioursCompiledSuccessfully() const;
     bool IsBehavioursLibraryReady() const;
-    static Behaviour* CreateBehaviourInstance(const String &behaviourName);
+    static Behaviour *CreateBehaviourInstance(const String &behaviourName);
     static bool DeleteBehaviourInstance(const String &behaviourName,
                                         Behaviour *behaviour);
 
@@ -71,29 +72,30 @@ private:
     std::queue<Compiler::Result> m_compileResults;
 
     Compiler::Result CompileBehaviourObject(const Path &behaviourPath);
-    Compiler::Result CompileBehaviourObject(const Path& behaviourFilepath,
-                                            const Path& outputObjectFilepath,
+    Compiler::Result CompileBehaviourObject(const Path &behaviourFilepath,
+                                            const Path &outputObjectFilepath,
                                             BinType binaryType);
     void CompileBehaviourObjectAsync(const Path &behaviourPath);
     void CompileAllProjectBehaviours();
     void MergeIntoBehavioursLibrary();
 
     static Compiler::Result MergeBehaviourObjects(
-                                      const Array<Path> &behaviourObjectPaths,
-                                      const Path &outputLibFilepath,
-                                      BinType binaryType);
+        const Array<Path> &behaviourObjectPaths,
+        const Path &outputLibFilepath,
+        BinType binaryType);
 
     static Array<Path> GetCompiledObjectsPaths();
     static Array<Path> GetBehaviourSourcesPaths();
     static Compiler::Job CreateBaseJob(BinType binaryType, bool addLibs);
     static Path GetObjectOutputPath(const Path &inputBehaviourPath);
-    static Compiler::Job CreateCompileBehaviourJob(const Path& behaviourFilepath,
-                                                   const Path& outputObjectFilepath,
-                                                   BinType binaryType);
-    static void RemoveBehaviourLibrariesOf(const String& behaviourName);
+    static Compiler::Job CreateCompileBehaviourJob(
+        const Path &behaviourFilepath,
+        const Path &outputObjectFilepath,
+        BinType binaryType);
+    static void RemoveBehaviourLibrariesOf(const String &behaviourName);
     static void RemoveOrphanBehaviourLibrariesAndObjects();
 
-    Mutex* GetMutex() const;
+    Mutex *GetMutex() const;
 
     class BehaviourCompileRunnable : public ThreadRunnable
     {
@@ -111,7 +113,6 @@ private:
     friend class GameBuilder;
     friend class BehaviourCompileRunnable;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // EDITORBEHAVIOURMANAGER_H
+#endif  // EDITORBEHAVIOURMANAGER_H

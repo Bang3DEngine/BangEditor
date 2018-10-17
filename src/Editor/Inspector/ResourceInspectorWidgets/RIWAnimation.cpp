@@ -13,13 +13,14 @@
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/RIWResource.tcc"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD class Texture2D;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class Texture2D;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 RIWAnimation::RIWAnimation()
 {
@@ -42,7 +43,8 @@ void RIWAnimation::Init()
     p_wrapModeInput = GameObjectFactory::CreateUIComboBox();
     p_wrapModeInput->AddItem("Clamp", SCAST<int>(AnimationWrapMode::CLAMP));
     p_wrapModeInput->AddItem("Repeat", SCAST<int>(AnimationWrapMode::REPEAT));
-    p_wrapModeInput->AddItem("PingPong", SCAST<int>(AnimationWrapMode::PING_PONG));
+    p_wrapModeInput->AddItem("PingPong",
+                             SCAST<int>(AnimationWrapMode::PING_PONG));
     p_wrapModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_durationInSeconds = GameObjectFactory::CreateUIInputText();
@@ -50,7 +52,8 @@ void RIWAnimation::Init()
 
     AddWidget("Speed", p_speedInput->GetGameObject());
     AddWidget("Wrap Mode", p_wrapModeInput->GetGameObject());
-    AddWidget( GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5) );
+    AddWidget(
+        GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5));
     AddWidget("Duration ", p_durationInSeconds->GetGameObject());
 
     SetLabelsWidth(130);
@@ -58,32 +61,31 @@ void RIWAnimation::Init()
 
 Animation *RIWAnimation::GetAnimation() const
 {
-    return SCAST<Animation*>(GetResource().Get());
+    return SCAST<Animation *>(GetResource().Get());
 }
 
 void RIWAnimation::UpdateInputsFromResource()
 {
-    p_speedInput->SetValue( GetAnimation()->GetSpeed() );
+    p_speedInput->SetValue(GetAnimation()->GetSpeed());
     p_wrapModeInput->SetSelectionByValue(
-                SCAST<int>(GetAnimation()->GetWrapMode()) );
+        SCAST<int>(GetAnimation()->GetWrapMode()));
 
     float durationSecs = GetAnimation()->GetDurationInFrames() /
                          Math::Max(1.0f, GetAnimation()->GetFramesPerSecond());
-    p_durationInSeconds->GetText()->SetContent(
-                                      String::ToString(durationSecs) + " s.");
+    p_durationInSeconds->GetText()->SetContent(String::ToString(durationSecs) +
+                                               " s.");
 }
 
 Texture2D *RIWAnimation::GetIconTexture() const
 {
     return EditorTextureFactory::GetIconForExtension(
-                Extensions::GetAnimationExtension() );
+        Extensions::GetAnimationExtension());
 }
 
 void RIWAnimation::OnValueChangedRIWResource(
-                            EventEmitter<IEventsValueChanged> *object)
+    EventEmitter<IEventsValueChanged> *object)
 {
-    GetAnimation()->SetSpeed( p_speedInput->GetValue() );
+    GetAnimation()->SetSpeed(p_speedInput->GetValue());
     GetAnimation()->SetWrapMode(
-                SCAST<AnimationWrapMode>(p_wrapModeInput->GetSelectedValue()) );
+        SCAST<AnimationWrapMode>(p_wrapModeInput->GetSelectedValue()));
 }
-

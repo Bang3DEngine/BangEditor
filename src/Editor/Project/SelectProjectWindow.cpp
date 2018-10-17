@@ -33,12 +33,14 @@
 #include "BangEditor/Project.h"
 #include "BangEditor/ProjectManager.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD_T class Array;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+template <class>
+class Array;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 Path SelectProjectWindow::SelectedProjectPath = Path::EmptyPath();
 
@@ -85,7 +87,7 @@ SelectProjectScene::SelectProjectScene()
 
     GameObject *logoContainer = GameObjectFactory::CreateUIGameObject();
     UILayoutElement *logoLE = logoContainer->AddComponent<UILayoutElement>();
-    logoLE->SetFlexibleSize( Vector2(1, 0.5f) );
+    logoLE->SetFlexibleSize(Vector2(1, 0.5f));
     logoLE->SetLayoutPriority(-5);
     logoContainer->SetParent(mainVLGo);
 
@@ -93,19 +95,19 @@ SelectProjectScene::SelectProjectScene()
     Texture2D *logoTex = TextureFactory::GetBang2048Icon();
     logo->SetImageTexture(logoTex);
     GameObject *logoGo = logo->GetGameObject();
-    logoGo->GetRectTransform()->SetAnchorX( Vector2(0) );
-    logoGo->GetRectTransform()->SetAnchorY( Vector2(0) );
-    logoGo->GetRectTransform()->SetPivotPosition( Vector2(0,0) );
+    logoGo->GetRectTransform()->SetAnchorX(Vector2(0));
+    logoGo->GetRectTransform()->SetAnchorY(Vector2(0));
+    logoGo->GetRectTransform()->SetPivotPosition(Vector2(0, 0));
     UIAspectRatioFitter *logoARF = logoGo->AddComponent<UIAspectRatioFitter>();
-    logoARF->SetAspectRatio( logoTex->GetSize() );
+    logoARF->SetAspectRatio(logoTex->GetSize());
     logoARF->SetAspectRatioMode(AspectRatioMode::KEEP);
     logo->GetGameObject()->SetParent(logoContainer);
 
     GameObjectFactory::CreateUIHSeparator()->SetParent(mainVLGo);
 
     UILabel *recentPLLabel = GameObjectFactory::CreateUILabel();
-    UILayoutElement *recentPLLabelLE = recentPLLabel->GetGameObject()->
-                                       GetComponent<UILayoutElement>();
+    UILayoutElement *recentPLLabelLE =
+        recentPLLabel->GetGameObject()->GetComponent<UILayoutElement>();
     recentPLLabelLE->SetFlexibleSize(Vector2::Zero);
     recentPLLabel->GetText()->SetContent("Recent projects:");
     recentPLLabel->GetText()->SetTextColor(Color::Black);
@@ -113,32 +115,34 @@ SelectProjectScene::SelectProjectScene()
     recentPLLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::LEFT);
     recentPLLabel->GetGameObject()->SetParent(mainVLGo);
 
-    GameObject *recentPLContainer =
-                        GameObjectFactory::CreateUIGameObject(true);
+    GameObject *recentPLContainer = GameObjectFactory::CreateUIGameObject(true);
 
     UILayoutElement *rplLE = recentPLContainer->AddComponent<UILayoutElement>();
-    rplLE->SetFlexibleSize( Vector2(1,1) );
+    rplLE->SetFlexibleSize(Vector2(1, 1));
     recentPLContainer->SetParent(mainVLGo);
 
     UIList *recentProjectsList = GameObjectFactory::CreateUIList(true);
-    recentProjectsList->SetSelectionCallback([this](GOItem *item, UIList::Action action)
-    {
-        if (!item) { return; }
-        RecentProjectListEntry *entry = SCAST<RecentProjectListEntry*>(item);
-        switch (action)
+    recentProjectsList->SetSelectionCallback([this](GOItem *item,
+                                                    UIList::Action action) {
+        if(!item)
+        {
+            return;
+        }
+        RecentProjectListEntry *entry = SCAST<RecentProjectListEntry *>(item);
+        switch(action)
         {
             case UIList::Action::MOUSE_LEFT_DOWN:
                 m_selectedRecentPath = entry->m_projectPath;
-            break;
+                break;
 
             case UIList::Action::DOUBLE_CLICKED_LEFT:
                 ConfirmOpenProject(entry->m_projectPath);
-            break;
+                break;
 
             default: break;
         }
     });
-    GameObject *recentProjectsListGo  = recentProjectsList->GetGameObject();
+    GameObject *recentProjectsListGo = recentProjectsList->GetGameObject();
     recentProjectsListGo->SetParent(recentPLContainer);
     UIScrollPanel *rplSP = recentProjectsList->GetScrollPanel();
     rplSP->SetForceHorizontalFit(true);
@@ -147,11 +151,12 @@ SelectProjectScene::SelectProjectScene()
     rplSP->SetVerticalShowScrollMode(ShowScrollMode::WHEN_NEEDED);
     rplSP->SetHorizontalShowScrollMode(ShowScrollMode::WHEN_NEEDED);
     recentProjectsList->Clear();
-    const Array<Path> &recentProjects = EditorSettings::GetRecentProjectFilepathsOpen();
-    for (const Path &recentProjectPath : recentProjects)
+    const Array<Path> &recentProjects =
+        EditorSettings::GetRecentProjectFilepathsOpen();
+    for(const Path &recentProjectPath : recentProjects)
     {
         GameObject *entry =
-                 GameObject::Create<RecentProjectListEntry>(recentProjectPath);
+            GameObject::Create<RecentProjectListEntry>(recentProjectPath);
         recentProjectsList->AddItem(entry);
     }
 
@@ -162,12 +167,12 @@ SelectProjectScene::SelectProjectScene()
     botHL->SetSpacing(20);
     UILayoutElement *botHLLE = botHLGo->AddComponent<UILayoutElement>();
     botHLLE->SetMinHeight(30);
-    botHLLE->SetFlexibleSize( Vector2(1,0) );
+    botHLLE->SetFlexibleSize(Vector2(1, 0));
     botHLGo->SetParent(mainVLGo);
 
     GameObjectFactory::CreateUIHSpacer()->SetParent(botHLGo);
 
-    p_newProjectButton  = GameObjectFactory::CreateUIButton("New project...");
+    p_newProjectButton = GameObjectFactory::CreateUIButton("New project...");
     p_newProjectButton->GetGameObject()->SetParent(botHLGo);
     p_newProjectButton->AddClickedCallback([this]() { NewProject(); });
 
@@ -175,18 +180,15 @@ SelectProjectScene::SelectProjectScene()
     p_openProjectButton->GetGameObject()->SetParent(botHLGo);
     p_openProjectButton->AddClickedCallback([this]() { OpenProject(); });
 
-    p_openSelectedProjectButton = GameObjectFactory::CreateUIButton(
-                                                  "Open selected project...");
+    p_openSelectedProjectButton =
+        GameObjectFactory::CreateUIButton("Open selected project...");
     p_openSelectedProjectButton->GetGameObject()->SetParent(botHLGo);
-    p_openSelectedProjectButton->AddClickedCallback([this]()
-    {
-        ConfirmOpenProject(m_selectedRecentPath);
-    });
+    p_openSelectedProjectButton->AddClickedCallback(
+        [this]() { ConfirmOpenProject(m_selectedRecentPath); });
 }
 
 SelectProjectScene::~SelectProjectScene()
 {
-
 }
 
 void SelectProjectScene::Update()
@@ -199,14 +201,13 @@ void SelectProjectScene::Update()
 void SelectProjectScene::NewProject()
 {
     Path newProjectDirPath = Dialog::OpenDirectory(
-                            "Create new project. Select parent dir...",
-                            EditorPaths::GetHome());
-    if (newProjectDirPath.IsDir())
+        "Create new project. Select parent dir...", EditorPaths::GetHome());
+    if(newProjectDirPath.IsDir())
     {
-        String projectName = Dialog::GetString("Choose Project Name",
-                                               "Please, choose your project name:",
-                                               "NewProject");
-        if (!projectName.IsEmpty())
+        String projectName = Dialog::GetString(
+            "Choose Project Name", "Please, choose your project name:",
+            "NewProject");
+        if(!projectName.IsEmpty())
         {
             Project *proj = ProjectManager::CreateNewProject(newProjectDirPath,
                                                              projectName);
@@ -217,10 +218,10 @@ void SelectProjectScene::NewProject()
 
 void SelectProjectScene::OpenProject()
 {
-    Path projectFilepath = Dialog::OpenFilePath("Open Project...",
-                                                {Extensions::GetProjectExtension()},
-                                                 EditorPaths::GetHome());
-    if (projectFilepath.IsFile())
+    Path projectFilepath = Dialog::OpenFilePath(
+        "Open Project...", {Extensions::GetProjectExtension()},
+        EditorPaths::GetHome());
+    if(projectFilepath.IsFile())
     {
         ConfirmOpenProject(projectFilepath);
     }
@@ -229,7 +230,7 @@ void SelectProjectScene::OpenProject()
 void SelectProjectScene::ConfirmOpenProject(const Path &projectFilepath)
 {
     SelectProjectWindow::SelectedProjectPath = projectFilepath;
-    WindowManager::GetInstance()->DestroyWindow( Window::GetActive() );
+    WindowManager::GetInstance()->DestroyWindow(Window::GetActive());
 }
 
 // ===========================================================================
@@ -238,8 +239,9 @@ SelectProjectScene::RecentProjectListEntry::RecentProjectListEntry()
 {
 }
 
-SelectProjectScene::RecentProjectListEntry::
-    RecentProjectListEntry(const Path &projectPath) : GameObject()
+SelectProjectScene::RecentProjectListEntry::RecentProjectListEntry(
+    const Path &projectPath)
+    : GameObject()
 {
     m_projectPath = projectPath;
 
@@ -251,7 +253,7 @@ SelectProjectScene::RecentProjectListEntry::
 
     GameObject *container = GameObjectFactory::CreateUIGameObject();
     UITextRenderer *text = container->AddComponent<UITextRenderer>();
-    text->SetContent( projectPath.GetAbsolute() );
+    text->SetContent(projectPath.GetAbsolute());
     text->SetTextSize(12);
     text->SetTextColor(Color::Black);
     text->SetHorizontalAlign(HorizontalAlignment::LEFT);

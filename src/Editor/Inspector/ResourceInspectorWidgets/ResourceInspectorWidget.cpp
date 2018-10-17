@@ -5,14 +5,16 @@
 #include "Bang/UIImageRenderer.h"
 #include "BangEditor/EditorTextureFactory.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 void ResourceInspectorWidget::InitInnerWidgets()
 {
     InspectorWidget::InitInnerWidgets();
-    GetInspectorWidgetTitle()->GetEnabledCheckBox()->
-                               GetGameObject()->SetEnabled(false);
+    GetInspectorWidgetTitle()
+        ->GetEnabledCheckBox()
+        ->GetGameObject()
+        ->SetEnabled(false);
     UpdateIcon();
 }
 
@@ -23,7 +25,7 @@ void ResourceInspectorWidget::Update()
 
 void ResourceInspectorWidget::SetPath(const Path &path)
 {
-    if (path != GetPath())
+    if(path != GetPath())
     {
         m_path = path;
         UpdateFromFileWhenChanged();
@@ -48,6 +50,6 @@ Color ResourceInspectorWidget::GetIconTint() const
 void ResourceInspectorWidget::UpdateIcon()
 {
     UIImageRenderer *icon = GetInspectorWidgetTitle()->GetIcon();
-    icon->SetImageTexture( GetIconTexture() );
-    icon->SetTint( GetIconTint() );
+    icon->SetImageTexture(GetIconTexture());
+    icon->SetTint(GetIconTint());
 }

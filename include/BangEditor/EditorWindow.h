@@ -7,15 +7,16 @@
 #include "Bang/Window.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class SceneManager;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class SceneManager;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class EditorScene;
-FORWARD class ShortcutManager;
+using namespace Bang;
+namespace BangEditor
+{
+class EditorScene;
+class ShortcutManager;
 
 class EditorWindow : public Window
 {
@@ -38,7 +39,6 @@ private:
 
     friend class ShortcutManager;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // EDITORWINDOW_H
+#endif  // EDITORWINDOW_H

@@ -26,21 +26,22 @@
 #include "BangEditor/IEventsExplorerItem.h"
 #include "BangEditor/UIContextMenu.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsDragDrop;
-FORWARD class IFocusable;
-FORWARD class UIAspectRatioFitter;
-FORWARD class UIDragDroppable;
-FORWARD class UIFocusable;
-FORWARD class UIImageRenderer;
-FORWARD class UILabel;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDragDrop;
+class IFocusable;
+class UIAspectRatioFitter;
+class UIDragDroppable;
+class UIFocusable;
+class UIImageRenderer;
+class UILabel;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class IEventsExplorerItem;
-FORWARD class MenuItem;
+using namespace Bang;
+namespace BangEditor
+{
+class IEventsExplorerItem;
+class MenuItem;
 
 class ExplorerItem : public GameObject,
                      public EventListener<IEventsFocus>,
@@ -56,9 +57,9 @@ public:
 
     bool IsSelected() const;
     UILabel *GetLabel() const;
-    const Path& GetPath() const;
-    UIFocusable* GetFocusable() const;
-    const String& GetPathString() const;
+    const Path &GetPath() const;
+    UIFocusable *GetFocusable() const;
+    const String &GetPathString() const;
 
     void Rename();
     void Remove();
@@ -92,8 +93,6 @@ private:
     virtual UIEventResult OnUIEvent(UIFocusable *focusable,
                                     const UIEvent &event) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // EXPLORERITEM_H
-
+#endif  // EXPLORERITEM_H

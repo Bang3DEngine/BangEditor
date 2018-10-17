@@ -13,23 +13,25 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SettingsInspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class UIInputNumber;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class UIInputNumber;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UIInputVector;
+using namespace Bang;
+namespace BangEditor
+{
+class UIInputVector;
 
 class SIWPhysicsSettings : public SettingsInspectorWidget,
                            public EventListener<IEventsValueChanged>
 {
 public:
-	SIWPhysicsSettings();
-	virtual ~SIWPhysicsSettings() override;
+    SIWPhysicsSettings();
+    virtual ~SIWPhysicsSettings() override;
 
     // SettingsInspectorWidget
     virtual void InitInnerWidgets() override;
@@ -43,8 +45,6 @@ private:
     UIInputNumber *p_stepSleepTimeInput = nullptr;
     UIInputVector *p_gravityInput = nullptr;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // SIWPHYSICSSETTINGS_H
-
+#endif  // SIWPHYSICSSETTINGS_H

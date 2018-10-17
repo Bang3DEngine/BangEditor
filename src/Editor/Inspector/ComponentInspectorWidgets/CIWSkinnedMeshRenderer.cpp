@@ -1,7 +1,7 @@
 #include "BangEditor/CIWSkinnedMeshRenderer.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 CIWSkinnedMeshRenderer::CIWSkinnedMeshRenderer()
 {
@@ -18,4 +18,3 @@ void CIWSkinnedMeshRenderer::InitInnerWidgets()
     SetName("SkinnedMeshRenderer");
     SetTitle("Skinned Mesh Renderer");
 }
-

@@ -9,16 +9,17 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class GameObject;
-FORWARD class LineRenderer;
-FORWARD class MeshRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class GameObject;
+class LineRenderer;
+class MeshRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class RotateGizmoAxis;
+using namespace Bang;
+namespace BangEditor
+{
+class RotateGizmoAxis;
 
 class RotateGizmo : public SelectionGizmo
 {
@@ -43,14 +44,12 @@ private:
     LineRenderer *p_sphereBoundsRenderer = nullptr;
 
     RotateGizmo();
-	virtual ~RotateGizmo() override;
+    virtual ~RotateGizmo() override;
 
     void CreateSphereBoundsPoints();
 
     friend class RotateGizmoAxis;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // ROTATEGIZMO_H
-
+#endif  // ROTATEGIZMO_H

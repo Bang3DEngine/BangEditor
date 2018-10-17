@@ -16,21 +16,23 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class Texture2D;
-FORWARD   class UIAspectRatioFitter;
-FORWARD   class UICheckBox;
-FORWARD   class UIComboBox;
-FORWARD   class UIImageRenderer;
-FORWARD   class UIInputText;
-FORWARD   class UISlider;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class Texture2D;
+class UIAspectRatioFitter;
+class UICheckBox;
+class UIComboBox;
+class UIImageRenderer;
+class UIInputText;
+class UISlider;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class RIWTexture : public RIWResource<Texture2D>
 {
     GAMEOBJECT_EDITOR(RIWTexture);
@@ -45,13 +47,13 @@ private:
     UISlider *p_alphaCutoffInput = nullptr;
     UICheckBox *p_SRGBCheckBoxInput = nullptr;
 
-    UIInputText *p_textureWidth  = nullptr;
+    UIInputText *p_textureWidth = nullptr;
     UIInputText *p_textureHeight = nullptr;
     UIImageRenderer *p_textureImageRend = nullptr;
     UIAspectRatioFitter *p_imageAspectRatioFitter = nullptr;
 
-	RIWTexture();
-	virtual ~RIWTexture() override;
+    RIWTexture();
+    virtual ~RIWTexture() override;
 
     Texture2D *GetTexture() const;
 
@@ -60,13 +62,11 @@ private:
     Texture2D *GetIconTexture() const override;
 
     // RIWResource
-    void OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *object)
-                                                                    override;
+    void OnValueChangedRIWResource(
+        EventEmitter<IEventsValueChanged> *object) override;
 
     friend class ResourceInspectorWidgetFactory;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // RIWTEXTURE_H
-
+#endif  // RIWTEXTURE_H

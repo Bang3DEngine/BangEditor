@@ -36,8 +36,8 @@
 #include "BangEditor/MenuItem.h"
 #include "BangEditor/UIContextMenu.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 AESConnectionLine::AESConnectionLine()
 {
@@ -48,27 +48,23 @@ AESConnectionLine::AESConnectionLine()
     p_lineRenderer->GetMaterial()->SetRenderPass(RenderPass::CANVAS);
     p_lineRenderer->SetPoints({Vector3::Zero, Vector3::Zero});
 
-    for (uint i : {0u, 1u, 2u})
+    for(uint i : {0u, 1u, 2u})
     {
         GameObject *arrowImgGo = GameObjectFactory::CreateUIGameObject();
         p_arrowImgs[i] = arrowImgGo->AddComponent<UIImageRenderer>();
-        p_arrowImgs[i]->SetImageTexture( TextureFactory::GetRightArrowIcon() );
+        p_arrowImgs[i]->SetImageTexture(TextureFactory::GetRightArrowIcon());
         arrowImgGo->GetRectTransform()->SetAnchors(Vector2::Zero);
-        arrowImgGo->GetRectTransform()->SetSizeFromPivot( Vector2i(20) );
-        arrowImgGo->GetRectTransform()->SetPivotPosition( Vector2::Zero );
+        arrowImgGo->GetRectTransform()->SetSizeFromPivot(Vector2i(20));
+        arrowImgGo->GetRectTransform()->SetPivotPosition(Vector2::Zero);
         arrowImgGo->SetParent(this);
     }
 
     p_contextMenu = AddComponent<UIContextMenu>();
-    p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
-    {
+    p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem) {
         menuRootItem->SetFontSize(12);
 
         MenuItem *menuItem = menuRootItem->AddItem("Remove Transition");
-        menuItem->SetSelectedCallback([this](MenuItem*)
-        {
-            RemoveSelf();
-        });
+        menuItem->SetSelectedCallback([this](MenuItem *) { RemoveSelf(); });
     });
 }
 
@@ -83,16 +79,17 @@ void AESConnectionLine::BeforeRender()
     float lineWidth = 2.0f;
     Color lineColor = Color::White;
     AESNode *provisionalToNode = nullptr;
-    if (!GetAESNodeTo())
+    if(!GetAESNodeTo())
     {
-        if (UICanvas *canvas = UICanvas::GetActive(this))
+        if(UICanvas *canvas = UICanvas::GetActive(this))
         {
-            if (UIFocusable *overedFocus = canvas->GetFocusableUnderMouseTopMost())
+            if(UIFocusable *overedFocus =
+                   canvas->GetFocusableUnderMouseTopMost())
             {
                 GameObject *overedGo = overedFocus->GetGameObject();
-                if (auto overedNode = DCAST<AESNode*>(overedGo))
+                if(auto overedNode = DCAST<AESNode *>(overedGo))
                 {
-                    if ( IsValidConnection(GetAESNodeFrom(), overedNode) )
+                    if(IsValidConnection(GetAESNodeFrom(), overedNode))
                     {
                         provisionalToNode = overedNode;
                     }
@@ -103,18 +100,18 @@ void AESConnectionLine::BeforeRender()
     else
     {
         bool thickenLine = false;
-        if (IsMouseOver())
+        if(IsMouseOver())
         {
             thickenLine = true;
-            if (Input::GetMouseButtonDown(MouseButton::RIGHT))
+            if(Input::GetMouseButtonDown(MouseButton::RIGHT))
             {
                 p_contextMenu->ShowMenu();
             }
 
-            if (Input::GetMouseButtonDown(MouseButton::RIGHT) ||
-                Input::GetMouseButtonDown(MouseButton::LEFT))
+            if(Input::GetMouseButtonDown(MouseButton::RIGHT) ||
+               Input::GetMouseButtonDown(MouseButton::LEFT))
             {
-                if (UICanvas *canvas = UICanvas::GetActive(this))
+                if(UICanvas *canvas = UICanvas::GetActive(this))
                 {
                     canvas->SetFocus(nullptr);
                 }
@@ -122,7 +119,7 @@ void AESConnectionLine::BeforeRender()
                 m_hasFocus = true;
 
                 GIWAESConnectionLine *aesConnLine =
-                        GameObject::Create<GIWAESConnectionLine>();
+                    GameObject::Create<GIWAESConnectionLine>();
                 aesConnLine->SetAESConnectionLine(this);
                 aesConnLine->Init();
                 Inspector::GetActive()->ShowInspectorWidget(aesConnLine);
@@ -130,44 +127,44 @@ void AESConnectionLine::BeforeRender()
         }
         else
         {
-            if (Input::GetMouseButtonDown(MouseButton::LEFT))
+            if(Input::GetMouseButtonDown(MouseButton::LEFT))
             {
                 m_hasFocus = false;
             }
         }
 
-        if (thickenLine || m_hasFocus)
+        if(thickenLine || m_hasFocus)
         {
             lineWidth = 5.0f;
-            lineColor = m_hasFocus ? UITheme::GetSelectedColor() :
-                                     UITheme::GetOverColor();
+            lineColor = m_hasFocus ? UITheme::GetSelectedColor()
+                                   : UITheme::GetOverColor();
         }
     }
 
-    if (Animator *animator = GetAESNodeFrom()->GetCurrentAnimator())
+    if(Animator *animator = GetAESNodeFrom()->GetCurrentAnimator())
     {
-        if (AnimatorStateMachinePlayer *player = animator->GetPlayer())
+        if(AnimatorStateMachinePlayer *player = animator->GetPlayer())
         {
-            if (player->GetCurrentTransition() &&
-                GetSMConnections().Contains(player->GetCurrentTransition()))
+            if(player->GetCurrentTransition() &&
+               GetSMConnections().Contains(player->GetCurrentTransition()))
             {
                 lineColor = Color::Green;
             }
         }
     }
 
-
     // Set line points positions
     {
-        Vector2 mousePosition ( Input::GetMousePosition() );
+        Vector2 mousePosition(Input::GetMousePosition());
         Vector3 lineMousePos = GetRectTransform()->FromWorldToLocalPoint(
-                                                Vector3(mousePosition, 0.0f));
+            Vector3(mousePosition, 0.0f));
         uint i = 0;
-        for (AESNode *node : {GetAESNodeFrom(),
-                             (GetAESNodeTo() ? GetAESNodeTo() : provisionalToNode)})
+        for(AESNode *node :
+            {GetAESNodeFrom(),
+             (GetAESNodeTo() ? GetAESNodeTo() : provisionalToNode)})
         {
-            Vector3 linePos = node ? GetConnectionPointLinePosition(node) :
-                                     lineMousePos;
+            Vector3 linePos =
+                node ? GetConnectionPointLinePosition(node) : lineMousePos;
             linePos.z = 0.0f;
             p_lineRenderer->SetPoint(i, linePos);
             ++i;
@@ -175,42 +172,44 @@ void AESConnectionLine::BeforeRender()
         OffsetLinePositions();
     }
 
-    if (HasFocus())
+    if(HasFocus())
     {
-        if (Input::GetKeyDown(Key::DELETE))
+        if(Input::GetKeyDown(Key::DELETE))
         {
             RemoveSelf();
         }
     }
 
-    for (UIImageRenderer *arrowImg : p_arrowImgs)
+    for(UIImageRenderer *arrowImg : p_arrowImgs)
     {
         arrowImg->GetMaterial()->SetAlbedoColor(lineColor);
     }
     p_lineRenderer->GetMaterial()->SetAlbedoColor(lineColor);
     p_lineRenderer->GetMaterial()->SetLineWidth(lineWidth);
 
-    for (uint i : {0u, 1u, 2u})
+    for(uint i : {0u, 1u, 2u})
     {
-        RectTransform *arrowRT = p_arrowImgs[i]->GetGameObject()->
-                                 GetRectTransform();
+        RectTransform *arrowRT =
+            p_arrowImgs[i]->GetGameObject()->GetRectTransform();
 
         Vector2 p0 = p_lineRenderer->GetPoints()[0].xy();
         Vector2 p1 = p_lineRenderer->GetPoints()[1].xy();
 
         constexpr float iLineStep = 0.05f;
-        Vector2 pointForArrow = p0 + (p1 - p0) * ( (0.5f - iLineStep) +
-                                                   (i * iLineStep));
+        Vector2 pointForArrow =
+            p0 + (p1 - p0) * ((0.5f - iLineStep) + (i * iLineStep));
         arrowRT->SetAnchors(pointForArrow);
 
-        Vector2 p0w = GetRectTransform()->FromLocalToWorldPoint( Vector3(p0, 0) ).xy();
-        Vector2 p1w = GetRectTransform()->FromLocalToWorldPoint( Vector3(p1, 0) ).xy();
-        float angle = Math::ATan2((p1w-p0w).x, (p1w-p0w).y);
+        Vector2 p0w =
+            GetRectTransform()->FromLocalToWorldPoint(Vector3(p0, 0)).xy();
+        Vector2 p1w =
+            GetRectTransform()->FromLocalToWorldPoint(Vector3(p1, 0)).xy();
+        float angle = Math::ATan2((p1w - p0w).x, (p1w - p0w).y);
         angle += (Math::Pi * 1.5f);
         Quaternion rotation = Quaternion::AngleAxis(angle, Vector3::Forward);
         arrowRT->SetLocalRotation(rotation);
 
-        if (i != 1)
+        if(i != 1)
         {
             p_arrowImgs[i]->SetEnabled(GetSMConnections().Size() >= 2);
         }
@@ -244,20 +243,21 @@ AESNode *AESConnectionLine::GetAESNodeFrom() const
 
 AnimatorStateMachine *AESConnectionLine::GetAnimatorSM() const
 {
-    if (GetAESNodeFrom())
+    if(GetAESNodeFrom())
     {
         return GetAESNodeFrom()->GetAnimatorSM();
     }
     return GetAESNodeTo() ? GetAESNodeTo()->GetAnimatorSM() : nullptr;
 }
 
-Array<AnimatorStateMachineConnection*> AESConnectionLine::GetSMConnections() const
+Array<AnimatorStateMachineConnection *> AESConnectionLine::GetSMConnections()
+    const
 {
-    Array<AnimatorStateMachineConnection*> connections;
-    if (GetAESNodeFrom() && GetAESNodeTo())
+    Array<AnimatorStateMachineConnection *> connections;
+    if(GetAESNodeFrom() && GetAESNodeTo())
     {
         AnimatorStateMachineNode *smNodeFrom = GetAESNodeFrom()->GetSMNode();
-        AnimatorStateMachineNode *smNodeTo   = GetAESNodeTo()->GetSMNode();
+        AnimatorStateMachineNode *smNodeTo = GetAESNodeTo()->GetSMNode();
         connections = smNodeFrom->GetConnectionsTo(smNodeTo);
     }
     return connections;
@@ -265,35 +265,36 @@ Array<AnimatorStateMachineConnection*> AESConnectionLine::GetSMConnections() con
 
 bool AESConnectionLine::IsMouseOver() const
 {
-    if (!GetAESNodeFrom() ||
-        !GetAESNodeTo()   ||
-        !IsActiveRecursively() ||
-        !IsVisibleRecursively())
+    if(!GetAESNodeFrom() || !GetAESNodeTo() || !IsActiveRecursively() ||
+       !IsVisibleRecursively())
     {
         return false;
     }
 
-    Vector2 linePosFrom = GetRectTransform()->FromLocalToWorldPoint(
-                            p_lineRenderer->GetPoints()[0]).xy();
-    Vector2 linePosTo   = GetRectTransform()->FromLocalToWorldPoint(
-                            p_lineRenderer->GetPoints()[1]).xy();
-    Vector2 mousePos ( Input::GetMousePosition() );
+    Vector2 linePosFrom =
+        GetRectTransform()
+            ->FromLocalToWorldPoint(p_lineRenderer->GetPoints()[0])
+            .xy();
+    Vector2 linePosTo =
+        GetRectTransform()
+            ->FromLocalToWorldPoint(p_lineRenderer->GetPoints()[1])
+            .xy();
+    Vector2 mousePos(Input::GetMousePosition());
 
-    bool interactingWithNodeTo = GetAESNodeTo() &&
-                                 (GetAESNodeTo()->GetFocusable()->IsMouseOver() ||
-                                  GetAESNodeTo()->GetFocusable()->IsBeingPressed());
-    bool interactingWithNodeFrom = GetAESNodeFrom() &&
-                                  (GetAESNodeFrom()->GetFocusable()->IsMouseOver() ||
-                                   GetAESNodeFrom()->GetFocusable()->IsBeingPressed());
+    bool interactingWithNodeTo =
+        GetAESNodeTo() && (GetAESNodeTo()->GetFocusable()->IsMouseOver() ||
+                           GetAESNodeTo()->GetFocusable()->IsBeingPressed());
+    bool interactingWithNodeFrom =
+        GetAESNodeFrom() &&
+        (GetAESNodeFrom()->GetFocusable()->IsMouseOver() ||
+         GetAESNodeFrom()->GetFocusable()->IsBeingPressed());
 
-    float distanceToLine = Geometry::GetPointToLineDistance2D(mousePos,
-                                                              linePosFrom,
-                                                              linePosTo);
+    float distanceToLine =
+        Geometry::GetPointToLineDistance2D(mousePos, linePosFrom, linePosTo);
     return (distanceToLine < 8.0f) &&
-            Vector2::Dot(mousePos-linePosFrom, linePosTo-linePosFrom) > 0 &&
-            Vector2::Dot(mousePos-linePosTo,   linePosFrom-linePosTo) > 0 &&
-            !interactingWithNodeTo &&
-            !interactingWithNodeFrom;
+           Vector2::Dot(mousePos - linePosFrom, linePosTo - linePosFrom) > 0 &&
+           Vector2::Dot(mousePos - linePosTo, linePosFrom - linePosTo) > 0 &&
+           !interactingWithNodeTo && !interactingWithNodeFrom;
 }
 
 void AESConnectionLine::RemoveSelf()
@@ -302,7 +303,7 @@ void AESConnectionLine::RemoveSelf()
     ASSERT(smNode);
 
     const auto connections = GetSMConnections();
-    for (AnimatorStateMachineConnection *smConn : connections)
+    for(AnimatorStateMachineConnection *smConn : connections)
     {
         smNode->RemoveConnection(smConn);
     }
@@ -310,7 +311,7 @@ void AESConnectionLine::RemoveSelf()
 
 AESNode *AESConnectionLine::GetFirstFoundNode() const
 {
-    if (GetAESNodeTo())
+    if(GetAESNodeTo())
     {
         return GetAESNodeTo();
     }
@@ -320,50 +321,52 @@ AESNode *AESConnectionLine::GetFirstFoundNode() const
 bool AESConnectionLine::IsValidConnection(AESNode *oneNode,
                                           AESNode *otherNode) const
 {
-    if (oneNode && otherNode)
+    if(oneNode && otherNode)
     {
         return (oneNode != otherNode);
     }
     return false;
 }
 
-Vector3 AESConnectionLine::GetConnectionPointLinePosition(
-                                        AESNode *node) const
+Vector3 AESConnectionLine::GetConnectionPointLinePosition(AESNode *node) const
 {
     RectTransform *nodeRT = node->GetRectTransform();
 
     Vector3 linePos = GetRectTransform()->FromWorldToLocalPoint(
-                        nodeRT->FromLocalToWorldPoint( Vector3(0, 0, 0) ) );
+        nodeRT->FromLocalToWorldPoint(Vector3(0, 0, 0)));
     return linePos;
 }
 
 void AESConnectionLine::OffsetLinePositions() const
 {
-    bool isLesserNode = GetAESNodeTo() ?
-                       (GetAESNodeFrom()->GetIndexInStateMachine() <
-                        GetAESNodeTo()->GetIndexInStateMachine()) : true;
+    bool isLesserNode = GetAESNodeTo()
+                            ? (GetAESNodeFrom()->GetIndexInStateMachine() <
+                               GetAESNodeTo()->GetIndexInStateMachine())
+                            : true;
 
     Vector3 lineFromPos = p_lineRenderer->GetPoints()[0];
-    Vector3 lineToPos   = p_lineRenderer->GetPoints()[1];
-    Vector3 lineFromTo  = (lineToPos - lineFromPos) * (isLesserNode ? 1.0f : -1.0f);
+    Vector3 lineToPos = p_lineRenderer->GetPoints()[1];
+    Vector3 lineFromTo =
+        (lineToPos - lineFromPos) * (isLesserNode ? 1.0f : -1.0f);
 
     const float zoomScale = GetAESNodeFrom()->GetAESScene()->GetZoomScale();
     const int offsetPx = (30 * zoomScale);
-    Vector3 offsetAnchorPerIndex (
-                    (1.0f / GetRectTransform()->GetViewportAARect().GetSize()) *
-                    Vector2(offsetPx), 0.0f);
+    Vector3 offsetAnchorPerIndex(
+        (1.0f / GetRectTransform()->GetViewportAARect().GetSize()) *
+            Vector2(offsetPx),
+        0.0f);
 
     Vector3 offsetDir = Vector3(lineFromTo.xy().Perpendicular(), 0.0f);
     offsetDir = offsetDir.NormalizedSafe();
 
-    if (GetAESNodeFrom())
+    if(GetAESNodeFrom())
     {
         float sign = (isLesserNode ? 1.0f : -1.0f);
         lineFromPos += offsetDir * offsetAnchorPerIndex * sign;
         p_lineRenderer->SetPoint(0, lineFromPos);
     }
 
-    if (GetAESNodeTo())
+    if(GetAESNodeTo())
     {
         float sign = (isLesserNode ? 1.0f : -1.0f);
         lineToPos += offsetDir * offsetAnchorPerIndex * sign;

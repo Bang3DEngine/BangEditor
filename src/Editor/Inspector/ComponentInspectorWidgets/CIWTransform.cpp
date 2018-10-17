@@ -12,12 +12,13 @@
 #include "Bang/Transform.h"
 #include "BangEditor/UIInputVector.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 void CIWTransform::InitInnerWidgets()
 {
@@ -26,8 +27,8 @@ void CIWTransform::InitInnerWidgets()
     SetName("CIWTransform");
     SetTitle("Transform");
 
-    p_posIV   = GameObject::Create<UIInputVector>(3);
-    p_rotIV   = GameObject::Create<UIInputVector>(3);
+    p_posIV = GameObject::Create<UIInputVector>(3);
+    p_rotIV = GameObject::Create<UIInputVector>(3);
     p_scaleIV = GameObject::Create<UIInputVector>(3);
 
     p_posIV->EventEmitter<IEventsValueChanged>::RegisterListener(this);
@@ -36,7 +37,7 @@ void CIWTransform::InitInnerWidgets()
 
     AddWidget("Position", p_posIV);
     AddWidget("Rotation", p_rotIV);
-    AddWidget("Scale",    p_scaleIV);
+    AddWidget("Scale", p_scaleIV);
 
     SetLabelsWidth(60);
 }
@@ -45,17 +46,17 @@ void CIWTransform::UpdateFromReference()
 {
     ComponentInspectorWidget::UpdateFromReference();
 
-    if (!p_posIV->HasFocus())
+    if(!p_posIV->HasFocus())
     {
         p_posIV->Set(GetTransform()->GetLocalPosition());
     }
 
-    if (!p_rotIV->HasFocus())
+    if(!p_rotIV->HasFocus())
     {
         p_rotIV->Set(GetTransform()->GetLocalEuler());
     }
 
-    if (!p_scaleIV->HasFocus())
+    if(!p_scaleIV->HasFocus())
     {
         p_scaleIV->Set(GetTransform()->GetLocalScale());
     }
@@ -68,7 +69,7 @@ bool CIWTransform::CanBeRemovedFromContextMenu() const
 
 Transform *CIWTransform::GetTransform() const
 {
-    return SCAST<Transform*>( GetComponent() );
+    return SCAST<Transform *>(GetComponent());
 }
 
 void CIWTransform::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
@@ -84,5 +85,3 @@ bool CIWTransform::MustShowEnabledCheckbox() const
 {
     return false;
 }
-
-

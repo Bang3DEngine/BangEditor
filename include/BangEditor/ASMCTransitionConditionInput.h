@@ -17,23 +17,24 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class AnimatorStateMachine;
-FORWARD class IEventsValueChanged;
-FORWARD class UIComboBox;
-FORWARD class UIInputNumber;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class AnimatorStateMachine;
+class IEventsValueChanged;
+class UIComboBox;
+class UIInputNumber;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class ASMCTransitionConditionInput : public GameObject,
                                      public EventEmitter<IEventsValueChanged>,
                                      public EventListener<IEventsValueChanged>
 {
 public:
-	ASMCTransitionConditionInput();
-	virtual ~ASMCTransitionConditionInput() override;
+    ASMCTransitionConditionInput();
+    virtual ~ASMCTransitionConditionInput() override;
 
     // GameObject
     void BeforeRender() override;
@@ -45,11 +46,11 @@ private:
     String m_selectedVarName = "";
     bool m_updatingFromVariable = false;
     AnimatorStateMachine *p_animatorSM = nullptr;
-    UIComboBox    *p_varNameInput      = nullptr;
-    UIComboBox    *p_comparatorInput   = nullptr;
-    UIInputNumber *p_floatInput        = nullptr;
+    UIComboBox *p_varNameInput = nullptr;
+    UIComboBox *p_comparatorInput = nullptr;
+    UIInputNumber *p_floatInput = nullptr;
     AnimatorStateMachineVariable::Type m_varType =
-            Undef<AnimatorStateMachineVariable::Type>();
+        Undef<AnimatorStateMachineVariable::Type>();
 
     void UpdateFromVariable();
 
@@ -60,8 +61,6 @@ private:
     virtual void ImportMeta(const MetaNode &metaNode) override;
     virtual void ExportMeta(MetaNode *metaNode) const override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // ASMCTRANSITIONCONDITIONINPUT_H
-
+#endif  // ASMCTRANSITIONCONDITIONINPUT_H

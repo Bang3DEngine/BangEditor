@@ -9,20 +9,27 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class GameObject;
-FORWARD class UIImageRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class GameObject;
+class UIImageRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class RectTransformAnchorSelectionGizmo : public SelectionGizmo
 {
     GAMEOBJECT_EDITOR(RectTransformAnchorSelectionGizmo);
 
 public:
-    enum class AnchorSide { LEFT_BOT, LEFT_TOP, RIGHT_TOP, RIGHT_BOT };
+    enum class AnchorSide
+    {
+        LEFT_BOT,
+        LEFT_TOP,
+        RIGHT_TOP,
+        RIGHT_BOT
+    };
 
     // GameObject
     void Update() override;
@@ -52,8 +59,6 @@ private:
 
     void UpdateBasedOnAnchorSide();
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // RECTTRANSFORMANCHORSELECTIONGIZMO_H
-
+#endif  // RECTTRANSFORMANCHORSELECTIONGIZMO_H

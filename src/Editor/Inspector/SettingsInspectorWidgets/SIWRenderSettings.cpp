@@ -1,7 +1,7 @@
 #include "BangEditor/SIWRenderSettings.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 SIWRenderSettings::SIWRenderSettings()
 {

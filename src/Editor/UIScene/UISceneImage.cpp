@@ -12,6 +12,7 @@
 #include "Bang/ResourceHandle.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/ShaderProgramFactory.h"
+#include "Bang/Texture2D.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutElement.h"
 #include "BangEditor/EditorCamera.h"
@@ -19,7 +20,7 @@
 #include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/UISceneDebugStats.h"
 
-USING_NAMESPACE_BANG_EDITOR
+using namespace BangEditor;
 
 UISceneImage::UISceneImage()
 {
@@ -28,7 +29,7 @@ UISceneImage::UISceneImage()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetFlexibleSize( Vector2::One );
+    le->SetFlexibleSize(Vector2::One);
 
     AddComponent<UIImageRenderer>()->SetTint(Color::Black);
 
@@ -36,16 +37,15 @@ UISceneImage::UISceneImage()
     // BANG_UNUSED(vl);
 
     GameObject *sceneImgGo = GameObjectFactory::CreateUIGameObject();
-    p_sceneImg  = sceneImgGo->AddComponent<UISceneImageRenderer>();
+    p_sceneImg = sceneImgGo->AddComponent<UISceneImageRenderer>();
     p_sceneImg->SetMode(UIImageRenderer::Mode::TEXTURE);
-    p_sceneImg->GetMaterial()->SetShaderProgram(
-        ShaderProgramFactory::Get(
-                        EPATH("Shaders/UIImageRenderer.vert"),
-                        EditorPaths::GetEditorAssetsDir().
-                            Append("Shaders").Append("UISceneImage.frag")));
+    p_sceneImg->GetMaterial()->SetShaderProgram(ShaderProgramFactory::Get(
+        EPATH("Shaders/UIImageRenderer.vert"),
+        EditorPaths::GetEditorAssetsDir().Append("Shaders").Append(
+            "UISceneImage.frag")));
 
     UILayoutElement *imgLE = sceneImgGo->AddComponent<UILayoutElement>();
-    imgLE->SetFlexibleSize( Vector2::One );
+    imgLE->SetFlexibleSize(Vector2::One);
 
     p_sceneDebugStats = GameObject::Create<UISceneDebugStats>();
 
@@ -57,7 +57,6 @@ UISceneImage::UISceneImage()
 
 UISceneImage::~UISceneImage()
 {
-
 }
 
 void UISceneImage::Update()
@@ -70,47 +69,47 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
     Camera *sceneCam = GetCamera();
     GBuffer *gb = sceneCam ? sceneCam->GetGBuffer() : nullptr;
     ShaderProgram *sp = p_sceneImg->GetMaterial()->GetShaderProgram();
-    switch (GetRenderMode())
+    switch(GetRenderMode())
     {
         case UISceneImage::RenderMode::DEPTH:
         case UISceneImage::RenderMode::SELECTION:
         case UISceneImage::RenderMode::WORLD_POSITION:
         {
-            switch (GetRenderMode())
+            switch(GetRenderMode())
             {
                 case UISceneImage::RenderMode::DEPTH:
                 case UISceneImage::RenderMode::WORLD_POSITION:
                 {
-                if (gb && sp)
-                {
-                    Texture2D *depthTex = gb->GetSceneDepthStencilTexture();
-                    sp->SetTexture2D("B_SceneDepthStencilTex", depthTex);
-                }
+                    if(gb && sp)
+                    {
+                        Texture2D *depthTex = gb->GetSceneDepthStencilTexture();
+                        sp->SetTexture2D("B_SceneDepthStencilTex", depthTex);
+                    }
                 }
                 break;
 
                 case UISceneImage::RenderMode::SELECTION:
                 {
-                EditorCamera *edCam = EditorCamera::GetInstance();
-                SelectionFramebuffer *sfb = edCam->GetSelectionFramebuffer();
-                if (sfb)
-                {
-                    Texture2D *selectionTex = sfb->GetColorTexture().Get();
-                    sp->SetTexture2D("B_SelectionTex", selectionTex);
-                }
+                    EditorCamera *edCam = EditorCamera::GetInstance();
+                    SelectionFramebuffer *sfb =
+                        edCam->GetSelectionFramebuffer();
+                    if(sfb)
+                    {
+                        Texture2D *selectionTex = sfb->GetColorTexture().Get();
+                        sp->SetTexture2D("B_SelectionTex", selectionTex);
+                    }
                 }
                 break;
 
                 default: break;
             }
-
         }
         break;
 
         default: break;
     }
 
-    if (gb)
+    if(gb)
     {
         GL::Push(GL::BindTarget::SHADER_PROGRAM);
 
@@ -121,14 +120,13 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
     }
 
     GameObject::Render(renderPass, renderChildren);
-
 }
 
 void UISceneImage::SetSceneImageCamera(Camera *sceneCam)
 {
     p_currentCamera = sceneCam;
 
-    if (sceneCam)
+    if(sceneCam)
     {
         GBuffer *camGBuffer = sceneCam->GetGBuffer();
 
@@ -146,16 +144,16 @@ void UISceneImage::SetSceneImageCamera(Camera *sceneCam)
 
 void UISceneImage::SetRenderMode(UISceneImage::RenderMode renderMode)
 {
-    if (renderMode != GetRenderMode())
+    if(renderMode != GetRenderMode())
     {
         m_renderMode = renderMode;
-        SetSceneImageCamera( GetCamera() );
+        SetSceneImageCamera(GetCamera());
     }
 }
 
 void UISceneImage::SetShowDebugStats(bool showDebugStats)
 {
-    p_sceneDebugStats->SetVisible( showDebugStats );
+    p_sceneDebugStats->SetVisible(showDebugStats);
 }
 
 Camera *UISceneImage::GetCamera() const

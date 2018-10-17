@@ -16,18 +16,20 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class Texture2D;
-FORWARD   class UILabel;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class Texture2D;
+class UILabel;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UIInputTexture;
-FORWARD class UITextureCubeMapPreviewer;
+using namespace Bang;
+namespace BangEditor
+{
+class UIInputTexture;
+class UITextureCubeMapPreviewer;
 
 class RIWTextureCubeMap : public RIWResource<TextureCubeMap>
 {
@@ -38,12 +40,12 @@ public:
     void Init() override;
 
 private:
-    UIInputTexture *p_topTextureInput   = nullptr;
-    UIInputTexture *p_botTextureInput   = nullptr;
+    UIInputTexture *p_topTextureInput = nullptr;
+    UIInputTexture *p_botTextureInput = nullptr;
     UIInputTexture *p_rightTextureInput = nullptr;
-    UIInputTexture *p_leftTextureInput  = nullptr;
+    UIInputTexture *p_leftTextureInput = nullptr;
     UIInputTexture *p_frontTextureInput = nullptr;
-    UIInputTexture *p_backTextureInput  = nullptr;
+    UIInputTexture *p_backTextureInput = nullptr;
     UITextureCubeMapPreviewer *p_textureCMPreviewer = nullptr;
     UILabel *p_warningLabel = nullptr;
 
@@ -59,12 +61,9 @@ private:
     Texture2D *GetIconTexture() const override;
 
     // RIWResource
-    void OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *object)
-                                                                    override;
-
+    void OnValueChangedRIWResource(
+        EventEmitter<IEventsValueChanged> *object) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // RIWTEXTURECUBEMAP_H
-
+#endif  // RIWTEXTURECUBEMAP_H

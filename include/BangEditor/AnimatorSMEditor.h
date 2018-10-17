@@ -17,19 +17,21 @@
 #include "Bang/UIButton.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class Animator;
-FORWARD   class AnimatorStateMachine;
-FORWARD_T class EventEmitter;
-FORWARD   class IEventsValueChanged;
-FORWARD   class UIButton;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Animator;
+class AnimatorStateMachine;
+template <class>
+class EventEmitter;
+class IEventsValueChanged;
+class UIButton;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class AnimatorSMEditorScene;
-FORWARD class UIInputArray;
+using namespace Bang;
+namespace BangEditor
+{
+class AnimatorSMEditorScene;
+class UIInputArray;
 
 class AnimatorSMEditor : public GameObject,
                          public EventListener<IEventsValueChanged>
@@ -37,15 +39,15 @@ class AnimatorSMEditor : public GameObject,
     GAMEOBJECT_EDITOR(AnimatorSMEditor);
 
 public:
-	AnimatorSMEditor();
-	virtual ~AnimatorSMEditor() override;
+    AnimatorSMEditor();
+    virtual ~AnimatorSMEditor() override;
 
     // GameObject
     void Update() override;
 
     void SetAnimatorSM(AnimatorStateMachine *animatorSM);
 
-    AnimatorStateMachine* GetAnimatorSM() const;
+    AnimatorStateMachine *GetAnimatorSM() const;
 
 private:
     Time m_lastVariablesInputUpdateTime;
@@ -60,8 +62,6 @@ private:
     // IEventsValueChanged
     virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *ee) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // ANIMATORSMEDITOR_H
-
+#endif  // ANIMATORSMEDITOR_H

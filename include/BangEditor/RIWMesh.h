@@ -17,17 +17,19 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class Texture2D;
-FORWARD   class UIInputNumber;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class Texture2D;
+class UIInputNumber;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class PreviewViewer;
+using namespace Bang;
+namespace BangEditor
+{
+class PreviewViewer;
 
 class RIWMesh : public RIWResource<Mesh>
 {
@@ -39,7 +41,7 @@ public:
 
 private:
     PreviewViewer *p_meshPreviewViewer = nullptr;
-    UIInputNumber *p_numVertices  = nullptr;
+    UIInputNumber *p_numVertices = nullptr;
     UIInputNumber *p_numTriangles = nullptr;
     UIInputNumber *p_numBones = nullptr;
 
@@ -51,16 +53,14 @@ private:
     // RIWResource
     void OnResourceSet() override;
     void UpdateInputsFromResource() override;
-    Texture2D* GetIconTexture() const override;
+    Texture2D *GetIconTexture() const override;
 
     // RIWResource
-    void OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *object) override;
+    void OnValueChangedRIWResource(
+        EventEmitter<IEventsValueChanged> *object) override;
 
     friend class ResourceInspectorWidgetFactory;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // RIWMESH_H
-
-
+#endif  // RIWMESH_H

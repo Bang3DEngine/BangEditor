@@ -18,32 +18,32 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ResourcePreviewFactory.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Texture2D;
-FORWARD class UIFocusable;
-FORWARD class UIImageRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Texture2D;
+class UIFocusable;
+class UIImageRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-class PreviewViewer : public GameObject,
-                      public EventListener<IEventsFocus>
+using namespace Bang;
+namespace BangEditor
+{
+class PreviewViewer : public GameObject, public EventListener<IEventsFocus>
 {
     GAMEOBJECT_EDITOR(PreviewViewer);
 
 public:
-    using ImageProviderFunc = std::function<RH<Texture2D>(
-                                     const ResourcePreviewFactoryParameters&)>;
+    using ImageProviderFunc =
+        std::function<RH<Texture2D>(const ResourcePreviewFactoryParameters &)>;
 
-	PreviewViewer();
-	virtual ~PreviewViewer() override;
+    PreviewViewer();
+    virtual ~PreviewViewer() override;
 
     // GameObject
     void Update() override;
 
     void SetPreviewImageProvider(
-                    PreviewViewer::ImageProviderFunc previewImgProvider);
+        PreviewViewer::ImageProviderFunc previewImgProvider);
 
 private:
     UIFocusable *p_focusable = nullptr;
@@ -56,8 +56,6 @@ private:
     virtual UIEventResult OnUIEvent(UIFocusable *focusable,
                                     const UIEvent &event) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // PREVIEWVIEWER_H
-
+#endif  // PREVIEWVIEWER_H

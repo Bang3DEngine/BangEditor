@@ -9,8 +9,8 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UITextRenderer.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 UISceneDebugStats::UISceneDebugStats()
 {
@@ -64,4 +64,3 @@ void UISceneDebugStats::OnEnabled(Object *object)
     Object::OnEnabled(object);
     m_editorRenderFPSChrono.MarkBegin();
 }
-

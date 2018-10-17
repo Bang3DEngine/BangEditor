@@ -11,8 +11,8 @@
 #include "Bang/EventListener.h"
 #include "Bang/EventListener.tcc"
 #include "Bang/GameObject.h"
-#include "Bang/IEvents.h"
 #include "Bang/IEventsFocus.h"
+#include "Bang/IEventsName.h"
 #include "Bang/ITreeItem.h"
 #include "Bang/String.h"
 #include "Bang/UIList.h"
@@ -20,22 +20,23 @@
 #include "BangEditor/IEventsHierarchyItem.h"
 #include "BangEditor/UIContextMenu.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsName;
-FORWARD class Object;
-FORWARD class UIFocusable;
-FORWARD class UIDragDroppable;
-FORWARD class UILabel;
-FORWARD class UITextRenderer;
-FORWARD class UITree;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsName;
+class Object;
+class UIFocusable;
+class UIDragDroppable;
+class UILabel;
+class UITextRenderer;
+class UITree;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class IEventsHierarchyItem;
-FORWARD class MenuItem;
-FORWARD class UIContextMenu;
+using namespace Bang;
+namespace BangEditor
+{
+class IEventsHierarchyItem;
+class MenuItem;
+class UIContextMenu;
 
 class HierarchyItem : public GameObject,
                       public ITreeItem,
@@ -96,8 +97,6 @@ private:
 
     void SetText(const String &text);
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // HIERARCHYITEM_H
-
+#endif  // HIERARCHYITEM_H

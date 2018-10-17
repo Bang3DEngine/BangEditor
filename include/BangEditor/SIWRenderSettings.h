@@ -6,23 +6,21 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SettingsInspectorWidget.h"
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UITabContainer;
+using namespace Bang;
+namespace BangEditor
+{
+class UITabContainer;
 
 class SIWRenderSettings : public SettingsInspectorWidget
 {
 public:
-	SIWRenderSettings();
-	virtual ~SIWRenderSettings() override;
+    SIWRenderSettings();
+    virtual ~SIWRenderSettings() override;
 
     // SettingsInspectorWidget
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // PROJECTSETTINGSDIALOG_H
-
+#endif  // PROJECTSETTINGSDIALOG_H

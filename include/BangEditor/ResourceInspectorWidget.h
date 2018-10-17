@@ -7,13 +7,14 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/InspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Texture2D;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Texture2D;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class ResourceInspectorWidget : public InspectorWidget
 {
 protected:
@@ -28,7 +29,7 @@ protected:
     Path GetPath() const;
 
     virtual void UpdateFromFileWhenChanged() = 0;
-    virtual Texture2D* GetIconTexture() const;
+    virtual Texture2D *GetIconTexture() const;
     virtual Color GetIconTint() const;
     void UpdateIcon();
 
@@ -37,8 +38,6 @@ private:
 
     friend class ResourceInspectorWidgetFactory;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // FILEINSPECTORWIDGET_H
-
+#endif  // FILEINSPECTORWIDGET_H

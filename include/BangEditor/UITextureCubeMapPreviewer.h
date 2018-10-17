@@ -17,26 +17,27 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ResourcePreviewFactory.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD class Material;
-FORWARD class TextureCubeMap;
-FORWARD class UIFocusable;
-FORWARD class UIAspectRatioFitter;
-FORWARD class UIImageRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class Material;
+class TextureCubeMap;
+class UIFocusable;
+class UIAspectRatioFitter;
+class UIImageRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class UITextureCubeMapPreviewer : public GameObject,
                                   public EventEmitter<IEventsValueChanged>
 {
     GAMEOBJECT_EDITOR(UITextureCubeMapPreviewer);
 
 public:
-	UITextureCubeMapPreviewer();
-	virtual ~UITextureCubeMapPreviewer() override;
+    UITextureCubeMapPreviewer();
+    virtual ~UITextureCubeMapPreviewer() override;
 
     // GameObject
     void Update() override;
@@ -53,8 +54,6 @@ private:
     UIImageRenderer *p_previewImageRenderer = nullptr;
     UIAspectRatioFitter *p_previewImgAspectRatioFitter = nullptr;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UITEXTURECUBEMAPPREVIEWER_H
-
+#endif  // UITEXTURECUBEMAPPREVIEWER_H

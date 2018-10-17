@@ -14,38 +14,38 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/IEventsProjectManager.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Path;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Path;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class IEventsProjectManager;
-FORWARD class Project;
+using namespace Bang;
+namespace BangEditor
+{
+class IEventsProjectManager;
+class Project;
 
 class ProjectManager : public EventEmitter<IEventsProjectManager>
 {
 public:
     ProjectManager();
 
-    static Project* OpenProject(const Path &projectFilepath);
+    static Project *OpenProject(const Path &projectFilepath);
 
-    static Project* CreateNewProject(const Path &projectDirPath,
+    static Project *CreateNewProject(const Path &projectDirPath,
                                      const String &projectName);
-    static Project* CreateNewProjectFileOnly(const Path &projectFilepath);
+    static Project *CreateNewProjectFileOnly(const Path &projectFilepath);
     static void ExportProject(const Project *project);
     static void ExportCurrentProject();
     static bool CloseCurrentProject();
 
-    static Project* GetCurrentProject();
+    static Project *GetCurrentProject();
 
     static ProjectManager *GetInstance();
 
 private:
     static Project *s_currentProject;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // PROJECTMANAGER_H
+#endif  // PROJECTMANAGER_H

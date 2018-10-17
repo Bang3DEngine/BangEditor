@@ -14,9 +14,9 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/Shortcut.h"
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class ShortcutManager
 {
 public:
@@ -37,8 +37,6 @@ private:
 
     friend class EditorWindow;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // SHORTCUTMANAGER_H
-
+#endif  // SHORTCUTMANAGER_H

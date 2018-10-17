@@ -22,16 +22,16 @@
 #include "Bang/UICheckBox.h"
 #include "BangEditor/UIInputFileWithPreview.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 CIWRenderer::CIWRenderer()
 {
-
 }
 
 CIWRenderer::~CIWRenderer()
@@ -46,25 +46,31 @@ void CIWRenderer::InitInnerWidgets()
     SetTitle("Renderer");
 
     p_visibleCheckBox = GameObjectFactory::CreateUICheckBox();
-    p_visibleCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_visibleCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_castsShadowsCheckBox = GameObjectFactory::CreateUICheckBox();
-    p_castsShadowsCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_castsShadowsCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_receivesShadowsCheckBox = GameObjectFactory::CreateUICheckBox();
-    p_receivesShadowsCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_receivesShadowsCheckBox
+        ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_useReflectionProbesCheckBox = GameObjectFactory::CreateUICheckBox();
-    p_useReflectionProbesCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_useReflectionProbesCheckBox
+        ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_materialInputFile = GameObject::Create<UIInputFileWithPreview>();
     p_materialInputFile->SetExtensions({Extensions::GetMaterialExtension()});
-    p_materialInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_materialInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     AddWidget("Visible", p_visibleCheckBox->GetGameObject());
     AddWidget("Casts Shadows", p_castsShadowsCheckBox->GetGameObject());
     AddWidget("Receives Shadows", p_receivesShadowsCheckBox->GetGameObject());
-    AddWidget("Use Reflection Probes", p_useReflectionProbesCheckBox->GetGameObject());
+    AddWidget("Use Reflection Probes",
+              p_useReflectionProbesCheckBox->GetGameObject());
     AddWidget("Material", p_materialInputFile);
 
     SetLabelsWidth(60);
@@ -76,11 +82,11 @@ void CIWRenderer::UpdateFromReference()
 
     EventListener<IEventsValueChanged>::SetReceiveEvents(false);
 
-    p_visibleCheckBox->SetChecked( GetRenderer()->IsVisible() );
-    p_castsShadowsCheckBox->SetChecked( GetRenderer()->GetCastsShadows() );
-    p_receivesShadowsCheckBox->SetChecked( GetRenderer()->GetReceivesShadows() );
+    p_visibleCheckBox->SetChecked(GetRenderer()->IsVisible());
+    p_castsShadowsCheckBox->SetChecked(GetRenderer()->GetCastsShadows());
+    p_receivesShadowsCheckBox->SetChecked(GetRenderer()->GetReceivesShadows());
     p_useReflectionProbesCheckBox->SetChecked(
-                                       GetRenderer()->GetUseReflectionProbes() );
+        GetRenderer()->GetUseReflectionProbes());
 
     Material *mat = GetRenderer()->GetSharedMaterial();
     Path matPath = mat ? mat->GetResourceFilepath() : Path::Empty;
@@ -91,33 +97,35 @@ void CIWRenderer::UpdateFromReference()
 
 Renderer *CIWRenderer::GetRenderer() const
 {
-    return SCAST<Renderer*>( GetComponent() );
+    return SCAST<Renderer *>(GetComponent());
 }
 
 void CIWRenderer::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChangedCIW(object);
 
-    if (object == p_visibleCheckBox)
+    if(object == p_visibleCheckBox)
     {
         GetRenderer()->SetVisible(p_visibleCheckBox->IsChecked());
     }
-    else if (object == p_castsShadowsCheckBox)
+    else if(object == p_castsShadowsCheckBox)
     {
         GetRenderer()->SetCastsShadows(p_castsShadowsCheckBox->IsChecked());
     }
-    else if (object == p_receivesShadowsCheckBox)
+    else if(object == p_receivesShadowsCheckBox)
     {
-        GetRenderer()->SetReceivesShadows(p_receivesShadowsCheckBox->IsChecked());
+        GetRenderer()->SetReceivesShadows(
+            p_receivesShadowsCheckBox->IsChecked());
     }
-    else if (object == p_useReflectionProbesCheckBox)
+    else if(object == p_useReflectionProbesCheckBox)
     {
         GetRenderer()->SetUseReflectionProbes(
-                            p_useReflectionProbesCheckBox->IsChecked() );
+            p_useReflectionProbesCheckBox->IsChecked());
     }
-    else if (object == p_materialInputFile)
+    else if(object == p_materialInputFile)
     {
-        RH<Material> mat = Resources::Load<Material>(p_materialInputFile->GetPath());
+        RH<Material> mat =
+            Resources::Load<Material>(p_materialInputFile->GetPath());
         GetRenderer()->SetMaterial(mat.Get());
     }
 }

@@ -21,12 +21,13 @@
 #include "Bang/UIInputNumber.h"
 #include "BangEditor/UIInputFileWithPreview.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 void CIWPostProcessEffect::InitInnerWidgets()
 {
@@ -41,8 +42,9 @@ void CIWPostProcessEffect::InitInnerWidgets()
 
     p_fragmentShaderInput = GameObject::Create<UIInputFileWithPreview>();
     p_fragmentShaderInput->SetExtensions(
-                            Extensions::GetFragmentShaderExtensions() );
-    p_fragmentShaderInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+        Extensions::GetFragmentShaderExtensions());
+    p_fragmentShaderInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
     p_fragmentShaderInput->SetZoomable(false);
 
     p_typeComboBox = GameObjectFactory::CreateUIComboBox();
@@ -61,34 +63,35 @@ void CIWPostProcessEffect::UpdateFromReference()
 {
     PostProcessEffect *ppe = GetPostProcessEffect();
 
-    p_priorityInput->SetValue( ppe->GetPriority() );
-    p_fragmentShaderInput->SetPath( ppe->GetPostProcessShaderFilepath() );
-    p_typeComboBox->SetSelectionByValue( SCAST<int>(ppe->GetType()) );
+    p_priorityInput->SetValue(ppe->GetPriority());
+    p_fragmentShaderInput->SetPath(ppe->GetPostProcessShaderFilepath());
+    p_typeComboBox->SetSelectionByValue(SCAST<int>(ppe->GetType()));
 }
 
 PostProcessEffect *CIWPostProcessEffect::GetPostProcessEffect() const
 {
-    return SCAST<PostProcessEffect*>( GetComponent() );
+    return SCAST<PostProcessEffect *>(GetComponent());
 }
 
-void CIWPostProcessEffect::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
+void CIWPostProcessEffect::OnValueChangedCIW(
+    EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChangedCIW(object);
 
     PostProcessEffect *ppe = GetPostProcessEffect();
 
     ppe->SetType(
-        SCAST<PostProcessEffect::Type>(p_typeComboBox->GetSelectedValue()) );
-    ppe->SetPriority( p_priorityInput->GetValue() );
+        SCAST<PostProcessEffect::Type>(p_typeComboBox->GetSelectedValue()));
+    ppe->SetPriority(p_priorityInput->GetValue());
 
-    if (p_fragmentShaderInput->GetPath().IsFile())
+    if(p_fragmentShaderInput->GetPath().IsFile())
     {
         const Path fragPath = p_fragmentShaderInput->GetPath();
         RH<Shader> shader = Resources::Load<Shader>(fragPath);
-        ppe->SetPostProcessShader( shader.Get() );
+        ppe->SetPostProcessShader(shader.Get());
     }
     else
     {
-        ppe->SetPostProcessShader( nullptr );
+        ppe->SetPostProcessShader(nullptr);
     }
 }

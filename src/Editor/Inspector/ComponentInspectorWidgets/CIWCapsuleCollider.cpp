@@ -13,12 +13,13 @@
 #include "Bang/UIComboBox.h"
 #include "Bang/UIInputNumber.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 CIWCapsuleCollider::CIWCapsuleCollider()
 {
@@ -61,31 +62,32 @@ void CIWCapsuleCollider::UpdateFromReference()
     CIWCollider::UpdateFromReference();
 
     CapsuleCollider *cc = GetCapsuleCollider();
-    if (!p_radiusInput->HasFocus())
+    if(!p_radiusInput->HasFocus())
     {
-        p_radiusInput->SetValue( cc->GetRadius() );
+        p_radiusInput->SetValue(cc->GetRadius());
     }
-    if (!p_heightInput->HasFocus())
+    if(!p_heightInput->HasFocus())
     {
-        p_heightInput->SetValue( cc->GetHeight() );
+        p_heightInput->SetValue(cc->GetHeight());
     }
-    if (!p_axisInput->HasFocus())
+    if(!p_axisInput->HasFocus())
     {
-        p_axisInput->SetSelectionByValue( SCAST<int>(cc->GetAxis()) );
+        p_axisInput->SetSelectionByValue(SCAST<int>(cc->GetAxis()));
     }
 }
 
-void CIWCapsuleCollider::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
+void CIWCapsuleCollider::OnValueChangedCIW(
+    EventEmitter<IEventsValueChanged> *object)
 {
     CIWCollider::OnValueChangedCIW(object);
 
     CapsuleCollider *capsuleCollider = GetCapsuleCollider();
-    capsuleCollider->SetRadius( p_radiusInput->GetValue() );
-    capsuleCollider->SetHeight( p_heightInput->GetValue() );
-    capsuleCollider->SetAxis( SCAST<Axis3D>(p_axisInput->GetSelectedValue()) );
+    capsuleCollider->SetRadius(p_radiusInput->GetValue());
+    capsuleCollider->SetHeight(p_heightInput->GetValue());
+    capsuleCollider->SetAxis(SCAST<Axis3D>(p_axisInput->GetSelectedValue()));
 }
 
 CapsuleCollider *CIWCapsuleCollider::GetCapsuleCollider() const
 {
-    return SCAST<CapsuleCollider*>( GetCollider() );
+    return SCAST<CapsuleCollider *>(GetCollider());
 }

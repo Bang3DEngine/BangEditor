@@ -7,19 +7,21 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class Light;
-FORWARD   class UIComboBox;
-FORWARD   class UIInputNumber;
-FORWARD   class UISlider;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class Light;
+class UIComboBox;
+class UIInputNumber;
+class UISlider;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UIInputColor;
+using namespace Bang;
+namespace BangEditor
+{
+class UIInputColor;
 
 class CIWLight : public ComponentInspectorWidget
 {
@@ -37,7 +39,8 @@ protected:
     Light *GetLight() const;
 
     // ComponentInspectorWidget
-    virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
+    virtual void OnValueChangedCIW(
+        EventEmitter<IEventsValueChanged> *object) override;
 
 private:
     UIInputNumber *p_intensityInput = nullptr;
@@ -46,8 +49,6 @@ private:
     UISlider *p_shadowBiasInput = nullptr;
     UISlider *p_shadowMapSizeInput = nullptr;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWLIGHT_H
-
+#endif  // CIWLIGHT_H

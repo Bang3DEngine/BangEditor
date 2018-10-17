@@ -6,8 +6,8 @@
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 void EditorClipboard::CopyComponent(Component *component)
 {
@@ -29,7 +29,7 @@ bool EditorClipboard::HasCopiedComponent()
 
 void EditorClipboard::ClearCopiedComponent()
 {
-    if (GetCopiedComponent())
+    if(GetCopiedComponent())
     {
         Component::Destroy(GetCopiedComponent());
 
@@ -37,7 +37,6 @@ void EditorClipboard::ClearCopiedComponent()
         ec->m_copiedComponent = nullptr;
     }
 }
-
 
 void EditorClipboard::CopyGameObject(GameObject *gameObject)
 {
@@ -59,7 +58,7 @@ bool EditorClipboard::HasCopiedGameObject()
 
 void EditorClipboard::ClearCopiedGameObject()
 {
-    if (GetCopiedGameObject())
+    if(GetCopiedGameObject())
     {
         GameObject::Destroy(GetCopiedGameObject());
 

@@ -5,24 +5,26 @@
 #include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/UISceneEditContainer.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class GameObject;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class GameObject;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 bool Selection::IsBeingRendered()
 {
     EditorCamera *edCam = EditorCamera::GetInstance();
-    SelectionFramebuffer *sfb = (edCam ? edCam->GetSelectionFramebuffer() :
-                                         nullptr);
+    SelectionFramebuffer *sfb =
+        (edCam ? edCam->GetSelectionFramebuffer() : nullptr);
     return sfb ? GL::IsBound(sfb) : false;
 }
 
 GameObject *Selection::GetOveredGameObject()
 {
-    const Vector2i &vpPoint = UISceneEditContainer::GetMousePositionInOpenScene();
+    const Vector2i &vpPoint =
+        UISceneEditContainer::GetMousePositionInOpenScene();
     return GetOveredGameObject(vpPoint);
 }
 
@@ -34,13 +36,12 @@ SelectionFramebuffer *Selection::GetSelectionFramebuffer()
 
 GameObject *Selection::GetOveredGameObject(const Vector2i &vpPoint)
 {
-    if (EditorCamera *edCam = EditorCamera::GetInstance())
+    if(EditorCamera *edCam = EditorCamera::GetInstance())
     {
-        if (SelectionFramebuffer *sfb = edCam->GetSelectionFramebuffer())
+        if(SelectionFramebuffer *sfb = edCam->GetSelectionFramebuffer())
         {
             return sfb->GetGameObjectInViewportPoint(vpPoint);
         }
     }
     return nullptr;
-
 }

@@ -22,12 +22,13 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIVerticalLayout.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Texture2D;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Texture2D;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 Console::Console()
 {
@@ -35,7 +36,7 @@ Console::Console()
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinSize(Vector2i(100));
-    le->SetFlexibleSize( Vector2::One );
+    le->SetFlexibleSize(Vector2::One);
 
     GameObjectFactory::CreateUIGameObjectInto(this);
 
@@ -56,8 +57,8 @@ Console::Console()
     toolBarLE->SetMinHeight(ToolBarHeight);
     toolBarLE->SetFlexibleHeight(0);
 
-    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::FLEXIBLE, 1.0f)->
-                       SetParent(toolBar);
+    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::FLEXIBLE, 1.0f)
+        ->SetParent(toolBar);
 
     UIButton *clearButton = GameObjectFactory::CreateUIButton("Clear");
     clearButton->AddClickedCallback([this]() { Clear(); });
@@ -66,12 +67,13 @@ Console::Console()
     p_messageList = GameObjectFactory::CreateUIList();
     // p_messageList->GetScrollPanel()->SetForceHorizontalFit(false);
     p_messageList->GetScrollPanel()->SetForceHorizontalFit(true);
-    p_messageList->GetScrollPanel()->GetScrollArea()->GetBackground()->
-                                     SetTint(Color::White.WithValue(0.7f));
-    p_messageList->GetScrollPanel()->SetVerticalScrollBarSide(HorizontalSide::RIGHT);
-    UILayoutElement *listLE = p_messageList->GetGameObject()->
-                              AddComponent<UILayoutElement>();
-    listLE->SetFlexibleSize( Vector2(1) );
+    p_messageList->GetScrollPanel()->GetScrollArea()->GetBackground()->SetTint(
+        Color::White.WithValue(0.7f));
+    p_messageList->GetScrollPanel()->SetVerticalScrollBarSide(
+        HorizontalSide::RIGHT);
+    UILayoutElement *listLE =
+        p_messageList->GetGameObject()->AddComponent<UILayoutElement>();
+    listLE->SetFlexibleSize(Vector2(1));
 
     toolBar->SetParent(mainVLGo);
     p_messageList->GetGameObject()->SetParent(mainVLGo);
@@ -81,14 +83,13 @@ Console::Console()
 
 Console::~Console()
 {
-
 }
 
 void Console::Update()
 {
     GameObject::Update();
 
-    for (const ConsoleMessage &cMsg : m_queuedMessages)
+    for(const ConsoleMessage &cMsg : m_queuedMessages)
     {
         ConsoleUIListEntry *entryGo = GameObject::Create<ConsoleUIListEntry>();
         entryGo->SetConsoleMessage(cMsg);
@@ -117,7 +118,7 @@ void Console::OnMessage(DebugMessageType msgType,
                         int line,
                         const String &fileName)
 {
-    if (msgType != DebugMessageType::DLOG)
+    if(msgType != DebugMessageType::DLOG)
     {
         ConsoleMessage cMsg;
         cMsg.msgType = msgType;
@@ -128,7 +129,6 @@ void Console::OnMessage(DebugMessageType msgType,
         AddMessage(cMsg);
     }
 }
-
 
 // ConsoleUIListEntry
 ConsoleUIListEntry::ConsoleUIListEntry()
@@ -145,10 +145,10 @@ ConsoleUIListEntry::ConsoleUIListEntry()
 
     GameObject *typeIconGo = GameObjectFactory::CreateUIGameObject();
     p_typeIconImg = typeIconGo->AddComponent<UIImageRenderer>();
-    p_typeIconImg->SetImageTexture( TextureFactory::GetWarningIcon() );
+    p_typeIconImg->SetImageTexture(TextureFactory::GetWarningIcon());
     UILayoutElement *iconLE = typeIconGo->AddComponent<UILayoutElement>();
-    iconLE->SetMinSize( Vector2i(20) );
-    iconLE->SetFlexibleSize( Vector2::Zero );
+    iconLE->SetMinSize(Vector2i(20));
+    iconLE->SetFlexibleSize(Vector2::Zero);
 
     GameObject *textGo = GameObjectFactory::CreateUIGameObject();
     p_msgText = textGo->AddComponent<UITextRenderer>();
@@ -157,7 +157,7 @@ ConsoleUIListEntry::ConsoleUIListEntry()
     p_msgText->SetWrapping(true);
     p_msgText->SetTextSize(12);
     UILayoutElement *textLE = textGo->AddComponent<UILayoutElement>();
-    textLE->SetFlexibleSize( Vector2::One );
+    textLE->SetFlexibleSize(Vector2::One);
 
     typeIconGo->SetParent(this);
     textGo->SetParent(this);
@@ -173,18 +173,18 @@ void ConsoleUIListEntry::SetConsoleMessage(const ConsoleMessage &cMsg)
     p_msgText->SetContent(cMsg.msgStr);
 
     Texture2D *iconTex = nullptr;
-    switch (cMsg.msgType)
+    switch(cMsg.msgType)
     {
         case DebugMessageType::LOG:
         case DebugMessageType::DLOG:
             iconTex = TextureFactory::GetInfoIcon();
-        break;
+            break;
         case DebugMessageType::WARN:
             iconTex = TextureFactory::GetWarningIcon();
-        break;
+            break;
         case DebugMessageType::ERROR:
             iconTex = TextureFactory::GetErrorIcon();
-        break;
+            break;
     }
     p_typeIconImg->SetImageTexture(iconTex);
 }

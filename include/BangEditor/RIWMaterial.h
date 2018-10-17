@@ -16,24 +16,26 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class Texture2D;
-FORWARD   class UICheckBox;
-FORWARD   class UIComboBox;
-FORWARD   class UIInputNumber;
-FORWARD   class UISlider;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class Texture2D;
+class UICheckBox;
+class UIComboBox;
+class UIInputNumber;
+class UISlider;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class PreviewViewer;
-FORWARD class UIInputColor;
-FORWARD class UIInputFileWithPreview;
-FORWARD class UIInputTexture;
-FORWARD class UIInputVector;
+using namespace Bang;
+namespace BangEditor
+{
+class PreviewViewer;
+class UIInputColor;
+class UIInputFileWithPreview;
+class UIInputTexture;
+class UIInputVector;
 
 class RIWMaterial : public RIWResource<Material>
 {
@@ -47,12 +49,12 @@ private:
     UIInputColor *p_albedoColorInput = nullptr;
     UIInputTexture *p_albedoTextureInput = nullptr;
     UIInputVector *p_albedoUvMultiplyInput = nullptr;
-    UIInputVector *p_albedoUvOffsetInput   = nullptr;
+    UIInputVector *p_albedoUvOffsetInput = nullptr;
     UIInputTexture *p_roughnessTextureInput = nullptr;
     UIInputTexture *p_metalnessTextureInput = nullptr;
     UIInputTexture *p_normalMapTextureInput = nullptr;
     UIInputVector *p_normalMapUvMultiplyInput = nullptr;
-    UIInputVector *p_normalMapUvOffsetInput   = nullptr;
+    UIInputVector *p_normalMapUvOffsetInput = nullptr;
     UIInputNumber *p_normalMapMultiplyFactorInput = nullptr;
     UICheckBox *p_receivesLightingCheckBox = nullptr;
     UISlider *p_metalnessSlider = nullptr;
@@ -66,22 +68,21 @@ private:
     UIInputFileWithPreview *p_fragmentShaderInput = nullptr;
     PreviewViewer *p_materialPreviewViewer = nullptr;
 
-	RIWMaterial();
+    RIWMaterial();
     virtual ~RIWMaterial() override;
 
     Material *GetMaterial() const;
 
     // RIWResource
     void UpdateInputsFromResource() override;
-    Texture2D* GetIconTexture() const override;
+    Texture2D *GetIconTexture() const override;
 
     // RIWResource
-    void OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *object) override;
+    void OnValueChangedRIWResource(
+        EventEmitter<IEventsValueChanged> *object) override;
 
     friend class ResourceInspectorWidgetFactory;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // RIWMATERIAL_H
-
+#endif  // RIWMATERIAL_H

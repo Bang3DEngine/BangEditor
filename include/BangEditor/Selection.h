@@ -5,15 +5,16 @@
 #include "Bang/BangDefines.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Camera;
-FORWARD class GameObject;
-FORWARD class Scene;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Camera;
+class GameObject;
+class Scene;
+}
 
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class SelectionFramebuffer;
+namespace BangEditor
+{
+class SelectionFramebuffer;
 
 class Selection
 {
@@ -24,7 +25,6 @@ public:
     static Bang::GameObject *GetOveredGameObject(const Bang::Vector2i &vpPoint);
     Selection() = delete;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // SELECTION_H
+#endif  // SELECTION_H

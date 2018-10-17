@@ -5,9 +5,9 @@
 
 #include "BangEditor/BangEditor.h"
 
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class ExplorerItem;
+namespace BangEditor
+{
+class ExplorerItem;
 
 class IEventsExplorerItem
 {
@@ -20,7 +20,6 @@ public:
     virtual void OnPastedOver(ExplorerItem *item) = 0;
     virtual void OnDroppedToDirectory(ExplorerItem *item) = 0;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // IEVENTSEXPLORERITEM_H
+#endif  // IEVENTSEXPLORERITEM_H

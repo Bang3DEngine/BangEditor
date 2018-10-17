@@ -20,17 +20,19 @@
 #include "BangEditor/EditorComponentsClassIds.h"
 #include "BangEditor/MenuItem.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsDestroy;
-FORWARD   class UIFocusable;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDestroy;
+class UIFocusable;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class ContextMenu;
-FORWARD class MenuItem;
+using namespace Bang;
+namespace BangEditor
+{
+class ContextMenu;
+class MenuItem;
 
 class UIContextMenu : public Component,
                       public EventListener<IEventsFocus>,
@@ -46,9 +48,10 @@ public:
     bool IsMenuBeingShown() const;
     void SetFocusable(UIFocusable *focusable);
 
-    using CreateContextMenuCallback = std::function<void(MenuItem *menuRootItem)>;
+    using CreateContextMenuCallback =
+        std::function<void(MenuItem *menuRootItem)>;
     void SetCreateContextMenuCallback(
-                std::function<void(MenuItem*)> createCallback);
+        std::function<void(MenuItem *)> createCallback);
 
 private:
     ContextMenu *p_menu = nullptr;
@@ -63,15 +66,12 @@ private:
     void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 };
 
-
 // ContextMenu
-class ContextMenu : public GameObject,
-                    public EventListener<IEventsFocus>
+class ContextMenu : public GameObject, public EventListener<IEventsFocus>
 {
     GAMEOBJECT_EDITOR(ContextMenu);
 
 public:
-
     // GameObject
     void Update() override;
 
@@ -93,8 +93,6 @@ private:
     // IEventsDestroy
     void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UICONTEXTMENU_H
-
+#endif  // UICONTEXTMENU_H

@@ -7,8 +7,8 @@
 #include "Bang/File.h"
 #include "Bang/String.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 UndoRedoFileChange::UndoRedoFileChange(const Path &path)
 {
@@ -19,12 +19,12 @@ UndoRedoFileChange::UndoRedoFileChange(const Path &path)
 
 UndoRedoFileChange::~UndoRedoFileChange()
 {
-    if (m_previousContents)
+    if(m_previousContents)
     {
         delete[] m_previousContents;
     }
 
-    if (m_newContents)
+    if(m_newContents)
     {
         delete[] m_newContents;
     }
@@ -60,8 +60,7 @@ void UndoRedoFileChange::Read(Byte **bytePointer, std::size_t *sizePointer)
 
     *bytePointer = new Byte[*sizePointer];
     ifs.seekg(0, std::ios::beg);
-    ifs.read(RCAST<char*>(*bytePointer), *sizePointer);
+    ifs.read(RCAST<char *>(*bytePointer), *sizePointer);
 
     ifs.close();
 }
-

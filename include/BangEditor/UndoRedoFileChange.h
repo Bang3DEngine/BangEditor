@@ -9,14 +9,14 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UndoRedoAction.h"
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class UndoRedoFileChange : public UndoRedoAction
 {
 public:
     UndoRedoFileChange(const Path &path);
-	virtual ~UndoRedoFileChange() override;
+    virtual ~UndoRedoFileChange() override;
 
     void ReadBefore();
     void ReadAfter();
@@ -35,8 +35,6 @@ private:
 
     void Read(Byte **bytePointer, std::size_t *sizePointer);
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UNDOREDOFILECHANGE_H
-
+#endif  // UNDOREDOFILECHANGE_H

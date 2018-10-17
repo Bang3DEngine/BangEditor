@@ -16,8 +16,8 @@
 #include "BangEditor/UndoRedoGameObjectSelection.h"
 #include "BangEditor/UndoRedoManager.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 Editor::Editor()
 {
@@ -32,8 +32,8 @@ Editor::~Editor()
 
 void Editor::Init()
 {
-    SceneManager::GetActive()->
-                  EventEmitter<IEventsSceneManager>::RegisterListener(this);
+    SceneManager::GetActive()
+        ->EventEmitter<IEventsSceneManager>::RegisterListener(this);
 }
 
 GameObject *Editor::GetSelectedGameObject()
@@ -49,41 +49,42 @@ void Editor::SelectGameObject(GameObject *selectedGameObject, bool registerUndo)
     ed->SelectGameObject_(selectedGameObject, registerUndo);
 }
 
-void Editor::SelectGameObject_(GameObject *selectedGameObject, bool registerUndo)
+void Editor::SelectGameObject_(GameObject *selectedGameObject,
+                               bool registerUndo)
 {
-    bool isSelectable = !selectedGameObject ||
-         (!selectedGameObject->GetComponent<NotSelectableInEditor>() &&
-          !selectedGameObject->GetComponentInAncestors<NotSelectableInEditor>());
+    bool isSelectable =
+        !selectedGameObject ||
+        (!selectedGameObject->GetComponent<NotSelectableInEditor>() &&
+         !selectedGameObject->GetComponentInAncestors<NotSelectableInEditor>());
 
-    if (selectedGameObject != GetSelectedGameObject())
+    if(selectedGameObject != GetSelectedGameObject())
     {
-        if (false && registerUndo && isSelectable)
+        if(false && registerUndo && isSelectable)
         {
-            UndoRedoManager::PushAction(
-                        new UndoRedoGameObjectSelection(GetSelectedGameObject(),
-                                                        selectedGameObject));
+            UndoRedoManager::PushAction(new UndoRedoGameObjectSelection(
+                GetSelectedGameObject(), selectedGameObject));
         }
 
-        if (isSelectable)
+        if(isSelectable)
         {
             p_selectedGameObject = selectedGameObject;
-            if (GetSelectedGameObject())
+            if(GetSelectedGameObject())
             {
-                GetSelectedGameObject()->
-                        EventEmitter<IEventsDestroy>::RegisterListener(this);
+                GetSelectedGameObject()
+                    ->EventEmitter<IEventsDestroy>::RegisterListener(this);
             }
 
             // Propagate event
-            EventEmitter<IEventsEditor>::
-                PropagateToListeners(&EventListener<IEventsEditor>::OnGameObjectSelected,
-                                     GetSelectedGameObject());
+            EventEmitter<IEventsEditor>::PropagateToListeners(
+                &EventListener<IEventsEditor>::OnGameObjectSelected,
+                GetSelectedGameObject());
         }
     }
 }
 
 void Editor::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
-    if (GetSelectedGameObject() == object)
+    if(GetSelectedGameObject() == object)
     {
         Editor::SelectGameObject(nullptr, false);
     }
@@ -91,7 +92,7 @@ void Editor::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 
 void Editor::OnPathSelected(const Path &path)
 {
-    if (path.IsFile())
+    if(path.IsFile())
     {
         Editor::SelectGameObject(nullptr, false);
     }
@@ -99,7 +100,7 @@ void Editor::OnPathSelected(const Path &path)
     Editor *ed = Editor::GetInstance();
     ASSERT(ed);
     ed->EventEmitter<IEventsEditor>::PropagateToListeners(
-                &IEventsEditor::OnExplorerPathSelected, path);
+        &IEventsEditor::OnExplorerPathSelected, path);
 }
 
 bool Editor::IsEditingScene()
@@ -112,7 +113,7 @@ EditorSettings *Editor::GetEditorSettings() const
     return m_editorSettings;
 }
 
-void Editor::OnSceneLoaded(Scene*, const Path &)
+void Editor::OnSceneLoaded(Scene *, const Path &)
 {
     Editor::SelectGameObject(nullptr, false);
 }
@@ -122,4 +123,3 @@ Editor *Editor::GetInstance()
     EditorApplication *edApp = EditorApplication::GetInstance();
     return edApp ? edApp->GetEditor() : nullptr;
 }
-

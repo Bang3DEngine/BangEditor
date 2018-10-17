@@ -16,19 +16,21 @@
 #include "Bang/UMap.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsDestroy;
-FORWARD   class GameObject;
-FORWARD   class Material;
-FORWARD   class Renderer;
-FORWARD   class Scene;
-FORWARD   class ShaderProgram;
-FORWARD   class Texture2D;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDestroy;
+class GameObject;
+class Material;
+class Renderer;
+class Scene;
+class ShaderProgram;
+class Texture2D;
+template <class>
+class EventEmitter;
+}
 
-NAMESPACE_BANG_EDITOR_BEGIN
-
+namespace BangEditor
+{
 class SelectionFramebuffer : public Framebuffer,
                              public EventListener<IEventsDestroy>
 {
@@ -57,8 +59,8 @@ private:
 
     bool m_drawOverlay = true;
     GameObject *p_nextRenderSelectable = nullptr;
-    mutable UMap<GameObject*, IdType> m_gameObject_To_Id;
-    mutable UMap<IdType, GameObject*> m_id_To_GameObject;
+    mutable UMap<GameObject *, IdType> m_gameObject_To_Id;
+    mutable UMap<IdType, GameObject *> m_id_To_GameObject;
 
     void RenderForSelectionBuffer(Renderer *renderer);
 
@@ -70,7 +72,6 @@ private:
     friend class Gizmos;
     friend class GEngine;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // SELECTIONFRAMEBUFFER_H
+#endif  // SELECTIONFRAMEBUFFER_H

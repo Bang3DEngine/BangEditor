@@ -7,16 +7,18 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class Transform;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class Transform;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UIInputVector;
+using namespace Bang;
+namespace BangEditor
+{
+class UIInputVector;
 
 class CIWTransform : public ComponentInspectorWidget
 {
@@ -37,8 +39,8 @@ protected:
     void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
-    UIInputVector *p_posIV   = nullptr;
-    UIInputVector *p_rotIV   = nullptr;
+    UIInputVector *p_posIV = nullptr;
+    UIInputVector *p_rotIV = nullptr;
     UIInputVector *p_scaleIV = nullptr;
 
     Transform *GetTransform() const;
@@ -46,8 +48,6 @@ private:
     // ComponentWidget
     bool MustShowEnabledCheckbox() const override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWTRANSFORM_H
-
+#endif  // CIWTRANSFORM_H

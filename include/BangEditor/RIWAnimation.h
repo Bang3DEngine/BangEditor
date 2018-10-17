@@ -14,19 +14,21 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class Texture2D;
-FORWARD   class UIComboBox;
-FORWARD   class UIInputNumber;
-FORWARD   class UIInputText;
-FORWARD   class UISlider;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class Texture2D;
+class UIComboBox;
+class UIInputNumber;
+class UIInputText;
+class UISlider;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class RIWAnimation : public RIWResource<Animation>
 {
     GAMEOBJECT_EDITOR(RIWAnimation);
@@ -50,12 +52,10 @@ private:
     void UpdateInputsFromResource() override;
     Texture2D *GetIconTexture() const override;
     void OnValueChangedRIWResource(
-                        EventEmitter<IEventsValueChanged> *object) override;
+        EventEmitter<IEventsValueChanged> *object) override;
 
     friend class ResourceInspectorWidgetFactory;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // RIWANIMATION_H
-
+#endif  // RIWANIMATION_H

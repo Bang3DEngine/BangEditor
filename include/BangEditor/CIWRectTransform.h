@@ -7,16 +7,18 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWTransform.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class RectTransform;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class RectTransform;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UIInputVector;
+using namespace Bang;
+namespace BangEditor
+{
+class UIInputVector;
 
 class CIWRectTransform : public CIWTransform
 {
@@ -42,7 +44,7 @@ private:
     UIInputVector *p_anchorMinInput = nullptr;
     UIInputVector *p_anchorMaxInput = nullptr;
 
-    UIInputVector *p_marginLeftBotInput  = nullptr;
+    UIInputVector *p_marginLeftBotInput = nullptr;
     UIInputVector *p_marginRightTopInput = nullptr;
 
     UIInputVector *p_pivotPositionInput = nullptr;
@@ -50,8 +52,6 @@ private:
     CIWRectTransform() = default;
     virtual ~CIWRectTransform() override = default;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWRECTTRANSFORM_H
-
+#endif  // CIWRECTTRANSFORM_H

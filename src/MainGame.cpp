@@ -17,38 +17,41 @@
 #include "Bang/WindowManager.h"
 #include "Bang/WindowManager.tcc"
 
-USING_NAMESPACE_BANG
+using namespace Bang;
 
 int main(int argc, char **argv)
 {
     Path execDir = (argc > 1) ? Path(argv[1]) : Paths::GetExecutableDir();
 
     // Get path and directories, and check for their existence.
-    Path dataDir      = execDir.Append("Data");
-    if (!dataDir.IsDir())
+    Path dataDir = execDir.Append("Data");
+    if(!dataDir.IsDir())
     {
         Debug_Error("Could not find data directory '" << dataDir << "'.");
         return 1;
     }
 
     Path bangDataDir = dataDir.Append("Bang");
-    if (!bangDataDir.IsDir())
+    if(!bangDataDir.IsDir())
     {
-        Debug_Error("Could not find bang data directory '" << bangDataDir << "'.");
+        Debug_Error("Could not find bang data directory '" << bangDataDir
+                                                           << "'.");
         return 3;
     }
 
     Path gameAssetsDir = dataDir.Append("Assets");
-    if (!gameAssetsDir.IsDir())
+    if(!gameAssetsDir.IsDir())
     {
-        Debug_Error("Could not find game assets directory '" << gameAssetsDir << "'.");
+        Debug_Error("Could not find game assets directory '" << gameAssetsDir
+                                                             << "'.");
         return 4;
     }
 
     Path librariesDir = dataDir.Append("Libraries");
-    if (!librariesDir.IsDir())
+    if(!librariesDir.IsDir())
     {
-        Debug_Error("Could not find libraries directory '" << librariesDir << "'.");
+        Debug_Error("Could not find libraries directory '" << librariesDir
+                                                           << "'.");
         return 5;
     }
 
@@ -65,9 +68,9 @@ int main(int argc, char **argv)
     mainWindow->SetTitle("Bang");
     mainWindow->Maximize();
 
-    Array<Path> sceneFilepaths = gameAssetsDir.GetFiles(FindFlag::RECURSIVE,
-                                                {Extensions::GetSceneExtension()});
-    if (sceneFilepaths.IsEmpty())
+    Array<Path> sceneFilepaths = gameAssetsDir.GetFiles(
+        FindFlag::RECURSIVE, {Extensions::GetSceneExtension()});
+    if(sceneFilepaths.IsEmpty())
     {
         Debug_Error("No scene found in '" << gameAssetsDir << "'");
         return 6;
@@ -82,27 +85,27 @@ int main(int argc, char **argv)
     // Find the behaviours library
     Path behavioursLibPath;
     Array<Path> libPaths = librariesDir.GetFiles(FindFlag::SIMPLE);
-    for (const Path &libPath : libPaths)
+    for(const Path &libPath : libPaths)
     {
-        if (libPath.GetExtension().Contains("so"))
+        if(libPath.GetExtension().Contains("so"))
         {
             behavioursLibPath = libPath;
             break;
         }
     }
 
-    if (!behavioursLibPath.IsFile())
+    if(!behavioursLibPath.IsFile())
     {
         Debug_Warn("No behaviours library found in '" << librariesDir << "'");
         // return 7;
     }
 
-    Debug_Log("Picking as Behaviours library: '" <<
-              behavioursLibPath.GetAbsolute() << "'");
+    Debug_Log("Picking as Behaviours library: '"
+              << behavioursLibPath.GetAbsolute() << "'");
 
     // Set the behaviour library
-    SceneManager::GetActive()->GetBehaviourManager()->
-                  SetBehavioursLibrary(behavioursLibPath);
+    SceneManager::GetActive()->GetBehaviourManager()->SetBehavioursLibrary(
+        behavioursLibPath);
 
     return app.MainLoop();
 }

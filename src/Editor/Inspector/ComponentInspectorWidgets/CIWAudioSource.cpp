@@ -24,12 +24,13 @@
 #include "Bang/UITextRenderer.h"
 #include "BangEditor/UIInputFileWithPreview.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 void CIWAudioSource::InitInnerWidgets()
 {
@@ -39,8 +40,9 @@ void CIWAudioSource::InitInnerWidgets()
     SetTitle("AudioSource");
 
     p_audioClipFileInput = GameObject::Create<UIInputFileWithPreview>();
-    p_audioClipFileInput->SetExtensions( Extensions::GetAudioClipExtensions() );
-    p_audioClipFileInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_audioClipFileInput->SetExtensions(Extensions::GetAudioClipExtensions());
+    p_audioClipFileInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
     p_audioClipFileInput->SetZoomable(false);
 
     p_rangeInput = GameObjectFactory::CreateUIInputNumber();
@@ -56,22 +58,21 @@ void CIWAudioSource::InitInnerWidgets()
     p_pitchSlider->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_loopingCheckbox = GameObjectFactory::CreateUICheckBox();
-    p_loopingCheckbox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_loopingCheckbox->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_playOnStartCheckbox = GameObjectFactory::CreateUICheckBox();
-    p_playOnStartCheckbox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_playOnStartCheckbox->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_playStopButton = GameObjectFactory::CreateUIButton("Play");
-    p_playStopButton->AddClickedCallback([this]()
-    {
-        OnPlayClicked();
-    });
+    p_playStopButton->AddClickedCallback([this]() { OnPlayClicked(); });
 
-    AddWidget("Audio clip",    p_audioClipFileInput);
-    AddWidget("Range",         p_rangeInput->GetGameObject());
-    AddWidget("Volume",        p_volumeSlider->GetGameObject());
-    AddWidget("Pitch",         p_pitchSlider->GetGameObject());
-    AddWidget("Looping",       p_loopingCheckbox->GetGameObject());
+    AddWidget("Audio clip", p_audioClipFileInput);
+    AddWidget("Range", p_rangeInput->GetGameObject());
+    AddWidget("Volume", p_volumeSlider->GetGameObject());
+    AddWidget("Pitch", p_pitchSlider->GetGameObject());
+    AddWidget("Looping", p_loopingCheckbox->GetGameObject());
     AddWidget("Play on Start", p_playOnStartCheckbox->GetGameObject());
     AddWidget(p_playStopButton->GetGameObject());
 
@@ -84,13 +85,13 @@ void CIWAudioSource::UpdateFromReference()
 
     AudioSource *as = GetAudioSource();
     AudioClip *ac = as->GetAudioClip();
-    p_audioClipFileInput->SetPath( ac ? ac->GetSoundFilepath() : Path::Empty );
+    p_audioClipFileInput->SetPath(ac ? ac->GetSoundFilepath() : Path::Empty);
 
-    p_rangeInput->SetValue( as->GetRange() );
-    p_volumeSlider->SetValue( as->GetVolume() );
-    p_pitchSlider->SetValue( as->GetPitch() );
-    p_loopingCheckbox->SetChecked( as->GetLooping() );
-    p_playOnStartCheckbox->SetChecked( as->GetPlayOnStart() );
+    p_rangeInput->SetValue(as->GetRange());
+    p_volumeSlider->SetValue(as->GetVolume());
+    p_pitchSlider->SetValue(as->GetPitch());
+    p_loopingCheckbox->SetChecked(as->GetLooping());
+    p_playOnStartCheckbox->SetChecked(as->GetPlayOnStart());
 
     p_playStopButton->SetBlocked(!ac || !ac->IsLoaded());
     p_playStopButton->GetText()->SetContent(as->IsPlaying() ? "Stop" : "Play");
@@ -98,7 +99,7 @@ void CIWAudioSource::UpdateFromReference()
 
 void CIWAudioSource::OnPlayClicked()
 {
-    if (!GetAudioSource()->IsPlaying())
+    if(!GetAudioSource()->IsPlaying())
     {
         GetAudioSource()->Play();
     }
@@ -108,24 +109,26 @@ void CIWAudioSource::OnPlayClicked()
     }
 }
 
-void CIWAudioSource::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
+void CIWAudioSource::OnValueChangedCIW(
+    EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChangedCIW(object);
 
-    if (object == p_audioClipFileInput)
+    if(object == p_audioClipFileInput)
     {
-        RH<AudioClip> ac = Resources::Load<AudioClip>( p_audioClipFileInput->GetPath() );
-        GetAudioSource()->SetAudioClip( ac.Get() );
+        RH<AudioClip> ac =
+            Resources::Load<AudioClip>(p_audioClipFileInput->GetPath());
+        GetAudioSource()->SetAudioClip(ac.Get());
     }
 
-    GetAudioSource()->SetRange( p_rangeInput->GetValue() );
-    GetAudioSource()->SetVolume( p_volumeSlider->GetValue() );
-    GetAudioSource()->SetPitch ( p_pitchSlider->GetValue() );
-    GetAudioSource()->SetLooping( p_loopingCheckbox->IsChecked() );
-    GetAudioSource()->SetPlayOnStart( p_playOnStartCheckbox->IsChecked() );
+    GetAudioSource()->SetRange(p_rangeInput->GetValue());
+    GetAudioSource()->SetVolume(p_volumeSlider->GetValue());
+    GetAudioSource()->SetPitch(p_pitchSlider->GetValue());
+    GetAudioSource()->SetLooping(p_loopingCheckbox->IsChecked());
+    GetAudioSource()->SetPlayOnStart(p_playOnStartCheckbox->IsChecked());
 }
 
 AudioSource *CIWAudioSource::GetAudioSource() const
 {
-    return SCAST<AudioSource*>( ComponentInspectorWidget::GetComponent() );
+    return SCAST<AudioSource *>(ComponentInspectorWidget::GetComponent());
 }

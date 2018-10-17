@@ -5,9 +5,9 @@
 
 #include "BangEditor/BangEditor.h"
 
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class Project;
+namespace BangEditor
+{
+class Project;
 
 class IEventsProjectManager
 {
@@ -24,7 +24,6 @@ public:
         BANG_UNUSED(project);
     }
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // IEVENTSPROJECTMANAGER_H
+#endif  // IEVENTSPROJECTMANAGER_H

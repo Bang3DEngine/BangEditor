@@ -6,10 +6,10 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UIInputArray;
+using namespace Bang;
+namespace BangEditor
+{
+class UIInputArray;
 
 class UIInputArrayRow : public GameObject
 {
@@ -27,8 +27,6 @@ public:
 private:
     GameObject *p_containedGameObject = nullptr;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UIINPUTARRAYROW_H
-
+#endif  // UIINPUTARRAYROW_H

@@ -18,17 +18,20 @@
 #include "BangEditor/RIWResource.tcc"
 #include "BangEditor/ResourceInspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+template <class>
+class EventEmitter;
+}
 
-FORWARD NAMESPACE_BANG_EDITOR_BEGIN
-FORWARD struct ResourcePreviewFactoryParameters;
-FORWARD NAMESPACE_BANG_EDITOR_END
+namespace BangEditor
+{
+struct ResourcePreviewFactoryParameters;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 RIWMesh::RIWMesh()
 {
@@ -64,46 +67,45 @@ void RIWMesh::Init()
     p_numBones->GetInputText()->SetBlocked(true);
 
     AddWidget(p_meshPreviewViewer, 256);
-    AddWidget( GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5) );
-    AddWidget("Num vertices",  p_numVertices->GetGameObject());
+    AddWidget(
+        GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5));
+    AddWidget("Num vertices", p_numVertices->GetGameObject());
     AddWidget("Num triangles", p_numTriangles->GetGameObject());
-    AddWidget("Num bones",     p_numBones->GetGameObject());
+    AddWidget("Num bones", p_numBones->GetGameObject());
 
     SetLabelsWidth(130);
 }
 
 Mesh *RIWMesh::GetMesh() const
 {
-    return SCAST<Mesh*>(GetResource().Get());
+    return SCAST<Mesh *>(GetResource().Get());
 }
 
 void RIWMesh::OnResourceSet()
 {
     RIWResource<Mesh>::OnResourceSet();
-    p_numVertices->SetValue( GetMesh()->GetNumVertices() );
-    p_numTriangles->SetValue( GetMesh()->GetNumTriangles() );
-    p_numBones->SetValue( GetMesh()->GetBonesPool().Size() );
+    p_numVertices->SetValue(GetMesh()->GetNumVertices());
+    p_numTriangles->SetValue(GetMesh()->GetNumTriangles());
+    p_numBones->SetValue(GetMesh()->GetBonesPool().Size());
 }
 
 void RIWMesh::UpdateInputsFromResource()
 {
-    p_meshPreviewViewer->SetPreviewImageProvider([this](
-                      const ResourcePreviewFactoryParameters &params)
-    {
-        return MeshPreviewFactory::GetPreviewTextureFor(GetMesh(), params);
-    });
+    p_meshPreviewViewer->SetPreviewImageProvider(
+        [this](const ResourcePreviewFactoryParameters &params) {
+            return MeshPreviewFactory::GetPreviewTextureFor(GetMesh(), params);
+        });
 }
 
-Texture2D* RIWMesh::GetIconTexture() const
+Texture2D *RIWMesh::GetIconTexture() const
 {
-    return MeshPreviewFactory::GetPreviewTextureFor( GetMesh() ).Get();
+    return MeshPreviewFactory::GetPreviewTextureFor(GetMesh()).Get();
 }
 
-void RIWMesh::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged>*)
+void RIWMesh::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *)
 {
-    if (!GetMesh())
+    if(!GetMesh())
     {
         return;
     }
 }
-

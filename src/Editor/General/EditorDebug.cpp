@@ -1,7 +1,7 @@
 #include "BangEditor/EditorDebug.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 EditorDebug::EditorDebug()
 {
@@ -10,4 +10,3 @@ EditorDebug::EditorDebug()
 EditorDebug::~EditorDebug()
 {
 }
-

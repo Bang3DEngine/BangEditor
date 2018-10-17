@@ -19,20 +19,22 @@
 #include "BangEditor/InspectorWidget.h"
 #include "BangEditor/UIContextMenu.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class Component;
-FORWARD   class GameObject;
-FORWARD   class IEventsValueChanged;
-FORWARD   class Texture2D;
-FORWARD   class UICheckBox;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Component;
+class GameObject;
+class IEventsValueChanged;
+class Texture2D;
+class UICheckBox;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class MenuItem;
-FORWARD class UIContextMenu;
+using namespace Bang;
+namespace BangEditor
+{
+class MenuItem;
+class UIContextMenu;
 
 class ComponentInspectorWidget : public InspectorWidget,
                                  public EventListener<IEventsValueChanged>
@@ -51,14 +53,14 @@ protected:
 
     void PushCurrentStateToUndoRedo(const MetaNode &undoMetaBefore);
     void PushCurrentStateToUndoRedoIfAnyChangeForGameObject(
-                                                const MetaNode &undoMetaBefore);
+        const MetaNode &undoMetaBefore);
     Component *GetComponent() const;
     GameObject *GetInspectedGameObject() const;
 
-    virtual void SetTitle(const String& title) override;
+    virtual void SetTitle(const String &title) override;
 
     virtual bool CanBeRemovedFromContextMenu() const;
-    virtual Texture2D* GetComponentIconTexture() const;
+    virtual Texture2D *GetComponentIconTexture() const;
     virtual Color GetComponentIconTint() const;
     virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object);
 
@@ -75,12 +77,11 @@ private:
     virtual bool MustShowEnabledCheckbox() const;
 
     // IEventsValueChanged
-    virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
+    virtual void OnValueChanged(
+        EventEmitter<IEventsValueChanged> *object) override;
 
     friend class ComponentInspectorWidgetFactory;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // COMPONENTINSPECTORWIDGET_H
-
+#endif  // COMPONENTINSPECTORWIDGET_H

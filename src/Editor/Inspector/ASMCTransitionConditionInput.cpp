@@ -18,8 +18,8 @@
 #include "Bang/UIInputNumber.h"
 #include "Bang/UILayoutElement.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 ASMCTransitionConditionInput::ASMCTransitionConditionInput()
 {
@@ -36,7 +36,8 @@ ASMCTransitionConditionInput::ASMCTransitionConditionInput()
     p_varNameInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_comparatorInput = GameObjectFactory::CreateUIComboBox();
-    p_comparatorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_comparatorInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_floatInput = GameObjectFactory::CreateUIInputNumber();
     p_floatInput->SetValue(0.0f);
@@ -55,7 +56,7 @@ void ASMCTransitionConditionInput::BeforeRender()
 {
     GameObject::BeforeRender();
 
-    if (p_animatorSM)
+    if(p_animatorSM)
     {
         UpdateFromVariable();
         p_varNameInput->SetSelectionByLabel(m_selectedVarName);
@@ -63,39 +64,43 @@ void ASMCTransitionConditionInput::BeforeRender()
 }
 
 void ASMCTransitionConditionInput::SetVariableType(
-                                    AnimatorStateMachineVariable::Type type)
+    AnimatorStateMachineVariable::Type type)
 {
-    if (type != m_varType)
+    if(type != m_varType)
     {
         m_varType = type;
 
         p_comparatorInput->ClearItems();
-        switch (m_varType)
+        switch(m_varType)
         {
             case AnimatorStateMachineVariable::Type::BOOL:
                 p_floatInput->GetGameObject()->SetEnabled(false);
-                p_comparatorInput->AddItem("True",
-                        SCAST<uint>(ASMCTransitionCondition::Comparator::IS_TRUE));
-                p_comparatorInput->AddItem("False",
-                        SCAST<uint>(ASMCTransitionCondition::Comparator::IS_FALSE));
+                p_comparatorInput->AddItem(
+                    "True",
+                    SCAST<uint>(ASMCTransitionCondition::Comparator::IS_TRUE));
+                p_comparatorInput->AddItem(
+                    "False",
+                    SCAST<uint>(ASMCTransitionCondition::Comparator::IS_FALSE));
 
-            break;
+                break;
 
             case AnimatorStateMachineVariable::Type::FLOAT:
                 p_floatInput->GetGameObject()->SetEnabled(true);
-                p_comparatorInput->AddItem("Greater",
-                        SCAST<uint>(ASMCTransitionCondition::Comparator::GREATER));
-                p_comparatorInput->AddItem("Less",
-                        SCAST<uint>(ASMCTransitionCondition::Comparator::LESS));
-            break;
+                p_comparatorInput->AddItem(
+                    "Greater",
+                    SCAST<uint>(ASMCTransitionCondition::Comparator::GREATER));
+                p_comparatorInput->AddItem(
+                    "Less",
+                    SCAST<uint>(ASMCTransitionCondition::Comparator::LESS));
+                break;
         }
     }
 }
 
 void ASMCTransitionConditionInput::SetAnimatorStateMachine(
-                                        AnimatorStateMachine *animatorSM)
+    AnimatorStateMachine *animatorSM)
 {
-    if (animatorSM != p_animatorSM)
+    if(animatorSM != p_animatorSM)
     {
         p_animatorSM = animatorSM;
         UpdateFromVariable();
@@ -104,20 +109,20 @@ void ASMCTransitionConditionInput::SetAnimatorStateMachine(
 
 void ASMCTransitionConditionInput::UpdateFromVariable()
 {
-    if (p_animatorSM && !m_updatingFromVariable)
+    if(p_animatorSM && !m_updatingFromVariable)
     {
         m_updatingFromVariable = true;
 
         bool updateVariablesComboBox = false;
         updateVariablesComboBox |= (p_animatorSM->GetVariables().Size() !=
                                     p_varNameInput->GetNumItems());
-        if (!updateVariablesComboBox)
+        if(!updateVariablesComboBox)
         {
             const auto &refVars = p_animatorSM->GetVariables();
             const auto &comboLabels = p_varNameInput->GetLabels();
-            for (uint i = 0; i < refVars.Size(); ++i)
+            for(uint i = 0; i < refVars.Size(); ++i)
             {
-                if (refVars[i]->GetName() != comboLabels[i])
+                if(refVars[i]->GetName() != comboLabels[i])
                 {
                     updateVariablesComboBox = true;
                     break;
@@ -125,18 +130,18 @@ void ASMCTransitionConditionInput::UpdateFromVariable()
             }
         }
 
-        if (updateVariablesComboBox)
+        if(updateVariablesComboBox)
         {
             p_varNameInput->ClearItems();
-            for (AnimatorStateMachineVariable *var : p_animatorSM->GetVariables())
+            for(AnimatorStateMachineVariable *var :
+                p_animatorSM->GetVariables())
             {
                 p_varNameInput->AddItem(var->GetName(), 0);
             }
         }
 
-
-        if (AnimatorStateMachineVariable *var =
-                                 p_animatorSM->GetVariable(m_selectedVarName))
+        if(AnimatorStateMachineVariable *var =
+               p_animatorSM->GetVariable(m_selectedVarName))
         {
             SetVariableType(var->GetType());
         }
@@ -146,36 +151,37 @@ void ASMCTransitionConditionInput::UpdateFromVariable()
 }
 
 void ASMCTransitionConditionInput::OnValueChanged(
-                                    EventEmitter<IEventsValueChanged> *ee)
+    EventEmitter<IEventsValueChanged> *ee)
 {
-    if (ee == p_varNameInput)
+    if(ee == p_varNameInput)
     {
         m_selectedVarName = p_varNameInput->GetSelectedLabel();
     }
     UpdateFromVariable();
 
     EventEmitter<IEventsValueChanged>::PropagateToListeners(
-                 &IEventsValueChanged::OnValueChanged, this);
+        &IEventsValueChanged::OnValueChanged, this);
 }
 
 void ASMCTransitionConditionInput::ImportMeta(const MetaNode &metaNode)
 {
     Serializable::ImportMeta(metaNode);
 
-    if (metaNode.Contains("VariableName"))
+    if(metaNode.Contains("VariableName"))
     {
         m_selectedVarName = metaNode.Get<String>("VariableName");
         p_varNameInput->SetSelectionByLabel(m_selectedVarName);
     }
 
-    if (metaNode.Contains("Comparator"))
+    if(metaNode.Contains("Comparator"))
     {
-        p_comparatorInput->SetSelectionByValue( metaNode.Get<uint>("Comparator") );
+        p_comparatorInput->SetSelectionByValue(
+            metaNode.Get<uint>("Comparator"));
     }
 
-    if (metaNode.Contains("CompareValueFloat"))
+    if(metaNode.Contains("CompareValueFloat"))
     {
-        p_floatInput->SetValue( metaNode.Get<float>("CompareValueFloat") );
+        p_floatInput->SetValue(metaNode.Get<float>("CompareValueFloat"));
     }
 
     UpdateFromVariable();
@@ -185,8 +191,7 @@ void ASMCTransitionConditionInput::ExportMeta(MetaNode *metaNode) const
 {
     Serializable::ExportMeta(metaNode);
 
-    metaNode->Set("VariableName",      p_varNameInput->GetSelectedLabel());
-    metaNode->Set("Comparator",        p_comparatorInput->GetSelectedValue());
+    metaNode->Set("VariableName", p_varNameInput->GetSelectedLabel());
+    metaNode->Set("Comparator", p_comparatorInput->GetSelectedValue());
     metaNode->Set("CompareValueFloat", p_floatInput->GetValue());
 }
-

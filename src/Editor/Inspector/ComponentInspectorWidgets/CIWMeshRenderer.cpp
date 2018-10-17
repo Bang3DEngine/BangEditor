@@ -18,12 +18,13 @@
 #include "Bang/Resources.tcc"
 #include "BangEditor/UIInputFileWithPreview.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 void CIWMeshRenderer::InitInnerWidgets()
 {
@@ -33,7 +34,7 @@ void CIWMeshRenderer::InitInnerWidgets()
     SetTitle("Mesh Renderer");
 
     p_meshInputFile = GameObject::Create<UIInputFileWithPreview>();
-    p_meshInputFile->SetExtensions( { Extensions::GetMeshExtension() } );
+    p_meshInputFile->SetExtensions({Extensions::GetMeshExtension()});
     p_meshInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     AddWidget("Mesh", p_meshInputFile);
@@ -50,11 +51,12 @@ void CIWMeshRenderer::UpdateFromReference()
     p_meshInputFile->SetPath(meshPath);
 }
 
-void CIWMeshRenderer::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
+void CIWMeshRenderer::OnValueChangedCIW(
+    EventEmitter<IEventsValueChanged> *object)
 {
     CIWRenderer::OnValueChangedCIW(object);
 
-    if (object == p_meshInputFile)
+    if(object == p_meshInputFile)
     {
         Path meshPath = p_meshInputFile->GetPath();
         RH<Mesh> mesh = Resources::Load<Mesh>(meshPath);
@@ -64,5 +66,5 @@ void CIWMeshRenderer::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *objec
 
 MeshRenderer *CIWMeshRenderer::GetMeshRenderer() const
 {
-    return SCAST<MeshRenderer*>( GetRenderer() );
+    return SCAST<MeshRenderer *>(GetRenderer());
 }

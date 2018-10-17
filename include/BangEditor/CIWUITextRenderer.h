@@ -7,20 +7,22 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class UIComboBox;
-FORWARD   class UIInputNumber;
-FORWARD   class UIInputText;
-FORWARD   class UITextRenderer;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class UIComboBox;
+class UIInputNumber;
+class UIInputText;
+class UITextRenderer;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UIInputColor;
-FORWARD class UIInputFileWithPreview;
+using namespace Bang;
+namespace BangEditor
+{
+class UIInputColor;
+class UIInputFileWithPreview;
 
 class CIWUITextRenderer : public ComponentInspectorWidget
 {
@@ -38,18 +40,16 @@ protected:
     void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
-    UIInputText *p_contentInput             = nullptr;
-    UIInputNumber *p_sizeInput              = nullptr;
-    UIInputColor *p_colorInput              = nullptr;
-    UIComboBox *p_horizontalAlignmentInput  = nullptr;
-    UIComboBox *p_verticalAlignmentInput    = nullptr;
+    UIInputText *p_contentInput = nullptr;
+    UIInputNumber *p_sizeInput = nullptr;
+    UIInputColor *p_colorInput = nullptr;
+    UIComboBox *p_horizontalAlignmentInput = nullptr;
+    UIComboBox *p_verticalAlignmentInput = nullptr;
     UIInputFileWithPreview *p_fontFileInput = nullptr;
 
     CIWUITextRenderer() = default;
     virtual ~CIWUITextRenderer() = default;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWTEXTRENDERER_H
-
+#endif  // CIWTEXTRENDERER_H

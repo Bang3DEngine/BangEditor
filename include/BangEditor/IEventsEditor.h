@@ -5,15 +5,17 @@
 
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class Path;
-FORWARD   class GameObject;
-FORWARD_T class EventListener;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Path;
+class GameObject;
+template <class>
+class EventListener;
+}
 
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class EditorSettings;
+namespace BangEditor
+{
+class EditorSettings;
 
 class IEventsEditor
 {
@@ -30,7 +32,6 @@ public:
         BANG_UNUSED(selectedPath);
     }
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // IEVENTSEDITOR_H
+#endif  // IEVENTSEDITOR_H

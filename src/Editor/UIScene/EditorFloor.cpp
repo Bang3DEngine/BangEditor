@@ -17,18 +17,19 @@
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/NotSelectableInEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class ShaderProgram;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class ShaderProgram;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 EditorFloor::EditorFloor()
 {
     AddComponent<Transform>();
     m_lineRenderer = AddComponent<LineRenderer>();
-    m_lineRenderer->SetMaterial( MaterialFactory::GetDefaultUnLighted().Get() );
+    m_lineRenderer->SetMaterial(MaterialFactory::GetDefaultUnLighted().Get());
     m_lineRenderer->GetMaterial()->SetAlbedoColor(Color::White);
     m_lineRenderer->GetMaterial()->SetReceivesLighting(false);
     m_lineRenderer->GetMaterial()->SetLineWidth(2.0f);
@@ -36,9 +37,9 @@ EditorFloor::EditorFloor()
     m_lineRenderer->SetCastsShadows(false);
 
     ShaderProgram *sp = ShaderProgramFactory::Get(
-                ShaderProgramFactory::GetDefaultVertexShaderPath(),
-                EditorPaths::GetEditorAssetsDir().Append("Shaders").
-                    Append("EditorFloor.frag"));
+        ShaderProgramFactory::GetDefaultVertexShaderPath(),
+        EditorPaths::GetEditorAssetsDir().Append("Shaders").Append(
+            "EditorFloor.frag"));
     m_lineRenderer->GetMaterial()->SetRenderPass(RenderPass::OVERLAY);
     m_lineRenderer->GetMaterial()->SetShaderProgram(sp);
 
@@ -47,26 +48,25 @@ EditorFloor::EditorFloor()
     constexpr int GridNumCells = 100;
     constexpr float HGS = GridSize / 2;
     constexpr float CellSize = (GridSize / GridNumCells);
-    for (int i = 0; i < GridNumCells; ++i)
+    for(int i = 0; i < GridNumCells; ++i)
     {
         {
-        Vector3 lineBegin = Vector3(-HGS + CellSize * i, 0, -HGS);
-        Vector3 lineEnd   = Vector3(-HGS + CellSize * i, 0,  HGS);
-        floorLinePoints.PushBack(lineBegin);
-        floorLinePoints.PushBack(lineEnd);
+            Vector3 lineBegin = Vector3(-HGS + CellSize * i, 0, -HGS);
+            Vector3 lineEnd = Vector3(-HGS + CellSize * i, 0, HGS);
+            floorLinePoints.PushBack(lineBegin);
+            floorLinePoints.PushBack(lineEnd);
         }
         {
-        Vector3 lineBegin = Vector3(-HGS, 0.0f, -HGS + CellSize * i);
-        Vector3 lineEnd   = Vector3( HGS, 0.0f, -HGS + CellSize * i);
-        floorLinePoints.PushBack(lineBegin);
-        floorLinePoints.PushBack(lineEnd);
+            Vector3 lineBegin = Vector3(-HGS, 0.0f, -HGS + CellSize * i);
+            Vector3 lineEnd = Vector3(HGS, 0.0f, -HGS + CellSize * i);
+            floorLinePoints.PushBack(lineBegin);
+            floorLinePoints.PushBack(lineEnd);
         }
     }
     m_lineRenderer->SetPoints(floorLinePoints);
 
     AddComponent<HideInHierarchy>();
     AddComponent<NotSelectableInEditor>();
-
 }
 
 EditorFloor::~EditorFloor()
@@ -75,7 +75,7 @@ EditorFloor::~EditorFloor()
 
 void EditorFloor::Render(RenderPass renderPass, bool renderChildren)
 {
-    if (renderPass == RenderPass::OVERLAY)
+    if(renderPass == RenderPass::OVERLAY)
     {
         GBuffer *gbuffer = GEngine::GetActiveGBuffer();
         gbuffer->PushDepthStencilTexture();
@@ -86,4 +86,3 @@ void EditorFloor::Render(RenderPass renderPass, bool renderChildren)
         gbuffer->PopDepthStencilTexture();
     }
 }
-

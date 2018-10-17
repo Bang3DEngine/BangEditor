@@ -56,16 +56,18 @@
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/UIContextMenu.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Texture2D;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Texture2D;
+}
 
-FORWARD NAMESPACE_BANG_EDITOR_BEGIN
-FORWARD class Project;
-FORWARD NAMESPACE_BANG_EDITOR_END
+namespace BangEditor
+{
+class Project;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 Explorer::Explorer()
 {
@@ -73,7 +75,7 @@ Explorer::Explorer()
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinSize(Vector2i(100));
-    le->SetFlexibleSize( Vector2::One );
+    le->SetFlexibleSize(Vector2::One);
 
     GameObjectFactory::CreateUIGameObjectInto(this);
 
@@ -97,36 +99,35 @@ Explorer::Explorer()
     // Scroll Panel
     p_scrollPanel = GameObjectFactory::CreateUIScrollPanel();
     p_scrollPanel->GetScrollArea()->GetBackground()->SetTint(
-                                        Color::White.WithValue(0.7f));
+        Color::White.WithValue(0.7f));
 
     GameObject *scrollPanelGo = p_scrollPanel->GetGameObject();
     UILayoutElement *spLE = scrollPanelGo->AddComponent<UILayoutElement>();
-    spLE->SetFlexibleSize( Vector2::One );
+    spLE->SetFlexibleSize(Vector2::One);
 
     // Back button
     Texture2D *backButtonTex = EditorTextureFactory::GetBackArrowIcon();
     p_backButton = GameObjectFactory::CreateUIButton("", backButtonTex);
     p_backButton->SetIcon(backButtonTex, Vector2i(20, 15), 0);
     p_backButton->GetText()->SetContent("");
-    p_backButton->AddClickedCallback( [this]()
-    {
-        GoDirectoryUp();
-    });
+    p_backButton->AddClickedCallback([this]() { GoDirectoryUp(); });
 
     // Direction label
     p_currentPathLabel = GameObjectFactory::CreateUILabel();
     p_currentPathLabel->SetSelectable(true);
     p_currentPathLabel->GetText()->SetTextSize(11);
     p_currentPathLabel->GetText()->SetCullByRectTransform(true);
-    p_currentPathLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::RIGHT);
+    p_currentPathLabel->GetText()->SetHorizontalAlign(
+        HorizontalAlignment::RIGHT);
 
     GameObject *dirBar = p_currentPathLabel->GetGameObject();
 
     // Items Container
     p_itemsContainer = GameObjectFactory::CreateUIGameObject();
-    p_itemsContainer->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
+    p_itemsContainer->GetRectTransform()->SetPivotPosition(Vector2(-1, 1));
 
-    UIContentSizeFitter *csf = p_itemsContainer->AddComponent<UIContentSizeFitter>();
+    UIContentSizeFitter *csf =
+        p_itemsContainer->AddComponent<UIContentSizeFitter>();
     csf->SetHorizontalSizeType(LayoutSizeType::NONE);
     csf->SetVerticalSizeType(LayoutSizeType::PREFERRED);
 
@@ -144,27 +145,30 @@ Explorer::Explorer()
     p_iconSizeSlider->SetValue(128);
 
     UIImageRenderer *eyeImg = GameObjectFactory::CreateUIImage();
-    eyeImg->SetImageTexture( EditorTextureFactory::GetEyeIcon() );
+    eyeImg->SetImageTexture(EditorTextureFactory::GetEyeIcon());
     eyeImg->SetTint(Color::Black);
-    UILayoutElement *eyeImgLE = eyeImg->GetGameObject()->
-                                        AddComponent<UILayoutElement>();
-    eyeImgLE->SetPreferredSize( Vector2i(20, ToolBarHeight) );
-    eyeImgLE->SetFlexibleSize( Vector2(0,1) );
+    UILayoutElement *eyeImgLE =
+        eyeImg->GetGameObject()->AddComponent<UILayoutElement>();
+    eyeImgLE->SetPreferredSize(Vector2i(20, ToolBarHeight));
+    eyeImgLE->SetFlexibleSize(Vector2(0, 1));
 
     UILayoutElement *iconsSizeSliderLE =
-            p_iconSizeSlider->GetGameObject()->AddComponent<UILayoutElement>();
+        p_iconSizeSlider->GetGameObject()->AddComponent<UILayoutElement>();
     iconsSizeSliderLE->SetMinWidth(128);
     iconsSizeSliderLE->SetFlexibleWidth(0.0f);
     iconsSizeSliderLE->SetLayoutPriority(2);
 
     p_backButton->GetGameObject()->SetParent(toolBar);
-    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 15)->SetParent(toolBar);
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 15)
+        ->SetParent(toolBar);
     eyeImg->GetGameObject()->SetParent(toolBar);
-    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 5)->SetParent(toolBar);
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 5)
+        ->SetParent(toolBar);
     p_iconSizeSlider->GetGameObject()->SetParent(toolBar);
     dirBar->SetParent(toolBar);
     toolBar->SetParent(mainVLGo);
-    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::MIN, 5)->SetParent(mainVLGo);
+    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::MIN, 5)
+        ->SetParent(mainVLGo);
     p_scrollPanel->GetGameObject()->SetParent(mainVLGo);
 
     p_scrollPanel->GetScrollArea()->SetContainedGameObject(p_itemsContainer);
@@ -176,20 +180,17 @@ Explorer::Explorer()
     focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
 
     p_contextMenu = AddComponent<UIContextMenu>();
-    p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
-    {
-        OnCreateContextMenu(menuRootItem);
-    });
+    p_contextMenu->SetCreateContextMenuCallback(
+        [this](MenuItem *menuRootItem) { OnCreateContextMenu(menuRootItem); });
     p_contextMenu->SetFocusable(focusable);
 
-    SetCurrentPath( Paths::GetEngineAssetsDir() );
+    SetCurrentPath(Paths::GetEngineAssetsDir());
 
-    Editor::GetInstance()->
-            EventEmitter<IEventsEditor>::RegisterListener(this);
-    ProjectManager::GetInstance()->
-            EventEmitter<IEventsProjectManager>::RegisterListener(this);
-    EditorFileTracker::GetInstance()->
-            EventEmitter<IEventsFileTracker>::RegisterListener(this);
+    Editor::GetInstance()->EventEmitter<IEventsEditor>::RegisterListener(this);
+    ProjectManager::GetInstance()
+        ->EventEmitter<IEventsProjectManager>::RegisterListener(this);
+    EditorFileTracker::GetInstance()
+        ->EventEmitter<IEventsFileTracker>::RegisterListener(this);
 }
 
 Explorer::~Explorer()
@@ -200,12 +201,12 @@ void Explorer::Update()
 {
     GameObject::Update();
 
-    #ifdef DEBUG
-    if (Input::GetKey(Key::P) && Input::GetKey(Key::NUM0))
+#ifdef DEBUG
+    if(Input::GetKey(Key::P) && Input::GetKey(Key::NUM0))
     {
         SetRootPath(EditorPaths::GetEngineAssetsDir());
     }
-    #endif
+#endif
 }
 
 void Explorer::ForceCheckFileChanges()
@@ -217,9 +218,9 @@ void Explorer::SelectPath(const Path &path,
                           bool registerUndo,
                           bool travelToDirectory)
 {
-    if (path != GetSelectedPath())
+    if(path != GetSelectedPath())
     {
-        if (registerUndo)
+        if(registerUndo)
         {
             // UndoRedoManager::PushAction( new UndoRedoExplorerSelect(
             //                                  GetSelectedPath(), path) );
@@ -227,13 +228,13 @@ void Explorer::SelectPath(const Path &path,
 
         m_selectedPath = path;
 
-        if (path.GetDirectory().Exists() && travelToDirectory)
+        if(path.GetDirectory().Exists() && travelToDirectory)
         {
             SetCurrentPath(path.GetDirectory());
         }
 
         ExplorerItem *explorerItem = GetItemFromPath(path);
-        if (explorerItem)
+        if(explorerItem)
         {
             UICanvas::GetActive(this)->SetFocus(explorerItem->GetFocusable());
             Editor::OnPathSelected(explorerItem->GetPath());
@@ -243,32 +244,33 @@ void Explorer::SelectPath(const Path &path,
 
 void Explorer::SetRootPath(const Path &rootPath)
 {
-    if (rootPath != GetRootPath())
+    if(rootPath != GetRootPath())
     {
         m_rootPath = rootPath;
-        if (!IsInsideRootPath( GetCurrentPath() ))
+        if(!IsInsideRootPath(GetCurrentPath()))
         {
-            SetCurrentPath( GetRootPath() );
+            SetCurrentPath(GetRootPath());
         }
     }
 }
 
 void Explorer::SetCurrentPath(const Path &path)
 {
-    if (GetCurrentPath() != path && IsInsideRootPath(path))
+    if(GetCurrentPath() != path && IsInsideRootPath(path))
     {
         m_currentPath = path;
-        p_currentPathLabel->GetText()->SetContent(GetCurrentPath().GetAbsolute());
+        p_currentPathLabel->GetText()->SetContent(
+            GetCurrentPath().GetAbsolute());
 
         bool canGoBack = (GetCurrentPath() != GetRootPath());
         p_backButton->SetBlocked(!canGoBack);
 
         Clear();
 
-        Array<ExplorerItem*> subExplorerItems =
-                ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(path,
-                                                                       canGoBack);
-        for (ExplorerItem *expItem : subExplorerItems)
+        Array<ExplorerItem *> subExplorerItems =
+            ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(path,
+                                                                   canGoBack);
+        for(ExplorerItem *expItem : subExplorerItems)
         {
             AddItem(expItem);
         }
@@ -293,7 +295,7 @@ const Path &Explorer::GetSelectedPath() const
 
 void Explorer::Clear()
 {
-    while (!p_items.IsEmpty())
+    while(!p_items.IsEmpty())
     {
         RemoveItem(p_items.Front()->GetPath());
     }
@@ -301,20 +303,20 @@ void Explorer::Clear()
     p_items.Clear();
 }
 
-UIEventResult Explorer::OnUIEvent(UIFocusable*, const UIEvent &event)
+UIEventResult Explorer::OnUIEvent(UIFocusable *, const UIEvent &event)
 {
-    switch (event.type)
+    switch(event.type)
     {
         case UIEvent::Type::MOUSE_CLICK_FULL:
             SelectPath(Path::Empty);
             return UIEventResult::INTERCEPT;
-        break;
+            break;
 
         case UIEvent::Type::KEY_DOWN:
-            if (event.key.key == Key::V &&
-                event.key.modifiers == KeyModifier::LCTRL)
+            if(event.key.key == Key::V &&
+               event.key.modifiers == KeyModifier::LCTRL)
             {
-                if (EditorClipboard::HasCopiedPath())
+                if(EditorClipboard::HasCopiedPath())
                 {
                     const Path &copiedPath = EditorClipboard::GetCopiedPath();
                     const Path newDir = GetCurrentPath();
@@ -322,10 +324,9 @@ UIEventResult Explorer::OnUIEvent(UIFocusable*, const UIEvent &event)
                     return UIEventResult::INTERCEPT;
                 }
             }
-        break;
+            break;
 
-        default:
-        break;
+        default: break;
     }
     return UIEventResult::IGNORE;
 }
@@ -345,9 +346,8 @@ void Explorer::OnProjectClosed(const Project *project)
 
 void Explorer::OnPathAdded(const Path &addedPath)
 {
-    if ( addedPath.GetDirectory() == GetCurrentPath() &&
-        !addedPath.IsHiddenFile() &&
-         addedPath.Exists())
+    if(addedPath.GetDirectory() == GetCurrentPath() &&
+       !addedPath.IsHiddenFile() && addedPath.Exists())
     {
         AddItem(addedPath);
     }
@@ -359,9 +359,9 @@ void Explorer::OnPathModified(const Path &)
 
 void Explorer::OnPathRemoved(const Path &removedPath)
 {
-    if (!removedPath.Exists())
+    if(!removedPath.Exists())
     {
-        if (removedPath == GetSelectedPath())
+        if(removedPath == GetSelectedPath())
         {
             SelectPath(Path::Empty, false, false);
         }
@@ -371,7 +371,7 @@ void Explorer::OnPathRemoved(const Path &removedPath)
 
 void Explorer::OnGameObjectSelected(GameObject *selectedGameObject)
 {
-    if (selectedGameObject)
+    if(selectedGameObject)
     {
         SelectPath(Path::Empty, false);
     }
@@ -379,30 +379,28 @@ void Explorer::OnGameObjectSelected(GameObject *selectedGameObject)
 
 void Explorer::AddItem(const Path &itemPath)
 {
-    AddItem( ExplorerItemFactory::CreateExplorerItem(itemPath) );
+    AddItem(ExplorerItemFactory::CreateExplorerItem(itemPath));
 }
 
 void Explorer::AddItem(ExplorerItem *explorerItem)
 {
     Path itemPath = explorerItem->GetPath();
-    if ( GetItemFromPath(itemPath) )
+    if(GetItemFromPath(itemPath))
     {
         return;
     }
 
     explorerItem->SetParent(p_itemsContainer);
 
-    explorerItem->GetFocusable()->AddEventCallback(
-    [this, explorerItem](UIFocusable *focusable,
-                         const UIEvent &event)
-    {
-        if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
+    explorerItem->GetFocusable()->AddEventCallback([this, explorerItem](
+        UIFocusable *focusable, const UIEvent &event) {
+        if(event.type == UIEvent::Type::MOUSE_CLICK_FULL)
         {
             bool travelToDirectory = (explorerItem->GetPathString() != "..");
-            SelectPath( explorerItem->GetPath(), true, travelToDirectory);
+            SelectPath(explorerItem->GetPath(), true, travelToDirectory);
             return UIEventResult::INTERCEPT;
         }
-        else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
+        else if(event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
         {
             OnItemDoubleClicked(focusable);
             return UIEventResult::INTERCEPT;
@@ -418,11 +416,10 @@ void Explorer::AddItem(ExplorerItem *explorerItem)
 void Explorer::RemoveItem(const Path &itemPath)
 {
     ExplorerItem *explorerItem = GetItemFromPath(itemPath);
-    if (explorerItem)
+    if(explorerItem)
     {
-        explorerItem->EventEmitter<IEventsExplorerItem>::
-                        UnRegisterListener(
-                            DCAST<EventListener<IEventsExplorerItem>*>(this));
+        explorerItem->EventEmitter<IEventsExplorerItem>::UnRegisterListener(
+            DCAST<EventListener<IEventsExplorerItem> *>(this));
 
         p_items.Remove(explorerItem);
         m_pathsToItem.Remove(itemPath);
@@ -432,7 +429,7 @@ void Explorer::RemoveItem(const Path &itemPath)
 
 void Explorer::GoDirectoryUp()
 {
-    SetCurrentPath( GetCurrentPath().GetDirectory() );
+    SetCurrentPath(GetCurrentPath().GetDirectory());
 }
 
 void DuplicateImportFiles(const Path &srcPath, const Path &dstPath)
@@ -440,20 +437,20 @@ void DuplicateImportFiles(const Path &srcPath, const Path &dstPath)
     ASSERT(srcPath.Exists() && dstPath.Exists());
     ASSERT(srcPath != dstPath);
 
-    if (srcPath.IsFile())
+    if(srcPath.IsFile())
     {
         MetaFilesManager::DuplicateMetaFile(srcPath, dstPath);
     }
-    else // IsDir()
+    else  // IsDir()
     {
         Array<Path> srcSubPaths = srcPath.GetSubPaths(FindFlag::SIMPLE);
-        const Path& srcDir = srcPath;
-        const Path& dstDir = dstPath;
-        for (const Path &srcSubPath : srcSubPaths)
+        const Path &srcDir = srcPath;
+        const Path &dstDir = dstPath;
+        for(const Path &srcSubPath : srcSubPaths)
         {
             const Path srcRelSubPath = srcSubPath.GetRelativePath(srcDir);
             const Path dstSubPath = dstDir.Append(srcRelSubPath);
-            if (dstSubPath.Exists())
+            if(dstSubPath.Exists())
             {
                 DuplicateImportFiles(srcSubPath, dstSubPath);
             }
@@ -463,8 +460,8 @@ void DuplicateImportFiles(const Path &srcPath, const Path &dstPath)
 
 void Explorer::DuplicatePathIntoDir(const Path &srcPath, const Path &dstDirPath)
 {
-    const Path dstPath = dstDirPath.Append( srcPath.GetNameExt() ).
-                         GetDuplicatePath();
+    const Path dstPath =
+        dstDirPath.Append(srcPath.GetNameExt()).GetDuplicatePath();
     File::Duplicate(srcPath, dstPath);
     DuplicateImportFiles(srcPath, dstPath);
 
@@ -476,26 +473,25 @@ void Explorer::OnRename(ExplorerItem *explorerItem)
 {
     const Path &path = explorerItem->GetPath();
 
-    String newName = Dialog::GetString("Rename", "Introduce the new name:",
-                                       path.GetName());
+    String newName =
+        Dialog::GetString("Rename", "Introduce the new name:", path.GetName());
     String oldExtensions = String::Join(path.GetExtensions(), ".");
 
-    if (!newName.IsEmpty())
+    if(!newName.IsEmpty())
     {
         Path newPath = path.GetDirectory().Append(newName);
 
         String newExtension = newPath.GetExtension();
-        if (newExtension.IsEmpty())
+        if(newExtension.IsEmpty())
         {
             newPath = newPath.AppendExtension(oldExtensions);
         }
 
-        if (newPath != path)
+        if(newPath != path)
         {
-            if (newPath.Exists())
+            if(newPath.Exists())
             {
-                Dialog::Error("Can't rename",
-                              "The path already exists.");
+                Dialog::Error("Can't rename", "The path already exists.");
             }
             else
             {
@@ -513,15 +509,15 @@ void Explorer::OnRename(ExplorerItem *explorerItem)
 
 void Explorer::OnRemove(ExplorerItem *explorerItem)
 {
-    const Path& path = explorerItem->GetPath();
+    const Path &path = explorerItem->GetPath();
     Dialog::YesNoCancel yesNoCancel =
         Dialog::GetYesNoCancel("Remove", "Are you sure you want to remove '" +
-                               path.GetNameExt() + "' ?");
+                                             path.GetNameExt() + "' ?");
 
-    if (yesNoCancel == Dialog::YesNoCancel::YES)
+    if(yesNoCancel == Dialog::YesNoCancel::YES)
     {
-        File::Remove( path );
-        File::Remove( MetaFilesManager::GetMetaFilepath(path) );
+        File::Remove(path);
+        File::Remove(MetaFilesManager::GetMetaFilepath(path));
     }
 
     ForceCheckFileChanges();
@@ -529,8 +525,8 @@ void Explorer::OnRemove(ExplorerItem *explorerItem)
 
 void Explorer::OnDuplicate(ExplorerItem *explorerItem)
 {
-    const Path& srcPath = explorerItem->GetPath();
-    const Path& dstDirPath = GetCurrentPath();
+    const Path &srcPath = explorerItem->GetPath();
+    const Path &dstDirPath = GetCurrentPath();
     DuplicatePathIntoDir(srcPath, dstDirPath);
 }
 
@@ -538,11 +534,11 @@ void Explorer::OnPastedOver(ExplorerItem *item)
 {
     ASSERT(EditorClipboard::HasCopiedPath());
 
-    const Path dstDirPath = (item->GetPath().IsDir() ? item->GetPath() :
-                                                       GetCurrentPath() );
+    const Path dstDirPath =
+        (item->GetPath().IsDir() ? item->GetPath() : GetCurrentPath());
     ASSERT(dstDirPath.IsDir());
 
-    const Path& srcPath = EditorClipboard::GetCopiedPath();
+    const Path &srcPath = EditorClipboard::GetCopiedPath();
     DuplicatePathIntoDir(srcPath, dstDirPath);
 }
 
@@ -554,9 +550,9 @@ void Explorer::OnDroppedToDirectory(ExplorerItem *item)
 
 ExplorerItem *Explorer::GetSelectedItem() const
 {
-    for (ExplorerItem *explorerItem : p_items)
+    for(ExplorerItem *explorerItem : p_items)
     {
-        if (explorerItem->IsSelected())
+        if(explorerItem->IsSelected())
         {
             return explorerItem;
         }
@@ -571,25 +567,25 @@ ExplorerItem *Explorer::GetItemFromPath(const Path &path) const
 
 void Explorer::OnItemDoubleClicked(UIFocusable *itemFocusable)
 {
-    GameObject *itemGo = DCAST<UIFocusable*>(itemFocusable)->GetGameObject();
-    ExplorerItem *expItem = DCAST<ExplorerItem*>(itemGo);
+    GameObject *itemGo = DCAST<UIFocusable *>(itemFocusable)->GetGameObject();
+    ExplorerItem *expItem = DCAST<ExplorerItem *>(itemGo);
     ASSERT(expItem);
 
     const Path itemPath = expItem->GetPath();
-    if ( ExplorerItemFactory::CanHaveSubpaths(itemPath) )
+    if(ExplorerItemFactory::CanHaveSubpaths(itemPath))
     {
         SetCurrentPath(itemPath);
     }
     else
     {
-        if (itemPath.HasExtension(Extensions::GetSceneExtension()))
+        if(itemPath.HasExtension(Extensions::GetSceneExtension()))
         {
-            if (Editor::IsEditingScene())
+            if(Editor::IsEditingScene())
             {
                 SceneOpenerSaver::GetInstance()->OpenSceneInEditor(itemPath);
             }
         }
-        else if (itemPath.HasExtension(Extensions::GetBehaviourExtensions()))
+        else if(itemPath.HasExtension(Extensions::GetBehaviourExtensions()))
         {
             QtProjectManager::OpenBehaviourInQtCreator(itemPath);
         }
@@ -598,12 +594,12 @@ void Explorer::OnItemDoubleClicked(UIFocusable *itemFocusable)
 
 bool Explorer::IsInsideRootPath(const Path &path) const
 {
-    return path.IsSubPathOf( GetRootPath() );
+    return path.IsSubPathOf(GetRootPath());
 }
 
-void Explorer::OnValueChanged(EventEmitter<IEventsValueChanged>*)
+void Explorer::OnValueChanged(EventEmitter<IEventsValueChanged> *)
 {
-    p_explorerGridLayout->SetCellSize( Vector2i(p_iconSizeSlider->GetValue()) );
+    p_explorerGridLayout->SetCellSize(Vector2i(p_iconSizeSlider->GetValue()));
 }
 
 void Explorer::OnCreateContextMenu(MenuItem *menuRootItem)
@@ -611,10 +607,9 @@ void Explorer::OnCreateContextMenu(MenuItem *menuRootItem)
     menuRootItem->SetFontSize(12);
 
     MenuItem *createDirItem = menuRootItem->AddItem("Create directory");
-    createDirItem->SetSelectedCallback([this](MenuItem*)
-    {
-        Path newDirPath = GetCurrentPath().Append("New_directory").
-                          GetDuplicatePath();
+    createDirItem->SetSelectedCallback([this](MenuItem *) {
+        Path newDirPath =
+            GetCurrentPath().Append("New_directory").GetDuplicatePath();
         File::CreateDirectory(newDirPath);
         ForceCheckFileChanges();
         SelectPath(newDirPath);
@@ -624,9 +619,8 @@ void Explorer::OnCreateContextMenu(MenuItem *menuRootItem)
     MenuBar::CreateAssetsMenuInto(createAssetItem);
 
     MenuItem *pasteItem = menuRootItem->AddItem("Paste");
-    pasteItem->SetOverAndActionEnabled( EditorClipboard::HasCopiedPath() );
-    pasteItem->SetSelectedCallback([this](MenuItem*)
-    {
+    pasteItem->SetOverAndActionEnabled(EditorClipboard::HasCopiedPath());
+    pasteItem->SetSelectedCallback([this](MenuItem *) {
         const Path &copiedPath = EditorClipboard::GetCopiedPath();
         const Path newDir = GetCurrentPath();
         DuplicatePathIntoDir(copiedPath, newDir);
@@ -635,7 +629,7 @@ void Explorer::OnCreateContextMenu(MenuItem *menuRootItem)
 
 Explorer *Explorer::GetInstance()
 {
-    if (EditorScene *edScene = EditorSceneManager::GetEditorScene())
+    if(EditorScene *edScene = EditorSceneManager::GetEditorScene())
     {
         return edScene->GetExplorer();
     }

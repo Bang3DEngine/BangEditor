@@ -25,19 +25,20 @@
 #include "Bang/UIImageRenderer.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class AnimatorStateMachine;
-FORWARD class AnimatorStateMachineNode;
-FORWARD class IEventsAnimatorStateMachine;
-FORWARD class UIFocusable;
-FORWARD class UIImageRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class AnimatorStateMachine;
+class AnimatorStateMachineNode;
+class IEventsAnimatorStateMachine;
+class UIFocusable;
+class UIImageRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class AESNode;
-FORWARD class UIContextMenu;
+using namespace Bang;
+namespace BangEditor
+{
+class AESNode;
+class UIContextMenu;
 
 class AnimatorSMEditorScene : public GameObject,
                               public EventListener<IEventsFocus>,
@@ -60,13 +61,13 @@ public:
     void Clear();
 
     float GetZoomScale() const;
-    const Array<AESNode*>& GetAESNodes() const;
-    AnimatorStateMachine* GetAnimatorSM() const;
+    const Array<AESNode *> &GetAESNodes() const;
+    AnimatorStateMachine *GetAnimatorSM() const;
 
 private:
     RH<AnimatorStateMachine> p_animatorSM;
 
-    Array<AESNode*> p_nodes;
+    Array<AESNode *> p_nodes;
     UIFocusable *p_focusable = nullptr;
     GameObject *p_gridContainer = nullptr;
     UIImageRenderer *p_gridImg = nullptr;
@@ -99,8 +100,6 @@ private:
 
     friend class AnimatorSMEditor;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // ANIMATOREDITORSCENE_H
-
+#endif  // ANIMATOREDITORSCENE_H

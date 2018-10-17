@@ -15,24 +15,26 @@
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/SelectProjectWindow.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 int main(int argc, char **argv)
 {
     EditorApplication editorApplication;
-    const Path engPath = Paths::GetResolvedPath( Path("" BANG_ENGINE_ROOT) );
-    const Path edtPath = Paths::GetResolvedPath( Path("" BANG_EDITOR_ROOT) );
-    Debug_Log("BangEngineRoot: " << "" BANG_ENGINE_ROOT << " => " << engPath);
-    Debug_Log("BangEditorRoot: " << "" BANG_EDITOR_ROOT << " => " << edtPath);
+    const Path engPath = Paths::GetResolvedPath(Path("" BANG_ENGINE_ROOT));
+    const Path edtPath = Paths::GetResolvedPath(Path("" BANG_EDITOR_ROOT));
+    Debug_Log("BangEngineRoot: "
+              << "" BANG_ENGINE_ROOT << " => " << engPath);
+    Debug_Log("BangEditorRoot: "
+              << "" BANG_EDITOR_ROOT << " => " << edtPath);
     editorApplication.InitEditorApplication(engPath, edtPath);
 
     Path projectToBeOpen = Path::Empty;
-    if (argc < 2)
+    if(argc < 2)
     {
         // Select project window
         SelectProjectWindow *selectProjectWindow =
-                             WindowManager::CreateWindow<SelectProjectWindow>();
+            WindowManager::CreateWindow<SelectProjectWindow>();
         Window::SetActive(selectProjectWindow);
         selectProjectWindow->Init();
         editorApplication.MainLoop();
@@ -44,18 +46,17 @@ int main(int argc, char **argv)
         projectToBeOpen = Path(argv[1]);
     }
 
-    if (projectToBeOpen.IsEmpty())
+    if(projectToBeOpen.IsEmpty())
     {
         Debug_Log("No project selected.");
         Application::Exit(0, true);
     }
 
-    if (!projectToBeOpen.IsFile())
+    if(!projectToBeOpen.IsFile())
     {
         Debug_Error("Could not open project '" << projectToBeOpen << "'");
         Application::Exit(1, true);
     }
-
 
     // Main window
     Window *mainWindow = WindowManager::CreateWindow<EditorWindow>();

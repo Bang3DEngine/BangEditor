@@ -6,9 +6,9 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/EditorComponentsClassIds.h"
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class NotSelectableInEditor : public Component
 {
     COMPONENT_WITH_FAST_DYNAMIC_CAST(NotSelectableInEditor)
@@ -20,8 +20,6 @@ private:
     }
     virtual ~NotSelectableInEditor() override = default;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // NOTSELECTABLEINEDITOR_H
-
+#endif  // NOTSELECTABLEINEDITOR_H

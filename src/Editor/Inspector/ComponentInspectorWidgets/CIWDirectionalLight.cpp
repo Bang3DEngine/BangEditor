@@ -11,12 +11,13 @@
 #include "Bang/IEvents.h"
 #include "Bang/UIInputNumber.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 void CIWDirectionalLight::InitInnerWidgets()
 {
@@ -27,7 +28,8 @@ void CIWDirectionalLight::InitInnerWidgets()
 
     p_shadowDistanceInput = GameObjectFactory::CreateUIInputNumber();
     p_shadowDistanceInput->SetMinMaxValues(1.0f, 2000.0f);
-    p_shadowDistanceInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_shadowDistanceInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
     AddWidget("Shadow dist.", p_shadowDistanceInput->GetGameObject());
 
     SetLabelsWidth(110);
@@ -37,20 +39,22 @@ void CIWDirectionalLight::UpdateFromReference()
 {
     CIWLight::UpdateFromReference();
 
-    if (!p_shadowDistanceInput->HasFocus())
+    if(!p_shadowDistanceInput->HasFocus())
     {
-        p_shadowDistanceInput->SetValue( GetDirectionalLight()->GetShadowDistance() );
+        p_shadowDistanceInput->SetValue(
+            GetDirectionalLight()->GetShadowDistance());
     }
 }
 
 DirectionalLight *CIWDirectionalLight::GetDirectionalLight() const
 {
-    return SCAST<DirectionalLight*>( GetLight() );
+    return SCAST<DirectionalLight *>(GetLight());
 }
 
-void CIWDirectionalLight::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
+void CIWDirectionalLight::OnValueChangedCIW(
+    EventEmitter<IEventsValueChanged> *object)
 {
     CIWLight::OnValueChangedCIW(object);
 
-    GetDirectionalLight()->SetShadowDistance( p_shadowDistanceInput->GetValue() );
+    GetDirectionalLight()->SetShadowDistance(p_shadowDistanceInput->GetValue());
 }

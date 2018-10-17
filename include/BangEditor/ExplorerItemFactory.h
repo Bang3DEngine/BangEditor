@@ -6,30 +6,29 @@
 #include "Bang/BangDefines.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Path;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Path;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class ExplorerItem;
+using namespace Bang;
+namespace BangEditor
+{
+class ExplorerItem;
 
 class ExplorerItemFactory
 {
 public:
-    static ExplorerItem* CreateExplorerItem(const Path &path);
-    static Array<ExplorerItem*> CreateAndGetSubPathsExplorerItems(
-                                                    const Path &path,
-                                                    bool addBackItem);
+    static ExplorerItem *CreateExplorerItem(const Path &path);
+    static Array<ExplorerItem *> CreateAndGetSubPathsExplorerItems(
+        const Path &path,
+        bool addBackItem);
     static bool CanHaveSubpaths(const Path &path);
 
 private:
-	ExplorerItemFactory();
+    ExplorerItemFactory();
     virtual ~ExplorerItemFactory();
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // EXPLORERITEMFACTORY_H
-
+#endif  // EXPLORERITEMFACTORY_H

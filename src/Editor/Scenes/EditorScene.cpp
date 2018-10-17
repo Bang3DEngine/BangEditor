@@ -49,13 +49,14 @@
 #include "BangEditor/UITabStation.h"
 #include "BangEditor/UndoRedoManager.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsDestroy;
-FORWARD class IEventsFileTracker;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDestroy;
+class IEventsFileTracker;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 EditorScene::EditorScene()
 {
@@ -71,16 +72,18 @@ void EditorScene::Init()
     m_editorFileTracker = new EditorFileTracker();
 
     GameObjectFactory::CreateUISceneInto(this);
-    this->RemoveComponent( GetComponent<Camera>() );
+    this->RemoveComponent(GetComponent<Camera>());
     SetName("EditorScene");
 
-    m_mainEditorVLGo = GameObjectFactory::CreateUIGameObjectNamed("MainEditorVL");
-    UIVerticalLayout *mainEdVL = m_mainEditorVLGo->AddComponent<UIVerticalLayout>();
+    m_mainEditorVLGo =
+        GameObjectFactory::CreateUIGameObjectNamed("MainEditorVL");
+    UIVerticalLayout *mainEdVL =
+        m_mainEditorVLGo->AddComponent<UIVerticalLayout>();
     mainEdVL->SetPaddings(5, 30, 5, 0);
     m_mainEditorVLGo->SetParent(this);
 
     m_menuBar = GameObject::Create<MenuBar>();
-    m_menuBar->GetTransform()->TranslateLocal( Vector3(0, 0, -0.1) );
+    m_menuBar->GetTransform()->TranslateLocal(Vector3(0, 0, -0.1));
     m_menuBar->SetParent(m_mainEditorVLGo);
 
     // GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 5)->
@@ -101,23 +104,34 @@ void EditorScene::Init()
     p_tabStation->SetParent(m_mainEditorVLGo);
 
     p_tabStation->GetTabContainer()->AddTab("Scene", p_sceneEditContainer);
-    p_tabStation->GetTabContainer()->AddTab("Game",  p_scenePlayContainer);
-    p_tabStation->GetTabContainer()->AddTab("AnimatorSM Editor", p_animatorSMEditor);
-    p_tabStation->GetChildStationAndCreateIfNeeded(Side::LEFT)->
-                  GetTabContainer()->AddTab("Hierarchy", p_hierarchy);
-    p_tabStation->GetChildStationAndCreateIfNeeded(Side::RIGHT)->
-                  GetTabContainer()->AddTab("Inspector", p_inspector);
-    p_tabStation->GetChildStationAndCreateIfNeeded(Side::BOT)->
-                  GetTabContainer()->AddTab("Explorer", p_explorer);
-    p_tabStation->GetChildStationAndCreateIfNeeded(Side::BOT)->
-                  GetTabContainer()->AddTab("Console", p_console);
+    p_tabStation->GetTabContainer()->AddTab("Game", p_scenePlayContainer);
+    p_tabStation->GetTabContainer()->AddTab("AnimatorSM Editor",
+                                            p_animatorSMEditor);
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::LEFT)
+        ->GetTabContainer()
+        ->AddTab("Hierarchy", p_hierarchy);
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::RIGHT)
+        ->GetTabContainer()
+        ->AddTab("Inspector", p_inspector);
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::BOT)
+        ->GetTabContainer()
+        ->AddTab("Explorer", p_explorer);
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::BOT)
+        ->GetTabContainer()
+        ->AddTab("Console", p_console);
 
-    p_tabStation->GetChildStationAndCreateIfNeeded(Side::LEFT)->GetParent()->
-                  GetComponent<UILayoutElement>()->SetFlexibleWidth(0.1f);
-    p_tabStation->GetChildStationAndCreateIfNeeded(Side::RIGHT)->GetParent()->
-                  GetComponent<UILayoutElement>()->SetFlexibleWidth(0.2f);
-    p_tabStation->GetChildStationAndCreateIfNeeded(Side::BOT)->GetParent()->
-                  GetComponent<UILayoutElement>()->SetFlexibleHeight(0.3f);
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::LEFT)
+        ->GetParent()
+        ->GetComponent<UILayoutElement>()
+        ->SetFlexibleWidth(0.1f);
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::RIGHT)
+        ->GetParent()
+        ->GetComponent<UILayoutElement>()
+        ->SetFlexibleWidth(0.2f);
+    p_tabStation->GetChildStationAndCreateIfNeeded(Side::BOT)
+        ->GetParent()
+        ->GetComponent<UILayoutElement>()
+        ->SetFlexibleHeight(0.3f);
 
     // Editor cam creation
     Camera *cam = GameObjectFactory::CreateUICameraInto(this);
@@ -128,25 +142,26 @@ void EditorScene::Init()
     cam->RemoveRenderPass(RenderPass::OVERLAY);
     cam->RemoveRenderPass(RenderPass::OVERLAY_POSTPROCESS);
 
-    #ifdef DEBUG
+#ifdef DEBUG
     cam->AddRenderPass(RenderPass::OVERLAY);
-    #endif
+#endif
 
-    cam->SetClearColor( Color::White.WithValue(0.8f) );
+    cam->SetClearColor(Color::White.WithValue(0.8f));
     cam->SetClearMode(CameraClearMode::COLOR);
-    cam->SetRenderFlags( RenderFlags(RenderFlag::NONE).
-                         SetOn(RenderFlag::CLEAR_COLOR).
-                         SetOn(RenderFlag::CLEAR_DEPTH_STENCIL) );
+    cam->SetRenderFlags(RenderFlags(RenderFlag::NONE)
+                            .SetOn(RenderFlag::CLEAR_COLOR)
+                            .SetOn(RenderFlag::CLEAR_DEPTH_STENCIL));
     SetCamera(cam);
 
-
-    EditorWindow *editorWindow = SCAST<EditorWindow*>(Window::GetActive());
+    EditorWindow *editorWindow = SCAST<EditorWindow *>(Window::GetActive());
     editorWindow->EventEmitter<IEventsWindow>::RegisterListener(this);
 
-    ScenePlayer::GetInstance()->EventEmitter<IEventsScenePlayer>::RegisterListener(this);
-    SceneManager::GetActive()->EventEmitter<IEventsSceneManager>::RegisterListener(this);
+    ScenePlayer::GetInstance()
+        ->EventEmitter<IEventsScenePlayer>::RegisterListener(this);
+    SceneManager::GetActive()
+        ->EventEmitter<IEventsSceneManager>::RegisterListener(this);
     GetEditorFileTracker()->EventEmitter<IEventsFileTracker>::RegisterListener(
-                                EditorBehaviourManager::GetActive());
+        EditorBehaviourManager::GetActive());
 
     ScenePlayer::StopScene();
 
@@ -170,19 +185,20 @@ void EditorScene::Update()
     GetScenePlayer()->Update();
 
     String sceneTabName = "Scene - ";
-    if (Scene *openScene = GetOpenScene())
+    if(Scene *openScene = GetOpenScene())
     {
-        if (ScenePlayer::GetPlayState() == PlayState::PLAYING)
+        if(ScenePlayer::GetPlayState() == PlayState::PLAYING)
         {
             // Update open scene if playing
             BindOpenScene();
 
             Input::Context openSceneInputContext;
-            openSceneInputContext.focus = GetScenePlayContainer()->GetFocusable();
-            openSceneInputContext.rect  = AARecti(GetScenePlayContainer()->
-                                                  GetSceneImage()->
-                                                  GetRectTransform()->
-                                                  GetViewportAARect());
+            openSceneInputContext.focus =
+                GetScenePlayContainer()->GetFocusable();
+            openSceneInputContext.rect = AARecti(GetScenePlayContainer()
+                                                     ->GetSceneImage()
+                                                     ->GetRectTransform()
+                                                     ->GetViewportAARect());
             Input::SetContext(openSceneInputContext);
 
             SceneManager::OnNewFrame(openScene);
@@ -191,10 +207,11 @@ void EditorScene::Update()
         }
 
         // Set scene tab name
-        Path loadedScenePath = SceneOpenerSaver::GetInstance()->GetLoadedScenePath();
+        Path loadedScenePath =
+            SceneOpenerSaver::GetInstance()->GetLoadedScenePath();
         sceneTabName += loadedScenePath.GetName();
-        if ( Editor::IsEditingScene() &&
-            !SceneOpenerSaver::GetInstance()->IsCurrentSceneSaved())
+        if(Editor::IsEditingScene() &&
+           !SceneOpenerSaver::GetInstance()->IsCurrentSceneSaved())
         {
             sceneTabName += " (*)";
         }
@@ -203,26 +220,26 @@ void EditorScene::Update()
     // Update editor scene stuff
     Input::Context editSceneInputContext;
     editSceneInputContext.focus = GetSceneEditContainer()->GetFocusable();
-    editSceneInputContext.rect  = AARecti(GetSceneEditContainer()->
-                                          GetSceneImage()->
-                                          GetRectTransform()->
-                                          GetViewportAARect());
+    editSceneInputContext.rect = AARecti(GetSceneEditContainer()
+                                             ->GetSceneImage()
+                                             ->GetRectTransform()
+                                             ->GetViewportAARect());
     Input::SetContext(editSceneInputContext);
     GetEditSceneGameObjects()->Update();
     Input::ClearContext();
 
-    if (UITabStation *sceneEditTabStation = p_tabStation->FindTabStationOf(
-                                                        p_sceneEditContainer))
+    if(UITabStation *sceneEditTabStation =
+           p_tabStation->FindTabStationOf(p_sceneEditContainer))
     {
-        sceneEditTabStation->GetTabContainer()->SetTabTitle(p_sceneEditContainer,
-                                                            sceneTabName);
+        sceneEditTabStation->GetTabContainer()->SetTabTitle(
+            p_sceneEditContainer, sceneTabName);
     }
 }
 
 void EditorScene::OnResize(int newWidth, int newHeight)
 {
     Scene::OnResize(newWidth, newHeight);
-    if ( GetOpenScene() )
+    if(GetOpenScene())
     {
         BindOpenScene();
         GetOpenScene()->OnResize(newWidth, newHeight);
@@ -232,12 +249,13 @@ void EditorScene::OnResize(int newWidth, int newHeight)
 
 void EditorScene::SetOpenScene(Scene *openScene)
 {
-    if (openScene != GetOpenScene())
+    if(openScene != GetOpenScene())
     {
         p_openScene = openScene;
-        if (GetOpenScene())
+        if(GetOpenScene())
         {
-            GetOpenScene()->EventEmitter<IEventsDestroy>::RegisterListener(this);
+            GetOpenScene()->EventEmitter<IEventsDestroy>::RegisterListener(
+                this);
 
             BindOpenScene();
             GetOpenScene()->InvalidateCanvas();
@@ -248,15 +266,15 @@ void EditorScene::SetOpenScene(Scene *openScene)
 
 void EditorScene::OnTabHeaderClicked(UITabHeader *header)
 {
-    if (header->GetTitle().BeginsWith("Scene"))
+    if(header->GetTitle().BeginsWith("Scene"))
     {
         UICanvas::GetActive(this)->SetFocus(
-                    GetSceneEditContainer()->GetFocusable());
+            GetSceneEditContainer()->GetFocusable());
     }
-    else if (header->GetTitle() == "Game")
+    else if(header->GetTitle() == "Game")
     {
         UICanvas::GetActive(this)->SetFocus(
-                    GetScenePlayContainer()->GetFocusable());
+            GetScenePlayContainer()->GetFocusable());
     }
 }
 
@@ -273,7 +291,7 @@ void EditorScene::OnFocusLost(Window *w)
 
 void EditorScene::OnSceneLoaded(Scene *scene, const Path &)
 {
-    if (scene != this)
+    if(scene != this)
     {
         SetOpenScene(scene);
     }
@@ -286,11 +304,12 @@ Scene *EditorScene::GetOpenScene() const
 
 void EditorScene::OpenTab(GameObject *tabbedChild)
 {
-    if (auto playTabStation = p_tabStation->FindTabStationOf(tabbedChild))
+    if(auto playTabStation = p_tabStation->FindTabStationOf(tabbedChild))
     {
         playTabStation->GetTabContainer()->SetCurrentTabChild(tabbedChild);
     }
-    UICanvas::GetActive(this)->SetFocus(tabbedChild->GetComponent<UIFocusable>());
+    UICanvas::GetActive(this)->SetFocus(
+        tabbedChild->GetComponent<UIFocusable>());
 }
 
 AARect EditorScene::GetOpenSceneWindowRectNDC() const
@@ -300,15 +319,15 @@ AARect EditorScene::GetOpenSceneWindowRectNDC() const
 
 void EditorScene::BindOpenScene()
 {
-    if ( GetOpenScene() )
+    if(GetOpenScene())
     {
-        EditorSceneManager::SetActiveScene( GetOpenScene() );
+        EditorSceneManager::SetActiveScene(GetOpenScene());
     }
 }
 
 void EditorScene::UnBindOpenScene()
 {
-    if ( GetOpenScene() )
+    if(GetOpenScene())
     {
         EditorSceneManager::SetActiveScene(this);
     }
@@ -389,23 +408,20 @@ void EditorScene::OnPlayStateChanged(PlayState previousPlayState,
     BANG_UNUSED(previousPlayState);
 
     // Change tab when play/stop
-    switch (newPlayState)
+    switch(newPlayState)
     {
-        case PlayState::EDITING:
-        {
-            OpenTab( GetSceneEditContainer() );
+        case PlayState::EDITING: { OpenTab(GetSceneEditContainer());
         }
         break;
 
         case PlayState::PLAYING:
-            if (previousPlayState == PlayState::JUST_BEFORE_PLAYING)
+            if(previousPlayState == PlayState::JUST_BEFORE_PLAYING)
             {
-                OpenTab( GetScenePlayContainer() );
+                OpenTab(GetScenePlayContainer());
             }
-        break;
+            break;
 
-        default:
-        break;
+        default: break;
     }
 }
 
@@ -413,7 +429,7 @@ void EditorScene::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     Scene::OnDestroyed(object);
 
-    if (object == GetOpenScene())
+    if(object == GetOpenScene())
     {
         p_openScene = nullptr;
     }

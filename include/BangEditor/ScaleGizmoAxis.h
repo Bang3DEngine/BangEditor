@@ -9,16 +9,17 @@
 #include "BangEditor/SelectionGizmo.h"
 #include "BangEditor/TransformGizmoAxis.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Color;
-FORWARD class GameObject;
-FORWARD class LineRenderer;
-FORWARD class MeshRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Color;
+class GameObject;
+class LineRenderer;
+class MeshRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class ScaleGizmoAxis : public TransformGizmoAxis
 {
     GAMEOBJECT_EDITOR(ScaleGizmoAxis);
@@ -56,8 +57,6 @@ private:
     bool ApplyAlignmentAlpha() const override;
     void SetColor(const Color &color) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // SCALEGIZMOAXIS_H
-
+#endif  // SCALEGIZMOAXIS_H

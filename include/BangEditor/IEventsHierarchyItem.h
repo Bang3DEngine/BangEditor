@@ -5,9 +5,9 @@
 
 #include "BangEditor/BangEditor.h"
 
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class HierarchyItem;
+namespace BangEditor
+{
+class HierarchyItem;
 
 class IEventsHierarchyItem
 {
@@ -48,9 +48,7 @@ public:
     {
         BANG_UNUSED(item);
     }
-
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // IEVENTSHIERARCHYITEM_H
+#endif  // IEVENTSHIERARCHYITEM_H

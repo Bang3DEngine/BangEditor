@@ -18,16 +18,17 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ResourcePreviewFactory.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Camera;
-FORWARD class GameObject;
-FORWARD class Scene;
-FORWARD class Texture2D;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Camera;
+class GameObject;
+class Scene;
+class Texture2D;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class MaterialPreviewFactory : public ResourcePreviewFactory<Material>
 {
 public:
@@ -36,8 +37,8 @@ public:
 
     static RH<Texture2D> GetPreviewTextureFor(Material *material);
     static RH<Texture2D> GetPreviewTextureFor(
-                              Material *material,
-                              const ResourcePreviewFactoryParameters &params);
+        Material *material,
+        const ResourcePreviewFactoryParameters &params);
     static MaterialPreviewFactory *GetActive();
 
 private:
@@ -46,20 +47,18 @@ private:
                                 Camera *previewCamera,
                                 GameObject *previewGoContainer) override;
     void OnUpdateTextureBegin(
-                  Scene *previewScene,
-                  Camera *previewCamera,
-                  GameObject *previewGoContainer,
-                  Material *material,
-                  const ResourcePreviewFactoryParameters &params) override;
+        Scene *previewScene,
+        Camera *previewCamera,
+        GameObject *previewGoContainer,
+        Material *material,
+        const ResourcePreviewFactoryParameters &params) override;
     void OnUpdateTextureEnd(
-                  Scene *previewScene,
-                  Camera *previewCamera,
-                  GameObject *previewGoContainer,
-                  Material *material,
-                  const ResourcePreviewFactoryParameters &params) override;
+        Scene *previewScene,
+        Camera *previewCamera,
+        GameObject *previewGoContainer,
+        Material *material,
+        const ResourcePreviewFactoryParameters &params) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // MATERIALPREVIEWFACTORY_H
-
+#endif  // MATERIALPREVIEWFACTORY_H

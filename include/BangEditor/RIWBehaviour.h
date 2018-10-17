@@ -8,15 +8,16 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ResourceInspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Texture2D;
-FORWARD class UIButton;
-FORWARD class UITextRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Texture2D;
+class UIButton;
+class UITextRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class RIWBehaviour : public ResourceInspectorWidget
 {
     GAMEOBJECT_EDITOR(RIWBehaviour);
@@ -26,8 +27,8 @@ public:
     void Init() override;
 
 private:
-	RIWBehaviour();
-	virtual ~RIWBehaviour() override;
+    RIWBehaviour();
+    virtual ~RIWBehaviour() override;
 
     // ResourceInspectorWidget
     void UpdateFromFileWhenChanged() override;
@@ -39,8 +40,6 @@ private:
 
     friend class ResourceInspectorWidgetFactory;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // RIWBEHAVIOUR_H
-
+#endif  // RIWBEHAVIOUR_H

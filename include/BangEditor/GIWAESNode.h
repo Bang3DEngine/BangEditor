@@ -13,25 +13,27 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/InspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsDestroy;
-FORWARD   class IEventsValueChanged;
-FORWARD   class UIInputText;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDestroy;
+class IEventsValueChanged;
+class UIInputText;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class AESNode;
-FORWARD class UIInputFileWithPreview;
+using namespace Bang;
+namespace BangEditor
+{
+class AESNode;
+class UIInputFileWithPreview;
 
 class GIWAESNode : public InspectorWidget,
                    public EventListener<IEventsValueChanged>
 {
 public:
-	GIWAESNode();
-	virtual ~GIWAESNode() override;
+    GIWAESNode();
+    virtual ~GIWAESNode() override;
 
     // InspectorWidget
     virtual void InitInnerWidgets() override;
@@ -39,11 +41,11 @@ public:
     void SetAESNode(AESNode *node);
 
 private:
-    AESNode *p_aesNode =  nullptr;
+    AESNode *p_aesNode = nullptr;
     UIInputText *p_nameInput = nullptr;
     UIInputFileWithPreview *p_nodeAnimationInput = nullptr;
 
-    AESNode* GetAESNode() const;
+    AESNode *GetAESNode() const;
 
     // InspectorWidget
     virtual void UpdateFromReference() override;
@@ -54,8 +56,6 @@ private:
     // IEventsDestroy
     virtual void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // GIWAESNODE_H
-
+#endif  // GIWAESNODE_H

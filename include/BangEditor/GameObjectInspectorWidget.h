@@ -16,25 +16,27 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/InspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class UIInputText;
-FORWARD   class GameObject;
-FORWARD   class IEventsValueChanged;
-FORWARD   class UICheckBox;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class UIInputText;
+class GameObject;
+class IEventsValueChanged;
+class UICheckBox;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class GameObjectInspectorWidget : public InspectorWidget,
                                   public EventListener<IEventsValueChanged>
 {
     GAMEOBJECT_EDITOR(GameObjectInspectorWidget);
 
 public:
-	GameObjectInspectorWidget();
-	virtual ~GameObjectInspectorWidget() override;
+    GameObjectInspectorWidget();
+    virtual ~GameObjectInspectorWidget() override;
 
     void SetGameObject(GameObject *gameObject);
     GameObject *GetGameObject() const;
@@ -50,10 +52,9 @@ private:
     UICheckBox *p_enabledInput = nullptr;
 
     // IEventsValueChanged
-    virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
+    virtual void OnValueChanged(
+        EventEmitter<IEventsValueChanged> *object) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // GAMEOBJECTINSPECTORWIDGET_H
-
+#endif  // GAMEOBJECTINSPECTORWIDGET_H

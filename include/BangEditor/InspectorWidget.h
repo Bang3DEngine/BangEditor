@@ -8,19 +8,20 @@
 #include "Bang/UMap.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Color;
-FORWARD class UICheckBox;
-FORWARD class UIImageRenderer;
-FORWARD class UILabel;
-FORWARD class UILayoutElement;
-FORWARD class UITextRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Color;
+class UICheckBox;
+class UIImageRenderer;
+class UILabel;
+class UILayoutElement;
+class UITextRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class InspectorWidgetTitle;
+using namespace Bang;
+namespace BangEditor
+{
+class InspectorWidgetTitle;
 
 class InspectorWidget : public GameObject
 {
@@ -29,11 +30,11 @@ class InspectorWidget : public GameObject
 public:
     virtual void Init();
 
-    const String& GetTitle() const;
+    const String &GetTitle() const;
     void SetBackgroundColor(const Color &bgColor);
 
 protected:
-    static constexpr int DefaultLabelWidth  = 50;
+    static constexpr int DefaultLabelWidth = 50;
     static constexpr int DefaultWidgetHeight = 20;
 
     InspectorWidget();
@@ -50,8 +51,7 @@ protected:
     virtual void UpdateFromReference();
 
     void AddLabel(const String &content, int height = -1, int width = -1);
-    void AddWidget(GameObject *widget,
-                   int height = DefaultWidgetHeight);
+    void AddWidget(GameObject *widget, int height = DefaultWidgetHeight);
     void AddWidget(const String &labelContent,
                    GameObject *widget,
                    int height = DefaultWidgetHeight);
@@ -63,14 +63,14 @@ protected:
     GameObject *GetWidgetsContainer() const;
 
 protected:
-    virtual InspectorWidgetTitle* CreateTitleGameObject();
+    virtual InspectorWidgetTitle *CreateTitleGameObject();
     InspectorWidgetTitle *GetInspectorWidgetTitle() const;
 
 private:
     int m_labelsWidth = -1;
-    List<GameObject*> p_widgets;
-    UMap<GameObject*, UILabel*> m_widgetToLabel;
-    UMap<UILabel*, UILayoutElement*> m_labelToLabelLE;
+    List<GameObject *> p_widgets;
+    UMap<GameObject *, UILabel *> m_widgetToLabel;
+    UMap<UILabel *, UILayoutElement *> m_labelToLabelLE;
 
     InspectorWidgetTitle *p_inspectorWidgetTitleGo = nullptr;
     UIImageRenderer *p_bgRenderer = nullptr;
@@ -103,10 +103,7 @@ private:
     UIImageRenderer *p_icon = nullptr;
     UITextRenderer *p_enabledText = nullptr;
     UICheckBox *p_enabledCheckBox = nullptr;
-
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // INSPECTORWIDGET_H
-
+#endif  // INSPECTORWIDGET_H

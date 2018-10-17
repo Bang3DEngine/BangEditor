@@ -13,24 +13,26 @@
 #include "Bang/GameObject.h"
 #include "Bang/IEvents.h"
 #include "Bang/IEventsDestroy.h"
+#include "Bang/IEventsSceneManager.h"
 #include "Bang/Object.h"
 #include "Bang/SceneManager.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/IEventsEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class GameObject;
-FORWARD class IEventsDestroy;
-FORWARD class IEventsSceneManager;
-FORWARD class Path;
-FORWARD class Scene;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class GameObject;
+class IEventsDestroy;
+class IEventsSceneManager;
+class Path;
+class Scene;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class EditorSettings;
-FORWARD class IEventsEditor;
+using namespace Bang;
+namespace BangEditor
+{
+class EditorSettings;
+class IEventsEditor;
 
 class Editor : public EventEmitter<IEventsEditor>,
                public EventListener<IEventsSceneManager>,
@@ -43,7 +45,7 @@ public:
 
     static bool IsEditingScene();
 
-    static Editor* GetInstance();
+    static Editor *GetInstance();
 
 private:
     GameObject *p_selectedGameObject = nullptr;
@@ -56,7 +58,7 @@ private:
 
     static void OnPathSelected(const Path &path);
 
-    EditorSettings* GetEditorSettings() const;
+    EditorSettings *GetEditorSettings() const;
 
     void SelectGameObject_(GameObject *selectedGameObject, bool registerUndo);
 
@@ -71,8 +73,6 @@ private:
     friend class EditorApplication;
     friend class UndoRedoGameObjectSelection;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // EDITOR_H
-
+#endif  // EDITOR_H

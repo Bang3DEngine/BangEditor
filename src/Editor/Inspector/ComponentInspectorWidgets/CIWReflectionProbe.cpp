@@ -27,12 +27,13 @@
 #include "BangEditor/UIInputVector.h"
 #include "BangEditor/UITextureCubeMapPreviewer.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 CIWReflectionProbe::CIWReflectionProbe()
 {
@@ -50,10 +51,12 @@ void CIWReflectionProbe::InitInnerWidgets()
     SetTitle("Reflection Probe");
 
     p_isBoxedCheckBox = GameObjectFactory::CreateUICheckBox();
-    p_isBoxedCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_isBoxedCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_filterForIBLCheckBox = GameObjectFactory::CreateUICheckBox();
-    p_filterForIBLCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_filterForIBLCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_sizeInput = GameObject::Create<UIInputVector>();
     p_sizeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
@@ -66,10 +69,11 @@ void CIWReflectionProbe::InitInnerWidgets()
     p_restTimeInput->SetDecimalPlaces(1);
 
     p_reflectionProbSizeInput = GameObjectFactory::CreateUIComboBox();
-    p_reflectionProbSizeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-    p_reflectionProbSizeInput->AddItem("128",  128);
-    p_reflectionProbSizeInput->AddItem("256",  256);
-    p_reflectionProbSizeInput->AddItem("512",  512);
+    p_reflectionProbSizeInput
+        ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_reflectionProbSizeInput->AddItem("128", 128);
+    p_reflectionProbSizeInput->AddItem("256", 256);
+    p_reflectionProbSizeInput->AddItem("512", 512);
     p_reflectionProbSizeInput->AddItem("1024", 1024);
     p_reflectionProbSizeInput->AddItem("2048", 2048);
 
@@ -80,16 +84,19 @@ void CIWReflectionProbe::InitInnerWidgets()
     p_zFarInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_clearModeInput = GameObjectFactory::CreateUIComboBox();
-    p_clearModeInput->AddItem("Color",  SCAST<int>(CameraClearMode::COLOR));
+    p_clearModeInput->AddItem("Color", SCAST<int>(CameraClearMode::COLOR));
     p_clearModeInput->AddItem("SkyBox", SCAST<int>(CameraClearMode::SKY_BOX));
     p_clearModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_clearColorInput = GameObject::Create<UIInputColor>();
-    p_clearColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_clearColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_textureCubeMapInput = GameObject::Create<UIInputFileWithPreview>();
-    p_textureCubeMapInput->SetExtensions( {Extensions::GetTextureCubeMapExtension()} );
-    p_textureCubeMapInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_textureCubeMapInput->SetExtensions(
+        {Extensions::GetTextureCubeMapExtension()});
+    p_textureCubeMapInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_previewCMRenderer = GameObject::Create<UITextureCubeMapPreviewer>();
 
@@ -97,14 +104,14 @@ void CIWReflectionProbe::InitInnerWidgets()
     AddWidget("Rest time sec.", p_restTimeInput->GetGameObject());
     AddWidget("Boxed", p_isBoxedCheckBox->GetGameObject());
     AddWidget("Filter for IBL", p_filterForIBLCheckBox->GetGameObject());
-    AddWidget("Size",  p_sizeInput);
-    AddWidget( GameObjectFactory::CreateUIHSeparator(), 10 );
+    AddWidget("Size", p_sizeInput);
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddWidget("ZNear", p_zNearInput->GetGameObject());
     AddWidget("ZFar", p_zFarInput->GetGameObject());
     AddWidget("Clear Mode", p_clearModeInput->GetGameObject());
     AddWidget("Clear Color", p_clearColorInput);
     AddWidget("SkyBox", p_textureCubeMapInput);
-    AddWidget( GameObjectFactory::CreateUIHSeparator(), 10 );
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
     AddLabel("Preview");
     AddWidget(p_previewCMRenderer, 200);
 
@@ -117,52 +124,53 @@ void CIWReflectionProbe::UpdateFromReference()
 
     ReflectionProbe *reflProbe = GetReflectionProbe();
 
-    if (!p_zNearInput->HasFocus())
+    if(!p_zNearInput->HasFocus())
     {
-        p_zNearInput->SetValue( reflProbe->GetCamerasZNear() );
+        p_zNearInput->SetValue(reflProbe->GetCamerasZNear());
     }
 
-    if (!p_zFarInput->HasFocus())
+    if(!p_zFarInput->HasFocus())
     {
-        p_zFarInput->SetValue( reflProbe->GetCamerasZFar() );
+        p_zFarInput->SetValue(reflProbe->GetCamerasZFar());
     }
 
-    if (!p_clearModeInput->HasFocus())
+    if(!p_clearModeInput->HasFocus())
     {
         p_clearModeInput->SetSelectionByValue(
-                    SCAST<int>(reflProbe->GetCamerasClearMode()) );
+            SCAST<int>(reflProbe->GetCamerasClearMode()));
     }
 
-    if (!p_clearColorInput->HasFocus())
+    if(!p_clearColorInput->HasFocus())
     {
-        p_clearColorInput->SetColor( reflProbe->GetCamerasClearColor() );
+        p_clearColorInput->SetColor(reflProbe->GetCamerasClearColor());
     }
 
-    if (!p_reflectionProbSizeInput->HasFocus())
+    if(!p_reflectionProbSizeInput->HasFocus())
     {
-        p_reflectionProbSizeInput->SetSelectionByValue( reflProbe->GetRenderSize() );
+        p_reflectionProbSizeInput->SetSelectionByValue(
+            reflProbe->GetRenderSize());
     }
 
     TextureCubeMap *skyBoxTex = reflProbe->GetCamerasSkyBoxTexture();
-    if (skyBoxTex)
+    if(skyBoxTex)
     {
         p_textureCubeMapInput->SetPath(skyBoxTex->GetResourceFilepath());
     }
 
-    if (!p_sizeInput->HasFocus())
+    if(!p_sizeInput->HasFocus())
     {
-        p_sizeInput->Set( reflProbe->GetSize() );
+        p_sizeInput->Set(reflProbe->GetSize());
     }
 
-    if (!p_restTimeInput->HasFocus())
+    if(!p_restTimeInput->HasFocus())
     {
-        p_restTimeInput->SetValue( reflProbe->GetRestTime().GetSeconds() );
+        p_restTimeInput->SetValue(reflProbe->GetRestTime().GetSeconds());
     }
 
-    p_isBoxedCheckBox->SetChecked( reflProbe->GetIsBoxed() );
-    p_filterForIBLCheckBox->SetChecked( reflProbe->GetFilterForIBL() );
-    p_previewCMRenderer->SetTextureCubeMap( reflProbe->
-                                            GetTextureCubeMapWithoutFiltering() );
+    p_isBoxedCheckBox->SetChecked(reflProbe->GetIsBoxed());
+    p_filterForIBLCheckBox->SetChecked(reflProbe->GetFilterForIBL());
+    p_previewCMRenderer->SetTextureCubeMap(
+        reflProbe->GetTextureCubeMapWithoutFiltering());
 
     p_previewCMRenderer->InvalidateRenderer();
 }
@@ -173,35 +181,36 @@ void CIWReflectionProbe::LimitValues()
     p_zFarInput->SetMinValue(GetReflectionProbe()->GetCamerasZNear());
 }
 
-void CIWReflectionProbe::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
+void CIWReflectionProbe::OnValueChangedCIW(
+    EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChangedCIW(object);
 
     ReflectionProbe *reflProbe = GetReflectionProbe();
-    reflProbe->SetCamerasZNear( p_zNearInput->GetValue() );
-    reflProbe->SetCamerasZFar( p_zFarInput->GetValue() );
-    reflProbe->SetCamerasClearMode( SCAST<CameraClearMode>(
-                                    p_clearModeInput->GetSelectedValue()) );
-    reflProbe->SetCamerasClearColor( p_clearColorInput->GetColor() );
-    reflProbe->SetRenderSize( p_reflectionProbSizeInput->GetSelectedValue() );
+    reflProbe->SetCamerasZNear(p_zNearInput->GetValue());
+    reflProbe->SetCamerasZFar(p_zFarInput->GetValue());
+    reflProbe->SetCamerasClearMode(
+        SCAST<CameraClearMode>(p_clearModeInput->GetSelectedValue()));
+    reflProbe->SetCamerasClearColor(p_clearColorInput->GetColor());
+    reflProbe->SetRenderSize(p_reflectionProbSizeInput->GetSelectedValue());
 
     RH<TextureCubeMap> tcmRH;
-    if (p_textureCubeMapInput->GetPath().IsFile())
+    if(p_textureCubeMapInput->GetPath().IsFile())
     {
-        tcmRH = Resources::Load<TextureCubeMap>(
-                                    p_textureCubeMapInput->GetPath());
+        tcmRH =
+            Resources::Load<TextureCubeMap>(p_textureCubeMapInput->GetPath());
     }
     reflProbe->SetCamerasSkyBoxTexture(tcmRH.Get());
 
-    reflProbe->SetSize( p_sizeInput->GetVector3() );
-    reflProbe->SetIsBoxed( p_isBoxedCheckBox->IsChecked() );
-    reflProbe->SetRestTimeSeconds( p_restTimeInput->GetValue() );
-    reflProbe->SetFilterForIBL( p_filterForIBLCheckBox->IsChecked() );
+    reflProbe->SetSize(p_sizeInput->GetVector3());
+    reflProbe->SetIsBoxed(p_isBoxedCheckBox->IsChecked());
+    reflProbe->SetRestTimeSeconds(p_restTimeInput->GetValue());
+    reflProbe->SetFilterForIBL(p_filterForIBLCheckBox->IsChecked());
 
     p_previewCMRenderer->InvalidateRenderer();
 }
 
 ReflectionProbe *CIWReflectionProbe::GetReflectionProbe() const
 {
-    return SCAST<ReflectionProbe*>( GetComponent() );
+    return SCAST<ReflectionProbe *>(GetComponent());
 }

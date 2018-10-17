@@ -10,15 +10,16 @@
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Debug;
-FORWARD class Path;
-FORWARD class Paths;
-FORWARD class Resources;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Debug;
+class Path;
+class Paths;
+class Resources;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 EditorApplication::EditorApplication() : Application()
 {
@@ -36,15 +37,15 @@ void EditorApplication::InitEditorApplication(const Path &engineRootPath,
     EditorResources::GetInstance()->InitAfterGLIsInited();
 
     GetEditorPaths()->InitEditorPath(editorRootPath);
-    MetaFilesManager::CreateMissingMetaFiles( EditorPaths::GetEditorAssetsDir() );
-    MetaFilesManager::LoadMetaFilepathGUIDs(  EditorPaths::GetEditorAssetsDir() );
+    MetaFilesManager::CreateMissingMetaFiles(EditorPaths::GetEditorAssetsDir());
+    MetaFilesManager::LoadMetaFilepathGUIDs(EditorPaths::GetEditorAssetsDir());
 
     m_editor = new Editor();
 }
 
 EditorPaths *EditorApplication::GetEditorPaths() const
 {
-    return SCAST<EditorPaths*>(GetPaths());
+    return SCAST<EditorPaths *>(GetPaths());
 }
 
 void EditorApplication::OpenEditorScene()
@@ -57,9 +58,8 @@ void EditorApplication::OpenEditorScene()
 
 EditorApplication *EditorApplication::GetInstance()
 {
-    return SCAST<EditorApplication*>( Application::GetInstance() );
+    return SCAST<EditorApplication *>(Application::GetInstance());
 }
-
 
 Debug *EditorApplication::CreateDebug() const
 {

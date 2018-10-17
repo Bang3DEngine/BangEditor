@@ -6,18 +6,20 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class Renderer;
-FORWARD   class UICheckBox;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class Renderer;
+class UICheckBox;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UIInputFileWithPreview;
-FORWARD class UIInputMaterial;
+using namespace Bang;
+namespace BangEditor
+{
+class UIInputFileWithPreview;
+class UIInputMaterial;
 
 class CIWRenderer : public ComponentInspectorWidget
 {
@@ -42,8 +44,6 @@ protected:
     UICheckBox *p_useReflectionProbesCheckBox = nullptr;
     UIInputFileWithPreview *p_materialInputFile = nullptr;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWRENDERER_H
-
+#endif  // CIWRENDERER_H

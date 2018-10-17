@@ -2,7 +2,7 @@
 
 #include ".BEHAVIOUR_NAME.refl.h"
 
-USING_NAMESPACE_BANG
+using namespace Bang;
 
 BP_REFLECT_CLASS(BEHAVIOUR_NAME)
 class BEHAVIOUR_NAME : public Behaviour

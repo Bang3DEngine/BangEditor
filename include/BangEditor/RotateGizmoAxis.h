@@ -10,17 +10,18 @@
 #include "BangEditor/SelectionGizmo.h"
 #include "BangEditor/TransformGizmoAxis.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Color;
-FORWARD class GameObject;
-FORWARD class LineRenderer;
-FORWARD class Mesh;
-FORWARD class MeshRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Color;
+class GameObject;
+class LineRenderer;
+class Mesh;
+class MeshRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class RotateGizmoAxis : public TransformGizmoAxis
 {
     GAMEOBJECT_EDITOR(RotateGizmoAxis);
@@ -53,10 +54,7 @@ private:
     // TransformGizmoAxis
     bool ApplyAlignmentAlpha() const override;
     void SetColor(const Color &color) override;
-
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // ROTATEGIZMOAXIS_H
-
+#endif  // ROTATEGIZMOAXIS_H

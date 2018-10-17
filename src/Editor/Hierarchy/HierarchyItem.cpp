@@ -20,13 +20,14 @@
 #include "BangEditor/MenuItem.h"
 #include "BangEditor/UIContextMenu.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsObject;
-FORWARD class Object;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsObject;
+class Object;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 HierarchyItem::HierarchyItem()
 {
@@ -37,10 +38,8 @@ HierarchyItem::HierarchyItem()
     p_focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
 
     p_contextMenu = AddComponent<UIContextMenu>();
-    p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
-    {
-        OnCreateContextMenu(menuRootItem);
-    });
+    p_contextMenu->SetCreateContextMenuCallback(
+        [this](MenuItem *menuRootItem) { OnCreateContextMenu(menuRootItem); });
     p_contextMenu->SetFocusable(p_focusable);
 
     UIHorizontalLayout *hLayout = AddComponent<UIHorizontalLayout>();
@@ -62,24 +61,24 @@ HierarchyItem::~HierarchyItem()
 
 void HierarchyItem::SetReferencedGameObject(GameObject *referencedGameObject)
 {
-    if (referencedGameObject != GetReferencedGameObject())
+    if(referencedGameObject != GetReferencedGameObject())
     {
-        if (GetReferencedGameObject())
+        if(GetReferencedGameObject())
         {
-            GetReferencedGameObject()->
-                    EventEmitter<IEventsName>::UnRegisterListener(
-                                SCAST<EventListener<IEventsName>*>(this) );
+            GetReferencedGameObject()
+                ->EventEmitter<IEventsName>::UnRegisterListener(
+                    SCAST<EventListener<IEventsName> *>(this));
         }
 
         p_refGameObject = referencedGameObject;
 
         UpdateEnabledDisabledColor();
-        SetText( GetReferencedGameObject()->GetName() );
+        SetText(GetReferencedGameObject()->GetName());
 
-        GetReferencedGameObject()->
-                        EventEmitter<IEventsObject>::RegisterListener(this);
-        GetReferencedGameObject()->
-                        EventEmitter<IEventsName>::RegisterListener(this);
+        GetReferencedGameObject()
+            ->EventEmitter<IEventsObject>::RegisterListener(this);
+        GetReferencedGameObject()->EventEmitter<IEventsName>::RegisterListener(
+            this);
         SetName("HItem_" + GetReferencedGameObject()->GetName());
     }
 }
@@ -92,48 +91,48 @@ GameObject *HierarchyItem::GetReferencedGameObject() const
 void HierarchyItem::Rename()
 {
     EventEmitter<IEventsHierarchyItem>::PropagateToListeners(
-                &IEventsHierarchyItem::OnRename, this);
+        &IEventsHierarchyItem::OnRename, this);
 }
 
 void HierarchyItem::Remove()
 {
     EventEmitter<IEventsHierarchyItem>::PropagateToListeners(
-                &IEventsHierarchyItem::OnRemove, this);
+        &IEventsHierarchyItem::OnRemove, this);
 }
 
 void HierarchyItem::Copy()
 {
     EventEmitter<IEventsHierarchyItem>::PropagateToListeners(
-                &IEventsHierarchyItem::OnCopy, this);
+        &IEventsHierarchyItem::OnCopy, this);
 }
 
 void HierarchyItem::Cut()
 {
     EventEmitter<IEventsHierarchyItem>::PropagateToListeners(
-                &IEventsHierarchyItem::OnCut, this);
+        &IEventsHierarchyItem::OnCut, this);
 }
 
 void HierarchyItem::Paste()
 {
     EventEmitter<IEventsHierarchyItem>::PropagateToListeners(
-                &IEventsHierarchyItem::OnPaste, this);
+        &IEventsHierarchyItem::OnPaste, this);
 }
 
 void HierarchyItem::Duplicate()
 {
     EventEmitter<IEventsHierarchyItem>::PropagateToListeners(
-                &IEventsHierarchyItem::OnDuplicate, this);
+        &IEventsHierarchyItem::OnDuplicate, this);
 }
 
 void HierarchyItem::CreatePrefab()
 {
     EventEmitter<IEventsHierarchyItem>::PropagateToListeners(
-                &IEventsHierarchyItem::OnCreatePrefab, this);
+        &IEventsHierarchyItem::OnCreatePrefab, this);
 }
 
 void HierarchyItem::UpdateEnabledDisabledColor()
 {
-    if (GetReferencedGameObject()->IsEnabledRecursively())
+    if(GetReferencedGameObject()->IsEnabledRecursively())
     {
         p_textRenderer->SetTextColor(Color::Black);
     }
@@ -160,11 +159,12 @@ void HierarchyItem::OnDisabled(Object *obj)
     UpdateEnabledDisabledColor();
 }
 
-void HierarchyItem::OnNameChanged(GameObject *go, const String &,
+void HierarchyItem::OnNameChanged(GameObject *go,
+                                  const String &,
                                   const String &newName)
 {
     ASSERT(go == GetReferencedGameObject());
-    SetText( newName );
+    SetText(newName);
 }
 
 void HierarchyItem::OnCreateContextMenu(MenuItem *menuRootItem)
@@ -175,53 +175,32 @@ void HierarchyItem::OnCreateContextMenu(MenuItem *menuRootItem)
     MenuBar::CreateGameObjectCreateMenuInto(create);
 
     MenuItem *createPrefab = menuRootItem->AddItem("Create Prefab");
-    createPrefab->SetSelectedCallback([this](MenuItem*)
-    {
-        CreatePrefab();
-    });
+    createPrefab->SetSelectedCallback([this](MenuItem *) { CreatePrefab(); });
 
     menuRootItem->AddSeparator();
 
     MenuItem *copy = menuRootItem->AddItem("Copy");
-    copy->SetSelectedCallback([this](MenuItem*)
-    {
-        Copy();
-    });
+    copy->SetSelectedCallback([this](MenuItem *) { Copy(); });
 
     MenuItem *cut = menuRootItem->AddItem("Cut");
-    cut->SetSelectedCallback([this](MenuItem*)
-    {
-        Cut();
-    });
+    cut->SetSelectedCallback([this](MenuItem *) { Cut(); });
 
     MenuItem *paste = menuRootItem->AddItem("Paste");
-    paste->SetSelectedCallback([this](MenuItem*)
-    {
-        Paste();
-    });
-    paste->SetOverAndActionEnabled( EditorClipboard::HasCopiedGameObject() );
+    paste->SetSelectedCallback([this](MenuItem *) { Paste(); });
+    paste->SetOverAndActionEnabled(EditorClipboard::HasCopiedGameObject());
 
     MenuItem *duplicate = menuRootItem->AddItem("Duplicate");
-    duplicate->SetSelectedCallback([this](MenuItem*)
-    {
-        Duplicate();
-    });
+    duplicate->SetSelectedCallback([this](MenuItem *) { Duplicate(); });
 
     menuRootItem->AddSeparator();
 
     MenuItem *rename = menuRootItem->AddItem("Rename");
-    rename->SetSelectedCallback([this](MenuItem*)
-    {
-        Rename();
-    });
+    rename->SetSelectedCallback([this](MenuItem *) { Rename(); });
 
     menuRootItem->AddSeparator();
 
     MenuItem *remove = menuRootItem->AddItem("Remove");
-    remove->SetSelectedCallback([this](MenuItem*)
-    {
-        Remove();
-    });
+    remove->SetSelectedCallback([this](MenuItem *) { Remove(); });
 
     menuRootItem->AddSeparator();
     MenuBar::CreateGameObjectMiscMenuInto(menuRootItem);
@@ -234,7 +213,7 @@ UIFocusable *HierarchyItem::GetTreeItemFocusable()
 
 void HierarchyItem::SetText(const String &text)
 {
-    if (text != p_textRenderer->GetContent())
+    if(text != p_textRenderer->GetContent())
     {
         p_textRenderer->SetContent(text);
     }
@@ -245,23 +224,23 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
     GameObject *refGo = GetReferencedGameObject();
 
     bool selectGameObject = false;
-    switch (action)
+    switch(action)
     {
         case UIList::Action::SELECTION_IN:
             selectGameObject = true;
-            UICanvas::GetActive(this)->SetFocus( GetTreeItemFocusable() );
-        break;
+            UICanvas::GetActive(this)->SetFocus(GetTreeItemFocusable());
+            break;
 
         case UIList::Action::MOUSE_RIGHT_DOWN:
             selectGameObject = true;
             p_contextMenu->ShowMenu();
-        break;
+            break;
 
         case UIList::Action::DOUBLE_CLICKED_LEFT:
         {
-            if (EditorCamera *edCam = EditorCamera::GetInstance())
+            if(EditorCamera *edCam = EditorCamera::GetInstance())
             {
-                if (GameObject *refGo = GetReferencedGameObject())
+                if(GameObject *refGo = GetReferencedGameObject())
                 {
                     edCam->LookAt(refGo);
                 }
@@ -272,75 +251,72 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
         default: break;
     }
 
-    if (selectGameObject)
+    if(selectGameObject)
     {
         Editor::SelectGameObject(refGo);
     }
 }
 
-UIEventResult HierarchyItem::OnUIEvent(UIFocusable*, const UIEvent &event)
+UIEventResult HierarchyItem::OnUIEvent(UIFocusable *, const UIEvent &event)
 {
-    switch (event.type)
+    switch(event.type)
     {
         case UIEvent::Type::KEY_DOWN:
-            if (event.key.modifiers.IsOn(KeyModifier::LCTRL))
+            if(event.key.modifiers.IsOn(KeyModifier::LCTRL))
             {
-                switch (event.key.key)
+                switch(event.key.key)
                 {
                     case Key::C:
                         Copy();
                         return UIEventResult::INTERCEPT;
-                    break;
+                        break;
 
                     case Key::X:
                         Cut();
                         return UIEventResult::INTERCEPT;
-                    break;
+                        break;
 
                     case Key::V:
                         Paste();
                         return UIEventResult::INTERCEPT;
-                    break;
+                        break;
 
                     case Key::D:
                         Duplicate();
                         return UIEventResult::INTERCEPT;
-                    break;
+                        break;
 
-                    default:
-                    break;
+                    default: break;
                 }
             }
             else
             {
-                switch (event.key.key)
+                switch(event.key.key)
                 {
                     case Key::F:
-                        if (EditorCamera *edCam = EditorCamera::GetInstance())
+                        if(EditorCamera *edCam = EditorCamera::GetInstance())
                         {
                             edCam->LookAt(GetReferencedGameObject());
                         }
                         return UIEventResult::INTERCEPT;
-                    break;
+                        break;
 
                     case Key::DELETE:
                         Remove();
                         return UIEventResult::INTERCEPT;
-                    break;
+                        break;
 
                     case Key::F2:
                         Rename();
                         return UIEventResult::INTERCEPT;
-                    break;
+                        break;
 
-                    default:
-                    break;
+                    default: break;
                 }
             }
-        break;
+            break;
 
-        default:
-        break;
+        default: break;
     }
     return UIEventResult::IGNORE;
 }
@@ -348,5 +324,5 @@ UIEventResult HierarchyItem::OnUIEvent(UIFocusable*, const UIEvent &event)
 String HierarchyItem::ToString() const
 {
     GameObject *refGo = GetReferencedGameObject();
-    return "HItem(" + ( refGo ? refGo->GetName() : "Null" ) + ")";
+    return "HItem(" + (refGo ? refGo->GetName() : "Null") + ")";
 }

@@ -21,12 +21,13 @@
 #include "BangEditor/UIInputFileWithPreview.h"
 #include "BangEditor/UIInputVector.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 CIWCollider::CIWCollider()
 {
@@ -51,8 +52,10 @@ void CIWCollider::InitInnerWidgets()
     p_isTriggerInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_physicsMaterialInput = GameObject::Create<UIInputFileWithPreview>();
-    p_physicsMaterialInput->SetExtensions( {Extensions::GetPhysicsMaterialExtension()} );
-    p_physicsMaterialInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_physicsMaterialInput->SetExtensions(
+        {Extensions::GetPhysicsMaterialExtension()});
+    p_physicsMaterialInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
     p_physicsMaterialInput->SetZoomable(false);
 
     AddWidget("Is Trigger", p_isTriggerInput->GetGameObject());
@@ -67,16 +70,17 @@ void CIWCollider::UpdateFromReference()
     ComponentInspectorWidget::UpdateFromReference();
 
     Collider *collider = GetCollider();
-    if (!p_centerInput->HasFocus())
+    if(!p_centerInput->HasFocus())
     {
-        p_centerInput->Set( collider->GetCenter() );
+        p_centerInput->Set(collider->GetCenter());
     }
 
-    p_isTriggerInput->SetChecked( collider->GetIsTrigger() );
+    p_isTriggerInput->SetChecked(collider->GetIsTrigger());
 
     p_physicsMaterialInput->SetPath(
-       collider->GetActivePhysicsMaterial() ?
-         collider->GetActivePhysicsMaterial()->GetResourceFilepath() : Path::Empty);
+        collider->GetActivePhysicsMaterial()
+            ? collider->GetActivePhysicsMaterial()->GetResourceFilepath()
+            : Path::Empty);
 }
 
 void CIWCollider::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
@@ -84,16 +88,16 @@ void CIWCollider::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
     ComponentInspectorWidget::OnValueChangedCIW(object);
 
     Collider *collider = GetCollider();
-    collider->SetIsTrigger( p_isTriggerInput->IsChecked() );
-    collider->SetCenter( p_centerInput->GetVector3() );
+    collider->SetIsTrigger(p_isTriggerInput->IsChecked());
+    collider->SetCenter(p_centerInput->GetVector3());
 
-    if (p_physicsMaterialInput->GetPath().IsFile())
+    if(p_physicsMaterialInput->GetPath().IsFile())
     {
-        RH<PhysicsMaterial> phMat = Resources::Load<PhysicsMaterial>(
-                                            p_physicsMaterialInput->GetPath());
+        RH<PhysicsMaterial> phMat =
+            Resources::Load<PhysicsMaterial>(p_physicsMaterialInput->GetPath());
         collider->SetPhysicsMaterial(phMat.Get());
     }
-    else if (p_physicsMaterialInput->GetPath().IsEmpty())
+    else if(p_physicsMaterialInput->GetPath().IsEmpty())
     {
         collider->SetPhysicsMaterial(nullptr);
     }
@@ -107,6 +111,5 @@ void CIWCollider::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 
 Collider *CIWCollider::GetCollider() const
 {
-    return SCAST<Collider*>( GetComponent() );
+    return SCAST<Collider *>(GetComponent());
 }
-

@@ -15,20 +15,22 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class ALAudioSource;
-FORWARD   class IEventsDestroy;
-FORWARD   class IEventsValueChanged;
-FORWARD   class Texture2D;
-FORWARD   class UIButton;
-FORWARD   class UIInputNumber;
-FORWARD   class UIInputText;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class ALAudioSource;
+class IEventsDestroy;
+class IEventsValueChanged;
+class Texture2D;
+class UIButton;
+class UIInputNumber;
+class UIInputText;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class RIWAudioClip : public RIWResource<AudioClip>
 {
     GAMEOBJECT_EDITOR(RIWAudioClip);
@@ -47,12 +49,12 @@ private:
     UIInputNumber *p_bufferSize = nullptr;
     UIInputNumber *p_numChannels = nullptr;
 
-	RIWAudioClip();
-	virtual ~RIWAudioClip() override;
+    RIWAudioClip();
+    virtual ~RIWAudioClip() override;
 
     void Play();
     void Stop();
-    AudioClip* GetAudioClip() const;
+    AudioClip *GetAudioClip() const;
 
     // RIWResource
     void UpdateInputsFromResource() override;
@@ -61,13 +63,11 @@ private:
 
     // RIWResource
     void OnValueChangedRIWResource(
-                        EventEmitter<IEventsValueChanged> *object) override;
+        EventEmitter<IEventsValueChanged> *object) override;
 
     // IEventsDestroy
     void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // RIWAUDIOCLIP_H
-
+#endif  // RIWAUDIOCLIP_H

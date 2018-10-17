@@ -7,22 +7,23 @@
 #include "Bang/BangDefines.h"
 #include "Bang/EventEmitter.tcc"
 #include "Bang/EventListener.h"
-#include "Bang/IEvents.h"
+#include "Bang/IEventsSceneManager.h"
 #include "Bang/SceneManager.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class BehaviourManager;
-FORWARD class IEventsSceneManager;
-FORWARD class Path;
-FORWARD class Scene;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class BehaviourManager;
+class IEventsSceneManager;
+class Path;
+class Scene;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class EditorBehaviourManager;
-FORWARD class EditorScene;
+using namespace Bang;
+namespace BangEditor
+{
+class EditorBehaviourManager;
+class EditorScene;
 
 class EditorSceneManager : public SceneManager,
                            public EventListener<IEventsSceneManager>
@@ -51,9 +52,7 @@ private:
     friend class EditorScene;
     friend class ScenePlayer;
     friend class EditorApplication;
-
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // EDITORSCENEMANAGER_H
+#endif  // EDITORSCENEMANAGER_H

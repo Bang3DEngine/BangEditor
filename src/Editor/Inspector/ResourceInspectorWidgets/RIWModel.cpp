@@ -23,17 +23,20 @@
 #include "BangEditor/RIWResource.tcc"
 #include "BangEditor/ResourceInspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+template <class>
+class EventEmitter;
+}
 
-FORWARD NAMESPACE_BANG_EDITOR_BEGIN
-FORWARD struct ResourcePreviewFactoryParameters;
-FORWARD NAMESPACE_BANG_EDITOR_END
+namespace BangEditor
+{
+struct ResourcePreviewFactoryParameters;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 RIWModel::RIWModel()
 {
@@ -81,14 +84,17 @@ void RIWModel::Init()
     p_numAnimations->GetInputText()->SetBlocked(true);
 
     AddWidget(p_modelPreviewViewer, 256);
-    AddWidget( GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5) );
+    AddWidget(
+        GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5));
     AddWidget("Num meshes", p_numMeshes->GetGameObject());
     AddWidget("Num vertices", p_numVertices->GetGameObject());
     AddWidget("Num triangles", p_numTriangles->GetGameObject());
     AddWidget("Num bones", p_numBones->GetGameObject());
-    AddWidget( GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5) );
+    AddWidget(
+        GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5));
     AddWidget("Num materials", p_numMaterials->GetGameObject());
-    AddWidget( GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5) );
+    AddWidget(
+        GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5));
     AddWidget("Num animations", p_numAnimations->GetGameObject());
 
     SetLabelsWidth(130);
@@ -96,23 +102,23 @@ void RIWModel::Init()
 
 Model *RIWModel::GetModel() const
 {
-    return SCAST<Model*>(GetResource().Get());
+    return SCAST<Model *>(GetResource().Get());
 }
 
 void RIWModel::OnResourceSet()
 {
     RIWResource<Model>::OnResourceSet();
     std::size_t numMeshes = GetModel()->GetMeshes().Size();
-    std::size_t numBones  = GetModel()->GetAllBones().Size();
+    std::size_t numBones = GetModel()->GetAllBones().Size();
     std::size_t numMaterials = GetModel()->GetMaterials().Size();
     std::size_t numAnimations = GetModel()->GetAnimations().Size();
 
     std::size_t numVertices = 0;
     std::size_t numTriangles = 0;
-    for (std::size_t i = 0; i < GetModel()->GetMeshes().Size(); ++i)
+    for(std::size_t i = 0; i < GetModel()->GetMeshes().Size(); ++i)
     {
         Mesh *mesh = GetModel()->GetMeshes()[i].Get();
-        numVertices  += static_cast<uint>(mesh->GetNumVertices());
+        numVertices += static_cast<uint>(mesh->GetNumVertices());
         numTriangles += static_cast<uint>(mesh->GetNumTriangles());
     }
 
@@ -127,18 +133,16 @@ void RIWModel::OnResourceSet()
 void RIWModel::UpdateInputsFromResource()
 {
     p_modelPreviewViewer->SetPreviewImageProvider([this](
-                      const ResourcePreviewFactoryParameters &params)
-    {
+        const ResourcePreviewFactoryParameters &params) {
         return ModelPreviewFactory::GetPreviewTextureFor(GetModel(), params);
     });
 }
 
 Texture2D *RIWModel::GetIconTexture() const
 {
-    return ModelPreviewFactory::GetPreviewTextureFor( GetModel() ).Get();
+    return ModelPreviewFactory::GetPreviewTextureFor(GetModel()).Get();
 }
 
-void RIWModel::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged>*)
+void RIWModel::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *)
 {
 }
-

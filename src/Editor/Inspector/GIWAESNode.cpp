@@ -25,12 +25,13 @@
 #include "BangEditor/Inspector.h"
 #include "BangEditor/UIInputFileWithPreview.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsDestroy;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDestroy;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 GIWAESNode::GIWAESNode()
 {
@@ -47,20 +48,21 @@ void GIWAESNode::InitInnerWidgets()
     SetTitle("Animation State Node");
     SetName("GIWAESNode");
 
-    GetInspectorWidgetTitle()->GetEnabledCheckBox()->GetGameObject()->
-                               SetEnabled(false);
+    GetInspectorWidgetTitle()
+        ->GetEnabledCheckBox()
+        ->GetGameObject()
+        ->SetEnabled(false);
     GetInspectorWidgetTitle()->GetIcon()->SetImageTexture(
-                               EditorTextureFactory::GetAnimatorSMIcon());
+        EditorTextureFactory::GetAnimatorSMIcon());
     GetInspectorWidgetTitle()->GetIcon()->SetTint(Color::White);
 
     p_nameInput = GameObjectFactory::CreateUIInputText();
     p_nameInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_nodeAnimationInput = GameObject::Create<UIInputFileWithPreview>();
-    p_nodeAnimationInput->SetExtensions( {Extensions::GetAnimationExtension()} );
-    p_nodeAnimationInput->EventEmitter<IEventsValueChanged>::
-                          RegisterListener(this);
-
+    p_nodeAnimationInput->SetExtensions({Extensions::GetAnimationExtension()});
+    p_nodeAnimationInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     AddWidget("Name", p_nameInput->GetGameObject());
     AddWidget("Animation", p_nodeAnimationInput);
@@ -84,28 +86,29 @@ void GIWAESNode::UpdateFromReference()
 {
     InspectorWidget::UpdateFromReference();
 
-    if (AnimatorStateMachineNode *smNode = GetAESNode()->GetSMNode())
+    if(AnimatorStateMachineNode *smNode = GetAESNode()->GetSMNode())
     {
         p_nameInput->GetText()->SetContent(smNode->GetName());
         p_nodeAnimationInput->SetPath(
-            smNode->GetAnimation() ?
-                smNode->GetAnimation()->GetResourceFilepath() : Path::Empty);
+            smNode->GetAnimation()
+                ? smNode->GetAnimation()->GetResourceFilepath()
+                : Path::Empty);
     }
 }
 
 void GIWAESNode::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 {
-    if (AnimatorStateMachineNode *smNode = GetAESNode()->GetSMNode())
+    if(AnimatorStateMachineNode *smNode = GetAESNode()->GetSMNode())
     {
-        if (ee == p_nameInput)
+        if(ee == p_nameInput)
         {
             smNode->SetName(p_nameInput->GetText()->GetContent());
         }
-        else if (ee == p_nodeAnimationInput)
+        else if(ee == p_nodeAnimationInput)
         {
             smNode->SetAnimation(
-                        Resources::Load<Animation>(
-                            p_nodeAnimationInput->GetPath()).Get() );
+                Resources::Load<Animation>(p_nodeAnimationInput->GetPath())
+                    .Get());
         }
     }
 }
@@ -117,4 +120,3 @@ void GIWAESNode::OnDestroyed(EventEmitter<IEventsDestroy> *object)
     ASSERT(object == p_aesNode);
     Inspector::GetActive()->Clear();
 }
-

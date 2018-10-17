@@ -30,8 +30,8 @@
 #include "BangEditor/Explorer.h"
 #include "BangEditor/UIInputArray.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 AnimatorSMEditor::AnimatorSMEditor()
 {
@@ -39,7 +39,7 @@ AnimatorSMEditor::AnimatorSMEditor()
 
     AddComponent<UIVerticalLayout>();
     UILayoutElement *mainLE = AddComponent<UILayoutElement>();
-    mainLE->SetFlexibleSize( Vector2::One );
+    mainLE->SetFlexibleSize(Vector2::One);
 
     GameObject *toolbar = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *toolbarHL = toolbar->AddComponent<UIHorizontalLayout>();
@@ -50,12 +50,10 @@ AnimatorSMEditor::AnimatorSMEditor()
     toolbarLE->SetMinHeight(40);
 
     p_centerSceneButton = GameObjectFactory::CreateUIButton(
-                                "", EditorTextureFactory::GetEyeIcon());
+        "", EditorTextureFactory::GetEyeIcon());
     p_centerSceneButton->GetIcon()->SetTint(Color::DarkGray);
-    p_centerSceneButton->AddClickedCallback([this]()
-    {
-       p_animatorEditorScene->CenterScene();
-    });
+    p_centerSceneButton->AddClickedCallback(
+        [this]() { p_animatorEditorScene->CenterScene(); });
     p_centerSceneButton->GetGameObject()->SetParent(toolbar);
 
     GameObject *botHLGo = GameObjectFactory::CreateUIGameObject();
@@ -67,12 +65,13 @@ AnimatorSMEditor::AnimatorSMEditor()
 
     AddComponent<UIFocusable>();
 
-    GameObject *animatorEditorSceneContainer = GameObjectFactory::CreateUIGameObject();
+    GameObject *animatorEditorSceneContainer =
+        GameObjectFactory::CreateUIGameObject();
     {
-        UILayoutElement *nodesSceneLE = animatorEditorSceneContainer->
-                                        AddComponent<UILayoutElement>();
-        nodesSceneLE->SetMinSize( Vector2i(200) );
-        nodesSceneLE->SetFlexibleSize( Vector2(3.0f, 1.0f) );
+        UILayoutElement *nodesSceneLE =
+            animatorEditorSceneContainer->AddComponent<UILayoutElement>();
+        nodesSceneLE->SetMinSize(Vector2i(200));
+        nodesSceneLE->SetFlexibleSize(Vector2(3.0f, 1.0f));
 
         p_animatorEditorScene = GameObject::Create<AnimatorSMEditorScene>();
         p_animatorEditorScene->SetParent(animatorEditorSceneContainer);
@@ -80,12 +79,12 @@ AnimatorSMEditor::AnimatorSMEditor()
 
     GameObject *inspectorContainer = GameObjectFactory::CreateUIGameObject();
     {
-        UILayoutElement *inspectorLE = inspectorContainer->
-                                       AddComponent<UILayoutElement>();
-        inspectorLE->SetFlexibleSize( Vector2(0.5f, 1.0f) );
+        UILayoutElement *inspectorLE =
+            inspectorContainer->AddComponent<UILayoutElement>();
+        inspectorLE->SetFlexibleSize(Vector2(0.5f, 1.0f));
 
-        UIVerticalLayout *inspVL = inspectorContainer->
-                                   AddComponent<UIVerticalLayout>();
+        UIVerticalLayout *inspVL =
+            inspectorContainer->AddComponent<UIVerticalLayout>();
         inspVL->SetPaddingLeft(10);
 
         UILabel *varsLabel = GameObjectFactory::CreateUILabel();
@@ -94,23 +93,24 @@ AnimatorSMEditor::AnimatorSMEditor()
         varsLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::LEFT);
         varsLabel->GetGameObject()->SetParent(inspectorContainer);
 
-        GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5)->
-                           SetParent(inspectorContainer);
+        GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5)
+            ->SetParent(inspectorContainer);
 
         p_variablesInput = GameObject::Create<UIInputArray>();
-        p_variablesInput->SetCreateNewRowGameObjectFunction([]()
-        {
+        p_variablesInput->SetCreateNewRowGameObjectFunction([]() {
             ASMVariableInput *varInput = GameObject::Create<ASMVariableInput>();
             return varInput;
         });
-        p_variablesInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+        p_variablesInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+            this);
         p_variablesInput->SetParent(inspectorContainer);
 
-        UILayoutElement *varsLE = p_variablesInput->AddComponent<UILayoutElement>();
+        UILayoutElement *varsLE =
+            p_variablesInput->AddComponent<UILayoutElement>();
         varsLE->SetFlexibleSize(Vector2(9999.9f));
 
-        UIImageRenderer *inspectorBG = inspectorContainer->
-                                       AddComponent<UIImageRenderer>();
+        UIImageRenderer *inspectorBG =
+            inspectorContainer->AddComponent<UIImageRenderer>();
         inspectorBG->SetTint(Color::LightGray);
     }
 
@@ -131,24 +131,24 @@ void AnimatorSMEditor::Update()
 {
     GameObject::Update();
 
-    p_centerSceneButton->SetBlocked( (p_animatorEditorScene == nullptr) );
+    p_centerSceneButton->SetBlocked((p_animatorEditorScene == nullptr));
 
-    if (Explorer *exp = Explorer::GetInstance())
+    if(Explorer *exp = Explorer::GetInstance())
     {
         Path selectedPath = exp->GetSelectedPath();
-        if (selectedPath.HasExtension(
-                            Extensions::GetAnimatorStateMachineExtension() ))
+        if(selectedPath.HasExtension(
+               Extensions::GetAnimatorStateMachineExtension()))
         {
             RH<AnimatorStateMachine> animSMRH =
-                        Resources::Load<AnimatorStateMachine>(selectedPath);
+                Resources::Load<AnimatorStateMachine>(selectedPath);
             SetAnimatorSM(animSMRH.Get());
         }
     }
 
-    if (GetAnimatorSM())
+    if(GetAnimatorSM())
     {
-        if (Time::GetPassedTimeSince(m_lastVariablesInputUpdateTime) >=
-            Time::Seconds(0.2f))
+        if(Time::GetPassedTimeSince(m_lastVariablesInputUpdateTime) >=
+           Time::Seconds(0.2f))
         {
             p_variablesInput->UpdateRows(GetAnimatorSM()->GetVariables());
             m_lastVariablesInputUpdateTime = Time::GetNow();
@@ -158,12 +158,12 @@ void AnimatorSMEditor::Update()
 
 void AnimatorSMEditor::SetAnimatorSM(AnimatorStateMachine *animatorSM)
 {
-    if (animatorSM != GetAnimatorSM())
+    if(animatorSM != GetAnimatorSM())
     {
         Clear();
 
         p_animatorSM.Set(animatorSM);
-        p_animatorEditorScene->SetAnimatorSM( GetAnimatorSM() );
+        p_animatorEditorScene->SetAnimatorSM(GetAnimatorSM());
     }
 }
 
@@ -180,26 +180,23 @@ void AnimatorSMEditor::Clear()
 
 void AnimatorSMEditor::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 {
-    if (!GetAnimatorSM())
+    if(!GetAnimatorSM())
     {
         return;
     }
 
-    if (ee == p_variablesInput)
+    if(ee == p_variablesInput)
     {
         p_variablesInput->UpdateReferences<AnimatorStateMachineVariable>(
-                        GetAnimatorSM()->GetVariables(),
-                        [this]()
-                        {
-                            ASSERT(GetAnimatorSM());
-                            auto newVar = GetAnimatorSM()->CreateNewVariable();
-                            return newVar;
-                        },
-                        [this](AnimatorStateMachineVariable *varToRemove)
-                        {
-                                ASSERT(GetAnimatorSM());
-                            GetAnimatorSM()->RemoveVariable(varToRemove);
-                        }
-                    );
+            GetAnimatorSM()->GetVariables(),
+            [this]() {
+                ASSERT(GetAnimatorSM());
+                auto newVar = GetAnimatorSM()->CreateNewVariable();
+                return newVar;
+            },
+            [this](AnimatorStateMachineVariable *varToRemove) {
+                ASSERT(GetAnimatorSM());
+                GetAnimatorSM()->RemoveVariable(varToRemove);
+            });
     }
 }

@@ -11,12 +11,13 @@
 #include "Bang/SphereCollider.h"
 #include "Bang/UIInputNumber.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 CIWSphereCollider::CIWSphereCollider()
 {
@@ -47,21 +48,22 @@ void CIWSphereCollider::UpdateFromReference()
     CIWCollider::UpdateFromReference();
 
     SphereCollider *sphereCollider = GetSphereCollider();
-    if (!p_radiusInput->HasFocus())
+    if(!p_radiusInput->HasFocus())
     {
-        p_radiusInput->SetValue( sphereCollider->GetRadius() );
+        p_radiusInput->SetValue(sphereCollider->GetRadius());
     }
 }
 
-void CIWSphereCollider::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
+void CIWSphereCollider::OnValueChangedCIW(
+    EventEmitter<IEventsValueChanged> *object)
 {
     CIWCollider::OnValueChangedCIW(object);
 
     SphereCollider *sphereCollider = GetSphereCollider();
-    sphereCollider->SetRadius( p_radiusInput->GetValue() );
+    sphereCollider->SetRadius(p_radiusInput->GetValue());
 }
 
 SphereCollider *CIWSphereCollider::GetSphereCollider() const
 {
-    return SCAST<SphereCollider*>( GetCollider() );
+    return SCAST<SphereCollider *>(GetCollider());
 }

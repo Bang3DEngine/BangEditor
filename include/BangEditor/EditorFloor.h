@@ -8,28 +8,27 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class LineRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class LineRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class EditorFloor : public GameObject
 {
     GAMEOBJECT(EditorFloor);
 
 public:
-	EditorFloor();
-	virtual ~EditorFloor() override;
+    EditorFloor();
+    virtual ~EditorFloor() override;
 
     void Render(RenderPass renderPass, bool renderChildren) override;
 
 private:
     LineRenderer *m_lineRenderer = nullptr;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // EDITORFLOOR_H
-
+#endif  // EDITORFLOOR_H

@@ -5,9 +5,9 @@
 
 #include "BangEditor/BangEditor.h"
 
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UITabHeader;
+namespace BangEditor
+{
+class UITabHeader;
 
 class IEventsTabHeader
 {
@@ -16,7 +16,6 @@ class IEventsTabHeader
 public:
     virtual void OnTabHeaderClicked(UITabHeader *header) = 0;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // IEVENTSTABHEADER_H
+#endif  // IEVENTSTABHEADER_H

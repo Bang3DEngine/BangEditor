@@ -9,9 +9,9 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class Project : public Serializable
 {
     SERIALIZABLE(Project)
@@ -24,7 +24,7 @@ public:
     Path GetProjectAssetsFilepath() const;
     Path GetProjectFilepath() const;
     String GetProjectName() const;
-    const GUID& GetProjectRandomId() const;
+    const GUID &GetProjectRandomId() const;
 
     void SetProjectFilepath(const Path &projectFilepath);
 
@@ -39,7 +39,6 @@ private:
     GUID m_id;
     Path m_projectFilepath;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // PROJECT_H
+#endif  // PROJECT_H

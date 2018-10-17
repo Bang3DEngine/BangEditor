@@ -13,8 +13,8 @@
 #include "BangEditor/IEventsEditor.h"
 #include "BangEditor/TransformGizmo.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 GizmosManager::GizmosManager()
 {
@@ -22,7 +22,8 @@ GizmosManager::GizmosManager()
     p_transformGizmo = tg;
     GetTransformGizmo()->SetReferencedGameObject(nullptr);
 
-    GameObjectSelectionGizmo *gsg = GameObject::Create<GameObjectSelectionGizmo>();
+    GameObjectSelectionGizmo *gsg =
+        GameObject::Create<GameObjectSelectionGizmo>();
     p_gameObjectSelectionGizmo = gsg;
     GetGameObjectSelectionGizmo()->SetReferencedGameObject(nullptr);
 
@@ -55,7 +56,7 @@ void GizmosManager::OnBeginRender(Scene *scene)
     GetTransformGizmo()->OnBeginRender(scene);
 }
 
-void GizmosManager::OnEndRender(Scene*)
+void GizmosManager::OnEndRender(Scene *)
 {
     GetTransformGizmo()->SetParent(nullptr);
     GetTransformGizmo()->OnEndRender(nullptr);
@@ -63,7 +64,7 @@ void GizmosManager::OnEndRender(Scene*)
     GetGameObjectSelectionGizmo()->SetParent(nullptr);
 }
 
-GizmosManager* GizmosManager::GetInstance()
+GizmosManager *GizmosManager::GetInstance()
 {
     return EditSceneGameObjects::GetInstance()->GetGizmosManager();
 }
@@ -73,15 +74,15 @@ void GizmosManager::OnGameObjectSelected(GameObject *selectedGameObject)
     GetTransformGizmo()->SetReferencedGameObject(selectedGameObject);
     GetGameObjectSelectionGizmo()->SetReferencedGameObject(selectedGameObject);
 
-    GetTransformGizmo()->SetEnabled( selectedGameObject != nullptr );
-    GetGameObjectSelectionGizmo()->SetEnabled( selectedGameObject != nullptr );
+    GetTransformGizmo()->SetEnabled(selectedGameObject != nullptr);
+    GetGameObjectSelectionGizmo()->SetEnabled(selectedGameObject != nullptr);
 }
 
 void GizmosManager::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
 }
 
-TransformGizmo* GizmosManager::GetTransformGizmo() const
+TransformGizmo *GizmosManager::GetTransformGizmo() const
 {
     return p_transformGizmo;
 }
@@ -95,4 +96,3 @@ GameObjectSelectionGizmo *GizmosManager::GetGameObjectSelectionGizmo() const
 {
     return p_gameObjectSelectionGizmo;
 }
-

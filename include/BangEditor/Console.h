@@ -11,23 +11,24 @@
 #include "Bang/EventEmitter.tcc"
 #include "Bang/EventListener.h"
 #include "Bang/GameObject.h"
-#include "Bang/IEvents.h"
+#include "Bang/IEventsDebug.h"
 #include "Bang/List.h"
 #include "Bang/Mutex.h"
 #include "Bang/String.h"
 #include "Bang/UIList.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsDebug;
-FORWARD class UIImageRenderer;
-FORWARD class UIList;
-FORWARD class UITextRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDebug;
+class UIImageRenderer;
+class UIList;
+class UITextRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 // ConsoleMessage
 class ConsoleMessage
 {
@@ -41,8 +42,7 @@ public:
 };
 
 // Console
-class Console : public GameObject,
-                public EventListener<IEventsDebug>
+class Console : public GameObject, public EventListener<IEventsDebug>
 {
     GAMEOBJECT_EDITOR(Console);
 
@@ -62,8 +62,10 @@ private:
     void Update() override;
 
     // IEventsDebug
-    void OnMessage(DebugMessageType msgType, const String &str,
-                   int line, const String &fileName) override;
+    void OnMessage(DebugMessageType msgType,
+                   const String &str,
+                   int line,
+                   const String &fileName) override;
 };
 
 // ConsoleUIListEntry
@@ -82,8 +84,6 @@ private:
     UITextRenderer *p_msgText = nullptr;
     UIImageRenderer *p_typeIconImg = nullptr;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-
-#endif // CONSOLE_H
+#endif  // CONSOLE_H

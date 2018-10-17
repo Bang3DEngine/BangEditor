@@ -6,15 +6,15 @@
 #include "Bang/Path.h"
 #include "BangEditor/BangEditor.h"
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class EditorSettings
 {
 public:
-
-    static void AddRecentProjectFilepathOpen(const Path &recentProjectFilePathOpen);
-    static const Array<Path>& GetRecentProjectFilepathsOpen();
+    static void AddRecentProjectFilepathOpen(
+        const Path &recentProjectFilePathOpen);
+    static const Array<Path> &GetRecentProjectFilepathsOpen();
 
 private:
     Array<Path> m_recentProjectFilesOpen;
@@ -27,13 +27,11 @@ private:
     void ImportFromFile();
     static Path GetEditorSettingsPath();
 
-    static EditorSettings* GetInstance();
+    static EditorSettings *GetInstance();
 
     friend class Editor;
     friend class EditorScene;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // EDITORSETTINGS_H
-
+#endif  // EDITORSETTINGS_H

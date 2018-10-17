@@ -25,12 +25,13 @@
 #include "BangEditor/EditorFileTracker.h"
 #include "BangEditor/UIInputFileWithPreview.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 CIWBehaviourContainer::CIWBehaviourContainer()
 {
@@ -49,40 +50,42 @@ void CIWBehaviourContainer::InitInnerWidgets()
 
     p_sourceInputFile = GameObject::Create<UIInputFileWithPreview>();
     p_sourceInputFile->SetExtensions(Extensions::GetSourceFileExtensions());
-    p_sourceInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_sourceInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
     p_sourceInputFile->SetZoomable(false);
     AddWidget("Source", p_sourceInputFile);
-    AddWidget( GameObjectFactory::CreateUIHSeparator(), 10 );
+    AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);
 
     SetLabelsWidth(80);
 }
 
 void CIWBehaviourContainer::UpdateFromReflection(
-                            const BPReflectedStruct &reflectStruct)
+    const BPReflectedStruct &reflectStruct)
 {
     // Clear
-    for (GameObject *widget : m_ciwBehaviourHelper.GetWidgets())
+    for(GameObject *widget : m_ciwBehaviourHelper.GetWidgets())
     {
         RemoveWidget(widget);
     }
 
     // Add
     m_ciwBehaviourHelper.RecreateWidgetsFromReflection(reflectStruct, this);
-    for (GameObject *widget : m_ciwBehaviourHelper.GetWidgets())
+    for(GameObject *widget : m_ciwBehaviourHelper.GetWidgets())
     {
-        String name = m_ciwBehaviourHelper.GetWidgetToReflectedVar().
-                      Get(widget).GetName();
+        String name = m_ciwBehaviourHelper.GetWidgetToReflectedVar()
+                          .Get(widget)
+                          .GetName();
         AddWidget(name, widget);
     }
-    m_ciwBehaviourHelper.UpdateWidgetsFromMeta( GetBehaviourContainer()->
-                                                GetInitializationMeta() );
+    m_ciwBehaviourHelper.UpdateWidgetsFromMeta(
+        GetBehaviourContainer()->GetInitializationMeta());
     UpdateInitializationMetaFromWidgets();
 }
 
 void CIWBehaviourContainer::UpdateInitializationMetaFromWidgets()
 {
     MetaNode initializationMeta = m_ciwBehaviourHelper.GetMetaFromWidgets();
-    GetBehaviourContainer()->SetInitializationMeta( initializationMeta );
+    GetBehaviourContainer()->SetInitializationMeta(initializationMeta);
 }
 
 void CIWBehaviourContainer::UpdateFromReference()
@@ -90,17 +93,17 @@ void CIWBehaviourContainer::UpdateFromReference()
     ComponentInspectorWidget::UpdateFromReference();
 
     Path srcPath = GetBehaviourContainer()->GetSourceFilepath();
-    if (srcPath.IsFile())
+    if(srcPath.IsFile())
     {
         Path headerPath = srcPath.WithExtension("h");
-        Time timeHeaderChanged = EditorFileTracker::GetInstance()->
-                                        GetModificationTime(headerPath);
-        if (timeHeaderChanged > m_prevTimeHeaderChanged)
+        Time timeHeaderChanged =
+            EditorFileTracker::GetInstance()->GetModificationTime(headerPath);
+        if(timeHeaderChanged > m_prevTimeHeaderChanged)
         {
             Array<BPReflectedStruct> reflStructs =
-                              BangPreprocessor::GetReflectStructs(headerPath);
+                BangPreprocessor::GetReflectStructs(headerPath);
             m_prevTimeHeaderChanged = timeHeaderChanged;
-            if (reflStructs.Size() >= 1)
+            if(reflStructs.Size() >= 1)
             {
                 UpdateFromReflection(reflStructs.Front());
             }
@@ -111,15 +114,16 @@ void CIWBehaviourContainer::UpdateFromReference()
     }
 }
 
-void CIWBehaviourContainer::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
+void CIWBehaviourContainer::OnValueChangedCIW(
+    EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChangedCIW(object);
 
-    GetBehaviourContainer()->SetSourceFilepath( p_sourceInputFile->GetPath() );
+    GetBehaviourContainer()->SetSourceFilepath(p_sourceInputFile->GetPath());
     UpdateInitializationMetaFromWidgets();
 }
 
 BehaviourContainer *CIWBehaviourContainer::GetBehaviourContainer() const
 {
-    return SCAST<BehaviourContainer*>( GetComponent() );
+    return SCAST<BehaviourContainer *>(GetComponent());
 }

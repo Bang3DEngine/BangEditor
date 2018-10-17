@@ -6,21 +6,22 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/GizmosManager.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Scene;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Scene;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class EditorCamera;
-FORWARD class EditorFloor;
-FORWARD class GizmosManager;
+using namespace Bang;
+namespace BangEditor
+{
+class EditorCamera;
+class EditorFloor;
+class GizmosManager;
 
 class EditSceneGameObjects
 {
 public:
-	EditSceneGameObjects();
+    EditSceneGameObjects();
     virtual ~EditSceneGameObjects();
 
     void Update();
@@ -41,8 +42,6 @@ private:
 
     friend class EditorCamera;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // EDITSCENEGAMEOBJECTS_H
-
+#endif  // EDITSCENEGAMEOBJECTS_H

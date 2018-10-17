@@ -9,22 +9,24 @@
 #include "BangEditor/ComponentInspectorWidget.h"
 #include "BangEditor/UIInputVector.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class ReflectionProbe;
-FORWARD   class UIComboBox;
-FORWARD   class UICheckBox;
-FORWARD   class UIInputNumber;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class ReflectionProbe;
+class UIComboBox;
+class UICheckBox;
+class UIInputNumber;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UIInputColor;
-FORWARD class UIInputFileWithPreview;
-FORWARD class UIInputVector;
-FORWARD class UITextureCubeMapPreviewer;
+using namespace Bang;
+namespace BangEditor
+{
+class UIInputColor;
+class UIInputFileWithPreview;
+class UIInputVector;
+class UITextureCubeMapPreviewer;
 
 class CIWReflectionProbe : public ComponentInspectorWidget
 {
@@ -39,15 +41,15 @@ public:
 
 private:
     UIComboBox *p_reflectionProbSizeInput = nullptr;
-    UIInputVector *p_sizeInput            = nullptr;
-    UICheckBox *p_isBoxedCheckBox         = nullptr;
-    UIInputNumber *p_restTimeInput        = nullptr;
-    UICheckBox *p_filterForIBLCheckBox    = nullptr;
+    UIInputVector *p_sizeInput = nullptr;
+    UICheckBox *p_isBoxedCheckBox = nullptr;
+    UIInputNumber *p_restTimeInput = nullptr;
+    UICheckBox *p_filterForIBLCheckBox = nullptr;
 
-    UIInputNumber *p_zNearInput                   = nullptr;
-    UIInputNumber *p_zFarInput                    = nullptr;
-    UIComboBox *p_clearModeInput                  = nullptr;
-    UIInputColor *p_clearColorInput               = nullptr;
+    UIInputNumber *p_zNearInput = nullptr;
+    UIInputNumber *p_zFarInput = nullptr;
+    UIComboBox *p_clearModeInput = nullptr;
+    UIInputColor *p_clearColorInput = nullptr;
     UIInputFileWithPreview *p_textureCubeMapInput = nullptr;
 
     UITextureCubeMapPreviewer *p_previewCMRenderer = nullptr;
@@ -60,8 +62,6 @@ private:
     // ComponentInspectorWidget
     void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWREFLECTIONPROBE_H
-
+#endif  // CIWREFLECTIONPROBE_H

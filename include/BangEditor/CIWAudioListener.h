@@ -7,9 +7,9 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class CIWAudioListener : public ComponentInspectorWidget
 {
     GAMEOBJECT_EDITOR(CIWAudioListener);
@@ -23,8 +23,6 @@ public:
     CIWAudioListener() = default;
     virtual ~CIWAudioListener() override = default;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWAUDIOLISTENER_H
-
+#endif  // CIWAUDIOLISTENER_H

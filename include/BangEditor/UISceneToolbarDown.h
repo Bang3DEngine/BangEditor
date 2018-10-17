@@ -14,29 +14,31 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class Texture2D;
-FORWARD   class UIButton;
-FORWARD   class UICheckBox;
-FORWARD   class UIComboBox;
-FORWARD   class UISlider;
-FORWARD   class UITextRenderer;
-FORWARD   class UIToolButton;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class Texture2D;
+class UIButton;
+class UICheckBox;
+class UIComboBox;
+class UISlider;
+class UITextRenderer;
+class UIToolButton;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class UISceneToolbarDown : public GameObject,
                            public EventListener<IEventsValueChanged>
 {
     GAMEOBJECT_EDITOR(UISceneToolbarDown);
 
 public:
-	UISceneToolbarDown();
-	virtual ~UISceneToolbarDown() override;
+    UISceneToolbarDown();
+    virtual ~UISceneToolbarDown() override;
 
 private:
     UISlider *p_zoomSpeedSlider = nullptr;
@@ -44,8 +46,6 @@ private:
     // IEventsValueChanged
     virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *ee) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UISCENETOOLBARDOWN_H
-
+#endif  // UISCENETOOLBARDOWN_H

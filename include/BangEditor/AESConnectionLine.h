@@ -18,26 +18,27 @@
 #include "BangEditor/AESNode.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class LineRenderer;
-FORWARD class AnimatorStateMachine;
-FORWARD class AnimatorStateMachineConnection;
-FORWARD class AnimatorStateMachineNode;
-FORWARD class UIImageRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class LineRenderer;
+class AnimatorStateMachine;
+class AnimatorStateMachineConnection;
+class AnimatorStateMachineNode;
+class UIImageRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class AESNode;
-FORWARD class UIContextMenu;
+using namespace Bang;
+namespace BangEditor
+{
+class AESNode;
+class UIContextMenu;
 
 class AESConnectionLine : public GameObject
 {
     GAMEOBJECT_EDITOR(AESConnectionLine);
 
 public:
-	AESConnectionLine();
+    AESConnectionLine();
     virtual ~AESConnectionLine() override;
 
     // GameObject
@@ -52,13 +53,13 @@ public:
     AESNode *GetAESNodeTo() const;
     AESNode *GetAESNodeFrom() const;
     AnimatorStateMachine *GetAnimatorSM() const;
-    Array<AnimatorStateMachineConnection*> GetSMConnections() const;
+    Array<AnimatorStateMachineConnection *> GetSMConnections() const;
 
 private:
     bool m_hasFocus = false;
     UIContextMenu *p_contextMenu = nullptr;
     LineRenderer *p_lineRenderer = nullptr;
-    std::array<UIImageRenderer*, 3> p_arrowImgs = {nullptr, nullptr, nullptr};
+    std::array<UIImageRenderer *, 3> p_arrowImgs = {nullptr, nullptr, nullptr};
 
     DPtr<AESNode> p_aesNodeTo;
     DPtr<AESNode> p_aesNodeFrom;
@@ -70,8 +71,6 @@ private:
     Vector3 GetConnectionPointLinePosition(AESNode *connPoint) const;
     void OffsetLinePositions() const;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // AESCONNECTIONLINE_H
-
+#endif  // AESCONNECTIONLINE_H

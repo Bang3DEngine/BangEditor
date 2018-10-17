@@ -6,16 +6,16 @@
 #include "Bang/Transform.h"
 #include "BangEditor/ScaleGizmoAxis.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 ScaleGizmo::ScaleGizmo()
 {
     AddComponent<Transform>();
 
-    p_axisX   = GameObject::Create<ScaleGizmoAxis>();
-    p_axisY   = GameObject::Create<ScaleGizmoAxis>();
-    p_axisZ   = GameObject::Create<ScaleGizmoAxis>();
+    p_axisX = GameObject::Create<ScaleGizmoAxis>();
+    p_axisY = GameObject::Create<ScaleGizmoAxis>();
+    p_axisZ = GameObject::Create<ScaleGizmoAxis>();
     p_axisXYZ = GameObject::Create<ScaleGizmoAxis>();
 
     p_axisX->SetAxis(Axis3DExt::X);
@@ -31,15 +31,14 @@ ScaleGizmo::ScaleGizmo()
 
 ScaleGizmo::~ScaleGizmo()
 {
-
 }
 
 void ScaleGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
 {
     SelectionGizmo::SetReferencedGameObject(referencedGameObject);
 
-    p_axisX->SetReferencedGameObject( GetReferencedGameObject() );
-    p_axisY->SetReferencedGameObject( GetReferencedGameObject() );
-    p_axisZ->SetReferencedGameObject( GetReferencedGameObject() );
-    p_axisXYZ->SetReferencedGameObject( GetReferencedGameObject() );
+    p_axisX->SetReferencedGameObject(GetReferencedGameObject());
+    p_axisY->SetReferencedGameObject(GetReferencedGameObject());
+    p_axisZ->SetReferencedGameObject(GetReferencedGameObject());
+    p_axisXYZ->SetReferencedGameObject(GetReferencedGameObject());
 }

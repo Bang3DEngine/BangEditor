@@ -14,33 +14,35 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/InspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class AnimatorStateMachineConnection;
-FORWARD   class AnimatorStateMachineNode;
-FORWARD   class GameObject;
-FORWARD   class IEventsDestroy;
-FORWARD   class IEventsValueChanged;
-FORWARD   class UICheckBox;
-FORWARD   class UIInputNumber;
-FORWARD   class UIInputText;
-FORWARD   class UILabel;
-FORWARD   class UIList;
-FORWARD   class UISlider;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class AnimatorStateMachineConnection;
+class AnimatorStateMachineNode;
+class GameObject;
+class IEventsDestroy;
+class IEventsValueChanged;
+class UICheckBox;
+class UIInputNumber;
+class UIInputText;
+class UILabel;
+class UIList;
+class UISlider;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class AESConnectionLine;
-FORWARD class UIInputArray;
+using namespace Bang;
+namespace BangEditor
+{
+class AESConnectionLine;
+class UIInputArray;
 
 class GIWAESConnectionLine : public InspectorWidget,
                              public EventListener<IEventsValueChanged>
 {
 public:
-	GIWAESConnectionLine();
-	virtual ~GIWAESConnectionLine() override;
+    GIWAESConnectionLine();
+    virtual ~GIWAESConnectionLine() override;
 
     // InspectorWidget
     virtual void InitInnerWidgets() override;
@@ -64,7 +66,7 @@ private:
 
     AnimatorStateMachineNode *GetSMNodeTo() const;
     AnimatorStateMachineNode *GetSMNodeFrom() const;
-    AESConnectionLine* GetAESConnectionLine() const;
+    AESConnectionLine *GetAESConnectionLine() const;
     AnimatorStateMachineConnection *GetSelectedSMConnection() const;
 
     // InspectorWidget
@@ -75,10 +77,7 @@ private:
 
     // IEventsDestroy
     virtual void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
-
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // GIWAESCONNECTIONLINE_H
-
+#endif  // GIWAESCONNECTIONLINE_H

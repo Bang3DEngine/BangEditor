@@ -21,20 +21,20 @@
 #include "Bang/UMap.tcc"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsResource;
-FORWARD NAMESPACE_BANG_END
-
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
-
-SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
-    Framebuffer(width, height)
+namespace Bang
 {
-    ShaderProgram *selectionProgram =
-        ShaderProgramFactory::Get(
-                ShaderProgramFactory::GetDefaultVertexShaderPath(),
-                EPATH("Shaders/SelectionBuffer.frag") );
+class IEventsResource;
+}
+
+using namespace Bang;
+using namespace BangEditor;
+
+SelectionFramebuffer::SelectionFramebuffer(int width, int height)
+    : Framebuffer(width, height)
+{
+    ShaderProgram *selectionProgram = ShaderProgramFactory::Get(
+        ShaderProgramFactory::GetDefaultVertexShaderPath(),
+        EPATH("Shaders/SelectionBuffer.frag"));
 
     p_selectionMaterial = Resources::Create<Material>();
     p_selectionMaterial.Get()->SetShaderProgram(selectionProgram);
@@ -62,8 +62,8 @@ void SelectionFramebuffer::PrepareNewFrameForRender(const GameObject *go)
     m_gameObject_To_Id.Clear();
     m_id_To_GameObject.Clear();
 
-    Array<GameObject*> gameObjects = go->GetChildrenRecursively();
-    for (GameObject *go : gameObjects)
+    Array<GameObject *> gameObjects = go->GetChildrenRecursively();
+    for(GameObject *go : gameObjects)
     {
         m_gameObject_To_Id[go] = id;
         m_id_To_GameObject[id] = go;
@@ -81,10 +81,8 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Scene *scene)
     GL::Push(GL::Pushable::BLEND_STATES);
     GL::Push(GL::Pushable::DEPTH_STATES);
 
-    ge->SetRenderRoutine([this](Renderer *rend)
-    {
-        RenderForSelectionBuffer(rend);
-    });
+    ge->SetRenderRoutine(
+        [this](Renderer *rend) { RenderForSelectionBuffer(rend); });
 
     GL::Disable(GL::Enablable::BLEND);
 
@@ -100,7 +98,7 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Scene *scene)
     GL::SetDepthFunc(GL::Function::LEQUAL);
     ge->RenderWithPass(scene, RenderPass::CANVAS);
 
-    if (m_drawOverlay)
+    if(m_drawOverlay)
     {
         GL::ClearDepthBuffer();
         GL::SetDepthMask(false);
@@ -123,18 +121,19 @@ void SelectionFramebuffer::SetDrawOverlay(bool drawOverlay)
 void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 {
     ASSERT(GL::IsBound(this));
-    if (!rend->GetActiveMaterial())
+    if(!rend->GetActiveMaterial())
     {
         return;
     }
 
-    GameObject *go = p_nextRenderSelectable ? p_nextRenderSelectable :
-                                              rend->GetGameObject();
+    GameObject *go =
+        p_nextRenderSelectable ? p_nextRenderSelectable : rend->GetGameObject();
 
     RH<ShaderProgram> prevSP;
-    prevSP.Set( rend->GetActiveMaterial()->GetShaderProgram() );
+    prevSP.Set(rend->GetActiveMaterial()->GetShaderProgram());
 
-    rend->GetActiveMaterial()->EventEmitter<IEventsResource>::SetEmitEvents(false);
+    rend->GetActiveMaterial()->EventEmitter<IEventsResource>::SetEmitEvents(
+        false);
 
     ShaderProgram *selSP = p_selectionMaterial.Get()->GetShaderProgram();
     rend->GetActiveMaterial()->SetShaderProgram(selSP);
@@ -146,16 +145,17 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 
     rend->GetActiveMaterial()->SetShaderProgram(prevSP.Get());
 
-    rend->GetActiveMaterial()->EventEmitter<IEventsResource>::SetEmitEvents(true);
+    rend->GetActiveMaterial()->EventEmitter<IEventsResource>::SetEmitEvents(
+        true);
 
     p_nextRenderSelectable = nullptr;
 }
 
-GameObject *SelectionFramebuffer::
-GetGameObjectInViewportPoint(const Vector2i &vpPoint)
+GameObject *SelectionFramebuffer::GetGameObjectInViewportPoint(
+    const Vector2i &vpPoint)
 {
-    if (vpPoint.x < 0 || vpPoint.y < 0 ||
-        vpPoint.x >= GetWidth() || vpPoint.y >= GetHeight())
+    if(vpPoint.x < 0 || vpPoint.y < 0 || vpPoint.x >= GetWidth() ||
+       vpPoint.y >= GetHeight())
     {
         return nullptr;
     }
@@ -163,7 +163,7 @@ GetGameObjectInViewportPoint(const Vector2i &vpPoint)
     Color colorUnderMouse = ReadColor(vpPoint.x, vpPoint.y, AttColor);
     IdType id = MapColorToId(colorUnderMouse);
 
-    if (colorUnderMouse != Color::Zero && m_id_To_GameObject.ContainsKey(id))
+    if(colorUnderMouse != Color::Zero && m_id_To_GameObject.ContainsKey(id))
     {
         return m_id_To_GameObject[id];
     }
@@ -172,10 +172,10 @@ GetGameObjectInViewportPoint(const Vector2i &vpPoint)
 
 void SelectionFramebuffer::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
-    GameObject *go = DCAST<GameObject*>(object);
-    if (go)
+    GameObject *go = DCAST<GameObject *>(object);
+    if(go)
     {
-        if (m_gameObject_To_Id.ContainsKey(go))
+        if(m_gameObject_To_Id.ContainsKey(go))
         {
             IdType id = m_gameObject_To_Id.Get(go);
             m_gameObject_To_Id.Remove(go);
@@ -192,22 +192,17 @@ Color SelectionFramebuffer::GetSelectionColor(GameObject *go) const
 Color SelectionFramebuffer::MapIdToColor(IdType id)
 {
     constexpr IdType C = 255;
-    Color color (double(   id                % C),
-                 double(  (id / C)           % C),
-                 double( ((id / C) / C)      % C),
-                 double((((id / C) / C) / C) % C)
-                );
-   return color / double(C);
+    Color color(double(id % C), double((id / C) % C),
+                double(((id / C) / C) % C), double((((id / C) / C) / C) % C));
+    return color / double(C);
 }
 
-typename SelectionFramebuffer::IdType
-SelectionFramebuffer::MapColorToId(const Color &color)
+typename SelectionFramebuffer::IdType SelectionFramebuffer::MapColorToId(
+    const Color &color)
 {
     constexpr IdType C = 255;
-    return   IdType(color.r * C)
-           + IdType(color.g * C * C)
-           + IdType(color.b * C * C * C)
-           + IdType(color.a * C * C * C * C);
+    return IdType(color.r * C) + IdType(color.g * C * C) +
+           IdType(color.b * C * C * C) + IdType(color.a * C * C * C * C);
 }
 
 RH<Texture2D> SelectionFramebuffer::GetColorTexture() const

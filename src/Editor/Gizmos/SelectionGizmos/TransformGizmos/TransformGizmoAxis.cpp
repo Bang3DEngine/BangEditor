@@ -10,12 +10,13 @@
 #include "Bang/Vector3.h"
 #include "BangEditor/EditorCamera.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Object;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Object;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 TransformGizmoAxis::TransformGizmoAxis()
 {
@@ -33,12 +34,12 @@ void TransformGizmoAxis::Update()
     SelectionGizmo::Update();
 
     // Change color depending on selection state
-    SetColor( GetSelectionState() );
+    SetColor(GetSelectionState());
 
     // Block editor camera if being grabbed
-    if (EditorCamera *edCam = EditorCamera::GetInstance())
+    if(EditorCamera *edCam = EditorCamera::GetInstance())
     {
-        if (IsBeingGrabbed())
+        if(IsBeingGrabbed())
         {
             edCam->RequestBlockBy(this);
         }
@@ -51,22 +52,25 @@ void TransformGizmoAxis::Update()
 
 void TransformGizmoAxis::SetAxis(Axis3DExt axis)
 {
-    if (axis != GetAxis())
+    if(axis != GetAxis())
     {
         m_axis = axis;
         SetColor(SelectionState::IDLE);
     }
 }
-Axis3DExt TransformGizmoAxis::GetAxis() const { return m_axis; }
+Axis3DExt TransformGizmoAxis::GetAxis() const
+{
+    return m_axis;
+}
 Vector3 TransformGizmoAxis::GetAxisVectorLocal() const
 {
-    return GetAxisVector( GetAxis() );
+    return GetAxisVector(GetAxis());
 }
 
 Vector3 TransformGizmoAxis::GetAxisVectorWorld() const
 {
     Transform *refGoT = GetReferencedGameObject()->GetTransform();
-    return refGoT->FromLocalToWorldDirection( GetAxisVectorLocal() ).Normalized();
+    return refGoT->FromLocalToWorldDirection(GetAxisVectorLocal()).Normalized();
 }
 
 void TransformGizmoAxis::SetColor(SelectionState state)
@@ -74,45 +78,43 @@ void TransformGizmoAxis::SetColor(SelectionState state)
     constexpr float DotRange = 0.2f;
 
     float alpha = 1.0f;
-    if (ApplyAlignmentAlpha())
+    if(ApplyAlignmentAlpha())
     {
         float dot = 1.0f;
         GameObject *refGo = GetReferencedGameObject();
         EditorCamera *edCam = EditorCamera::GetInstance();
-        if (edCam && refGo)
+        if(edCam && refGo)
         {
-            if (refGo->GetTransform())
+            if(refGo->GetTransform())
             {
                 Vector3 refGoPos = refGo->GetTransform()->GetPosition();
                 Vector3 edCamPos = edCam->GetTransform()->GetPosition();
-                Vector3 edCamToRefGoDir = (refGoPos - edCamPos).NormalizedSafe();
-                if (edCamToRefGoDir.Length() > 0)
+                Vector3 edCamToRefGoDir =
+                    (refGoPos - edCamPos).NormalizedSafe();
+                if(edCamToRefGoDir.Length() > 0)
                 {
-                    dot = Math::Abs( Vector3::Dot(GetAxisVectorWorld(), edCamToRefGoDir) );
+                    dot = Math::Abs(
+                        Vector3::Dot(GetAxisVectorWorld(), edCamToRefGoDir));
                 }
             }
         }
 
-        if ((1.0f-dot) <= DotRange)
+        if((1.0f - dot) <= DotRange)
         {
-            alpha = ((1.0f-dot) / DotRange);
+            alpha = ((1.0f - dot) / DotRange);
         }
     }
-    SetVisible( (alpha >= 0.1f) );
+    SetVisible((alpha >= 0.1f));
 
-    switch (state)
+    switch(state)
     {
         case SelectionState::IDLE:
-            SetColor( GetAxisColor( GetAxis() ).WithAlpha(alpha) );
+            SetColor(GetAxisColor(GetAxis()).WithAlpha(alpha));
             break;
 
-        case SelectionState::OVER:
-            SetColor( Color::Orange );
-            break;
+        case SelectionState::OVER: SetColor(Color::Orange); break;
 
-        case SelectionState::GRABBED:
-            SetColor( Color::Yellow );
-            break;
+        case SelectionState::GRABBED: SetColor(Color::Yellow); break;
     }
 }
 

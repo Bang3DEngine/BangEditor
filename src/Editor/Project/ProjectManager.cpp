@@ -18,8 +18,8 @@
 #include "BangEditor/QtProjectManager.h"
 #include "BangEditor/SceneOpenerSaver.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 Project *ProjectManager::s_currentProject = nullptr;
 
@@ -27,9 +27,12 @@ ProjectManager::ProjectManager()
 {
 }
 
-Project* ProjectManager::OpenProject(const Path &projectFilepath)
+Project *ProjectManager::OpenProject(const Path &projectFilepath)
 {
-    if (!ProjectManager::CloseCurrentProject()) { return nullptr; }
+    if(!ProjectManager::CloseCurrentProject())
+    {
+        return nullptr;
+    }
 
     ProjectManager::s_currentProject = new Project();
     Project *currentProject = ProjectManager::s_currentProject;
@@ -42,47 +45,55 @@ Project* ProjectManager::OpenProject(const Path &projectFilepath)
     MetaFilesManager::CreateMissingMetaFiles(assetsDir);
     MetaFilesManager::LoadMetaFilepathGUIDs(assetsDir);
 
-    ProjectManager::GetInstance()->
-        EventEmitter<IEventsProjectManager>::PropagateToListeners(
-               &IEventsProjectManager::OnProjectOpen, s_currentProject);
+    ProjectManager::GetInstance()
+        ->EventEmitter<IEventsProjectManager>::PropagateToListeners(
+            &IEventsProjectManager::OnProjectOpen, s_currentProject);
 
     EditorSettings::AddRecentProjectFilepathOpen(
-                            currentProject->GetProjectFilepath() );
+        currentProject->GetProjectFilepath());
 
     bool sceneHasBeenOpen = currentProject->OpenFirstFoundScene();
     SceneOpenerSaver *sov = SceneOpenerSaver::GetInstance();
-    if (!sceneHasBeenOpen && sov) { sov->OnNewScene(); }
+    if(!sceneHasBeenOpen && sov)
+    {
+        sov->OnNewScene();
+    }
 
     QtProjectManager::CreateQtProjectFile();
 
     return currentProject;
 }
 
-Project* ProjectManager::CreateNewProject(const Path &projectDirPath,
+Project *ProjectManager::CreateNewProject(const Path &projectDirPath,
                                           const String &projectName)
 {
-    if (!ProjectManager::CloseCurrentProject()) { return nullptr; }
+    if(!ProjectManager::CloseCurrentProject())
+    {
+        return nullptr;
+    }
 
     Path projectDir(projectDirPath.Append(projectName));
-    if (!projectDir.Exists())
+    if(!projectDir.Exists())
     {
-        if (!File::CreateDirectory(projectDir))
+        if(!File::CreateDirectory(projectDir))
         {
-            Debug_Error ("Could not create project in directory '" <<
-                         projectDir << "'.");
+            Debug_Error("Could not create project in directory '" << projectDir
+                                                                  << "'.");
             return nullptr;
         }
     }
     else
     {
         // TODO: Add overwrite window warning
-        Debug_Warn("Directory '" << projectDir << "' already existed, using it.");
+        Debug_Warn("Directory '" << projectDir
+                                 << "' already existed, using it.");
     }
 
-    Path projectFilepath(projectDir.Append(projectName).WithExtension(
-                             Extensions::GetProjectExtension()));
+    Path projectFilepath(projectDir.Append(projectName)
+                             .WithExtension(Extensions::GetProjectExtension()));
 
-    ProjectManager::s_currentProject = CreateNewProjectFileOnly(projectFilepath);
+    ProjectManager::s_currentProject =
+        CreateNewProjectFileOnly(projectFilepath);
     ProjectManager::s_currentProject->SetProjectFilepath(projectFilepath);
 
     File::CreateDirectory(projectDir.Append("Assets"));
@@ -100,9 +111,12 @@ Project *ProjectManager::CreateNewProjectFileOnly(const Path &projectFilepath)
 
 void ProjectManager::ExportProject(const Project *project)
 {
-    if (!project) { return; }
+    if(!project)
+    {
+        return;
+    }
     bool ok = project->ExportMetaToFile(project->GetProjectFilepath());
-    if (!ok)
+    if(!ok)
     {
         Debug_Error("Could not save the project...");
     }
@@ -110,19 +124,25 @@ void ProjectManager::ExportProject(const Project *project)
 
 void ProjectManager::ExportCurrentProject()
 {
-    ProjectManager::ExportProject( ProjectManager::GetCurrentProject() );
+    ProjectManager::ExportProject(ProjectManager::GetCurrentProject());
 }
 
-bool ProjectManager:: CloseCurrentProject()
+bool ProjectManager::CloseCurrentProject()
 {
-    if (!SceneOpenerSaver::GetInstance()) { return true; }
-    if (!SceneOpenerSaver::GetInstance()->CloseScene()) { return false; }
-
-    if (ProjectManager::s_currentProject)
+    if(!SceneOpenerSaver::GetInstance())
     {
-        ProjectManager::GetInstance()->
-            EventEmitter<IEventsProjectManager>::PropagateToListeners(
-                   &IEventsProjectManager::OnProjectClosed, s_currentProject);
+        return true;
+    }
+    if(!SceneOpenerSaver::GetInstance()->CloseScene())
+    {
+        return false;
+    }
+
+    if(ProjectManager::s_currentProject)
+    {
+        ProjectManager::GetInstance()
+            ->EventEmitter<IEventsProjectManager>::PropagateToListeners(
+                &IEventsProjectManager::OnProjectClosed, s_currentProject);
 
         delete s_currentProject;
         ProjectManager::s_currentProject = nullptr;

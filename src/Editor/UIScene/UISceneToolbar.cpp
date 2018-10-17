@@ -29,12 +29,13 @@
 #include "BangEditor/UISceneEditContainer.h"
 #include "BangEditor/UISceneImage.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Scene;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Scene;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 UISceneToolbar::UISceneToolbar()
 {
@@ -47,60 +48,57 @@ UISceneToolbar::UISceneToolbar()
 
     UILayoutElement *toolbarLE = AddComponent<UILayoutElement>();
     toolbarLE->SetMinHeight(ToolBarHeight);
-    toolbarLE->SetFlexibleWidth( 1.0f );
+    toolbarLE->SetFlexibleWidth(1.0f);
 
-    Texture2D *eyeIcon              = EditorTextureFactory::GetEyeIcon();
-    Texture2D *rightArrowIcon       = TextureFactory::GetRightArrowIcon();
-    Texture2D *doubleBarIcon        = EditorTextureFactory::GetDoubleBarIcon();
-    Texture2D *squareIcon           = EditorTextureFactory::GetSquareIcon();
-    Texture2D *rightArrowAndBarIcon = EditorTextureFactory::GetRightArrowAndBarIcon();
-    Texture2D *translateIcon        = EditorTextureFactory::GetHairCrossIcon();
-    Texture2D *rotateIcon           = EditorTextureFactory::GetRotateIcon();
-    Texture2D *scaleIcon            = EditorTextureFactory::GetAxesIcon();
-    Texture2D *rectTransformIcon    = EditorTextureFactory::GetAnchoredRectIcon();
+    Texture2D *eyeIcon = EditorTextureFactory::GetEyeIcon();
+    Texture2D *rightArrowIcon = TextureFactory::GetRightArrowIcon();
+    Texture2D *doubleBarIcon = EditorTextureFactory::GetDoubleBarIcon();
+    Texture2D *squareIcon = EditorTextureFactory::GetSquareIcon();
+    Texture2D *rightArrowAndBarIcon =
+        EditorTextureFactory::GetRightArrowAndBarIcon();
+    Texture2D *translateIcon = EditorTextureFactory::GetHairCrossIcon();
+    Texture2D *rotateIcon = EditorTextureFactory::GetRotateIcon();
+    Texture2D *scaleIcon = EditorTextureFactory::GetAxesIcon();
+    Texture2D *rectTransformIcon = EditorTextureFactory::GetAnchoredRectIcon();
 
-    auto AddToolbarButton = [&](UIToolButton **buttonPtr,
-                                Texture2D *icon,
-                                std::function<void()> callbackFunc)
-    {
+    auto AddToolbarButton = [&](UIToolButton **buttonPtr, Texture2D *icon,
+                                std::function<void()> callbackFunc) {
         UIToolButton *button = GameObjectFactory::CreateUIToolButton("", icon);
         button->SetIcon(icon, Vector2i(14));
-        button->GetLayoutElement()->SetMinSize( Vector2i(ToolBarHeight) );
+        button->GetLayoutElement()->SetMinSize(Vector2i(ToolBarHeight));
         button->GetIcon()->SetTint(Color::DarkGray);
         button->AddClickedCallback(callbackFunc);
         button->GetGameObject()->SetParent(this);
         *buttonPtr = button;
     };
-    auto AddTransformButton = [&](UIToolButton **buttonPtr,
-                                  Texture2D *icon,
-                                  std::function<void()> callbackFunc)
-    {
-        AddToolbarButton(buttonPtr, icon,
-        [this, buttonPtr, callbackFunc]()
-        {
+    auto AddTransformButton = [&](UIToolButton **buttonPtr, Texture2D *icon,
+                                  std::function<void()> callbackFunc) {
+        AddToolbarButton(buttonPtr, icon, [this, buttonPtr, callbackFunc]() {
             (*buttonPtr)->SetOn(true);
             callbackFunc();
         });
     };
-    AddTransformButton(&p_translateButton, translateIcon,
-                       [&]() { SetTransformGizmoMode( TransformGizmoMode::TRANSLATE); });
-    AddTransformButton(&p_rotateButton, rotateIcon,
-                       [&]() { SetTransformGizmoMode( TransformGizmoMode::ROTATE); });
-    AddTransformButton(&p_scaleButton, scaleIcon,
-                       [&]() { SetTransformGizmoMode( TransformGizmoMode::SCALE); });
-    AddTransformButton(&p_rectTransformButton, rectTransformIcon,
-                       [&]() { SetTransformGizmoMode( TransformGizmoMode::RECT); });
+    AddTransformButton(&p_translateButton, translateIcon, [&]() {
+        SetTransformGizmoMode(TransformGizmoMode::TRANSLATE);
+    });
+    AddTransformButton(&p_rotateButton, rotateIcon, [&]() {
+        SetTransformGizmoMode(TransformGizmoMode::ROTATE);
+    });
+    AddTransformButton(&p_scaleButton, scaleIcon, [&]() {
+        SetTransformGizmoMode(TransformGizmoMode::SCALE);
+    });
+    AddTransformButton(&p_rectTransformButton, rectTransformIcon, [&]() {
+        SetTransformGizmoMode(TransformGizmoMode::RECT);
+    });
 
-    p_transformCamSeparator = GameObjectFactory::CreateUIVSeparator(
-                                                 LayoutSizeType::PREFERRED, 10);
+    p_transformCamSeparator =
+        GameObjectFactory::CreateUIVSeparator(LayoutSizeType::PREFERRED, 10);
     p_transformCamSeparator->SetParent(this);
 
-    AddToolbarButton(&p_resetCamViewButton, eyeIcon,
-                     [&]()
-                     {
-                         p_resetCamViewButton->SetOn(false);
-                         ResetCameraView();
-                     });
+    AddToolbarButton(&p_resetCamViewButton, eyeIcon, [&]() {
+        p_resetCamViewButton->SetOn(false);
+        ResetCameraView();
+    });
 
     p_transformCamSpacer = GameObjectFactory::CreateUIHSpacer();
     p_transformCamSpacer->SetParent(this);
@@ -115,30 +113,43 @@ UISceneToolbar::UISceneToolbar()
                      [&]() { ScenePlayer::StopScene(); });
 
     p_renderModeInput = GameObjectFactory::CreateUIComboBox();
-    p_renderModeInput->AddItem("Color",            SCAST<int>(UISceneImage::RenderMode::COLOR));
-    p_renderModeInput->AddItem("Albedo",           SCAST<int>(UISceneImage::RenderMode::ALBEDO));
-    p_renderModeInput->AddItem("Normal",           SCAST<int>(UISceneImage::RenderMode::NORMAL));
-    p_renderModeInput->AddItem("World Position",   SCAST<int>(UISceneImage::RenderMode::WORLD_POSITION));
-    p_renderModeInput->AddItem("Roughness",        SCAST<int>(UISceneImage::RenderMode::ROUGHNESS));
-    p_renderModeInput->AddItem("Metalness",        SCAST<int>(UISceneImage::RenderMode::METALNESS));
-    p_renderModeInput->AddItem("Receives Light",   SCAST<int>(UISceneImage::RenderMode::RECEIVES_LIGHT));
-    p_renderModeInput->AddItem("Receives Shadows", SCAST<int>(UISceneImage::RenderMode::RECEIVES_SHADOWS));
-    p_renderModeInput->AddItem("Depth",            SCAST<int>(UISceneImage::RenderMode::DEPTH));
-    p_renderModeInput->AddItem("Selection",        SCAST<int>(UISceneImage::RenderMode::SELECTION));
-    p_renderModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_renderModeInput->AddItem("Color",
+                               SCAST<int>(UISceneImage::RenderMode::COLOR));
+    p_renderModeInput->AddItem("Albedo",
+                               SCAST<int>(UISceneImage::RenderMode::ALBEDO));
+    p_renderModeInput->AddItem("Normal",
+                               SCAST<int>(UISceneImage::RenderMode::NORMAL));
+    p_renderModeInput->AddItem(
+        "World Position", SCAST<int>(UISceneImage::RenderMode::WORLD_POSITION));
+    p_renderModeInput->AddItem("Roughness",
+                               SCAST<int>(UISceneImage::RenderMode::ROUGHNESS));
+    p_renderModeInput->AddItem("Metalness",
+                               SCAST<int>(UISceneImage::RenderMode::METALNESS));
+    p_renderModeInput->AddItem(
+        "Receives Light", SCAST<int>(UISceneImage::RenderMode::RECEIVES_LIGHT));
+    p_renderModeInput->AddItem(
+        "Receives Shadows",
+        SCAST<int>(UISceneImage::RenderMode::RECEIVES_SHADOWS));
+    p_renderModeInput->AddItem("Depth",
+                               SCAST<int>(UISceneImage::RenderMode::DEPTH));
+    p_renderModeInput->AddItem("Selection",
+                               SCAST<int>(UISceneImage::RenderMode::SELECTION));
+    p_renderModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_showDebugStatsCheckbox = GameObjectFactory::CreateUICheckBox();
     p_showDebugStatsCheckbox->SetChecked(false);
-    p_showDebugStatsCheckbox->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_showDebugStatsCheckbox
+        ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     GameObject *showDebugStatsTextGo = GameObjectFactory::CreateUIGameObject();
     UITextRenderer *showDebugStatsText =
-                        showDebugStatsTextGo->AddComponent<UITextRenderer>();
+        showDebugStatsTextGo->AddComponent<UITextRenderer>();
     showDebugStatsText->SetTextSize(11);
     showDebugStatsText->SetContent("Stats");
 
-    GameObjectFactory::CreateUISpacer(LayoutSizeType::FLEXIBLE, Vector2::One)->
-                        SetParent(this);
+    GameObjectFactory::CreateUISpacer(LayoutSizeType::FLEXIBLE, Vector2::One)
+        ->SetParent(this);
     p_renderModeInput->GetGameObject()->SetParent(this);
     showDebugStatsTextGo->SetParent(this);
     p_showDebugStatsCheckbox->GetGameObject()->SetParent(this);
@@ -156,7 +167,7 @@ void UISceneToolbar::Update()
 
 void UISceneToolbar::SetTransformGizmoMode(TransformGizmoMode transformMode)
 {
-    if (transformMode != GetTransformGizmoMode())
+    if(transformMode != GetTransformGizmoMode())
     {
         m_transformGizmoMode = transformMode;
     }
@@ -194,7 +205,7 @@ UISceneToolbar *UISceneToolbar::GetActive()
 
 void UISceneToolbar::ResetCameraView()
 {
-    if (Scene *openScene = EditorSceneManager::GetActive()->GetOpenScene())
+    if(Scene *openScene = EditorSceneManager::GetActive()->GetOpenScene())
     {
         EditorCamera::GetInstance()->FocusScene(openScene);
     }
@@ -205,12 +216,12 @@ void UISceneToolbar::UpdateToolButtons()
     // Play buttons
     {
         PlayState playState = ScenePlayer::GetPlayState();
-        p_playButton->SetOn( playState == PlayState::PLAYING );
-        p_stepButton->SetOn( false );
-        p_pauseButton->SetOn( playState == PlayState::PAUSED );
-        p_stopButton->SetOn( playState == PlayState::EDITING );
-        p_playButton->SetBlocked( !(playState == PlayState::EDITING ||
-                                    playState == PlayState::PAUSED) );
+        p_playButton->SetOn(playState == PlayState::PLAYING);
+        p_stepButton->SetOn(false);
+        p_pauseButton->SetOn(playState == PlayState::PAUSED);
+        p_stopButton->SetOn(playState == PlayState::EDITING);
+        p_playButton->SetBlocked(!(playState == PlayState::EDITING ||
+                                   playState == PlayState::PAUSED));
         p_stepButton->SetBlocked(playState == PlayState::EDITING);
         p_pauseButton->SetBlocked(playState == PlayState::EDITING ||
                                   playState == PlayState::PAUSED);
@@ -220,61 +231,62 @@ void UISceneToolbar::UpdateToolButtons()
     // Transform mode buttons
     {
         GameObject *selGo = Editor::GetSelectedGameObject();
-        if (selGo)
+        if(selGo)
         {
             bool hasRectTransform = selGo->HasComponent<RectTransform>();
-            if (hasRectTransform)
+            if(hasRectTransform)
             {
                 SetTransformGizmoMode(TransformGizmoMode::RECT);
             }
-            else if (GetTransformGizmoMode() == TransformGizmoMode::RECT)
+            else if(GetTransformGizmoMode() == TransformGizmoMode::RECT)
             {
                 SetTransformGizmoMode(TransformGizmoMode::TRANSLATE);
             }
         }
 
-        p_translateButton->SetBlocked( !(selGo && selGo->GetTransform()) );
-        p_rotateButton->SetBlocked( !(selGo && selGo->GetTransform()) );
-        p_scaleButton->SetBlocked( !(selGo && selGo->GetTransform()) );
-        p_rectTransformButton->SetBlocked( !(selGo && selGo->GetRectTransform()) );
+        p_translateButton->SetBlocked(!(selGo && selGo->GetTransform()));
+        p_rotateButton->SetBlocked(!(selGo && selGo->GetTransform()));
+        p_scaleButton->SetBlocked(!(selGo && selGo->GetTransform()));
+        p_rectTransformButton->SetBlocked(
+            !(selGo && selGo->GetRectTransform()));
 
         // W, E, R, T shortcuts handling
         TransformGizmoMode newTrMode = Undef<TransformGizmoMode>();
-        if (Input::GetKeyDown(Key::W))
+        if(Input::GetKeyDown(Key::W))
         {
             newTrMode = TransformGizmoMode::TRANSLATE;
         }
-        else if (Input::GetKeyDown(Key::E))
+        else if(Input::GetKeyDown(Key::E))
         {
             newTrMode = TransformGizmoMode::ROTATE;
         }
-        else if (Input::GetKeyDown(Key::R))
+        else if(Input::GetKeyDown(Key::R))
         {
             newTrMode = TransformGizmoMode::SCALE;
         }
-        else if (Input::GetKeyDown(Key::T))
+        else if(Input::GetKeyDown(Key::T))
         {
             newTrMode = TransformGizmoMode::RECT;
         }
 
-        if (newTrMode != Undef<TransformGizmoMode>())
+        if(newTrMode != Undef<TransformGizmoMode>())
         {
             SetTransformGizmoMode(newTrMode);
         }
 
-        p_translateButton->SetOn( GetTransformGizmoMode() ==
-                                  TransformGizmoMode::TRANSLATE );
-        p_rotateButton->SetOn( GetTransformGizmoMode() ==
-                               TransformGizmoMode::ROTATE );
-        p_scaleButton->SetOn( GetTransformGizmoMode() ==
-                              TransformGizmoMode::SCALE );
-        p_rectTransformButton->SetOn( GetTransformGizmoMode() ==
-                                      TransformGizmoMode::RECT );
+        p_translateButton->SetOn(GetTransformGizmoMode() ==
+                                 TransformGizmoMode::TRANSLATE);
+        p_rotateButton->SetOn(GetTransformGizmoMode() ==
+                              TransformGizmoMode::ROTATE);
+        p_scaleButton->SetOn(GetTransformGizmoMode() ==
+                             TransformGizmoMode::SCALE);
+        p_rectTransformButton->SetOn(GetTransformGizmoMode() ==
+                                     TransformGizmoMode::RECT);
     }
 }
 
 void UISceneToolbar::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     EventEmitter<IEventsValueChanged>::PropagateToListeners(
-                    &IEventsValueChanged::OnValueChanged, object);
+        &IEventsValueChanged::OnValueChanged, object);
 }

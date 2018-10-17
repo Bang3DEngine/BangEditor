@@ -28,13 +28,15 @@
 #include "BangEditor/UIInputColor.h"
 #include "BangEditor/UIInputVector.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD_T class EventListener;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+template <class>
+class EventListener;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 CIWBehaviour::CIWBehaviour()
 {
@@ -65,13 +67,12 @@ void CIWBehaviour::UpdateFromReference()
     m_ciwBehaviourHelper.UpdateWidgetsFromMeta(behaviourMeta);
 }
 
-
 void CIWBehaviour::OnComponentSet()
 {
     ASSERT(GetBehaviour());
 
     // Clear
-    for (GameObject *widget : m_ciwBehaviourHelper.GetWidgets())
+    for(GameObject *widget : m_ciwBehaviourHelper.GetWidgets())
     {
         RemoveWidget(widget);
     }
@@ -79,10 +80,11 @@ void CIWBehaviour::OnComponentSet()
     // Add
     BPReflectedStruct reflectStruct = GetBehaviour()->GetReflectionInfo();
     m_ciwBehaviourHelper.RecreateWidgetsFromReflection(reflectStruct, this);
-    for (GameObject *widget : m_ciwBehaviourHelper.GetWidgets())
+    for(GameObject *widget : m_ciwBehaviourHelper.GetWidgets())
     {
-        String name = m_ciwBehaviourHelper.GetWidgetToReflectedVar().
-                      Get(widget).GetName();
+        String name = m_ciwBehaviourHelper.GetWidgetToReflectedVar()
+                          .Get(widget)
+                          .GetName();
         AddWidget(name, widget);
     }
 }
@@ -97,15 +99,14 @@ void CIWBehaviour::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 
 Behaviour *CIWBehaviour::GetBehaviour() const
 {
-    return SCAST<Behaviour*>(GetComponent());
+    return SCAST<Behaviour *>(GetComponent());
 }
-
 
 // ===========================================================================
 
 void CIWBehaviourHelper::RecreateWidgetsFromReflection(
-                    const BPReflectedStruct &reflectStruct,
-                    EventListener<IEventsValueChanged> *listener)
+    const BPReflectedStruct &reflectStruct,
+    EventListener<IEventsValueChanged> *listener)
 {
     // Clear
     m_widgets.Clear();
@@ -113,70 +114,70 @@ void CIWBehaviourHelper::RecreateWidgetsFromReflection(
     m_varNameToWidget.Clear();
 
     // Add
-    for (const BPReflectedVariable &reflVar : reflectStruct.GetVariables())
+    for(const BPReflectedVariable &reflVar : reflectStruct.GetVariables())
     {
         GameObject *widgetToAdd = nullptr;
         String widgetName = reflVar.GetName();
-        if (reflVar.IsOfType(BangPreprocessor::VarTypeFloat)  ||
-            reflVar.IsOfType(BangPreprocessor::VarTypeDouble) ||
-            reflVar.IsOfType(BangPreprocessor::VarTypeInt))
+        if(reflVar.IsOfType(BangPreprocessor::VarTypeFloat) ||
+           reflVar.IsOfType(BangPreprocessor::VarTypeDouble) ||
+           reflVar.IsOfType(BangPreprocessor::VarTypeInt))
         {
             UIInputNumber *inputNumber =
-                                GameObjectFactory::CreateUIInputNumber();
+                GameObjectFactory::CreateUIInputNumber();
             inputNumber->SetValue(
-                        String::ToFloat(reflVar.GetVariableInitValue()) );
-            if (reflVar.IsOfType(BangPreprocessor::VarTypeInt))
+                String::ToFloat(reflVar.GetVariableInitValue()));
+            if(reflVar.IsOfType(BangPreprocessor::VarTypeInt))
             {
                 inputNumber->SetDecimalPlaces(0);
             }
-            inputNumber->EventEmitter<IEventsValueChanged>::
-                         RegisterListener(listener);
+            inputNumber->EventEmitter<IEventsValueChanged>::RegisterListener(
+                listener);
             widgetToAdd = inputNumber->GetGameObject();
         }
-        else if (reflVar.IsOfType(BangPreprocessor::VarTypeBool))
+        else if(reflVar.IsOfType(BangPreprocessor::VarTypeBool))
         {
             UICheckBox *checkBox = GameObjectFactory::CreateUICheckBox();
             checkBox->SetChecked(
-                    (reflVar.GetVariableInitValue().EqualsNoCase("True")) );
-            checkBox->EventEmitter<IEventsValueChanged>::
-                      RegisterListener(listener);
+                (reflVar.GetVariableInitValue().EqualsNoCase("True")));
+            checkBox->EventEmitter<IEventsValueChanged>::RegisterListener(
+                listener);
             widgetToAdd = checkBox->GetGameObject();
         }
-        else if (reflVar.IsOfType(BangPreprocessor::VarTypeString))
+        else if(reflVar.IsOfType(BangPreprocessor::VarTypeString))
         {
             UIInputText *inputText = GameObjectFactory::CreateUIInputText();
             inputText->GetText()->SetContent(reflVar.GetVariableInitValue());
-            inputText->EventEmitter<IEventsValueChanged>::
-                       RegisterListener(listener);
+            inputText->EventEmitter<IEventsValueChanged>::RegisterListener(
+                listener);
             widgetToAdd = inputText->GetGameObject();
         }
-        else if (reflVar.IsOfType(BangPreprocessor::VarTypeVector2) ||
-                 reflVar.IsOfType(BangPreprocessor::VarTypeVector3) ||
-                 reflVar.IsOfType(BangPreprocessor::VarTypeVector4) ||
-                 reflVar.IsOfType(BangPreprocessor::VarTypeQuaternion))
+        else if(reflVar.IsOfType(BangPreprocessor::VarTypeVector2) ||
+                reflVar.IsOfType(BangPreprocessor::VarTypeVector3) ||
+                reflVar.IsOfType(BangPreprocessor::VarTypeVector4) ||
+                reflVar.IsOfType(BangPreprocessor::VarTypeQuaternion))
         {
             int numComps = 4;
-            if (reflVar.IsOfType(BangPreprocessor::VarTypeVector2))
+            if(reflVar.IsOfType(BangPreprocessor::VarTypeVector2))
             {
                 numComps = 2;
             }
-            else if (reflVar.IsOfType(BangPreprocessor::VarTypeVector3))
+            else if(reflVar.IsOfType(BangPreprocessor::VarTypeVector3))
             {
                 numComps = 3;
             }
             UIInputVector *inputVec = GameObject::Create<UIInputVector>();
             inputVec->SetSize(numComps);
-            inputVec->Set( Vector4::Zero );
-            inputVec->EventEmitter<IEventsValueChanged>::
-                      RegisterListener(listener);
+            inputVec->Set(Vector4::Zero);
+            inputVec->EventEmitter<IEventsValueChanged>::RegisterListener(
+                listener);
             widgetToAdd = inputVec;
         }
-        else if (reflVar.IsOfType(BangPreprocessor::VarTypeColor))
+        else if(reflVar.IsOfType(BangPreprocessor::VarTypeColor))
         {
             UIInputColor *inputColor = GameObject::Create<UIInputColor>();
-            inputColor->SetColor( Color::White );
-            inputColor->EventEmitter<IEventsValueChanged>::
-                        RegisterListener(listener);
+            inputColor->SetColor(Color::White);
+            inputColor->EventEmitter<IEventsValueChanged>::RegisterListener(
+                listener);
             widgetToAdd = inputColor;
         }
 
@@ -188,34 +189,37 @@ void CIWBehaviourHelper::RecreateWidgetsFromReflection(
 
 void CIWBehaviourHelper::UpdateWidgetsFromMeta(const MetaNode &meta)
 {
-    for (const auto &pair : meta.GetAttributes())
+    for(const auto &pair : meta.GetAttributes())
     {
         const String &attrName = pair.first;
         const MetaAttribute &metaAttr = pair.second;
 
         auto it = GetVarNameToWidget().Find(attrName);
-        if (it != GetVarNameToWidget().End())
+        if(it != GetVarNameToWidget().End())
         {
             GameObject *widget = it->second;
-            if (UIInputVector *inputVec = DCAST<UIInputVector*>(widget))
+            if(UIInputVector *inputVec = DCAST<UIInputVector *>(widget))
             {
                 inputVec->Set(metaAttr.Get<Vector4>());
             }
-            else if (UIInputColor *inputColor = DCAST<UIInputColor*>(widget))
+            else if(UIInputColor *inputColor = DCAST<UIInputColor *>(widget))
             {
                 inputColor->SetColor(metaAttr.Get<Color>());
             }
-            else if (UIInputNumber *inputNumber = widget->GetComponent<UIInputNumber>())
+            else if(UIInputNumber *inputNumber =
+                        widget->GetComponent<UIInputNumber>())
             {
-                inputNumber->SetValue( metaAttr.Get<double>() );
+                inputNumber->SetValue(metaAttr.Get<double>());
             }
-            else if (UIInputText *inputText = widget->GetComponent<UIInputText>())
+            else if(UIInputText *inputText =
+                        widget->GetComponent<UIInputText>())
             {
                 inputText->GetText()->SetContent(metaAttr.Get<String>());
             }
-            else if (UICheckBox *inputCheckBox = widget->GetComponent<UICheckBox>())
+            else if(UICheckBox *inputCheckBox =
+                        widget->GetComponent<UICheckBox>())
             {
-                inputCheckBox->SetChecked( metaAttr.Get<bool>() );
+                inputCheckBox->SetChecked(metaAttr.Get<bool>());
             }
         }
     }
@@ -224,37 +228,31 @@ void CIWBehaviourHelper::UpdateWidgetsFromMeta(const MetaNode &meta)
 String GetStringValueFromWidget(GameObject *widget)
 {
     String value = "";
-    if (UIInputVector *inputVec = DCAST<UIInputVector*>(widget))
+    if(UIInputVector *inputVec = DCAST<UIInputVector *>(widget))
     {
-        switch (inputVec->GetSize())
+        switch(inputVec->GetSize())
         {
-            case 2:
-                value = String::ToString( inputVec->GetVector2() );
-            break;
+            case 2: value = String::ToString(inputVec->GetVector2()); break;
 
-            case 3:
-                value = String::ToString( inputVec->GetVector3() );
-            break;
+            case 3: value = String::ToString(inputVec->GetVector3()); break;
 
-            default:
-                value = String::ToString( inputVec->GetVector4() );
-            break;
+            default: value = String::ToString(inputVec->GetVector4()); break;
         }
     }
-    else if (UIInputColor *inputColor = DCAST<UIInputColor*>(widget))
+    else if(UIInputColor *inputColor = DCAST<UIInputColor *>(widget))
     {
         value = String::ToString(inputColor->GetColor());
     }
-    else if (UICheckBox *inputCheckBox = widget->GetComponent<UICheckBox>())
+    else if(UICheckBox *inputCheckBox = widget->GetComponent<UICheckBox>())
     {
         value = inputCheckBox->IsChecked() ? "True" : "False";
     }
-    else if (UIInputNumber *inputNumber = widget->GetComponent<UIInputNumber>())
+    else if(UIInputNumber *inputNumber = widget->GetComponent<UIInputNumber>())
     {
         value = String::ToString(inputNumber->GetValue(),
                                  inputNumber->GetDecimalPlaces());
     }
-    else if (UIInputText *inputText = widget->GetComponent<UIInputText>())
+    else if(UIInputText *inputText = widget->GetComponent<UIInputText>())
     {
         value = inputText->GetText()->GetContent();
     }
@@ -264,7 +262,7 @@ String GetStringValueFromWidget(GameObject *widget)
 MetaNode CIWBehaviourHelper::GetMetaFromWidgets() const
 {
     MetaNode meta;
-    for (const auto &it : GetWidgetToReflectedVar())
+    for(const auto &it : GetWidgetToReflectedVar())
     {
         GameObject *widget = it.first;
         const BPReflectedVariable &reflVar = it.second;
@@ -274,7 +272,8 @@ MetaNode CIWBehaviourHelper::GetMetaFromWidgets() const
     return meta;
 }
 
-const Map<GameObject *, BPReflectedVariable> &CIWBehaviourHelper::GetWidgetToReflectedVar() const
+const Map<GameObject *, BPReflectedVariable>
+    &CIWBehaviourHelper::GetWidgetToReflectedVar() const
 {
     return m_widgetToReflectedVar;
 }

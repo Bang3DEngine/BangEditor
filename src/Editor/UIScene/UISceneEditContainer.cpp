@@ -58,12 +58,13 @@
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsDestroy;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDestroy;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 UISceneEditContainer::UISceneEditContainer()
 {
@@ -74,18 +75,17 @@ UISceneEditContainer::UISceneEditContainer()
 
     GameObjectFactory::AddOuterBorder(cameraPreviewGo);
 
-    m_cameraPreviewGBuffer = new GBuffer(1,1);
+    m_cameraPreviewGBuffer = new GBuffer(1, 1);
 
-    cameraPreviewGo->GetRectTransform()->SetAnchors( Vector2(-1),
-                                                     Vector2(-1) );
-    cameraPreviewGo->GetRectTransform()->SetMarginLeftBot( Vector2i(5) );
+    cameraPreviewGo->GetRectTransform()->SetAnchors(Vector2(-1), Vector2(-1));
+    cameraPreviewGo->GetRectTransform()->SetMarginLeftBot(Vector2i(5));
     cameraPreviewGo->AddComponent<UILayoutIgnorer>();
-    cameraPreviewGo->SetParent( GetSceneImage() );
+    cameraPreviewGo->SetParent(GetSceneImage());
 
-    ScenePlayer::GetInstance()->
-            EventEmitter<IEventsScenePlayer>::RegisterListener(this);
-    SceneManager::GetActive()->
-            EventEmitter<IEventsSceneManager>::RegisterListener(this);
+    ScenePlayer::GetInstance()
+        ->EventEmitter<IEventsScenePlayer>::RegisterListener(this);
+    SceneManager::GetActive()
+        ->EventEmitter<IEventsSceneManager>::RegisterListener(this);
     EventEmitter<IEventsGameObjectVisibilityChanged>::RegisterListener(this);
 }
 
@@ -97,25 +97,25 @@ UISceneEditContainer::~UISceneEditContainer()
 void UISceneEditContainer::Update()
 {
     GameObject::Update();
-    SetScene( EditorSceneManager::GetOpenScene() );
+    SetScene(EditorSceneManager::GetOpenScene());
 }
 
 void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
 {
-    if (m_needToRenderPreviewImg && (rp == RenderPass::CANVAS) )
+    if(m_needToRenderPreviewImg && (rp == RenderPass::CANVAS))
     {
         RenderCameraPreviewIfSelected();
         m_needToRenderPreviewImg = false;
     }
 
-    if ( rp == RenderPass::CANVAS && NeedsToRenderSelectionFramebuffer() )
+    if(rp == RenderPass::CANVAS && NeedsToRenderSelectionFramebuffer())
     {
         EditorCamera *edCamGo = EditorCamera::GetInstance();
         Camera *edCam = edCamGo->GetCamera();
         SelectionFramebuffer *sfb = GetSelectionFramebuffer();
         Scene *openScene = EditorSceneManager::GetOpenScene();
         GEngine *ge = GEngine::GetInstance();
-        if (sfb && ge && edCamGo && openScene)
+        if(sfb && ge && edCamGo && openScene)
         {
             GEngine *ge = GEngine::GetInstance();
             ge->PushActiveRenderingCamera();
@@ -126,7 +126,7 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
             ge->SetActiveRenderingCamera(edCam);
 
             RectTransform *sceneImgRT = GetSceneImage()->GetRectTransform();
-            AARecti imgRect( sceneImgRT->GetViewportAARect() );
+            AARecti imgRect(sceneImgRT->GetViewportAARect());
             Vector2i renderSize = imgRect.GetSize();
             edCam->SetRenderSize(renderSize);
             edCamGo->GetSelectionFramebuffer()->Resize(renderSize);
@@ -164,15 +164,14 @@ bool UISceneEditContainer::IsMouseOver()
 Vector2i UISceneEditContainer::GetMousePositionInOpenScene()
 {
     Vector2i mousePosInOpenScene = Vector2i::Zero;
-    if (UISceneEditContainer *sec = UISceneEditContainer::GetActive())
+    if(UISceneEditContainer *sec = UISceneEditContainer::GetActive())
     {
         AARecti vp = GL::GetViewportRect();
-        AARecti sceneVPRect( sec->GetSceneImage()->GetRectTransform()->
-                             GetViewportAARect() );
+        AARecti sceneVPRect(
+            sec->GetSceneImage()->GetRectTransform()->GetViewportAARect());
         AARecti windowSceneRect = sceneVPRect + vp.GetMin();
-        Vector2i vpMousePos( GL::FromWindowPointToViewportPoint(
-                                Vector2(Input::GetMousePositionWindow()),
-                                windowSceneRect) );
+        Vector2i vpMousePos(GL::FromWindowPointToViewportPoint(
+            Vector2(Input::GetMousePositionWindow()), windowSceneRect));
         mousePosInOpenScene = vpMousePos;
     }
     return mousePosInOpenScene;
@@ -181,23 +180,25 @@ Vector2i UISceneEditContainer::GetMousePositionInOpenScene()
 void UISceneEditContainer::RenderCameraPreviewIfSelected()
 {
     GameObject *selectedGO = Editor::GetSelectedGameObject();
-    Camera *selectedCamera = selectedGO ? selectedGO->GetComponent<Camera>() :
-                                          nullptr;
+    Camera *selectedCamera =
+        selectedGO ? selectedGO->GetComponent<Camera>() : nullptr;
 
     // Camera preview handling
-    if (selectedCamera)
+    if(selectedCamera)
     {
         // Set preview size
-        Vector2i previewRectSize( GetSceneImage()->GetRectTransform()->
-                                  GetViewportAARect().GetSize() / 4.0f );
-        if (previewRectSize.x > 0 && previewRectSize.y > 0)
+        Vector2i previewRectSize(
+            GetSceneImage()->GetRectTransform()->GetViewportAARect().GetSize() /
+            4.0f);
+        if(previewRectSize.x > 0 && previewRectSize.y > 0)
         {
             GL::Push(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
 
             GBuffer *gbuffer = m_cameraPreviewGBuffer;
 
-            p_cameraPreviewImg->GetGameObject()->GetRectTransform()->
-                                SetMarginRightTop(-previewRectSize);
+            p_cameraPreviewImg->GetGameObject()
+                ->GetRectTransform()
+                ->SetMarginRightTop(-previewRectSize);
 
             m_cameraPreviewGBuffer->Bind();
             m_cameraPreviewGBuffer->Resize(previewRectSize.x,
@@ -210,19 +211,19 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
             selectedCamera->SetReplacementGBuffer(nullptr);
 
             Texture2D *camColorTexture = gbuffer->GetLastDrawnColorTexture();
-            camColorTexture->SetWrapMode( GL::WrapMode::REPEAT );
+            camColorTexture->SetWrapMode(GL::WrapMode::REPEAT);
             p_cameraPreviewImg->SetImageTexture(camColorTexture);
 
             GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
         }
     }
-    p_cameraPreviewImg->GetGameObject()->SetVisible( selectedCamera != nullptr );
+    p_cameraPreviewImg->GetGameObject()->SetVisible(selectedCamera != nullptr);
 }
 
-Camera* UISceneEditContainer::GetSceneCamera(Scene *scene)
+Camera *UISceneEditContainer::GetSceneCamera(Scene *scene)
 {
     Camera *editorCamera = EditorCamera::GetInstance()->GetCamera();
-    if (editorCamera)
+    if(editorCamera)
     {
         return editorCamera;
     }
@@ -237,16 +238,18 @@ bool UISceneEditContainer::NeedsToRenderContainedScene(Scene *scene)
 
 void UISceneEditContainer::OnRenderContainedSceneBegin()
 {
-    EditorSceneManager::GetActive()->GetEditorScene()->
-          GetEditSceneGameObjects()->OnBeginRender(
-                EditorSceneManager::GetActive()->GetOpenScene() );
+    EditorSceneManager::GetActive()
+        ->GetEditorScene()
+        ->GetEditSceneGameObjects()
+        ->OnBeginRender(EditorSceneManager::GetActive()->GetOpenScene());
 }
 
 void UISceneEditContainer::OnRenderContainedSceneFinished()
 {
-    EditorSceneManager::GetActive()->GetEditorScene()->
-          GetEditSceneGameObjects()->OnEndRender(
-                EditorSceneManager::GetActive()->GetOpenScene() );
+    EditorSceneManager::GetActive()
+        ->GetEditorScene()
+        ->GetEditSceneGameObjects()
+        ->OnEndRender(EditorSceneManager::GetActive()->GetOpenScene());
 
     m_needToRenderPreviewImg = true;
 }
@@ -263,11 +266,12 @@ bool UISceneEditContainer::NeedsToRenderSelectionFramebuffer() const
             GetSceneImage()->GetRectTransform()->IsMouseOver(false));
 }
 
-GameObject* UISceneEditContainer::GetCurrentOveredGameObject() const
+GameObject *UISceneEditContainer::GetCurrentOveredGameObject() const
 {
-    AARecti imgRect( GetSceneImage()->GetRectTransform()->GetViewportAARect() );
+    AARecti imgRect(GetSceneImage()->GetRectTransform()->GetViewportAARect());
     Vector2i mousePosLocal = Input::GetMousePosition() - imgRect.GetMin();
-    GameObject *overedGameObject = Selection::GetOveredGameObject(mousePosLocal);
+    GameObject *overedGameObject =
+        Selection::GetOveredGameObject(mousePosLocal);
     ASSERT(!overedGameObject ||
            !overedGameObject->HasComponent<NotSelectableInEditor>());
     return overedGameObject;
@@ -275,13 +279,14 @@ GameObject* UISceneEditContainer::GetCurrentOveredGameObject() const
 
 void UISceneEditContainer::ApplyDraggedMaterialToOveredGameObject()
 {
-    if (GameObject *overedGameObject = p_lastOveredGameObject)
+    if(GameObject *overedGameObject = p_lastOveredGameObject)
     {
-        Array<MeshRenderer*> mrs = overedGameObject->GetComponents<MeshRenderer>();
-        for (MeshRenderer *mr : mrs)
+        Array<MeshRenderer *> mrs =
+            overedGameObject->GetComponents<MeshRenderer>();
+        for(MeshRenderer *mr : mrs)
         {
             RH<Material> prevMat = RH<Material>(mr->GetActiveMaterial());
-            mr->SetMaterial( m_currentMaterialBeingDragged.Get() );
+            mr->SetMaterial(m_currentMaterialBeingDragged.Get());
             m_matDragMeshRenderersToPrevMaterials.Add(mr, prevMat);
         }
     }
@@ -289,25 +294,25 @@ void UISceneEditContainer::ApplyDraggedMaterialToOveredGameObject()
 
 void UISceneEditContainer::RestoreDraggedMaterialToPreviousGameObjectOvered()
 {
-    List<MeshRenderer*> restoredMeshRenderers;
-    for (const auto &pair : m_matDragMeshRenderersToPrevMaterials)
+    List<MeshRenderer *> restoredMeshRenderers;
+    for(const auto &pair : m_matDragMeshRenderersToPrevMaterials)
     {
         MeshRenderer *mr = pair.first;
         RH<Material> previousMat = pair.second;
-        mr->SetMaterial( previousMat.Get() );
+        mr->SetMaterial(previousMat.Get());
         restoredMeshRenderers.PushBack(mr);
     }
 
-    for (MeshRenderer *mr : restoredMeshRenderers)
+    for(MeshRenderer *mr : restoredMeshRenderers)
     {
         m_matDragMeshRenderersToPrevMaterials.Remove(mr);
     }
 }
 
-void UISceneEditContainer::OnVisibilityChanged(GameObject*)
+void UISceneEditContainer::OnVisibilityChanged(GameObject *)
 {
     EditorCamera *edCamGo = EditorCamera::GetInstance();
-    if (IsVisible())
+    if(IsVisible())
     {
         edCamGo->RequestUnBlockBy(this);
     }
@@ -320,18 +325,19 @@ void UISceneEditContainer::OnVisibilityChanged(GameObject*)
 UIEventResult UISceneEditContainer::OnUIEvent(UIFocusable *focusable,
                                               const UIEvent &event)
 {
-    if (UISceneContainer::OnUIEvent(focusable, event) == UIEventResult::INTERCEPT)
+    if(UISceneContainer::OnUIEvent(focusable, event) ==
+       UIEventResult::INTERCEPT)
     {
         return UIEventResult::INTERCEPT;
     }
 
-    switch (event.type)
+    switch(event.type)
     {
         case UIEvent::Type::MOUSE_CLICK_DOWN:
         {
-            if (event.mouse.button == MouseButton::LEFT)
+            if(event.mouse.button == MouseButton::LEFT)
             {
-                if (GameObject *selectedGo = Selection::GetOveredGameObject())
+                if(GameObject *selectedGo = Selection::GetOveredGameObject())
                 {
                     Editor::SelectGameObject(selectedGo, true);
                 }
@@ -345,7 +351,7 @@ UIEventResult UISceneEditContainer::OnUIEvent(UIFocusable *focusable,
         break;
 
         case UIEvent::Type::KEY_DOWN:
-            switch (event.key.key)
+            switch(event.key.key)
             {
                 case Key::C:
                 case Key::X:
@@ -353,27 +359,25 @@ UIEventResult UISceneEditContainer::OnUIEvent(UIFocusable *focusable,
                 case Key::D:
                 case Key::F:
                 case Key::DELETE:
-                    if (Hierarchy *hierarchy = Hierarchy::GetInstance())
+                    if(Hierarchy *hierarchy = Hierarchy::GetInstance())
                     {
-                        if (GameObject *selGo = Editor::GetSelectedGameObject() )
+                        if(GameObject *selGo = Editor::GetSelectedGameObject())
                         {
-                            if (HierarchyItem *hItem =
-                                    hierarchy->GetItemFromGameObject(selGo))
+                            if(HierarchyItem *hItem =
+                                   hierarchy->GetItemFromGameObject(selGo))
                             {
                                 return hItem->OnUIEvent(focusable, event);
                             }
                         }
                         return hierarchy->OnUIEvent(focusable, event);
                     }
-                break;
+                    break;
 
-                default:
-                break;
+                default: break;
             }
-        break;
+            break;
 
-        default:
-        break;
+        default: break;
     }
     return UIEventResult::IGNORE;
 }
@@ -382,38 +386,38 @@ void UISceneEditContainer::OnDragStarted(EventEmitter<IEventsDragDrop> *dd_)
 {
     IEventsDragDrop::OnDragStarted(dd_);
 
-    UIDragDroppable *dragDroppable = DCAST<UIDragDroppable*>(dd_);
-    if (ExplorerItem *expItem = DCAST<ExplorerItem*>(dragDroppable->GetGameObject()))
+    UIDragDroppable *dragDroppable = DCAST<UIDragDroppable *>(dd_);
+    if(ExplorerItem *expItem =
+           DCAST<ExplorerItem *>(dragDroppable->GetGameObject()))
     {
         Path draggedPath = expItem->GetPath();
-        if (draggedPath.HasExtension( Extensions::GetMaterialExtension() ))
+        if(draggedPath.HasExtension(Extensions::GetMaterialExtension()))
         {
-            m_currentMaterialBeingDragged = Resources::Load<Material>(draggedPath);
-            if (m_currentMaterialBeingDragged)
+            m_currentMaterialBeingDragged =
+                Resources::Load<Material>(draggedPath);
+            if(m_currentMaterialBeingDragged)
             {
                 Camera *edCam = EditorCamera::GetInstance()->GetCamera();
                 edCam->RemoveRenderPass(RenderPass::OVERLAY);
                 GetSelectionFramebuffer()->SetDrawOverlay(false);
             }
-
         }
     }
-
 }
 
 void UISceneEditContainer::OnDragUpdate(EventEmitter<IEventsDragDrop> *dd_)
 {
     IEventsDragDrop::OnDragUpdate(dd_);
 
-    if (m_currentMaterialBeingDragged)
+    if(m_currentMaterialBeingDragged)
     {
         GameObject *currentOveredGo = GetCurrentOveredGameObject();
-        if (currentOveredGo != p_lastOveredGameObject)
+        if(currentOveredGo != p_lastOveredGameObject)
         {
             RestoreDraggedMaterialToPreviousGameObjectOvered();
 
             m_prevGameObjectMetaBeforeDraggingMaterial =
-                    currentOveredGo ? currentOveredGo->GetMeta() : MetaNode();
+                currentOveredGo ? currentOveredGo->GetMeta() : MetaNode();
             p_lastOveredGameObject = currentOveredGo;
             ApplyDraggedMaterialToOveredGameObject();
         }
@@ -424,17 +428,17 @@ void UISceneEditContainer::OnDrop(EventEmitter<IEventsDragDrop> *dd_)
 {
     IEventsDragDrop::OnDrop(dd_);
 
-    if (p_lastOveredGameObject)
+    if(p_lastOveredGameObject)
     {
-        #ifdef DEBUG
-        GUID prevGUID = m_prevGameObjectMetaBeforeDraggingMaterial.Get<GUID>("GUID");
+#ifdef DEBUG
+        GUID prevGUID =
+            m_prevGameObjectMetaBeforeDraggingMaterial.Get<GUID>("GUID");
         GUID currGUID = p_lastOveredGameObject->GetGUID();
         ASSERT(prevGUID == currGUID);
-        #endif
-        UndoRedoManager::PushAction( new UndoRedoSerializableChange(
-                                p_lastOveredGameObject,
-                                m_prevGameObjectMetaBeforeDraggingMaterial,
-                                p_lastOveredGameObject->GetMeta()));
+#endif
+        UndoRedoManager::PushAction(new UndoRedoSerializableChange(
+            p_lastOveredGameObject, m_prevGameObjectMetaBeforeDraggingMaterial,
+            p_lastOveredGameObject->GetMeta()));
     }
     p_lastOveredGameObject = nullptr;
     m_currentMaterialBeingDragged.Set(nullptr);
@@ -450,14 +454,14 @@ void UISceneEditContainer::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     UISceneContainer::OnDestroyed(object);
 
-    GameObject *go = DCAST<GameObject*>(object);
-    if (go && p_lastOveredGameObject)
+    GameObject *go = DCAST<GameObject *>(object);
+    if(go && p_lastOveredGameObject)
     {
         p_lastOveredGameObject = nullptr;
     }
 
-    MeshRenderer *mr = DCAST<MeshRenderer*>(mr);
-    if (mr)
+    MeshRenderer *mr = DCAST<MeshRenderer *>(mr);
+    if(mr)
     {
         m_matDragMeshRenderersToPrevMaterials.Remove(mr);
     }
@@ -467,18 +471,18 @@ void UISceneEditContainer::OnPlayStateChanged(PlayState, PlayState)
 {
 }
 
-void UISceneEditContainer::OnSceneLoaded(Scene *scene, const Path&)
+void UISceneEditContainer::OnSceneLoaded(Scene *scene, const Path &)
 {
     BANG_UNUSED(scene);
 }
 
 UISceneEditContainer *UISceneEditContainer::GetActive()
 {
-    if (EditorSceneManager *esm = EditorSceneManager::GetActive())
+    if(EditorSceneManager *esm = EditorSceneManager::GetActive())
     {
-        if (EditorScene *edScene = esm->GetEditorScene())
+        if(EditorScene *edScene = esm->GetEditorScene())
         {
-            if (UISceneEditContainer *sec = edScene->GetSceneEditContainer())
+            if(UISceneEditContainer *sec = edScene->GetSceneEditContainer())
             {
                 return sec;
             }

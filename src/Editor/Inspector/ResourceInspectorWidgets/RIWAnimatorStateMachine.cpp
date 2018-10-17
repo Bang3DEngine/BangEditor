@@ -12,14 +12,16 @@
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/RIWResource.tcc"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class Texture2D;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class Texture2D;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 RIWAnimatorStateMachine::RIWAnimatorStateMachine()
 {
@@ -36,17 +38,16 @@ void RIWAnimatorStateMachine::Init()
     SetTitle("Animator State Machine");
     SetName("RIWAnimatorStateMachine");
 
-    p_openInEditorButton = GameObjectFactory::CreateUIButton(
-                                    "Open in AnimatorSM Editor");
-    p_openInEditorButton->AddClickedCallback([]()
-    {
+    p_openInEditorButton =
+        GameObjectFactory::CreateUIButton("Open in AnimatorSM Editor");
+    p_openInEditorButton->AddClickedCallback([]() {
         EditorScene *edScene = EditorSceneManager::GetEditorScene();
-        edScene->OpenTab( edScene->GetAnimatorSMEditor() );
+        edScene->OpenTab(edScene->GetAnimatorSMEditor());
     });
 
-    UILayoutElement *buttonLE = p_openInEditorButton->GetGameObject()->
-                                 AddComponent<UILayoutElement>();
-    buttonLE->SetFlexibleSize( Vector2::One );
+    UILayoutElement *buttonLE =
+        p_openInEditorButton->GetGameObject()->AddComponent<UILayoutElement>();
+    buttonLE->SetFlexibleSize(Vector2::One);
     buttonLE->SetLayoutPriority(3);
 
     AddWidget(p_openInEditorButton->GetGameObject());
@@ -58,7 +59,7 @@ void RIWAnimatorStateMachine::UpdateInputsFromResource()
 }
 
 void RIWAnimatorStateMachine::OnValueChangedRIWResource(
-                        EventEmitter<IEventsValueChanged> *object)
+    EventEmitter<IEventsValueChanged> *object)
 {
     BANG_UNUSED(object);
 }
@@ -70,6 +71,5 @@ Texture2D *RIWAnimatorStateMachine::GetIconTexture() const
 
 AnimatorStateMachine *RIWAnimatorStateMachine::GetAnimatorStateMachine() const
 {
-    return SCAST<AnimatorStateMachine*>( GetResource().Get() );
+    return SCAST<AnimatorStateMachine *>(GetResource().Get());
 }
-

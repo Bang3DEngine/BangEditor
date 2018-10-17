@@ -9,21 +9,22 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Object;
-FORWARD class UITextRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Object;
+class UITextRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class UISceneDebugStats : public GameObject
 {
     GAMEOBJECT_EDITOR(UISceneDebugStats);
 
 public:
-	UISceneDebugStats();
-	virtual ~UISceneDebugStats() override;
+    UISceneDebugStats();
+    virtual ~UISceneDebugStats() override;
 
     // GameObject
     void Update() override;
@@ -35,8 +36,6 @@ private:
     FPSChrono m_editorRenderFPSChrono;
     UITextRenderer *p_debugStatsText = nullptr;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UISCENEDEBUGSTATS_H
-
+#endif  // UISCENEDEBUGSTATS_H

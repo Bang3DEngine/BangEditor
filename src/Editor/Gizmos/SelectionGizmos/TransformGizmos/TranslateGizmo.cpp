@@ -6,8 +6,8 @@
 #include "Bang/Transform.h"
 #include "BangEditor/TranslateGizmoAxis.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 TranslateGizmo::TranslateGizmo()
 {
@@ -28,14 +28,13 @@ TranslateGizmo::TranslateGizmo()
 
 TranslateGizmo::~TranslateGizmo()
 {
-
 }
 
 void TranslateGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
 {
     SelectionGizmo::SetReferencedGameObject(referencedGameObject);
 
-    p_axisX->SetReferencedGameObject( GetReferencedGameObject() );
-    p_axisY->SetReferencedGameObject( GetReferencedGameObject() );
-    p_axisZ->SetReferencedGameObject( GetReferencedGameObject() );
+    p_axisX->SetReferencedGameObject(GetReferencedGameObject());
+    p_axisY->SetReferencedGameObject(GetReferencedGameObject());
+    p_axisZ->SetReferencedGameObject(GetReferencedGameObject());
 }

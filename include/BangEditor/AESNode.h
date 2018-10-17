@@ -19,24 +19,24 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Animator;
-FORWARD class AnimatorStateMachine;
-FORWARD class AnimatorStateMachineConnection;
-FORWARD class AnimatorStateMachineNode;
-FORWARD class IEventsAnimatorStateMachineNode;
-FORWARD class UIFocusable;
-FORWARD class UIImageRenderer;
-FORWARD class UITextRenderer;
+namespace Bang
+{
+class Animator;
+class AnimatorStateMachine;
+class AnimatorStateMachineConnection;
+class AnimatorStateMachineNode;
+class IEventsAnimatorStateMachineNode;
+class UIFocusable;
+class UIImageRenderer;
+class UITextRenderer;
+}
 
-FORWARD NAMESPACE_BANG_END
-
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class AESConnectionLine;
-FORWARD class AnimatorSMEditorScene;
-FORWARD class UIContextMenu;
+using namespace Bang;
+namespace BangEditor
+{
+class AESConnectionLine;
+class AnimatorSMEditorScene;
+class UIContextMenu;
 
 class AESNode : public GameObject,
                 public EventListener<IEventsFocus>,
@@ -45,7 +45,7 @@ class AESNode : public GameObject,
     GAMEOBJECT_EDITOR(AESNode);
 
 public:
-	AESNode();
+    AESNode();
     virtual ~AESNode() override;
 
     // GameObject
@@ -55,14 +55,14 @@ public:
     void SetNodeName(const String &nodeName);
     void OnZoomScaleChanged(float zoomScale);
 
-    const String& GetNodeName() const;
-    UIFocusable* GetFocusable() const;
+    const String &GetNodeName() const;
+    UIFocusable *GetFocusable() const;
     uint GetIndexInStateMachine() const;
     Animator *GetCurrentAnimator() const;
     AnimatorSMEditorScene *GetAESScene() const;
     AnimatorStateMachine *GetAnimatorSM() const;
     AnimatorStateMachineNode *GetSMNode() const;
-    const Array<AESConnectionLine*>& GetConnectionLines() const;
+    const Array<AESConnectionLine *> &GetConnectionLines() const;
 
 private:
     String m_nodeName = "";
@@ -75,15 +75,15 @@ private:
 
     Vector2 m_grabOffset = Vector2::Zero;
     AnimatorSMEditorScene *p_aesScene = nullptr;
-    Array<AESConnectionLine*> p_connectionLinesTo;
-    Map<AnimatorStateMachineNode*, AESConnectionLine*>
+    Array<AESConnectionLine *> p_connectionLinesTo;
+    Map<AnimatorStateMachineNode *, AESConnectionLine *>
         p_nodeConnectedToToConnectionLine;
 
     int m_framesPassedSinceLineDragStarted = 0;
     AESConnectionLine *p_toConnectionLineBeingDragged = nullptr;
 
     void CreateAndAddConnectionToBeginDrag();
-    AESConnectionLine* CreateAndAddDefinitiveConnection();
+    AESConnectionLine *CreateAndAddDefinitiveConnection();
     void OnDragConnectionLineEnd();
     void RemoveSelf();
     void Duplicate();
@@ -93,12 +93,12 @@ private:
     void ImportPosition(const Vector2 &position);
 
     // IEventsAnimatorStateMachineNode
-    virtual void OnConnectionAdded(AnimatorStateMachineNode *node,
-                                   AnimatorStateMachineConnection *connection)
-                 override;
-    virtual void OnConnectionRemoved(AnimatorStateMachineNode *node,
-                                     AnimatorStateMachineConnection *connection)
-                 override;
+    virtual void OnConnectionAdded(
+        AnimatorStateMachineNode *node,
+        AnimatorStateMachineConnection *connection) override;
+    virtual void OnConnectionRemoved(
+        AnimatorStateMachineNode *node,
+        AnimatorStateMachineConnection *connection) override;
 
     // IEventsFocus
     virtual UIEventResult OnUIEvent(UIFocusable *focusable,
@@ -106,8 +106,6 @@ private:
 
     friend class AnimatorSMEditorScene;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // AESNODE_H
-
+#endif  // AESNODE_H

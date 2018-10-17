@@ -9,8 +9,8 @@
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/MenuItem.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 PrefabExplorerItem::PrefabExplorerItem()
 {
@@ -25,13 +25,12 @@ void PrefabExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
     ExplorerItem::OnCreateContextMenu(menuRootItem);
 
     MenuItem *createGo = menuRootItem->AddItem("Create GameObject from prefab");
-    createGo->SetSelectedCallback([this](MenuItem*)
-    {
+    createGo->SetSelectedCallback([this](MenuItem *) {
         Scene *openScene = EditorSceneManager::GetOpenScene();
-        if (openScene)
+        if(openScene)
         {
             RH<Prefab> prefabRH = Resources::Load<Prefab>(GetPath());
-            if (prefabRH)
+            if(prefabRH)
             {
                 GameObject *gameObject = prefabRH.Get()->Instantiate();
                 gameObject->SetParent(openScene);
@@ -39,4 +38,3 @@ void PrefabExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
         }
     });
 }
-

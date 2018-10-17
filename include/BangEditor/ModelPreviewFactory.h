@@ -18,48 +18,47 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ResourcePreviewFactory.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Camera;
-FORWARD class GameObject;
-FORWARD class Scene;
-FORWARD class Texture2D;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Camera;
+class GameObject;
+class Scene;
+class Texture2D;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class ModelPreviewFactory : public ResourcePreviewFactory<Model>
 {
 public:
-	ModelPreviewFactory();
-	virtual ~ModelPreviewFactory() override;
+    ModelPreviewFactory();
+    virtual ~ModelPreviewFactory() override;
 
     static RH<Texture2D> GetPreviewTextureFor(Model *model);
     static RH<Texture2D> GetPreviewTextureFor(
-                                Model *model,
-                                const ResourcePreviewFactoryParameters &params);
+        Model *model,
+        const ResourcePreviewFactoryParameters &params);
     static ModelPreviewFactory *GetActive();
 
 private:
-   // ResourcePreviewFactory
-   void OnCreateSceneFirstTime(Scene *previewScene,
-                               Camera *previewCamera,
-                               GameObject *previewGoContainer) override;
-   void OnUpdateTextureBegin(
-                Scene *previewScene,
-                Camera *previewCamera,
-                GameObject *previewGoContainer,
-                Model *model,
-                const ResourcePreviewFactoryParameters &params) override;
-   void OnUpdateTextureEnd(
-                Scene *previewScene,
-                Camera *previewCamera,
-                GameObject *previewGoContainer,
-                Model *model,
-                const ResourcePreviewFactoryParameters &params) override;
+    // ResourcePreviewFactory
+    void OnCreateSceneFirstTime(Scene *previewScene,
+                                Camera *previewCamera,
+                                GameObject *previewGoContainer) override;
+    void OnUpdateTextureBegin(
+        Scene *previewScene,
+        Camera *previewCamera,
+        GameObject *previewGoContainer,
+        Model *model,
+        const ResourcePreviewFactoryParameters &params) override;
+    void OnUpdateTextureEnd(
+        Scene *previewScene,
+        Camera *previewCamera,
+        GameObject *previewGoContainer,
+        Model *model,
+        const ResourcePreviewFactoryParameters &params) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // MODELPREVIEWFACTORY_H
-
+#endif  // MODELPREVIEWFACTORY_H

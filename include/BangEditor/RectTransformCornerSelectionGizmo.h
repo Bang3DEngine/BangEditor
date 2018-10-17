@@ -9,20 +9,28 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class GameObject;
-FORWARD class UIImageRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class GameObject;
+class UIImageRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class RectTransformCornerSelectionGizmo : public SelectionGizmo
 {
     GAMEOBJECT_EDITOR(RectTransformCornerSelectionGizmo);
 
 public:
-    enum class CornerSide { LEFT_BOT, LEFT_TOP, RIGHT_TOP, RIGHT_BOT, CENTER };
+    enum class CornerSide
+    {
+        LEFT_BOT,
+        LEFT_TOP,
+        RIGHT_TOP,
+        RIGHT_BOT,
+        CENTER
+    };
 
     // GameObject
     void Update() override;
@@ -38,8 +46,8 @@ private:
     static const int CornerSelectionSize;
 
     CornerSide m_cornerSide = CornerSide::LEFT_BOT;
-    Vector2i m_startGrabMousePos   = Vector2i::Zero;
-    Vector2i m_startMarginLeftBot  = Vector2i::Zero;
+    Vector2i m_startGrabMousePos = Vector2i::Zero;
+    Vector2i m_startMarginLeftBot = Vector2i::Zero;
     Vector2i m_startMarginRightTop = Vector2i::Zero;
 
     GameObject *p_cornerGO = nullptr;
@@ -48,12 +56,10 @@ private:
     UIImageRenderer *p_selectionRenderer = nullptr;
 
     RectTransformCornerSelectionGizmo();
-	virtual ~RectTransformCornerSelectionGizmo() override;
+    virtual ~RectTransformCornerSelectionGizmo() override;
 
     void UpdateBasedOnCornerSide();
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // RECTTRANSFORMCORNERSELECTIONGIZMO_H
-
+#endif  // RECTTRANSFORMCORNERSELECTIONGIZMO_H

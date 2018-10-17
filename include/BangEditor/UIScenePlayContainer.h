@@ -8,8 +8,8 @@
 #include "Bang/BangDefines.h"
 #include "Bang/EventEmitter.tcc"
 #include "Bang/EventListener.h"
-#include "Bang/IEvents.h"
 #include "Bang/IEventsFocus.h"
+#include "Bang/IEventsSceneManager.h"
 #include "Bang/SceneManager.h"
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
@@ -17,17 +17,18 @@
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneContainer.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Camera;
-FORWARD class IEventsSceneManager;
-FORWARD class Path;
-FORWARD class Scene;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Camera;
+class IEventsSceneManager;
+class Path;
+class Scene;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class IEventsScenePlayer;
+using namespace Bang;
+namespace BangEditor
+{
+class IEventsScenePlayer;
 
 class UIScenePlayContainer : public UISceneContainer,
                              public EventListener<IEventsScenePlayer>,
@@ -36,14 +37,14 @@ class UIScenePlayContainer : public UISceneContainer,
     GAMEOBJECT_EDITOR(UIScenePlayContainer);
 
 public:
-	UIScenePlayContainer();
-	virtual ~UIScenePlayContainer() override;
+    UIScenePlayContainer();
+    virtual ~UIScenePlayContainer() override;
 
     // GameObject
     void Update() override;
 
 private:
-    Camera* GetSceneCamera(Scene *scene) override;
+    Camera *GetSceneCamera(Scene *scene) override;
     bool NeedsToRenderContainedScene(Scene *scene) override;
 
     // IEventsScenePlayer
@@ -53,8 +54,6 @@ private:
     // IEventsSceneManager
     void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UISCENEPLAYCONTAINER_H
-
+#endif  // UISCENEPLAYCONTAINER_H

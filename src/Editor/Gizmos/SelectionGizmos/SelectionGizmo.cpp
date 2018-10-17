@@ -17,13 +17,14 @@
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/Selection.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsDestroy;
-FORWARD class Object;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDestroy;
+class Object;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 void SelectionGizmo::Update()
 {
@@ -32,31 +33,31 @@ void SelectionGizmo::Update()
     // Update selectionState
     bool isMouseOver = false;
     GameObject *overedGameObject = Selection::GetOveredGameObject();
-    if (overedGameObject)
+    if(overedGameObject)
     {
         isMouseOver = (overedGameObject == this);
         isMouseOver = isMouseOver || (overedGameObject->IsChildOf(this, true));
     }
 
     bool prevGrab = IsBeingGrabbed();
-    if ( Input::GetMouseButtonDown(MouseButton::LEFT) )
+    if(Input::GetMouseButtonDown(MouseButton::LEFT))
     {
-        if (isMouseOver)
+        if(isMouseOver)
         {
             m_selectionState = SelectionState::GRABBED;
         }
     }
-    else if ( !Input::GetMouseButton(MouseButton::LEFT) )
+    else if(!Input::GetMouseButton(MouseButton::LEFT))
     {
-        m_selectionState = isMouseOver ? SelectionState::OVER :
-                                         SelectionState::IDLE;
+        m_selectionState =
+            isMouseOver ? SelectionState::OVER : SelectionState::IDLE;
     }
     m_grabHasJustChanged = (IsBeingGrabbed() != prevGrab);
 
     // Grab event
-    if (GrabHasJustChanged())
+    if(GrabHasJustChanged())
     {
-        if (IsBeingGrabbed())
+        if(IsBeingGrabbed())
         {
             OnGrabBegin();
         }
@@ -69,19 +70,19 @@ void SelectionGizmo::Update()
 
 void SelectionGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
 {
-    if (GetReferencedGameObject() != referencedGameObject)
+    if(GetReferencedGameObject() != referencedGameObject)
     {
-        if (GetReferencedGameObject())
+        if(GetReferencedGameObject())
         {
-            GetReferencedGameObject()->
-                    EventEmitter<IEventsDestroy>::UnRegisterListener(this);
+            GetReferencedGameObject()
+                ->EventEmitter<IEventsDestroy>::UnRegisterListener(this);
         }
 
         p_referencedGameObject = referencedGameObject;
-        if (GetReferencedGameObject())
+        if(GetReferencedGameObject())
         {
-            GetReferencedGameObject()->
-                    EventEmitter<IEventsDestroy>::RegisterListener(this);
+            GetReferencedGameObject()
+                ->EventEmitter<IEventsDestroy>::RegisterListener(this);
         }
     }
 }
@@ -103,7 +104,8 @@ float SelectionGizmo::GetScaleFactor() const
 Camera *SelectionGizmo::GetEditorCamera() const
 {
     EditorCamera *editorCameraGo = EditorCamera::GetInstance();
-    Camera *editorCamera = editorCameraGo ? editorCameraGo->GetCamera() : nullptr;
+    Camera *editorCamera =
+        editorCameraGo ? editorCameraGo->GetCamera() : nullptr;
     return editorCamera;
 }
 
@@ -129,14 +131,14 @@ void SelectionGizmo::OnGrabBegin()
 
 void SelectionGizmo::OnGrabEnd()
 {
-   // Empty
+    // Empty
 }
 
 void SelectionGizmo::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     GameObject::OnDestroyed(object);
 
-    ASSERT( !GetReferencedGameObject() || object == GetReferencedGameObject() );
+    ASSERT(!GetReferencedGameObject() || object == GetReferencedGameObject());
     SetReferencedGameObject(nullptr);
 }
 

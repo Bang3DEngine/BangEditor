@@ -18,12 +18,11 @@
 #include "BangEditor/IEventsTabHeader.h"
 #include "BangEditor/UITabContainer.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 const Color UITabHeader::ForegroundColor = Color::Zero;
-const Color UITabHeader::BackgroundColor = Color::DarkGray.
-                                           WithValue(1.3f);
+const Color UITabHeader::BackgroundColor = Color::DarkGray.WithValue(1.3f);
 
 UITabHeader::UITabHeader()
 {
@@ -32,30 +31,29 @@ UITabHeader::UITabHeader()
     titleHL->SetPaddings(6);
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetFlexibleHeight( 1.0f );
+    le->SetFlexibleHeight(1.0f);
     le->SetLayoutPriority(1);
 
     p_bg = AddComponent<UIImageRenderer>();
 
     p_border = AddComponent<UIImageRenderer>();
-    p_border->SetImageTexture( TextureFactory::Get9SliceBorder() );
-    p_border->SetMode( UIImageRenderer::Mode::SLICE_9 );
-    p_border->SetSlice9BorderStrokePx( Vector2i(1) );
+    p_border->SetImageTexture(TextureFactory::Get9SliceBorder());
+    p_border->SetMode(UIImageRenderer::Mode::SLICE_9);
+    p_border->SetSlice9BorderStrokePx(Vector2i(1));
 
     GameObject *titleGo = GameObjectFactory::CreateUIGameObject();
     p_titleText = titleGo->AddComponent<UITextRenderer>();
     p_titleText->SetHorizontalAlign(HorizontalAlignment::LEFT);
     p_titleText->SetVerticalAlign(VerticalAlignment::BOT);
     p_titleText->SetTextSize(12);
-    p_titleText->SetContent( GetTitle() );
+    p_titleText->SetContent(GetTitle());
 
     p_focusable = AddComponent<UIFocusable>();
-    p_focusable->AddEventCallback( [this](UIFocusable*, const UIEvent &event)
-    {
-        if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
+    p_focusable->AddEventCallback([this](UIFocusable *, const UIEvent &event) {
+        if(event.type == UIEvent::Type::MOUSE_CLICK_FULL)
         {
             EventEmitter<IEventsTabHeader>::PropagateToListeners(
-                        &IEventsTabHeader::OnTabHeaderClicked, this);
+                &IEventsTabHeader::OnTabHeaderClicked, this);
             return UIEventResult::INTERCEPT;
         }
         return UIEventResult::IGNORE;
@@ -80,13 +78,13 @@ void UITabHeader::Update()
 {
     GameObject::Update();
 
-    if (!m_inForeground)
+    if(!m_inForeground)
     {
-        if (UICanvas *canvas = UICanvas::GetActive(this))
+        if(UICanvas *canvas = UICanvas::GetActive(this))
         {
             bool mouseOver = (canvas->IsMouseOver(p_focusable));
-            p_bg->SetTint(mouseOver ? m_currentHeaderColor.WithValue(1.5f) :
-                                      m_currentHeaderColor);
+            p_bg->SetTint(mouseOver ? m_currentHeaderColor.WithValue(1.5f)
+                                    : m_currentHeaderColor);
         }
     }
 }
@@ -94,18 +92,18 @@ void UITabHeader::Update()
 void UITabHeader::SetInForeground(bool inForeground)
 {
     m_inForeground = inForeground;
-    m_currentHeaderColor = (inForeground ? UITabHeader::ForegroundColor :
-                                           UITabHeader::BackgroundColor);
+    m_currentHeaderColor = (inForeground ? UITabHeader::ForegroundColor
+                                         : UITabHeader::BackgroundColor);
     p_bg->SetTint(m_currentHeaderColor);
-    p_border->SetTint( inForeground ? Color::Zero : Color::Black );
+    p_border->SetTint(inForeground ? Color::Zero : Color::Black);
 }
 
 void UITabHeader::SetTitle(const String &title)
 {
-    if (title != GetTitle())
+    if(title != GetTitle())
     {
         m_title = title;
-        p_titleText->SetContent( GetTitle() );
+        p_titleText->SetContent(GetTitle());
     }
 }
 
@@ -132,7 +130,7 @@ UIDragDroppable *UITabHeader::GetDragDroppable() const
 void UITabHeader::SetTabContainer(UITabContainer *tabContainer)
 {
     p_tabContainer = tabContainer;
-    if (GetTabContainer())
+    if(GetTabContainer())
     {
         p_lastTabContainer = GetTabContainer();
         ASSERT(!GetTabContainer()->IsWaitingToBeDestroyed())
@@ -148,7 +146,7 @@ void UITabHeader::OnDragStarted(EventEmitter<IEventsDragDrop> *dragDropEmitter)
 {
     BANG_UNUSED(dragDropEmitter);
 
-    if (dragDropEmitter == GetDragDroppable())
+    if(dragDropEmitter == GetDragDroppable())
     {
         ASSERT(GetTabbedChild());
         p_dragTabContainerDestiny = nullptr;
@@ -162,22 +160,20 @@ void UITabHeader::OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDropEmitter)
 
 void UITabHeader::OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter)
 {
-    if (dragDropEmitter == GetDragDroppable())
+    if(dragDropEmitter == GetDragDroppable())
     {
-
-        if (GetTabContainer())
+        if(GetTabContainer())
         {
             GetTabContainer()->RemoveTabByHeader(this, false);
         }
 
-        UITabContainer *destinyTabContainer = p_dragTabContainerDestiny ?
-                                                    p_dragTabContainerDestiny :
-                                                    p_lastTabContainer;
-        if (destinyTabContainer)
+        UITabContainer *destinyTabContainer = p_dragTabContainerDestiny
+                                                  ? p_dragTabContainerDestiny
+                                                  : p_lastTabContainer;
+        if(destinyTabContainer)
         {
-            destinyTabContainer->
-                    AddTabByTabHeader(this, m_dragTabContainerDestinyIndex);
+            destinyTabContainer->AddTabByTabHeader(
+                this, m_dragTabContainerDestinyIndex);
         }
     }
 }
-

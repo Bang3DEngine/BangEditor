@@ -18,12 +18,13 @@
 #include "Bang/Resources.tcc"
 #include "BangEditor/UIInputFile.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 CIWMeshCollider::CIWMeshCollider()
 {
@@ -41,7 +42,7 @@ void CIWMeshCollider::InitInnerWidgets()
     SetTitle("MeshCollider");
 
     p_meshInput = GameObject::Create<UIInputFile>();
-    p_meshInput->SetExtensions( { Extensions::GetMeshExtension() } );
+    p_meshInput->SetExtensions({Extensions::GetMeshExtension()});
     p_meshInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     AddWidget("Mesh", p_meshInput);
@@ -54,21 +55,21 @@ void CIWMeshCollider::UpdateFromReference()
     CIWCollider::UpdateFromReference();
 
     MeshCollider *meshCollider = GetMeshCollider();
-    p_meshInput->SetPath( meshCollider->GetMesh() ?
-                            meshCollider->GetMesh()->GetResourceFilepath() :
-                            Path::Empty );
+    p_meshInput->SetPath(meshCollider->GetMesh()
+                             ? meshCollider->GetMesh()->GetResourceFilepath()
+                             : Path::Empty);
 }
 
-void CIWMeshCollider::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
+void CIWMeshCollider::OnValueChangedCIW(
+    EventEmitter<IEventsValueChanged> *object)
 {
     CIWCollider::OnValueChangedCIW(object);
 
     MeshCollider *meshCollider = GetMeshCollider();
-    meshCollider->SetMesh( Resources::Load<Mesh>(p_meshInput->GetPath()).Get() );
+    meshCollider->SetMesh(Resources::Load<Mesh>(p_meshInput->GetPath()).Get());
 }
 
 MeshCollider *CIWMeshCollider::GetMeshCollider() const
 {
-    return SCAST<MeshCollider*>( GetCollider() );
+    return SCAST<MeshCollider *>(GetCollider());
 }
-

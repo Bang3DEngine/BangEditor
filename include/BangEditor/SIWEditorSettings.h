@@ -6,9 +6,9 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SettingsInspectorWidget.h"
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class SIWEditorSettings : public SettingsInspectorWidget
 {
 public:
@@ -19,8 +19,6 @@ public:
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // SIWEDITORSETTINGS_H
-
+#endif  // SIWEDITORSETTINGS_H

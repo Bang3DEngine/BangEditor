@@ -2,21 +2,22 @@
 #define RESOURCEPREVIEWFACTORY_H
 
 #include "Bang/Bang.h"
-#include "Bang/UMap.h"
-#include "Bang/Texture2D.h"
 #include "Bang/Framebuffer.h"
 #include "Bang/IEventsResource.h"
+#include "Bang/Texture2D.h"
+#include "Bang/UMap.h"
 
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Scene;
-FORWARD class Camera;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Scene;
+class Camera;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 struct ResourcePreviewFactoryParameters
 {
     Vector2 camOrbitAnglesDegs = Vector2(45.0f, -45.0f);
@@ -33,7 +34,6 @@ struct ResourcePreviewFactoryParameters
     }
 };
 
-
 template <class T>
 class ResourcePreviewFactory : public EventListener<IEventsResource>
 {
@@ -48,24 +48,24 @@ protected:
                                         Camera *previewCamera,
                                         GameObject *previewGoContainer) = 0;
     virtual void OnUpdateTextureBegin(
-                         Scene *previewScene,
-                         Camera *previewCamera,
-                         GameObject *previewGoContainer,
-                         T *resource,
-                         const ResourcePreviewFactoryParameters &params) = 0;
+        Scene *previewScene,
+        Camera *previewCamera,
+        GameObject *previewGoContainer,
+        T *resource,
+        const ResourcePreviewFactoryParameters &params) = 0;
     virtual void OnUpdateTextureEnd(
-                         Scene *previewScene,
-                         Camera *previewCamera,
-                         GameObject *previewGoContainer,
-                         T *resource,
-                         const ResourcePreviewFactoryParameters &params) = 0;
+        Scene *previewScene,
+        Camera *previewCamera,
+        GameObject *previewGoContainer,
+        T *resource,
+        const ResourcePreviewFactoryParameters &params) = 0;
 
     Scene *GetPreviewScene() const;
     Camera *GetPreviewCamera() const;
     GameObject *GetPreviewGameObjectContainer() const;
     RH<Texture2D> GetPreviewTextureFor_(
-                            T *resource,
-                            const ResourcePreviewFactoryParameters &params);
+        T *resource,
+        const ResourcePreviewFactoryParameters &params);
 
 private:
     Array<RH<T>> m_previewsResources;
@@ -78,18 +78,15 @@ private:
     Framebuffer *m_auxiliarFBToCopyTextures = nullptr;
 
     void CreatePreviewScene();
-    void FillTextureWithPreview(
-                            Texture2D *texture,
-                            T *resource,
-                            const ResourcePreviewFactoryParameters &params);
+    void FillTextureWithPreview(Texture2D *texture,
+                                T *resource,
+                                const ResourcePreviewFactoryParameters &params);
 
     // IEventsResource
     void OnResourceChanged(Resource *changedResource) override;
 };
-
-NAMESPACE_BANG_EDITOR_END
+}
 
 #include "BangEditor/ResourcePreviewFactory.tcc"
 
-#endif // RESOURCEPREVIEWFACTORY_H
-
+#endif  // RESOURCEPREVIEWFACTORY_H

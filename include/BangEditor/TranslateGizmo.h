@@ -8,14 +8,15 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class GameObject;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class GameObject;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class TranslateGizmoAxis;
+using namespace Bang;
+namespace BangEditor
+{
+class TranslateGizmoAxis;
 
 class TranslateGizmo : public SelectionGizmo
 {
@@ -33,9 +34,6 @@ private:
     TranslateGizmo();
     virtual ~TranslateGizmo() override;
 };
+}
 
-
-NAMESPACE_BANG_EDITOR_END
-
-#endif // TRANSLATEGIZMO_H
-
+#endif  // TRANSLATEGIZMO_H

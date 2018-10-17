@@ -13,8 +13,8 @@
 #include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/SelectionFramebuffer.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 GameObjectSelectionGizmo::GameObjectSelectionGizmo()
 {
@@ -34,12 +34,16 @@ void GameObjectSelectionGizmo::Render(RenderPass rp, bool renderChildren)
 {
     GameObject::Render(rp, renderChildren);
 
-    if (!GetReferencedGameObject()) { return; }
-
-    SelectionFramebuffer *sfb = EditorCamera::GetInstance()->GetSelectionFramebuffer();
-    if (!sfb || !GL::IsBound(sfb))
+    if(!GetReferencedGameObject())
     {
-        if (rp == RenderPass::OVERLAY)
+        return;
+    }
+
+    SelectionFramebuffer *sfb =
+        EditorCamera::GetInstance()->GetSelectionFramebuffer();
+    if(!sfb || !GL::IsBound(sfb))
+    {
+        if(rp == RenderPass::OVERLAY)
         {
             GBuffer *gb = GEngine::GetActiveGBuffer();
             gb->PushDepthStencilTexture();
@@ -49,10 +53,9 @@ void GameObjectSelectionGizmo::Render(RenderPass rp, bool renderChildren)
             params.thickness = 2.0f;
             params.color = Color::Orange;
             params.receivesLighting = false;
-            RenderFactory::RenderOutline( GetReferencedGameObject(), params );
+            RenderFactory::RenderOutline(GetReferencedGameObject(), params);
 
             gb->PopDepthStencilTexture();
         }
     }
 }
-

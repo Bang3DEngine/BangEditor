@@ -13,12 +13,13 @@
 #include "Bang/UIInputNumber.h"
 #include "Bang/UISlider.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 CIWPostProcessEffectSSAO::CIWPostProcessEffectSSAO()
 {
@@ -46,20 +47,24 @@ void CIWPostProcessEffectSSAO::InitInnerWidgets()
     p_blurRadiusInput = GameObjectFactory::CreateUISlider();
     p_blurRadiusInput->SetMinMaxValues(0.0f, 10.0f);
     p_blurRadiusInput->GetInputNumber()->SetDecimalPlaces(0);
-    p_blurRadiusInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_blurRadiusInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_numRandAxesInput = GameObjectFactory::CreateUISlider();
     p_numRandAxesInput->SetMinMaxValues(1.0f, 128.0f);
     p_numRandAxesInput->GetInputNumber()->SetDecimalPlaces(0);
-    p_numRandAxesInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_numRandAxesInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_numRandSamplesInput = GameObjectFactory::CreateUISlider();
     p_numRandSamplesInput->SetMinMaxValues(1.0f, 128.0f);
     p_numRandSamplesInput->GetInputNumber()->SetDecimalPlaces(0);
-    p_numRandSamplesInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_numRandSamplesInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_bilateralBlurInput = GameObjectFactory::CreateUICheckBox();
-    p_bilateralBlurInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_bilateralBlurInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_separableInput = GameObjectFactory::CreateUICheckBox();
     p_separableInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
@@ -79,32 +84,33 @@ void CIWPostProcessEffectSSAO::UpdateFromReference()
 {
     PostProcessEffectSSAO *ppe = GetPostProcessEffectSSAO();
 
-    p_intensityInput->SetValue( ppe->GetSSAOIntensity() );
-    p_radiusInput->SetValue( ppe->GetSSAORadius() );
-    p_blurRadiusInput->SetValue( ppe->GetBlurRadius() );
-    p_numRandAxesInput->SetValue( ppe->GetNumRandomAxes() );
-    p_numRandSamplesInput->SetValue( ppe->GetNumRandomSamples() );
-    p_bilateralBlurInput->SetChecked( ppe->GetBilateralBlurEnabled() );
-    p_separableInput->SetChecked( ppe->GetSeparable() );
+    p_intensityInput->SetValue(ppe->GetSSAOIntensity());
+    p_radiusInput->SetValue(ppe->GetSSAORadius());
+    p_blurRadiusInput->SetValue(ppe->GetBlurRadius());
+    p_numRandAxesInput->SetValue(ppe->GetNumRandomAxes());
+    p_numRandSamplesInput->SetValue(ppe->GetNumRandomSamples());
+    p_bilateralBlurInput->SetChecked(ppe->GetBilateralBlurEnabled());
+    p_separableInput->SetChecked(ppe->GetSeparable());
 }
 
-void CIWPostProcessEffectSSAO::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
+void CIWPostProcessEffectSSAO::OnValueChangedCIW(
+    EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChangedCIW(object);
 
     PostProcessEffectSSAO *ppe = GetPostProcessEffectSSAO();
 
-    ppe->SetSSAOIntensity( p_intensityInput->GetValue() );
-    ppe->SetSSAORadius( p_radiusInput->GetValue() );
-    ppe->SetBlurRadius( p_blurRadiusInput->GetValue() );
-    ppe->SetNumRandomAxes( p_numRandAxesInput->GetValue() );
-    ppe->SetNumRandomSamples( p_numRandSamplesInput->GetValue() );
-    ppe->SetBilateralBlurEnabled( p_bilateralBlurInput->IsChecked() );
-    ppe->SetSeparable( p_separableInput->IsChecked() );
+    ppe->SetSSAOIntensity(p_intensityInput->GetValue());
+    ppe->SetSSAORadius(p_radiusInput->GetValue());
+    ppe->SetBlurRadius(p_blurRadiusInput->GetValue());
+    ppe->SetNumRandomAxes(p_numRandAxesInput->GetValue());
+    ppe->SetNumRandomSamples(p_numRandSamplesInput->GetValue());
+    ppe->SetBilateralBlurEnabled(p_bilateralBlurInput->IsChecked());
+    ppe->SetSeparable(p_separableInput->IsChecked());
 }
 
-PostProcessEffectSSAO *CIWPostProcessEffectSSAO::GetPostProcessEffectSSAO() const
+PostProcessEffectSSAO *CIWPostProcessEffectSSAO::GetPostProcessEffectSSAO()
+    const
 {
-    return SCAST<PostProcessEffectSSAO*>( GetComponent() );
+    return SCAST<PostProcessEffectSSAO *>(GetComponent());
 }
-

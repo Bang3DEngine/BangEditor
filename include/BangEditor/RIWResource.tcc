@@ -2,17 +2,17 @@
 
 #include "BangEditor/RIWResource.h"
 
+#include "Bang/MetaFilesManager.h"
 #include "Bang/Resources.h"
 #include "Bang/UIImageRenderer.h"
-#include "Bang/MetaFilesManager.h"
 
-#include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/UndoRedoFileChange.h"
+#include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
-
+using namespace Bang;
+namespace BangEditor
+{
 template <class T>
 void RIWResource<T>::InitInnerWidgets()
 {
@@ -28,22 +28,24 @@ void RIWResource<T>::Update()
 template <class T>
 void RIWResource<T>::SetResource(RH<T> &resource)
 {
-    if (resource != GetResource())
+    if(resource != GetResource())
     {
-        if (GetResource())
+        if(GetResource())
         {
-            GetResource().Get()->EventEmitter<IEventsResource>::
-                                 UnRegisterListener(this);
+            GetResource()
+                .Get()
+                ->EventEmitter<IEventsResource>::UnRegisterListener(this);
         }
 
         m_resource = resource;
-        if (GetResource())
+        if(GetResource())
         {
-            GetResource().Get()->EventEmitter<IEventsResource>::
-                                 RegisterListener(this);
+            GetResource()
+                .Get()
+                ->EventEmitter<IEventsResource>::RegisterListener(this);
 
             UpdateIcon();
-            OnResourceChanged( GetResource().Get() );
+            OnResourceChanged(GetResource().Get());
             OnResourceSet();
         }
     }
@@ -58,24 +60,24 @@ RH<T> RIWResource<T>::GetResource() const
 template <class T>
 void RIWResource<T>::BeginUndoRedo()
 {
-    if (GetResource())
+    if(GetResource())
     {
-        if (GetPath().IsFile())
+        if(GetPath().IsFile())
         {
             Array<Path> undoRedoPaths = GetUndoRedoPaths();
-            for (const Path &undoRedoPath : undoRedoPaths)
+            for(const Path &undoRedoPath : undoRedoPaths)
             {
                 UndoRedoFileChange *undoRedoFileChange =
-                                        new UndoRedoFileChange(undoRedoPath);
+                    new UndoRedoFileChange(undoRedoPath);
                 undoRedoFileChange->ReadBefore();
                 p_undoRedosFileChanges.PushBack(undoRedoFileChange);
             }
         }
 
         UndoRedoSerializableChange *undoRedoSerializableChange =
-           new UndoRedoSerializableChange(GetResource().Get(),
-                                          GetResource().Get()->GetMeta(),
-                                          MetaNode());
+            new UndoRedoSerializableChange(GetResource().Get(),
+                                           GetResource().Get()->GetMeta(),
+                                           MetaNode());
         p_undoRedosSerializableChanges.PushBack(undoRedoSerializableChange);
     }
 }
@@ -83,9 +85,9 @@ void RIWResource<T>::BeginUndoRedo()
 template <class T>
 void RIWResource<T>::EndUndoRedo()
 {
-    if (GetResource())
+    if(GetResource())
     {
-        Array<UndoRedoAction*> undoRedoActions;
+        Array<UndoRedoAction *> undoRedoActions;
         for(UndoRedoFileChange *undoRedoFileChange : p_undoRedosFileChanges)
         {
             undoRedoFileChange->ReadAfter();
@@ -94,7 +96,7 @@ void RIWResource<T>::EndUndoRedo()
             p_undoRedosSerializableChanges)
         {
             undoRedoSerializableChange->SetMetaAfter(
-                        GetResource().Get()->GetMeta() );
+                GetResource().Get()->GetMeta());
         }
         undoRedoActions.PushBack(p_undoRedosSerializableChanges);
         undoRedoActions.PushBack(p_undoRedosFileChanges);
@@ -108,34 +110,34 @@ void RIWResource<T>::EndUndoRedo()
 template <class T>
 Array<Path> RIWResource<T>::GetUndoRedoPaths() const
 {
-    if (Resource *res = GetResource().Get())
+    if(Resource *res = GetResource().Get())
     {
-        return { MetaFilesManager::GetMetaFilepath(res->GetGUID()) };
+        return {MetaFilesManager::GetMetaFilepath(res->GetGUID())};
     }
     return {};
 }
 
-template<class T>
+template <class T>
 void RIWResource<T>::OnResourceSet()
 {
     // Empty
 }
 
-template<class T>
+template <class T>
 void RIWResource<T>::UpdateFromFileWhenChanged()
 {
     RH<T> newResourceT;
-    if (GetPath().IsFile() || Resources::IsEmbeddedResource(GetPath()))
+    if(GetPath().IsFile() || Resources::IsEmbeddedResource(GetPath()))
     {
-        newResourceT = Resources::Load<T>( GetPath() );
+        newResourceT = Resources::Load<T>(GetPath());
     }
     SetResource(newResourceT);
 }
 
-template<class T>
+template <class T>
 void RIWResource<T>::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
-    if (GetResource())
+    if(GetResource())
     {
         BeginUndoRedo();
 
@@ -145,10 +147,10 @@ void RIWResource<T>::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
         // Export to file
         Resource *resourceToExport = GetResource().Get();
         Path resourcePath = resourceToExport->GetResourceFilepath();
-        if (!resourcePath.IsFile())
+        if(!resourcePath.IsFile())
         {
-            if (Resource *parentResource = GetResource().Get()->
-                                           GetParentResource())
+            if(Resource *parentResource =
+                   GetResource().Get()->GetParentResource())
             {
                 resourceToExport = parentResource;
                 resourcePath = parentResource->GetResourceFilepath();
@@ -156,7 +158,7 @@ void RIWResource<T>::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
         }
 
         Path importPath = MetaFilesManager::GetMetaFilepath(resourcePath);
-        if (resourceToExport && importPath.IsFile())
+        if(resourceToExport && importPath.IsFile())
         {
             resourceToExport->ExportMetaToFile(importPath);
         }
@@ -169,11 +171,11 @@ template <class T>
 void RIWResource<T>::OnResourceChanged(Resource *res)
 {
     ASSERT(res == GetResource().Get());
-    if (GetResource())
+    if(GetResource())
     {
         IEventListenerCommon::SetReceiveEventsCommon(false);
         UpdateInputsFromResource();
         IEventListenerCommon::SetReceiveEventsCommon(true);
     }
 }
-
+}

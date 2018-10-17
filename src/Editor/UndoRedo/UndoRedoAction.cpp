@@ -1,7 +1,7 @@
 #include "BangEditor/UndoRedoAction.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 UndoRedoAction::UndoRedoAction()
 {
@@ -15,4 +15,3 @@ bool UndoRedoAction::IsRedundant() const
 {
     return false;
 }
-

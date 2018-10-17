@@ -12,13 +12,14 @@
 #include "Bang/Window.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIButton;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class UIButton;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class SelectProjectWindow : public Window
 {
 public:
@@ -52,8 +53,8 @@ private:
     };
 
     Path m_selectedRecentPath = Path::Empty;
-    UIButton *p_newProjectButton          = nullptr;
-    UIButton *p_openProjectButton         = nullptr;
+    UIButton *p_newProjectButton = nullptr;
+    UIButton *p_openProjectButton = nullptr;
     UIButton *p_openSelectedProjectButton = nullptr;
 
     // GameObject
@@ -63,9 +64,6 @@ private:
     void OpenProject();
     void ConfirmOpenProject(const Path &projectFilepath);
 };
+}
 
-
-NAMESPACE_BANG_EDITOR_END
-
-#endif // SELECTPROJECTWINDOW_H
-
+#endif  // SELECTPROJECTWINDOW_H

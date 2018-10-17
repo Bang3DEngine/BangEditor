@@ -12,8 +12,8 @@
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/UIInputArray.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 UIInputArrayRow::UIInputArrayRow()
 {
@@ -30,31 +30,28 @@ void UIInputArrayRow::Init(UIInputArray *inputArray)
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
     hl->SetSpacing(10);
 
-    UIButton *removeButton = GameObjectFactory::CreateUIButton("",
-                                EditorTextureFactory::GetLessIcon());
+    UIButton *removeButton = GameObjectFactory::CreateUIButton(
+        "", EditorTextureFactory::GetLessIcon());
     removeButton->GetIcon()->SetTint(Color::Red.WithValue(0.75f));
     removeButton->GetGameObject()->SetParent(this);
-    removeButton->AddClickedCallback([this, inputArray]()
-    {
-        inputArray->RemoveRow(this, true);
-    });
+    removeButton->AddClickedCallback(
+        [this, inputArray]() { inputArray->RemoveRow(this, true); });
 
     GameObject *moveButtonsContainer = GameObjectFactory::CreateUIGameObject();
-    UIVerticalLayout *vl = moveButtonsContainer->AddComponent<UIVerticalLayout>();
+    UIVerticalLayout *vl =
+        moveButtonsContainer->AddComponent<UIVerticalLayout>();
     vl->SetSpacing(0);
 
-    auto CreateUpDownButton = [this, inputArray](bool up)
-    {
-        UIButton *upDownButton = GameObjectFactory::CreateUIButton("",
-                                    up ? TextureFactory::GetUpArrowIcon() :
-                                         TextureFactory::GetDownArrowIcon());
-        upDownButton->AddClickedCallback([this, inputArray, up]()
-        {
+    auto CreateUpDownButton = [this, inputArray](bool up) {
+        UIButton *upDownButton = GameObjectFactory::CreateUIButton(
+            "", up ? TextureFactory::GetUpArrowIcon()
+                   : TextureFactory::GetDownArrowIcon());
+        upDownButton->AddClickedCallback([this, inputArray, up]() {
             inputArray->MoveRow(this, (up ? -1 : 1));
         });
         upDownButton->GetIcon()->SetTint(Color::Black);
         upDownButton->GetLayoutElement()->SetMinHeight(10);
-        upDownButton->SetIconSize( Vector2i(8, 10) );
+        upDownButton->SetIconSize(Vector2i(8, 10));
         return upDownButton;
     };
 
@@ -68,9 +65,9 @@ void UIInputArrayRow::Init(UIInputArray *inputArray)
 
 void UIInputArrayRow::SetContainedGameObject(GameObject *containedGo)
 {
-    if (containedGo != GetContainedGameObject())
+    if(containedGo != GetContainedGameObject())
     {
-        if (GetContainedGameObject())
+        if(GetContainedGameObject())
         {
             GetContainedGameObject()->SetParent(nullptr);
         }
@@ -84,4 +81,3 @@ GameObject *UIInputArrayRow::GetContainedGameObject() const
 {
     return p_containedGameObject;
 }
-

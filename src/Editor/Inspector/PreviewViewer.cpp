@@ -18,8 +18,8 @@
 #include "Bang/Vector.tcc"
 #include "Bang/Vector2.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 PreviewViewer::PreviewViewer()
 {
@@ -30,16 +30,16 @@ PreviewViewer::PreviewViewer()
 
     p_imgRenderer = AddComponent<UIImageRenderer>();
     p_imgRenderer->SetMode(UIImageRenderer::Mode::TEXTURE);
-    p_imgRenderer->SetImageTexture( TextureFactory::GetWhiteTexture() );
+    p_imgRenderer->SetImageTexture(TextureFactory::GetWhiteTexture());
     p_border = GameObjectFactory::AddInnerShadow(this, Vector2i(20));
 
     UIContentSizeFitter *previewContentSizeFitter =
-                                        AddComponent<UIContentSizeFitter>();
+        AddComponent<UIContentSizeFitter>();
     previewContentSizeFitter->SetVerticalSizeType(LayoutSizeType::PREFERRED);
     previewContentSizeFitter->SetHorizontalSizeType(LayoutSizeType::PREFERRED);
 
     UIAspectRatioFitter *previewAspectRatioSizeFitter =
-                                        AddComponent<UIAspectRatioFitter>();
+        AddComponent<UIAspectRatioFitter>();
     previewAspectRatioSizeFitter->SetAspectRatio(1.0f);
     previewAspectRatioSizeFitter->SetAspectRatioMode(AspectRatioMode::KEEP);
 
@@ -55,45 +55,43 @@ void PreviewViewer::Update()
 {
     GameObject::Update();
 
-    if (p_focusable->IsBeingPressed())
+    if(p_focusable->IsBeingPressed())
     {
         constexpr float RotationSpeed = 3.0f;
         m_params.camOrbitAnglesDegs +=
-                        Vector2(Input::GetMouseDelta()) * RotationSpeed;
-        m_params.camOrbitAnglesDegs.y = Math::Clamp(m_params.camOrbitAnglesDegs.y,
-                                                    -75.0f, 75.0f);
+            Vector2(Input::GetMouseDelta()) * RotationSpeed;
+        m_params.camOrbitAnglesDegs.y =
+            Math::Clamp(m_params.camOrbitAnglesDegs.y, -75.0f, 75.0f);
     }
 
-    if (m_previewImageProviderFunc)
+    if(m_previewImageProviderFunc)
     {
         p_imgRenderer->SetImageTexture(
-                            m_previewImageProviderFunc(m_params).Get() );
+            m_previewImageProviderFunc(m_params).Get());
     }
 }
 
 void PreviewViewer::SetPreviewImageProvider(
-                            PreviewViewer::ImageProviderFunc previewImgProvider)
+    PreviewViewer::ImageProviderFunc previewImgProvider)
 {
     m_previewImageProviderFunc = previewImgProvider;
 }
 
-UIEventResult PreviewViewer::OnUIEvent(UIFocusable*, const UIEvent &event)
+UIEventResult PreviewViewer::OnUIEvent(UIFocusable *, const UIEvent &event)
 {
-    switch (event.type)
+    switch(event.type)
     {
         case UIEvent::Type::FOCUS_TAKEN:
             p_border->SetTint(Color::Orange);
             return UIEventResult::INTERCEPT;
-        break;
+            break;
 
         case UIEvent::Type::FOCUS_LOST:
             p_border->SetTint(Color::Black);
             return UIEventResult::INTERCEPT;
-        break;
+            break;
 
-        default:
-        break;
+        default: break;
     }
     return UIEventResult::IGNORE;
 }
-

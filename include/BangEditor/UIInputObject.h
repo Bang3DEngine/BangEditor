@@ -7,14 +7,15 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Object;
-FORWARD class UIInputText;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Object;
+class UIInputText;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class UIInputObject : public GameObject
 {
     GAMEOBJECT_EDITOR(UIInputObject);
@@ -22,7 +23,7 @@ class UIInputObject : public GameObject
 public:
     void SetObject(Object *object);
 
-    Object* GetObject() const;
+    Object *GetObject() const;
 
 protected:
     UIInputObject();
@@ -31,16 +32,12 @@ protected:
 private:
     UIInputText *p_objectInputText = nullptr;
     Object *p_object = nullptr;
-
 };
 
 template <class T>
 class UIInputObjectT : public UIInputObject
 {
-
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UIINPUTOBJECT_H
-
+#endif  // UIINPUTOBJECT_H

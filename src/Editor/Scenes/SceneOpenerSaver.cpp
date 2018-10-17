@@ -16,32 +16,33 @@
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/IEventsScenePlayer.h"
 #include "BangEditor/ScenePlayer.h"
-#include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/UndoRedoCreateGameObject.h"
+#include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/UndoRedoMoveGameObject.h"
 #include "BangEditor/UndoRedoRemoveGameObject.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UndoRedoAction;
-FORWARD class UndoRedoCreateGameObject;
-FORWARD class UndoRedoMoveGameObject;
-FORWARD class UndoRedoRemoveGameObject;
-FORWARD class UndoRedoSerializableChange;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class UndoRedoAction;
+class UndoRedoCreateGameObject;
+class UndoRedoMoveGameObject;
+class UndoRedoRemoveGameObject;
+class UndoRedoSerializableChange;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 SceneOpenerSaver::SceneOpenerSaver()
 {
-    SceneManager::GetActive()->
-        EventEmitter<IEventsSceneManager>::RegisterListener(this);
-    ScenePlayer::GetInstance()->
-        EventEmitter<IEventsScenePlayer>::RegisterListener(this);
+    SceneManager::GetActive()
+        ->EventEmitter<IEventsSceneManager>::RegisterListener(this);
+    ScenePlayer::GetInstance()
+        ->EventEmitter<IEventsScenePlayer>::RegisterListener(this);
 
-    UndoRedoManager::GetInstance()->EventEmitter<IEventsUndoRedo>::
-                                    RegisterListener(this);
+    UndoRedoManager::GetInstance()
+        ->EventEmitter<IEventsUndoRedo>::RegisterListener(this);
 }
 
 SceneOpenerSaver::~SceneOpenerSaver()
@@ -50,12 +51,12 @@ SceneOpenerSaver::~SceneOpenerSaver()
 
 bool SceneOpenerSaver::OnNewScene()
 {
-    if (!Editor::IsEditingScene())
+    if(!Editor::IsEditingScene())
     {
         return false;
     }
 
-    if (CloseScene())
+    if(CloseScene())
     {
         Scene *defaultScene = GameObjectFactory::CreateScene();
         SceneManager::LoadSceneInstantly(defaultScene, false);
@@ -68,17 +69,17 @@ bool SceneOpenerSaver::OnNewScene()
 
 bool SceneOpenerSaver::OnOpenScene()
 {
-    if (!Editor::IsEditingScene())
+    if(!Editor::IsEditingScene())
     {
         return false;
     }
 
-    Path openScenePath = Dialog::OpenFilePath("Open Scene...",
-                                             { Extensions::GetSceneExtension() },
-                                              GetDialogStartPath());
-    if (!openScenePath.IsEmpty())
+    Path openScenePath =
+        Dialog::OpenFilePath("Open Scene...", {Extensions::GetSceneExtension()},
+                             GetDialogStartPath());
+    if(!openScenePath.IsEmpty())
     {
-        if (openScenePath.IsFile())
+        if(openScenePath.IsFile())
         {
             return OpenSceneInEditor(openScenePath);
         }
@@ -90,7 +91,7 @@ void SceneOpenerSaver::OpenDefaultScene() const
 {
     Scene *scene = GameObjectFactory::CreateScene(true);
     GameObjectFactory::CreateDefaultSceneInto(scene);
-    
+
     SceneManager::LoadScene(scene);
 }
 
@@ -103,7 +104,7 @@ bool SceneOpenerSaver::OnSaveSceneAs()
     return OnSaveScene(true);
 }
 
-void SceneOpenerSaver::OnSceneLoaded(Scene*, const Path &sceneFilepath)
+void SceneOpenerSaver::OnSceneLoaded(Scene *, const Path &sceneFilepath)
 {
     m_currentLoadedScenePath = sceneFilepath;
 }
@@ -126,39 +127,41 @@ SceneOpenerSaver *SceneOpenerSaver::GetInstance()
 
 bool SceneOpenerSaver::OnSaveScene(bool saveAs)
 {
-    if (!Editor::IsEditingScene())
+    if(!Editor::IsEditingScene())
     {
         return false;
     }
 
     EditorScene *edScene = EditorSceneManager::GetEditorScene();
     Scene *openScene = edScene->GetOpenScene();
-    if (openScene && Editor::IsEditingScene())
+    if(openScene && Editor::IsEditingScene())
     {
         Path saveScenePath = GetOpenScenePath();
-        if (saveAs || !saveScenePath.IsFile())
+        if(saveAs || !saveScenePath.IsFile())
         {
             String hintName = GetOpenScenePath().GetName();
-            if (hintName.IsEmpty()) { hintName = "Scene"; }
-            saveScenePath = Dialog::SaveFilePath("Save Scene As...",
-                            { Extensions::GetSceneExtension() },
-                             GetDialogStartPath(),
-                             hintName);
+            if(hintName.IsEmpty())
+            {
+                hintName = "Scene";
+            }
+            saveScenePath = Dialog::SaveFilePath(
+                "Save Scene As...", {Extensions::GetSceneExtension()},
+                GetDialogStartPath(), hintName);
         }
 
         bool saveScene = (saveScenePath != Path::Empty);
-        if (saveScene && saveScenePath.IsFile() &&
-            saveScenePath != GetOpenScenePath())
+        if(saveScene && saveScenePath.IsFile() &&
+           saveScenePath != GetOpenScenePath())
         {
             Dialog::YesNoCancel yesNoCancel = Overwrite(saveScenePath);
             saveScene = (yesNoCancel == Dialog::YES);
         }
 
-        if (saveScene)
+        if(saveScene)
         {
             m_currentOpenScenePath = saveScenePath;
             m_currentLoadedScenePath = saveScenePath;
-            openScene->ExportMetaToFile( Path( GetOpenScenePath() ) );
+            openScene->ExportMetaToFile(Path(GetOpenScenePath()));
             m_numActionsDoneSinceLastSave = 0;
         }
 
@@ -169,43 +172,42 @@ bool SceneOpenerSaver::OnSaveScene(bool saveAs)
 
 Dialog::YesNoCancel SceneOpenerSaver::Overwrite(const Path &path)
 {
-    return Dialog::GetYesNoCancel("Overwrite?",
-                         "Are you sure you want to overwrite the file '" +
-                                  path.GetNameExt() + "'?");
+    return Dialog::GetYesNoCancel(
+        "Overwrite?", "Are you sure you want to overwrite the file '" +
+                          path.GetNameExt() + "'?");
 }
 
 bool SceneOpenerSaver::CloseScene()
 {
     Scene *previousOpenScene = EditorSceneManager::GetOpenScene();
-    if (previousOpenScene &&
-        !IsCurrentSceneSaved() &&
-        ScenePlayer::GetPlayState() ==  PlayState::EDITING)
+    if(previousOpenScene && !IsCurrentSceneSaved() &&
+       ScenePlayer::GetPlayState() == PlayState::EDITING)
     {
         Dialog::YesNoCancel saveSceneYNC =
-                Dialog::GetYesNoCancel("Save current scene",
-                                       "Current scene is not saved."
-                                       " Do you want to save it ?");
+            Dialog::GetYesNoCancel("Save current scene",
+                                   "Current scene is not saved."
+                                   " Do you want to save it ?");
 
-        if (saveSceneYNC == Dialog::YES)
+        if(saveSceneYNC == Dialog::YES)
         {
-            if (!OnSaveScene())
+            if(!OnSaveScene())
             {
                 return false;
             }
         }
-        else if (saveSceneYNC == Dialog::CANCEL)
+        else if(saveSceneYNC == Dialog::CANCEL)
         {
             return false;
         }
     }
 
-    if (previousOpenScene)
+    if(previousOpenScene)
     {
         GameObject::Destroy(previousOpenScene);
     }
 
     m_numActionsDoneSinceLastSave = 0;
-    m_currentOpenScenePath   = Path::Empty;
+    m_currentOpenScenePath = Path::Empty;
     m_currentLoadedScenePath = Path::Empty;
     SceneManager::LoadScene(nullptr, false);
     return true;
@@ -213,7 +215,7 @@ bool SceneOpenerSaver::CloseScene()
 
 Path SceneOpenerSaver::GetDialogStartPath() const
 {
-    if (Paths::GetProjectAssetsDir().Exists())
+    if(Paths::GetProjectAssetsDir().Exists())
     {
         return Paths::GetProjectAssetsDir();
     }
@@ -222,15 +224,15 @@ Path SceneOpenerSaver::GetDialogStartPath() const
 
 bool SceneOpenerSaver::DoesUndoRedoActionAffectScene(UndoRedoAction *action)
 {
-    return DCAST<UndoRedoCreateGameObject*>(action) ||
-           DCAST<UndoRedoMoveGameObject*>(action)   ||
-           DCAST<UndoRedoRemoveGameObject*>(action) ||
-           DCAST<UndoRedoSerializableChange*>(action);
+    return DCAST<UndoRedoCreateGameObject *>(action) ||
+           DCAST<UndoRedoMoveGameObject *>(action) ||
+           DCAST<UndoRedoRemoveGameObject *>(action) ||
+           DCAST<UndoRedoSerializableChange *>(action);
 }
 
 void SceneOpenerSaver::OnActionPushed(UndoRedoAction *action)
 {
-    if (SceneOpenerSaver::DoesUndoRedoActionAffectScene(action))
+    if(SceneOpenerSaver::DoesUndoRedoActionAffectScene(action))
     {
         ++m_numActionsDoneSinceLastSave;
     }
@@ -238,7 +240,7 @@ void SceneOpenerSaver::OnActionPushed(UndoRedoAction *action)
 
 void SceneOpenerSaver::OnUndo(UndoRedoAction *action)
 {
-    if (SceneOpenerSaver::DoesUndoRedoActionAffectScene(action))
+    if(SceneOpenerSaver::DoesUndoRedoActionAffectScene(action))
     {
         --m_numActionsDoneSinceLastSave;
     }
@@ -246,7 +248,7 @@ void SceneOpenerSaver::OnUndo(UndoRedoAction *action)
 
 void SceneOpenerSaver::OnRedo(UndoRedoAction *action)
 {
-    if (SceneOpenerSaver::DoesUndoRedoActionAffectScene(action))
+    if(SceneOpenerSaver::DoesUndoRedoActionAffectScene(action))
     {
         ++m_numActionsDoneSinceLastSave;
     }
@@ -254,18 +256,18 @@ void SceneOpenerSaver::OnRedo(UndoRedoAction *action)
 
 void SceneOpenerSaver::OnPlayStateChanged(PlayState, PlayState newPlayState)
 {
-    switch (newPlayState)
+    switch(newPlayState)
     {
         case PlayState::JUST_BEFORE_PLAYING:
             m_previousLoadedScenePath = m_currentLoadedScenePath;
             m_previousOpenScenePath = m_currentOpenScenePath;
-        break;
+            break;
 
         case PlayState::PLAYING:
         case PlayState::EDITING:
             m_currentLoadedScenePath = m_previousLoadedScenePath;
             m_currentOpenScenePath = m_previousOpenScenePath;
-        break;
+            break;
 
         default: break;
     }
@@ -278,16 +280,16 @@ bool SceneOpenerSaver::IsCurrentSceneSaved() const
 
 bool SceneOpenerSaver::OpenSceneInEditor(const Path &scenePath)
 {
-    bool alreadyLoadingThisScene = (scenePath == GetOpenScenePath()) &&
-                                    GetLoadedScenePath().IsEmpty();
-    if (!alreadyLoadingThisScene)
+    bool alreadyLoadingThisScene =
+        (scenePath == GetOpenScenePath()) && GetLoadedScenePath().IsEmpty();
+    if(!alreadyLoadingThisScene)
     {
-        if (!Editor::IsEditingScene())
+        if(!Editor::IsEditingScene())
         {
             return false;
         }
 
-        if (CloseScene())
+        if(CloseScene())
         {
             UndoRedoManager::Clear();
             SceneManager::LoadScene(scenePath, false);
@@ -298,4 +300,3 @@ bool SceneOpenerSaver::OpenSceneInEditor(const Path &scenePath)
     }
     return false;
 }
-

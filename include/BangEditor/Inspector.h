@@ -20,29 +20,31 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/Editor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class Component;
-FORWARD   class IEventsComponent;
-FORWARD   class IEventsDestroy;
-FORWARD   class IEventsFileTracker;
-FORWARD   class IEventsSceneManager;
-FORWARD   class Object;
-FORWARD   class Scene;
-FORWARD   class Serializable;
-FORWARD   class UIImageRenderer;
-FORWARD   class UITextRenderer;
-FORWARD   class UIScrollPanel;
-FORWARD   class UIVerticalLayout;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Component;
+class IEventsComponent;
+class IEventsDestroy;
+class IEventsFileTracker;
+class IEventsSceneManager;
+class Object;
+class Scene;
+class Serializable;
+class UIImageRenderer;
+class UITextRenderer;
+class UIScrollPanel;
+class UIVerticalLayout;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class IEventsEditor;
-FORWARD class InspectorWidget;
-FORWARD class MenuItem;
-FORWARD class UIContextMenu;
+using namespace Bang;
+namespace BangEditor
+{
+class IEventsEditor;
+class InspectorWidget;
+class MenuItem;
+class UIContextMenu;
 
 class Inspector : public GameObject,
                   public EventListener<IEventsEditor>,
@@ -69,23 +71,23 @@ public:
     const Path &GetCurrentPath() const;
     GameObject *GetCurrentGameObject() const;
 
-    static Inspector* GetActive();
+    static Inspector *GetActive();
 
 private:
-    List<InspectorWidget*> m_widgets;
-    UMap<Object*, InspectorWidget*> m_objToWidget;
+    List<InspectorWidget *> m_widgets;
+    UMap<Object *, InspectorWidget *> m_objToWidget;
 
     Path m_currentOpenPath = Path::Empty;
     GameObject *p_currentGameObject = nullptr;
-    UIVerticalLayout *p_mainVL   = nullptr;
+    UIVerticalLayout *p_mainVL = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
     UITextRenderer *p_titleText = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
     UIImageRenderer *p_blockLayer = nullptr;
 
-    GameObject* GetWidgetsContainer() const;
+    GameObject *GetWidgetsContainer() const;
     UIVerticalLayout *GetMainVL() const;
-    UIScrollPanel* GetScrollPanel() const;
+    UIScrollPanel *GetScrollPanel() const;
 
     void AddWidget(InspectorWidget *widget, int index = -1);
     void RemoveWidget(InspectorWidget *widget);
@@ -113,7 +115,6 @@ private:
     void OnComponentRemoved(Component *removedComponent,
                             GameObject *previousGameObject) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // INSPECTOR_H
+#endif  // INSPECTOR_H

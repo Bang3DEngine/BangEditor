@@ -21,12 +21,13 @@
 #include "Bang/UICheckBox.h"
 #include "BangEditor/UIInputFileWithPreview.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 CIWAnimator::CIWAnimator()
 {
@@ -45,24 +46,28 @@ void CIWAnimator::InitInnerWidgets()
 
     p_animatorSMInput = GameObject::Create<UIInputFileWithPreview>();
     p_animatorSMInput->SetExtensions(
-                            {Extensions::GetAnimatorStateMachineExtension()} );
+        {Extensions::GetAnimatorStateMachineExtension()});
     p_animatorSMInput->SetZoomable(false);
-    p_animatorSMInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_animatorSMInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_playOnStartInput = GameObjectFactory::CreateUICheckBox();
-    p_playOnStartInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_playOnStartInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     AddWidget("Play on start", p_playOnStartInput->GetGameObject());
-    AddWidget(GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5));
+    AddWidget(
+        GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5));
     AddWidget("State Machine", p_animatorSMInput);
 
     SetLabelsWidth(90);
 }
 
-UIInputFileWithPreview* CIWAnimator::CreateAnimationEntry()
+UIInputFileWithPreview *CIWAnimator::CreateAnimationEntry()
 {
-    UIInputFileWithPreview *entry = GameObject::Create<UIInputFileWithPreview>();
-    entry->SetExtensions( {Extensions::GetAnimationExtension()} );
+    UIInputFileWithPreview *entry =
+        GameObject::Create<UIInputFileWithPreview>();
+    entry->SetExtensions({Extensions::GetAnimationExtension()});
     entry->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     entry->SetZoomable(false);
     return entry;
@@ -76,7 +81,7 @@ void CIWAnimator::UpdateFromReference()
     AnimatorStateMachine *sm = animator->GetStateMachine();
 
     p_animatorSMInput->SetPath(sm ? sm->GetResourceFilepath() : Path::Empty);
-    p_playOnStartInput->SetChecked( animator->GetPlayOnStart() );
+    p_playOnStartInput->SetChecked(animator->GetPlayOnStart());
 }
 
 void CIWAnimator::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
@@ -85,21 +90,20 @@ void CIWAnimator::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 
     Animator *animator = GetAnimator();
 
-    if (object == p_animatorSMInput)
+    if(object == p_animatorSMInput)
     {
         animator->SetStateMachine(
-                    Resources::Load<AnimatorStateMachine>(
-                                p_animatorSMInput->GetPath()).Get() );
+            Resources::Load<AnimatorStateMachine>(p_animatorSMInput->GetPath())
+                .Get());
     }
 
-    if (object == p_playOnStartInput)
+    if(object == p_playOnStartInput)
     {
-        GetAnimator()->SetPlayOnStart( p_playOnStartInput->IsChecked() );
+        GetAnimator()->SetPlayOnStart(p_playOnStartInput->IsChecked());
     }
 }
 
 Animator *CIWAnimator::GetAnimator() const
 {
-    return SCAST<Animator*>( GetComponent() );
+    return SCAST<Animator *>(GetComponent());
 }
-

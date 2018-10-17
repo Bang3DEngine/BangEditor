@@ -9,8 +9,8 @@
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/MenuItem.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 ModelExplorerItem::ModelExplorerItem()
 {
@@ -25,18 +25,17 @@ void ModelExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
     ExplorerItem::OnCreateContextMenu(menuRootItem);
 
     MenuItem *createGo = menuRootItem->AddItem("Create GameObject from model");
-    createGo->SetSelectedCallback([this](MenuItem*)
-    {
+    createGo->SetSelectedCallback([this](MenuItem *) {
         Scene *openScene = EditorSceneManager::GetOpenScene();
-        if (openScene)
+        if(openScene)
         {
             RH<Model> model = Resources::Load<Model>(GetPath());
-            if (model)
+            if(model)
             {
-                GameObject *gameObject = model.Get()->CreateGameObjectFromModel();
+                GameObject *gameObject =
+                    model.Get()->CreateGameObjectFromModel();
                 gameObject->SetParent(openScene);
             }
         }
     });
 }
-

@@ -7,16 +7,18 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWCollider.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class MeshCollider;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class MeshCollider;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UIInputFile;
+using namespace Bang;
+namespace BangEditor
+{
+class UIInputFile;
 
 class CIWMeshCollider : public CIWCollider
 {
@@ -31,18 +33,17 @@ class CIWMeshCollider : public CIWCollider
 public:
     UIInputFile *p_meshInput = nullptr;
 
-	CIWMeshCollider();
-	virtual ~CIWMeshCollider() override;
+    CIWMeshCollider();
+    virtual ~CIWMeshCollider() override;
 
     // ComponentInspectorWidget
-    virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
+    virtual void OnValueChangedCIW(
+        EventEmitter<IEventsValueChanged> *object) override;
 
     MeshCollider *GetMeshCollider() const;
 
     friend class ComponentInspectorWidgetFactory;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWMESHCOLLIDER_H
-
+#endif  // CIWMESHCOLLIDER_H

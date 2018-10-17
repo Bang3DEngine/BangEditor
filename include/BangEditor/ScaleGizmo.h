@@ -8,14 +8,15 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class GameObject;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class GameObject;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class ScaleGizmoAxis;
+using namespace Bang;
+namespace BangEditor
+{
+class ScaleGizmoAxis;
 
 class ScaleGizmo : public SelectionGizmo
 {
@@ -26,16 +27,14 @@ public:
     void SetReferencedGameObject(GameObject *referencedGameObject) override;
 
 private:
-    ScaleGizmoAxis *p_axisX   = nullptr;
-    ScaleGizmoAxis *p_axisY   = nullptr;
-    ScaleGizmoAxis *p_axisZ   = nullptr;
+    ScaleGizmoAxis *p_axisX = nullptr;
+    ScaleGizmoAxis *p_axisY = nullptr;
+    ScaleGizmoAxis *p_axisZ = nullptr;
     ScaleGizmoAxis *p_axisXYZ = nullptr;
 
     ScaleGizmo();
     virtual ~ScaleGizmo() override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // SCALEGIZMO_H
-
+#endif  // SCALEGIZMO_H

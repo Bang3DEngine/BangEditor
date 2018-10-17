@@ -14,6 +14,7 @@
 #include "Bang/Material.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/Math.h"
+#include "Bang/Mesh.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/ResourceHandle.h"
@@ -22,8 +23,8 @@
 #include "Bang/Vector3.h"
 #include "BangEditor/RotateGizmoAxis.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 RotateGizmo::RotateGizmo()
 {
@@ -33,9 +34,10 @@ RotateGizmo::RotateGizmo()
     p_sphereGo->SetName("Sphere");
 
     p_sphereRenderer = p_sphereGo->AddComponent<MeshRenderer>();
-    p_sphereRenderer->SetMaterial(MaterialFactory::GetGizmosUnLightedOverlay().Get());
-    p_sphereRenderer->SetMesh( MeshFactory::GetSphere().Get() );
-    p_sphereRenderer->GetMaterial()->SetAlbedoColor( Color(1, 1, 1, 0.25f) );
+    p_sphereRenderer->SetMaterial(
+        MaterialFactory::GetGizmosUnLightedOverlay().Get());
+    p_sphereRenderer->SetMesh(MeshFactory::GetSphere().Get());
+    p_sphereRenderer->GetMaterial()->SetAlbedoColor(Color(1, 1, 1, 0.25f));
     p_sphereRenderer->SetVisible(false);
     p_sphereGo->GetTransform()->SetLocalScale(0.97f);
 
@@ -43,7 +45,8 @@ RotateGizmo::RotateGizmo()
     p_sphereBoundsGo->SetName("SphereBounds");
 
     p_sphereBoundsRenderer = p_sphereBoundsGo->AddComponent<LineRenderer>();
-    p_sphereBoundsRenderer->SetMaterial(MaterialFactory::GetGizmosUnLightedOverlay().Get());
+    p_sphereBoundsRenderer->SetMaterial(
+        MaterialFactory::GetGizmosUnLightedOverlay().Get());
     p_sphereBoundsRenderer->GetMaterial()->SetAlbedoColor(Color::Black);
     CreateSphereBoundsPoints();
 
@@ -77,11 +80,12 @@ void RotateGizmo::Render(RenderPass rp, bool renderChildren)
     // Update sphere so that it faces camera
     Camera *cam = GetEditorCamera();
     Transform *camT = cam->GetGameObject()->GetTransform();
-    Vector3 camCenterDir = (GetTransform()->GetPosition() - camT->GetPosition());
+    Vector3 camCenterDir =
+        (GetTransform()->GetPosition() - camT->GetPosition());
     p_sphereBoundsGo->GetTransform()->SetRotation(
-                                    Quaternion::LookDirection(camCenterDir) );
+        Quaternion::LookDirection(camCenterDir));
 
-    GameObject::Render(rp, renderChildren); // Do Render
+    GameObject::Render(rp, renderChildren);  // Do Render
 }
 
 void RotateGizmo::CreateSphereBoundsPoints()
@@ -91,30 +95,29 @@ void RotateGizmo::CreateSphereBoundsPoints()
 
     // Get circle points
     Array<Vector3> circlePoints;
-    for (uint i = 0; i < numSegments + 1; ++i)
+    for(uint i = 0; i < numSegments + 1; ++i)
     {
         float angle = angleStep * i;
-        Vector3 newPoint (Math::Sin(angle), Math::Cos(angle), 0.0f);
+        Vector3 newPoint(Math::Sin(angle), Math::Cos(angle), 0.0f);
         circlePoints.PushBack(newPoint);
     }
 
     // Get renderer points
     Array<Vector3> rendererPoints;
-    for (uint i = 0; i < circlePoints.Size() - 1; ++i)
+    for(uint i = 0; i < circlePoints.Size() - 1; ++i)
     {
-        rendererPoints.PushBack( circlePoints[i+0] );
-        rendererPoints.PushBack( circlePoints[i+1] );
+        rendererPoints.PushBack(circlePoints[i + 0]);
+        rendererPoints.PushBack(circlePoints[i + 1]);
     }
 
     p_sphereBoundsRenderer->SetPoints(rendererPoints);
 }
 
-
 void RotateGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
 {
     SelectionGizmo::SetReferencedGameObject(referencedGameObject);
 
-    p_axisX->SetReferencedGameObject( GetReferencedGameObject() );
-    p_axisY->SetReferencedGameObject( GetReferencedGameObject() );
-    p_axisZ->SetReferencedGameObject( GetReferencedGameObject() );
+    p_axisX->SetReferencedGameObject(GetReferencedGameObject());
+    p_axisY->SetReferencedGameObject(GetReferencedGameObject());
+    p_axisZ->SetReferencedGameObject(GetReferencedGameObject());
 }

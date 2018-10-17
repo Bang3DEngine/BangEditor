@@ -20,20 +20,21 @@
 #include "BangEditor/IEventsScenePlayer.h"
 #include "BangEditor/PlayState.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Camera;
-FORWARD class IEventsSceneManager;
-FORWARD class Input;
-FORWARD class Path;
-FORWARD class Scene;
-FORWARD class Transform;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Camera;
+class IEventsSceneManager;
+class Input;
+class Path;
+class Scene;
+class Transform;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class IEventsScenePlayer;
-FORWARD class SelectionFramebuffer;
+using namespace Bang;
+namespace BangEditor
+{
+class IEventsScenePlayer;
+class SelectionFramebuffer;
 
 class EditorCamera : public GameObject,
                      public EventListener<IEventsScenePlayer>,
@@ -69,11 +70,11 @@ private:
     static float InitialZNear;
     static float InitialZFar;
 
-    Camera *p_cam              = nullptr;
-    Transform *p_camt          = nullptr;
+    Camera *p_cam = nullptr;
+    Transform *p_camt = nullptr;
     GameObject *p_camContainer = nullptr;
     SelectionFramebuffer *m_selectionFramebuffer = nullptr;
-    Set<GameObject*> m_blockRequests;
+    Set<GameObject *> m_blockRequests;
 
     Vector3 m_targetPosition = Vector3::Zero;
     Quaternion m_targetRotation = Quaternion::Identity;
@@ -83,14 +84,14 @@ private:
 
     // WASD
     float m_keysMoveAccel = 1.0f;
-    float m_maxMoveSpeed  = 10.0f;
+    float m_maxMoveSpeed = 10.0f;
     float m_keysCurrentMoveSpeed = 0.0f;
 
     // Panning
     Vector2 m_mousePanPerPixel = Vector2(70.0f);
 
     // Rotation
-    Vector2 m_mouseRotDegreesPerPixel = Vector2(0.0f); // Parameter
+    Vector2 m_mouseRotDegreesPerPixel = Vector2(0.0f);  // Parameter
 
     // Zoom
     float m_mouseZoomPerDeltaWheel = 0.0f;
@@ -99,15 +100,16 @@ private:
     float m_orthoHeight = 30.0f;
 
     // Focus
-    float m_lookAtRotSpeed     = 3.0f;
-    float m_lookAtMoveSpeed    = 4.0f;
+    float m_lookAtRotSpeed = 3.0f;
+    float m_lookAtMoveSpeed = 4.0f;
 
     // IEventsScenePlayer
     virtual void OnPlayStateChanged(PlayState previousPlayState,
                                     PlayState newPlayState) override;
 
     // IEventsSceneManager
-    virtual void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
+    virtual void OnSceneLoaded(Scene *scene,
+                               const Path &sceneFilepath) override;
 
     void AdjustSpeeds();
     void HandleWheelZoom();
@@ -120,7 +122,6 @@ private:
                               Vector3 *targetPos,
                               Quaternion *targetRot);
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // EDITORCAMERA_H
+#endif  // EDITORCAMERA_H

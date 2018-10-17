@@ -14,12 +14,13 @@
 #include "Bang/UIComboBox.h"
 #include "Bang/UIInputNumber.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 CIWRigidBody::CIWRigidBody()
 {
@@ -46,33 +47,37 @@ void CIWRigidBody::InitInnerWidgets()
 
     p_angularDragInput = GameObjectFactory::CreateUIInputNumber();
     p_angularDragInput->SetMinMaxValues(0.0f, 1.0f);
-    p_angularDragInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_angularDragInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_useGravityInput = GameObjectFactory::CreateUICheckBox();
-    p_useGravityInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_useGravityInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_isKinematicInput = GameObjectFactory::CreateUICheckBox();
-    p_isKinematicInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_isKinematicInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_constraintsInput = GameObjectFactory::CreateUIBoolComboBox();
-    p_constraintsInput->AddItem("Lock Position X",
-                                SCAST<int>(RigidBodyConstraint::LOCK_POSITION_X));
-    p_constraintsInput->AddItem("Lock Position Y",
-                                SCAST<int>(RigidBodyConstraint::LOCK_POSITION_Y));
-    p_constraintsInput->AddItem("Lock Position Z",
-                                SCAST<int>(RigidBodyConstraint::LOCK_POSITION_Z));
-    p_constraintsInput->AddItem("Lock Rotation X",
-                                SCAST<int>(RigidBodyConstraint::LOCK_ROTATION_X));
-    p_constraintsInput->AddItem("Lock Rotation Y",
-                                SCAST<int>(RigidBodyConstraint::LOCK_ROTATION_Y));
-    p_constraintsInput->AddItem("Lock Rotation Z",
-                                SCAST<int>(RigidBodyConstraint::LOCK_ROTATION_Z));
-    p_constraintsInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_constraintsInput->AddItem(
+        "Lock Position X", SCAST<int>(RigidBodyConstraint::LOCK_POSITION_X));
+    p_constraintsInput->AddItem(
+        "Lock Position Y", SCAST<int>(RigidBodyConstraint::LOCK_POSITION_Y));
+    p_constraintsInput->AddItem(
+        "Lock Position Z", SCAST<int>(RigidBodyConstraint::LOCK_POSITION_Z));
+    p_constraintsInput->AddItem(
+        "Lock Rotation X", SCAST<int>(RigidBodyConstraint::LOCK_ROTATION_X));
+    p_constraintsInput->AddItem(
+        "Lock Rotation Y", SCAST<int>(RigidBodyConstraint::LOCK_ROTATION_Y));
+    p_constraintsInput->AddItem(
+        "Lock Rotation Z", SCAST<int>(RigidBodyConstraint::LOCK_ROTATION_Z));
+    p_constraintsInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     AddWidget("Mass", p_massInput->GetGameObject());
     AddWidget("Drag", p_dragInput->GetGameObject());
     AddWidget("Angular Drag", p_angularDragInput->GetGameObject());
-    AddWidget("Use Gravity",  p_useGravityInput->GetGameObject());
+    AddWidget("Use Gravity", p_useGravityInput->GetGameObject());
     AddWidget("Is Kinematic", p_isKinematicInput->GetGameObject());
     AddWidget("Constraints", p_constraintsInput->GetGameObject());
 
@@ -85,13 +90,13 @@ void CIWRigidBody::UpdateFromReference()
 
     RigidBody *rigidBody = GetRigidBody();
 
-    p_massInput->SetValue( rigidBody->GetMass() );
-    p_dragInput->SetValue( rigidBody->GetDrag() );
-    p_angularDragInput->SetValue( rigidBody->GetAngularDrag() );
-    p_useGravityInput->SetChecked( rigidBody->GetUseGravity() );
-    p_isKinematicInput->SetChecked( rigidBody->GetIsKinematic() );
-    p_constraintsInput->SetSelectionForFlag( SCAST<int>(rigidBody->GetConstraints().
-                                                        GetValue()) );
+    p_massInput->SetValue(rigidBody->GetMass());
+    p_dragInput->SetValue(rigidBody->GetDrag());
+    p_angularDragInput->SetValue(rigidBody->GetAngularDrag());
+    p_useGravityInput->SetChecked(rigidBody->GetUseGravity());
+    p_isKinematicInput->SetChecked(rigidBody->GetIsKinematic());
+    p_constraintsInput->SetSelectionForFlag(
+        SCAST<int>(rigidBody->GetConstraints().GetValue()));
 }
 
 void CIWRigidBody::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
@@ -100,37 +105,34 @@ void CIWRigidBody::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 
     RigidBody *rigidBody = GetRigidBody();
 
-    if (object == p_massInput)
+    if(object == p_massInput)
     {
-        rigidBody->SetMass( p_massInput->GetValue() );
+        rigidBody->SetMass(p_massInput->GetValue());
     }
-    else if (object == p_dragInput)
+    else if(object == p_dragInput)
     {
-        rigidBody->SetDrag( p_dragInput->GetValue() );
+        rigidBody->SetDrag(p_dragInput->GetValue());
     }
-    else if (object == p_angularDragInput)
+    else if(object == p_angularDragInput)
     {
-        rigidBody->SetAngularDrag( p_angularDragInput->GetValue() );
+        rigidBody->SetAngularDrag(p_angularDragInput->GetValue());
     }
-    else if (object == p_useGravityInput)
+    else if(object == p_useGravityInput)
     {
-        rigidBody->SetUseGravity( p_useGravityInput->IsChecked() );
+        rigidBody->SetUseGravity(p_useGravityInput->IsChecked());
     }
-    else if (object == p_isKinematicInput)
+    else if(object == p_isKinematicInput)
     {
-        rigidBody->SetIsKinematic( p_isKinematicInput->IsChecked() );
+        rigidBody->SetIsKinematic(p_isKinematicInput->IsChecked());
     }
-    else if (object == p_constraintsInput)
+    else if(object == p_constraintsInput)
     {
-        rigidBody->SetConstraints(
-                    SCAST<RigidBodyConstraint>(
-                        p_constraintsInput->GetSelectedValuesForFlag()));
+        rigidBody->SetConstraints(SCAST<RigidBodyConstraint>(
+            p_constraintsInput->GetSelectedValuesForFlag()));
     }
 }
 
 RigidBody *CIWRigidBody::GetRigidBody() const
 {
-    return SCAST<RigidBody*>( GetComponent() );
+    return SCAST<RigidBody *>(GetComponent());
 }
-
-

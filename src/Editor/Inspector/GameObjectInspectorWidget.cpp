@@ -14,8 +14,8 @@
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 GameObjectInspectorWidget::GameObjectInspectorWidget()
 {
@@ -45,8 +45,10 @@ void GameObjectInspectorWidget::InitInnerWidgets()
     SetName("GameObjectInspectorWidget");
     SetTitle("GameObject");
 
-    GetInspectorWidgetTitle()->GetEnabledCheckBox()->
-                               GetGameObject()->SetEnabled(false);
+    GetInspectorWidgetTitle()
+        ->GetEnabledCheckBox()
+        ->GetGameObject()
+        ->SetEnabled(false);
     GetInspectorWidgetTitle()->GetIcon()->GetGameObject()->SetEnabled(false);
     GetInspectorWidgetTitle()->SetEnabled(false);
 
@@ -56,33 +58,32 @@ void GameObjectInspectorWidget::InitInnerWidgets()
     p_enabledInput = GameObjectFactory::CreateUICheckBox();
     p_enabledInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    AddWidget("Name",    p_nameInput->GetGameObject());
+    AddWidget("Name", p_nameInput->GetGameObject());
     AddWidget("Enabled", p_enabledInput->GetGameObject());
     SetLabelsWidth(80);
 }
 
 void GameObjectInspectorWidget::UpdateFromReference()
 {
-    p_nameInput->GetText()->SetContent( GetGameObject()->GetName() );
-    p_enabledInput->SetChecked( GetGameObject()->IsEnabled() );
+    p_nameInput->GetText()->SetContent(GetGameObject()->GetName());
+    p_enabledInput->SetChecked(GetGameObject()->IsEnabled());
 }
 
-void GameObjectInspectorWidget::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void GameObjectInspectorWidget::OnValueChanged(
+    EventEmitter<IEventsValueChanged> *object)
 {
     MetaNode undoMetaBefore = GetGameObject()->GetMeta();
 
-    if (object == p_nameInput)
+    if(object == p_nameInput)
     {
-        GetGameObject()->SetName( p_nameInput->GetText()->GetContent() );
+        GetGameObject()->SetName(p_nameInput->GetText()->GetContent());
     }
-    else if (object == p_enabledInput)
+    else if(object == p_enabledInput)
     {
         GetGameObject()->SetEnabled(p_enabledInput->IsChecked());
     }
 
     MetaNode currentMeta = GetGameObject()->GetMeta();
-    UndoRedoManager::PushAction( new UndoRedoSerializableChange(GetGameObject(),
-                                                                undoMetaBefore,
-                                                                currentMeta) );
+    UndoRedoManager::PushAction(new UndoRedoSerializableChange(
+        GetGameObject(), undoMetaBefore, currentMeta));
 }
-

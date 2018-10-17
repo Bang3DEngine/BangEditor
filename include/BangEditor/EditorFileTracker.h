@@ -11,43 +11,45 @@
 #include "Bang/EventEmitter.tcc"
 #include "Bang/EventListener.h"
 #include "Bang/FileTracker.h"
-#include "Bang/IEvents.h"
+#include "Bang/IEventsFileTracker.h"
+#include "Bang/IEventsFileTracker.h"
 #include "Bang/Time.h"
 #include "Bang/USet.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ProjectManager.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsFileTracker;
-FORWARD class FileTracker;
-FORWARD class Path;
-FORWARD class String;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsFileTracker;
+class FileTracker;
+class Path;
+class String;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class IEventsProjectManager;
-FORWARD class Project;
+using namespace Bang;
+namespace BangEditor
+{
+class IEventsProjectManager;
+class Project;
 
 class EditorFileTracker : public EventListener<IEventsFileTracker>,
                           public EventListener<IEventsProjectManager>,
                           public EventEmitter<IEventsFileTracker>
 {
 public:
-	EditorFileTracker();
-	virtual ~EditorFileTracker() override;
+    EditorFileTracker();
+    virtual ~EditorFileTracker() override;
 
     void CheckFiles();
     void OnPathRenamed(const Path &previousPath, const Path &newPath);
 
     Time GetModificationTime(const Path &path) const;
 
-    const USet<Path>& GetTrackedPaths() const;
+    const USet<Path> &GetTrackedPaths() const;
     Array<Path> GetTrackedPathsWithExtensions(
-                                        const Array<String> &extensions) const;
+        const Array<String> &extensions) const;
     Array<Path> GetTrackedPathsWithLastExtension(
-                                        const Array<String> &extensions) const;
+        const Array<String> &extensions) const;
 
     static EditorFileTracker *GetInstance();
 
@@ -56,7 +58,7 @@ private:
 
     void CheckForShaderModifications(const Path &modifiedPath);
     void CheckForBehaviourModifications(const Path &modifiedPath);
-    FileTracker* GetFileTracker() const;
+    FileTracker *GetFileTracker() const;
 
     // IFileTrackerListener
     void OnPathAdded(const Path &addedPath) override;
@@ -67,8 +69,6 @@ private:
     void OnProjectOpen(const Project *project) override;
     void OnProjectClosed(const Project *project) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // EDITORFILETRACKER_H
-
+#endif  // EDITORFILETRACKER_H

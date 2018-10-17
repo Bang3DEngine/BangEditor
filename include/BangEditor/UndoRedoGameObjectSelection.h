@@ -16,15 +16,17 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UndoRedoAction.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsDestroy;
-FORWARD   class GameObject;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDestroy;
+class GameObject;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class UndoRedoGameObjectSelection : public UndoRedoAction,
                                     public EventListener<IEventsDestroy>
 {
@@ -45,8 +47,6 @@ private:
     // IEventsDestroy
     void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UNDOREDOGAMEOBJECTSELECTION_H
-
+#endif  // UNDOREDOGAMEOBJECTSELECTION_H

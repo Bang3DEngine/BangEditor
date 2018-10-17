@@ -16,12 +16,13 @@
 #include "BangEditor/UIInputColor.h"
 #include "BangEditor/UIInputTexture.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 CIWUIImageRenderer::CIWUIImageRenderer()
 {
@@ -41,13 +42,13 @@ void CIWUIImageRenderer::InitInnerWidgets()
     p_tintInput = GameObject::Create<UIInputColor>();
 
     p_imageInput = GameObject::Create<UIInputTexture>();
-    p_imageInput->SetExtensions( Extensions::GetImageExtensions() );
+    p_imageInput->SetExtensions(Extensions::GetImageExtensions());
 
     p_tintInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     p_imageInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     AddWidget("Image", p_imageInput);
-    AddWidget("Tint",  p_tintInput);
+    AddWidget("Tint", p_tintInput);
 
     SetLabelsWidth(70);
 }
@@ -56,9 +57,9 @@ void CIWUIImageRenderer::UpdateFromReference()
 {
     ComponentInspectorWidget::UpdateFromReference();
 
-    if (!p_tintInput->HasFocus())
+    if(!p_tintInput->HasFocus())
     {
-        p_tintInput->SetColor( GetUIImageRenderer()->GetTint() );
+        p_tintInput->SetColor(GetUIImageRenderer()->GetTint());
     }
 
     Texture2D *tex = GetUIImageRenderer()->GetImageTexture();
@@ -67,14 +68,14 @@ void CIWUIImageRenderer::UpdateFromReference()
 
 UIImageRenderer *CIWUIImageRenderer::GetUIImageRenderer() const
 {
-    return SCAST<UIImageRenderer*>( GetComponent() );
+    return SCAST<UIImageRenderer *>(GetComponent());
 }
 
-void CIWUIImageRenderer::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
+void CIWUIImageRenderer::OnValueChangedCIW(
+    EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChangedCIW(object);
 
-    GetUIImageRenderer()->SetTint( p_tintInput->GetColor() );
-    GetUIImageRenderer()->SetImageTexture( p_imageInput->GetPath() );
+    GetUIImageRenderer()->SetTint(p_tintInput->GetColor());
+    GetUIImageRenderer()->SetImageTexture(p_imageInput->GetPath());
 }
-

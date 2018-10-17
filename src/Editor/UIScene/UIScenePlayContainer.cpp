@@ -12,23 +12,24 @@
 #include "BangEditor/UISceneToolbar.h"
 #include "BangEditor/UISceneToolbarDown.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Camera;
-FORWARD class Path;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Camera;
+class Path;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 UIScenePlayContainer::UIScenePlayContainer()
 {
     GetSceneToolbar()->DisableTransformAndCameraControls();
     GetSceneToolbarDown()->SetEnabled(false);
 
-    ScenePlayer::GetInstance()->
-            EventEmitter<IEventsScenePlayer>::RegisterListener(this);
-    SceneManager::GetActive()->
-            EventEmitter<IEventsSceneManager>::RegisterListener(this);
+    ScenePlayer::GetInstance()
+        ->EventEmitter<IEventsScenePlayer>::RegisterListener(this);
+    SceneManager::GetActive()
+        ->EventEmitter<IEventsSceneManager>::RegisterListener(this);
 }
 
 UIScenePlayContainer::~UIScenePlayContainer()
@@ -38,10 +39,10 @@ UIScenePlayContainer::~UIScenePlayContainer()
 void UIScenePlayContainer::Update()
 {
     GameObject::Update();
-    SetScene( EditorSceneManager::GetOpenScene() );
+    SetScene(EditorSceneManager::GetOpenScene());
 }
 
-Camera* UIScenePlayContainer::GetSceneCamera(Scene *scene)
+Camera *UIScenePlayContainer::GetSceneCamera(Scene *scene)
 {
     return scene ? scene->GetCamera() : nullptr;
 }
@@ -50,7 +51,7 @@ void UIScenePlayContainer::OnPlayStateChanged(PlayState, PlayState)
 {
 }
 
-void UIScenePlayContainer::OnSceneLoaded(Scene*, const Path&)
+void UIScenePlayContainer::OnSceneLoaded(Scene *, const Path &)
 {
 }
 

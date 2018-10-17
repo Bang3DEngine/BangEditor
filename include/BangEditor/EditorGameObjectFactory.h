@@ -6,21 +6,20 @@
 #include "Bang/Vector2.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class UIScrollPanel;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class UIScrollPanel;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class EditorGameObjectFactory
 {
 public:
     EditorGameObjectFactory() = delete;
     ~EditorGameObjectFactory() = delete;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // EDITORGAMEOBJECTFACTORY_H
-
+#endif  // EDITORGAMEOBJECTFACTORY_H

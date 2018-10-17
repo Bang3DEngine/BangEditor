@@ -18,11 +18,11 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UITabHeader.h"
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class IEventsTabHeader;
-FORWARD class UITabHeader;
+using namespace Bang;
+namespace BangEditor
+{
+class IEventsTabHeader;
+class UITabHeader;
 
 class UITabContainer : public GameObject,
                        public EventEmitter<IEventsTabHeader>,
@@ -41,16 +41,16 @@ public:
     void SetTabTitle(GameObject *tabbedChild, const String &title);
 
     uint GetCurrentTabIndex() const;
-    GameObject* GetHeadersBar() const;
-    GameObject* GetCurrentTabChild() const;
+    GameObject *GetHeadersBar() const;
+    GameObject *GetCurrentTabChild() const;
 
-    Array<UITabHeader*> GetTabHeaders() const;
-    const Array<GameObject*>& GetTabbedChildren() const;
+    Array<UITabHeader *> GetTabHeaders() const;
+    const Array<GameObject *> &GetTabbedChildren() const;
 
 private:
     uint m_currentTabIndex = -1u;
-    Array<GameObject*> p_tabbedChildren;
-    UMap<GameObject*, UITabHeader*> m_childrenToHeader;
+    Array<GameObject *> p_tabbedChildren;
+    UMap<GameObject *, UITabHeader *> m_childrenToHeader;
 
     GameObject *p_headersBar = nullptr;
     GameObject *p_hiddenTabsContainer = nullptr;
@@ -59,16 +59,14 @@ private:
     // IEventsTabHeader
     void OnTabHeaderClicked(UITabHeader *header) override;
 
-    GameObject* GetHiddenContainer() const;
-    GameObject* GetVisibleContainer() const;
-    UITabHeader* GetTabHeaderFromChild(GameObject *tabbedChild) const;
-    GameObject* GetChildFromTabHeader(UITabHeader *tabHeader) const;
+    GameObject *GetHiddenContainer() const;
+    GameObject *GetVisibleContainer() const;
+    UITabHeader *GetTabHeaderFromChild(GameObject *tabbedChild) const;
+    GameObject *GetChildFromTabHeader(UITabHeader *tabHeader) const;
 
-	UITabContainer();
-	virtual ~UITabContainer() override;
+    UITabContainer();
+    virtual ~UITabContainer() override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UITABCONTAINER_H
-
+#endif  // UITABCONTAINER_H

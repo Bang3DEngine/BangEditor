@@ -15,23 +15,24 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UIInputFile.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Path;
-FORWARD class Resource;
-FORWARD class Texture2D;
-FORWARD class UIFocusable;
-FORWARD class UIImageRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Path;
+class Resource;
+class Texture2D;
+class UIFocusable;
+class UIImageRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class UIInputFileWithPreview : public UIInputFile,
                                public EventListener<IEventsFocus>
 {
 public:
-	UIInputFileWithPreview();
-	virtual ~UIInputFileWithPreview() override;
+    UIInputFileWithPreview();
+    virtual ~UIInputFileWithPreview() override;
 
     void SetZoomable(bool zoomable);
     void SetResource(Resource *resource);
@@ -48,10 +49,7 @@ private:
     // IFocusable
     virtual UIEventResult OnUIEvent(UIFocusable *focusable,
                                     const UIEvent &event) override;
-
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UIINPUTFILEWITHPREVIEW_H
-
+#endif  // UIINPUTFILEWITHPREVIEW_H

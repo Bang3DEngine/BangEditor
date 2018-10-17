@@ -9,8 +9,8 @@
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/GizmosManager.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 EditSceneGameObjects::EditSceneGameObjects()
 {
@@ -66,4 +66,3 @@ EditorFloor *EditSceneGameObjects::GetEditorFloor() const
 {
     return m_editorFloor;
 }
-

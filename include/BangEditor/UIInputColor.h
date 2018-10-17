@@ -16,17 +16,18 @@
 #include "Bang/Vector4.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD class UIButton;
-FORWARD class UIImageRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class UIButton;
+class UIImageRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class ColorPickerReporter;
-FORWARD class UIInputVector;
+using namespace Bang;
+namespace BangEditor
+{
+class ColorPickerReporter;
+class UIInputVector;
 
 class UIInputColor : public GameObject,
                      public EventListener<IEventsValueChanged>,
@@ -37,11 +38,11 @@ class UIInputColor : public GameObject,
 public:
     void SetColor(const Color &color);
 
-    const Color& GetColor() const;
+    const Color &GetColor() const;
     bool HasFocus() const;
 
 protected:
-	UIInputColor();
+    UIInputColor();
     virtual ~UIInputColor() override;
 
     // GameObject
@@ -58,8 +59,6 @@ private:
     UIImageRenderer *p_bgCheckerboardImage = nullptr;
     UIButton *p_searchColorButton = nullptr;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UIINPUTCOLOR_H
-
+#endif  // UIINPUTCOLOR_H

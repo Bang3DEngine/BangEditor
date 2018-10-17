@@ -7,19 +7,21 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class RigidBody;
-FORWARD   class UICheckBox;
-FORWARD   class UIComboBox;
-FORWARD   class UIInputNumber;
-FORWARD   class UIInputVector;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class RigidBody;
+class UICheckBox;
+class UIComboBox;
+class UIInputNumber;
+class UIInputVector;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class CIWRigidBody : public ComponentInspectorWidget
 {
     GAMEOBJECT_EDITOR(CIWRigidBody);
@@ -43,14 +45,13 @@ private:
     virtual ~CIWRigidBody() override;
 
     // ComponentInspectorWidget
-    virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
+    virtual void OnValueChangedCIW(
+        EventEmitter<IEventsValueChanged> *object) override;
 
     RigidBody *GetRigidBody() const;
 
     friend class ComponentInspectorWidgetFactory;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWRIGIDBODY_H
-
+#endif  // CIWRIGIDBODY_H

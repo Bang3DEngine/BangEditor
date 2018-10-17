@@ -8,11 +8,12 @@
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/ShortcutManager.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class SceneManager;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class SceneManager;
+}
 
-USING_NAMESPACE_BANG_EDITOR
+using namespace BangEditor;
 
 EditorWindow::EditorWindow() : Window()
 {
@@ -28,8 +29,7 @@ void EditorWindow::Create(uint flags)
 {
     Window::Create(flags);
     Maximize();
-    SetTitle("Bang Editor - <OpenGL " +
-             String(GetGLMajorVersion()) + "." +
+    SetTitle("Bang Editor - <OpenGL " + String(GetGLMajorVersion()) + "." +
              String(GetGLMinorVersion()) + ">");
 }
 
@@ -39,8 +39,8 @@ void EditorWindow::Update()
     Window::Update();
 
     float sleepTimeSecs =
-            (ScenePlayer::GetPlayState() != PlayState::PLAYING) ? 1.0f : 0.0f;
-    SetSleepTimeOnBackground( Time::Seconds(sleepTimeSecs) );
+        (ScenePlayer::GetPlayState() != PlayState::PLAYING) ? 1.0f : 0.0f;
+    SetSleepTimeOnBackground(Time::Seconds(sleepTimeSecs));
 }
 
 void EditorWindow::Render()
@@ -65,5 +65,5 @@ ShortcutManager *EditorWindow::GetShortcutManager() const
 
 EditorWindow *EditorWindow::GetActive()
 {
-    return DCAST<EditorWindow*>( Window::GetActive() );
+    return DCAST<EditorWindow *>(Window::GetActive());
 }

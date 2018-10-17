@@ -9,10 +9,11 @@
 #include "Bang/BangDefines.h"
 #include "Bang/EventEmitter.tcc"
 #include "Bang/EventListener.h"
-#include "Bang/IEvents.h"
 #include "Bang/IEventsDestroy.h"
 #include "Bang/IEventsDragDrop.h"
 #include "Bang/IEventsFocus.h"
+#include "Bang/IEventsGameObjectVisibilityChanged.h"
+#include "Bang/IEventsSceneManager.h"
 #include "Bang/Map.h"
 #include "Bang/Material.h"
 #include "Bang/MetaNode.h"
@@ -26,41 +27,43 @@
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneContainer.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class Camera;
-FORWARD   class GameObject;
-FORWARD   class GBuffer;
-FORWARD   class IEventsDestroy;
-FORWARD   class IEventsDragDrop;
-FORWARD   class IEventsGameObjectVisibilityChanged;
-FORWARD   class IEventsSceneManager;
-FORWARD   class Material;
-FORWARD   class MeshRenderer;
-FORWARD   class Path;
-FORWARD   class Scene;
-FORWARD   class UIFocusable;
-FORWARD   class UIImageRenderer;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Camera;
+class GameObject;
+class GBuffer;
+class IEventsDestroy;
+class IEventsDragDrop;
+class IEventsGameObjectVisibilityChanged;
+class IEventsSceneManager;
+class Material;
+class MeshRenderer;
+class Path;
+class Scene;
+class UIFocusable;
+class UIImageRenderer;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
+using namespace Bang;
+namespace BangEditor
+{
+class IEventsScenePlayer;
+class SelectionFramebuffer;
 
-FORWARD class IEventsScenePlayer;
-FORWARD class SelectionFramebuffer;
-
-class UISceneEditContainer :
-        public UISceneContainer,
-        public EventListener<IEventsGameObjectVisibilityChanged>,
-        public EventListener<IEventsScenePlayer>,
-        public EventListener<IEventsSceneManager>,
-        public EventListener<IEventsDragDrop>
+class UISceneEditContainer
+    : public UISceneContainer,
+      public EventListener<IEventsGameObjectVisibilityChanged>,
+      public EventListener<IEventsScenePlayer>,
+      public EventListener<IEventsSceneManager>,
+      public EventListener<IEventsDragDrop>
 {
     GAMEOBJECT_EDITOR(UISceneEditContainer);
 
 public:
-	UISceneEditContainer();
-	virtual ~UISceneEditContainer() override;
+    UISceneEditContainer();
+    virtual ~UISceneEditContainer() override;
 
     // GameObject
     void Update() override;
@@ -78,10 +81,10 @@ private:
     RH<Material> m_currentMaterialBeingDragged;
     GameObject *p_lastOveredGameObject = nullptr;
     MetaNode m_prevGameObjectMetaBeforeDraggingMaterial;
-    Map<MeshRenderer*, RH<Material>> m_matDragMeshRenderersToPrevMaterials;
+    Map<MeshRenderer *, RH<Material>> m_matDragMeshRenderersToPrevMaterials;
 
     void RenderCameraPreviewIfSelected();
-    Camera* GetSceneCamera(Scene *scene) override;
+    Camera *GetSceneCamera(Scene *scene) override;
     bool NeedsToRenderContainedScene(Scene *scene) override;
     void OnRenderContainedSceneBegin() override;
     void OnRenderContainedSceneFinished() override;
@@ -90,7 +93,7 @@ private:
     bool NeedsToRenderSelectionFramebuffer() const;
 
     // Material drag related
-    GameObject* GetCurrentOveredGameObject() const;
+    GameObject *GetCurrentOveredGameObject() const;
     void ApplyDraggedMaterialToOveredGameObject();
     void RestoreDraggedMaterialToPreviousGameObjectOvered();
 
@@ -104,8 +107,10 @@ private:
     virtual void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
     // IEventsDragDrop
-    virtual void OnDragStarted(EventEmitter<IEventsDragDrop> *dragDroppable) override;
-    virtual void OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDroppable) override;
+    virtual void OnDragStarted(
+        EventEmitter<IEventsDragDrop> *dragDroppable) override;
+    virtual void OnDragUpdate(
+        EventEmitter<IEventsDragDrop> *dragDroppable) override;
     virtual void OnDrop(EventEmitter<IEventsDragDrop> *dragDroppable) override;
 
     // IEventsScenePlayer
@@ -118,8 +123,6 @@ private:
 
     friend class UISceneToolbar;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UISCENEEDITCONTAINER_H
-
+#endif  // UISCENEEDITCONTAINER_H

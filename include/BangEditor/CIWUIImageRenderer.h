@@ -7,17 +7,19 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class UIImageRenderer;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class UIImageRenderer;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UIInputColor;
-FORWARD class UIInputTexture;
+using namespace Bang;
+namespace BangEditor
+{
+class UIInputColor;
+class UIInputTexture;
 
 class CIWUIImageRenderer : public ComponentInspectorWidget
 {
@@ -38,11 +40,9 @@ private:
     UIInputColor *p_tintInput = nullptr;
     UIInputTexture *p_imageInput = nullptr;
 
-	CIWUIImageRenderer();
-	virtual ~CIWUIImageRenderer() override;
+    CIWUIImageRenderer();
+    virtual ~CIWUIImageRenderer() override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWUIIMAGERENDERER_H
-
+#endif  // CIWUIIMAGERENDERER_H

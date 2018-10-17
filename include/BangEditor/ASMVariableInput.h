@@ -17,18 +17,18 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD class UICheckBox;
-FORWARD class UIComboBox;
-FORWARD class UIInputNumber;
-FORWARD class UIInputText;
+namespace Bang
+{
+class IEventsValueChanged;
+class UICheckBox;
+class UIComboBox;
+class UIInputNumber;
+class UIInputText;
+}
 
-FORWARD NAMESPACE_BANG_END
-
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class ASMVariableInput : public GameObject,
                          public EventEmitter<IEventsValueChanged>,
                          public EventListener<IEventsValueChanged>
@@ -36,17 +36,17 @@ class ASMVariableInput : public GameObject,
     GAMEOBJECT_EDITOR(ASMVariableInput);
 
 public:
-	ASMVariableInput();
-	virtual ~ASMVariableInput() override;
+    ASMVariableInput();
+    virtual ~ASMVariableInput() override;
 
 private:
-    UIInputText   *p_varNameInput = nullptr;
-    UIComboBox    *p_varTypeInput = nullptr;
-    UIInputNumber *p_floatInput   = nullptr;
-    UICheckBox    *p_boolInput    = nullptr;
+    UIInputText *p_varNameInput = nullptr;
+    UIComboBox *p_varTypeInput = nullptr;
+    UIInputNumber *p_floatInput = nullptr;
+    UICheckBox *p_boolInput = nullptr;
 
     AnimatorStateMachineVariable::Type m_varType =
-                    Undef<AnimatorStateMachineVariable::Type>();
+        Undef<AnimatorStateMachineVariable::Type>();
 
     void SetVarType(AnimatorStateMachineVariable::Type type);
 
@@ -59,8 +59,6 @@ private:
     virtual void ImportMeta(const MetaNode &metaNode) override;
     virtual void ExportMeta(MetaNode *metaNode) const override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // ASMVARIABLEINPUT_H
-
+#endif  // ASMVARIABLEINPUT_H

@@ -2,8 +2,8 @@
 
 #include "BangEditor/Explorer.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 UndoRedoExplorerSelect::UndoRedoExplorerSelect(const Path &previousSelectedPath,
                                                const Path &newSelectedPath)
@@ -36,4 +36,3 @@ void UndoRedoExplorerSelect::RestorePath(const Path &path)
     Explorer *explorer = Explorer::GetInstance();
     explorer->SelectPath(path, false);
 }
-

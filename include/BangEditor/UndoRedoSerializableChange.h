@@ -16,15 +16,17 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UndoRedoAction.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsDestroy;
-FORWARD   class Serializable;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDestroy;
+class Serializable;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class UndoRedoSerializableChange : public UndoRedoAction,
                                    public EventListener<IEventsDestroy>
 {
@@ -52,8 +54,6 @@ private:
 
     void SelectSerializableOrShowInInspectorIfPossible() const;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UNDOREDOSERIALIZABLECHANGE_H
-
+#endif  // UNDOREDOSERIALIZABLECHANGE_H

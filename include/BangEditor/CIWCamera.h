@@ -7,21 +7,23 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD  class Camera;
-FORWARD  class IEventsValueChanged;
-FORWARD  class UICheckBox;
-FORWARD  class UIComboBox;
-FORWARD  class UIInputNumber;
-FORWARD  class UISlider;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Camera;
+class IEventsValueChanged;
+class UICheckBox;
+class UIComboBox;
+class UIInputNumber;
+class UISlider;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UIInputColor;
-FORWARD class UIInputFileWithPreview;
+using namespace Bang;
+namespace BangEditor
+{
+class UIInputColor;
+class UIInputFileWithPreview;
 
 class CIWCamera : public ComponentInspectorWidget
 {
@@ -41,21 +43,20 @@ protected:
     void LimitValues();
 
     // ComponentInspectorWidget
-    virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
+    virtual void OnValueChangedCIW(
+        EventEmitter<IEventsValueChanged> *object) override;
 
 private:
-    UIInputNumber          *p_zNearInput          = nullptr;
-    UIInputNumber          *p_zFarInput           = nullptr;
-    UIInputNumber          *p_orthoHeightInput    = nullptr;
-    UISlider               *p_fovInput            = nullptr;
-    UIComboBox             *p_projectionModeInput = nullptr;
-    UIComboBox             *p_clearModeInput      = nullptr;
-    UICheckBox             *p_isActiveCamera       = nullptr;
-    UIInputColor           *p_clearColorInput     = nullptr;
+    UIInputNumber *p_zNearInput = nullptr;
+    UIInputNumber *p_zFarInput = nullptr;
+    UIInputNumber *p_orthoHeightInput = nullptr;
+    UISlider *p_fovInput = nullptr;
+    UIComboBox *p_projectionModeInput = nullptr;
+    UIComboBox *p_clearModeInput = nullptr;
+    UICheckBox *p_isActiveCamera = nullptr;
+    UIInputColor *p_clearColorInput = nullptr;
     UIInputFileWithPreview *p_textureCubeMapInput = nullptr;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWCAMERA_H
-
+#endif  // CIWCAMERA_H

@@ -8,9 +8,9 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class GameObjectSelectionGizmo : public SelectionGizmo
 {
     GAMEOBJECT_EDITOR(GameObjectSelectionGizmo);
@@ -22,8 +22,6 @@ public:
     // GameObject
     void Render(RenderPass rp, bool renderChildren) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // GAMEOBJECTSELECTIONGIZMO_H
-
+#endif  // GAMEOBJECTSELECTIONGIZMO_H

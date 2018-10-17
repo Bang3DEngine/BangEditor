@@ -7,16 +7,17 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Color;
-FORWARD class LineRenderer;
-FORWARD class MeshRenderer;
-FORWARD class Object;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Color;
+class LineRenderer;
+class MeshRenderer;
+class Object;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class TransformGizmoAxis : public SelectionGizmo
 {
 public:
@@ -46,8 +47,6 @@ private:
     // IEventsObject
     void OnDisabled(Object *object) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // TRANSFORMGIZMOAXIS_H
-
+#endif  // TRANSFORMGIZMOAXIS_H

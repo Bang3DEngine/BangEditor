@@ -8,23 +8,24 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class AudioSource;
-FORWARD class BoxCollider;
-FORWARD class Camera;
-FORWARD class CapsuleCollider;
-FORWARD class Component;
-FORWARD class DirectionalLight;
-FORWARD class ParticleSystem;
-FORWARD class PointLight;
-FORWARD class ReflectionProbe;
-FORWARD class Rope;
-FORWARD class SphereCollider;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class AudioSource;
+class BoxCollider;
+class Camera;
+class CapsuleCollider;
+class Component;
+class DirectionalLight;
+class ParticleSystem;
+class PointLight;
+class ReflectionProbe;
+class Rope;
+class SphereCollider;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class ComponentsGizmos : public GameObject
 {
     GAMEOBJECT_EDITOR(ComponentsGizmos);
@@ -37,7 +38,7 @@ public:
     void Render(RenderPass rp, bool renderChildren) override;
 
 private:
-    float GetCameraDistScale(const Vector3& position) const;
+    float GetCameraDistScale(const Vector3 &position) const;
 
     void RenderComponentGizmosWhenNotSelected(GameObject *go);
     void RenderComponentGizmos(Component *comp, bool isBeingSelected);
@@ -56,8 +57,6 @@ private:
     void RenderRopeGizmo(Rope *rope, bool isBeingSelected);
     void RenderAudioSourceGizmo(AudioSource *audioSource, bool isBeingSelected);
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // COMPONENTSGIZMOS_H
-
+#endif  // COMPONENTSGIZMOS_H

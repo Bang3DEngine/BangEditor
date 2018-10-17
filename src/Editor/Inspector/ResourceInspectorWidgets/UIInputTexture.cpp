@@ -5,16 +5,17 @@
 #include "Bang/Resources.tcc"
 #include "Bang/Texture2D.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Path;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Path;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 UIInputTexture::UIInputTexture()
 {
-    SetExtensions( Extensions::GetImageExtensions() );
+    SetExtensions(Extensions::GetImageExtensions());
 }
 
 UIInputTexture::~UIInputTexture()

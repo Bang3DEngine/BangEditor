@@ -10,18 +10,20 @@
 #include "BangEditor/CIWBehaviour.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class BehaviourContainer;
-FORWARD   class BPReflectedStruct;
-FORWARD   class IEventsValueChanged;
-FORWARD   class UIInputFileWithPreview;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class BehaviourContainer;
+class BPReflectedStruct;
+class IEventsValueChanged;
+class UIInputFileWithPreview;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UIInputFileWithPreview;
+using namespace Bang;
+namespace BangEditor
+{
+class UIInputFileWithPreview;
 
 class CIWBehaviourContainer : public ComponentInspectorWidget
 {
@@ -51,8 +53,6 @@ private:
 
     friend class ComponentInspectorWidgetFactory;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWBEHAVIOURCONTAINER_H
-
+#endif  // CIWBEHAVIOURCONTAINER_H

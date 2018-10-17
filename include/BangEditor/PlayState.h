@@ -3,8 +3,8 @@
 
 #include "BangEditor/BangEditor.h"
 
-NAMESPACE_BANG_EDITOR_BEGIN
-
+namespace BangEditor
+{
 enum class PlayState
 {
     JUST_BEFORE_PLAYING,
@@ -12,7 +12,6 @@ enum class PlayState
     PAUSED,
     EDITING
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // PLAYSTATE_H
+#endif  // PLAYSTATE_H

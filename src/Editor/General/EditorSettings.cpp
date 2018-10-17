@@ -8,23 +8,23 @@
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorPaths.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 void EditorSettings::AddRecentProjectFilepathOpen(
-                                const Path &recentProjectFilePathOpen)
+    const Path &recentProjectFilePathOpen)
 {
     EditorSettings *es = EditorSettings::GetInstance();
     ASSERT(es);
 
-    if (!es->m_recentProjectFilesOpen.Contains(recentProjectFilePathOpen))
+    if(!es->m_recentProjectFilesOpen.Contains(recentProjectFilePathOpen))
     {
         es->m_recentProjectFilesOpen.PushBack(recentProjectFilePathOpen);
         es->ExportToFile();
     }
 }
 
-const Array<Path>& EditorSettings::GetRecentProjectFilepathsOpen()
+const Array<Path> &EditorSettings::GetRecentProjectFilepathsOpen()
 {
     EditorSettings *es = EditorSettings::GetInstance();
     ASSERT(es);
@@ -60,14 +60,16 @@ void EditorSettings::ImportFromFile()
 
     MetaNode settingsMeta;
     settingsMeta.Import(editorSettingsPath);
-    m_recentProjectFilesOpen = settingsMeta.GetArray<Path>("RecentProjectFilesOpen");
+    m_recentProjectFilesOpen =
+        settingsMeta.GetArray<Path>("RecentProjectFilesOpen");
     ExportToFile();
 }
 
 Path EditorSettings::GetEditorSettingsPath()
 {
-    return EditorPaths::GetEditorAssetsDir().Append("EditorSettings")
-                                              .AppendExtension("txt");
+    return EditorPaths::GetEditorAssetsDir()
+        .Append("EditorSettings")
+        .AppendExtension("txt");
 }
 
 EditorSettings *EditorSettings::GetInstance()
@@ -75,4 +77,3 @@ EditorSettings *EditorSettings::GetInstance()
     Editor *ed = Editor::GetInstance();
     return ed ? ed->GetEditorSettings() : nullptr;
 }
-

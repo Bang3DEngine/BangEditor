@@ -26,12 +26,13 @@
 #include "BangEditor/UISceneToolbar.h"
 #include "BangEditor/UISceneToolbarDown.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsDestroy;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDestroy;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 UISceneContainer::UISceneContainer()
 {
@@ -41,17 +42,19 @@ UISceneContainer::UISceneContainer()
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinSize(Vector2i(400));
-    le->SetFlexibleSize( Vector2::One );
+    le->SetFlexibleSize(Vector2::One);
 
     UIVerticalLayout *mainVL = AddComponent<UIVerticalLayout>();
     mainVL->SetChildrenHorizontalStretch(Stretch::FULL);
 
     p_noCameraOverlay = GameObjectFactory::CreateUIGameObject();
 
-    UIImageRenderer *camOverlayImg = p_noCameraOverlay->AddComponent<UIImageRenderer>();
+    UIImageRenderer *camOverlayImg =
+        p_noCameraOverlay->AddComponent<UIImageRenderer>();
     camOverlayImg->SetTint(Color::Black);
 
-    UITextRenderer *noCameraText = p_noCameraOverlay->AddComponent<UITextRenderer>();
+    UITextRenderer *noCameraText =
+        p_noCameraOverlay->AddComponent<UITextRenderer>();
     noCameraText->SetContent("No scene camera. Please assign one.");
     noCameraText->SetVerticalAlign(VerticalAlignment::CENTER);
     noCameraText->SetHorizontalAlign(HorizontalAlignment::CENTER);
@@ -75,9 +78,11 @@ UISceneContainer::UISceneContainer()
     p_sceneToolbarDown = GameObject::Create<UISceneToolbarDown>();
 
     GetSceneToolbar()->SetParent(vlGo);
-    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::PREFERRED, 5)->SetParent(vlGo);
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::PREFERRED, 5)
+        ->SetParent(vlGo);
     p_sceneImage->SetParent(vlGo);
-    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::PREFERRED, 5)->SetParent(vlGo);
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::PREFERRED, 5)
+        ->SetParent(vlGo);
     GetSceneToolbarDown()->SetParent(vlGo);
 
     p_focusable = AddComponent<UIFocusable>();
@@ -86,9 +91,10 @@ UISceneContainer::UISceneContainer()
 
     p_border = GameObjectFactory::AddOuterShadow(GetSceneImage(), Vector2i(2));
 
-    GetSceneToolbar()->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-    p_sceneImage->GetRectTransform()->
-                  EventEmitter<IEventsTransform>::RegisterListener(this);
+    GetSceneToolbar()->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
+    p_sceneImage->GetRectTransform()
+        ->EventEmitter<IEventsTransform>::RegisterListener(this);
 
     vlGo->SetParent(this);
     p_noCameraOverlay->SetParent(this);
@@ -100,20 +106,21 @@ UISceneContainer::~UISceneContainer()
 
 void UISceneContainer::BeforeChildrenRender(RenderPass rp)
 {
-    if (rp == RenderPass::CANVAS)
+    if(rp == RenderPass::CANVAS)
     {
         RenderContainedSceneIfNeeded();
 
         bool showSceneImg = false;
-        if (Camera *cam = GetSceneCamera(GetContainedScene()))
+        if(Camera *cam = GetSceneCamera(GetContainedScene()))
         {
-            Vector2i sceneImgSize( p_sceneImage->GetRectTransform()->
-                                   GetViewportAARect().GetSize() );
+            Vector2i sceneImgSize(p_sceneImage->GetRectTransform()
+                                      ->GetViewportAARect()
+                                      .GetSize());
             bool renderSizeMatches = (sceneImgSize == cam->GetRenderSize());
             showSceneImg = renderSizeMatches;
         }
         p_sceneImage->GetSceneImageRenderer()->SetTint(
-                    showSceneImg ? Color::Blue : Color::Black);
+            showSceneImg ? Color::Blue : Color::Black);
     }
 
     GameObject::BeforeChildrenRender(rp);
@@ -121,12 +128,14 @@ void UISceneContainer::BeforeChildrenRender(RenderPass rp)
 
 void UISceneContainer::RenderContainedSceneIfNeeded()
 {
-    if ( NeedsToRenderContainedScene( GetContainedScene() ) )
+    if(NeedsToRenderContainedScene(GetContainedScene()))
     {
-        if (Camera *cam = GetSceneCamera(GetContainedScene()))
+        if(Camera *cam = GetSceneCamera(GetContainedScene()))
         {
-            cam->SetRenderSize( Vector2i(GetSceneImage()->GetRectTransform()->
-                                         GetViewportAARect().GetSize()) );
+            cam->SetRenderSize(Vector2i(GetSceneImage()
+                                            ->GetRectTransform()
+                                            ->GetViewportAARect()
+                                            .GetSize()));
             OnRenderContainedSceneBegin();
             GEngine::GetInstance()->Render(GetContainedScene(), cam);
             OnRenderContainedSceneFinished();
@@ -142,16 +151,18 @@ void UISceneContainer::RenderContainedSceneIfNeeded()
 
 void UISceneContainer::SetScene(Scene *scene)
 {
-    if (GetContainedScene())
+    if(GetContainedScene())
     {
-        GetContainedScene()->EventEmitter<IEventsDestroy>::UnRegisterListener(this);
+        GetContainedScene()->EventEmitter<IEventsDestroy>::UnRegisterListener(
+            this);
     }
 
     p_containedScene = scene;
-    if (GetContainedScene())
+    if(GetContainedScene())
     {
-        GetContainedScene()->EventEmitter<IEventsDestroy>::RegisterListener(this);
-        p_sceneImage->SetSceneImageCamera( GetSceneCamera(GetContainedScene()) );
+        GetContainedScene()->EventEmitter<IEventsDestroy>::RegisterListener(
+            this);
+        p_sceneImage->SetSceneImageCamera(GetSceneCamera(GetContainedScene()));
     }
 }
 
@@ -188,18 +199,19 @@ UISceneToolbarDown *UISceneContainer::GetSceneToolbarDown() const
 void UISceneContainer::OnTransformChanged()
 {
     Scene *containerScene = GetContainedScene();
-    if (containerScene)
+    if(containerScene)
     {
         containerScene->InvalidateCanvas();
     }
 }
 
-void UISceneContainer::OnValueChanged(EventEmitter<IEventsValueChanged>*)
+void UISceneContainer::OnValueChanged(EventEmitter<IEventsValueChanged> *)
 {
-    p_sceneImage->SetShowDebugStats( GetSceneToolbar()->IsShowDebugStatsChecked() );
+    p_sceneImage->SetShowDebugStats(
+        GetSceneToolbar()->IsShowDebugStatsChecked());
 
     UISceneImage::RenderMode renderMode = SCAST<UISceneImage::RenderMode>(
-                  p_sceneToolbar->GetRenderModeComboBox()->GetSelectedValue());
+        p_sceneToolbar->GetRenderModeComboBox()->GetSelectedValue());
     p_sceneImage->SetRenderMode(renderMode);
 }
 
@@ -210,22 +222,21 @@ void UISceneContainer::OnDestroyed(EventEmitter<IEventsDestroy> *object)
     SetScene(nullptr);
 }
 
-UIEventResult UISceneContainer::OnUIEvent(UIFocusable*, const UIEvent &event)
+UIEventResult UISceneContainer::OnUIEvent(UIFocusable *, const UIEvent &event)
 {
-    switch (event.type)
+    switch(event.type)
     {
         case UIEvent::Type::FOCUS_TAKEN:
             GameObjectFactory::MakeBorderFocused(p_border);
             return UIEventResult::INTERCEPT;
-        break;
+            break;
 
         case UIEvent::Type::FOCUS_LOST:
             GameObjectFactory::MakeBorderNotFocused(p_border);
             return UIEventResult::INTERCEPT;
-        break;
+            break;
 
-        default:
-        break;
+        default: break;
     }
 
     return UIEventResult::IGNORE;

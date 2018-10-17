@@ -18,17 +18,18 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-NAMESPACE_BANG_BEGIN
-FORWARD class IEventsDragDrop;
-FORWARD class IEventsValueChanged;
-FORWARD class UIButton;
-FORWARD class UIInputNumber;
-FORWARD class UIInputText;
-NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDragDrop;
+class IEventsValueChanged;
+class UIButton;
+class UIInputNumber;
+class UIInputText;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class UIInputFile : public GameObject,
                     public EventEmitter<IEventsValueChanged>,
                     public EventListener<IEventsDragDrop>
@@ -41,27 +42,27 @@ public:
 
     Path GetPath() const;
     UIInputText *GetInputText() const;
-    const Array<String>& GetExtensions() const;
+    const Array<String> &GetExtensions() const;
 
 protected:
-	UIInputFile();
+    UIInputFile();
     virtual ~UIInputFile() override;
 
     // IEventsDragDrop
-    virtual void OnDragStarted(EventEmitter<IEventsDragDrop> *dragDroppable) override;
-    virtual void OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDroppable) override;
+    virtual void OnDragStarted(
+        EventEmitter<IEventsDragDrop> *dragDroppable) override;
+    virtual void OnDragUpdate(
+        EventEmitter<IEventsDragDrop> *dragDroppable) override;
     virtual void OnDrop(EventEmitter<IEventsDragDrop> *dragDroppable) override;
 
 private:
-    Path m_path = Path("undef"); // Set to empty in constructor
+    Path m_path = Path("undef");  // Set to empty in constructor
     Array<String> m_extensions;
 
     UIButton *p_searchButton = nullptr;
     UIInputText *p_pathInputText = nullptr;
     UIButton *p_openFileInInspectorButton = nullptr;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UIINPUTFILE_H
-
+#endif  // UIINPUTFILE_H

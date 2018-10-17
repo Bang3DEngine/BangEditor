@@ -12,8 +12,8 @@
 #include "Bang/Time.h"
 #include "BangEditor/SceneOpenerSaver.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 Project::Project()
 {
@@ -44,7 +44,7 @@ String Project::GetProjectName() const
     return GetProjectFilepath().GetName();
 }
 
-const GUID& Project::GetProjectRandomId() const
+const GUID &Project::GetProjectRandomId() const
 {
     return m_id;
 }
@@ -57,7 +57,7 @@ void Project::SetProjectFilepath(const Path &projectFilepath)
 bool Project::OpenFirstFoundScene() const
 {
     Path firstFoundScenePath = GetFirstFoundScenePath();
-    if (firstFoundScenePath.IsFile())
+    if(firstFoundScenePath.IsFile())
     {
         SceneOpenerSaver::GetInstance()->OpenSceneInEditor(firstFoundScenePath);
     }
@@ -67,37 +67,35 @@ bool Project::OpenFirstFoundScene() const
 
 Path Project::GetFirstFoundScenePath() const
 {
-    Array<Path> sceneFilepaths = GetProjectAssetsFilepath()
-                                .GetFiles(FindFlag::RECURSIVE,
-                                           {Extensions::GetSceneExtension()});
+    Array<Path> sceneFilepaths = GetProjectAssetsFilepath().GetFiles(
+        FindFlag::RECURSIVE, {Extensions::GetSceneExtension()});
     Paths::SortPathsByName(&sceneFilepaths);
     return !sceneFilepaths.IsEmpty() ? sceneFilepaths.Back() : Path::Empty;
 }
 
-
 void Project::ImportMeta(const MetaNode &metaNode)
 {
-    if (metaNode.Contains("RandomID"))
+    if(metaNode.Contains("RandomID"))
     {
         m_id = metaNode.Get<GUID>("RandomID");
     }
 
-    if (metaNode.Contains("Physics_StepSleepTime"))
+    if(metaNode.Contains("Physics_StepSleepTime"))
     {
         Physics::GetInstance()->SetStepSleepTime(
-                Time::Seconds(metaNode.Get<float>("Physics_StepSleepTime")) );
+            Time::Seconds(metaNode.Get<float>("Physics_StepSleepTime")));
     }
 
-    if (metaNode.Contains("Physics_MaxSubSteps"))
+    if(metaNode.Contains("Physics_MaxSubSteps"))
     {
         Physics::GetInstance()->SetMaxSubSteps(
-                    metaNode.Get<int>("Physics_MaxSubSteps"));
+            metaNode.Get<int>("Physics_MaxSubSteps"));
     }
 
-    if (metaNode.Contains("Physics_Gravity"))
+    if(metaNode.Contains("Physics_Gravity"))
     {
         Physics::GetInstance()->SetGravity(
-                    metaNode.Get<Vector3>("Physics_Gravity"));
+            metaNode.Get<Vector3>("Physics_Gravity"));
     }
 }
 
@@ -106,9 +104,8 @@ void Project::ExportMeta(MetaNode *metaNode) const
     metaNode->SetName("Project");
     metaNode->Set("RandomID", GetProjectRandomId());
     metaNode->Set("Physics_StepSleepTime",
-                 Physics::GetInstance()->GetStepSleepTime().GetSeconds());
+                  Physics::GetInstance()->GetStepSleepTime().GetSeconds());
     metaNode->Set("Physics_MaxSubSteps",
-                 Physics::GetInstance()->GetMaxSubSteps());
-    metaNode->Set("Physics_Gravity",
-                 Physics::GetInstance()->GetGravity());
+                  Physics::GetInstance()->GetMaxSubSteps());
+    metaNode->Set("Physics_Gravity", Physics::GetInstance()->GetGravity());
 }

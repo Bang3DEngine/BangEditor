@@ -18,17 +18,18 @@
 #include "BangEditor/Shortcut.h"
 #include "BangEditor/ShortcutManager.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 ScenePlayer::ScenePlayer()
 {
-    ShortcutManager::RegisterShortcut(Shortcut(Key::P, KeyModifier::LCTRL, "Play"),
-                                      &ScenePlayer::OnShortcutPressed);
-    ShortcutManager::RegisterShortcut(Shortcut(Key::P, (KeyModifier::LSHIFT |
-                                                        KeyModifier::LCTRL),
-                                               "Pause", true),
-                                      &ScenePlayer::OnShortcutPressed);
+    ShortcutManager::RegisterShortcut(
+        Shortcut(Key::P, KeyModifier::LCTRL, "Play"),
+        &ScenePlayer::OnShortcutPressed);
+    ShortcutManager::RegisterShortcut(
+        Shortcut(Key::P, (KeyModifier::LSHIFT | KeyModifier::LCTRL), "Pause",
+                 true),
+        &ScenePlayer::OnShortcutPressed);
 }
 
 ScenePlayer::~ScenePlayer()
@@ -37,7 +38,7 @@ ScenePlayer::~ScenePlayer()
 
 void ScenePlayer::Update()
 {
-    if (m_steppingFrame)
+    if(m_steppingFrame)
     {
         ScenePlayer::PauseScene();
         m_steppingFrame = false;
@@ -46,9 +47,9 @@ void ScenePlayer::Update()
 
 void ScenePlayer::OnShortcutPressed(const Shortcut &shortcut)
 {
-    if (shortcut.GetName() == "Play")
+    if(shortcut.GetName() == "Play")
     {
-        if (!Editor::IsEditingScene())
+        if(!Editor::IsEditingScene())
         {
             StopScene();
         }
@@ -57,13 +58,13 @@ void ScenePlayer::OnShortcutPressed(const Shortcut &shortcut)
             PlayScene();
         }
     }
-    else if (shortcut.GetName() == "Pause")
+    else if(shortcut.GetName() == "Pause")
     {
-        if (GetPlayState() == PlayState::PLAYING)
+        if(GetPlayState() == PlayState::PLAYING)
         {
             PauseScene();
         }
-        else if (GetPlayState() == PlayState::PAUSED)
+        else if(GetPlayState() == PlayState::PAUSED)
         {
             PlayScene();
         }
@@ -72,7 +73,7 @@ void ScenePlayer::OnShortcutPressed(const Shortcut &shortcut)
 
 void ScenePlayer::SetPlayState(PlayState playState)
 {
-    if (playState != ScenePlayer::GetPlayState())
+    if(playState != ScenePlayer::GetPlayState())
     {
         PlayState previousPlayState = ScenePlayer::GetPlayState();
 
@@ -80,11 +81,10 @@ void ScenePlayer::SetPlayState(PlayState playState)
         sp->m_currentPlayState = playState;
 
         sp->EventEmitter<IEventsScenePlayer>::PropagateToListeners(
-                    &IEventsScenePlayer::OnPlayStateChanged,
-                    previousPlayState,
-                    sp->m_currentPlayState);
+            &IEventsScenePlayer::OnPlayStateChanged, previousPlayState,
+            sp->m_currentPlayState);
 
-        AudioManager::SetPlayOnStartBlocked( Editor::IsEditingScene() );
+        AudioManager::SetPlayOnStartBlocked(Editor::IsEditingScene());
     }
 }
 
@@ -96,20 +96,21 @@ PlayState ScenePlayer::GetPlayState()
 
 void ScenePlayer::PlayScene()
 {
-    if (ScenePlayer::GetPlayState() != PlayState::PLAYING)
+    if(ScenePlayer::GetPlayState() != PlayState::PLAYING)
     {
         ScenePlayer *sp = ScenePlayer::GetInstance();
-        if (ScenePlayer::GetPlayState() == PlayState::EDITING)
+        if(ScenePlayer::GetPlayState() == PlayState::EDITING)
         {
             sp->p_editOpenScene = EditorSceneManager::GetOpenScene();
 
             // Play scene!
-            EditorBehaviourManager *edBehaviourMgr = EditorBehaviourManager::GetActive();
+            EditorBehaviourManager *edBehaviourMgr =
+                EditorBehaviourManager::GetActive();
             bool behavioursReady = edBehaviourMgr->PrepareBehavioursLibrary();
-            if (behavioursReady)
+            if(behavioursReady)
             {
                 Scene *openScene = EditorSceneManager::GetOpenScene();
-                if (openScene)
+                if(openScene)
                 {
                     ScenePlayer::SetPlayState(PlayState::JUST_BEFORE_PLAYING);
 
@@ -121,14 +122,16 @@ void ScenePlayer::PlayScene()
                     SceneManager::LoadSceneInstantly(nullptr, false);
 
                     // Now set the open scene in the editor
-                    SceneManager::LoadSceneInstantly(sp->p_playOpenScene, false);
+                    SceneManager::LoadSceneInstantly(sp->p_playOpenScene,
+                                                     false);
 
-                    Physics::GetInstance()->SetIgnoreNextFrames(sp->p_playOpenScene, 5);
+                    Physics::GetInstance()->SetIgnoreNextFrames(
+                        sp->p_playOpenScene, 5);
                     ScenePlayer::SetPlayState(PlayState::PLAYING);
                 }
             }
         }
-        else if (ScenePlayer::GetPlayState() == PlayState::PAUSED)
+        else if(ScenePlayer::GetPlayState() == PlayState::PAUSED)
         {
             AudioManager::ResumeAllSounds();
             ScenePlayer::SetPlayState(PlayState::PLAYING);
@@ -138,7 +141,7 @@ void ScenePlayer::PlayScene()
 
 void ScenePlayer::PauseScene()
 {
-    if (ScenePlayer::GetPlayState() != PlayState::PAUSED)
+    if(ScenePlayer::GetPlayState() != PlayState::PAUSED)
     {
         ScenePlayer::SetPlayState(PlayState::PAUSED);
         AudioManager::PauseAllSounds();
@@ -154,11 +157,11 @@ void ScenePlayer::StepFrame()
 
 void ScenePlayer::StopScene()
 {
-    if (ScenePlayer::GetPlayState() != PlayState::EDITING)
+    if(ScenePlayer::GetPlayState() != PlayState::EDITING)
     {
         ScenePlayer *sp = ScenePlayer::GetInstance();
         SceneManager::LoadSceneInstantly(sp->p_editOpenScene, false);
-        if (sp->p_playOpenScene)
+        if(sp->p_playOpenScene)
         {
             GameObject::Destroy(sp->p_playOpenScene);
         }

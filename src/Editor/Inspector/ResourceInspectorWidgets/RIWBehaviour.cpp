@@ -21,12 +21,13 @@
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/QtProjectManager.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Texture2D;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Texture2D;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 void RIWBehaviour::Init()
 {
@@ -44,16 +45,19 @@ void RIWBehaviour::Init()
     p_codeText->SetHorizontalAlign(HorizontalAlignment::LEFT);
 
     GameObject *codeContainer = GameObjectFactory::CreateUIGameObject();
-    UIHorizontalLayout *codeContHL = codeContainer->AddComponent<UIHorizontalLayout>();
+    UIHorizontalLayout *codeContHL =
+        codeContainer->AddComponent<UIHorizontalLayout>();
     codeContHL->SetChildrenHorizontalStretch(Stretch::FULL);
     codeContHL->SetChildrenVerticalStretch(Stretch::FULL);
     codeContHL->SetPaddings(10);
     codeTextGo->SetParent(codeContainer);
 
-    p_codeText->GetGameObject()->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
-    codeContainer->GetRectTransform()->SetPivotPosition(Vector2(-1,1));
+    p_codeText->GetGameObject()->GetRectTransform()->SetPivotPosition(
+        Vector2(-1, 1));
+    codeContainer->GetRectTransform()->SetPivotPosition(Vector2(-1, 1));
 
-    UIContentSizeFitter *csf = codeContainer->AddComponent<UIContentSizeFitter>();
+    UIContentSizeFitter *csf =
+        codeContainer->AddComponent<UIContentSizeFitter>();
     csf->SetHorizontalSizeType(LayoutSizeType::PREFERRED);
     csf->SetVerticalSizeType(LayoutSizeType::PREFERRED);
 
@@ -61,13 +65,11 @@ void RIWBehaviour::Init()
     codeScrollPanel->GetScrollArea()->SetContainedGameObject(codeContainer);
     GameObject *scrollPanelGo = codeScrollPanel->GetGameObject();
     UILayoutElement *spLE = scrollPanelGo->AddComponent<UILayoutElement>();
-    spLE->SetFlexibleSize( Vector2::One );
+    spLE->SetFlexibleSize(Vector2::One);
 
     p_openButton = GameObjectFactory::CreateUIButton("Open in editor");
-    p_openButton->AddClickedCallback([this]()
-    {
-        QtProjectManager::OpenBehaviourInQtCreator(GetPath());
-    });
+    p_openButton->AddClickedCallback(
+        [this]() { QtProjectManager::OpenBehaviourInQtCreator(GetPath()); });
 
     AddLabel("Contents");
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 5);
@@ -95,12 +97,11 @@ void RIWBehaviour::UpdateFromFileWhenChanged()
 Texture2D *RIWBehaviour::GetIconTexture() const
 {
     return EditorTextureFactory::GetIconForExtension(
-                Extensions::GetBehaviourExtensions().Front() );
+        Extensions::GetBehaviourExtensions().Front());
 }
 
 Color RIWBehaviour::GetIconTint() const
 {
     return EditorTextureFactory::GetExtensionIconTint(
-                 Extensions::GetBehaviourExtensions().Front() );
+        Extensions::GetBehaviourExtensions().Front());
 }
-

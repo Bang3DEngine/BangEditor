@@ -16,26 +16,35 @@
 #include "BangEditor/ShortcutManager.h"
 #include "BangEditor/UndoRedoAction.h"
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UndoRedoAction;
+using namespace Bang;
+namespace BangEditor
+{
+class UndoRedoAction;
 
 class IEventsUndoRedo
 {
     IEVENTS_NS(IEventsUndoRedo);
 
 public:
-    virtual void OnActionPushed(UndoRedoAction *action) { BANG_UNUSED(action); }
-    virtual void OnUndo(UndoRedoAction *action) { BANG_UNUSED(action); }
-    virtual void OnRedo(UndoRedoAction *action) { BANG_UNUSED(action); }
+    virtual void OnActionPushed(UndoRedoAction *action)
+    {
+        BANG_UNUSED(action);
+    }
+    virtual void OnUndo(UndoRedoAction *action)
+    {
+        BANG_UNUSED(action);
+    }
+    virtual void OnRedo(UndoRedoAction *action)
+    {
+        BANG_UNUSED(action);
+    }
 };
 
 class UndoRedoManager : public EventEmitter<IEventsUndoRedo>
 {
 public:
-	UndoRedoManager();
-	virtual ~UndoRedoManager() override;
+    UndoRedoManager();
+    virtual ~UndoRedoManager() override;
 
     static void Undo();
     static void Redo();
@@ -44,21 +53,19 @@ public:
     static bool CanRedo();
     static void PushAction(UndoRedoAction *action);
     static void PushActionsInSameStep(
-                        const Array<UndoRedoAction*> &actionsInSameStep);
+        const Array<UndoRedoAction *> &actionsInSameStep);
 
-    static UndoRedoManager* GetInstance();
+    static UndoRedoManager *GetInstance();
 
 private:
     static constexpr int UndoListSize = 10000;
 
-    List< Array<UndoRedoAction*> > m_undoActions;
-    List< Array<UndoRedoAction*> > m_redoActions;
+    List<Array<UndoRedoAction *>> m_undoActions;
+    List<Array<UndoRedoAction *>> m_redoActions;
 
     // Only for debugging
     bool m_undoingOrRedoing = false;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UNDOREDOMANAGER_H
-
+#endif  // UNDOREDOMANAGER_H

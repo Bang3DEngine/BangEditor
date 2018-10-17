@@ -36,16 +36,17 @@
 #include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/UISceneEditContainer.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Path;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Path;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 float EditorCamera::InitialFOVDegrees = 60.0f;
-float EditorCamera::InitialZNear      = 0.5f;
-float EditorCamera::InitialZFar       = 9999.9f;
+float EditorCamera::InitialZNear = 0.5f;
+float EditorCamera::InitialZFar = 9999.9f;
 
 EditorCamera::EditorCamera()
 {
@@ -69,12 +70,12 @@ EditorCamera::EditorCamera()
     p_cam->SetZFar(EditorCamera::InitialZFar);
     p_cam->SetFovDegrees(EditorCamera::InitialFOVDegrees);
 
-    m_selectionFramebuffer = new SelectionFramebuffer(1,1);
+    m_selectionFramebuffer = new SelectionFramebuffer(1, 1);
 
-    SceneManager::GetActive()->EventEmitter<IEventsSceneManager>::
-                  RegisterListener(this);
-    ScenePlayer::GetInstance()->EventEmitter<IEventsScenePlayer>::
-                 RegisterListener(this);
+    SceneManager::GetActive()
+        ->EventEmitter<IEventsSceneManager>::RegisterListener(this);
+    ScenePlayer::GetInstance()
+        ->EventEmitter<IEventsScenePlayer>::RegisterListener(this);
 }
 
 EditorCamera::~EditorCamera()
@@ -89,22 +90,22 @@ void EditorCamera::Update()
     AdjustSpeeds();
 
     bool unwrapMouse = true;
-    if (!IsBlocked())
+    if(!IsBlocked())
     {
-        if ( GL::GetViewportRect().Contains( Input::GetMousePositionWindow() ))
+        if(GL::GetViewportRect().Contains(Input::GetMousePositionWindow()))
         {
-            HandleKeyMovement(); //WASD
+            HandleKeyMovement();  // WASD
 
-            //Mouse rot with right click
-            if (!HandleMouseRotation())
+            // Mouse rot with right click
+            if(!HandleMouseRotation())
             {
-                //Mouse move with mid click
+                // Mouse move with mid click
                 HandleMousePanning();
             }
 
             HandleWheelZoom();
 
-            m_keysCurrentMoveSpeed = 0.0f; // Reset speed
+            m_keysCurrentMoveSpeed = 0.0f;  // Reset speed
         }
     }
     InterpolatePositionAndRotation();
@@ -112,13 +113,15 @@ void EditorCamera::Update()
     // Copy clear mode stuff from current scene camera
     Scene *scene = EditorSceneManager::GetOpenScene();
     Camera *sceneCam = scene ? scene->GetCamera() : nullptr;
-    if (sceneCam)
+    if(sceneCam)
     {
         GetCamera()->SetClearMode(sceneCam->GetClearMode());
         GetCamera()->SetClearColor(sceneCam->GetClearColor());
         GetCamera()->SetSkyBoxTexture(sceneCam->GetSkyBoxTexture());
-        // GetCamera()->SetSkyBoxTexture(sceneCam->GetSpecularSkyBoxTexture(), false);
-        // GetCamera()->SetSkyBoxTexture(sceneCam->GetDiffuseSkyBoxTexture(), false);
+        // GetCamera()->SetSkyBoxTexture(sceneCam->GetSpecularSkyBoxTexture(),
+        // false);
+        // GetCamera()->SetSkyBoxTexture(sceneCam->GetDiffuseSkyBoxTexture(),
+        // false);
     }
     else
     {
@@ -126,7 +129,7 @@ void EditorCamera::Update()
         GetCamera()->SetClearColor(Color::White.WithValue(0.3f));
     }
 
-    if (unwrapMouse)
+    if(unwrapMouse)
     {
         Input::SetMouseWrapping(false);
     }
@@ -134,7 +137,7 @@ void EditorCamera::Update()
 
 void EditorCamera::AdjustSpeeds()
 {
-    int wWidth  = Window::GetActive()->GetWidth();
+    int wWidth = Window::GetActive()->GetWidth();
     int wHeight = Window::GetActive()->GetHeight();
 
     m_mouseRotDegreesPerPixel.x = 360.0f / wWidth;
@@ -161,28 +164,28 @@ void EditorCamera::InterpolatePositionAndRotation(double extraInterpPos,
 
     float interpRotSpeed = 3.0f;
     float rotT = Math::Min((dts * interpRotSpeed) + extraInterpRot, 1.0);
-    Quaternion newRot =
-       Quaternion::SLerp(GetTransform()->GetRotation(), m_targetRotation, rotT);
+    Quaternion newRot = Quaternion::SLerp(GetTransform()->GetRotation(),
+                                          m_targetRotation, rotT);
     GetTransform()->SetLocalRotation(newRot);
 }
 
 void EditorCamera::HandleWheelZoom()
 {
     // Update zoom value
-    if (UISceneEditContainer::IsMouseOver())
+    if(UISceneEditContainer::IsMouseOver())
     {
         float mouseWheel = Input::GetMouseWheel().y * m_mouseZoomPerDeltaWheel;
         float zoomSpeed = mouseWheel * m_zoomSpeedMultiplier;
 
         // Apply zoom
-        if (zoomSpeed != 0.0f)
+        if(zoomSpeed != 0.0f)
         {
-            if (p_cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
+            if(p_cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
             {
                 SetPositionDirectly(GetTransform()->GetPosition() +
                                     (zoomSpeed * p_camt->GetForward()));
             }
-            m_orthoHeight -= 2.75f * mouseWheel; // Magic number here :)
+            m_orthoHeight -= 2.75f * mouseWheel;  // Magic number here :)
             p_cam->SetOrthoHeight(m_orthoHeight);
         }
     }
@@ -190,15 +193,15 @@ void EditorCamera::HandleWheelZoom()
 
 bool EditorCamera::HandleMouseRotation()
 {
-    if (Input::GetMouseButton(MouseButton::RIGHT) &&
-        UISceneEditContainer::IsMouseOver())
+    if(Input::GetMouseButton(MouseButton::RIGHT) &&
+       UISceneEditContainer::IsMouseOver())
     {
         Vector2 delta = Vector2(Input::GetMouseDelta()) * Vector2(-1, 1) *
                         m_mouseRotDegreesPerPixel;
 
         Quaternion newRot = GetTransform()->GetRotation();
-        Quaternion rotX = Quaternion::AngleAxis(Math::DegToRad(delta.x),
-                                                Vector3::Up);
+        Quaternion rotX =
+            Quaternion::AngleAxis(Math::DegToRad(delta.x), Vector3::Up);
         newRot = rotX * newRot;
         Quaternion rotY = Quaternion::AngleAxis(Math::DegToRad(delta.y),
                                                 newRot * Vector3::Right);
@@ -215,12 +218,12 @@ bool EditorCamera::HandleMouseRotation()
 
 void EditorCamera::HandleMousePanning()
 {
-    if (Input::GetMouseButton(MouseButton::MIDDLE))
+    if(Input::GetMouseButton(MouseButton::MIDDLE))
     {
         Vector2 delta = -Vector2(Input::GetMouseDelta()) * m_mousePanPerPixel;
-        SetPositionDirectly( GetTransform()->GetPosition() +
-                             (p_camt->GetRight() * delta.x +
-                               p_camt->GetUp() * delta.y) );
+        SetPositionDirectly(
+            GetTransform()->GetPosition() +
+            (p_camt->GetRight() * delta.x + p_camt->GetUp() * delta.y));
         Input::SetMouseWrapping(true);
     }
 }
@@ -230,24 +233,24 @@ void EditorCamera::HandleKeyMovement()
     m_keysCurrentMoveSpeed += m_keysMoveAccel;
     m_keysCurrentMoveSpeed = Math::Min(m_keysCurrentMoveSpeed, m_maxMoveSpeed);
 
-    if (!Input::GetKey(Key::LCTRL) && !Input::GetKey(Key::LSHIFT))
+    if(!Input::GetKey(Key::LCTRL) && !Input::GetKey(Key::LSHIFT))
     {
         float dt = Time::GetDeltaTime().GetSeconds();
         Vector3 m = Vector3::Zero;
-        if (Input::GetKey(Key::W))
+        if(Input::GetKey(Key::W))
         {
             m += m_keysCurrentMoveSpeed * dt * p_camt->GetForward();
         }
-        else if (Input::GetKey(Key::S))
+        else if(Input::GetKey(Key::S))
         {
             m -= m_keysCurrentMoveSpeed * dt * p_camt->GetForward();
         }
 
-        if (Input::GetKey(Key::A))
+        if(Input::GetKey(Key::A))
         {
             m -= m_keysCurrentMoveSpeed * dt * p_camt->GetRight();
         }
-        else if (Input::GetKey(Key::D))
+        else if(Input::GetKey(Key::D))
         {
             m += m_keysCurrentMoveSpeed * dt * p_camt->GetRight();
         }
@@ -258,21 +261,22 @@ void EditorCamera::HandleKeyMovement()
 
 void EditorCamera::FocusScene(Scene *scene)
 {
-    if (scene)
+    if(scene)
     {
         float sceneRadius = 1.0f;
         Vector3 sceneCenter = Vector3::Zero;
 
         Sphere bSphere = scene->GetBoundingSphere();
-        if ( !Math::IsInfinity(bSphere.GetRadius()) &&
-             !Math::IsNaN(bSphere.GetRadius()) )
+        if(!Math::IsInfinity(bSphere.GetRadius()) &&
+           !Math::IsNaN(bSphere.GetRadius()))
         {
             sceneRadius = bSphere.GetRadius();
             sceneCenter = bSphere.GetCenter();
         }
 
         m_targetPosition = (sceneCenter + Vector3::One * sceneRadius * 1.1f);
-        m_targetRotation = Quaternion::LookDirection(sceneCenter - m_targetPosition);
+        m_targetRotation =
+            Quaternion::LookDirection(sceneCenter - m_targetPosition);
     }
 }
 
@@ -293,12 +297,13 @@ void EditorCamera::AlignViewWithGameObject(GameObject *selected)
     p_camt->SetLocalRotation(Quaternion::Identity);
     m_targetPosition = selected->GetTransform()->GetPosition();
     Vector3 up = Vector3::Up;
-    m_targetRotation = Quaternion::LookDirection(selected->GetTransform()->GetForward(), up);
+    m_targetRotation =
+        Quaternion::LookDirection(selected->GetTransform()->GetForward(), up);
 }
 
 void EditorCamera::SwitchProjectionModeTo(bool mode3D)
 {
-    if (mode3D)
+    if(mode3D)
     {
         p_cam->SetProjectionMode(CameraProjectionMode::PERSPECTIVE);
         p_cam->SetZNear(EditorCamera::InitialZNear);
@@ -316,7 +321,7 @@ void EditorCamera::SwitchProjectionModeTo(bool mode3D)
 
 void EditorCamera::LookAt(GameObject *lookAtFocus)
 {
-    if (lookAtFocus)
+    if(lookAtFocus)
     {
         Vector3 targetPos;
         Quaternion targetRot;
@@ -335,8 +340,9 @@ void EditorCamera::GetLookAtFocusParams(GameObject *lookAtGo,
     Sphere focusBSphere = lookAtGo->GetBoundingSphere();
 
     Vector3 thisPos = GetTransform()->GetPosition();
-    Vector3 focusPos = (!Math::IsInfinity(focusBSphere.GetRadius()) ?
-            focusBSphere.GetCenter() : lookAtGo->GetTransform()->GetPosition());
+    Vector3 focusPos = (!Math::IsInfinity(focusBSphere.GetRadius())
+                            ? focusBSphere.GetCenter()
+                            : lookAtGo->GetTransform()->GetPosition());
     Vector3 focusDir = (focusPos - thisPos).NormalizedSafe();
 
     // LookAt Rotation
@@ -347,7 +353,7 @@ void EditorCamera::GetLookAtFocusParams(GameObject *lookAtGo,
     radius = !Math::IsInfinity(radius) ? radius : 0.1f;
     radius = Math::Max(radius, 0.1f);
     float stopDist = radius;
-    if (cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
+    if(cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
     {
         float fov = Math::DegToRad(cam->GetFovDegrees() / 2.0f);
         stopDist = radius / std::tan(fov) * 1.5f;
@@ -376,7 +382,7 @@ bool EditorCamera::IsBlocked() const
     return !m_blockRequests.IsEmpty();
 }
 
-SelectionFramebuffer* EditorCamera::GetSelectionFramebuffer() const
+SelectionFramebuffer *EditorCamera::GetSelectionFramebuffer() const
 {
     return m_selectionFramebuffer;
 }
@@ -388,35 +394,36 @@ Camera *EditorCamera::GetCamera() const
 
 EditorCamera *EditorCamera::GetInstance()
 {
-    EditSceneGameObjects *editSceneGameObject = EditSceneGameObjects::GetInstance();
-    return editSceneGameObject ? editSceneGameObject->GetEditorCamera() : nullptr;
+    EditSceneGameObjects *editSceneGameObject =
+        EditSceneGameObjects::GetInstance();
+    return editSceneGameObject ? editSceneGameObject->GetEditorCamera()
+                               : nullptr;
 }
 
 void EditorCamera::OnPlayStateChanged(PlayState prevPlayState,
                                       PlayState newPlayState)
 {
-    switch (newPlayState)
+    switch(newPlayState)
     {
         case PlayState::JUST_BEFORE_PLAYING:
             m_previousPlayStateChangePos = GetTransform()->GetPosition();
             m_previousPlayStateChangeRot = GetTransform()->GetRotation();
-        break;
+            break;
 
         case PlayState::PLAYING:
-        if (prevPlayState == PlayState::JUST_BEFORE_PLAYING)
-        {
-            SetPositionDirectly( m_previousPlayStateChangePos );
-            SetRotationDirectly( m_previousPlayStateChangeRot );
-        }
-        break;
+            if(prevPlayState == PlayState::JUST_BEFORE_PLAYING)
+            {
+                SetPositionDirectly(m_previousPlayStateChangePos);
+                SetRotationDirectly(m_previousPlayStateChangeRot);
+            }
+            break;
 
         case PlayState::EDITING:
-            SetPositionDirectly( m_previousPlayStateChangePos );
-            SetRotationDirectly( m_previousPlayStateChangeRot );
-        break;
+            SetPositionDirectly(m_previousPlayStateChangePos);
+            SetRotationDirectly(m_previousPlayStateChangeRot);
+            break;
 
-        default:
-        break;
+        default: break;
     }
 }
 

@@ -7,25 +7,24 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UIInputFileWithPreview.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Path;
-FORWARD class Texture2D;
-FORWARD class UIImageRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Path;
+class Texture2D;
+class UIImageRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class UIInputTexture : public UIInputFileWithPreview
 {
 public:
-	UIInputTexture();
-	virtual ~UIInputTexture() override;
+    UIInputTexture();
+    virtual ~UIInputTexture() override;
 
     virtual RH<Texture2D> GetPreviewTextureFromPath(const Path &path) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UIINPUTTEXTURE_H
-
+#endif  // UIINPUTTEXTURE_H

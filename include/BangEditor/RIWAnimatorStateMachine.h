@@ -14,17 +14,19 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class AnimatorStateMachine;
-FORWARD   class IEventsValueChanged;
-FORWARD   class Texture2D;
-FORWARD   class UIButton;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class AnimatorStateMachine;
+class IEventsValueChanged;
+class Texture2D;
+class UIButton;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class RIWAnimatorStateMachine : public RIWResource<AnimatorStateMachine>
 {
     GAMEOBJECT_EDITOR(RIWAnimatorStateMachine);
@@ -43,12 +45,10 @@ private:
     void UpdateInputsFromResource() override;
     Texture2D *GetIconTexture() const override;
     void OnValueChangedRIWResource(
-                        EventEmitter<IEventsValueChanged> *object) override;
+        EventEmitter<IEventsValueChanged> *object) override;
 
     AnimatorStateMachine *GetAnimatorStateMachine() const;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // RIWANIMATORSTATEMACHINE_H
-
+#endif  // RIWANIMATORSTATEMACHINE_H

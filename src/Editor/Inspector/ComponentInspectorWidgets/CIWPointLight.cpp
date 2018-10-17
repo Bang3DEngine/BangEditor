@@ -11,12 +11,13 @@
 #include "Bang/PointLight.h"
 #include "Bang/UIInputNumber.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 void CIWPointLight::InitInnerWidgets()
 {
@@ -35,20 +36,20 @@ void CIWPointLight::UpdateFromReference()
 {
     CIWLight::UpdateFromReference();
 
-    if (!p_rangeInput->HasFocus())
+    if(!p_rangeInput->HasFocus())
     {
-        p_rangeInput->SetValue( GetPointLight()->GetRange() );
+        p_rangeInput->SetValue(GetPointLight()->GetRange());
     }
 }
 
 PointLight *CIWPointLight::GetPointLight() const
 {
-    return SCAST<PointLight*>( GetLight() );
+    return SCAST<PointLight *>(GetLight());
 }
 
 void CIWPointLight::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
     CIWLight::OnValueChangedCIW(object);
 
-    GetPointLight()->SetRange( p_rangeInput->GetValue() );
+    GetPointLight()->SetRange(p_rangeInput->GetValue());
 }

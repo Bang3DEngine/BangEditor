@@ -8,13 +8,14 @@
 #include "BangEditor/EditorBehaviourManager.h"
 #include "BangEditor/EditorScene.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class BehaviourManager;
-FORWARD class Path;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class BehaviourManager;
+class Path;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 EditorSceneManager::EditorSceneManager()
 {
@@ -23,14 +24,14 @@ EditorSceneManager::EditorSceneManager()
 
 EditorSceneManager::~EditorSceneManager()
 {
-    if (GetOpenScene())
+    if(GetOpenScene())
     {
-        GameObject::Destroy( GetOpenScene() );
+        GameObject::Destroy(GetOpenScene());
     }
 
-    if (GetEditorScene())
+    if(GetEditorScene())
     {
-        GameObject::Destroy( GetEditorScene() );
+        GameObject::Destroy(GetEditorScene());
     }
 }
 
@@ -46,9 +47,9 @@ EditorScene *EditorSceneManager::GetEditorScene()
     return esm ? esm->GetEditorScene_() : nullptr;
 }
 
-EditorBehaviourManager* EditorSceneManager::GetEditorBehaviourManager() const
+EditorBehaviourManager *EditorSceneManager::GetEditorBehaviourManager() const
 {
-    return DCAST<EditorBehaviourManager*>( SceneManager::GetBehaviourManager() );
+    return DCAST<EditorBehaviourManager *>(SceneManager::GetBehaviourManager());
 }
 
 Scene *EditorSceneManager::GetOpenScene_() const
@@ -75,18 +76,18 @@ BehaviourManager *EditorSceneManager::CreateBehaviourManager() const
 void EditorSceneManager::OnSceneLoaded(Scene *scene, const Path &sceneFilepath)
 {
     BANG_UNUSED_2(scene, sceneFilepath);
-    if (GetEditorScene_())
+    if(GetEditorScene_())
     {
-        GetEditorScene_()->SetOpenScene( GetLoadedScene() );
+        GetEditorScene_()->SetOpenScene(GetLoadedScene());
     }
-    else // Retrieve editor scene
+    else  // Retrieve editor scene
     {
-        p_editorScene = DCAST<EditorScene*>( GetLoadedScene() );
+        p_editorScene = DCAST<EditorScene *>(GetLoadedScene());
     }
 }
 
 EditorSceneManager *EditorSceneManager::GetActive()
 {
     SceneManager *sm = SceneManager::GetActive();
-    return sm ? DCAST<EditorSceneManager*>(sm) : nullptr;
+    return sm ? DCAST<EditorSceneManager *>(sm) : nullptr;
 }

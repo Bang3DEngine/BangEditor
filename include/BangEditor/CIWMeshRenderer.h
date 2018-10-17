@@ -6,16 +6,18 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWRenderer.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class MeshRenderer;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class MeshRenderer;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UIInputFileWithPreview;
+using namespace Bang;
+namespace BangEditor
+{
+class UIInputFileWithPreview;
 
 class CIWMeshRenderer : public CIWRenderer
 {
@@ -37,8 +39,6 @@ protected:
     // ComponentInspectorWidget
     void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWMESHRENDERER_H
-
+#endif  // CIWMESHRENDERER_H

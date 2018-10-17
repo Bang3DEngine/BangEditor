@@ -16,14 +16,15 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD class UIInputNumber;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class UIInputNumber;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class UIInputComplexRandom : public GameObject,
                              public EventListener<IEventsValueChanged>,
                              public EventEmitter<IEventsValueChanged>
@@ -31,8 +32,8 @@ class UIInputComplexRandom : public GameObject,
     GAMEOBJECT_EDITOR(UIInputComplexRandom);
 
 public:
-	UIInputComplexRandom();
-	virtual ~UIInputComplexRandom() override;
+    UIInputComplexRandom();
+    virtual ~UIInputComplexRandom() override;
 
     void Set(const ComplexRandom &complexRandom);
 
@@ -41,7 +42,7 @@ public:
     void SetRangeMinMaxValues(float minValue, float maxValue);
 
     bool HasFocus() const;
-    const ComplexRandom& GetComplexRandom() const;
+    const ComplexRandom &GetComplexRandom() const;
 
 private:
     ComplexRandom m_complexRandom;
@@ -52,8 +53,6 @@ private:
     // IEventsValueChanged
     virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *ee) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UIINPUTCOMPLEXRANDOM_H
-
+#endif  // UIINPUTCOMPLEXRANDOM_H

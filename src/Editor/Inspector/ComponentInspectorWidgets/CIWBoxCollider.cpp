@@ -13,12 +13,13 @@
 #include "Bang/UIInputNumber.h"
 #include "BangEditor/UIInputVector.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 CIWBoxCollider::CIWBoxCollider()
 {
@@ -36,7 +37,7 @@ void CIWBoxCollider::InitInnerWidgets()
     SetTitle("BoxCollider");
 
     p_extentsInput = GameObject::Create<UIInputVector>();
-    for (UIInputNumber *inputNumber : p_extentsInput->GetInputNumbers())
+    for(UIInputNumber *inputNumber : p_extentsInput->GetInputNumbers())
     {
         inputNumber->SetMinValue(0.01f);
     }
@@ -53,22 +54,22 @@ void CIWBoxCollider::UpdateFromReference()
     CIWCollider::UpdateFromReference();
 
     BoxCollider *boxCollider = GetBoxCollider();
-    if (!p_extentsInput->HasFocus())
+    if(!p_extentsInput->HasFocus())
     {
-        p_extentsInput->Set( boxCollider->GetExtents() );
+        p_extentsInput->Set(boxCollider->GetExtents());
     }
 }
 
-void CIWBoxCollider::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
+void CIWBoxCollider::OnValueChangedCIW(
+    EventEmitter<IEventsValueChanged> *object)
 {
     CIWCollider::OnValueChangedCIW(object);
 
     BoxCollider *boxCollider = GetBoxCollider();
-    boxCollider->SetExtents( p_extentsInput->GetVector3() );
+    boxCollider->SetExtents(p_extentsInput->GetVector3());
 }
 
 BoxCollider *CIWBoxCollider::GetBoxCollider() const
 {
-    return SCAST<BoxCollider*>( GetCollider() );
+    return SCAST<BoxCollider *>(GetCollider());
 }
-

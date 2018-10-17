@@ -10,6 +10,7 @@
 #include "Bang/Component.h"
 #include "Bang/ComponentMacros.h"
 #include "Bang/EventEmitter.h"
+#include "Bang/EventEmitter.h"
 #include "Bang/EventListener.tcc"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
@@ -21,7 +22,6 @@
 #include "Bang/List.tcc"
 #include "Bang/MetaNode.h"
 #include "Bang/Paths.h"
-#include "Bang/EventEmitter.h"
 #include "Bang/RectTransform.h"
 #include "Bang/Resource.h"
 #include "Bang/SceneManager.h"
@@ -52,17 +52,18 @@
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsDestroy;
-FORWARD class IEventsDragDrop;
-FORWARD class IEventsFocus;
-FORWARD class Object;
-FORWARD class Scene;
-FORWARD class Serializable;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDestroy;
+class IEventsDragDrop;
+class IEventsFocus;
+class Object;
+class Scene;
+class Serializable;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 Inspector::Inspector()
 {
@@ -70,7 +71,7 @@ Inspector::Inspector()
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinSize(Vector2i(300));
-    le->SetFlexibleSize( Vector2::One );
+    le->SetFlexibleSize(Vector2::One);
 
     GameObjectFactory::CreateUIGameObjectInto(this);
 
@@ -83,17 +84,20 @@ Inspector::Inspector()
     UIScrollPanel *scrollPanel = GameObjectFactory::CreateUIScrollPanel();
     scrollPanel->GetScrollArea()->GetBackground()->SetVisible(false);
     scrollPanel->GetScrollArea()->GetBackground()->SetTint(
-                                            Color::White.WithValue(0.7f));
+        Color::White.WithValue(0.7f));
 
-    UILayoutElement *scrollLE = scrollPanel->GetGameObject()->
-                                AddComponent<UILayoutElement>();
-    scrollLE->SetFlexibleSize( Vector2::One );
+    UILayoutElement *scrollLE =
+        scrollPanel->GetGameObject()->AddComponent<UILayoutElement>();
+    scrollLE->SetFlexibleSize(Vector2::One);
 
-    // GameObject *topSpacer = GameObjectFactory::CreateUISpacer(LayoutSizeType::Min,
-    //                                                           Vector2i(0, 30));
+    // GameObject *topSpacer =
+    // GameObjectFactory::CreateUISpacer(LayoutSizeType::Min,
+    //                                                           Vector2i(0,
+    //                                                           30));
 
-    GameObject *widgetsVLGo = GameObjectFactory::CreateUIGameObjectNamed("MainVL");
-    widgetsVLGo->GetRectTransform()->SetPivotPosition( Vector2(-1, 1) );
+    GameObject *widgetsVLGo =
+        GameObjectFactory::CreateUIGameObjectNamed("MainVL");
+    widgetsVLGo->GetRectTransform()->SetPivotPosition(Vector2(-1, 1));
     widgetsVLGo->SetParent(this);
 
     UILabel *titleGo = GameObjectFactory::CreateUILabel();
@@ -110,7 +114,8 @@ Inspector::Inspector()
     widgetsVL->SetPaddingLeft(10);
     widgetsVL->SetPaddingRight(10);
 
-    UIContentSizeFitter *vlCSF = widgetsVLGo->AddComponent<UIContentSizeFitter>();
+    UIContentSizeFitter *vlCSF =
+        widgetsVLGo->AddComponent<UIContentSizeFitter>();
     vlCSF->SetVerticalSizeType(LayoutSizeType::PREFERRED);
 
     p_mainVL = widgetsVL;
@@ -119,12 +124,12 @@ Inspector::Inspector()
     GetScrollPanel()->SetHorizontalScrollEnabled(false);
     GetScrollPanel()->SetVerticalScrollBarSide(HorizontalSide::RIGHT);
     GetScrollPanel()->GetScrollArea()->SetContainedGameObject(
-                                                GetMainVL()->GetGameObject() );
+        GetMainVL()->GetGameObject());
     GetScrollPanel()->SetVerticalShowScrollMode(ShowScrollMode::WHEN_NEEDED);
 
     titleGo->GetGameObject()->SetParent(mainVLGo);
-    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 5)->
-                       SetParent(mainVLGo);
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 5)
+        ->SetParent(mainVLGo);
     scrollPanel->GetGameObject()->SetParent(mainVLGo);
 
     p_blockLayer = GameObjectFactory::CreateUIImage(Color::Red.WithAlpha(0.3f));
@@ -134,55 +139,52 @@ Inspector::Inspector()
 
     UIFocusable *focusable = AddComponent<UIFocusable>();
     p_contextMenu = AddComponent<UIContextMenu>();
-    p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem)
-    {
-        OnCreateContextMenu(menuRootItem);
-    });
+    p_contextMenu->SetCreateContextMenuCallback(
+        [this](MenuItem *menuRootItem) { OnCreateContextMenu(menuRootItem); });
     p_contextMenu->SetFocusable(focusable);
 
     // Add a bit of margin below...
-    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 150)->
-                        SetParent(GetWidgetsContainer());
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::MIN, 150)
+        ->SetParent(GetWidgetsContainer());
 
-    EditorFileTracker::GetInstance()->
-                      EventEmitter<IEventsFileTracker>::RegisterListener(this);
+    EditorFileTracker::GetInstance()
+        ->EventEmitter<IEventsFileTracker>::RegisterListener(this);
     Editor::GetInstance()->EventEmitter<IEventsEditor>::RegisterListener(this);
-    SceneManager::GetActive()->EventEmitter<IEventsSceneManager>::
-                               RegisterListener(this);
+    SceneManager::GetActive()
+        ->EventEmitter<IEventsSceneManager>::RegisterListener(this);
 }
 
 Inspector::~Inspector()
 {
-
 }
 
 void Inspector::Update()
 {
     GameObject::Update();
 
-    if (p_currentGameObject)
+    if(p_currentGameObject)
     {
-        p_titleText->SetContent( p_currentGameObject->GetName() );
+        p_titleText->SetContent(p_currentGameObject->GetName());
     }
 }
 
 void Inspector::ShowSerializable(Serializable *serializable)
 {
-    if (serializable)
+    if(serializable)
     {
-        if (Resource *res = DCAST<Resource*>(serializable))
+        if(Resource *res = DCAST<Resource *>(serializable))
         {
             Path resPath = res->GetResourceFilepath();
-            if (resPath.IsFile())
+            if(resPath.IsFile())
             {
                 ShowPath(resPath);
             }
         }
-        else if (GameObject *gameObject = DCAST<GameObject*>(serializable))
+        else if(GameObject *gameObject = DCAST<GameObject *>(serializable))
         {
             ShowGameObject(gameObject);
         }
-        else if (Component *comp = DCAST<Component*>(serializable))
+        else if(Component *comp = DCAST<Component *>(serializable))
         {
             ShowGameObject(comp->GetGameObject());
         }
@@ -195,26 +197,26 @@ void Inspector::ShowSerializable(Serializable *serializable)
 
 void Inspector::ShowPath(const Path &path)
 {
-    if (m_currentOpenPath != path)
+    if(m_currentOpenPath != path)
     {
-        if (!path.IsDir())
+        if(!path.IsDir())
         {
             InspectorWidget *fiw = ResourceInspectorWidgetFactory::Create(path);
-            if (fiw || path.IsFile())
+            if(fiw || path.IsFile())
             {
                 Clear();
             }
 
-            if (fiw)
+            if(fiw)
             {
                 p_titleText->SetContent(path.GetNameExt());
                 m_currentOpenPath = path;
                 AddWidget(fiw);
 
                 bool isEnginePath = Paths::IsEnginePath(m_currentOpenPath);
-                #ifdef DEBUG
+#ifdef DEBUG
                 isEnginePath = false;
-                #endif
+#endif
                 SetCurrentWidgetBlocked(isEnginePath);
             }
         }
@@ -230,20 +232,23 @@ void Inspector::ShowGameObject(GameObject *go)
     }
 
     p_currentGameObject = go;
-    GetCurrentGameObject()->EventEmitter<IEventsComponent>::RegisterListener(this);
+    GetCurrentGameObject()->EventEmitter<IEventsComponent>::RegisterListener(
+        this);
 
     p_titleText->SetContent(go->GetName());
-    GetCurrentGameObject()->EventEmitter<IEventsDestroy>::RegisterListener(this);
+    GetCurrentGameObject()->EventEmitter<IEventsDestroy>::RegisterListener(
+        this);
 
-    GameObjectInspectorWidget *giw = GameObject::Create<GameObjectInspectorWidget>();
+    GameObjectInspectorWidget *giw =
+        GameObject::Create<GameObjectInspectorWidget>();
     giw->Init();
     giw->SetGameObject(go);
     AddWidget(giw, 0);
 
     int i = 0;
-    for (Component *comp : go->GetComponents())
+    for(Component *comp : go->GetComponents())
     {
-        if (comp)
+        if(comp)
         {
             OnComponentAdded(comp, i);
             ++i;
@@ -271,7 +276,7 @@ GameObject *Inspector::GetCurrentGameObject() const
 void Inspector::OnSceneLoaded(Scene *scene, const Path &)
 {
     BANG_UNUSED(scene);
-    if (p_currentGameObject)
+    if(p_currentGameObject)
     {
         Clear();
     }
@@ -287,7 +292,7 @@ void Inspector::OnDestroyed(EventEmitter<IEventsDestroy> *ee)
 
 void Inspector::OnPathRemoved(const Path &removedPath)
 {
-    if (GetCurrentPath() == removedPath)
+    if(GetCurrentPath() == removedPath)
     {
         Clear();
     }
@@ -297,7 +302,7 @@ void Inspector::OnCreateContextMenu(MenuItem *menuRootItem)
 {
     menuRootItem->SetFontSize(12);
 
-    if (GameObject *currentGameObject = GetCurrentGameObject())
+    if(GameObject *currentGameObject = GetCurrentGameObject())
     {
         {
             MetaNode undoMetaBefore = currentGameObject->GetMeta();
@@ -306,16 +311,14 @@ void Inspector::OnCreateContextMenu(MenuItem *menuRootItem)
             MenuBar::CreateComponentsMenuInto(addComp);
 
             MetaNode currentMeta = currentGameObject->GetMeta();
-            UndoRedoManager::PushAction(
-                    new UndoRedoSerializableChange(currentGameObject,
-                                                   undoMetaBefore, currentMeta) );
+            UndoRedoManager::PushAction(new UndoRedoSerializableChange(
+                currentGameObject, undoMetaBefore, currentMeta));
         }
 
         // menuRootItem->AddSeparator();
 
         MenuItem *paste = menuRootItem->AddItem("Paste");
-        paste->SetSelectedCallback([this, currentGameObject](MenuItem*)
-        {
+        paste->SetSelectedCallback([this, currentGameObject](MenuItem *) {
             MetaNode undoMetaBefore = currentGameObject->GetMeta();
 
             Component *copiedComp = EditorClipboard::GetCopiedComponent();
@@ -323,11 +326,10 @@ void Inspector::OnCreateContextMenu(MenuItem *menuRootItem)
             GetCurrentGameObject()->AddComponent(newComponent);
 
             MetaNode currentMeta = currentGameObject->GetMeta();
-            UndoRedoManager::PushAction(
-                new UndoRedoSerializableChange(currentGameObject,
-                                               undoMetaBefore, currentMeta) );
+            UndoRedoManager::PushAction(new UndoRedoSerializableChange(
+                currentGameObject, undoMetaBefore, currentMeta));
         });
-        paste->SetOverAndActionEnabled( (EditorClipboard::HasCopiedComponent()) );
+        paste->SetOverAndActionEnabled((EditorClipboard::HasCopiedComponent()));
     }
 }
 
@@ -343,16 +345,16 @@ void Inspector::OnGameObjectSelected(GameObject *selectedGameObject)
 
 void Inspector::OnComponentAdded(Component *addedComponent, int index_)
 {
-    if (ComponentInspectorWidget *compWidget =
-            ComponentInspectorWidgetFactory::Create(addedComponent))
+    if(ComponentInspectorWidget *compWidget =
+           ComponentInspectorWidgetFactory::Create(addedComponent))
     {
         m_objToWidget.Add(addedComponent, compWidget);
 
-        int index = (index_ + 1); // +1 to jump the gameObject inspector widget
+        int index = (index_ + 1);  // +1 to jump the gameObject inspector widget
         GameObject *go = addedComponent->GetGameObject();
-        for (Component *comp : go->GetComponents())
+        for(Component *comp : go->GetComponents())
         {
-            if (!comp) // Dont take into account removed components for index
+            if(!comp)  // Dont take into account removed components for index
             {
                 --index;
             }
@@ -366,14 +368,14 @@ void Inspector::OnComponentRemoved(Component *removedComponent,
 {
     BANG_UNUSED(previousGameObject);
 
-    if (m_objToWidget.ContainsKey(removedComponent))
+    if(m_objToWidget.ContainsKey(removedComponent))
     {
         RemoveWidget(m_objToWidget.Get(removedComponent));
         m_objToWidget.Remove(removedComponent);
     }
 }
 
-Inspector* Inspector::GetActive()
+Inspector *Inspector::GetActive()
 {
     EditorSceneManager *esm = EditorSceneManager::GetActive();
     EditorScene *es = esm ? esm->GetEditorScene() : nullptr;
@@ -390,7 +392,7 @@ UIVerticalLayout *Inspector::GetMainVL() const
     return p_mainVL;
 }
 
-UIScrollPanel* Inspector::GetScrollPanel() const
+UIScrollPanel *Inspector::GetScrollPanel() const
 {
     return p_scrollPanel;
 }
@@ -402,50 +404,50 @@ void Inspector::AddWidget(InspectorWidget *widget, int _index)
     m_widgets.Insert(widget, index);
     Color bgColor = Color::LightGray.WithValue(0.9f);
     widget->SetBackgroundColor(bgColor);
-    widget->SetParent( GetWidgetsContainer(), index );
+    widget->SetParent(GetWidgetsContainer(), index);
 }
 
 void Inspector::RemoveWidget(InspectorWidget *widget)
 {
     m_widgets.Remove(widget);
-    GameObject::Destroy(widget); // To allow move up/down to work e.g.
+    GameObject::Destroy(widget);  // To allow move up/down to work e.g.
 }
 
 void Inspector::RemoveWidget(int index)
 {
     auto it = m_widgets.Begin();
     std::advance(it, index);
-    RemoveWidget( *it );
+    RemoveWidget(*it);
 }
 
 void Inspector::SetCurrentWidgetBlocked(bool blocked)
 {
-    p_blockLayer->GetGameObject()->SetEnabled( blocked );
+    p_blockLayer->GetGameObject()->SetEnabled(blocked);
 
-    Array<Object*> childrenAndChildrenComps;
+    Array<Object *> childrenAndChildrenComps;
 
-    Array<GameObject*> children = GetWidgetsContainer()->GetChildrenRecursively();
-    for (GameObject *child : children)
+    Array<GameObject *> children =
+        GetWidgetsContainer()->GetChildrenRecursively();
+    for(GameObject *child : children)
     {
         childrenAndChildrenComps.PushBack(child);
         childrenAndChildrenComps.PushBack(child->GetComponents());
     }
 
-    for (Object *obj : childrenAndChildrenComps)
+    for(Object *obj : childrenAndChildrenComps)
     {
-        if (EventListener<IEventsFocus> *focusListener =
-                DCAST<EventListener<IEventsFocus>*>(obj))
+        if(EventListener<IEventsFocus> *focusListener =
+               DCAST<EventListener<IEventsFocus> *>(obj))
         {
             focusListener->SetReceiveEvents(!blocked);
         }
 
-        if (EventListener<IEventsDragDrop> *ddListener =
-                DCAST<EventListener<IEventsDragDrop>*>(obj))
+        if(EventListener<IEventsDragDrop> *ddListener =
+               DCAST<EventListener<IEventsDragDrop> *>(obj))
         {
             ddListener->SetReceiveEvents(!blocked);
         }
     }
-
 }
 
 void Inspector::Clear()
@@ -453,16 +455,18 @@ void Inspector::Clear()
     p_titleText->SetContent("");
     GetScrollPanel()->SetScrolling(Vector2i::Zero);
 
-    while (!m_widgets.IsEmpty())
+    while(!m_widgets.IsEmpty())
     {
         InspectorWidget *widget = m_widgets.Front();
         RemoveWidget(widget);
     }
 
-    if (GetCurrentGameObject())
+    if(GetCurrentGameObject())
     {
-        GetCurrentGameObject()->EventEmitter<IEventsDestroy>::UnRegisterListener(this);
-        GetCurrentGameObject()->EventEmitter<IEventsComponent>::UnRegisterListener(this);
+        GetCurrentGameObject()
+            ->EventEmitter<IEventsDestroy>::UnRegisterListener(this);
+        GetCurrentGameObject()
+            ->EventEmitter<IEventsComponent>::UnRegisterListener(this);
         p_currentGameObject = nullptr;
     }
 

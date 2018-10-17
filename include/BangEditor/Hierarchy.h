@@ -21,26 +21,28 @@
 #include "BangEditor/HierarchyItem.h"
 #include "BangEditor/ShortcutManager.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsDestroy;
-FORWARD   class IEventsSceneManager;
-FORWARD   class IEventsUITree;
-FORWARD   class Path;
-FORWARD   class Scene;
-FORWARD   class UIDragDroppable;
-FORWARD   class UIFocusable;
-FORWARD   class UITree;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDestroy;
+class IEventsSceneManager;
+class IEventsUITree;
+class Path;
+class Scene;
+class UIDragDroppable;
+class UIFocusable;
+class UITree;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class HierarchyItem;
-FORWARD class IEventsEditor;
-FORWARD class IEventsHierarchyItem;
-FORWARD class MenuItem;
-FORWARD class UIContextMenu;
+using namespace Bang;
+namespace BangEditor
+{
+class HierarchyItem;
+class IEventsEditor;
+class IEventsHierarchyItem;
+class MenuItem;
+class UIContextMenu;
 
 class Hierarchy : public GameObject,
                   public EventListener<IEventsEditor>,
@@ -59,8 +61,8 @@ public:
 
     bool IsItemCollapsed(HierarchyItem *item) const;
 
-    HierarchyItem* GetItemFromGameObject(GameObject *go) const;
-    GameObject* GetGameObjectFromItem(GOItem *item) const;
+    HierarchyItem *GetItemFromGameObject(GameObject *go) const;
+    GameObject *GetGameObjectFromItem(GOItem *item) const;
 
     // Object
     void Update() override;
@@ -112,7 +114,7 @@ public:
 private:
     UITree *p_tree = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
-    UMap<GameObject*, HierarchyItem*> m_gameObjectToItem;
+    UMap<GameObject *, HierarchyItem *> m_gameObjectToItem;
 
     void TreeSelectionCallback(GOItem *item, UIList::Action action);
     void AddGameObject(GameObject *go);
@@ -126,7 +128,6 @@ private:
 
     friend class HierarchyItem;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // HIERARCHY_H
+#endif  // HIERARCHY_H

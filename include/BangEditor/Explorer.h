@@ -10,6 +10,7 @@
 #include "Bang/FileTracker.h"
 #include "Bang/GameObject.h"
 #include "Bang/IEvents.h"
+#include "Bang/IEventsFileTracker.h"
 #include "Bang/IEventsFocus.h"
 #include "Bang/IEventsValueChanged.h"
 #include "Bang/List.h"
@@ -23,28 +24,30 @@
 #include "BangEditor/ProjectManager.h"
 #include "BangEditor/ShortcutManager.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsFileTracker;
-FORWARD   class IEventsValueChanged;
-FORWARD   class UIButton;
-FORWARD   class UIFocusable;
-FORWARD   class UIGridLayout;
-FORWARD   class UILabel;
-FORWARD   class UIScrollPanel;
-FORWARD   class UISlider;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsFileTracker;
+class IEventsValueChanged;
+class UIButton;
+class UIFocusable;
+class UIGridLayout;
+class UILabel;
+class UIScrollPanel;
+class UISlider;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class ExplorerItem;
-FORWARD class IEventsEditor;
-FORWARD class IEventsExplorerItem;
-FORWARD class IEventsProjectManager;
-FORWARD class MenuItem;
-FORWARD class Project;
-FORWARD class UIContextMenu;
+using namespace Bang;
+namespace BangEditor
+{
+class ExplorerItem;
+class IEventsEditor;
+class IEventsExplorerItem;
+class IEventsProjectManager;
+class MenuItem;
+class Project;
+class UIContextMenu;
 
 class Explorer : public GameObject,
                  public EventListener<IEventsFocus>,
@@ -105,8 +108,8 @@ private:
     Path m_currentPath = Path::Empty;
     Path m_selectedPath = Path::Empty;
 
-    List<ExplorerItem*> p_items;
-    UMap<Path, ExplorerItem*> m_pathsToItem;
+    List<ExplorerItem *> p_items;
+    UMap<Path, ExplorerItem *> m_pathsToItem;
 
     UIButton *p_backButton = nullptr;
     UISlider *p_iconSizeSlider = nullptr;
@@ -126,7 +129,7 @@ private:
     ExplorerItem *GetSelectedItem() const;
     ExplorerItem *GetItemFromPath(const Path &path) const;
 
-    void OnItemDoubleClicked(UIFocusable*);
+    void OnItemDoubleClicked(UIFocusable *);
 
     bool IsInsideRootPath(const Path &path) const;
 
@@ -138,8 +141,6 @@ private:
 
     friend class UndoRedoExplorerSelect;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-
-#endif // EXPLORER_H
+#endif  // EXPLORER_H

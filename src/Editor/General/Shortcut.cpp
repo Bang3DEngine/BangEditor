@@ -3,8 +3,8 @@
 #include "Bang/Flags.h"
 #include "Bang/Input.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 Shortcut::Shortcut(Key key,
                    KeyModifiers keyModifiers,
@@ -19,18 +19,17 @@ Shortcut::Shortcut(Key key,
 
 bool Shortcut::IsTriggered(const InputEvent &inputEvent) const
 {
-    switch (inputEvent.type)
+    switch(inputEvent.type)
     {
         case InputEvent::Type::KEY_DOWN:
-            if (GetAutoRepeat() || (!inputEvent.autoRepeat))
+            if(GetAutoRepeat() || (!inputEvent.autoRepeat))
             {
                 return (inputEvent.key == GetKey() &&
                         inputEvent.keyModifiers == GetKeyModifiers());
             }
-        break;
+            break;
 
-        default:
-        break;
+        default: break;
     }
     return false;
 }
@@ -64,17 +63,18 @@ bool Shortcut::operator==(const Shortcut &rhs) const
 
 bool Shortcut::operator<(const Shortcut &rhs) const
 {
-    if (GetKey() < rhs.GetKey())
+    if(GetKey() < rhs.GetKey())
     {
         return true;
     }
-    else if (GetKey() == rhs.GetKey())
+    else if(GetKey() == rhs.GetKey())
     {
-        if (GetKeyModifiers().GetValue() < rhs.GetKeyModifiers().GetValue())
+        if(GetKeyModifiers().GetValue() < rhs.GetKeyModifiers().GetValue())
         {
             return true;
         }
-        else if (GetKeyModifiers().GetValue() == rhs.GetKeyModifiers().GetValue())
+        else if(GetKeyModifiers().GetValue() ==
+                rhs.GetKeyModifiers().GetValue())
         {
             return GetName() < rhs.GetName();
         }

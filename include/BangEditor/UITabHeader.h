@@ -21,19 +21,20 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/IEventsTabHeader.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsDragDrop;
-FORWARD class UIDragDroppable;
-FORWARD class UIFocusable;
-FORWARD class UIImageRenderer;
-FORWARD class UITextRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDragDrop;
+class UIDragDroppable;
+class UIFocusable;
+class UIImageRenderer;
+class UITextRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class IEventsTabHeader;
-FORWARD class UITabContainer;
+using namespace Bang;
+namespace BangEditor
+{
+class IEventsTabHeader;
+class UITabContainer;
 
 class UITabHeader : public GameObject,
                     public EventEmitter<IEventsTabHeader>,
@@ -42,8 +43,8 @@ class UITabHeader : public GameObject,
     GAMEOBJECT_EDITOR(UITabHeader);
 
 public:
-	UITabHeader();
-	virtual ~UITabHeader() override;
+    UITabHeader();
+    virtual ~UITabHeader() override;
 
     // GameObject
     void Update() override;
@@ -80,17 +81,16 @@ private:
     void SetTabbedChild(GameObject *tabbedChild);
 
     // IEventsDragDrop
-    virtual void OnDragStarted(EventEmitter<IEventsDragDrop>
-                               *dragDropEmitter) override;
-    virtual void OnDragUpdate(EventEmitter<IEventsDragDrop>
-                              *dragDropEmitter) override;
-    virtual void OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter) override;
+    virtual void OnDragStarted(
+        EventEmitter<IEventsDragDrop> *dragDropEmitter) override;
+    virtual void OnDragUpdate(
+        EventEmitter<IEventsDragDrop> *dragDropEmitter) override;
+    virtual void OnDrop(
+        EventEmitter<IEventsDragDrop> *dragDropEmitter) override;
 
     friend class UITabStation;
     friend class UITabContainer;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UITABHEADER_H
-
+#endif  // UITABHEADER_H

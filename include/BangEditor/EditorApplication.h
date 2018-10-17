@@ -5,25 +5,26 @@
 #include "Bang/BangDefines.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Debug;
-FORWARD class DialogWindow;
-FORWARD class Path;
-FORWARD class Paths;
-FORWARD class Resources;
-FORWARD class Scene;
-FORWARD class Texture2D;
-FORWARD class UIImageRenderer;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Debug;
+class DialogWindow;
+class Path;
+class Paths;
+class Resources;
+class Scene;
+class Texture2D;
+class UIImageRenderer;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class Editor;
-FORWARD class EditorDebug;
-FORWARD class EditorPaths;
-FORWARD class EditorResources;
-FORWARD class EditorScene;
+using namespace Bang;
+namespace BangEditor
+{
+class Editor;
+class EditorDebug;
+class EditorPaths;
+class EditorResources;
+class EditorScene;
 
 class EditorApplication : public Application
 {
@@ -31,27 +32,26 @@ public:
     EditorApplication();
     virtual ~EditorApplication() override;
 
-    void InitEditorApplication(const Path &engineRootPath, 
+    void InitEditorApplication(const Path &engineRootPath,
                                const Path &editorRootPath);
     void OpenEditorScene();
 
-    EditorPaths* GetEditorPaths() const;
+    EditorPaths *GetEditorPaths() const;
 
 private:
     Editor *m_editor = nullptr;
 
-    Debug* CreateDebug() const override;
-    Paths* CreatePaths() const override;
-    Resources* CreateResources() const override;
+    Debug *CreateDebug() const override;
+    Paths *CreatePaths() const override;
+    Resources *CreateResources() const override;
 
     Editor *GetEditor() const;
-    static EditorApplication* GetInstance();
+    static EditorApplication *GetInstance();
 
     friend class Editor;
     friend class EditorPaths;
     friend class EditorBehaviourManager;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // EDITORAPPLICATION_H
+#endif  // EDITORAPPLICATION_H

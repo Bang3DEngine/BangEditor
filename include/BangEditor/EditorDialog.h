@@ -16,21 +16,22 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD class Path;
-FORWARD class Scene;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class Path;
+class Scene;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class ColorPickerReporter;
+using namespace Bang;
+namespace BangEditor
+{
+class ColorPickerReporter;
 
 class EditorDialog
 {
 public:
-	EditorDialog();
+    EditorDialog();
     virtual ~EditorDialog();
 
     static void GetAsset(const String &title,
@@ -46,13 +47,13 @@ private:
     static bool s_accepted;
     static Path s_assetPathResult;
 
-    static Scene* CreateGetAssetSceneInto(Scene *scene,
+    static Scene *CreateGetAssetSceneInto(Scene *scene,
                                           const Array<String> &extensions);
-    static Scene* CreateGetColorSceneInto(Scene *scene,
-                                          const Color &initialColor,
-                                          ColorPickerReporter *colorPickerReporter);
+    static Scene *CreateGetColorSceneInto(
+        Scene *scene,
+        const Color &initialColor,
+        ColorPickerReporter *colorPickerReporter);
 };
-
 
 class ColorPickerReporter : public GameObject,
                             public EventEmitter<IEventsValueChanged>
@@ -76,8 +77,6 @@ private:
 
     friend class EditorDialog;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // EDITORDIALOG_H
-
+#endif  // EDITORDIALOG_H

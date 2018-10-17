@@ -10,8 +10,8 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/UITextRenderer.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 UIInputObject::UIInputObject()
 {
@@ -19,7 +19,7 @@ UIInputObject::UIInputObject()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetFlexibleWidth( 1.0f );
+    le->SetFlexibleWidth(1.0f);
 
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
     hl->SetChildrenVerticalStretch(Stretch::FULL);
@@ -28,9 +28,9 @@ UIInputObject::UIInputObject()
     p_objectInputText->SetBlocked(true);
     p_objectInputText->GetText()->SetTextSize(12);
     p_objectInputText->GetBackground()->SetTint(Color::White);
-    UILayoutElement *objectInputTextLE = p_objectInputText->GetGameObject()->
-                                         AddComponent<UILayoutElement>();
-    objectInputTextLE->SetFlexibleSize( Vector2(9999.9f) );
+    UILayoutElement *objectInputTextLE =
+        p_objectInputText->GetGameObject()->AddComponent<UILayoutElement>();
+    objectInputTextLE->SetFlexibleSize(Vector2(9999.9f));
     objectInputTextLE->SetLayoutPriority(1);
 
     p_objectInputText->GetGameObject()->SetParent(this);
@@ -49,4 +49,3 @@ Object *UIInputObject::GetObject() const
 {
     return p_object;
 }
-

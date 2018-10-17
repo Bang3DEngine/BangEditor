@@ -12,12 +12,13 @@
 #include "BangEditor/EditorResources.h"
 #include "BangEditor/ResourcePreviewFactory.tcc"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Camera;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Camera;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 MeshPreviewFactory::MeshPreviewFactory()
 {
@@ -30,12 +31,12 @@ MeshPreviewFactory::~MeshPreviewFactory()
 RH<Texture2D> MeshPreviewFactory::GetPreviewTextureFor(Mesh *mesh)
 {
     return MeshPreviewFactory::GetPreviewTextureFor(
-                                    mesh, ResourcePreviewFactoryParameters());
+        mesh, ResourcePreviewFactoryParameters());
 }
 
 RH<Texture2D> MeshPreviewFactory::GetPreviewTextureFor(
-                                Mesh *mesh,
-                                const ResourcePreviewFactoryParameters &params)
+    Mesh *mesh,
+    const ResourcePreviewFactoryParameters &params)
 {
     return MeshPreviewFactory::GetActive()->GetPreviewTextureFor_(mesh, params);
 }
@@ -61,11 +62,11 @@ void MeshPreviewFactory::OnCreateSceneFirstTime(Scene *previewScene,
 }
 
 void MeshPreviewFactory::OnUpdateTextureBegin(
-                                Scene *previewScene,
-                                Camera *previewCamera,
-                                GameObject *previewGoContainer,
-                                Mesh *mesh,
-                                const ResourcePreviewFactoryParameters &params)
+    Scene *previewScene,
+    Camera *previewCamera,
+    GameObject *previewGoContainer,
+    Mesh *mesh,
+    const ResourcePreviewFactoryParameters &params)
 {
     BANG_UNUSED_3(previewScene, previewCamera, params);
     ASSERT(previewScene);
@@ -79,13 +80,12 @@ void MeshPreviewFactory::OnUpdateTextureBegin(
 }
 
 void MeshPreviewFactory::OnUpdateTextureEnd(
-                                Scene *previewScene,
-                                Camera *previewCamera,
-                                GameObject *previewGoContainer,
-                                Mesh *mesh,
-                                const ResourcePreviewFactoryParameters &params)
+    Scene *previewScene,
+    Camera *previewCamera,
+    GameObject *previewGoContainer,
+    Mesh *mesh,
+    const ResourcePreviewFactoryParameters &params)
 {
-    BANG_UNUSED_5(previewScene, previewCamera,
-                  previewGoContainer, mesh, params);
+    BANG_UNUSED_5(previewScene, previewCamera, previewGoContainer, mesh,
+                  params);
 }
-

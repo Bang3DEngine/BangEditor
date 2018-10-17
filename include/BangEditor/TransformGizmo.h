@@ -9,18 +9,19 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class GameObject;
-FORWARD class Scene;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class GameObject;
+class Scene;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class RectTransformSelectionGizmo;
-FORWARD class RotateGizmo;
-FORWARD class ScaleGizmo;
-FORWARD class TranslateGizmo;
+using namespace Bang;
+namespace BangEditor
+{
+class RectTransformSelectionGizmo;
+class RotateGizmo;
+class ScaleGizmo;
+class TranslateGizmo;
 
 enum class TransformGizmoMode
 {
@@ -55,19 +56,17 @@ public:
 private:
     MetaNode m_transformUndoMetaBefore;
 
-    GameObject                  *p_worldGizmoContainer  = nullptr;
-    GameObject                  *p_canvasGizmoContainer = nullptr;
+    GameObject *p_worldGizmoContainer = nullptr;
+    GameObject *p_canvasGizmoContainer = nullptr;
 
-    TranslateGizmo              *p_translateGizmo     = nullptr;
-    RotateGizmo                 *p_rotateGizmo        = nullptr;
-    ScaleGizmo                  *p_scaleGizmo         = nullptr;
+    TranslateGizmo *p_translateGizmo = nullptr;
+    RotateGizmo *p_rotateGizmo = nullptr;
+    ScaleGizmo *p_scaleGizmo = nullptr;
     RectTransformSelectionGizmo *p_rectTransformGizmo = nullptr;
 
-	TransformGizmo();
+    TransformGizmo();
     virtual ~TransformGizmo() override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // TRANSFORMGIZMO_H
-
+#endif  // TRANSFORMGIZMO_H

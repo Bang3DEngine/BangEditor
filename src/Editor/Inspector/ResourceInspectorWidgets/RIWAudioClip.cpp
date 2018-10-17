@@ -18,14 +18,15 @@
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/RIWResource.tcc"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsDestroy;
-FORWARD class IEventsValueChanged;
-FORWARD class Texture2D;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsDestroy;
+class IEventsValueChanged;
+class Texture2D;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 RIWAudioClip::RIWAudioClip()
 {
@@ -43,9 +44,8 @@ void RIWAudioClip::Init()
     SetTitle("Audio Clip");
 
     p_playStopButton = GameObjectFactory::CreateUIButton("Play");
-    p_playStopButton->AddClickedCallback([this]()
-    {
-        if (p_playStopButton->GetText()->GetContent() == "Stop")
+    p_playStopButton->AddClickedCallback([this]() {
+        if(p_playStopButton->GetText()->GetContent() == "Stop")
         {
             Stop();
         }
@@ -74,7 +74,8 @@ void RIWAudioClip::Init()
     p_numChannels->SetDecimalPlaces(0);
 
     AddWidget(p_playStopButton->GetGameObject());
-    AddWidget( GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5) );
+    AddWidget(
+        GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5));
     AddWidget("Duration", p_duration->GetGameObject());
     AddWidget("Frequency", p_frequency->GetGameObject());
     AddWidget("Bit depth", p_bitDepth->GetGameObject());
@@ -88,18 +89,18 @@ void RIWAudioClip::Play()
 {
     AudioParams params;
     p_alAudioSourceBeingPlayed = AudioManager::Play(GetAudioClip(), params);
-    p_alAudioSourceBeingPlayed->EventEmitter<IEventsDestroy>::
-                                RegisterListener(this);
+    p_alAudioSourceBeingPlayed->EventEmitter<IEventsDestroy>::RegisterListener(
+        this);
     p_playStopButton->GetText()->SetContent("Stop");
 }
 
 void RIWAudioClip::Stop()
 {
-    if (p_alAudioSourceBeingPlayed)
+    if(p_alAudioSourceBeingPlayed)
     {
         p_alAudioSourceBeingPlayed->Stop();
-        p_alAudioSourceBeingPlayed->EventEmitter<IEventsDestroy>::
-                                    UnRegisterListener(this);
+        p_alAudioSourceBeingPlayed
+            ->EventEmitter<IEventsDestroy>::UnRegisterListener(this);
     }
     p_playStopButton->GetText()->SetContent("Play");
 }
@@ -107,18 +108,18 @@ void RIWAudioClip::Stop()
 void RIWAudioClip::UpdateInputsFromResource()
 {
     p_duration->GetText()->SetContent(
-                String::ToString(GetAudioClip()->GetLength()) + "s.");
+        String::ToString(GetAudioClip()->GetLength()) + "s.");
     p_frequency->GetText()->SetContent(
-                String::ToString(GetAudioClip()->GetFrequency()) + " hz.");
-    p_bitDepth->SetValue( GetAudioClip()->GetBitDepth() );
-    p_bufferSize->SetValue( GetAudioClip()->GetBufferSize() );
-    p_numChannels->SetValue( GetAudioClip()->GetChannels() );
+        String::ToString(GetAudioClip()->GetFrequency()) + " hz.");
+    p_bitDepth->SetValue(GetAudioClip()->GetBitDepth());
+    p_bufferSize->SetValue(GetAudioClip()->GetBufferSize());
+    p_numChannels->SetValue(GetAudioClip()->GetChannels());
 }
 
 Texture2D *RIWAudioClip::GetIconTexture() const
 {
     return EditorTextureFactory::GetIconForExtension(
-                Extensions::GetAudioClipExtensions().Front());
+        Extensions::GetAudioClipExtensions().Front());
 }
 
 Color RIWAudioClip::GetIconTint() const
@@ -126,7 +127,8 @@ Color RIWAudioClip::GetIconTint() const
     return EditorTextureFactory::GetComponentIconTint("AudioSource");
 }
 
-void RIWAudioClip::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *object)
+void RIWAudioClip::OnValueChangedRIWResource(
+    EventEmitter<IEventsValueChanged> *object)
 {
     // Empty
     BANG_UNUSED(object);
@@ -143,7 +145,5 @@ void RIWAudioClip::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 
 AudioClip *RIWAudioClip::GetAudioClip() const
 {
-    return SCAST<AudioClip*>( GetResource().Get() );
+    return SCAST<AudioClip *>(GetResource().Get());
 }
-
-

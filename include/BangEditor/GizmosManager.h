@@ -13,20 +13,22 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/Editor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class GameObject;
-FORWARD   class IEventsDestroy;
-FORWARD   class Scene;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class GameObject;
+class IEventsDestroy;
+class Scene;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class ComponentsGizmos;
-FORWARD class GameObjectSelectionGizmo;
-FORWARD class IEventsEditor;
-FORWARD class TransformGizmo;
+using namespace Bang;
+namespace BangEditor
+{
+class ComponentsGizmos;
+class GameObjectSelectionGizmo;
+class IEventsEditor;
+class TransformGizmo;
 
 class GizmosManager : public EventListener<IEventsEditor>,
                       public EventListener<IEventsDestroy>
@@ -44,7 +46,7 @@ public:
     ComponentsGizmos *GetComponentsGizmos() const;
     GameObjectSelectionGizmo *GetGameObjectSelectionGizmo() const;
 
-    static GizmosManager* GetInstance();
+    static GizmosManager *GetInstance();
 
 private:
     TransformGizmo *p_transformGizmo = nullptr;
@@ -57,8 +59,6 @@ private:
     // IEventsDestroy
     void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // GIZMOSMANAGER_H
-
+#endif  // GIZMOSMANAGER_H

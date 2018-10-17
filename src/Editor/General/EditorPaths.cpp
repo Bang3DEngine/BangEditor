@@ -9,8 +9,8 @@
 #include "Bang/Time.h"
 #include "BangEditor/EditorApplication.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 EditorPaths::EditorPaths()
 {
@@ -24,10 +24,10 @@ void EditorPaths::InitEditorPath(const Path &editorRootPath)
 {
     c_editorRoot = editorRootPath;
 
-    if (EditorPaths::GetEditorAssetsDir().IsDir())
+    if(EditorPaths::GetEditorAssetsDir().IsDir())
     {
-        Debug_DLog("Picking as EditorPaths Bang Editor Root: '" <<
-                  EditorPaths::GetEditorDir() << "'");
+        Debug_DLog("Picking as EditorPaths Bang Editor Root: '"
+                   << EditorPaths::GetEditorDir() << "'");
     }
     else
     {
@@ -39,7 +39,7 @@ void EditorPaths::InitEditorPath(const Path &editorRootPath)
 List<Path> EditorPaths::GetEditorIncludeDirs()
 {
     List<Path> incDirs;
-    incDirs.PushBack( EditorPaths::GetEditorDir().Append("include") );
+    incDirs.PushBack(EditorPaths::GetEditorDir().Append("include"));
     return incDirs;
 }
 
@@ -55,16 +55,16 @@ Path EditorPaths::GetEditorAssetsDir()
 
 Path EditorPaths::GetEditorBinariesDir()
 {
-    return EditorPaths::GetEditorDir().
-           Append("Binaries").
-           Append( Paths::GetBuildType() );
+    return EditorPaths::GetEditorDir()
+        .Append("Binaries")
+        .Append(Paths::GetBuildType());
 }
 
 Path EditorPaths::GetEditorLibrariesDir()
 {
-    return EditorPaths::GetEditorDir().
-           Append("Libraries").
-           Append(Paths::GetBuildType());
+    return EditorPaths::GetEditorDir()
+        .Append("Libraries")
+        .Append(Paths::GetBuildType());
 }
 
 Path EditorPaths::GetEditorBuildDir()
@@ -96,10 +96,8 @@ Bang::Path BangEditor::EditorPaths::GetBangLatestLibPath()
 {
     Path staticLibPath = EditorPaths::GetBangStaticLibPath();
     Path dynamicLibPath = EditorPaths::GetBangDynamicLibPath();
-    if (staticLibPath.IsFile() &&
-        (staticLibPath.GetModificationTime() >
-         dynamicLibPath.GetModificationTime())
-       )
+    if(staticLibPath.IsFile() && (staticLibPath.GetModificationTime() >
+                                  dynamicLibPath.GetModificationTime()))
     {
         return staticLibPath;
     }

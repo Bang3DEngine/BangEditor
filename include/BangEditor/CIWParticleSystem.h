@@ -6,25 +6,26 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/CIWRenderer.h"
 
+namespace Bang
+{
+class IEventsValueChanged;
+class UICheckBox;
+class ParticleSystem;
+class UIComboBox;
+class UIInputNumber;
+class UISlider;
+template <class>
+class EventEmitter;
+}
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class UICheckBox;
-FORWARD   class ParticleSystem;
-FORWARD   class UIComboBox;
-FORWARD   class UIInputNumber;
-FORWARD   class UISlider;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
-
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UIInputColor;
-FORWARD class UIInputComplexRandom;
-FORWARD class UIInputFileWithPreview;
-FORWARD class UIInputTexture;
-FORWARD class UIInputVector;
+using namespace Bang;
+namespace BangEditor
+{
+class UIInputColor;
+class UIInputComplexRandom;
+class UIInputFileWithPreview;
+class UIInputTexture;
+class UIInputVector;
 
 class CIWParticleSystem : public CIWRenderer
 {
@@ -69,8 +70,6 @@ protected:
     // ComponentInspectorWidget
     void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWPARTICLESYSTEM_H
-
+#endif  // CIWPARTICLESYSTEM_H

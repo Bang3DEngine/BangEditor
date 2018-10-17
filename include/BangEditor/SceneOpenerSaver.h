@@ -17,17 +17,18 @@
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UndoRedoManager.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsSceneManager;
-FORWARD class Scene;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsSceneManager;
+class Scene;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class IEventsScenePlayer;
-FORWARD class IEventsUndoRedo;
-FORWARD class UndoRedoAction;
+using namespace Bang;
+namespace BangEditor
+{
+class IEventsScenePlayer;
+class IEventsUndoRedo;
+class UndoRedoAction;
 
 class SceneOpenerSaver : public EventListener<IEventsSceneManager>,
                          public EventListener<IEventsScenePlayer>,
@@ -50,10 +51,10 @@ public:
     // IEventsSceneManager
     void OnSceneLoaded(Scene *scene, const Path &sceneFilepath) override;
 
-    const Path& GetOpenScenePath() const;
-    const Path& GetLoadedScenePath() const;
+    const Path &GetOpenScenePath() const;
+    const Path &GetLoadedScenePath() const;
 
-    static SceneOpenerSaver* GetInstance();
+    static SceneOpenerSaver *GetInstance();
 
 private:
     int m_numActionsDoneSinceLastSave = 0;
@@ -79,8 +80,6 @@ private:
     void OnPlayStateChanged(PlayState previousPlayState,
                             PlayState newPlayState) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // SCENEOPENERSAVER_H
-
+#endif  // SCENEOPENERSAVER_H

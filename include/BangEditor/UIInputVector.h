@@ -15,15 +15,16 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class IEventsValueChanged;
-FORWARD class UIInputNumber;
-FORWARD class UILabel;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class UIInputNumber;
+class UILabel;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class UIInputVector : public GameObject,
                       public EventListener<IEventsValueChanged>,
                       public EventEmitter<IEventsValueChanged>
@@ -39,8 +40,7 @@ public:
     void Set(int i, float v);
     void SetMinValue(const Vector4 &minValue);
     void SetMaxValue(const Vector4 &maxValue);
-    void SetMinMaxValues(const Vector4 &minValue,
-                         const Vector4 &maxValue);
+    void SetMinMaxValues(const Vector4 &minValue, const Vector4 &maxValue);
 
     float Get(int i) const;
     Vector2 GetVector2() const;
@@ -49,7 +49,7 @@ public:
 
     int GetSize() const;
 
-    const Array<UIInputNumber*> GetInputNumbers() const;
+    const Array<UIInputNumber *> GetInputNumbers() const;
 
     bool HasFocus() const;
 
@@ -62,10 +62,8 @@ protected:
 
 private:
     int m_size = 4;
-    Array<UIInputNumber*> m_inputNumbers;
+    Array<UIInputNumber *> m_inputNumbers;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UIINPUTVECTOR_H
-
+#endif  // UIINPUTVECTOR_H

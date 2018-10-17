@@ -7,19 +7,21 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class PostProcessEffectSSAO;
-FORWARD   class UIComboBox;
-FORWARD   class UICheckBox;
-FORWARD   class UIInputNumber;
-FORWARD   class UISlider;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class PostProcessEffectSSAO;
+class UIComboBox;
+class UICheckBox;
+class UIInputNumber;
+class UISlider;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class CIWPostProcessEffectSSAO : public ComponentInspectorWidget
 {
     GAMEOBJECT_EDITOR(CIWPostProcessEffectSSAO);
@@ -30,7 +32,8 @@ public:
     virtual void UpdateFromReference() override;
 
     // ComponentInspectorWidget
-    virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
+    virtual void OnValueChangedCIW(
+        EventEmitter<IEventsValueChanged> *object) override;
 
 private:
     UISlider *p_intensityInput = nullptr;
@@ -44,10 +47,8 @@ private:
     CIWPostProcessEffectSSAO();
     virtual ~CIWPostProcessEffectSSAO() override;
 
-    PostProcessEffectSSAO* GetPostProcessEffectSSAO() const;
+    PostProcessEffectSSAO *GetPostProcessEffectSSAO() const;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // CIWPOSTPROCESSEFFECTSSAO_H
-
+#endif  // CIWPOSTPROCESSEFFECTSSAO_H

@@ -9,8 +9,8 @@
 #include "Bang/UIInputNumber.h"
 #include "Bang/UILayoutElement.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 UIInputComplexRandom::UIInputComplexRandom()
 {
@@ -22,17 +22,19 @@ UIInputComplexRandom::UIInputComplexRandom()
     hl->SetSpacing(5);
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetFlexibleSize( Vector2::One );
+    le->SetFlexibleSize(Vector2::One);
 
     p_minRangeInputNumber = GameObjectFactory::CreateUIInputNumber();
     p_maxRangeInputNumber = GameObjectFactory::CreateUIInputNumber();
-    p_minRangeInputNumber->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-    p_maxRangeInputNumber->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_minRangeInputNumber->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
+    p_maxRangeInputNumber->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     p_minRangeInputNumber->GetGameObject()->SetParent(this);
     p_maxRangeInputNumber->GetGameObject()->SetParent(this);
 
-    Set( ComplexRandom(0, 1) );
+    Set(ComplexRandom(0, 1));
 }
 
 UIInputComplexRandom::~UIInputComplexRandom()
@@ -41,15 +43,17 @@ UIInputComplexRandom::~UIInputComplexRandom()
 
 void UIInputComplexRandom::Set(const ComplexRandom &complexRandom)
 {
-    if (complexRandom != GetComplexRandom())
+    if(complexRandom != GetComplexRandom())
     {
         m_complexRandom = complexRandom;
 
-        p_minRangeInputNumber->SetValue( GetComplexRandom().GetMinRangeValue() );
-        p_maxRangeInputNumber->SetValue( GetComplexRandom().GetMaxRangeValue() );
+        p_minRangeInputNumber->SetValue(GetComplexRandom().GetMinRangeValue());
+        p_maxRangeInputNumber->SetValue(GetComplexRandom().GetMaxRangeValue());
 
-        p_minRangeInputNumber->SetMaxValue( GetComplexRandom().GetMaxRangeValue() );
-        p_maxRangeInputNumber->SetMinValue( GetComplexRandom().GetMinRangeValue() );
+        p_minRangeInputNumber->SetMaxValue(
+            GetComplexRandom().GetMaxRangeValue());
+        p_maxRangeInputNumber->SetMinValue(
+            GetComplexRandom().GetMinRangeValue());
     }
 }
 
@@ -82,13 +86,12 @@ const ComplexRandom &UIInputComplexRandom::GetComplexRandom() const
     return m_complexRandom;
 }
 
-void UIInputComplexRandom::OnValueChanged(EventEmitter<IEventsValueChanged>*)
+void UIInputComplexRandom::OnValueChanged(EventEmitter<IEventsValueChanged> *)
 {
     ComplexRandom cr(p_minRangeInputNumber->GetValue(),
                      p_maxRangeInputNumber->GetValue());
     Set(cr);
 
     EventEmitter<IEventsValueChanged>::PropagateToListeners(
-                &IEventsValueChanged::OnValueChanged, this);
+        &IEventsValueChanged::OnValueChanged, this);
 }
-

@@ -15,8 +15,8 @@
 #include "Bang/UITextRenderer.h"
 #include "BangEditor/EditorCamera.h"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 UISceneToolbarDown::UISceneToolbarDown()
 {
@@ -29,22 +29,24 @@ UISceneToolbarDown::UISceneToolbarDown()
     zoomSpeedLabel->GetText()->SetContent("Zoom speed:");
     zoomSpeedLabel->GetGameObject()->SetParent(this);
 
-    UILayoutElement *labelLE = zoomSpeedLabel->GetGameObject()->
-                               AddComponent<UILayoutElement>();
+    UILayoutElement *labelLE =
+        zoomSpeedLabel->GetGameObject()->AddComponent<UILayoutElement>();
     labelLE->SetFlexibleWidth(0.0f);
     labelLE->SetLayoutPriority(2);
 
-    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::PREFERRED, 10)->SetParent(this);
+    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::PREFERRED, 10)
+        ->SetParent(this);
 
     p_zoomSpeedSlider = GameObjectFactory::CreateUISlider();
-    p_zoomSpeedSlider->EventEmitter<IEventsValueChanged>::RegisterListener(this);
+    p_zoomSpeedSlider->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
     p_zoomSpeedSlider->SetMinMaxValues(0.01f, 3.0f);
     p_zoomSpeedSlider->SetValue(1.0f);
     p_zoomSpeedSlider->GetInputNumber()->GetGameObject()->SetEnabled(false);
     p_zoomSpeedSlider->GetGameObject()->SetParent(this);
 
-    UILayoutElement *zoomSpeedSliderLE = p_zoomSpeedSlider->GetGameObject()->
-                                         AddComponent<UILayoutElement>();
+    UILayoutElement *zoomSpeedSliderLE =
+        p_zoomSpeedSlider->GetGameObject()->AddComponent<UILayoutElement>();
     zoomSpeedSliderLE->SetMinWidth(50);
     zoomSpeedSliderLE->SetPreferredWidth(100);
     zoomSpeedSliderLE->SetFlexibleWidth(0.0f);
@@ -53,17 +55,16 @@ UISceneToolbarDown::UISceneToolbarDown()
     constexpr int ToolBarHeight = 20;
     UILayoutElement *toolbarLE = AddComponent<UILayoutElement>();
     toolbarLE->SetPreferredHeight(ToolBarHeight);
-    toolbarLE->SetFlexibleWidth( 1.0f );
+    toolbarLE->SetFlexibleWidth(1.0f);
 }
 
 UISceneToolbarDown::~UISceneToolbarDown()
 {
 }
 
-void UISceneToolbarDown::OnValueChanged(EventEmitter<IEventsValueChanged>*)
+void UISceneToolbarDown::OnValueChanged(EventEmitter<IEventsValueChanged> *)
 {
     float zoomSpeed = p_zoomSpeedSlider->GetValue();
-    zoomSpeed *= zoomSpeed; // Quadratic slider value
+    zoomSpeed *= zoomSpeed;  // Quadratic slider value
     EditorCamera::GetInstance()->SetZoomSpeedMultiplier(zoomSpeed);
 }
-

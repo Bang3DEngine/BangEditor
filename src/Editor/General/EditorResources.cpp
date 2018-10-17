@@ -10,13 +10,14 @@
 #include "BangEditor/ModelPreviewFactory.h"
 #include "BangEditor/ResourcePreviewFactory.tcc"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class MeshFactory;
-FORWARD class TextureFactory;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class MeshFactory;
+class TextureFactory;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 EditorResources::EditorResources()
 {
@@ -49,7 +50,7 @@ MaterialPreviewFactory *EditorResources::GetMaterialPreviewFactory() const
 
 EditorResources *EditorResources::GetInstance()
 {
-    return DCAST<EditorResources*>( Resources::GetInstance() );
+    return DCAST<EditorResources *>(Resources::GetInstance());
 }
 
 void EditorResources::Init()
@@ -79,8 +80,7 @@ Array<Path> EditorResources::GetLookUpPaths() const
     Array<Path> lookUpPaths = Resources::GetLookUpPaths();
     lookUpPaths.PushBack(EditorPaths::GetEditorAssetsDir());
     lookUpPaths.PushBack(EditorPaths::GetEditorAssetsDir().Append("Shaders"));
-    lookUpPaths.PushBack(EditorPaths::GetEditorAssetsDir().Append("Shaders").
-                         Append("Include"));
+    lookUpPaths.PushBack(
+        EditorPaths::GetEditorAssetsDir().Append("Shaders").Append("Include"));
     return lookUpPaths;
 }
-

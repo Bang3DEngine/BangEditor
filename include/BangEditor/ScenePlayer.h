@@ -17,15 +17,16 @@
 #include "BangEditor/PlayState.h"
 #include "BangEditor/ShortcutManager.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Scene;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Scene;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class IEventsScenePlayer;
-FORWARD class Shortcut;
+using namespace Bang;
+namespace BangEditor
+{
+class IEventsScenePlayer;
+class Shortcut;
 
 class ScenePlayer : public EventEmitter<IEventsScenePlayer>
 {
@@ -56,8 +57,6 @@ private:
 
     friend class EditorScene;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // SCENEPLAYER_H
-
+#endif  // SCENEPLAYER_H

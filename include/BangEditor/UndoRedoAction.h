@@ -5,9 +5,9 @@
 #include "Bang/BangDefines.h"
 #include "BangEditor/BangEditor.h"
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class UndoRedoAction
 {
 public:
@@ -20,10 +20,8 @@ public:
     virtual bool IsRedundant() const;
 
 protected:
-	UndoRedoAction();
+    UndoRedoAction();
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UNDOREDOACTION_H
-
+#endif  // UNDOREDOACTION_H

@@ -3,11 +3,11 @@
 
 #include "Bang/IEvents.h"
 
-#include "BangEditor/PlayState.h"
 #include "BangEditor/BangEditor.h"
+#include "BangEditor/PlayState.h"
 
-NAMESPACE_BANG_EDITOR_BEGIN
-
+namespace BangEditor
+{
 class IEventsScenePlayer
 {
     IEVENTS_NS(IEventsScenePlayer);
@@ -19,8 +19,6 @@ public:
         BANG_UNUSED_2(previousPlayState, newPlayState);
     }
 };
+}
 
-
-NAMESPACE_BANG_EDITOR_END
-
-#endif // IEVENTSSCENEPLAYER_H
+#endif  // IEVENTSSCENEPLAYER_H

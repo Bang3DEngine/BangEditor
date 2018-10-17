@@ -2,13 +2,15 @@
 
 #include "Bang/WaterRenderer.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 void CIWWaterRenderer::InitInnerWidgets()
 {
@@ -33,11 +35,11 @@ CIWWaterRenderer::~CIWWaterRenderer()
 
 WaterRenderer *CIWWaterRenderer::GetWaterRenderer() const
 {
-    return SCAST<WaterRenderer*>( GetComponent() );
+    return SCAST<WaterRenderer *>(GetComponent());
 }
 
-void CIWWaterRenderer::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
+void CIWWaterRenderer::OnValueChangedCIW(
+    EventEmitter<IEventsValueChanged> *object)
 {
     CIWRenderer::OnValueChangedCIW(object);
 }
-

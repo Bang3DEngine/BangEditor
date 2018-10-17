@@ -15,24 +15,26 @@
 #include "Bang/RenderPass.h"
 #include "BangEditor/BangEditor.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class Camera;
-FORWARD   class IEventsDestroy;
-FORWARD   class IEventsTransform;
-FORWARD   class IEventsValueChanged;
-FORWARD   class Scene;
-FORWARD   class Texture2D;
-FORWARD   class UIFocusable;
-FORWARD   class UIImageRenderer;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Camera;
+class IEventsDestroy;
+class IEventsTransform;
+class IEventsValueChanged;
+class Scene;
+class Texture2D;
+class UIFocusable;
+class UIImageRenderer;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
-FORWARD class UISceneImage;
-FORWARD class UISceneToolbar;
-FORWARD class UISceneToolbarDown;
+using namespace Bang;
+namespace BangEditor
+{
+class UISceneImage;
+class UISceneToolbar;
+class UISceneToolbarDown;
 
 class UISceneContainer : public GameObject,
                          public EventListener<IEventsFocus>,
@@ -53,9 +55,9 @@ public:
     Scene *GetContainedScene() const;
     AARect GetSceneImageAARectNDC() const;
 
-    UISceneToolbar* GetSceneToolbar() const;
-    UISceneImage* GetSceneImage() const;
-    UIFocusable* GetFocusable() const;
+    UISceneToolbar *GetSceneToolbar() const;
+    UISceneImage *GetSceneImage() const;
+    UIFocusable *GetFocusable() const;
     UISceneToolbarDown *GetSceneToolbarDown() const;
 
 protected:
@@ -63,7 +65,8 @@ protected:
     void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
     // IEventsFocus
-    UIEventResult OnUIEvent(UIFocusable *focusable, const UIEvent &event) override;
+    UIEventResult OnUIEvent(UIFocusable *focusable,
+                            const UIEvent &event) override;
 
 private:
     UIFocusable *p_focusable = nullptr;
@@ -77,7 +80,7 @@ private:
 
     GameObject *p_noCameraOverlay = nullptr;
 
-    virtual Camera* GetSceneCamera(Scene *scene) = 0;
+    virtual Camera *GetSceneCamera(Scene *scene) = 0;
     virtual bool NeedsToRenderContainedScene(Scene *scene) = 0;
     virtual void OnRenderContainedSceneBegin();
     virtual void OnRenderContainedSceneFinished();
@@ -88,8 +91,6 @@ private:
     // IEventsValueChanged
     void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UISCENECONTAINER_H
-
+#endif  // UISCENECONTAINER_H

@@ -15,18 +15,20 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/RIWResource.h"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD   class IEventsValueChanged;
-FORWARD   class Texture2D;
-FORWARD   class UIComboBox;
-FORWARD   class UIInputNumber;
-FORWARD   class UISlider;
-FORWARD_T class EventEmitter;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class IEventsValueChanged;
+class Texture2D;
+class UIComboBox;
+class UIInputNumber;
+class UISlider;
+template <class>
+class EventEmitter;
+}
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class RIWPhysicsMaterial : public RIWResource<PhysicsMaterial>
 {
     GAMEOBJECT_EDITOR(RIWPhysicsMaterial);
@@ -38,10 +40,10 @@ public:
 private:
     RH<PhysicsMaterial> m_physicsMaterialRH;
 
-    UISlider *p_staticFrictionInput           = nullptr;
-    UISlider *p_dynamicFrictionInput          = nullptr;
-    UISlider *p_restitutionInput              = nullptr;
-    UIComboBox *p_frictionCombineModeInput    = nullptr;
+    UISlider *p_staticFrictionInput = nullptr;
+    UISlider *p_dynamicFrictionInput = nullptr;
+    UISlider *p_restitutionInput = nullptr;
+    UIComboBox *p_frictionCombineModeInput = nullptr;
     UIComboBox *p_restitutionCombineModeInput = nullptr;
 
     RIWPhysicsMaterial();
@@ -54,12 +56,11 @@ private:
     Texture2D *GetIconTexture() const override;
 
     // RIWResource
-    void OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *object) override;
+    void OnValueChangedRIWResource(
+        EventEmitter<IEventsValueChanged> *object) override;
 
     friend class ResourceInspectorWidgetFactory;
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // RIWPHYSICSMATERIAL_H
-
+#endif  // RIWPHYSICSMATERIAL_H

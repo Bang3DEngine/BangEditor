@@ -7,15 +7,15 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/UndoRedoAction.h"
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
-
+using namespace Bang;
+namespace BangEditor
+{
 class UndoRedoExplorerSelect : public UndoRedoAction
 {
 public:
     UndoRedoExplorerSelect(const Path &previousSelectedPath,
                            const Path &newSelectedPath);
-	virtual ~UndoRedoExplorerSelect() override;
+    virtual ~UndoRedoExplorerSelect() override;
 
     // UndoRedoAction
     void Undo() override;
@@ -28,8 +28,6 @@ private:
 
     void RestorePath(const Path &path);
 };
+}
 
-NAMESPACE_BANG_EDITOR_END
-
-#endif // UNDOREDOEXPLORERSELECT_H
-
+#endif  // UNDOREDOEXPLORERSELECT_H

@@ -14,12 +14,13 @@
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/ResourcePreviewFactory.tcc"
 
-FORWARD NAMESPACE_BANG_BEGIN
-FORWARD class Camera;
-FORWARD NAMESPACE_BANG_END
+namespace Bang
+{
+class Camera;
+}
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 ModelPreviewFactory::ModelPreviewFactory()
 {
@@ -32,25 +33,25 @@ ModelPreviewFactory::~ModelPreviewFactory()
 RH<Texture2D> ModelPreviewFactory::GetPreviewTextureFor(Model *model)
 {
     return ModelPreviewFactory::GetPreviewTextureFor(
-                            model, ResourcePreviewFactoryParameters());
+        model, ResourcePreviewFactoryParameters());
 }
 
 RH<Texture2D> ModelPreviewFactory::GetPreviewTextureFor(
-                                Model *model,
-                                const ResourcePreviewFactoryParameters &params)
+    Model *model,
+    const ResourcePreviewFactoryParameters &params)
 {
     RH<Texture2D> texRH;
-    if (model)
+    if(model)
     {
-        if (model->GetMeshes().Size() >= 1)
+        if(model->GetMeshes().Size() >= 1)
         {
-            texRH = ModelPreviewFactory::GetActive()->
-                                         GetPreviewTextureFor_(model, params);
+            texRH = ModelPreviewFactory::GetActive()->GetPreviewTextureFor_(
+                model, params);
         }
         else
         {
             texRH.Set(EditorTextureFactory::GetIconForExtension(
-                                Extensions::GetAnimationExtension() ) );
+                Extensions::GetAnimationExtension()));
         }
     }
     return texRH;
@@ -69,11 +70,11 @@ void ModelPreviewFactory::OnCreateSceneFirstTime(Scene *previewScene,
 }
 
 void ModelPreviewFactory::OnUpdateTextureBegin(
-                                Scene *previewScene,
-                                Camera *previewCamera,
-                                GameObject *previewGoContainer,
-                                Model *model,
-                                const ResourcePreviewFactoryParameters &params)
+    Scene *previewScene,
+    Camera *previewCamera,
+    GameObject *previewGoContainer,
+    Model *model,
+    const ResourcePreviewFactoryParameters &params)
 {
     BANG_UNUSED_2(previewCamera, params);
 
@@ -86,20 +87,20 @@ void ModelPreviewFactory::OnUpdateTextureBegin(
     previewScene->Start();
 
     // Modify material
-    Array<MeshRenderer*> meshRenderers =
-         previewGoContainer->GetComponentsInDescendantsAndThis<MeshRenderer>();
-    for (MeshRenderer *mr : meshRenderers)
+    Array<MeshRenderer *> meshRenderers =
+        previewGoContainer->GetComponentsInDescendantsAndThis<MeshRenderer>();
+    for(MeshRenderer *mr : meshRenderers)
     {
         mr->GetMaterial()->SetCullFace(GL::CullFaceExt::NONE);
     }
 }
 
 void ModelPreviewFactory::OnUpdateTextureEnd(
-                                Scene *previewScene,
-                                Camera *previewCamera,
-                                GameObject *previewGoContainer,
-                                Model *model,
-                                const ResourcePreviewFactoryParameters &params)
+    Scene *previewScene,
+    Camera *previewCamera,
+    GameObject *previewGoContainer,
+    Model *model,
+    const ResourcePreviewFactoryParameters &params)
 {
     BANG_UNUSED_4(previewScene, previewCamera, model, params);
 
@@ -108,4 +109,3 @@ void ModelPreviewFactory::OnUpdateTextureEnd(
 
     GameObject::DestroyImmediate(modelGo);
 }
-
