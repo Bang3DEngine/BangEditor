@@ -99,7 +99,7 @@ void CIWAudioSource::UpdateFromReference()
 
 void CIWAudioSource::OnPlayClicked()
 {
-    if(!GetAudioSource()->IsPlaying())
+    if (!GetAudioSource()->IsPlaying())
     {
         GetAudioSource()->Play();
     }
@@ -114,7 +114,7 @@ void CIWAudioSource::OnValueChangedCIW(
 {
     ComponentInspectorWidget::OnValueChangedCIW(object);
 
-    if(object == p_audioClipFileInput)
+    if (object == p_audioClipFileInput)
     {
         RH<AudioClip> ac =
             Resources::Load<AudioClip>(p_audioClipFileInput->GetPath());

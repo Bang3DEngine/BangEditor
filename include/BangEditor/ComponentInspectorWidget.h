@@ -16,8 +16,8 @@
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/InspectorWidget.h"
-#include "BangEditor/UIContextMenu.h"
 #include "BangEditor/ReflectWidgetsManager.h"
+#include "BangEditor/UIContextMenu.h"
 
 namespace Bang
 {

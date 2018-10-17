@@ -96,14 +96,15 @@ private:
 template <class T>
 void UIInputArray::UpdateRows(const Array<T *> &referenceSerializables)
 {
-    if(!m_updatingRowsOrReferences)
+    if (!m_updatingRowsOrReferences)
     {
         m_updatingRowsOrReferences = true;
         auto rowGameObjectsCasted =
             GetRowGameObjects().template To<Array, Serializable *>();
         auto referenceSerializablesCasted =
             referenceSerializables.template To<Array, Serializable *>();
-        UpdateSerializables(rowGameObjectsCasted, referenceSerializablesCasted,
+        UpdateSerializables(rowGameObjectsCasted,
+                            referenceSerializablesCasted,
                             [this]() {
                                 GameObject *newObj =
                                     m_createNewRowGameObjectFunction();
@@ -124,7 +125,7 @@ void UIInputArray::UpdateReferences(
     std::function<T *()> createNewReferenceFunction,
     std::function<void(T *)> removeReferenceFunction)
 {
-    if(!m_updatingRowsOrReferences)
+    if (!m_updatingRowsOrReferences)
     {
         m_updatingRowsOrReferences = true;
         auto rowGameObjectsCasted =
@@ -132,7 +133,8 @@ void UIInputArray::UpdateReferences(
         auto referenceSerializablesCasted =
             referenceSerializables.template To<Array, Serializable *>();
         UpdateSerializables(
-            referenceSerializablesCasted, rowGameObjectsCasted,
+            referenceSerializablesCasted,
+            rowGameObjectsCasted,
             [&]() {
                 T *newObj = createNewReferenceFunction();
                 return SCAST<Serializable *>(newObj);

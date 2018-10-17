@@ -24,7 +24,7 @@ UndoRedoObjectProperty<T>::UndoRedoObjectProperty(
 template <class T>
 void UndoRedoObjectProperty<T>::Undo()
 {
-    if(p_obj)
+    if (p_obj)
     {
         m_setter(p_obj, m_prevValue);
     }
@@ -33,7 +33,7 @@ void UndoRedoObjectProperty<T>::Undo()
 template <class T>
 void UndoRedoObjectProperty<T>::Redo()
 {
-    if(p_obj)
+    if (p_obj)
     {
         m_setter(p_obj, m_newValue);
     }

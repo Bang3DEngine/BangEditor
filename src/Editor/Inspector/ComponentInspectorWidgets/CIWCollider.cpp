@@ -70,7 +70,7 @@ void CIWCollider::UpdateFromReference()
     ComponentInspectorWidget::UpdateFromReference();
 
     Collider *collider = GetCollider();
-    if(!p_centerInput->HasFocus())
+    if (!p_centerInput->HasFocus())
     {
         p_centerInput->Set(collider->GetCenter());
     }
@@ -91,13 +91,13 @@ void CIWCollider::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
     collider->SetIsTrigger(p_isTriggerInput->IsChecked());
     collider->SetCenter(p_centerInput->GetVector3());
 
-    if(p_physicsMaterialInput->GetPath().IsFile())
+    if (p_physicsMaterialInput->GetPath().IsFile())
     {
         RH<PhysicsMaterial> phMat =
             Resources::Load<PhysicsMaterial>(p_physicsMaterialInput->GetPath());
         collider->SetPhysicsMaterial(phMat.Get());
     }
-    else if(p_physicsMaterialInput->GetPath().IsEmpty())
+    else if (p_physicsMaterialInput->GetPath().IsEmpty())
     {
         collider->SetPhysicsMaterial(nullptr);
     }

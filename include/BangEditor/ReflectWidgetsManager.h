@@ -1,18 +1,19 @@
 #ifndef REFLECTWIDGETSMANAGER_H
 #define REFLECTWIDGETSMANAGER_H
 
-#include "Bang/Bang.h"
-#include "Bang/Map.h"
 #include "Bang/BPReflectedStruct.h"
 #include "Bang/BPReflectedVariable.h"
+#include "Bang/Bang.h"
+#include "Bang/Map.h"
 
 #include "BangEditor/BangEditor.h"
 
 namespace Bang
 {
-    class GameObject;
-    class IEventsValueChanged;
-    template <class> class EventListener;
+class GameObject;
+class IEventsValueChanged;
+template <class>
+class EventListener;
 };
 
 using namespace Bang;

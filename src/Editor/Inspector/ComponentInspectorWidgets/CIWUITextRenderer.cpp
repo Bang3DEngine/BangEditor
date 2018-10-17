@@ -85,18 +85,18 @@ void CIWUITextRenderer::UpdateFromReference()
 {
     ComponentInspectorWidget::UpdateFromReference();
 
-    if(!UICanvas::GetActive(p_contentInput)->HasFocus(p_contentInput))
+    if (!UICanvas::GetActive(p_contentInput)->HasFocus(p_contentInput))
     {
         p_contentInput->GetText()->SetContent(
             GetUITextRenderer()->GetContent());
     }
 
-    if(!p_sizeInput->HasFocus())
+    if (!p_sizeInput->HasFocus())
     {
         p_sizeInput->SetValue(GetUITextRenderer()->GetTextSize());
     }
 
-    if(!p_colorInput->HasFocus())
+    if (!p_colorInput->HasFocus())
     {
         p_colorInput->SetColor(GetUITextRenderer()->GetTextColor());
     }

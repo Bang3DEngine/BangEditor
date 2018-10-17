@@ -45,7 +45,7 @@ void RIWAudioClip::Init()
 
     p_playStopButton = GameObjectFactory::CreateUIButton("Play");
     p_playStopButton->AddClickedCallback([this]() {
-        if(p_playStopButton->GetText()->GetContent() == "Stop")
+        if (p_playStopButton->GetText()->GetContent() == "Stop")
         {
             Stop();
         }
@@ -96,7 +96,7 @@ void RIWAudioClip::Play()
 
 void RIWAudioClip::Stop()
 {
-    if(p_alAudioSourceBeingPlayed)
+    if (p_alAudioSourceBeingPlayed)
     {
         p_alAudioSourceBeingPlayed->Stop();
         p_alAudioSourceBeingPlayed

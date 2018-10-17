@@ -24,13 +24,17 @@ int main(int argc, char **argv)
     const Path engPath = Paths::GetResolvedPath(Path("" BANG_ENGINE_ROOT));
     const Path edtPath = Paths::GetResolvedPath(Path("" BANG_EDITOR_ROOT));
     Debug_Log("BangEngineRoot: "
-              << "" BANG_ENGINE_ROOT << " => " << engPath);
+              << "" BANG_ENGINE_ROOT
+              << " => "
+              << engPath);
     Debug_Log("BangEditorRoot: "
-              << "" BANG_EDITOR_ROOT << " => " << edtPath);
+              << "" BANG_EDITOR_ROOT
+              << " => "
+              << edtPath);
     editorApplication.InitEditorApplication(engPath, edtPath);
 
     Path projectToBeOpen = Path::Empty;
-    if(argc < 2)
+    if (argc < 2)
     {
         // Select project window
         SelectProjectWindow *selectProjectWindow =
@@ -46,13 +50,13 @@ int main(int argc, char **argv)
         projectToBeOpen = Path(argv[1]);
     }
 
-    if(projectToBeOpen.IsEmpty())
+    if (projectToBeOpen.IsEmpty())
     {
         Debug_Log("No project selected.");
         Application::Exit(0, true);
     }
 
-    if(!projectToBeOpen.IsFile())
+    if (!projectToBeOpen.IsFile())
     {
         Debug_Error("Could not open project '" << projectToBeOpen << "'");
         Application::Exit(1, true);

@@ -47,103 +47,103 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     ComponentInspectorWidget *ciw = nullptr;
 
     String cName = component->GetClassName();
-    if(DCAST<Behaviour *>(component))
+    if (DCAST<Behaviour *>(component))
     {
         ciw = GameObject::Create<CIWBehaviour>();
     }
-    else if(cName == "Transform")
+    else if (cName == "Transform")
     {
         ciw = GameObject::Create<CIWTransform>();
     }
-    else if(cName == "RectTransform")
+    else if (cName == "RectTransform")
     {
         ciw = GameObject::Create<CIWRectTransform>();
     }
-    else if(cName == "UITextRenderer")
+    else if (cName == "UITextRenderer")
     {
         ciw = GameObject::Create<CIWUITextRenderer>();
     }
-    else if(cName == "UIImageRenderer")
+    else if (cName == "UIImageRenderer")
     {
         ciw = GameObject::Create<CIWUIImageRenderer>();
     }
-    else if(cName == "MeshRenderer")
+    else if (cName == "MeshRenderer")
     {
         ciw = GameObject::Create<CIWMeshRenderer>();
     }
-    else if(cName == "RigidBody")
+    else if (cName == "RigidBody")
     {
         ciw = GameObject::Create<CIWRigidBody>();
     }
-    else if(cName == "Rope")
+    else if (cName == "Rope")
     {
         ciw = GameObject::Create<CIWRope>();
     }
-    else if(cName == "ParticleSystem")
+    else if (cName == "ParticleSystem")
     {
         ciw = GameObject::Create<CIWParticleSystem>();
     }
-    else if(cName == "BoxCollider")
+    else if (cName == "BoxCollider")
     {
         ciw = GameObject::Create<CIWBoxCollider>();
     }
-    else if(cName == "MeshCollider")
+    else if (cName == "MeshCollider")
     {
         ciw = GameObject::Create<CIWMeshCollider>();
     }
-    else if(cName == "CapsuleCollider")
+    else if (cName == "CapsuleCollider")
     {
         ciw = GameObject::Create<CIWCapsuleCollider>();
     }
-    else if(cName == "SphereCollider")
+    else if (cName == "SphereCollider")
     {
         ciw = GameObject::Create<CIWSphereCollider>();
     }
-    else if(cName == "WaterRenderer")
+    else if (cName == "WaterRenderer")
     {
         ciw = GameObject::Create<CIWWaterRenderer>();
     }
-    else if(cName == "SkinnedMeshRenderer")
+    else if (cName == "SkinnedMeshRenderer")
     {
         ciw = GameObject::Create<CIWSkinnedMeshRenderer>();
     }
-    else if(cName == "BehaviourContainer")
+    else if (cName == "BehaviourContainer")
     {
         ciw = GameObject::Create<CIWBehaviourContainer>();
     }
-    else if(cName == "DirectionalLight")
+    else if (cName == "DirectionalLight")
     {
         ciw = GameObject::Create<CIWDirectionalLight>();
     }
-    else if(cName == "PointLight")
+    else if (cName == "PointLight")
     {
         ciw = GameObject::Create<CIWPointLight>();
     }
-    else if(cName == "Camera")
+    else if (cName == "Camera")
     {
         ciw = GameObject::Create<CIWCamera>();
     }
-    else if(cName == "AudioListener")
+    else if (cName == "AudioListener")
     {
         ciw = GameObject::Create<CIWAudioListener>();
     }
-    else if(cName == "AudioSource")
+    else if (cName == "AudioSource")
     {
         ciw = GameObject::Create<CIWAudioSource>();
     }
-    else if(cName == "Animator")
+    else if (cName == "Animator")
     {
         ciw = GameObject::Create<CIWAnimator>();
     }
-    else if(cName == "ReflectionProbe")
+    else if (cName == "ReflectionProbe")
     {
         ciw = GameObject::Create<CIWReflectionProbe>();
     }
-    else if(cName == "PostProcessEffect")
+    else if (cName == "PostProcessEffect")
     {
         ciw = GameObject::Create<CIWPostProcessEffect>();
     }
-    else if(cName == "PostProcessEffectSSAO")
+    else if (cName == "PostProcessEffectSSAO")
     {
         ciw = GameObject::Create<CIWPostProcessEffectSSAO>();
     }
@@ -152,7 +152,7 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
         ciw = GameObject::Create<ComponentInspectorWidget>();
     }
 
-    if(ciw)
+    if (ciw)
     {
         ciw->Init();
         ciw->SetComponent(component);

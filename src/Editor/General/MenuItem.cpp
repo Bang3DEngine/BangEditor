@@ -38,7 +38,7 @@ MenuItem::MenuItem(MenuItemType itemType)
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
     hl->SetChildrenVerticalStretch(Stretch::NONE);
     hl->SetChildrenVerticalAlignment(VerticalAlignment::CENTER);
-    if(GetItemType() == MenuItemType::ROOT)
+    if (GetItemType() == MenuItemType::ROOT)
     {
         hl->SetPaddings(1);
     }
@@ -48,8 +48,8 @@ MenuItem::MenuItem(MenuItemType itemType)
         int vPaddings = 4;
         hl->SetPaddings(hPaddings, vPaddings, hPaddings, vPaddings);
 
-        if(GetItemType() == MenuItemType::TOP ||
-           GetItemType() == MenuItemType::NORMAL)
+        if (GetItemType() == MenuItemType::TOP ||
+            GetItemType() == MenuItemType::NORMAL)
         {
             hl->SetSpacing(5);
 
@@ -68,7 +68,7 @@ MenuItem::MenuItem(MenuItemType itemType)
 
             p_focusable = textGo->AddComponent<UIFocusable>();
 
-            if(GetItemType() != MenuItemType::TOP)
+            if (GetItemType() != MenuItemType::TOP)
             {
                 p_rightArrow = GameObjectFactory::CreateUIImage();
                 p_rightArrow->SetTint(Color::Black);
@@ -116,8 +116,8 @@ MenuItem::~MenuItem()
 
 MenuItem *MenuItem::GetTopOrRootItem() const
 {
-    if(GetItemType() == MenuItemType::ROOT ||
-       GetItemType() == MenuItemType::TOP)
+    if (GetItemType() == MenuItemType::ROOT ||
+        GetItemType() == MenuItemType::TOP)
     {
         return const_cast<MenuItem *>(this);
     }
@@ -126,7 +126,7 @@ MenuItem *MenuItem::GetTopOrRootItem() const
 
 bool MenuItem::IsSelected() const
 {
-    switch(GetItemType())
+    switch (GetItemType())
     {
         case MenuItemType::ROOT: return true;
 
@@ -137,7 +137,7 @@ bool MenuItem::IsSelected() const
         case MenuItemType::NORMAL:
         {
             MenuItem *parentItem = GetParentItem();
-            if(!parentItem)
+            if (!parentItem)
             {
                 return false;
             }
@@ -150,7 +150,7 @@ bool MenuItem::IsSelected() const
 void MenuItem::AdjustToBeInsideScreen()
 {
     MenuItem *topOrRootRT = GetTopOrRootItem();
-    if(!topOrRootRT)
+    if (!topOrRootRT)
     {
         return;
     }
@@ -161,7 +161,7 @@ void MenuItem::AdjustToBeInsideScreen()
         GetChildrenList()->GetGameObject()->GetRectTransform();
 
     const bool isTop = (GetItemType() == MenuItemType::TOP);
-    if(isTop)
+    if (isTop)
     {
         const Vector2 OverlapEpsilon(0.005f);
         thisListRT->SetAnchors(Vector2(-1, -1) + OverlapEpsilon);
@@ -171,10 +171,10 @@ void MenuItem::AdjustToBeInsideScreen()
     {
         Vector2 anchors = Vector2::Zero;
         Vector2 pivotPos = thisListRT->GetPivotPosition();
-        for(int axis = 0; axis < 2; ++axis)  // X and Y
+        for (int axis = 0; axis < 2; ++axis)  // X and Y
         {
             // Avoid side where it overflows. If it overflows both, just pick 1
-            if(topRectNDC.GetCenter()[axis] > 0.0f)
+            if (topRectNDC.GetCenter()[axis] > 0.0f)
             {
                 pivotPos[axis] = 1.0f;
                 anchors[axis] = -1;
@@ -206,23 +206,23 @@ void MenuItem::Update()
 
     const bool mustDisplayChildren = MustDisplayChildren();
     GetChildrenList()->GetGameObject()->SetEnabled(mustDisplayChildren);
-    if(mustDisplayChildren)
+    if (mustDisplayChildren)
     {
         AdjustToBeInsideScreen();
     }
 
-    if(p_topBg && GetItemType() == MenuItemType::TOP)
+    if (p_topBg && GetItemType() == MenuItemType::TOP)
     {
         UICanvas *canvas = UICanvas::GetActive(this);
         bool mouseOver = canvas->IsMouseOver(this, true);
         bool tintBg = mouseOver && !IsForcedShow();
 
         Color topBgColor = Color::Zero;
-        if(tintBg && mouseOver)
+        if (tintBg && mouseOver)
         {
             topBgColor = UITheme::GetOverColor();
         }
-        else if(mustDisplayChildren)
+        else if (mustDisplayChildren)
         {
             topBgColor = UITheme::GetSelectedColor();
         }
@@ -234,7 +234,7 @@ void MenuItem::Update()
         p_topBg->SetTint(topBgColor);
     }
 
-    if(p_rightArrow)
+    if (p_rightArrow)
     {
         p_rightArrow->SetEnabled(!GetChildrenItems().IsEmpty());
     }
@@ -244,25 +244,25 @@ void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
 {
     MenuItem *menuItem = DCAST<MenuItem *>(item);
     MenuItem *parentItem = (menuItem ? menuItem->GetParentItem() : nullptr);
-    if(menuItem)
+    if (menuItem)
     {
-        switch(action)
+        switch (action)
         {
             case UIList::Action::PRESSED:
             case UIList::Action::SELECTION_IN:
             case UIList::Action::MOUSE_LEFT_DOWN:
             {
-                if(menuItem && menuItem->IsOverAndActionEnabled() &&
-                   menuItem->m_selectedCallback &&
-                   (action != UIList::Action::SELECTION_IN))
+                if (menuItem && menuItem->IsOverAndActionEnabled() &&
+                    menuItem->m_selectedCallback &&
+                    (action != UIList::Action::SELECTION_IN))
                 {
                     menuItem->m_selectedCallback(menuItem);
                     UICanvas::GetActive(menuItem)->SetFocus(nullptr);
                     menuItem->Close(true);
                 }
 
-                if(menuItem &&
-                   menuItem->GetItemType() == MenuItemType::SEPARATOR)
+                if (menuItem &&
+                    menuItem->GetItemType() == MenuItemType::SEPARATOR)
                 {
                     parentItem->GetChildrenList()->SetSelection(nullptr);
                 }
@@ -270,14 +270,14 @@ void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
             break;
 
             case UIList::Action::MOUSE_OVER:
-                if(parentItem)
+                if (parentItem)
                 {
                     parentItem->GetChildrenList()->SetSelection(menuItem);
                 }
                 break;
 
             case UIList::Action::MOUSE_OUT:
-                if(parentItem && menuItem->GetChildrenItems().IsEmpty())
+                if (parentItem && menuItem->GetChildrenItems().IsEmpty())
                 {
                     parentItem->GetChildrenList()->SetSelection(nullptr);
                 }
@@ -290,12 +290,12 @@ void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
 
 void MenuItem::SetFontSize(uint fontSize)
 {
-    if(fontSize != GetFontSize())
+    if (fontSize != GetFontSize())
     {
         m_fontSize = fontSize;
         Array<UITextRenderer *> texts =
             GetComponentsInChildrenAndThis<UITextRenderer>();
-        for(UITextRenderer *text : texts)
+        for (UITextRenderer *text : texts)
         {
             text->SetTextSize(GetFontSize());
         }
@@ -304,13 +304,13 @@ void MenuItem::SetFontSize(uint fontSize)
 
 void MenuItem::Close(bool recursiveUp)
 {
-    if(!GetParentItem() || !recursiveUp)
+    if (!GetParentItem() || !recursiveUp)
     {
-        if(!GetDestroyOnClose())
+        if (!GetDestroyOnClose())
         {
             GetChildrenList()->GetGameObject()->SetEnabled(false);
             GetChildrenList()->SetSelection(nullptr);
-            for(MenuItem *childItem : GetChildrenItems())
+            for (MenuItem *childItem : GetChildrenItems())
             {
                 childItem->Close(false);
             }
@@ -365,12 +365,12 @@ MenuItem *MenuItem::AddItem(const String &text)
 
 void MenuItem::SetForceShow(bool forceShow)
 {
-    if(forceShow != IsForcedShow())
+    if (forceShow != IsForcedShow())
     {
         m_forcedShow = forceShow;
-        if(GetItemType() == MenuItemType::TOP)
+        if (GetItemType() == MenuItemType::TOP)
         {
-            if(IsForcedShow())
+            if (IsForcedShow())
             {
                 GetText()->SetTextColor(Color::Black);
             }
@@ -384,10 +384,10 @@ void MenuItem::SetForceShow(bool forceShow)
 
 void MenuItem::SetOverAndActionEnabled(bool enabled)
 {
-    if(enabled != IsOverAndActionEnabled())
+    if (enabled != IsOverAndActionEnabled())
     {
         m_overAndActionEnabled = enabled;
-        if(GetItemType() == MenuItemType::NORMAL)
+        if (GetItemType() == MenuItemType::NORMAL)
         {
             GetText()->SetTextColor(IsOverAndActionEnabled() ? Color::Black
                                                              : Color::DarkGray);
@@ -398,7 +398,7 @@ void MenuItem::SetOverAndActionEnabled(bool enabled)
 void MenuItem::SetOverAndActionEnabledRecursively(bool enabled)
 {
     SetOverAndActionEnabled(enabled);
-    for(MenuItem *childItem : GetChildrenItems())
+    for (MenuItem *childItem : GetChildrenItems())
     {
         childItem->SetOverAndActionEnabledRecursively(enabled);
     }
@@ -406,7 +406,7 @@ void MenuItem::SetOverAndActionEnabledRecursively(bool enabled)
 
 void MenuItem::SetDropDownEnabled(bool enabled)
 {
-    if(enabled != IsDropDownEnabled())
+    if (enabled != IsDropDownEnabled())
     {
         m_dropDownEnabled = true;
     }
@@ -415,7 +415,7 @@ void MenuItem::SetDropDownEnabled(bool enabled)
 void MenuItem::SetDropDownEnabledRecursively(bool enabled)
 {
     SetDropDownEnabled(enabled);
-    for(MenuItem *childItem : GetChildrenItems())
+    for (MenuItem *childItem : GetChildrenItems())
     {
         childItem->SetDropDownEnabledRecursively(enabled);
     }

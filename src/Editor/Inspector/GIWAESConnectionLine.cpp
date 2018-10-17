@@ -63,7 +63,7 @@ void GIWAESConnectionLine::InitInnerWidgets()
     p_transitionsList = GameObjectFactory::CreateUIList(true);
     p_transitionsList->SetSelectionCallback(
         [this](GameObject *item, UIList::Action action) {
-            switch(action)
+            switch (action)
             {
                 case UIList::Action::PRESSED:
                 case UIList::Action::SELECTION_IN:
@@ -152,7 +152,7 @@ void GIWAESConnectionLine::SetAESConnectionLine(AESConnectionLine *connLine)
 
     const Array<AnimatorStateMachineConnection *> smConnections =
         p_aesConnectionLine->GetSMConnections();
-    for(AnimatorStateMachineConnection *smConn : smConnections)
+    for (AnimatorStateMachineConnection *smConn : smConnections)
     {
         smConn->EventEmitter<IEventsDestroy>::RegisterListener(this);
     }
@@ -168,7 +168,7 @@ AESConnectionLine *GIWAESConnectionLine::GetAESConnectionLine() const
 
 void GIWAESConnectionLine::EnableNeededWidgets()
 {
-    if(GetAESConnectionLine())
+    if (GetAESConnectionLine())
     {
         bool moreThanOneTransition =
             GetAESConnectionLine()->GetSMConnections().Size() >= 2;
@@ -189,7 +189,7 @@ void GIWAESConnectionLine::EnableNeededWidgets()
 void GIWAESConnectionLine::SetSelectedSMConnection(
     AnimatorStateMachineConnection *connection)
 {
-    if(connection != GetSelectedSMConnection())
+    if (connection != GetSelectedSMConnection())
     {
         p_selectedSMConnection = connection;
     }
@@ -218,12 +218,12 @@ void GIWAESConnectionLine::UpdateFromReference()
     Array<MetaNode> metaNodes;
     Array<AnimatorStateMachineConnection *> smConns =
         GetAESConnectionLine()->GetSMConnections();
-    if(p_transitionsList->GetNumItems() != smConns.Size())
+    if (p_transitionsList->GetNumItems() != smConns.Size())
     {
         p_transitionsList->Clear();
 
         uint i = 0;
-        for(AnimatorStateMachineConnection *smConn : smConns)
+        for (AnimatorStateMachineConnection *smConn : smConns)
         {
             BANG_UNUSED(smConn);
             GameObject *listItemGo = GameObjectFactory::CreateUIGameObject();
@@ -263,7 +263,7 @@ void GIWAESConnectionLine::UpdateFromReference()
         }
     }
 
-    if(GetSelectedSMConnection())
+    if (GetSelectedSMConnection())
     {
         p_immediateTransitionInput->SetChecked(
             GetSelectedSMConnection()->GetImmediateTransition());
@@ -275,8 +275,8 @@ void GIWAESConnectionLine::UpdateFromReference()
             GetSelectedSMConnection()->GetTransitionConditions());
 
         uint i = 0;
-        for(GameObject *transCondInputGo :
-            p_transitionConditionsInput->GetRowGameObjects())
+        for (GameObject *transCondInputGo :
+             p_transitionConditionsInput->GetRowGameObjects())
         {
             ASMCTransitionConditionInput *transCondInput =
                 SCAST<ASMCTransitionConditionInput *>(transCondInputGo);
@@ -293,15 +293,15 @@ void GIWAESConnectionLine::UpdateFromReference()
 void GIWAESConnectionLine::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 {
     BANG_UNUSED(ee);
-    if(GetSelectedSMConnection())
+    if (GetSelectedSMConnection())
     {
-        if(ee == p_immediateTransitionInput)
+        if (ee == p_immediateTransitionInput)
         {
             GetSelectedSMConnection()->SetImmediateTransition(
                 p_immediateTransitionInput->IsChecked());
         }
 
-        if(ee == p_transitionDurationInput)
+        if (ee == p_transitionDurationInput)
         {
             GetSelectedSMConnection()->SetTransitionDuration(
                 Time::Seconds(p_transitionDurationInput->GetValue()));
@@ -326,7 +326,7 @@ void GIWAESConnectionLine::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     GameObject::OnDestroyed(object);
 
-    if(object == GetSelectedSMConnection())
+    if (object == GetSelectedSMConnection())
     {
         SetSelectedSMConnection(nullptr);
     }

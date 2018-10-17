@@ -185,9 +185,9 @@ void EditorScene::Update()
     GetScenePlayer()->Update();
 
     String sceneTabName = "Scene - ";
-    if(Scene *openScene = GetOpenScene())
+    if (Scene *openScene = GetOpenScene())
     {
-        if(ScenePlayer::GetPlayState() == PlayState::PLAYING)
+        if (ScenePlayer::GetPlayState() == PlayState::PLAYING)
         {
             // Update open scene if playing
             BindOpenScene();
@@ -210,8 +210,8 @@ void EditorScene::Update()
         Path loadedScenePath =
             SceneOpenerSaver::GetInstance()->GetLoadedScenePath();
         sceneTabName += loadedScenePath.GetName();
-        if(Editor::IsEditingScene() &&
-           !SceneOpenerSaver::GetInstance()->IsCurrentSceneSaved())
+        if (Editor::IsEditingScene() &&
+            !SceneOpenerSaver::GetInstance()->IsCurrentSceneSaved())
         {
             sceneTabName += " (*)";
         }
@@ -228,8 +228,8 @@ void EditorScene::Update()
     GetEditSceneGameObjects()->Update();
     Input::ClearContext();
 
-    if(UITabStation *sceneEditTabStation =
-           p_tabStation->FindTabStationOf(p_sceneEditContainer))
+    if (UITabStation *sceneEditTabStation =
+            p_tabStation->FindTabStationOf(p_sceneEditContainer))
     {
         sceneEditTabStation->GetTabContainer()->SetTabTitle(
             p_sceneEditContainer, sceneTabName);
@@ -239,7 +239,7 @@ void EditorScene::Update()
 void EditorScene::OnResize(int newWidth, int newHeight)
 {
     Scene::OnResize(newWidth, newHeight);
-    if(GetOpenScene())
+    if (GetOpenScene())
     {
         BindOpenScene();
         GetOpenScene()->OnResize(newWidth, newHeight);
@@ -249,10 +249,10 @@ void EditorScene::OnResize(int newWidth, int newHeight)
 
 void EditorScene::SetOpenScene(Scene *openScene)
 {
-    if(openScene != GetOpenScene())
+    if (openScene != GetOpenScene())
     {
         p_openScene = openScene;
-        if(GetOpenScene())
+        if (GetOpenScene())
         {
             GetOpenScene()->EventEmitter<IEventsDestroy>::RegisterListener(
                 this);
@@ -266,12 +266,12 @@ void EditorScene::SetOpenScene(Scene *openScene)
 
 void EditorScene::OnTabHeaderClicked(UITabHeader *header)
 {
-    if(header->GetTitle().BeginsWith("Scene"))
+    if (header->GetTitle().BeginsWith("Scene"))
     {
         UICanvas::GetActive(this)->SetFocus(
             GetSceneEditContainer()->GetFocusable());
     }
-    else if(header->GetTitle() == "Game")
+    else if (header->GetTitle() == "Game")
     {
         UICanvas::GetActive(this)->SetFocus(
             GetScenePlayContainer()->GetFocusable());
@@ -291,7 +291,7 @@ void EditorScene::OnFocusLost(Window *w)
 
 void EditorScene::OnSceneLoaded(Scene *scene, const Path &)
 {
-    if(scene != this)
+    if (scene != this)
     {
         SetOpenScene(scene);
     }
@@ -304,7 +304,7 @@ Scene *EditorScene::GetOpenScene() const
 
 void EditorScene::OpenTab(GameObject *tabbedChild)
 {
-    if(auto playTabStation = p_tabStation->FindTabStationOf(tabbedChild))
+    if (auto playTabStation = p_tabStation->FindTabStationOf(tabbedChild))
     {
         playTabStation->GetTabContainer()->SetCurrentTabChild(tabbedChild);
     }
@@ -319,7 +319,7 @@ AARect EditorScene::GetOpenSceneWindowRectNDC() const
 
 void EditorScene::BindOpenScene()
 {
-    if(GetOpenScene())
+    if (GetOpenScene())
     {
         EditorSceneManager::SetActiveScene(GetOpenScene());
     }
@@ -327,7 +327,7 @@ void EditorScene::BindOpenScene()
 
 void EditorScene::UnBindOpenScene()
 {
-    if(GetOpenScene())
+    if (GetOpenScene())
     {
         EditorSceneManager::SetActiveScene(this);
     }
@@ -408,14 +408,14 @@ void EditorScene::OnPlayStateChanged(PlayState previousPlayState,
     BANG_UNUSED(previousPlayState);
 
     // Change tab when play/stop
-    switch(newPlayState)
+    switch (newPlayState)
     {
         case PlayState::EDITING: { OpenTab(GetSceneEditContainer());
         }
         break;
 
         case PlayState::PLAYING:
-            if(previousPlayState == PlayState::JUST_BEFORE_PLAYING)
+            if (previousPlayState == PlayState::JUST_BEFORE_PLAYING)
             {
                 OpenTab(GetScenePlayContainer());
             }
@@ -429,7 +429,7 @@ void EditorScene::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     Scene::OnDestroyed(object);
 
-    if(object == GetOpenScene())
+    if (object == GetOpenScene())
     {
         p_openScene = nullptr;
     }

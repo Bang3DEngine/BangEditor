@@ -87,7 +87,7 @@ void UITabContainer::AddTab(const String &title,
                             GameObject *tabbedChild,
                             uint index)
 {
-    if(!GetTabbedChildren().Contains(tabbedChild))
+    if (!GetTabbedChildren().Contains(tabbedChild))
     {
         UITabHeader *tabHeader = GameObject::Create<UITabHeader>();
         tabHeader->SetTitle(title);
@@ -98,7 +98,7 @@ void UITabContainer::AddTab(const String &title,
 
 void UITabContainer::AddTabByTabHeader(UITabHeader *tabHeader, uint index_)
 {
-    if(!GetTabHeaders().Contains(tabHeader))
+    if (!GetTabHeaders().Contains(tabHeader))
     {
         uint index = Math::Min(index_, GetTabbedChildren().Size());
 
@@ -114,7 +114,7 @@ void UITabContainer::AddTabByTabHeader(UITabHeader *tabHeader, uint index_)
         tabHeader->SetTabContainer(this);
         tabHeader->EventEmitter<IEventsTabHeader>::RegisterListener(this);
 
-        if(!GetCurrentTabChild())
+        if (!GetCurrentTabChild())
         {
             SetCurrentTabChild(tabbedChild);
         }
@@ -128,7 +128,7 @@ void UITabContainer::AddTabByTabHeader(UITabHeader *tabHeader, uint index_)
 
 void UITabContainer::RemoveTab(GameObject *tabbedChild, bool destroy)
 {
-    if(UITabHeader *tabHeader = GetTabHeaderFromChild(tabbedChild))
+    if (UITabHeader *tabHeader = GetTabHeaderFromChild(tabbedChild))
     {
         RemoveTabByHeader(tabHeader, destroy);
     }
@@ -136,10 +136,10 @@ void UITabContainer::RemoveTab(GameObject *tabbedChild, bool destroy)
 
 void UITabContainer::RemoveTabByHeader(UITabHeader *tabHeader, bool destroy)
 {
-    if(GameObject *tabbedChild = tabHeader->GetTabbedChild())
+    if (GameObject *tabbedChild = tabHeader->GetTabbedChild())
     {
         uint removedTabIndex = p_tabbedChildren.IndexOf(tabbedChild);
-        if(removedTabIndex == GetCurrentTabIndex())
+        if (removedTabIndex == GetCurrentTabIndex())
         {
             SetCurrentTabIndex(-1u);
         }
@@ -147,7 +147,7 @@ void UITabContainer::RemoveTabByHeader(UITabHeader *tabHeader, bool destroy)
         tabHeader->EventEmitter<IEventsTabHeader>::UnRegisterListener(this);
         tabHeader->SetParent(nullptr);
         tabbedChild->SetParent(nullptr);
-        if(destroy)
+        if (destroy)
         {
             GameObject::Destroy(tabbedChild);
             GameObject::Destroy(tabHeader);
@@ -156,9 +156,9 @@ void UITabContainer::RemoveTabByHeader(UITabHeader *tabHeader, bool destroy)
         m_childrenToHeader.Remove(tabbedChild);
 
         // In case indices are changed, reselect current tab child
-        if(GetTabbedChildren().Size() >= 1)
+        if (GetTabbedChildren().Size() >= 1)
         {
-            if(GetCurrentTabChild())
+            if (GetCurrentTabChild())
             {
                 SetCurrentTabChild(GetCurrentTabChild());
             }
@@ -172,7 +172,7 @@ void UITabContainer::RemoveTabByHeader(UITabHeader *tabHeader, bool destroy)
 
 void UITabContainer::SetTabTitle(GameObject *tabbedChild, const String &title)
 {
-    if(m_childrenToHeader.ContainsKey(tabbedChild))
+    if (m_childrenToHeader.ContainsKey(tabbedChild))
     {
         UITabHeader *header = m_childrenToHeader.Get(tabbedChild);
         header->SetTitle(title);
@@ -182,7 +182,7 @@ void UITabContainer::SetTabTitle(GameObject *tabbedChild, const String &title)
 GameObject *UITabContainer::GetCurrentTabChild() const
 {
     GameObject *currentTabChild = nullptr;
-    if(GetCurrentTabIndex() < GetTabbedChildren().Size())
+    if (GetCurrentTabIndex() < GetTabbedChildren().Size())
     {
         auto it = p_tabbedChildren.Begin();
         std::advance(it, GetCurrentTabIndex());
@@ -195,7 +195,7 @@ Array<UITabHeader *> UITabContainer::GetTabHeaders() const
 {
     Array<UITabHeader *> tabHeaders;
     Array<GameObject *> tabChildren = GetTabbedChildren();
-    for(GameObject *tabChild : tabChildren)
+    for (GameObject *tabChild : tabChildren)
     {
         tabHeaders.PushBack(GetTabHeaderFromChild(tabChild));
     }
@@ -219,15 +219,15 @@ GameObject *UITabContainer::GetHeadersBar() const
 
 void UITabContainer::SetCurrentTabIndex(int index)
 {
-    if(index != GetCurrentTabIndex())
+    if (index != GetCurrentTabIndex())
     {
-        if(index == -1u || index < GetTabbedChildren().Size())
+        if (index == -1u || index < GetTabbedChildren().Size())
         {
             m_currentTabIndex = index;
         }
 
         // Hide all tabs
-        for(int i = 0; i < GetTabbedChildren().Size(); ++i)
+        for (int i = 0; i < GetTabbedChildren().Size(); ++i)
         {
             GameObject *tabbedChild = GetTabbedChildren()[i];
             UITabHeader *header = GetTabHeaderFromChild(tabbedChild);
@@ -237,7 +237,7 @@ void UITabContainer::SetCurrentTabIndex(int index)
         }
 
         // Show chosen current tab
-        if(index < GetTabbedChildren().Size())
+        if (index < GetTabbedChildren().Size())
         {
             GameObject *tabbedChild = GetTabbedChildren()[index];
             UITabHeader *header = GetTabHeaderFromChild(tabbedChild);
@@ -256,7 +256,7 @@ void UITabContainer::SetCurrentTabChild(GameObject *currentTabChild)
 
 void UITabContainer::OnTabHeaderClicked(UITabHeader *header)
 {
-    if(GameObject *tabbedChild = header->GetTabbedChild())
+    if (GameObject *tabbedChild = header->GetTabbedChild())
     {
         SetCurrentTabChild(tabbedChild);
     }
@@ -279,7 +279,7 @@ UITabHeader *UITabContainer::GetTabHeaderFromChild(
     GameObject *tabbedChild) const
 {
     auto it = m_childrenToHeader.Find(tabbedChild);
-    if(it != m_childrenToHeader.End())
+    if (it != m_childrenToHeader.End())
     {
         return it->second;
     }

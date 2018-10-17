@@ -29,7 +29,7 @@ ProjectManager::ProjectManager()
 
 Project *ProjectManager::OpenProject(const Path &projectFilepath)
 {
-    if(!ProjectManager::CloseCurrentProject())
+    if (!ProjectManager::CloseCurrentProject())
     {
         return nullptr;
     }
@@ -54,7 +54,7 @@ Project *ProjectManager::OpenProject(const Path &projectFilepath)
 
     bool sceneHasBeenOpen = currentProject->OpenFirstFoundScene();
     SceneOpenerSaver *sov = SceneOpenerSaver::GetInstance();
-    if(!sceneHasBeenOpen && sov)
+    if (!sceneHasBeenOpen && sov)
     {
         sov->OnNewScene();
     }
@@ -67,15 +67,15 @@ Project *ProjectManager::OpenProject(const Path &projectFilepath)
 Project *ProjectManager::CreateNewProject(const Path &projectDirPath,
                                           const String &projectName)
 {
-    if(!ProjectManager::CloseCurrentProject())
+    if (!ProjectManager::CloseCurrentProject())
     {
         return nullptr;
     }
 
     Path projectDir(projectDirPath.Append(projectName));
-    if(!projectDir.Exists())
+    if (!projectDir.Exists())
     {
-        if(!File::CreateDirectory(projectDir))
+        if (!File::CreateDirectory(projectDir))
         {
             Debug_Error("Could not create project in directory '" << projectDir
                                                                   << "'.");
@@ -111,12 +111,12 @@ Project *ProjectManager::CreateNewProjectFileOnly(const Path &projectFilepath)
 
 void ProjectManager::ExportProject(const Project *project)
 {
-    if(!project)
+    if (!project)
     {
         return;
     }
     bool ok = project->ExportMetaToFile(project->GetProjectFilepath());
-    if(!ok)
+    if (!ok)
     {
         Debug_Error("Could not save the project...");
     }
@@ -129,16 +129,16 @@ void ProjectManager::ExportCurrentProject()
 
 bool ProjectManager::CloseCurrentProject()
 {
-    if(!SceneOpenerSaver::GetInstance())
+    if (!SceneOpenerSaver::GetInstance())
     {
         return true;
     }
-    if(!SceneOpenerSaver::GetInstance()->CloseScene())
+    if (!SceneOpenerSaver::GetInstance()->CloseScene())
     {
         return false;
     }
 
-    if(ProjectManager::s_currentProject)
+    if (ProjectManager::s_currentProject)
     {
         ProjectManager::GetInstance()
             ->EventEmitter<IEventsProjectManager>::PropagateToListeners(

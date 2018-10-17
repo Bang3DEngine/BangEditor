@@ -102,7 +102,7 @@ void CIWCamera::UpdateFromReference()
 {
     ComponentInspectorWidget::UpdateFromReference();
 
-    if(Scene *openScene = EditorSceneManager::GetOpenScene())
+    if (Scene *openScene = EditorSceneManager::GetOpenScene())
     {
         p_isActiveCamera->SetChecked(openScene->GetCamera() == GetCamera());
     }
@@ -111,45 +111,45 @@ void CIWCamera::UpdateFromReference()
         p_isActiveCamera->SetChecked(false);
     }
 
-    if(!p_zNearInput->HasFocus())
+    if (!p_zNearInput->HasFocus())
     {
         p_zNearInput->SetValue(GetCamera()->GetZNear());
     }
 
-    if(!p_zFarInput->HasFocus())
+    if (!p_zFarInput->HasFocus())
     {
         p_zFarInput->SetValue(GetCamera()->GetZFar());
     }
 
-    if(!p_orthoHeightInput->HasFocus())
+    if (!p_orthoHeightInput->HasFocus())
     {
         p_orthoHeightInput->SetValue(GetCamera()->GetOrthoHeight());
     }
 
-    if(!p_fovInput->HasFocus())
+    if (!p_fovInput->HasFocus())
     {
         p_fovInput->SetValue(GetCamera()->GetFovDegrees());
     }
 
-    if(!p_projectionModeInput->HasFocus())
+    if (!p_projectionModeInput->HasFocus())
     {
         p_projectionModeInput->SetSelectionByValue(
             SCAST<int>(GetCamera()->GetProjectionMode()));
     }
 
-    if(!p_clearModeInput->HasFocus())
+    if (!p_clearModeInput->HasFocus())
     {
         p_clearModeInput->SetSelectionByValue(
             SCAST<int>(GetCamera()->GetClearMode()));
     }
 
-    if(!p_clearColorInput->HasFocus())
+    if (!p_clearColorInput->HasFocus())
     {
         p_clearColorInput->SetColor(GetCamera()->GetClearColor());
     }
 
     TextureCubeMap *skyBoxTex = GetCamera()->GetSkyBoxTexture();
-    if(skyBoxTex)
+    if (skyBoxTex)
     {
         p_textureCubeMapInput->SetPath(skyBoxTex->GetResourceFilepath());
     }
@@ -172,13 +172,13 @@ void CIWCamera::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChangedCIW(object);
 
-    if(object == p_isActiveCamera)
+    if (object == p_isActiveCamera)
     {
-        if(Scene *openScene = EditorSceneManager::GetOpenScene())
+        if (Scene *openScene = EditorSceneManager::GetOpenScene())
         {
             Camera *prevCam = openScene->GetCamera();
 
-            if(p_isActiveCamera->IsChecked())
+            if (p_isActiveCamera->IsChecked())
             {
                 openScene->SetCamera(GetCamera());
             }
@@ -189,7 +189,9 @@ void CIWCamera::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 
             UndoRedoObjectProperty<Camera *> *undoRedo =
                 new UndoRedoObjectProperty<Camera *>(
-                    openScene, prevCam, openScene->GetCamera(),
+                    openScene,
+                    prevCam,
+                    openScene->GetCamera(),
                     [&](Object *scene, Camera *cam) {
                         SCAST<Scene *>(scene)->SetCamera(cam);
                     });
@@ -208,7 +210,7 @@ void CIWCamera::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
     GetCamera()->SetClearColor(p_clearColorInput->GetColor());
 
     RH<TextureCubeMap> tcmRH;
-    if(p_textureCubeMapInput->GetPath().IsFile())
+    if (p_textureCubeMapInput->GetPath().IsFile())
     {
         tcmRH =
             Resources::Load<TextureCubeMap>(p_textureCubeMapInput->GetPath());

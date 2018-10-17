@@ -83,13 +83,13 @@ ASMVariableInput::~ASMVariableInput()
 
 void ASMVariableInput::SetVarType(AnimatorStateMachineVariable::Type type)
 {
-    if(type != GetVarType())
+    if (type != GetVarType())
     {
         p_boolInput->GetGameObject()->SetEnabled(false);
         p_floatInput->GetGameObject()->SetEnabled(false);
         m_varType = type;
 
-        switch(GetVarType())
+        switch (GetVarType())
         {
             case AnimatorStateMachineVariable::Type::BOOL:
                 p_boolInput->GetGameObject()->SetEnabled(true);
@@ -110,7 +110,7 @@ AnimatorStateMachineVariable::Type ASMVariableInput::GetVarType() const
 
 void ASMVariableInput::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 {
-    if(ee == p_varTypeInput)
+    if (ee == p_varTypeInput)
     {
         SetVarType(SCAST<AnimatorStateMachineVariable::Type>(
             p_varTypeInput->GetSelectedValue()));
@@ -124,23 +124,23 @@ void ASMVariableInput::ImportMeta(const MetaNode &metaNode)
 {
     Serializable::ImportMeta(metaNode);
 
-    if(metaNode.Contains("VariableName"))
+    if (metaNode.Contains("VariableName"))
     {
         p_varNameInput->GetText()->SetContent(
             metaNode.Get<String>("VariableName"));
     }
 
-    if(metaNode.Contains("VariableType"))
+    if (metaNode.Contains("VariableType"))
     {
         p_varTypeInput->SetSelectionByValue(metaNode.Get<uint>("VariableType"));
     }
 
-    if(metaNode.Contains("ValueFloat"))
+    if (metaNode.Contains("ValueFloat"))
     {
         p_floatInput->SetValue(metaNode.Get<float>("ValueFloat"));
     }
 
-    if(metaNode.Contains("ValueBool"))
+    if (metaNode.Contains("ValueBool"))
     {
         p_boolInput->SetChecked(metaNode.Get<bool>("ValueBool"));
     }

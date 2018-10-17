@@ -93,15 +93,15 @@ void InspectorWidget::SetTitle(const String &title)
 
 void InspectorWidget::SetLabelsWidth(int labelsWidth)
 {
-    if(GetLabelsWidth() != labelsWidth)
+    if (GetLabelsWidth() != labelsWidth)
     {
         m_labelsWidth = labelsWidth;
 
-        for(GameObject *widget : p_widgets)
+        for (GameObject *widget : p_widgets)
         {
             ASSERT(m_widgetToLabel.ContainsKey(widget))
             UILabel *label = m_widgetToLabel[widget];
-            if(label)
+            if (label)
             {
                 ASSERT(m_labelToLabelLE.ContainsKey(label));
                 UILayoutElement *labelLE = m_labelToLabelLE[label];
@@ -158,14 +158,14 @@ void InspectorWidget::AddWidgetInternal(const String &labelContent,
     widgetContHL->SetChildrenVerticalStretch(Stretch::FULL);
 
     UILabel *label = nullptr;
-    if(addLabel)
+    if (addLabel)
     {
-        label = InspectorWidget::CreateWidgetLabel(labelContent, height,
-                                                   GetLabelsWidth());
+        label = InspectorWidget::CreateWidgetLabel(
+            labelContent, height, GetLabelsWidth());
         label->GetFocusable()->SetEnabled(false);
     }
 
-    if(height >= 0)
+    if (height >= 0)
     {
         UILayoutElement *widgetContLE =
             widgetContainer->AddComponent<UILayoutElement>();
@@ -175,7 +175,7 @@ void InspectorWidget::AddWidgetInternal(const String &labelContent,
     }
 
     widgetContainer->SetParent(GetWidgetsContainer());
-    if(label)
+    if (label)
     {
         label->GetGameObject()->SetParent(widgetContainer);
     }

@@ -22,48 +22,48 @@ using namespace BangEditor;
 InspectorWidget *ResourceInspectorWidgetFactory::Create(const Path &path)
 {
     ResourceInspectorWidget *riw = nullptr;
-    if(path.HasExtension(Extensions::GetMaterialExtension()))
+    if (path.HasExtension(Extensions::GetMaterialExtension()))
     {
         riw = GameObject::Create<RIWMaterial>();
     }
-    else if(path.HasExtension(Extensions::GetPhysicsMaterialExtension()))
+    else if (path.HasExtension(Extensions::GetPhysicsMaterialExtension()))
     {
         riw = GameObject::Create<RIWPhysicsMaterial>();
     }
-    else if(path.HasExtension(Extensions::GetAnimatorStateMachineExtension()))
+    else if (path.HasExtension(Extensions::GetAnimatorStateMachineExtension()))
     {
         riw = GameObject::Create<RIWAnimatorStateMachine>();
     }
-    else if(path.HasExtension(Extensions::GetImageExtensions()))
+    else if (path.HasExtension(Extensions::GetImageExtensions()))
     {
         riw = GameObject::Create<RIWTexture>();
     }
-    else if(path.HasExtension(Extensions::GetModelExtensions()))
+    else if (path.HasExtension(Extensions::GetModelExtensions()))
     {
         riw = GameObject::Create<RIWModel>();
     }
-    else if(path.HasExtension(Extensions::GetMeshExtension()))
+    else if (path.HasExtension(Extensions::GetMeshExtension()))
     {
         riw = GameObject::Create<RIWMesh>();
     }
-    else if(path.HasExtension(Extensions::GetAudioClipExtensions()))
+    else if (path.HasExtension(Extensions::GetAudioClipExtensions()))
     {
         riw = GameObject::Create<RIWAudioClip>();
     }
-    else if(path.HasExtension(Extensions::GetAnimationExtension()))
+    else if (path.HasExtension(Extensions::GetAnimationExtension()))
     {
         riw = GameObject::Create<RIWAnimation>();
     }
-    else if(path.HasExtension(Extensions::GetTextureCubeMapExtension()))
+    else if (path.HasExtension(Extensions::GetTextureCubeMapExtension()))
     {
         riw = GameObject::Create<RIWTextureCubeMap>();
     }
-    else if(path.HasExtension(Extensions::GetBehaviourExtensions()))
+    else if (path.HasExtension(Extensions::GetBehaviourExtensions()))
     {
         riw = GameObject::Create<RIWBehaviour>();
     }
 
-    if(riw)
+    if (riw)
     {
         riw->Init();
         riw->SetPath(path);

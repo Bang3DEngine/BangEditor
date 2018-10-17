@@ -29,7 +29,7 @@ UIContextMenu::UIContextMenu()
 
 void UIContextMenu::ShowMenu()
 {
-    if(p_menu)
+    if (p_menu)
     {
         GameObject::Destroy(p_menu);
         p_menu = nullptr;
@@ -40,12 +40,12 @@ void UIContextMenu::ShowMenu()
         p_menu = GameObject::Create<ContextMenu>();
         p_menu->EventEmitter<IEventsDestroy>::RegisterListener(this);
 
-        if(m_createContextMenuCallback)
+        if (m_createContextMenuCallback)
         {
             m_createContextMenuCallback(p_menu->GetRootItem());
         }
 
-        if(p_menu->GetRootItem()->GetChildrenItems().IsEmpty())
+        if (p_menu->GetRootItem()->GetChildrenItems().IsEmpty())
         {
             GameObject::Destroy(p_menu);
         }
@@ -77,7 +77,7 @@ void UIContextMenu::SetCreateContextMenuCallback(
 
 UIEventResult UIContextMenu::OnUIEvent(UIFocusable *, const UIEvent &event)
 {
-    switch(event.type)
+    switch (event.type)
     {
         // case UIEvent::Type::FOCUS_LOST:
         //     GameObject::Destroy(p_menu);
@@ -85,7 +85,7 @@ UIEventResult UIContextMenu::OnUIEvent(UIFocusable *, const UIEvent &event)
         // break;
 
         case UIEvent::Type::MOUSE_CLICK_DOWN:
-            if(event.mouse.button == MouseButton::RIGHT)
+            if (event.mouse.button == MouseButton::RIGHT)
             {
                 ShowMenu();
                 return UIEventResult::INTERCEPT;
@@ -99,7 +99,7 @@ UIEventResult UIContextMenu::OnUIEvent(UIFocusable *, const UIEvent &event)
 
 void UIContextMenu::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
-    if(p_menu && object == p_menu)
+    if (p_menu && object == p_menu)
     {
         p_menu = nullptr;
     }
@@ -135,7 +135,7 @@ ContextMenu::ContextMenu()
 
 UIEventResult ContextMenu::OnUIEvent(UIFocusable *, const UIEvent &event)
 {
-    switch(event.type)
+    switch (event.type)
     {
         // case UIEvent::Type::FOCUS_TAKEN:
         // break;
@@ -153,13 +153,13 @@ UIEventResult ContextMenu::OnUIEvent(UIFocusable *, const UIEvent &event)
 void ContextMenu::Update()
 {
     GameObject::Update();
-    if(GetRootItem())
+    if (GetRootItem())
     {
-        if(Input::GetMouseButtonDown(MouseButton::RIGHT) ||
-           Input::GetMouseButtonDown(MouseButton::LEFT))
+        if (Input::GetMouseButtonDown(MouseButton::RIGHT) ||
+            Input::GetMouseButtonDown(MouseButton::LEFT))
         {
-            if(!m_justCreated &&
-               !GetRootItem()->GetRectTransform()->IsMouseOver(true))
+            if (!m_justCreated &&
+                !GetRootItem()->GetRectTransform()->IsMouseOver(true))
             {
                 GameObject::Destroy(this);
             }
@@ -183,7 +183,7 @@ void ContextMenu::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     GameObject::OnDestroyed(object);
 
-    if(object == p_rootItem)
+    if (object == p_rootItem)
     {
         p_rootItem = nullptr;
         GameObject::Destroy(this);

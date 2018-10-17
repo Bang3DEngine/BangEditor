@@ -25,7 +25,7 @@ void ResourceInspectorWidget::Update()
 
 void ResourceInspectorWidget::SetPath(const Path &path)
 {
-    if(path != GetPath())
+    if (path != GetPath())
     {
         m_path = path;
         UpdateFromFileWhenChanged();

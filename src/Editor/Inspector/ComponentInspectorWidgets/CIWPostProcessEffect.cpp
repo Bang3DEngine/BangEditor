@@ -84,7 +84,7 @@ void CIWPostProcessEffect::OnValueChangedCIW(
         SCAST<PostProcessEffect::Type>(p_typeComboBox->GetSelectedValue()));
     ppe->SetPriority(p_priorityInput->GetValue());
 
-    if(p_fragmentShaderInput->GetPath().IsFile())
+    if (p_fragmentShaderInput->GetPath().IsFile())
     {
         const Path fragPath = p_fragmentShaderInput->GetPath();
         RH<Shader> shader = Resources::Load<Shader>(fragPath);

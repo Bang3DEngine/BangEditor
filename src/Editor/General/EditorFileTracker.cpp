@@ -97,7 +97,7 @@ Array<Path> EditorFileTracker::GetTrackedPathsWithLastExtension(
 
 EditorFileTracker *EditorFileTracker::GetInstance()
 {
-    if(EditorScene *edScene = EditorSceneManager::GetEditorScene())
+    if (EditorScene *edScene = EditorSceneManager::GetEditorScene())
     {
         return edScene->GetEditorFileTracker();
     }
@@ -106,8 +106,8 @@ EditorFileTracker *EditorFileTracker::GetInstance()
 
 void EditorFileTracker::CheckForShaderModifications(const Path &modifiedPath)
 {
-    if(!Extensions::Equals(modifiedPath.GetExtension(),
-                           Extensions::GetShaderExtensions()))
+    if (!Extensions::Equals(modifiedPath.GetExtension(),
+                            Extensions::GetShaderExtensions()))
     {
         return;
     }
@@ -123,28 +123,28 @@ void EditorFileTracker::CheckForShaderModifications(const Path &modifiedPath)
 
     // Treat shaderProgram dependencies
     Array<ShaderProgram *> shaderPrograms = Resources::GetAll<ShaderProgram>();
-    for(ShaderProgram *sp : shaderPrograms)
+    for (ShaderProgram *sp : shaderPrograms)
     {
         std::array<Shader *, 3> shaders = {{sp->GetVertexShader(),
                                             sp->GetGeometryShader(),
                                             sp->GetFragmentShader()}};
-        for(Shader *shader : shaders)
+        for (Shader *shader : shaders)
         {
-            if(shader)
+            if (shader)
             {
                 Set<Path> processedPaths;
                 Array<Path> incPaths = CodePreprocessor::GetSourceIncludePaths(
                     shader->GetResourceFilepath(), shadersIncPaths);
-                for(int i = 0; i < incPaths.Size();
-                    ++i)  // const Path &incPath : incPaths)
+                for (int i = 0; i < incPaths.Size();
+                     ++i)  // const Path &incPath : incPaths)
                 {
                     const Path incPath = incPaths[i];
-                    if(incPath == modifiedPath)
+                    if (incPath == modifiedPath)
                     {
                         Resources::Import(shader);
                         break;
                     }
-                    else if(!processedPaths.Contains(incPath))
+                    else if (!processedPaths.Contains(incPath))
                     {
                         incPaths.PushBack(
                             CodePreprocessor::GetSourceIncludePaths(
@@ -171,16 +171,16 @@ void EditorFileTracker::OnPathAdded(const Path &addedPath)
 
 void EditorFileTracker::OnPathModified(const Path &modifiedPath)
 {
-    if(!MetaFilesManager::IsMetaFile(modifiedPath))
+    if (!MetaFilesManager::IsMetaFile(modifiedPath))
     {
-        if(modifiedPath.IsFile())
+        if (modifiedPath.IsFile())
         {
             CheckForShaderModifications(modifiedPath);
             CheckForBehaviourModifications(modifiedPath);
 
             // Refresh/reimport resources of the modified path
             Resource *modifiedResource = Resources::GetCached(modifiedPath);
-            if(modifiedResource)
+            if (modifiedResource)
             {
                 Resources::Import(modifiedResource);
             }

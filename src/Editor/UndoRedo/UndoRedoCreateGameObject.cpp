@@ -27,7 +27,7 @@ UndoRedoCreateGameObject::UndoRedoCreateGameObject(
 
 UndoRedoCreateGameObject::~UndoRedoCreateGameObject()
 {
-    if(p_createdGameObject && p_createdGameObject->GetParent() == nullptr)
+    if (p_createdGameObject && p_createdGameObject->GetParent() == nullptr)
     {
         GameObject::Destroy(p_createdGameObject);
     }
@@ -35,7 +35,7 @@ UndoRedoCreateGameObject::~UndoRedoCreateGameObject()
 
 void UndoRedoCreateGameObject::Undo()
 {
-    if(p_createdGameObject)
+    if (p_createdGameObject)
     {
         p_createdGameObject->SetParent(nullptr);
     }
@@ -43,7 +43,7 @@ void UndoRedoCreateGameObject::Undo()
 
 void UndoRedoCreateGameObject::Redo()
 {
-    if(p_createdGameObject)
+    if (p_createdGameObject)
     {
         p_createdGameObject->SetParent(p_parent, m_indexInParent);
         Editor::SelectGameObject(p_createdGameObject, false);

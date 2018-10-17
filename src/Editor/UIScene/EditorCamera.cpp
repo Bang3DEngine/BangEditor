@@ -90,14 +90,14 @@ void EditorCamera::Update()
     AdjustSpeeds();
 
     bool unwrapMouse = true;
-    if(!IsBlocked())
+    if (!IsBlocked())
     {
-        if(GL::GetViewportRect().Contains(Input::GetMousePositionWindow()))
+        if (GL::GetViewportRect().Contains(Input::GetMousePositionWindow()))
         {
             HandleKeyMovement();  // WASD
 
             // Mouse rot with right click
-            if(!HandleMouseRotation())
+            if (!HandleMouseRotation())
             {
                 // Mouse move with mid click
                 HandleMousePanning();
@@ -113,7 +113,7 @@ void EditorCamera::Update()
     // Copy clear mode stuff from current scene camera
     Scene *scene = EditorSceneManager::GetOpenScene();
     Camera *sceneCam = scene ? scene->GetCamera() : nullptr;
-    if(sceneCam)
+    if (sceneCam)
     {
         GetCamera()->SetClearMode(sceneCam->GetClearMode());
         GetCamera()->SetClearColor(sceneCam->GetClearColor());
@@ -129,7 +129,7 @@ void EditorCamera::Update()
         GetCamera()->SetClearColor(Color::White.WithValue(0.3f));
     }
 
-    if(unwrapMouse)
+    if (unwrapMouse)
     {
         Input::SetMouseWrapping(false);
     }
@@ -164,23 +164,23 @@ void EditorCamera::InterpolatePositionAndRotation(double extraInterpPos,
 
     float interpRotSpeed = 3.0f;
     float rotT = Math::Min((dts * interpRotSpeed) + extraInterpRot, 1.0);
-    Quaternion newRot = Quaternion::SLerp(GetTransform()->GetRotation(),
-                                          m_targetRotation, rotT);
+    Quaternion newRot = Quaternion::SLerp(
+        GetTransform()->GetRotation(), m_targetRotation, rotT);
     GetTransform()->SetLocalRotation(newRot);
 }
 
 void EditorCamera::HandleWheelZoom()
 {
     // Update zoom value
-    if(UISceneEditContainer::IsMouseOver())
+    if (UISceneEditContainer::IsMouseOver())
     {
         float mouseWheel = Input::GetMouseWheel().y * m_mouseZoomPerDeltaWheel;
         float zoomSpeed = mouseWheel * m_zoomSpeedMultiplier;
 
         // Apply zoom
-        if(zoomSpeed != 0.0f)
+        if (zoomSpeed != 0.0f)
         {
-            if(p_cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
+            if (p_cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
             {
                 SetPositionDirectly(GetTransform()->GetPosition() +
                                     (zoomSpeed * p_camt->GetForward()));
@@ -193,8 +193,8 @@ void EditorCamera::HandleWheelZoom()
 
 bool EditorCamera::HandleMouseRotation()
 {
-    if(Input::GetMouseButton(MouseButton::RIGHT) &&
-       UISceneEditContainer::IsMouseOver())
+    if (Input::GetMouseButton(MouseButton::RIGHT) &&
+        UISceneEditContainer::IsMouseOver())
     {
         Vector2 delta = Vector2(Input::GetMouseDelta()) * Vector2(-1, 1) *
                         m_mouseRotDegreesPerPixel;
@@ -218,7 +218,7 @@ bool EditorCamera::HandleMouseRotation()
 
 void EditorCamera::HandleMousePanning()
 {
-    if(Input::GetMouseButton(MouseButton::MIDDLE))
+    if (Input::GetMouseButton(MouseButton::MIDDLE))
     {
         Vector2 delta = -Vector2(Input::GetMouseDelta()) * m_mousePanPerPixel;
         SetPositionDirectly(
@@ -233,24 +233,24 @@ void EditorCamera::HandleKeyMovement()
     m_keysCurrentMoveSpeed += m_keysMoveAccel;
     m_keysCurrentMoveSpeed = Math::Min(m_keysCurrentMoveSpeed, m_maxMoveSpeed);
 
-    if(!Input::GetKey(Key::LCTRL) && !Input::GetKey(Key::LSHIFT))
+    if (!Input::GetKey(Key::LCTRL) && !Input::GetKey(Key::LSHIFT))
     {
         float dt = Time::GetDeltaTime().GetSeconds();
         Vector3 m = Vector3::Zero;
-        if(Input::GetKey(Key::W))
+        if (Input::GetKey(Key::W))
         {
             m += m_keysCurrentMoveSpeed * dt * p_camt->GetForward();
         }
-        else if(Input::GetKey(Key::S))
+        else if (Input::GetKey(Key::S))
         {
             m -= m_keysCurrentMoveSpeed * dt * p_camt->GetForward();
         }
 
-        if(Input::GetKey(Key::A))
+        if (Input::GetKey(Key::A))
         {
             m -= m_keysCurrentMoveSpeed * dt * p_camt->GetRight();
         }
-        else if(Input::GetKey(Key::D))
+        else if (Input::GetKey(Key::D))
         {
             m += m_keysCurrentMoveSpeed * dt * p_camt->GetRight();
         }
@@ -261,14 +261,14 @@ void EditorCamera::HandleKeyMovement()
 
 void EditorCamera::FocusScene(Scene *scene)
 {
-    if(scene)
+    if (scene)
     {
         float sceneRadius = 1.0f;
         Vector3 sceneCenter = Vector3::Zero;
 
         Sphere bSphere = scene->GetBoundingSphere();
-        if(!Math::IsInfinity(bSphere.GetRadius()) &&
-           !Math::IsNaN(bSphere.GetRadius()))
+        if (!Math::IsInfinity(bSphere.GetRadius()) &&
+            !Math::IsNaN(bSphere.GetRadius()))
         {
             sceneRadius = bSphere.GetRadius();
             sceneCenter = bSphere.GetCenter();
@@ -303,7 +303,7 @@ void EditorCamera::AlignViewWithGameObject(GameObject *selected)
 
 void EditorCamera::SwitchProjectionModeTo(bool mode3D)
 {
-    if(mode3D)
+    if (mode3D)
     {
         p_cam->SetProjectionMode(CameraProjectionMode::PERSPECTIVE);
         p_cam->SetZNear(EditorCamera::InitialZNear);
@@ -321,7 +321,7 @@ void EditorCamera::SwitchProjectionModeTo(bool mode3D)
 
 void EditorCamera::LookAt(GameObject *lookAtFocus)
 {
-    if(lookAtFocus)
+    if (lookAtFocus)
     {
         Vector3 targetPos;
         Quaternion targetRot;
@@ -353,7 +353,7 @@ void EditorCamera::GetLookAtFocusParams(GameObject *lookAtGo,
     radius = !Math::IsInfinity(radius) ? radius : 0.1f;
     radius = Math::Max(radius, 0.1f);
     float stopDist = radius;
-    if(cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
+    if (cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
     {
         float fov = Math::DegToRad(cam->GetFovDegrees() / 2.0f);
         stopDist = radius / std::tan(fov) * 1.5f;
@@ -403,7 +403,7 @@ EditorCamera *EditorCamera::GetInstance()
 void EditorCamera::OnPlayStateChanged(PlayState prevPlayState,
                                       PlayState newPlayState)
 {
-    switch(newPlayState)
+    switch (newPlayState)
     {
         case PlayState::JUST_BEFORE_PLAYING:
             m_previousPlayStateChangePos = GetTransform()->GetPosition();
@@ -411,7 +411,7 @@ void EditorCamera::OnPlayStateChanged(PlayState prevPlayState,
             break;
 
         case PlayState::PLAYING:
-            if(prevPlayState == PlayState::JUST_BEFORE_PLAYING)
+            if (prevPlayState == PlayState::JUST_BEFORE_PLAYING)
             {
                 SetPositionDirectly(m_previousPlayStateChangePos);
                 SetRotationDirectly(m_previousPlayStateChangeRot);

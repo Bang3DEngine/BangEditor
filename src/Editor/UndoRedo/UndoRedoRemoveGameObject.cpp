@@ -14,7 +14,7 @@ UndoRedoRemoveGameObject::UndoRedoRemoveGameObject(
     GameObject *removedGameObject)
 {
     p_removedGameObject = removedGameObject;
-    if(p_removedGameObject)
+    if (p_removedGameObject)
     {
         p_removedGameObject->EventEmitter<IEventsDestroy>::RegisterListener(
             this);
@@ -23,7 +23,7 @@ UndoRedoRemoveGameObject::UndoRedoRemoveGameObject(
     p_previousParent = p_removedGameObject->GetParent();
     m_indexInPreviousParent =
         p_previousParent->GetChildren().IndexOf(p_removedGameObject);
-    if(p_previousParent)
+    if (p_previousParent)
     {
         p_previousParent->EventEmitter<IEventsDestroy>::RegisterListener(this);
     }
@@ -31,7 +31,7 @@ UndoRedoRemoveGameObject::UndoRedoRemoveGameObject(
 
 UndoRedoRemoveGameObject::~UndoRedoRemoveGameObject()
 {
-    if(p_removedGameObject && !p_removedGameObject->GetParent())
+    if (p_removedGameObject && !p_removedGameObject->GetParent())
     {
         GameObject::Destroy(p_removedGameObject);
     }
@@ -39,7 +39,7 @@ UndoRedoRemoveGameObject::~UndoRedoRemoveGameObject()
 
 void UndoRedoRemoveGameObject::Undo()
 {
-    if(p_removedGameObject)
+    if (p_removedGameObject)
     {
         p_removedGameObject->SetParent(p_previousParent,
                                        m_indexInPreviousParent);
@@ -49,7 +49,7 @@ void UndoRedoRemoveGameObject::Undo()
 
 void UndoRedoRemoveGameObject::Redo()
 {
-    if(p_removedGameObject)
+    if (p_removedGameObject)
     {
         p_removedGameObject->SetParent(nullptr);
     }

@@ -56,7 +56,7 @@ void CIWMeshRenderer::OnValueChangedCIW(
 {
     CIWRenderer::OnValueChangedCIW(object);
 
-    if(object == p_meshInputFile)
+    if (object == p_meshInputFile)
     {
         Path meshPath = p_meshInputFile->GetPath();
         RH<Mesh> mesh = Resources::Load<Mesh>(meshPath);

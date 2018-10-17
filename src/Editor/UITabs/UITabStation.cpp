@@ -60,7 +60,7 @@ UITabStation::UITabStation()
     auto contLE = p_tabContainerGo->AddComponent<UILayoutElement>();
     contLE->SetFlexibleSize(Vector2::One);
 
-    for(int s = 0; s < 4; ++s)
+    for (int s = 0; s < 4; ++s)
     {
         p_tabStations[s] = nullptr;
 
@@ -111,7 +111,7 @@ UITabContainer *UITabStation::GetTabContainer() const
 UITabStation *UITabStation::GetChildStationAndCreateIfNeeded(Side side)
 {
     int s = SCAST<int>(side);
-    if(!p_tabStations[s])
+    if (!p_tabStations[s])
     {
         p_tabStations[s] = GameObject::Create<UITabStation>();
         UITabStation *tabStation = p_tabStations[s];
@@ -124,7 +124,7 @@ UITabStation *UITabStation::GetChildStationAndCreateIfNeeded(Side side)
 
 void UITabStation::RemoveChildStation(Side side)
 {
-    if(UITabStation *station = GetChildStation(side))
+    if (UITabStation *station = GetChildStation(side))
     {
         GameObject::Destroy(station);
 
@@ -137,17 +137,17 @@ void UITabStation::RemoveChildStation(Side side)
 
 void UITabStation::CleanUpEmptyChildStations()
 {
-    for(int s = 0; s < 4; ++s)
+    for (int s = 0; s < 4; ++s)
     {
         Side side = SCAST<Side>(s);
-        if(UITabStation *sideStt = GetChildStation(side))
+        if (UITabStation *sideStt = GetChildStation(side))
         {
             UITabContainer *sideTabCont = sideStt->GetTabContainer();
-            if(sideTabCont->GetTabbedChildren().Size() == 0 &&
-               !sideStt->GetChildStation(Side::LEFT) &&
-               !sideStt->GetChildStation(Side::RIGHT) &&
-               !sideStt->GetChildStation(Side::TOP) &&
-               !sideStt->GetChildStation(Side::BOT))
+            if (sideTabCont->GetTabbedChildren().Size() == 0 &&
+                !sideStt->GetChildStation(Side::LEFT) &&
+                !sideStt->GetChildStation(Side::RIGHT) &&
+                !sideStt->GetChildStation(Side::TOP) &&
+                !sideStt->GetChildStation(Side::BOT))
             {
                 RemoveChildStation(side);
             }
@@ -157,11 +157,12 @@ void UITabStation::CleanUpEmptyChildStations()
 
 void UITabStation::OnDragStarted(EventEmitter<IEventsDragDrop> *dragDropEmitter)
 {
-    if(Component *comp = DCAST<Component *>(dragDropEmitter))
+    if (Component *comp = DCAST<Component *>(dragDropEmitter))
     {
-        if(UITabHeader *tabHeader = DCAST<UITabHeader *>(comp->GetGameObject()))
+        if (UITabHeader *tabHeader =
+                DCAST<UITabHeader *>(comp->GetGameObject()))
         {
-            if(UITabContainer *tabContainer = tabHeader->GetTabContainer())
+            if (UITabContainer *tabContainer = tabHeader->GetTabContainer())
             {
                 tabContainer->RemoveTabByHeader(tabHeader, false);
                 CleanUpEmptyChildStations();
@@ -172,13 +173,13 @@ void UITabStation::OnDragStarted(EventEmitter<IEventsDragDrop> *dragDropEmitter)
 
 void UITabStation::OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDropEmitter)
 {
-    if(Component *comp = DCAST<Component *>(dragDropEmitter))
+    if (Component *comp = DCAST<Component *>(dragDropEmitter))
     {
-        if(UITabHeader *draggedTabHeader =
-               DCAST<UITabHeader *>(comp->GetGameObject()))
+        if (UITabHeader *draggedTabHeader =
+                DCAST<UITabHeader *>(comp->GetGameObject()))
         {
             BANG_UNUSED(draggedTabHeader);
-            if(GetTabContainer()->IsWaitingToBeDestroyed())
+            if (GetTabContainer()->IsWaitingToBeDestroyed())
             {
                 return;
             }
@@ -194,26 +195,26 @@ void UITabStation::OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDropEmitter)
             GameObject *headersBar = GetTabContainer()->GetHeadersBar();
             bool overHeadersBar =
                 (headersBar->GetRectTransform()->IsMouseOver());
-            if(overHeadersBar)
+            if (overHeadersBar)
             {
                 m_dragPutInThisTabContainer = true;
                 float closestDistToPrevTH = Math::Infinity<float>();
                 float closestDistToNextTH = Math::Infinity<float>();
                 auto thisTabHeaders = GetTabContainer()->GetTabHeaders();
-                for(UITabHeader *tabHeader : thisTabHeaders)
+                for (UITabHeader *tabHeader : thisTabHeaders)
                 {
                     RectTransform *tabHeaderRT = tabHeader->GetRectTransform();
                     AARect tabHeaderRect = tabHeaderRT->GetViewportAARect();
                     Vector2 thCenter = tabHeaderRect.GetCenter();
                     float distToTH = Math::Abs(thCenter.x - mousePos.x);
-                    if(distToTH < closestDistToPrevTH &&
-                       mousePos.x < thCenter.x)
+                    if (distToTH < closestDistToPrevTH &&
+                        mousePos.x < thCenter.x)
                     {
                         nextTabHeader = tabHeader;
                         closestDistToPrevTH = distToTH;
                     }
-                    else if(distToTH < closestDistToNextTH &&
-                            mousePos.x >= thCenter.x)
+                    else if (distToTH < closestDistToNextTH &&
+                             mousePos.x >= thCenter.x)
                     {
                         prevTabHeader = tabHeader;
                         closestDistToNextTH = distToTH;
@@ -226,7 +227,7 @@ void UITabStation::OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDropEmitter)
                        m_dragPutInThisTabContainerTabIndex <=
                            thisTabHeaders.Size());
             }
-            else if(GetRectTransform()->IsMouseOver())
+            else if (GetRectTransform()->IsMouseOver())
             {
                 UITabStation *leftSt = GetChildStation(Side::LEFT);
                 UITabStation *rightSt = GetChildStation(Side::RIGHT);
@@ -238,33 +239,33 @@ void UITabStation::OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDropEmitter)
                     (!topSt || !topSt->GetRectTransform()->IsMouseOver()) &&
                     (!botSt || !botSt->GetRectTransform()->IsMouseOver());
 
-                if(isOverTerminalStation)
+                if (isOverTerminalStation)
                 {
                     AARect stationRect = GetTabContainer()
                                              ->GetRectTransform()
                                              ->GetViewportAARect();
                     Vector2 stationCenter = stationRect.GetCenter();
                     Vector2 stationSize = stationRect.GetSize();
-                    if(!leftSt &&
-                       mousePos.x < stationCenter.x - stationSize.x / 4)
+                    if (!leftSt &&
+                        mousePos.x < stationCenter.x - stationSize.x / 4)
                     {
                         m_dragPutInSideTabContainer = true;
                         m_dragPutInSideTabContainerSide = Side::LEFT;
                     }
-                    else if(!rightSt &&
-                            mousePos.x >= stationCenter.x + stationSize.x / 4)
+                    else if (!rightSt &&
+                             mousePos.x >= stationCenter.x + stationSize.x / 4)
                     {
                         m_dragPutInSideTabContainer = true;
                         m_dragPutInSideTabContainerSide = Side::RIGHT;
                     }
-                    else if(!botSt &&
-                            mousePos.y < stationCenter.y - stationSize.y / 4)
+                    else if (!botSt &&
+                             mousePos.y < stationCenter.y - stationSize.y / 4)
                     {
                         m_dragPutInSideTabContainer = true;
                         m_dragPutInSideTabContainerSide = Side::BOT;
                     }
-                    else if(!topSt &&
-                            mousePos.y >= stationCenter.y + stationSize.y / 4)
+                    else if (!topSt &&
+                             mousePos.y >= stationCenter.y + stationSize.y / 4)
                     {
                         m_dragPutInSideTabContainer = true;
                         m_dragPutInSideTabContainerSide = Side::TOP;
@@ -277,10 +278,10 @@ void UITabStation::OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDropEmitter)
                 }
             }
 
-            if(m_dragPutInThisTabContainer)
+            if (m_dragPutInThisTabContainer)
             {
-                if(UITabHeader *tabHeaderToMark =
-                       prevTabHeader ? prevTabHeader : nextTabHeader)
+                if (UITabHeader *tabHeaderToMark =
+                        prevTabHeader ? prevTabHeader : nextTabHeader)
                 {
                     bool markingPrev = (tabHeaderToMark == prevTabHeader);
                     float markX = markingPrev ? 1 : -1;
@@ -300,12 +301,12 @@ void UITabStation::OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDropEmitter)
                 }
                 p_dragMarker->SetEnabled(true);
             }
-            else if(m_dragPutInSideTabContainer)
+            else if (m_dragPutInSideTabContainer)
             {
                 UITabContainer *dragMarkerParent = GetTabContainer();
                 Vector2 markerAnchorMin;
                 Vector2 markerAnchorMax;
-                switch(m_dragPutInSideTabContainerSide)
+                switch (m_dragPutInSideTabContainerSide)
                 {
                     case Side::LEFT:
                         markerAnchorMin = Vector2(-1, -1);
@@ -341,19 +342,19 @@ void UITabStation::OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDropEmitter)
 void UITabStation::OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter)
 {
     BANG_UNUSED(dragDropEmitter);
-    if(Component *comp = DCAST<Component *>(dragDropEmitter))
+    if (Component *comp = DCAST<Component *>(dragDropEmitter))
     {
-        if(UITabHeader *draggedTabHeader =
-               DCAST<UITabHeader *>(comp->GetGameObject()))
+        if (UITabHeader *draggedTabHeader =
+                DCAST<UITabHeader *>(comp->GetGameObject()))
         {
             p_dragMarker->SetEnabled(false);
-            if(m_dragPutInThisTabContainer)
+            if (m_dragPutInThisTabContainer)
             {
                 draggedTabHeader->p_dragTabContainerDestiny = GetTabContainer();
                 draggedTabHeader->m_dragTabContainerDestinyIndex =
                     m_dragPutInThisTabContainerTabIndex;
             }
-            else if(m_dragPutInSideTabContainer)
+            else if (m_dragPutInSideTabContainer)
             {
                 draggedTabHeader->p_dragTabContainerDestiny =
                     GetChildStationAndCreateIfNeeded(
@@ -385,21 +386,21 @@ UITabStation *UITabStation::GetChildStation(Side side) const
 UITabStation *UITabStation::FindTabStationOf(GameObject *gameObject)
 {
     const auto &childrenInTabs = GetTabContainer()->GetTabbedChildren();
-    for(GameObject *childInTabs : childrenInTabs)
+    for (GameObject *childInTabs : childrenInTabs)
     {
-        if(childInTabs == gameObject)
+        if (childInTabs == gameObject)
         {
             return this;
         }
     }
 
-    for(int sidei = 0; sidei < 4; ++sidei)
+    for (int sidei = 0; sidei < 4; ++sidei)
     {
         Side side = SCAST<Side>(sidei);
-        if(GetChildStation(side))
+        if (GetChildStation(side))
         {
-            if(UITabStation *tabStation =
-                   GetChildStation(side)->FindTabStationOf(gameObject))
+            if (UITabStation *tabStation =
+                    GetChildStation(side)->FindTabStationOf(gameObject))
             {
                 return tabStation;
             }
@@ -412,19 +413,19 @@ UITabStation *UITabStation::FindTabStationOf(GameObject *gameObject)
 UITabStation *UITabStation::FindTabStationOfContainer(
     UITabContainer *tabContainer)
 {
-    if(tabContainer == GetTabContainer())
+    if (tabContainer == GetTabContainer())
     {
         return this;
     }
 
-    for(int s = 0; s < 4; ++s)
+    for (int s = 0; s < 4; ++s)
     {
         Side side = SCAST<Side>(s);
-        if(GetChildStation(side))
+        if (GetChildStation(side))
         {
-            if(UITabStation *tabStation =
-                   GetChildStation(side)->FindTabStationOfContainer(
-                       tabContainer))
+            if (UITabStation *tabStation =
+                    GetChildStation(side)->FindTabStationOfContainer(
+                        tabContainer))
             {
                 return tabStation;
             }

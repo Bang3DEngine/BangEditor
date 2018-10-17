@@ -36,9 +36,9 @@ SelectionFramebuffer *Selection::GetSelectionFramebuffer()
 
 GameObject *Selection::GetOveredGameObject(const Vector2i &vpPoint)
 {
-    if(EditorCamera *edCam = EditorCamera::GetInstance())
+    if (EditorCamera *edCam = EditorCamera::GetInstance())
     {
-        if(SelectionFramebuffer *sfb = edCam->GetSelectionFramebuffer())
+        if (SelectionFramebuffer *sfb = edCam->GetSelectionFramebuffer())
         {
             return sfb->GetGameObjectInViewportPoint(vpPoint);
         }

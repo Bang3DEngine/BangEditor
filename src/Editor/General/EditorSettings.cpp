@@ -17,7 +17,7 @@ void EditorSettings::AddRecentProjectFilepathOpen(
     EditorSettings *es = EditorSettings::GetInstance();
     ASSERT(es);
 
-    if(!es->m_recentProjectFilesOpen.Contains(recentProjectFilePathOpen))
+    if (!es->m_recentProjectFilesOpen.Contains(recentProjectFilePathOpen))
     {
         es->m_recentProjectFilesOpen.PushBack(recentProjectFilePathOpen);
         es->ExportToFile();

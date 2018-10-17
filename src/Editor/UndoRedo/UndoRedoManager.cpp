@@ -23,8 +23,8 @@ UndoRedoManager::UndoRedoManager()
         [](const Shortcut &) { UndoRedoManager::Undo(); });
 
     ShortcutManager::RegisterShortcut(
-        Shortcut(Key::Z, (KeyModifier::LCTRL | KeyModifier::LSHIFT), "Redo",
-                 true),
+        Shortcut(
+            Key::Z, (KeyModifier::LCTRL | KeyModifier::LSHIFT), "Redo", true),
         [](const Shortcut &) { UndoRedoManager::Redo(); });
 }
 
@@ -34,13 +34,13 @@ UndoRedoManager::~UndoRedoManager()
 
 void UndoRedoManager::Undo()
 {
-    if(UndoRedoManager::CanUndo())
+    if (UndoRedoManager::CanUndo())
     {
         UndoRedoManager *urm = UndoRedoManager::GetInstance();
         const Array<UndoRedoAction *> &actions = urm->m_undoActions.Front();
 
         urm->m_undoingOrRedoing = true;
-        for(UndoRedoAction *action : actions)
+        for (UndoRedoAction *action : actions)
         {
             action->Undo();
             urm->EventEmitter<IEventsUndoRedo>::PropagateToListeners(
@@ -51,9 +51,9 @@ void UndoRedoManager::Undo()
         urm->m_redoActions.PushFront(actions);
         urm->m_undoActions.PopFront();
 
-        if(urm->m_redoActions.Size() > UndoRedoManager::UndoListSize)
+        if (urm->m_redoActions.Size() > UndoRedoManager::UndoListSize)
         {
-            for(UndoRedoAction *action : urm->m_redoActions.Back())
+            for (UndoRedoAction *action : urm->m_redoActions.Back())
             {
                 delete action;
             }
@@ -64,13 +64,13 @@ void UndoRedoManager::Undo()
 
 void UndoRedoManager::Redo()
 {
-    if(UndoRedoManager::CanRedo())
+    if (UndoRedoManager::CanRedo())
     {
         UndoRedoManager *urm = UndoRedoManager::GetInstance();
         const Array<UndoRedoAction *> &actions = urm->m_redoActions.Front();
 
         urm->m_undoingOrRedoing = true;
-        for(UndoRedoAction *action : actions)
+        for (UndoRedoAction *action : actions)
         {
             action->Redo();
             urm->EventEmitter<IEventsUndoRedo>::PropagateToListeners(
@@ -88,17 +88,17 @@ void UndoRedoManager::Clear()
     UndoRedoManager *urm = UndoRedoManager::GetInstance();
     ASSERT(urm);
 
-    for(const Array<UndoRedoAction *> &actions : urm->m_undoActions)
+    for (const Array<UndoRedoAction *> &actions : urm->m_undoActions)
     {
-        for(UndoRedoAction *action : actions)
+        for (UndoRedoAction *action : actions)
         {
             delete action;
         }
     }
 
-    for(const Array<UndoRedoAction *> &actions : urm->m_redoActions)
+    for (const Array<UndoRedoAction *> &actions : urm->m_redoActions)
     {
-        for(UndoRedoAction *action : actions)
+        for (UndoRedoAction *action : actions)
         {
             delete action;
         }
@@ -133,18 +133,18 @@ void UndoRedoManager::PushActionsInSameStep(
     ASSERT(!urm->m_undoingOrRedoing);
 
     bool allStepsRedundant = true;
-    for(UndoRedoAction *pushedAction : actionsInSameStep)
+    for (UndoRedoAction *pushedAction : actionsInSameStep)
     {
-        if(!pushedAction->IsRedundant())
+        if (!pushedAction->IsRedundant())
         {
             allStepsRedundant = false;
             break;
         }
     }
 
-    if(!allStepsRedundant)
+    if (!allStepsRedundant)
     {
-        for(UndoRedoAction *pushedAction : actionsInSameStep)
+        for (UndoRedoAction *pushedAction : actionsInSameStep)
         {
             urm->EventEmitter<IEventsUndoRedo>::PropagateToListeners(
                 &IEventsUndoRedo::OnActionPushed, pushedAction);
@@ -153,9 +153,9 @@ void UndoRedoManager::PushActionsInSameStep(
         urm->m_undoActions.PushFront(actionsInSameStep);
         urm->m_redoActions.Clear();
 
-        if(urm->m_undoActions.Size() > UndoListSize)
+        if (urm->m_undoActions.Size() > UndoListSize)
         {
-            for(UndoRedoAction *action : urm->m_undoActions.Back())
+            for (UndoRedoAction *action : urm->m_undoActions.Back())
             {
                 delete action;
             }

@@ -50,22 +50,22 @@ void RectTransformAnchorSelectionGizmo::Update()
     SelectionGizmo::Update();
 
     GameObject *refGo = GetReferencedGameObject();
-    if(!refGo)
+    if (!refGo)
     {
         return;
     }
     RectTransform *refRT = refGo->GetRectTransform();
-    if(!refRT)
+    if (!refRT)
     {
         return;
     }
     RectTransform *parentRT = refGo->GetParent()->GetRectTransform();
     parentRT = parentRT ? parentRT : refRT;
 
-    if(IsBeingGrabbed())
+    if (IsBeingGrabbed())
     {
         Vector2 mousePos(Input::GetMousePosition());
-        if(GrabHasJustChanged())
+        if (GrabHasJustChanged())
         {
             m_startGrabMousePos = mousePos;
             m_startLocalAnchorMin = refRT->GetAnchorMin();
@@ -80,7 +80,7 @@ void RectTransformAnchorSelectionGizmo::Update()
         Vector2 newAnchorMinLocal = m_startLocalAnchorMin;
         Vector2 newAnchorMaxLocal = m_startLocalAnchorMax;
 
-        switch(m_anchorSide)
+        switch (m_anchorSide)
         {
             case AnchorSide::LEFT_BOT:
                 newAnchorMinLocal.x += displacementLocal.x;
@@ -103,7 +103,7 @@ void RectTransformAnchorSelectionGizmo::Update()
                 break;
         }
 
-        if(Input::GetKey(Key::LSHIFT))
+        if (Input::GetKey(Key::LSHIFT))
         {
             constexpr float Snapping = 10.0f;
             newAnchorMinLocal =
@@ -129,7 +129,7 @@ void RectTransformAnchorSelectionGizmo::Render(RenderPass renderPass,
     SelectionGizmo::Render(renderPass, renderChildren);
 
     Color color;
-    switch(GetSelectionState())
+    switch (GetSelectionState())
     {
         case SelectionGizmo::SelectionState::IDLE: color = Color::White; break;
 
@@ -158,19 +158,19 @@ void RectTransformAnchorSelectionGizmo::SetAnchorSide(AnchorSide anchorSide)
 void RectTransformAnchorSelectionGizmo::UpdateBasedOnAnchorSide()
 {
     GameObject *refGo = GetReferencedGameObject();
-    if(!refGo)
+    if (!refGo)
     {
         return;
     }
     RectTransform *refRT = refGo->GetRectTransform();
-    if(!refRT)
+    if (!refRT)
     {
         return;
     }
 
     float localAnchorRot = 0.0f;
     Vector2 localAnchor;
-    switch(m_anchorSide)
+    switch (m_anchorSide)
     {
         case AnchorSide::LEFT_BOT:
             localAnchor.x = refRT->GetAnchorMin().x;
@@ -201,7 +201,7 @@ void RectTransformAnchorSelectionGizmo::UpdateBasedOnAnchorSide()
     Quaternion parentRot = Quaternion::Identity;
     GameObject *parent = refGo->GetParent();
     RectTransform *parentRT = parent ? parent->GetRectTransform() : nullptr;
-    if(parentRT)
+    if (parentRT)
     {
         vpAnchorNDC =
             parentRT->FromLocalPointNDCToViewportPointNDC(localAnchor);
@@ -209,7 +209,7 @@ void RectTransformAnchorSelectionGizmo::UpdateBasedOnAnchorSide()
     }
 
     // Update anchor and selection rectTransforms
-    for(int i = 0; i < 2; ++i)
+    for (int i = 0; i < 2; ++i)
     {
         RectTransform *rt = (i == 0) ? p_anchorGO->GetRectTransform()
                                      : p_selectionGO->GetRectTransform();
@@ -222,7 +222,8 @@ void RectTransformAnchorSelectionGizmo::UpdateBasedOnAnchorSide()
         rt->SetPivotPosition(Vector2(0, -1));
 
         // Fit into screen if in borders
-        if(Math::Abs(vpAnchorNDC.x) >= 0.9f || Math::Abs(vpAnchorNDC.y) >= 0.9f)
+        if (Math::Abs(vpAnchorNDC.x) >= 0.9f ||
+            Math::Abs(vpAnchorNDC.y) >= 0.9f)
         {
             localAnchorRot += 180.0f;
         }

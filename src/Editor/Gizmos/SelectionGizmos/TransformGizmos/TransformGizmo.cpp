@@ -69,7 +69,7 @@ void TransformGizmo::Update()
     SelectionGizmo::Update();
 
     GameObject *refGo = GetReferencedGameObject();
-    if(!refGo || !refGo->GetTransform())
+    if (!refGo || !refGo->GetTransform())
     {
         return;
     }
@@ -77,7 +77,7 @@ void TransformGizmo::Update()
     UISceneToolbar *toolbar = UISceneToolbar::GetActive();
     TransformGizmoMode transformGizmoMode = toolbar->GetTransformGizmoMode();
 
-    switch(transformGizmoMode)
+    switch (transformGizmoMode)
     {
         case TransformGizmoMode::RECT:
             GetTransform()->SetLocalPosition(Vector3::Zero);
@@ -92,7 +92,7 @@ void TransformGizmo::Update()
     }
 
     GameObject *gizmoToEnable = nullptr;
-    switch(transformGizmoMode)
+    switch (transformGizmoMode)
     {
         case TransformGizmoMode::TRANSLATE:
             gizmoToEnable = p_translateGizmo;
@@ -108,9 +108,9 @@ void TransformGizmo::Update()
 
         default: break;
     }
-    std::array<GameObject *, 4> trGizmos = {p_translateGizmo, p_rotateGizmo,
-                                            p_scaleGizmo, p_rectTransformGizmo};
-    for(GameObject *trGizmo : trGizmos)
+    std::array<GameObject *, 4> trGizmos = {
+        p_translateGizmo, p_rotateGizmo, p_scaleGizmo, p_rectTransformGizmo};
+    for (GameObject *trGizmo : trGizmos)
     {
         trGizmo->SetEnabled(trGizmo == gizmoToEnable);
     }

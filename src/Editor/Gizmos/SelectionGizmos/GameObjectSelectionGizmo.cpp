@@ -34,16 +34,16 @@ void GameObjectSelectionGizmo::Render(RenderPass rp, bool renderChildren)
 {
     GameObject::Render(rp, renderChildren);
 
-    if(!GetReferencedGameObject())
+    if (!GetReferencedGameObject())
     {
         return;
     }
 
     SelectionFramebuffer *sfb =
         EditorCamera::GetInstance()->GetSelectionFramebuffer();
-    if(!sfb || !GL::IsBound(sfb))
+    if (!sfb || !GL::IsBound(sfb))
     {
-        if(rp == RenderPass::OVERLAY)
+        if (rp == RenderPass::OVERLAY)
         {
             GBuffer *gb = GEngine::GetActiveGBuffer();
             gb->PushDepthStencilTexture();

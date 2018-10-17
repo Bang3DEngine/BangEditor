@@ -33,21 +33,21 @@ void SelectionGizmo::Update()
     // Update selectionState
     bool isMouseOver = false;
     GameObject *overedGameObject = Selection::GetOveredGameObject();
-    if(overedGameObject)
+    if (overedGameObject)
     {
         isMouseOver = (overedGameObject == this);
         isMouseOver = isMouseOver || (overedGameObject->IsChildOf(this, true));
     }
 
     bool prevGrab = IsBeingGrabbed();
-    if(Input::GetMouseButtonDown(MouseButton::LEFT))
+    if (Input::GetMouseButtonDown(MouseButton::LEFT))
     {
-        if(isMouseOver)
+        if (isMouseOver)
         {
             m_selectionState = SelectionState::GRABBED;
         }
     }
-    else if(!Input::GetMouseButton(MouseButton::LEFT))
+    else if (!Input::GetMouseButton(MouseButton::LEFT))
     {
         m_selectionState =
             isMouseOver ? SelectionState::OVER : SelectionState::IDLE;
@@ -55,9 +55,9 @@ void SelectionGizmo::Update()
     m_grabHasJustChanged = (IsBeingGrabbed() != prevGrab);
 
     // Grab event
-    if(GrabHasJustChanged())
+    if (GrabHasJustChanged())
     {
-        if(IsBeingGrabbed())
+        if (IsBeingGrabbed())
         {
             OnGrabBegin();
         }
@@ -70,16 +70,16 @@ void SelectionGizmo::Update()
 
 void SelectionGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
 {
-    if(GetReferencedGameObject() != referencedGameObject)
+    if (GetReferencedGameObject() != referencedGameObject)
     {
-        if(GetReferencedGameObject())
+        if (GetReferencedGameObject())
         {
             GetReferencedGameObject()
                 ->EventEmitter<IEventsDestroy>::UnRegisterListener(this);
         }
 
         p_referencedGameObject = referencedGameObject;
-        if(GetReferencedGameObject())
+        if (GetReferencedGameObject())
         {
             GetReferencedGameObject()
                 ->EventEmitter<IEventsDestroy>::RegisterListener(this);

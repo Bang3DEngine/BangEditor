@@ -43,7 +43,7 @@ UIInputComplexRandom::~UIInputComplexRandom()
 
 void UIInputComplexRandom::Set(const ComplexRandom &complexRandom)
 {
-    if(complexRandom != GetComplexRandom())
+    if (complexRandom != GetComplexRandom())
     {
         m_complexRandom = complexRandom;
 

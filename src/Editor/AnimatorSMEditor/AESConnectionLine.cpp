@@ -48,7 +48,7 @@ AESConnectionLine::AESConnectionLine()
     p_lineRenderer->GetMaterial()->SetRenderPass(RenderPass::CANVAS);
     p_lineRenderer->SetPoints({Vector3::Zero, Vector3::Zero});
 
-    for(uint i : {0u, 1u, 2u})
+    for (uint i : {0u, 1u, 2u})
     {
         GameObject *arrowImgGo = GameObjectFactory::CreateUIGameObject();
         p_arrowImgs[i] = arrowImgGo->AddComponent<UIImageRenderer>();
@@ -79,17 +79,17 @@ void AESConnectionLine::BeforeRender()
     float lineWidth = 2.0f;
     Color lineColor = Color::White;
     AESNode *provisionalToNode = nullptr;
-    if(!GetAESNodeTo())
+    if (!GetAESNodeTo())
     {
-        if(UICanvas *canvas = UICanvas::GetActive(this))
+        if (UICanvas *canvas = UICanvas::GetActive(this))
         {
-            if(UIFocusable *overedFocus =
-                   canvas->GetFocusableUnderMouseTopMost())
+            if (UIFocusable *overedFocus =
+                    canvas->GetFocusableUnderMouseTopMost())
             {
                 GameObject *overedGo = overedFocus->GetGameObject();
-                if(auto overedNode = DCAST<AESNode *>(overedGo))
+                if (auto overedNode = DCAST<AESNode *>(overedGo))
                 {
-                    if(IsValidConnection(GetAESNodeFrom(), overedNode))
+                    if (IsValidConnection(GetAESNodeFrom(), overedNode))
                     {
                         provisionalToNode = overedNode;
                     }
@@ -100,18 +100,18 @@ void AESConnectionLine::BeforeRender()
     else
     {
         bool thickenLine = false;
-        if(IsMouseOver())
+        if (IsMouseOver())
         {
             thickenLine = true;
-            if(Input::GetMouseButtonDown(MouseButton::RIGHT))
+            if (Input::GetMouseButtonDown(MouseButton::RIGHT))
             {
                 p_contextMenu->ShowMenu();
             }
 
-            if(Input::GetMouseButtonDown(MouseButton::RIGHT) ||
-               Input::GetMouseButtonDown(MouseButton::LEFT))
+            if (Input::GetMouseButtonDown(MouseButton::RIGHT) ||
+                Input::GetMouseButtonDown(MouseButton::LEFT))
             {
-                if(UICanvas *canvas = UICanvas::GetActive(this))
+                if (UICanvas *canvas = UICanvas::GetActive(this))
                 {
                     canvas->SetFocus(nullptr);
                 }
@@ -127,13 +127,13 @@ void AESConnectionLine::BeforeRender()
         }
         else
         {
-            if(Input::GetMouseButtonDown(MouseButton::LEFT))
+            if (Input::GetMouseButtonDown(MouseButton::LEFT))
             {
                 m_hasFocus = false;
             }
         }
 
-        if(thickenLine || m_hasFocus)
+        if (thickenLine || m_hasFocus)
         {
             lineWidth = 5.0f;
             lineColor = m_hasFocus ? UITheme::GetSelectedColor()
@@ -141,12 +141,12 @@ void AESConnectionLine::BeforeRender()
         }
     }
 
-    if(Animator *animator = GetAESNodeFrom()->GetCurrentAnimator())
+    if (Animator *animator = GetAESNodeFrom()->GetCurrentAnimator())
     {
-        if(AnimatorStateMachinePlayer *player = animator->GetPlayer())
+        if (AnimatorStateMachinePlayer *player = animator->GetPlayer())
         {
-            if(player->GetCurrentTransition() &&
-               GetSMConnections().Contains(player->GetCurrentTransition()))
+            if (player->GetCurrentTransition() &&
+                GetSMConnections().Contains(player->GetCurrentTransition()))
             {
                 lineColor = Color::Green;
             }
@@ -159,9 +159,9 @@ void AESConnectionLine::BeforeRender()
         Vector3 lineMousePos = GetRectTransform()->FromWorldToLocalPoint(
             Vector3(mousePosition, 0.0f));
         uint i = 0;
-        for(AESNode *node :
-            {GetAESNodeFrom(),
-             (GetAESNodeTo() ? GetAESNodeTo() : provisionalToNode)})
+        for (AESNode *node :
+             {GetAESNodeFrom(),
+              (GetAESNodeTo() ? GetAESNodeTo() : provisionalToNode)})
         {
             Vector3 linePos =
                 node ? GetConnectionPointLinePosition(node) : lineMousePos;
@@ -172,22 +172,22 @@ void AESConnectionLine::BeforeRender()
         OffsetLinePositions();
     }
 
-    if(HasFocus())
+    if (HasFocus())
     {
-        if(Input::GetKeyDown(Key::DELETE))
+        if (Input::GetKeyDown(Key::DELETE))
         {
             RemoveSelf();
         }
     }
 
-    for(UIImageRenderer *arrowImg : p_arrowImgs)
+    for (UIImageRenderer *arrowImg : p_arrowImgs)
     {
         arrowImg->GetMaterial()->SetAlbedoColor(lineColor);
     }
     p_lineRenderer->GetMaterial()->SetAlbedoColor(lineColor);
     p_lineRenderer->GetMaterial()->SetLineWidth(lineWidth);
 
-    for(uint i : {0u, 1u, 2u})
+    for (uint i : {0u, 1u, 2u})
     {
         RectTransform *arrowRT =
             p_arrowImgs[i]->GetGameObject()->GetRectTransform();
@@ -209,7 +209,7 @@ void AESConnectionLine::BeforeRender()
         Quaternion rotation = Quaternion::AngleAxis(angle, Vector3::Forward);
         arrowRT->SetLocalRotation(rotation);
 
-        if(i != 1)
+        if (i != 1)
         {
             p_arrowImgs[i]->SetEnabled(GetSMConnections().Size() >= 2);
         }
@@ -243,7 +243,7 @@ AESNode *AESConnectionLine::GetAESNodeFrom() const
 
 AnimatorStateMachine *AESConnectionLine::GetAnimatorSM() const
 {
-    if(GetAESNodeFrom())
+    if (GetAESNodeFrom())
     {
         return GetAESNodeFrom()->GetAnimatorSM();
     }
@@ -254,7 +254,7 @@ Array<AnimatorStateMachineConnection *> AESConnectionLine::GetSMConnections()
     const
 {
     Array<AnimatorStateMachineConnection *> connections;
-    if(GetAESNodeFrom() && GetAESNodeTo())
+    if (GetAESNodeFrom() && GetAESNodeTo())
     {
         AnimatorStateMachineNode *smNodeFrom = GetAESNodeFrom()->GetSMNode();
         AnimatorStateMachineNode *smNodeTo = GetAESNodeTo()->GetSMNode();
@@ -265,8 +265,8 @@ Array<AnimatorStateMachineConnection *> AESConnectionLine::GetSMConnections()
 
 bool AESConnectionLine::IsMouseOver() const
 {
-    if(!GetAESNodeFrom() || !GetAESNodeTo() || !IsActiveRecursively() ||
-       !IsVisibleRecursively())
+    if (!GetAESNodeFrom() || !GetAESNodeTo() || !IsActiveRecursively() ||
+        !IsVisibleRecursively())
     {
         return false;
     }
@@ -303,7 +303,7 @@ void AESConnectionLine::RemoveSelf()
     ASSERT(smNode);
 
     const auto connections = GetSMConnections();
-    for(AnimatorStateMachineConnection *smConn : connections)
+    for (AnimatorStateMachineConnection *smConn : connections)
     {
         smNode->RemoveConnection(smConn);
     }
@@ -311,7 +311,7 @@ void AESConnectionLine::RemoveSelf()
 
 AESNode *AESConnectionLine::GetFirstFoundNode() const
 {
-    if(GetAESNodeTo())
+    if (GetAESNodeTo())
     {
         return GetAESNodeTo();
     }
@@ -321,7 +321,7 @@ AESNode *AESConnectionLine::GetFirstFoundNode() const
 bool AESConnectionLine::IsValidConnection(AESNode *oneNode,
                                           AESNode *otherNode) const
 {
-    if(oneNode && otherNode)
+    if (oneNode && otherNode)
     {
         return (oneNode != otherNode);
     }
@@ -359,14 +359,14 @@ void AESConnectionLine::OffsetLinePositions() const
     Vector3 offsetDir = Vector3(lineFromTo.xy().Perpendicular(), 0.0f);
     offsetDir = offsetDir.NormalizedSafe();
 
-    if(GetAESNodeFrom())
+    if (GetAESNodeFrom())
     {
         float sign = (isLesserNode ? 1.0f : -1.0f);
         lineFromPos += offsetDir * offsetAnchorPerIndex * sign;
         p_lineRenderer->SetPoint(0, lineFromPos);
     }
 
-    if(GetAESNodeTo())
+    if (GetAESNodeTo())
     {
         float sign = (isLesserNode ? 1.0f : -1.0f);
         lineToPos += offsetDir * offsetAnchorPerIndex * sign;

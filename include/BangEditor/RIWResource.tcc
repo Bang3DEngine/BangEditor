@@ -28,9 +28,9 @@ void RIWResource<T>::Update()
 template <class T>
 void RIWResource<T>::SetResource(RH<T> &resource)
 {
-    if(resource != GetResource())
+    if (resource != GetResource())
     {
-        if(GetResource())
+        if (GetResource())
         {
             GetResource()
                 .Get()
@@ -38,7 +38,7 @@ void RIWResource<T>::SetResource(RH<T> &resource)
         }
 
         m_resource = resource;
-        if(GetResource())
+        if (GetResource())
         {
             GetResource()
                 .Get()
@@ -60,12 +60,12 @@ RH<T> RIWResource<T>::GetResource() const
 template <class T>
 void RIWResource<T>::BeginUndoRedo()
 {
-    if(GetResource())
+    if (GetResource())
     {
-        if(GetPath().IsFile())
+        if (GetPath().IsFile())
         {
             Array<Path> undoRedoPaths = GetUndoRedoPaths();
-            for(const Path &undoRedoPath : undoRedoPaths)
+            for (const Path &undoRedoPath : undoRedoPaths)
             {
                 UndoRedoFileChange *undoRedoFileChange =
                     new UndoRedoFileChange(undoRedoPath);
@@ -85,15 +85,15 @@ void RIWResource<T>::BeginUndoRedo()
 template <class T>
 void RIWResource<T>::EndUndoRedo()
 {
-    if(GetResource())
+    if (GetResource())
     {
         Array<UndoRedoAction *> undoRedoActions;
-        for(UndoRedoFileChange *undoRedoFileChange : p_undoRedosFileChanges)
+        for (UndoRedoFileChange *undoRedoFileChange : p_undoRedosFileChanges)
         {
             undoRedoFileChange->ReadAfter();
         }
-        for(UndoRedoSerializableChange *undoRedoSerializableChange :
-            p_undoRedosSerializableChanges)
+        for (UndoRedoSerializableChange *undoRedoSerializableChange :
+             p_undoRedosSerializableChanges)
         {
             undoRedoSerializableChange->SetMetaAfter(
                 GetResource().Get()->GetMeta());
@@ -110,7 +110,7 @@ void RIWResource<T>::EndUndoRedo()
 template <class T>
 Array<Path> RIWResource<T>::GetUndoRedoPaths() const
 {
-    if(Resource *res = GetResource().Get())
+    if (Resource *res = GetResource().Get())
     {
         return {MetaFilesManager::GetMetaFilepath(res->GetGUID())};
     }
@@ -127,7 +127,7 @@ template <class T>
 void RIWResource<T>::UpdateFromFileWhenChanged()
 {
     RH<T> newResourceT;
-    if(GetPath().IsFile() || Resources::IsEmbeddedResource(GetPath()))
+    if (GetPath().IsFile() || Resources::IsEmbeddedResource(GetPath()))
     {
         newResourceT = Resources::Load<T>(GetPath());
     }
@@ -139,7 +139,7 @@ void RIWResource<T>::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
     ResourceInspectorWidget::OnValueChanged(object);
 
-    if(GetResource())
+    if (GetResource())
     {
         BeginUndoRedo();
 
@@ -149,10 +149,10 @@ void RIWResource<T>::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
         // Export to file
         Resource *resourceToExport = GetResource().Get();
         Path resourcePath = resourceToExport->GetResourceFilepath();
-        if(!resourcePath.IsFile())
+        if (!resourcePath.IsFile())
         {
-            if(Resource *parentResource =
-                   GetResource().Get()->GetParentResource())
+            if (Resource *parentResource =
+                    GetResource().Get()->GetParentResource())
             {
                 resourceToExport = parentResource;
                 resourcePath = parentResource->GetResourceFilepath();
@@ -160,7 +160,7 @@ void RIWResource<T>::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
         }
 
         Path importPath = MetaFilesManager::GetMetaFilepath(resourcePath);
-        if(resourceToExport && importPath.IsFile())
+        if (resourceToExport && importPath.IsFile())
         {
             resourceToExport->ExportMetaToFile(importPath);
         }
@@ -173,7 +173,7 @@ template <class T>
 void RIWResource<T>::OnResourceChanged(Resource *res)
 {
     ASSERT(res == GetResource().Get());
-    if(GetResource())
+    if (GetResource())
     {
         IEventListenerCommon::SetReceiveEventsCommon(false);
         UpdateInputsFromResource();

@@ -69,7 +69,7 @@ void CIWParticleSystem::InitInnerWidgets()
     p_textureInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_sheetSizeInput = GameObject::Create<UIInputVector>();
-    for(int i = 0; i < 2; ++i)
+    for (int i = 0; i < 2; ++i)
     {
         p_sheetSizeInput->GetInputNumbers()[i]->SetDecimalPlaces(0);
     }
@@ -188,17 +188,17 @@ void CIWParticleSystem::UpdateFromReference()
     Path meshPath = mesh ? mesh->GetResourceFilepath() : Path::Empty;
     p_meshInputFile->SetPath(meshPath);
 
-    if(!p_lifeTimeInput->HasFocus())
+    if (!p_lifeTimeInput->HasFocus())
     {
         p_lifeTimeInput->Set(GetParticleSystem()->GetLifeTime());
     }
 
-    if(!p_startTimeInput->HasFocus())
+    if (!p_startTimeInput->HasFocus())
     {
         p_startTimeInput->Set(GetParticleSystem()->GetStartTime());
     }
 
-    if(!p_startSizeInput->HasFocus())
+    if (!p_startSizeInput->HasFocus())
     {
         p_startSizeInput->Set(GetParticleSystem()->GetStartSize());
     }
@@ -208,75 +208,75 @@ void CIWParticleSystem::UpdateFromReference()
         GetParticleSystem()->GetComputeCollisions());
     p_textureInput->SetResource(GetParticleSystem()->GetTexture());
 
-    if(!p_sheetSizeInput->HasFocus())
+    if (!p_sheetSizeInput->HasFocus())
     {
         p_sheetSizeInput->Set(
             Vector2(GetParticleSystem()->GetAnimationSheetSize()));
     }
 
-    if(!p_animationSpeedInput->HasFocus())
+    if (!p_animationSpeedInput->HasFocus())
     {
         p_animationSpeedInput->SetValue(
             GetParticleSystem()->GetAnimationSpeed());
     }
 
-    if(!p_physicsStepModeInput->HasFocus())
+    if (!p_physicsStepModeInput->HasFocus())
     {
         p_physicsStepModeInput->SetSelectionByValue(
             SCAST<int>(GetParticleSystem()->GetPhysicsStepMode()));
     }
 
-    if(!p_particleRenderModeInput->HasFocus())
+    if (!p_particleRenderModeInput->HasFocus())
     {
         p_particleRenderModeInput->SetSelectionByValue(
             SCAST<int>(GetParticleSystem()->GetParticleRenderMode()));
     }
 
-    if(!p_startColorInput->HasFocus())
+    if (!p_startColorInput->HasFocus())
     {
         p_startColorInput->SetColor(GetParticleSystem()->GetStartColor());
     }
 
-    if(!p_endColorInput->HasFocus())
+    if (!p_endColorInput->HasFocus())
     {
         p_endColorInput->SetColor(GetParticleSystem()->GetEndColor());
     }
 
-    if(!p_numParticlesInput->HasFocus())
+    if (!p_numParticlesInput->HasFocus())
     {
         p_numParticlesInput->SetValue(GetParticleSystem()->GetNumParticles());
     }
 
-    if(!p_bouncinessInput->HasFocus())
+    if (!p_bouncinessInput->HasFocus())
     {
         p_bouncinessInput->SetValue(GetParticleSystem()->GetBounciness());
     }
 
-    if(!p_generationShapeInput->HasFocus())
+    if (!p_generationShapeInput->HasFocus())
     {
         p_generationShapeInput->SetSelectionByValue(
             SCAST<int>(GetParticleSystem()->GetGenerationShape()));
     }
 
-    if(!p_generationShapeBoxSizeInput->HasFocus())
+    if (!p_generationShapeBoxSizeInput->HasFocus())
     {
         p_generationShapeBoxSizeInput->Set(
             GetParticleSystem()->GetGenerationShapeBoxSize());
     }
 
-    if(!p_generationShapeConeFOVInput->HasFocus())
+    if (!p_generationShapeConeFOVInput->HasFocus())
     {
         p_generationShapeConeFOVInput->SetValue(Math::RadToDeg(
             GetParticleSystem()->GetGenerationShapeConeFOVRads()));
     }
 
-    if(!p_gravityMultiplierInput->HasFocus())
+    if (!p_gravityMultiplierInput->HasFocus())
     {
         p_gravityMultiplierInput->SetValue(
             GetParticleSystem()->GetGravityMultiplier());
     }
 
-    if(!p_initialVelocityMultiplier->HasFocus())
+    if (!p_initialVelocityMultiplier->HasFocus())
     {
         p_initialVelocityMultiplier->SetValue(
             GetParticleSystem()->GetInitialVelocityMultiplier());
@@ -298,9 +298,9 @@ void CIWParticleSystem::EnableOnlyNeededWidgets()
         p_generationShapeConeFOVInput->GetGameObject());
 
     Array<GameObject *> keepWidgetsEnabled;
-    if(GetParticleSystem())
+    if (GetParticleSystem())
     {
-        switch(GetParticleSystem()->GetGenerationShape())
+        switch (GetParticleSystem()->GetGenerationShape())
         {
             case ParticleGenerationShape::BOX:
                 keepWidgetsEnabled.PushBack(p_generationShapeBoxSizeInput);
@@ -313,7 +313,7 @@ void CIWParticleSystem::EnableOnlyNeededWidgets()
         }
     }
 
-    for(GameObject *widget : allWidgetsToEnableOrDisable)
+    for (GameObject *widget : allWidgetsToEnableOrDisable)
     {
         bool enabled = (keepWidgetsEnabled.Contains(widget));
         SetWidgetEnabled(widget, enabled);
@@ -325,86 +325,86 @@ void CIWParticleSystem::OnValueChangedCIW(
 {
     CIWRenderer::OnValueChangedCIW(object);
 
-    if(object == p_meshInputFile)
+    if (object == p_meshInputFile)
     {
         Path meshPath = p_meshInputFile->GetPath();
         RH<Mesh> mesh = Resources::Load<Mesh>(meshPath);
         GetParticleSystem()->SetMesh(mesh.Get());
     }
 
-    if(object == p_lifeTimeInput)
+    if (object == p_lifeTimeInput)
     {
         GetParticleSystem()->SetLifeTime(p_lifeTimeInput->GetComplexRandom());
     }
 
-    if(object == p_startTimeInput)
+    if (object == p_startTimeInput)
     {
         GetParticleSystem()->SetStartTime(p_startTimeInput->GetComplexRandom());
     }
 
-    if(object == p_textureInput)
+    if (object == p_textureInput)
     {
         RH<Texture2D> tex =
             Resources::Load<Texture2D>(p_textureInput->GetPath());
         GetParticleSystem()->SetTexture(tex.Get());
     }
 
-    if(object == p_billboardInput)
+    if (object == p_billboardInput)
     {
         GetParticleSystem()->SetBillboard(p_billboardInput->IsChecked());
     }
 
-    if(object == p_bouncinessInput)
+    if (object == p_bouncinessInput)
     {
         GetParticleSystem()->SetBounciness(p_bouncinessInput->GetValue());
     }
 
-    if(object == p_animationSpeedInput)
+    if (object == p_animationSpeedInput)
     {
         GetParticleSystem()->SetAnimationSpeed(
             p_animationSpeedInput->GetValue());
     }
 
-    if(object == p_sheetSizeInput)
+    if (object == p_sheetSizeInput)
     {
         GetParticleSystem()->SetAnimationSheetSize(
             Vector2i(p_sheetSizeInput->GetVector2()));
     }
 
-    if(object == p_particleRenderModeInput)
+    if (object == p_particleRenderModeInput)
     {
         GetParticleSystem()->SetParticleRenderMode(SCAST<ParticleRenderMode>(
             p_particleRenderModeInput->GetSelectedValue()));
     }
 
-    if(object == p_startColorInput)
+    if (object == p_startColorInput)
     {
         GetParticleSystem()->SetStartColor(p_startColorInput->GetColor());
     }
 
-    if(object == p_endColorInput)
+    if (object == p_endColorInput)
     {
         GetParticleSystem()->SetEndColor(p_endColorInput->GetColor());
     }
 
-    if(object == p_numParticlesInput)
+    if (object == p_numParticlesInput)
     {
         GetParticleSystem()->SetNumParticles(p_numParticlesInput->GetValue());
     }
 
-    if(object == p_physicsStepModeInput)
+    if (object == p_physicsStepModeInput)
     {
         GetParticleSystem()->SetPhysicsStepMode(
             SCAST<Particle::PhysicsStepMode>(
                 p_physicsStepModeInput->GetSelectedValue()));
     }
 
-    if(object == p_startSizeInput)
+    if (object == p_startSizeInput)
     {
         GetParticleSystem()->SetStartSize(p_startSizeInput->GetComplexRandom());
     }
 
-    if(object == p_generationShapeInput)
+    if (object == p_generationShapeInput)
     {
         GetParticleSystem()->SetGenerationShape(SCAST<ParticleGenerationShape>(
             p_generationShapeInput->GetSelectedValue()));
@@ -415,19 +415,19 @@ void CIWParticleSystem::OnValueChangedCIW(
     GetParticleSystem()->SetGenerationShapeConeFOVRads(
         Math::DegToRad(p_generationShapeConeFOVInput->GetValue()));
 
-    if(object == p_computeCollisionsInput)
+    if (object == p_computeCollisionsInput)
     {
         GetParticleSystem()->SetComputeCollisions(
             p_computeCollisionsInput->IsChecked());
     }
 
-    if(object == p_gravityMultiplierInput)
+    if (object == p_gravityMultiplierInput)
     {
         GetParticleSystem()->SetGravityMultiplier(
             p_gravityMultiplierInput->GetValue());
     }
 
-    if(object == p_initialVelocityMultiplier)
+    if (object == p_initialVelocityMultiplier)
     {
         GetParticleSystem()->SetInitialVelocityMultiplier(
             p_initialVelocityMultiplier->GetValue());

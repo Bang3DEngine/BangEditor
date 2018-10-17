@@ -34,12 +34,12 @@ ResourcePreviewFactory<T>::~ResourcePreviewFactory()
 {
     delete m_auxiliarFBToCopyTextures;
 
-    if(m_previewScene)
+    if (m_previewScene)
     {
         GameObject::DestroyImmediate(m_previewScene);
     }
 
-    for(RH<T> &res : m_previewsResources)
+    for (RH<T> &res : m_previewsResources)
     {
         res.Get()->EventEmitter<IEventsResource>::UnRegisterListener(this);
     }
@@ -91,18 +91,18 @@ RH<Texture2D> ResourcePreviewFactory<T>::GetPreviewTextureFor_(
     T *resource,
     const ResourcePreviewFactoryParameters &params)
 {
-    if(!resource)
+    if (!resource)
     {
         return RH<Texture2D>(TextureFactory::GetWhiteTexture());
     }
 
-    if(!m_lastPreviewParameters.ContainsKey(resource->GetGUID()) ||
-       params != m_lastPreviewParameters.Get(resource->GetGUID()))
+    if (!m_lastPreviewParameters.ContainsKey(resource->GetGUID()) ||
+        params != m_lastPreviewParameters.Get(resource->GetGUID()))
     {
         m_previewsMap.Remove(resource->GetGUID());
     }
 
-    if(!m_previewsMap.ContainsKey(resource->GetGUID()))
+    if (!m_previewsMap.ContainsKey(resource->GetGUID()))
     {
         // Create empty preview texture
         RH<Texture2D> previewTexRH = Resources::Create<Texture2D>();
@@ -131,7 +131,7 @@ void ResourcePreviewFactory<T>::FillTextureWithPreview(
     GL::Push(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);
 
     // Prepare to draw scene
-    if(!GetPreviewScene())
+    if (!GetPreviewScene())
     {
         CreatePreviewScene();
     }
@@ -147,8 +147,11 @@ void ResourcePreviewFactory<T>::FillTextureWithPreview(
                                              previewTextureSize);
 
     m_lastPreviewParameters.Add(resource->GetGUID(), params);
-    OnUpdateTextureBegin(GetPreviewScene(), GetPreviewCamera(),
-                         GetPreviewGameObjectContainer(), resource, params);
+    OnUpdateTextureBegin(GetPreviewScene(),
+                         GetPreviewCamera(),
+                         GetPreviewGameObjectContainer(),
+                         resource,
+                         params);
 
     // Set camera
     Transform *camTR = GetPreviewCamera()->GetGameObject()->GetTransform();
@@ -180,8 +183,10 @@ void ResourcePreviewFactory<T>::FillTextureWithPreview(
         GetPreviewCamera()->GetGBuffer()->GetLastDrawnColorAttachment());
     GL::DrawBuffers({GL::Attachment::COLOR0});
 
-    GL::BlitFramebuffer(GL::GetViewportRect(), GL::GetViewportRect(),
-                        GL::FilterMode::NEAREST, GL::BufferBit::COLOR);
+    GL::BlitFramebuffer(GL::GetViewportRect(),
+                        GL::GetViewportRect(),
+                        GL::FilterMode::NEAREST,
+                        GL::BufferBit::COLOR);
 
     texture->Bind();
     texture->SetFilterMode(GL::FilterMode::BILINEAR);
@@ -189,8 +194,11 @@ void ResourcePreviewFactory<T>::FillTextureWithPreview(
     // texture->SetFilterMode(GL::FilterMode::Trilinear_LL);
     texture->PropagateResourceChanged();
 
-    OnUpdateTextureEnd(GetPreviewScene(), GetPreviewCamera(),
-                       GetPreviewGameObjectContainer(), resource, params);
+    OnUpdateTextureEnd(GetPreviewScene(),
+                       GetPreviewCamera(),
+                       GetPreviewGameObjectContainer(),
+                       resource,
+                       params);
 
     // Restore OpenGL state
     GL::Pop(GL::Pushable::FRAMEBUFFER_AND_READ_DRAW_ATTACHMENTS);

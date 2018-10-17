@@ -48,7 +48,7 @@ void CIWSphereCollider::UpdateFromReference()
     CIWCollider::UpdateFromReference();
 
     SphereCollider *sphereCollider = GetSphereCollider();
-    if(!p_radiusInput->HasFocus())
+    if (!p_radiusInput->HasFocus())
     {
         p_radiusInput->SetValue(sphereCollider->GetRadius());
     }

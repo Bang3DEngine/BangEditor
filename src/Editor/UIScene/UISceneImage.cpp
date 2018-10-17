@@ -69,18 +69,18 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
     Camera *sceneCam = GetCamera();
     GBuffer *gb = sceneCam ? sceneCam->GetGBuffer() : nullptr;
     ShaderProgram *sp = p_sceneImg->GetMaterial()->GetShaderProgram();
-    switch(GetRenderMode())
+    switch (GetRenderMode())
     {
         case UISceneImage::RenderMode::DEPTH:
         case UISceneImage::RenderMode::SELECTION:
         case UISceneImage::RenderMode::WORLD_POSITION:
         {
-            switch(GetRenderMode())
+            switch (GetRenderMode())
             {
                 case UISceneImage::RenderMode::DEPTH:
                 case UISceneImage::RenderMode::WORLD_POSITION:
                 {
-                    if(gb && sp)
+                    if (gb && sp)
                     {
                         Texture2D *depthTex = gb->GetSceneDepthStencilTexture();
                         sp->SetTexture2D("B_SceneDepthStencilTex", depthTex);
@@ -93,7 +93,7 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
                     EditorCamera *edCam = EditorCamera::GetInstance();
                     SelectionFramebuffer *sfb =
                         edCam->GetSelectionFramebuffer();
-                    if(sfb)
+                    if (sfb)
                     {
                         Texture2D *selectionTex = sfb->GetColorTexture().Get();
                         sp->SetTexture2D("B_SelectionTex", selectionTex);
@@ -109,7 +109,7 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
         default: break;
     }
 
-    if(gb)
+    if (gb)
     {
         GL::Push(GL::BindTarget::SHADER_PROGRAM);
 
@@ -126,7 +126,7 @@ void UISceneImage::SetSceneImageCamera(Camera *sceneCam)
 {
     p_currentCamera = sceneCam;
 
-    if(sceneCam)
+    if (sceneCam)
     {
         GBuffer *camGBuffer = sceneCam->GetGBuffer();
 
@@ -144,7 +144,7 @@ void UISceneImage::SetSceneImageCamera(Camera *sceneCam)
 
 void UISceneImage::SetRenderMode(UISceneImage::RenderMode renderMode)
 {
-    if(renderMode != GetRenderMode())
+    if (renderMode != GetRenderMode())
     {
         m_renderMode = renderMode;
         SetSceneImageCamera(GetCamera());

@@ -83,27 +83,27 @@ void CIWRope::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
     CIWRenderer::OnValueChangedCIW(object);
 
-    if(object == p_numPointsInput)
+    if (object == p_numPointsInput)
     {
         GetRope()->SetNumPoints(SCAST<uint>(p_numPointsInput->GetValue()));
     }
-    else if(object == p_bouncinessInput)
+    else if (object == p_bouncinessInput)
     {
         GetRope()->SetBounciness(p_bouncinessInput->GetValue());
     }
-    else if(object == p_dampingInput)
+    else if (object == p_dampingInput)
     {
         GetRope()->SetDamping(p_dampingInput->GetValue());
     }
-    else if(object == p_springsForceInput)
+    else if (object == p_springsForceInput)
     {
         GetRope()->SetSpringsForce(p_springsForceInput->GetValue());
     }
-    else if(object == p_ropeLengthInput)
+    else if (object == p_ropeLengthInput)
     {
         GetRope()->SetRopeLength(p_ropeLengthInput->GetValue());
     }
-    else if(object == p_seeDebugPointsInput)
+    else if (object == p_seeDebugPointsInput)
     {
         GetRope()->SetSeeDebugPoints(p_seeDebugPointsInput->IsChecked());
     }

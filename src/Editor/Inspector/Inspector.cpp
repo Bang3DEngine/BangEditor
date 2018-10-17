@@ -162,7 +162,7 @@ void Inspector::Update()
 {
     GameObject::Update();
 
-    if(p_currentGameObject)
+    if (p_currentGameObject)
     {
         p_titleText->SetContent(p_currentGameObject->GetName());
     }
@@ -170,21 +170,21 @@ void Inspector::Update()
 
 void Inspector::ShowSerializable(Serializable *serializable)
 {
-    if(serializable)
+    if (serializable)
     {
-        if(Resource *res = DCAST<Resource *>(serializable))
+        if (Resource *res = DCAST<Resource *>(serializable))
         {
             Path resPath = res->GetResourceFilepath();
-            if(resPath.IsFile())
+            if (resPath.IsFile())
             {
                 ShowPath(resPath);
             }
         }
-        else if(GameObject *gameObject = DCAST<GameObject *>(serializable))
+        else if (GameObject *gameObject = DCAST<GameObject *>(serializable))
         {
             ShowGameObject(gameObject);
         }
-        else if(Component *comp = DCAST<Component *>(serializable))
+        else if (Component *comp = DCAST<Component *>(serializable))
         {
             ShowGameObject(comp->GetGameObject());
         }
@@ -197,17 +197,17 @@ void Inspector::ShowSerializable(Serializable *serializable)
 
 void Inspector::ShowPath(const Path &path)
 {
-    if(m_currentOpenPath != path)
+    if (m_currentOpenPath != path)
     {
-        if(!path.IsDir())
+        if (!path.IsDir())
         {
             InspectorWidget *fiw = ResourceInspectorWidgetFactory::Create(path);
-            if(fiw || path.IsFile())
+            if (fiw || path.IsFile())
             {
                 Clear();
             }
 
-            if(fiw)
+            if (fiw)
             {
                 p_titleText->SetContent(path.GetNameExt());
                 m_currentOpenPath = path;
@@ -226,7 +226,7 @@ void Inspector::ShowPath(const Path &path)
 void Inspector::ShowGameObject(GameObject *go)
 {
     Clear();
-    if(!go || go->IsWaitingToBeDestroyed())
+    if (!go || go->IsWaitingToBeDestroyed())
     {
         return;
     }
@@ -246,9 +246,9 @@ void Inspector::ShowGameObject(GameObject *go)
     AddWidget(giw, 0);
 
     int i = 0;
-    for(Component *comp : go->GetComponents())
+    for (Component *comp : go->GetComponents())
     {
-        if(comp)
+        if (comp)
         {
             OnComponentAdded(comp, i);
             ++i;
@@ -276,7 +276,7 @@ GameObject *Inspector::GetCurrentGameObject() const
 void Inspector::OnSceneLoaded(Scene *scene, const Path &)
 {
     BANG_UNUSED(scene);
-    if(p_currentGameObject)
+    if (p_currentGameObject)
     {
         Clear();
     }
@@ -292,7 +292,7 @@ void Inspector::OnDestroyed(EventEmitter<IEventsDestroy> *ee)
 
 void Inspector::OnPathRemoved(const Path &removedPath)
 {
-    if(GetCurrentPath() == removedPath)
+    if (GetCurrentPath() == removedPath)
     {
         Clear();
     }
@@ -302,7 +302,7 @@ void Inspector::OnCreateContextMenu(MenuItem *menuRootItem)
 {
     menuRootItem->SetFontSize(12);
 
-    if(GameObject *currentGameObject = GetCurrentGameObject())
+    if (GameObject *currentGameObject = GetCurrentGameObject())
     {
         {
             MetaNode undoMetaBefore = currentGameObject->GetMeta();
@@ -345,16 +345,16 @@ void Inspector::OnGameObjectSelected(GameObject *selectedGameObject)
 
 void Inspector::OnComponentAdded(Component *addedComponent, int index_)
 {
-    if(ComponentInspectorWidget *compWidget =
-           ComponentInspectorWidgetFactory::Create(addedComponent))
+    if (ComponentInspectorWidget *compWidget =
+            ComponentInspectorWidgetFactory::Create(addedComponent))
     {
         m_objToWidget.Add(addedComponent, compWidget);
 
         int index = (index_ + 1);  // +1 to jump the gameObject inspector widget
         GameObject *go = addedComponent->GetGameObject();
-        for(Component *comp : go->GetComponents())
+        for (Component *comp : go->GetComponents())
         {
-            if(!comp)  // Dont take into account removed components for index
+            if (!comp)  // Dont take into account removed components for index
             {
                 --index;
             }
@@ -368,7 +368,7 @@ void Inspector::OnComponentRemoved(Component *removedComponent,
 {
     BANG_UNUSED(previousGameObject);
 
-    if(m_objToWidget.ContainsKey(removedComponent))
+    if (m_objToWidget.ContainsKey(removedComponent))
     {
         RemoveWidget(m_objToWidget.Get(removedComponent));
         m_objToWidget.Remove(removedComponent);
@@ -428,22 +428,22 @@ void Inspector::SetCurrentWidgetBlocked(bool blocked)
 
     Array<GameObject *> children =
         GetWidgetsContainer()->GetChildrenRecursively();
-    for(GameObject *child : children)
+    for (GameObject *child : children)
     {
         childrenAndChildrenComps.PushBack(child);
         childrenAndChildrenComps.PushBack(child->GetComponents());
     }
 
-    for(Object *obj : childrenAndChildrenComps)
+    for (Object *obj : childrenAndChildrenComps)
     {
-        if(EventListener<IEventsFocus> *focusListener =
-               DCAST<EventListener<IEventsFocus> *>(obj))
+        if (EventListener<IEventsFocus> *focusListener =
+                DCAST<EventListener<IEventsFocus> *>(obj))
         {
             focusListener->SetReceiveEvents(!blocked);
         }
 
-        if(EventListener<IEventsDragDrop> *ddListener =
-               DCAST<EventListener<IEventsDragDrop> *>(obj))
+        if (EventListener<IEventsDragDrop> *ddListener =
+                DCAST<EventListener<IEventsDragDrop> *>(obj))
         {
             ddListener->SetReceiveEvents(!blocked);
         }
@@ -455,13 +455,13 @@ void Inspector::Clear()
     p_titleText->SetContent("");
     GetScrollPanel()->SetScrolling(Vector2i::Zero);
 
-    while(!m_widgets.IsEmpty())
+    while (!m_widgets.IsEmpty())
     {
         InspectorWidget *widget = m_widgets.Front();
         RemoveWidget(widget);
     }
 
-    if(GetCurrentGameObject())
+    if (GetCurrentGameObject())
     {
         GetCurrentGameObject()
             ->EventEmitter<IEventsDestroy>::UnRegisterListener(this);

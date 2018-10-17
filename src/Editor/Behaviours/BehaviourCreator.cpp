@@ -29,7 +29,7 @@ Path BehaviourCreator::GetNewBehaviourSourceFilepath(
 bool BehaviourCreator::CanCreateNewBehaviour(const Path &dirPath,
                                              const String &behaviourName)
 {
-    if(!dirPath.IsDir())
+    if (!dirPath.IsDir())
     {
         return false;
     }
@@ -39,12 +39,12 @@ bool BehaviourCreator::CanCreateNewBehaviour(const Path &dirPath,
     Path sourcePath =
         BehaviourCreator::GetNewBehaviourSourceFilepath(dirPath, behaviourName);
 
-    if(headerPath.IsFile())
+    if (headerPath.IsFile())
     {
         return false;
     }
 
-    if(sourcePath.IsFile())
+    if (sourcePath.IsFile())
     {
         return false;
     }

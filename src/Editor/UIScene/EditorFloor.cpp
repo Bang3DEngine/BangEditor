@@ -48,7 +48,7 @@ EditorFloor::EditorFloor()
     constexpr int GridNumCells = 100;
     constexpr float HGS = GridSize / 2;
     constexpr float CellSize = (GridSize / GridNumCells);
-    for(int i = 0; i < GridNumCells; ++i)
+    for (int i = 0; i < GridNumCells; ++i)
     {
         {
             Vector3 lineBegin = Vector3(-HGS + CellSize * i, 0, -HGS);
@@ -75,7 +75,7 @@ EditorFloor::~EditorFloor()
 
 void EditorFloor::Render(RenderPass renderPass, bool renderChildren)
 {
-    if(renderPass == RenderPass::OVERLAY)
+    if (renderPass == RenderPass::OVERLAY)
     {
         GBuffer *gbuffer = GEngine::GetActiveGBuffer();
         gbuffer->PushDepthStencilTexture();

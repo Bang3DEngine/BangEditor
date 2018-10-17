@@ -115,7 +115,7 @@ void RIWModel::OnResourceSet()
 
     std::size_t numVertices = 0;
     std::size_t numTriangles = 0;
-    for(std::size_t i = 0; i < GetModel()->GetMeshes().Size(); ++i)
+    for (std::size_t i = 0; i < GetModel()->GetMeshes().Size(); ++i)
     {
         Mesh *mesh = GetModel()->GetMeshes()[i].Get();
         numVertices += static_cast<uint>(mesh->GetNumVertices());

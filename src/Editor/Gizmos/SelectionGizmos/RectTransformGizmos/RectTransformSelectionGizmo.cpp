@@ -74,7 +74,7 @@ void RectTransformSelectionGizmo::Update()
     SelectionGizmo::Update();
 
     GameObject *refGo = GetReferencedGameObject();
-    if(!refGo || !refGo->GetTransform())
+    if (!refGo || !refGo->GetTransform())
     {
         return;
     }
@@ -85,14 +85,14 @@ void RectTransformSelectionGizmo::Render(RenderPass renderPass,
 {
     p_selectionGo->SetEnabled(Selection::IsBeingRendered());
 
-    if(renderPass == RenderPass::OVERLAY)
+    if (renderPass == RenderPass::OVERLAY)
     {
         GameObject *refGo = GetReferencedGameObject();
-        if(!refGo)
+        if (!refGo)
         {
             return;
         }
-        if(!refGo->GetRectTransform())
+        if (!refGo->GetRectTransform())
         {
             return;
         }

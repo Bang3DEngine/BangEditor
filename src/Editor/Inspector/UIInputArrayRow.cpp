@@ -44,8 +44,9 @@ void UIInputArrayRow::Init(UIInputArray *inputArray)
 
     auto CreateUpDownButton = [this, inputArray](bool up) {
         UIButton *upDownButton = GameObjectFactory::CreateUIButton(
-            "", up ? TextureFactory::GetUpArrowIcon()
-                   : TextureFactory::GetDownArrowIcon());
+            "",
+            up ? TextureFactory::GetUpArrowIcon()
+               : TextureFactory::GetDownArrowIcon());
         upDownButton->AddClickedCallback([this, inputArray, up]() {
             inputArray->MoveRow(this, (up ? -1 : 1));
         });
@@ -65,9 +66,9 @@ void UIInputArrayRow::Init(UIInputArray *inputArray)
 
 void UIInputArrayRow::SetContainedGameObject(GameObject *containedGo)
 {
-    if(containedGo != GetContainedGameObject())
+    if (containedGo != GetContainedGameObject())
     {
-        if(GetContainedGameObject())
+        if (GetContainedGameObject())
         {
             GetContainedGameObject()->SetParent(nullptr);
         }

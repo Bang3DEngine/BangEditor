@@ -88,8 +88,8 @@ void EditorDialog::GetColor(const String &title,
     colorPickerReporter->SetPickedColor(initialColor);
     Dialog::BeginDialogCreation(title, 550, 400, true, false);
     Scene *scene = GameObjectFactory::CreateScene(false);
-    EditorDialog::CreateGetColorSceneInto(scene, initialColor,
-                                          colorPickerReporter);
+    EditorDialog::CreateGetColorSceneInto(
+        scene, initialColor, colorPickerReporter);
     Dialog::EndDialogCreation(scene);
 }
 
@@ -147,48 +147,49 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
             assetExpItem->SetPath(assetPath);
             expItems.PushFront(assetExpItem);
 
-            for(ExplorerItem *expItem : expItems)
+            for (ExplorerItem *expItem : expItems)
             {
                 Path path = expItem->GetPath();
-                if(path.IsEmpty() || path.HasExtension(extensions))
+                if (path.IsEmpty() || path.HasExtension(extensions))
                 {
                     expItem->GetLabel()->GetText()->SetTextColor(Color::Black);
 
-                    if(path.IsEmpty())
+                    if (path.IsEmpty())
                     {
                         expItem->GetLabel()->GetText()->SetContent("None");
                     }
 
-                    expItem->GetFocusable()->AddEventCallback([expItem,
-                                                               gridLayoutGo](
-                        UIFocusable *, const UIEvent &event) {
-                        if(event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
-                        {
-                            // Save path, and select only the clicked one
-                            EditorDialog::s_assetPathResult =
-                                expItem->GetPath();
-                            for(GameObject *expItemGo :
-                                gridLayoutGo->GetChildren())
+                    expItem->GetFocusable()->AddEventCallback(
+                        [expItem, gridLayoutGo](UIFocusable *,
+                                                const UIEvent &event) {
+                            if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
                             {
-                                ExplorerItem *expItem =
-                                    DCAST<ExplorerItem *>(expItemGo);
-                                if(expItem)
+                                // Save path, and select only the clicked one
+                                EditorDialog::s_assetPathResult =
+                                    expItem->GetPath();
+                                for (GameObject *expItemGo :
+                                     gridLayoutGo->GetChildren())
                                 {
-                                    expItem->SetSelected(false);
+                                    ExplorerItem *expItem =
+                                        DCAST<ExplorerItem *>(expItemGo);
+                                    if (expItem)
+                                    {
+                                        expItem->SetSelected(false);
+                                    }
                                 }
+                                expItem->SetSelected(true);
+                                return UIEventResult::INTERCEPT;
                             }
-                            expItem->SetSelected(true);
-                            return UIEventResult::INTERCEPT;
-                        }
-                        else if(event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
-                        {
-                            // Directly select
-                            EditorDialog::s_accepted = true;
-                            Dialog::EndCurrentDialog();
-                            return UIEventResult::INTERCEPT;
-                        }
-                        return UIEventResult::IGNORE;
-                    });
+                            else if (event.type ==
+                                     UIEvent::Type::MOUSE_CLICK_DOUBLE)
+                            {
+                                // Directly select
+                                EditorDialog::s_accepted = true;
+                                Dialog::EndCurrentDialog();
+                                return UIEventResult::INTERCEPT;
+                            }
+                            return UIEventResult::IGNORE;
+                        });
 
                     expItem->SetParent(gridLayoutGo);
                 }
@@ -196,7 +197,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
         };
 
         // Add paths to grid layout
-        for(const Path &assetPath : assetPaths)
+        for (const Path &assetPath : assetPaths)
         {
             CreateExpItemFromPath(assetPath);
         }
@@ -415,24 +416,25 @@ Scene *EditorDialog::CreateGetColorSceneInto(
             GameObject::Update();
 
             RectTransform *parentRT = GetParent()->GetRectTransform();
-            if((parentRT->IsMouseOver() || GetRectTransform()->IsMouseOver()) &&
-               Input::GetMouseButton(MouseButton::LEFT))
+            if ((parentRT->IsMouseOver() ||
+                 GetRectTransform()->IsMouseOver()) &&
+                Input::GetMouseButton(MouseButton::LEFT))
             {
                 m_colorPanelHasBeenPressed = true;
             }
 
-            if(Input::GetMouseButtonUp(MouseButton::LEFT))
+            if (Input::GetMouseButtonUp(MouseButton::LEFT))
             {
                 m_colorPanelHasBeenPressed = false;
             }
 
-            if(m_colorPanelHasBeenPressed)
+            if (m_colorPanelHasBeenPressed)
             {
                 Vector2i mouseCoordsVP = Input::GetMousePosition();
                 Vector2 mouseCoordsAnchor =
                     parentRT->FromViewportPointToLocalPointNDC(mouseCoordsVP);
-                mouseCoordsAnchor = Vector2::Clamp(mouseCoordsAnchor,
-                                                   -Vector2::One, Vector2::One);
+                mouseCoordsAnchor = Vector2::Clamp(
+                    mouseCoordsAnchor, -Vector2::One, Vector2::One);
                 p_img->GetGameObject()->GetRectTransform()->SetAnchors(
                     mouseCoordsAnchor);
                 EventEmitter<IEventsValueChanged>::PropagateToListeners(
@@ -465,12 +467,12 @@ Scene *EditorDialog::CreateGetColorSceneInto(
         {
             EventListener<IEventsValueChanged>::SetReceiveEvents(false);
 
-            if(object == p_sliderHue)
+            if (object == p_sliderHue)
             {
                 m_pickedColorHSV.r = p_sliderHue->GetValue();
                 m_pickedColorRGB = m_pickedColorHSV.ToRGB();
             }
-            else if(object == p_handle)
+            else if (object == p_handle)
             {
                 Vector2 sv =
                     p_handle->GetPositionRelativeToColorPanel() * 0.5f + 0.5f;
@@ -480,21 +482,21 @@ Scene *EditorDialog::CreateGetColorSceneInto(
             }
             else
             {
-                m_pickedColorRGB =
-                    Color(p_sliderRGB_R->GetValue(), p_sliderRGB_G->GetValue(),
-                          p_sliderRGB_B->GetValue());
+                m_pickedColorRGB = Color(p_sliderRGB_R->GetValue(),
+                                         p_sliderRGB_G->GetValue(),
+                                         p_sliderRGB_B->GetValue());
 
                 // Correct for undeterminate hsv configs, keeping the previous
                 // known values
                 Color prevColorHSV = m_pickedColorHSV;
                 m_pickedColorHSV = m_pickedColorRGB.ToHSV();
-                if(m_pickedColorHSV.g <= 0.0f)
+                if (m_pickedColorHSV.g <= 0.0f)
                 {
                     m_pickedColorHSV.r = prevColorHSV.r;
                     m_pickedColorHSV.b = prevColorHSV.b;
                 }
 
-                if(m_pickedColorHSV.b <= 0.01f)
+                if (m_pickedColorHSV.b <= 0.01f)
                 {
                     m_pickedColorHSV.r = prevColorHSV.r;
                     m_pickedColorHSV.g = prevColorHSV.g;
@@ -561,7 +563,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(
 
 void ColorPickerReporter::SetPickedColor(const Color &color)
 {
-    if(color != GetPickedColor())
+    if (color != GetPickedColor())
     {
         m_pickedColor = color;
         EventEmitter<IEventsValueChanged>::PropagateToListeners(
@@ -571,7 +573,7 @@ void ColorPickerReporter::SetPickedColor(const Color &color)
 
 void ColorPickerReporter::SetHasFinished(bool hasFinished)
 {
-    if(hasFinished != HasFinished())
+    if (hasFinished != HasFinished())
     {
         m_hasFinished = hasFinished;
     }

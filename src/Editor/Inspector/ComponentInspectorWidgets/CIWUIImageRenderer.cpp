@@ -57,7 +57,7 @@ void CIWUIImageRenderer::UpdateFromReference()
 {
     ComponentInspectorWidget::UpdateFromReference();
 
-    if(!p_tintInput->HasFocus())
+    if (!p_tintInput->HasFocus())
     {
         p_tintInput->SetColor(GetUIImageRenderer()->GetTint());
     }

@@ -86,6 +86,6 @@ void MeshPreviewFactory::OnUpdateTextureEnd(
     Mesh *mesh,
     const ResourcePreviewFactoryParameters &params)
 {
-    BANG_UNUSED_5(previewScene, previewCamera, previewGoContainer, mesh,
-                  params);
+    BANG_UNUSED_5(
+        previewScene, previewCamera, previewGoContainer, mesh, params);
 }

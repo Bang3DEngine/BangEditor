@@ -58,13 +58,13 @@ UIInputColor::UIInputColor()
     p_searchColorButton = GameObjectFactory::CreateUIButton("", lensIcon);
     p_searchColorButton->SetIcon(lensIcon, Vector2i(16));
     p_searchColorButton->AddClickedCallback([this]() {
-        EditorDialog::GetColor("Pick Color...", GetColor(),
-                               m_colorPickerReporter);
+        EditorDialog::GetColor(
+            "Pick Color...", GetColor(), m_colorPickerReporter);
     });
 
     colorImgFocusable->AddEventCallback(
         [this](UIFocusable *, const UIEvent &event) {
-            if(event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
+            if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
             {
                 p_searchColorButton->Click();
                 return UIEventResult::INTERCEPT;
@@ -86,7 +86,7 @@ UIInputColor::~UIInputColor()
 void UIInputColor::Update()
 {
     GameObject::Update();
-    if(m_colorPickerReporter->IsPicking())
+    if (m_colorPickerReporter->IsPicking())
     {
         SetColor(m_colorPickerReporter->GetPickedColor());
     }
@@ -100,7 +100,7 @@ void UIInputColor::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 
 void UIInputColor::SetColor(const Color &color)
 {
-    if(color != GetColor())
+    if (color != GetColor())
     {
         m_color = color;
         p_colorImage->SetTint(GetColor());

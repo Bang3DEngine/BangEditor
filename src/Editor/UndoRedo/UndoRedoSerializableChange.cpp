@@ -25,8 +25,8 @@ UndoRedoSerializableChange::UndoRedoSerializableChange(
     SetMetaBefore(metaBefore);
     SetMetaAfter(metaAfter);
 
-    if(auto *destroyable =
-           DCAST<EventEmitter<IEventsDestroy> *>(p_serializable))
+    if (auto *destroyable =
+            DCAST<EventEmitter<IEventsDestroy> *>(p_serializable))
     {
         destroyable->EventEmitter<IEventsDestroy>::RegisterListener(this);
     }
@@ -48,7 +48,7 @@ void UndoRedoSerializableChange::SetMetaAfter(const MetaNode &metaAfter)
 
 void UndoRedoSerializableChange::Undo()
 {
-    if(p_serializable)
+    if (p_serializable)
     {
         p_serializable->ImportMeta(m_metaBefore);
         SelectSerializableOrShowInInspectorIfPossible();
@@ -57,7 +57,7 @@ void UndoRedoSerializableChange::Undo()
 
 void UndoRedoSerializableChange::Redo()
 {
-    if(p_serializable)
+    if (p_serializable)
     {
         p_serializable->ImportMeta(m_metaAfter);
         SelectSerializableOrShowInInspectorIfPossible();
@@ -80,33 +80,33 @@ void UndoRedoSerializableChange::SelectSerializableOrShowInInspectorIfPossible()
     const
 {
     GameObject *go = DCAST<GameObject *>(p_serializable);
-    if(!go)
+    if (!go)
     {
         Component *comp = DCAST<Component *>(p_serializable);
-        if(comp)
+        if (comp)
         {
             go = comp->GetGameObject();
         }
     }
 
-    if(go)
+    if (go)
     {
         Editor::SelectGameObject(go, false);
     }
     else
     {
         bool keepTrying = true;
-        if(Resource *res = DCAST<Resource *>(p_serializable))
+        if (Resource *res = DCAST<Resource *>(p_serializable))
         {
             Path path = res->GetResourceFilepath();
-            if(path.IsFile())
+            if (path.IsFile())
             {
                 Explorer::GetInstance()->SelectPath(path, false);
                 keepTrying = false;
             }
         }
 
-        if(keepTrying)
+        if (keepTrying)
         {
             Inspector::GetActive()->ShowSerializable(p_serializable);
         }

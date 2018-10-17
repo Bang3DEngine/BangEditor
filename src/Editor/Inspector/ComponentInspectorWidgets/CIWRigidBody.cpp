@@ -105,27 +105,27 @@ void CIWRigidBody::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 
     RigidBody *rigidBody = GetRigidBody();
 
-    if(object == p_massInput)
+    if (object == p_massInput)
     {
         rigidBody->SetMass(p_massInput->GetValue());
     }
-    else if(object == p_dragInput)
+    else if (object == p_dragInput)
     {
         rigidBody->SetDrag(p_dragInput->GetValue());
     }
-    else if(object == p_angularDragInput)
+    else if (object == p_angularDragInput)
     {
         rigidBody->SetAngularDrag(p_angularDragInput->GetValue());
     }
-    else if(object == p_useGravityInput)
+    else if (object == p_useGravityInput)
     {
         rigidBody->SetUseGravity(p_useGravityInput->IsChecked());
     }
-    else if(object == p_isKinematicInput)
+    else if (object == p_isKinematicInput)
     {
         rigidBody->SetIsKinematic(p_isKinematicInput->IsChecked());
     }
-    else if(object == p_constraintsInput)
+    else if (object == p_constraintsInput)
     {
         rigidBody->SetConstraints(SCAST<RigidBodyConstraint>(
             p_constraintsInput->GetSelectedValuesForFlag()));

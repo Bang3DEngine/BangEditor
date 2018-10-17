@@ -61,7 +61,8 @@ UISceneToolbar::UISceneToolbar()
     Texture2D *scaleIcon = EditorTextureFactory::GetAxesIcon();
     Texture2D *rectTransformIcon = EditorTextureFactory::GetAnchoredRectIcon();
 
-    auto AddToolbarButton = [&](UIToolButton **buttonPtr, Texture2D *icon,
+    auto AddToolbarButton = [&](UIToolButton **buttonPtr,
+                                Texture2D *icon,
                                 std::function<void()> callbackFunc) {
         UIToolButton *button = GameObjectFactory::CreateUIToolButton("", icon);
         button->SetIcon(icon, Vector2i(14));
@@ -71,7 +72,8 @@ UISceneToolbar::UISceneToolbar()
         button->GetGameObject()->SetParent(this);
         *buttonPtr = button;
     };
-    auto AddTransformButton = [&](UIToolButton **buttonPtr, Texture2D *icon,
+    auto AddTransformButton = [&](UIToolButton **buttonPtr,
+                                  Texture2D *icon,
                                   std::function<void()> callbackFunc) {
         AddToolbarButton(buttonPtr, icon, [this, buttonPtr, callbackFunc]() {
             (*buttonPtr)->SetOn(true);
@@ -103,14 +105,15 @@ UISceneToolbar::UISceneToolbar()
     p_transformCamSpacer = GameObjectFactory::CreateUIHSpacer();
     p_transformCamSpacer->SetParent(this);
 
-    AddToolbarButton(&p_playButton, rightArrowIcon,
-                     [&]() { ScenePlayer::PlayScene(); });
-    AddToolbarButton(&p_pauseButton, doubleBarIcon,
-                     [&]() { ScenePlayer::PauseScene(); });
-    AddToolbarButton(&p_stepButton, rightArrowAndBarIcon,
-                     [&]() { ScenePlayer::StepFrame(); });
-    AddToolbarButton(&p_stopButton, squareIcon,
-                     [&]() { ScenePlayer::StopScene(); });
+    AddToolbarButton(
+        &p_playButton, rightArrowIcon, [&]() { ScenePlayer::PlayScene(); });
+    AddToolbarButton(
+        &p_pauseButton, doubleBarIcon, [&]() { ScenePlayer::PauseScene(); });
+    AddToolbarButton(&p_stepButton, rightArrowAndBarIcon, [&]() {
+        ScenePlayer::StepFrame();
+    });
+    AddToolbarButton(
+        &p_stopButton, squareIcon, [&]() { ScenePlayer::StopScene(); });
 
     p_renderModeInput = GameObjectFactory::CreateUIComboBox();
     p_renderModeInput->AddItem("Color",
@@ -167,7 +170,7 @@ void UISceneToolbar::Update()
 
 void UISceneToolbar::SetTransformGizmoMode(TransformGizmoMode transformMode)
 {
-    if(transformMode != GetTransformGizmoMode())
+    if (transformMode != GetTransformGizmoMode())
     {
         m_transformGizmoMode = transformMode;
     }
@@ -205,7 +208,7 @@ UISceneToolbar *UISceneToolbar::GetActive()
 
 void UISceneToolbar::ResetCameraView()
 {
-    if(Scene *openScene = EditorSceneManager::GetActive()->GetOpenScene())
+    if (Scene *openScene = EditorSceneManager::GetActive()->GetOpenScene())
     {
         EditorCamera::GetInstance()->FocusScene(openScene);
     }
@@ -231,14 +234,14 @@ void UISceneToolbar::UpdateToolButtons()
     // Transform mode buttons
     {
         GameObject *selGo = Editor::GetSelectedGameObject();
-        if(selGo)
+        if (selGo)
         {
             bool hasRectTransform = selGo->HasComponent<RectTransform>();
-            if(hasRectTransform)
+            if (hasRectTransform)
             {
                 SetTransformGizmoMode(TransformGizmoMode::RECT);
             }
-            else if(GetTransformGizmoMode() == TransformGizmoMode::RECT)
+            else if (GetTransformGizmoMode() == TransformGizmoMode::RECT)
             {
                 SetTransformGizmoMode(TransformGizmoMode::TRANSLATE);
             }
@@ -252,24 +255,24 @@ void UISceneToolbar::UpdateToolButtons()
 
         // W, E, R, T shortcuts handling
         TransformGizmoMode newTrMode = Undef<TransformGizmoMode>();
-        if(Input::GetKeyDown(Key::W))
+        if (Input::GetKeyDown(Key::W))
         {
             newTrMode = TransformGizmoMode::TRANSLATE;
         }
-        else if(Input::GetKeyDown(Key::E))
+        else if (Input::GetKeyDown(Key::E))
         {
             newTrMode = TransformGizmoMode::ROTATE;
         }
-        else if(Input::GetKeyDown(Key::R))
+        else if (Input::GetKeyDown(Key::R))
         {
             newTrMode = TransformGizmoMode::SCALE;
         }
-        else if(Input::GetKeyDown(Key::T))
+        else if (Input::GetKeyDown(Key::T))
         {
             newTrMode = TransformGizmoMode::RECT;
         }
 
-        if(newTrMode != Undef<TransformGizmoMode>())
+        if (newTrMode != Undef<TransformGizmoMode>())
         {
             SetTransformGizmoMode(newTrMode);
         }

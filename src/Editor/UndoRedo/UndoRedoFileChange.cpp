@@ -19,12 +19,12 @@ UndoRedoFileChange::UndoRedoFileChange(const Path &path)
 
 UndoRedoFileChange::~UndoRedoFileChange()
 {
-    if(m_previousContents)
+    if (m_previousContents)
     {
         delete[] m_previousContents;
     }
 
-    if(m_newContents)
+    if (m_newContents)
     {
         delete[] m_newContents;
     }

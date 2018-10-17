@@ -68,28 +68,28 @@ void CIWLight::UpdateFromReference()
 {
     ComponentInspectorWidget::UpdateFromReference();
 
-    if(!p_intensityInput->HasFocus())
+    if (!p_intensityInput->HasFocus())
     {
         p_intensityInput->SetValue(GetLight()->GetIntensity());
     }
 
-    if(!p_colorInput->HasFocus())
+    if (!p_colorInput->HasFocus())
     {
         p_colorInput->SetColor(GetLight()->GetColor());
     }
 
-    if(!p_shadowBiasInput->HasFocus())
+    if (!p_shadowBiasInput->HasFocus())
     {
         p_shadowBiasInput->SetValue(GetLight()->GetShadowBias());
     }
 
-    if(!p_shadowTypeInput->HasFocus())
+    if (!p_shadowTypeInput->HasFocus())
     {
         p_shadowTypeInput->SetSelectionByValue(
             SCAST<int>(GetLight()->GetShadowType()));
     }
 
-    if(!p_shadowMapSizeInput->HasFocus())
+    if (!p_shadowMapSizeInput->HasFocus())
     {
         p_shadowMapSizeInput->SetValue(GetLight()->GetShadowMapSize().x);
     }

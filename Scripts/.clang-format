@@ -34,7 +34,7 @@ PointerAlignment: Right
 SortIncludes: 'true'
 # SpaceAfterTemplateKeyword: 'true'
 SpaceBeforeAssignmentOperators: 'true'
-SpaceBeforeParens: Always
+SpaceBeforeParens: ControlStatements
 SpaceInEmptyParentheses: 'false'
 SpacesInAngles: 'false'
 SpacesInCStyleCastParentheses: 'false'

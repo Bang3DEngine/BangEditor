@@ -29,7 +29,7 @@ bool EditorClipboard::HasCopiedComponent()
 
 void EditorClipboard::ClearCopiedComponent()
 {
-    if(GetCopiedComponent())
+    if (GetCopiedComponent())
     {
         Component::Destroy(GetCopiedComponent());
 
@@ -58,7 +58,7 @@ bool EditorClipboard::HasCopiedGameObject()
 
 void EditorClipboard::ClearCopiedGameObject()
 {
-    if(GetCopiedGameObject())
+    if (GetCopiedGameObject())
     {
         GameObject::Destroy(GetCopiedGameObject());
 

@@ -57,18 +57,18 @@ void Editor::SelectGameObject_(GameObject *selectedGameObject,
         (!selectedGameObject->GetComponent<NotSelectableInEditor>() &&
          !selectedGameObject->GetComponentInAncestors<NotSelectableInEditor>());
 
-    if(selectedGameObject != GetSelectedGameObject())
+    if (selectedGameObject != GetSelectedGameObject())
     {
-        if(false && registerUndo && isSelectable)
+        if (false && registerUndo && isSelectable)
         {
             UndoRedoManager::PushAction(new UndoRedoGameObjectSelection(
                 GetSelectedGameObject(), selectedGameObject));
         }
 
-        if(isSelectable)
+        if (isSelectable)
         {
             p_selectedGameObject = selectedGameObject;
-            if(GetSelectedGameObject())
+            if (GetSelectedGameObject())
             {
                 GetSelectedGameObject()
                     ->EventEmitter<IEventsDestroy>::RegisterListener(this);
@@ -84,7 +84,7 @@ void Editor::SelectGameObject_(GameObject *selectedGameObject,
 
 void Editor::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
-    if(GetSelectedGameObject() == object)
+    if (GetSelectedGameObject() == object)
     {
         Editor::SelectGameObject(nullptr, false);
     }
@@ -92,7 +92,7 @@ void Editor::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 
 void Editor::OnPathSelected(const Path &path)
 {
-    if(path.IsFile())
+    if (path.IsFile())
     {
         Editor::SelectGameObject(nullptr, false);
     }

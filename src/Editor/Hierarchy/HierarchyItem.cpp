@@ -61,9 +61,9 @@ HierarchyItem::~HierarchyItem()
 
 void HierarchyItem::SetReferencedGameObject(GameObject *referencedGameObject)
 {
-    if(referencedGameObject != GetReferencedGameObject())
+    if (referencedGameObject != GetReferencedGameObject())
     {
-        if(GetReferencedGameObject())
+        if (GetReferencedGameObject())
         {
             GetReferencedGameObject()
                 ->EventEmitter<IEventsName>::UnRegisterListener(
@@ -132,7 +132,7 @@ void HierarchyItem::CreatePrefab()
 
 void HierarchyItem::UpdateEnabledDisabledColor()
 {
-    if(GetReferencedGameObject()->IsEnabledRecursively())
+    if (GetReferencedGameObject()->IsEnabledRecursively())
     {
         p_textRenderer->SetTextColor(Color::Black);
     }
@@ -213,7 +213,7 @@ UIFocusable *HierarchyItem::GetTreeItemFocusable()
 
 void HierarchyItem::SetText(const String &text)
 {
-    if(text != p_textRenderer->GetContent())
+    if (text != p_textRenderer->GetContent())
     {
         p_textRenderer->SetContent(text);
     }
@@ -224,7 +224,7 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
     GameObject *refGo = GetReferencedGameObject();
 
     bool selectGameObject = false;
-    switch(action)
+    switch (action)
     {
         case UIList::Action::SELECTION_IN:
             selectGameObject = true;
@@ -238,9 +238,9 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
 
         case UIList::Action::DOUBLE_CLICKED_LEFT:
         {
-            if(EditorCamera *edCam = EditorCamera::GetInstance())
+            if (EditorCamera *edCam = EditorCamera::GetInstance())
             {
-                if(GameObject *refGo = GetReferencedGameObject())
+                if (GameObject *refGo = GetReferencedGameObject())
                 {
                     edCam->LookAt(refGo);
                 }
@@ -251,7 +251,7 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
         default: break;
     }
 
-    if(selectGameObject)
+    if (selectGameObject)
     {
         Editor::SelectGameObject(refGo);
     }
@@ -259,12 +259,12 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
 
 UIEventResult HierarchyItem::OnUIEvent(UIFocusable *, const UIEvent &event)
 {
-    switch(event.type)
+    switch (event.type)
     {
         case UIEvent::Type::KEY_DOWN:
-            if(event.key.modifiers.IsOn(KeyModifier::LCTRL))
+            if (event.key.modifiers.IsOn(KeyModifier::LCTRL))
             {
-                switch(event.key.key)
+                switch (event.key.key)
                 {
                     case Key::C:
                         Copy();
@@ -291,10 +291,10 @@ UIEventResult HierarchyItem::OnUIEvent(UIFocusable *, const UIEvent &event)
             }
             else
             {
-                switch(event.key.key)
+                switch (event.key.key)
                 {
                     case Key::F:
-                        if(EditorCamera *edCam = EditorCamera::GetInstance())
+                        if (EditorCamera *edCam = EditorCamera::GetInstance())
                         {
                             edCam->LookAt(GetReferencedGameObject());
                         }

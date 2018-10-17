@@ -62,7 +62,8 @@ void CIWBehaviourContainer::InitInnerWidgets()
 
 void CIWBehaviourContainer::UpdateInitializationMetaFromWidgets()
 {
-    MetaNode initializationMeta = GetReflectWidgetsManager()->GetMetaFromWidgets();
+    MetaNode initializationMeta =
+        GetReflectWidgetsManager()->GetMetaFromWidgets();
     GetBehaviourContainer()->SetInitializationMeta(initializationMeta);
 }
 
@@ -77,12 +78,12 @@ void CIWBehaviourContainer::OnComponentSet()
 BPReflectedStruct CIWBehaviourContainer::GetComponentReflectStruct() const
 {
     Path srcPath = GetBehaviourContainer()->GetSourceFilepath();
-    if(srcPath.IsFile())
+    if (srcPath.IsFile())
     {
         Path headerPath = srcPath.WithExtension("h");
         Time timeHeaderChanged =
             EditorFileTracker::GetInstance()->GetModificationTime(headerPath);
-        if(timeHeaderChanged > m_prevTimeHeaderChanged)
+        if (timeHeaderChanged > m_prevTimeHeaderChanged)
         {
             Array<BPReflectedStruct> reflStructs =
                 BangPreprocessor::GetReflectStructs(headerPath);
@@ -105,7 +106,7 @@ void CIWBehaviourContainer::UpdateFromReference()
     ComponentInspectorWidget::UpdateFromReference();
 
     Path srcPath = GetBehaviourContainer()->GetSourceFilepath();
-    if(srcPath.IsFile())
+    if (srcPath.IsFile())
     {
         SetTitle(srcPath.GetName());
         p_sourceInputFile->SetPath(srcPath);

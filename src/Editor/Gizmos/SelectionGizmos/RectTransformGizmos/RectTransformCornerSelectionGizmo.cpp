@@ -51,20 +51,20 @@ void RectTransformCornerSelectionGizmo::Update()
     SelectionGizmo::Update();
 
     GameObject *refGo = GetReferencedGameObject();
-    if(!refGo)
+    if (!refGo)
     {
         return;
     }
     RectTransform *refRT = refGo->GetRectTransform();
-    if(!refRT)
+    if (!refRT)
     {
         return;
     }
 
-    if(IsBeingGrabbed())
+    if (IsBeingGrabbed())
     {
         Vector2i mousePos = Input::GetMousePosition();
-        if(GrabHasJustChanged())
+        if (GrabHasJustChanged())
         {
             m_startGrabMousePos = mousePos;
             m_startMarginLeftBot = refRT->GetMarginLeftBot();
@@ -82,7 +82,7 @@ void RectTransformCornerSelectionGizmo::Update()
 
         Vector2i newMarginLeftBot = m_startMarginLeftBot;
         Vector2i newMarginRightTop = m_startMarginRightTop;
-        switch(m_cornerSide)
+        switch (m_cornerSide)
         {
             case CornerSide::LEFT_BOT:
                 newMarginLeftBot.x += displacement.x;
@@ -110,7 +110,7 @@ void RectTransformCornerSelectionGizmo::Update()
                 break;
         }
 
-        if(Input::GetKey(Key::LSHIFT))
+        if (Input::GetKey(Key::LSHIFT))
         {
             constexpr int Snapping = 5;
             newMarginLeftBot = (newMarginLeftBot / Snapping) * Snapping;
@@ -130,7 +130,7 @@ void RectTransformCornerSelectionGizmo::Render(RenderPass renderPass,
     p_selectionRenderer->SetEnabled(Selection::IsBeingRendered());
 
     Color color;
-    switch(GetSelectionState())
+    switch (GetSelectionState())
     {
         case SelectionGizmo::SelectionState::IDLE: color = Color::Blue; break;
 
@@ -161,12 +161,12 @@ void RectTransformCornerSelectionGizmo::SetCornerSide(CornerSide cornerSide)
 void RectTransformCornerSelectionGizmo::UpdateBasedOnCornerSide()
 {
     GameObject *refGo = GetReferencedGameObject();
-    if(!refGo)
+    if (!refGo)
     {
         return;
     }
     RectTransform *refRT = refGo->GetRectTransform();
-    if(!refRT)
+    if (!refRT)
     {
         return;
     }
@@ -184,7 +184,7 @@ void RectTransformCornerSelectionGizmo::UpdateBasedOnCornerSide()
         GL::FromViewportPointToViewportPointNDC(refRect.GetCenter()));
 
     Vector2 cornerAnchor = Vector2::Zero;
-    switch(m_cornerSide)
+    switch (m_cornerSide)
     {
         case CornerSide::LEFT_BOT:
             cornerAnchor = Vector2(leftBotNDC.x, leftBotNDC.y);
@@ -208,7 +208,7 @@ void RectTransformCornerSelectionGizmo::UpdateBasedOnCornerSide()
     }
 
     // Update corner and selection rectTransforms
-    for(int i = 0; i < 2; ++i)
+    for (int i = 0; i < 2; ++i)
     {
         RectTransform *rt = (i == 0) ? p_cornerGO->GetRectTransform()
                                      : p_selectionGO->GetRectTransform();

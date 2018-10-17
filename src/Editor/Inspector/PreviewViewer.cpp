@@ -55,7 +55,7 @@ void PreviewViewer::Update()
 {
     GameObject::Update();
 
-    if(p_focusable->IsBeingPressed())
+    if (p_focusable->IsBeingPressed())
     {
         constexpr float RotationSpeed = 3.0f;
         m_params.camOrbitAnglesDegs +=
@@ -64,7 +64,7 @@ void PreviewViewer::Update()
             Math::Clamp(m_params.camOrbitAnglesDegs.y, -75.0f, 75.0f);
     }
 
-    if(m_previewImageProviderFunc)
+    if (m_previewImageProviderFunc)
     {
         p_imgRenderer->SetImageTexture(
             m_previewImageProviderFunc(m_params).Get());
@@ -79,7 +79,7 @@ void PreviewViewer::SetPreviewImageProvider(
 
 UIEventResult PreviewViewer::OnUIEvent(UIFocusable *, const UIEvent &event)
 {
-    switch(event.type)
+    switch (event.type)
     {
         case UIEvent::Type::FOCUS_TAKEN:
             p_border->SetTint(Color::Orange);

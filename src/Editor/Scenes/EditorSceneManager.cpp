@@ -24,12 +24,12 @@ EditorSceneManager::EditorSceneManager()
 
 EditorSceneManager::~EditorSceneManager()
 {
-    if(GetOpenScene())
+    if (GetOpenScene())
     {
         GameObject::Destroy(GetOpenScene());
     }
 
-    if(GetEditorScene())
+    if (GetEditorScene())
     {
         GameObject::Destroy(GetEditorScene());
     }
@@ -76,7 +76,7 @@ BehaviourManager *EditorSceneManager::CreateBehaviourManager() const
 void EditorSceneManager::OnSceneLoaded(Scene *scene, const Path &sceneFilepath)
 {
     BANG_UNUSED_2(scene, sceneFilepath);
-    if(GetEditorScene_())
+    if (GetEditorScene_())
     {
         GetEditorScene_()->SetOpenScene(GetLoadedScene());
     }

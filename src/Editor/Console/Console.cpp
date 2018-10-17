@@ -89,7 +89,7 @@ void Console::Update()
 {
     GameObject::Update();
 
-    for(const ConsoleMessage &cMsg : m_queuedMessages)
+    for (const ConsoleMessage &cMsg : m_queuedMessages)
     {
         ConsoleUIListEntry *entryGo = GameObject::Create<ConsoleUIListEntry>();
         entryGo->SetConsoleMessage(cMsg);
@@ -118,7 +118,7 @@ void Console::OnMessage(DebugMessageType msgType,
                         int line,
                         const String &fileName)
 {
-    if(msgType != DebugMessageType::DLOG)
+    if (msgType != DebugMessageType::DLOG)
     {
         ConsoleMessage cMsg;
         cMsg.msgType = msgType;
@@ -173,7 +173,7 @@ void ConsoleUIListEntry::SetConsoleMessage(const ConsoleMessage &cMsg)
     p_msgText->SetContent(cMsg.msgStr);
 
     Texture2D *iconTex = nullptr;
-    switch(cMsg.msgType)
+    switch (cMsg.msgType)
     {
         case DebugMessageType::LOG:
         case DebugMessageType::DLOG:

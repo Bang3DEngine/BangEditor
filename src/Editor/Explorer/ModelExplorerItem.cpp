@@ -27,10 +27,10 @@ void ModelExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
     MenuItem *createGo = menuRootItem->AddItem("Create GameObject from model");
     createGo->SetSelectedCallback([this](MenuItem *) {
         Scene *openScene = EditorSceneManager::GetOpenScene();
-        if(openScene)
+        if (openScene)
         {
             RH<Model> model = Resources::Load<Model>(GetPath());
-            if(model)
+            if (model)
             {
                 GameObject *gameObject =
                     model.Get()->CreateGameObjectFromModel();

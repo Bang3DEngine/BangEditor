@@ -124,12 +124,12 @@ SelectProjectScene::SelectProjectScene()
     UIList *recentProjectsList = GameObjectFactory::CreateUIList(true);
     recentProjectsList->SetSelectionCallback([this](GOItem *item,
                                                     UIList::Action action) {
-        if(!item)
+        if (!item)
         {
             return;
         }
         RecentProjectListEntry *entry = SCAST<RecentProjectListEntry *>(item);
-        switch(action)
+        switch (action)
         {
             case UIList::Action::MOUSE_LEFT_DOWN:
                 m_selectedRecentPath = entry->m_projectPath;
@@ -153,7 +153,7 @@ SelectProjectScene::SelectProjectScene()
     recentProjectsList->Clear();
     const Array<Path> &recentProjects =
         EditorSettings::GetRecentProjectFilepathsOpen();
-    for(const Path &recentProjectPath : recentProjects)
+    for (const Path &recentProjectPath : recentProjects)
     {
         GameObject *entry =
             GameObject::Create<RecentProjectListEntry>(recentProjectPath);
@@ -202,12 +202,13 @@ void SelectProjectScene::NewProject()
 {
     Path newProjectDirPath = Dialog::OpenDirectory(
         "Create new project. Select parent dir...", EditorPaths::GetHome());
-    if(newProjectDirPath.IsDir())
+    if (newProjectDirPath.IsDir())
     {
-        String projectName = Dialog::GetString(
-            "Choose Project Name", "Please, choose your project name:",
-            "NewProject");
-        if(!projectName.IsEmpty())
+        String projectName =
+            Dialog::GetString("Choose Project Name",
+                              "Please, choose your project name:",
+                              "NewProject");
+        if (!projectName.IsEmpty())
         {
             Project *proj = ProjectManager::CreateNewProject(newProjectDirPath,
                                                              projectName);
@@ -218,10 +219,11 @@ void SelectProjectScene::NewProject()
 
 void SelectProjectScene::OpenProject()
 {
-    Path projectFilepath = Dialog::OpenFilePath(
-        "Open Project...", {Extensions::GetProjectExtension()},
-        EditorPaths::GetHome());
-    if(projectFilepath.IsFile())
+    Path projectFilepath =
+        Dialog::OpenFilePath("Open Project...",
+                             {Extensions::GetProjectExtension()},
+                             EditorPaths::GetHome());
+    if (projectFilepath.IsFile())
     {
         ConfirmOpenProject(projectFilepath);
     }

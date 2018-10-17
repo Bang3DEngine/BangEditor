@@ -62,15 +62,15 @@ void CIWCapsuleCollider::UpdateFromReference()
     CIWCollider::UpdateFromReference();
 
     CapsuleCollider *cc = GetCapsuleCollider();
-    if(!p_radiusInput->HasFocus())
+    if (!p_radiusInput->HasFocus())
     {
         p_radiusInput->SetValue(cc->GetRadius());
     }
-    if(!p_heightInput->HasFocus())
+    if (!p_heightInput->HasFocus())
     {
         p_heightInput->SetValue(cc->GetHeight());
     }
-    if(!p_axisInput->HasFocus())
+    if (!p_axisInput->HasFocus())
     {
         p_axisInput->SetSelectionByValue(SCAST<int>(cc->GetAxis()));
     }

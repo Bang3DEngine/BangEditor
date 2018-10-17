@@ -61,7 +61,7 @@ void UIInputFileWithPreview::SetZoomable(bool zoomable)
 
 void UIInputFileWithPreview::SetResource(Resource *resource)
 {
-    if(resource)
+    if (resource)
     {
         SetPath(resource->GetResourceFilepath());
     }
@@ -76,7 +76,7 @@ void UIInputFileWithPreview::SetPath(const Path &path)
     UIInputFile::SetPath(path);
 
     RH<Texture2D> previewTex;
-    if(HasExistingPath())
+    if (HasExistingPath())
     {
         previewTex = GetPreviewTextureFromPath(path);
     }
@@ -98,15 +98,15 @@ bool UIInputFileWithPreview::HasExistingPath() const
 UIEventResult UIInputFileWithPreview::OnUIEvent(UIFocusable *,
                                                 const UIEvent &event)
 {
-    if(event.type == UIEvent::Type::MOUSE_ENTER)
+    if (event.type == UIEvent::Type::MOUSE_ENTER)
     {
-        if(HasExistingPath() && m_zoomable)
+        if (HasExistingPath() && m_zoomable)
         {
             p_bigPreviewImg->GetGameObject()->SetVisible(true);
         }
         return UIEventResult::INTERCEPT;
     }
-    else if(event.type == UIEvent::Type::MOUSE_EXIT)
+    else if (event.type == UIEvent::Type::MOUSE_EXIT)
     {
         p_bigPreviewImg->GetGameObject()->SetVisible(false);
         return UIEventResult::INTERCEPT;

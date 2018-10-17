@@ -95,7 +95,7 @@ void RotateGizmo::CreateSphereBoundsPoints()
 
     // Get circle points
     Array<Vector3> circlePoints;
-    for(uint i = 0; i < numSegments + 1; ++i)
+    for (uint i = 0; i < numSegments + 1; ++i)
     {
         float angle = angleStep * i;
         Vector3 newPoint(Math::Sin(angle), Math::Cos(angle), 0.0f);
@@ -104,7 +104,7 @@ void RotateGizmo::CreateSphereBoundsPoints()
 
     // Get renderer points
     Array<Vector3> rendererPoints;
-    for(uint i = 0; i < circlePoints.Size() - 1; ++i)
+    for (uint i = 0; i < circlePoints.Size() - 1; ++i)
     {
         rendererPoints.PushBack(circlePoints[i + 0]);
         rendererPoints.PushBack(circlePoints[i + 1]);

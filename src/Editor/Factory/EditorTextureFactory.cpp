@@ -28,14 +28,14 @@ using namespace BangEditor;
 
 Texture2D *EditorTextureFactory::GetIconForPath(const Path &path)
 {
-    if(!path.IsDir())
+    if (!path.IsDir())
     {
         EditorTextureFactory *etf = EditorTextureFactory::GetInstance();
 
         RH<Texture2D> icon;
-        if(path.HasExtension(Extensions::GetImageExtensions()))
+        if (path.HasExtension(Extensions::GetImageExtensions()))
         {
-            if(etf->m_iconCacheMap.ContainsKey(path))
+            if (etf->m_iconCacheMap.ContainsKey(path))
             {
                 return etf->m_iconCacheMap.Get(path).Get();
             }
@@ -44,17 +44,17 @@ Texture2D *EditorTextureFactory::GetIconForPath(const Path &path)
                 icon = Resources::Load<Texture2D>(path);
             }
         }
-        else if(path.HasExtension(Extensions::GetModelExtensions()))
+        else if (path.HasExtension(Extensions::GetModelExtensions()))
         {
             RH<Model> model = Resources::Load<Model>(path);
             icon = ModelPreviewFactory::GetPreviewTextureFor(model.Get());
         }
-        else if(path.HasExtension(Extensions::GetMeshExtension()))
+        else if (path.HasExtension(Extensions::GetMeshExtension()))
         {
             RH<Mesh> mesh = Resources::Load<Mesh>(path);
             icon = MeshPreviewFactory::GetPreviewTextureFor(mesh.Get());
         }
-        else if(path.HasExtension(Extensions::GetMaterialExtension()))
+        else if (path.HasExtension(Extensions::GetMaterialExtension()))
         {
             RH<Material> material = Resources::Load<Material>(path);
             icon = MaterialPreviewFactory::GetPreviewTextureFor(material.Get());
@@ -65,7 +65,7 @@ Texture2D *EditorTextureFactory::GetIconForPath(const Path &path)
                 EditorTextureFactory::GetIconForExtension(path.GetExtension()));
         }
 
-        if(icon)
+        if (icon)
         {
             etf->m_iconCacheMap.Add(path, icon);
         }
@@ -265,72 +265,72 @@ Texture2D *EditorTextureFactory::GetAnchoredRectIcon()
 
 Texture2D *EditorTextureFactory::GetComponentIcon(const String &componentName)
 {
-    if(componentName == "Transform")
+    if (componentName == "Transform")
     {
         return EditorTextureFactory::GetColoredAxesIcon();
     }
-    else if(componentName == "Behaviour" ||
-            componentName == "BehaviourContainer")
+    else if (componentName == "Behaviour" ||
+             componentName == "BehaviourContainer")
     {
         return EditorTextureFactory::GetBracketsIcon();
     }
-    else if(componentName == "RectTransform")
+    else if (componentName == "RectTransform")
     {
         return EditorTextureFactory::GetAnchoredRectIcon();
     }
-    else if(componentName == "BoxCollider")
+    else if (componentName == "BoxCollider")
     {
         return EditorTextureFactory::GetGreenCubeIcon();
     }
-    else if(componentName == "SphereCollider")
+    else if (componentName == "SphereCollider")
     {
         return EditorTextureFactory::GetGreenSphereIcon();
     }
-    else if(componentName == "CapsuleCollider")
+    else if (componentName == "CapsuleCollider")
     {
         return EditorTextureFactory::GetGreenCapsuleIcon();
     }
-    else if(componentName == "RigidBody")
+    else if (componentName == "RigidBody")
     {
         return EditorTextureFactory::GetCrashDummyIcon();
     }
-    else if(componentName == "PointLight")
+    else if (componentName == "PointLight")
     {
         Texture2D *tex = TextureFactory::GetLightBulbIcon();
         tex->SetAlphaCutoff(0.5f);
         return tex;
     }
-    else if(componentName == "DirectionalLight")
+    else if (componentName == "DirectionalLight")
     {
         Texture2D *tex = TextureFactory::GetSunIcon();
         tex->SetAlphaCutoff(0.5f);
         return tex;
     }
-    else if(componentName == "Behaviour")
+    else if (componentName == "Behaviour")
     {
         return EditorTextureFactory::GetBracketsIcon();
     }
-    else if(componentName == "MeshRenderer")
+    else if (componentName == "MeshRenderer")
     {
         return EditorTextureFactory::GetCubeIcon();
     }
-    else if(componentName == "Animator")
+    else if (componentName == "Animator")
     {
         return EditorTextureFactory::GetPlayWithCircleIcon();
     }
-    else if(componentName == "AudioSource" || componentName == "AudioListener")
+    else if (componentName == "AudioSource" || componentName == "AudioListener")
     {
         Texture2D *tex = TextureFactory::GetAudioIcon();
         tex->SetAlphaCutoff(0.5f);
         return tex;
     }
-    else if(componentName == "ParticleSystem" || componentName == "Rope")
+    else if (componentName == "ParticleSystem" || componentName == "Rope")
     {
         Texture2D *tex = EditorTextureFactory::GetStarsIcon();
         tex->SetAlphaCutoff(0.5f);
         return tex;
     }
-    else if(componentName == "Camera")
+    else if (componentName == "Camera")
     {
         Texture2D *tex = EditorTextureFactory::GetCameraIcon();
         tex->SetAlphaCutoff(0.5f);
@@ -343,7 +343,7 @@ Texture2D *EditorTextureFactory::GetComponentIcon(const String &componentName)
 Color EditorTextureFactory::GetComponentIconTint(const Component *component)
 {
     String className = component->GetClassName();
-    if(DCAST<const Behaviour *>(component))
+    if (DCAST<const Behaviour *>(component))
     {
         className = "Behaviour";
     }
@@ -352,48 +352,48 @@ Color EditorTextureFactory::GetComponentIconTint(const Component *component)
 
 Color EditorTextureFactory::GetComponentIconTint(const String &componentName)
 {
-    if(componentName == "MeshRenderer")
+    if (componentName == "MeshRenderer")
     {
         return Color::White.WithValue(0.2f);
     }
-    else if(componentName == "SkinnedMeshRenderer")
+    else if (componentName == "SkinnedMeshRenderer")
     {
         return Color::White.WithValue(0.2f);
     }
-    else if(componentName == "DirectionalLight")
+    else if (componentName == "DirectionalLight")
     {
         return Color::White.WithValue(0.2f);
     }
-    else if(componentName == "PointLight")
+    else if (componentName == "PointLight")
     {
         return Color::White.WithValue(0.2f);
     }
-    else if(componentName == "AudioSource")
+    else if (componentName == "AudioSource")
     {
         return Color::White.WithValue(0.2f);
     }
-    else if(componentName == "AudioListener")
+    else if (componentName == "AudioListener")
     {
         return Color::White.WithValue(0.2f);
     }
-    else if(componentName == "BehaviourContainer")
+    else if (componentName == "BehaviourContainer")
     {
         return Color::White.WithValue(0.2f);
     }
-    else if(componentName == "Behaviour" ||
-            componentName == "BehaviourContainer")
+    else if (componentName == "Behaviour" ||
+             componentName == "BehaviourContainer")
     {
         return Color::White.WithValue(0.2f);
     }
-    else if(componentName == "ParticleSystem")
+    else if (componentName == "ParticleSystem")
     {
         return Color::White.WithValue(0.2f);
     }
-    else if(componentName == "MeshCollider")
+    else if (componentName == "MeshCollider")
     {
         return Color::Green.WithValue(0.8f);
     }
-    else if(componentName == "Camera")
+    else if (componentName == "Camera")
     {
         return Color::White.WithValue(0.2f);
     }
@@ -402,48 +402,48 @@ Color EditorTextureFactory::GetComponentIconTint(const String &componentName)
 
 Texture2D *EditorTextureFactory::GetIconForExtension(const String &ext)
 {
-    if(Extensions::Equals(ext, Extensions::GetTTFExtensions()))
+    if (Extensions::Equals(ext, Extensions::GetTTFExtensions()))
     {
         return EditorTextureFactory::GetLetterIcon();
     }
-    else if(Extensions::Equals(ext, Extensions::GetAudioClipExtensions()))
+    else if (Extensions::Equals(ext, Extensions::GetAudioClipExtensions()))
     {
         return TextureFactory::GetAudioIcon();
     }
-    else if(Extensions::Equals(ext, Extensions::GetSceneExtension()))
+    else if (Extensions::Equals(ext, Extensions::GetSceneExtension()))
     {
         return EditorTextureFactory::GetSceneIcon();
     }
-    else if(Extensions::Equals(ext, Extensions::GetPrefabExtension()))
+    else if (Extensions::Equals(ext, Extensions::GetPrefabExtension()))
     {
         return EditorTextureFactory::GetPillIcon();
     }
-    else if(Extensions::Equals(ext, Extensions::GetModelExtensions()))
+    else if (Extensions::Equals(ext, Extensions::GetModelExtensions()))
     {
         return EditorTextureFactory::GetCubeIcon();
     }
-    else if(Extensions::Equals(ext, Extensions::GetPhysicsMaterialExtension()))
+    else if (Extensions::Equals(ext, Extensions::GetPhysicsMaterialExtension()))
     {
         return EditorTextureFactory::GetPhysicsBallIcon();
     }
-    else if(Extensions::Equals(ext, Extensions::GetBehaviourExtensions()))
+    else if (Extensions::Equals(ext, Extensions::GetBehaviourExtensions()))
     {
         return EditorTextureFactory::GetBracketsIcon();
     }
-    else if(Extensions::Equals(ext, Extensions::GetTextureCubeMapExtension()))
+    else if (Extensions::Equals(ext, Extensions::GetTextureCubeMapExtension()))
     {
         return EditorTextureFactory::GetCubeMapIcon();
     }
-    else if(Extensions::Equals(ext,
-                               Extensions::GetAnimatorStateMachineExtension()))
+    else if (Extensions::Equals(ext,
+                                Extensions::GetAnimatorStateMachineExtension()))
     {
         return EditorTextureFactory::GetAnimatorSMIcon();
     }
-    else if(Extensions::Equals(ext, Extensions::GetAnimationExtension()))
+    else if (Extensions::Equals(ext, Extensions::GetAnimationExtension()))
     {
         return EditorTextureFactory::GetPlayWithCircleIcon();
     }
-    else if(Extensions::Equals(ext, Extensions::GetMeshExtension()))
+    else if (Extensions::Equals(ext, Extensions::GetMeshExtension()))
     {
         return EditorTextureFactory::GetCubeIcon();
     }
@@ -458,11 +458,12 @@ Color EditorTextureFactory::GetPathIconTint(const Path &path)
 
 Color EditorTextureFactory::GetExtensionIconTint(const String &extension)
 {
-    if(Extensions::Equals(extension, Extensions::GetSceneExtension()))
+    if (Extensions::Equals(extension, Extensions::GetSceneExtension()))
     {
         return Color::Black;
     }
-    else if(Extensions::Equals(extension, Extensions::GetBehaviourExtensions()))
+    else if (Extensions::Equals(extension,
+                                Extensions::GetBehaviourExtensions()))
     {
         return Color::Black;
     }
@@ -472,7 +473,7 @@ Color EditorTextureFactory::GetExtensionIconTint(const String &extension)
 Texture2D *EditorTextureFactory::GetComponentIcon(const Component *component)
 {
     String className = component->GetClassName();
-    if(DCAST<const Behaviour *>(component))
+    if (DCAST<const Behaviour *>(component))
     {
         className = "Behaviour";
     }

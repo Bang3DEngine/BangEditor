@@ -67,4 +67,3 @@ Behaviour *CIWBehaviour::GetBehaviour() const
 {
     return SCAST<Behaviour *>(GetComponent());
 }
-

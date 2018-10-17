@@ -50,7 +50,7 @@ UITabHeader::UITabHeader()
 
     p_focusable = AddComponent<UIFocusable>();
     p_focusable->AddEventCallback([this](UIFocusable *, const UIEvent &event) {
-        if(event.type == UIEvent::Type::MOUSE_CLICK_FULL)
+        if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
         {
             EventEmitter<IEventsTabHeader>::PropagateToListeners(
                 &IEventsTabHeader::OnTabHeaderClicked, this);
@@ -78,9 +78,9 @@ void UITabHeader::Update()
 {
     GameObject::Update();
 
-    if(!m_inForeground)
+    if (!m_inForeground)
     {
-        if(UICanvas *canvas = UICanvas::GetActive(this))
+        if (UICanvas *canvas = UICanvas::GetActive(this))
         {
             bool mouseOver = (canvas->IsMouseOver(p_focusable));
             p_bg->SetTint(mouseOver ? m_currentHeaderColor.WithValue(1.5f)
@@ -100,7 +100,7 @@ void UITabHeader::SetInForeground(bool inForeground)
 
 void UITabHeader::SetTitle(const String &title)
 {
-    if(title != GetTitle())
+    if (title != GetTitle())
     {
         m_title = title;
         p_titleText->SetContent(GetTitle());
@@ -130,7 +130,7 @@ UIDragDroppable *UITabHeader::GetDragDroppable() const
 void UITabHeader::SetTabContainer(UITabContainer *tabContainer)
 {
     p_tabContainer = tabContainer;
-    if(GetTabContainer())
+    if (GetTabContainer())
     {
         p_lastTabContainer = GetTabContainer();
         ASSERT(!GetTabContainer()->IsWaitingToBeDestroyed())
@@ -146,7 +146,7 @@ void UITabHeader::OnDragStarted(EventEmitter<IEventsDragDrop> *dragDropEmitter)
 {
     BANG_UNUSED(dragDropEmitter);
 
-    if(dragDropEmitter == GetDragDroppable())
+    if (dragDropEmitter == GetDragDroppable())
     {
         ASSERT(GetTabbedChild());
         p_dragTabContainerDestiny = nullptr;
@@ -160,9 +160,9 @@ void UITabHeader::OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDropEmitter)
 
 void UITabHeader::OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter)
 {
-    if(dragDropEmitter == GetDragDroppable())
+    if (dragDropEmitter == GetDragDroppable())
     {
-        if(GetTabContainer())
+        if (GetTabContainer())
         {
             GetTabContainer()->RemoveTabByHeader(this, false);
         }
@@ -170,7 +170,7 @@ void UITabHeader::OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter)
         UITabContainer *destinyTabContainer = p_dragTabContainerDestiny
                                                   ? p_dragTabContainerDestiny
                                                   : p_lastTabContainer;
-        if(destinyTabContainer)
+        if (destinyTabContainer)
         {
             destinyTabContainer->AddTabByTabHeader(
                 this, m_dragTabContainerDestinyIndex);

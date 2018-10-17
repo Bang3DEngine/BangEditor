@@ -90,7 +90,7 @@ Vector3 GetAxisedSpherePointFromMousePosNDC(const Camera *cam,
     bool intersected;
     Vector3 spherePoint;
     Geometry::IntersectRaySphere(mouseRay, sphere, &intersected, &spherePoint);
-    if(!intersected)
+    if (!intersected)
     {
         // If it did not intersect, find closest sphere point to ray
         Vector3 closestRayPointToSphere =
@@ -108,12 +108,13 @@ Vector3 GetAxisedSpherePointFromMousePosNDC(const Camera *cam,
 void RotateGizmoAxis::Update()
 {
     TransformGizmoAxis::Update();
-    if(!GetReferencedGameObject() || !GetReferencedGameObject()->GetTransform())
+    if (!GetReferencedGameObject() ||
+        !GetReferencedGameObject()->GetTransform())
     {
         return;
     }
 
-    if(IsBeingGrabbed())
+    if (IsBeingGrabbed())
     {
         GameObject *refGo = GetReferencedGameObject();
         Transform *refGoT = refGo->GetTransform();
@@ -128,7 +129,7 @@ void RotateGizmoAxis::Update()
         rotationSphere.SetCenter(refGoT->GetPosition());
         rotationSphere.SetRadius(tg->GetScaleFactor() * 1.0f);
 
-        if(GrabHasJustChanged())
+        if (GrabHasJustChanged())
         {
             m_startingGrabMousePosNDC = Input::GetMousePositionNDC();
             m_startingGrabAxisedSpherePoint =
@@ -144,9 +145,10 @@ void RotateGizmoAxis::Update()
             Vector2 displacedMousePositionNDC =
                 m_startingGrabMousePosNDC + mouseAxis;
             Vector3 displacedMouseAxisedSpherePoint =
-                GetAxisedSpherePointFromMousePosNDC(
-                    cam, displacedMousePositionNDC, GetAxisVectorWorld(),
-                    rotationSphere);
+                GetAxisedSpherePointFromMousePosNDC(cam,
+                                                    displacedMousePositionNDC,
+                                                    GetAxisVectorWorld(),
+                                                    rotationSphere);
 
             // Now that we have the two points (starting and new displaced), get
             // the 2 vectors from the center outwards, and just apply the
@@ -165,7 +167,7 @@ void RotateGizmoAxis::Update()
             newDirLocal.Normalize();
 
             // Only process now if dirs are different enough (avoid NaN's)
-            if(Math::Abs(Vector3::Dot(startDirLocal, newDirLocal)) < 0.9999f)
+            if (Math::Abs(Vector3::Dot(startDirLocal, newDirLocal)) < 0.9999f)
             {
                 // Get the quaternion representing the local rotation
                 // displacement
@@ -173,7 +175,7 @@ void RotateGizmoAxis::Update()
                     Quaternion::FromTo(startDirLocal, newDirLocal);
 
                 // Apply Snapping if demanded with shift
-                if(Input::GetKey(Key::LSHIFT))
+                if (Input::GetKey(Key::LSHIFT))
                 {
                     constexpr float SnappingDeg = 15.0f;
                     Vector3 deltaEulerDeg =
@@ -232,7 +234,8 @@ void RotateGizmoAxis::SetAxis(Axis3DExt axis)
 
 void RotateGizmoAxis::UpdateCirclePoints()
 {
-    if(!GetReferencedGameObject() || !GetReferencedGameObject()->GetTransform())
+    if (!GetReferencedGameObject() ||
+        !GetReferencedGameObject()->GetTransform())
     {
         return;
     }
@@ -245,13 +248,13 @@ void RotateGizmoAxis::UpdateCirclePoints()
 
     // Get circle points
     Array<Vector3> circlePoints;
-    for(uint i = 0; i < numSegments + 1; ++i)
+    for (uint i = 0; i < numSegments + 1; ++i)
     {
         float angle = angleStep * i;
         Vector3 newPoint = Vector3::Zero;
         float sin = Math::Sin(angle);
         float cos = Math::Cos(angle);
-        switch(GetAxis())
+        switch (GetAxis())
         {
             case Axis3DExt::X:
                 newPoint.y = sin;
@@ -277,7 +280,7 @@ void RotateGizmoAxis::UpdateCirclePoints()
         Vector3 camToLine =
             (newPointWorld - camT->GetPosition()).NormalizedSafe();
         float dot = Vector3::Dot(camToLine, refGoCenterToLine);
-        if(dot <= 0.2f)
+        if (dot <= 0.2f)
         {
             circlePoints.PushBack(newPoint);
         }
@@ -285,13 +288,13 @@ void RotateGizmoAxis::UpdateCirclePoints()
 
     // Fill renderer points
     Array<Vector3> rendererPoints;
-    if(!circlePoints.IsEmpty())
+    if (!circlePoints.IsEmpty())
     {
-        for(uint i = 0; i < circlePoints.Size() - 1; ++i)
+        for (uint i = 0; i < circlePoints.Size() - 1; ++i)
         {
             const Vector3 &p0 = circlePoints[i + 0];
             const Vector3 &p1 = circlePoints[i + 1];
-            if(Vector3::Distance(p0, p1) < 0.5f)  // Avoid linking big jumps
+            if (Vector3::Distance(p0, p1) < 0.5f)  // Avoid linking big jumps
             {
                 rendererPoints.PushBack(p0);
                 rendererPoints.PushBack(p1);
@@ -301,12 +304,12 @@ void RotateGizmoAxis::UpdateCirclePoints()
     p_circleRenderer->SetPoints(rendererPoints);
 
     // Create selection mesh (box wrapping around the culled circle)
-    if(!rendererPoints.IsEmpty())
+    if (!rendererPoints.IsEmpty())
     {
         constexpr float SelectionMeshThickness = 0.15f;
         Array<Vector3> selectionMeshPoints;
         Mesh *sMesh = m_selectionMesh.Get();
-        for(uint i = 0; i < rendererPoints.Size() - 1; i += 2)
+        for (uint i = 0; i < rendererPoints.Size() - 1; i += 2)
         {
             const Vector3 &p0 = rendererPoints[i + 0];
             const Vector3 &p1 = rendererPoints[i + 1];

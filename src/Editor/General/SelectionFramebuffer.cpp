@@ -63,7 +63,7 @@ void SelectionFramebuffer::PrepareNewFrameForRender(const GameObject *go)
     m_id_To_GameObject.Clear();
 
     Array<GameObject *> gameObjects = go->GetChildrenRecursively();
-    for(GameObject *go : gameObjects)
+    for (GameObject *go : gameObjects)
     {
         m_gameObject_To_Id[go] = id;
         m_id_To_GameObject[id] = go;
@@ -98,7 +98,7 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Scene *scene)
     GL::SetDepthFunc(GL::Function::LEQUAL);
     ge->RenderWithPass(scene, RenderPass::CANVAS);
 
-    if(m_drawOverlay)
+    if (m_drawOverlay)
     {
         GL::ClearDepthBuffer();
         GL::SetDepthMask(false);
@@ -121,7 +121,7 @@ void SelectionFramebuffer::SetDrawOverlay(bool drawOverlay)
 void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 {
     ASSERT(GL::IsBound(this));
-    if(!rend->GetActiveMaterial())
+    if (!rend->GetActiveMaterial())
     {
         return;
     }
@@ -154,8 +154,8 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 GameObject *SelectionFramebuffer::GetGameObjectInViewportPoint(
     const Vector2i &vpPoint)
 {
-    if(vpPoint.x < 0 || vpPoint.y < 0 || vpPoint.x >= GetWidth() ||
-       vpPoint.y >= GetHeight())
+    if (vpPoint.x < 0 || vpPoint.y < 0 || vpPoint.x >= GetWidth() ||
+        vpPoint.y >= GetHeight())
     {
         return nullptr;
     }
@@ -163,7 +163,7 @@ GameObject *SelectionFramebuffer::GetGameObjectInViewportPoint(
     Color colorUnderMouse = ReadColor(vpPoint.x, vpPoint.y, AttColor);
     IdType id = MapColorToId(colorUnderMouse);
 
-    if(colorUnderMouse != Color::Zero && m_id_To_GameObject.ContainsKey(id))
+    if (colorUnderMouse != Color::Zero && m_id_To_GameObject.ContainsKey(id))
     {
         return m_id_To_GameObject[id];
     }
@@ -173,9 +173,9 @@ GameObject *SelectionFramebuffer::GetGameObjectInViewportPoint(
 void SelectionFramebuffer::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     GameObject *go = DCAST<GameObject *>(object);
-    if(go)
+    if (go)
     {
-        if(m_gameObject_To_Id.ContainsKey(go))
+        if (m_gameObject_To_Id.ContainsKey(go))
         {
             IdType id = m_gameObject_To_Id.Get(go);
             m_gameObject_To_Id.Remove(go);
@@ -192,8 +192,10 @@ Color SelectionFramebuffer::GetSelectionColor(GameObject *go) const
 Color SelectionFramebuffer::MapIdToColor(IdType id)
 {
     constexpr IdType C = 255;
-    Color color(double(id % C), double((id / C) % C),
-                double(((id / C) / C) % C), double((((id / C) / C) / C) % C));
+    Color color(double(id % C),
+                double((id / C) % C),
+                double(((id / C) / C) % C),
+                double((((id / C) / C) / C) % C));
     return color / double(C);
 }
 

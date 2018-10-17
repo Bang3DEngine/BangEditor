@@ -74,11 +74,11 @@ void GameObjectInspectorWidget::OnValueChanged(
 {
     MetaNode undoMetaBefore = GetGameObject()->GetMeta();
 
-    if(object == p_nameInput)
+    if (object == p_nameInput)
     {
         GetGameObject()->SetName(p_nameInput->GetText()->GetContent());
     }
-    else if(object == p_enabledInput)
+    else if (object == p_enabledInput)
     {
         GetGameObject()->SetEnabled(p_enabledInput->IsChecked());
     }

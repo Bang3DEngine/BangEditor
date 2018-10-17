@@ -98,7 +98,7 @@ bool ComponentInspectorWidget::CanBeRemovedFromContextMenu() const
 void ComponentInspectorWidget::OnValueChangedCIW(
     EventEmitter<IEventsValueChanged> *object)
 {
-    if(object == GetInspectorWidgetTitle()->GetEnabledCheckBox())
+    if (object == GetInspectorWidgetTitle()->GetEnabledCheckBox())
     {
         GetComponent()->SetEnabled(
             GetInspectorWidgetTitle()->GetEnabledCheckBox()->IsChecked());
@@ -112,14 +112,14 @@ void ComponentInspectorWidget::OnValueChanged(
     EventEmitter<IEventsValueChanged> *object)
 {
     MetaNode undoMetaBefore;
-    if(GetComponent())
+    if (GetComponent())
     {
         undoMetaBefore = GetComponent()->GetMeta();
     }
 
     OnValueChangedCIW(object);
 
-    if(GetComponent())
+    if (GetComponent())
     {
         PushCurrentStateToUndoRedo(undoMetaBefore);
     }
@@ -127,7 +127,7 @@ void ComponentInspectorWidget::OnValueChanged(
 
 Texture2D *ComponentInspectorWidget::GetComponentIconTexture() const
 {
-    if(GetComponent())
+    if (GetComponent())
     {
         return EditorTextureFactory::GetComponentIcon(GetComponent());
     }
@@ -136,7 +136,7 @@ Texture2D *ComponentInspectorWidget::GetComponentIconTexture() const
 
 Color ComponentInspectorWidget::GetComponentIconTint() const
 {
-    if(GetComponent())
+    if (GetComponent())
     {
         return EditorTextureFactory::GetComponentIconTint(GetComponent());
     }
@@ -157,7 +157,7 @@ void ComponentInspectorWidget::
 {
     GameObject *go = GetComponent()->GetGameObject();
     MetaNode currentMeta = go->GetMeta();
-    if(currentMeta.ToString() != undoMetaBefore.ToString())
+    if (currentMeta.ToString() != undoMetaBefore.ToString())
     {
         UndoRedoManager::PushAction(
             new UndoRedoSerializableChange(go, undoMetaBefore, currentMeta));
@@ -256,7 +256,8 @@ bool ComponentInspectorWidget::MustShowEnabledCheckbox() const
     return true;
 }
 
-ReflectWidgetsManager *ComponentInspectorWidget::GetReflectWidgetsManager() const
+ReflectWidgetsManager *ComponentInspectorWidget::GetReflectWidgetsManager()
+    const
 {
     return &m_reflectWidgetsManager;
 }

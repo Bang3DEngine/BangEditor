@@ -113,7 +113,7 @@ void RIWTextureCubeMap::CheckValidity() const
     RH<Texture2D> frontTex = tcm->GetSideTexture(GL::CubeMapDir::FRONT);
     RH<Texture2D> backTex = tcm->GetSideTexture(GL::CubeMapDir::BACK);
 
-    if(!topTex || !botTex || !leftTex || !rightTex || !frontTex || !backTex)
+    if (!topTex || !botTex || !leftTex || !rightTex || !frontTex || !backTex)
     {
         p_warningLabel->GetText()->SetTextColor(Color::Red);
         p_warningLabel->GetText()->SetContent(
@@ -131,7 +131,7 @@ void RIWTextureCubeMap::CheckValidity() const
                           rightTex.Get()->GetSize() == size &&
                           frontTex.Get()->GetSize() == size &&
                           backTex.Get()->GetSize() == size;
-        if(!allSizesCorrect)
+        if (!allSizesCorrect)
         {
             p_warningLabel->GetText()->SetTextColor(Color::Red);
             p_warningLabel->GetText()->SetContent(
@@ -186,11 +186,11 @@ Texture2D *RIWTextureCubeMap::GetIconTexture() const
 void RIWTextureCubeMap::OnValueChangedRIWResource(
     EventEmitter<IEventsValueChanged> *ee)
 {
-    if(ee != p_textureCMPreviewer)
+    if (ee != p_textureCMPreviewer)
     {
-        auto Refresh = [this](UIInputFile *inputFile, TextureCubeMap *tcm,
-                              GL::CubeMapDir cmdir) {
-            if(inputFile->GetPath().IsFile())
+        auto Refresh = [this](
+            UIInputFile *inputFile, TextureCubeMap *tcm, GL::CubeMapDir cmdir) {
+            if (inputFile->GetPath().IsFile())
             {
                 Imageb img;
                 RH<Texture2D> tex = tcm->GetSideTexture(cmdir);

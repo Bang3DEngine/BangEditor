@@ -25,11 +25,11 @@ using namespace BangEditor;
 ExplorerItem *ExplorerItemFactory::CreateExplorerItem(const Path &path)
 {
     ExplorerItem *explorerItem = nullptr;
-    if(path.HasExtension(Extensions::GetModelExtensions()))
+    if (path.HasExtension(Extensions::GetModelExtensions()))
     {
         explorerItem = GameObject::Create<ModelExplorerItem>();
     }
-    else if(path.HasExtension(Extensions::GetPrefabExtension()))
+    else if (path.HasExtension(Extensions::GetPrefabExtension()))
     {
         explorerItem = GameObject::Create<PrefabExplorerItem>();
     }
@@ -49,7 +49,7 @@ Array<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
 {
     Array<ExplorerItem *> expItems;
 
-    if(addBackItem)
+    if (addBackItem)
     {
         Path prevDirPath = path.GetDirectory();
         ExplorerItem *prevDirExpItem =
@@ -58,25 +58,25 @@ Array<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
         expItems.PushBack(prevDirExpItem);
     }
 
-    if(path.IsDir())
+    if (path.IsDir())
     {
         Array<Path> subPaths = path.GetSubPaths(FindFlag::SIMPLE);
         Paths::SortPathsByExtension(&subPaths);
         Paths::SortPathsByName(&subPaths);
-        for(const Path &subPath : subPaths)
+        for (const Path &subPath : subPaths)
         {
             ExplorerItem *childExpItem =
                 ExplorerItemFactory::CreateExplorerItem(subPath);
             expItems.PushBack(childExpItem);
         }
     }
-    else if(path.IsFile())
+    else if (path.IsFile())
     {
-        if(path.HasExtension(Extensions::GetModelExtensions()))
+        if (path.HasExtension(Extensions::GetModelExtensions()))
         {
             RH<Model> model = Resources::Load<Model>(path);
 
-            for(const String &meshName : model.Get()->GetMeshesNames())
+            for (const String &meshName : model.Get()->GetMeshesNames())
             {
                 Path meshPath = path.Append(meshName);
                 ExplorerItem *meshExplorerItem =
@@ -84,7 +84,7 @@ Array<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
                 expItems.PushBack(meshExplorerItem);
             }
 
-            for(const String &materialName : model.Get()->GetMaterialsNames())
+            for (const String &materialName : model.Get()->GetMaterialsNames())
             {
                 Path materialPath = path.Append(materialName);
                 ExplorerItem *materialExplorerItem =
@@ -92,7 +92,8 @@ Array<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
                 expItems.PushBack(materialExplorerItem);
             }
 
-            for(const String &animationName : model.Get()->GetAnimationsNames())
+            for (const String &animationName :
+                 model.Get()->GetAnimationsNames())
             {
                 Path animationPath = path.Append(animationName);
                 ExplorerItem *animationExplorerItem =

@@ -86,7 +86,7 @@ void GIWAESNode::UpdateFromReference()
 {
     InspectorWidget::UpdateFromReference();
 
-    if(AnimatorStateMachineNode *smNode = GetAESNode()->GetSMNode())
+    if (AnimatorStateMachineNode *smNode = GetAESNode()->GetSMNode())
     {
         p_nameInput->GetText()->SetContent(smNode->GetName());
         p_nodeAnimationInput->SetPath(
@@ -98,13 +98,13 @@ void GIWAESNode::UpdateFromReference()
 
 void GIWAESNode::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 {
-    if(AnimatorStateMachineNode *smNode = GetAESNode()->GetSMNode())
+    if (AnimatorStateMachineNode *smNode = GetAESNode()->GetSMNode())
     {
-        if(ee == p_nameInput)
+        if (ee == p_nameInput)
         {
             smNode->SetName(p_nameInput->GetText()->GetContent());
         }
-        else if(ee == p_nodeAnimationInput)
+        else if (ee == p_nodeAnimationInput)
         {
             smNode->SetAnimation(
                 Resources::Load<Animation>(p_nodeAnimationInput->GetPath())

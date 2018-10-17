@@ -124,45 +124,45 @@ void CIWReflectionProbe::UpdateFromReference()
 
     ReflectionProbe *reflProbe = GetReflectionProbe();
 
-    if(!p_zNearInput->HasFocus())
+    if (!p_zNearInput->HasFocus())
     {
         p_zNearInput->SetValue(reflProbe->GetCamerasZNear());
     }
 
-    if(!p_zFarInput->HasFocus())
+    if (!p_zFarInput->HasFocus())
     {
         p_zFarInput->SetValue(reflProbe->GetCamerasZFar());
     }
 
-    if(!p_clearModeInput->HasFocus())
+    if (!p_clearModeInput->HasFocus())
     {
         p_clearModeInput->SetSelectionByValue(
             SCAST<int>(reflProbe->GetCamerasClearMode()));
     }
 
-    if(!p_clearColorInput->HasFocus())
+    if (!p_clearColorInput->HasFocus())
     {
         p_clearColorInput->SetColor(reflProbe->GetCamerasClearColor());
     }
 
-    if(!p_reflectionProbSizeInput->HasFocus())
+    if (!p_reflectionProbSizeInput->HasFocus())
     {
         p_reflectionProbSizeInput->SetSelectionByValue(
             reflProbe->GetRenderSize());
     }
 
     TextureCubeMap *skyBoxTex = reflProbe->GetCamerasSkyBoxTexture();
-    if(skyBoxTex)
+    if (skyBoxTex)
     {
         p_textureCubeMapInput->SetPath(skyBoxTex->GetResourceFilepath());
     }
 
-    if(!p_sizeInput->HasFocus())
+    if (!p_sizeInput->HasFocus())
     {
         p_sizeInput->Set(reflProbe->GetSize());
     }
 
-    if(!p_restTimeInput->HasFocus())
+    if (!p_restTimeInput->HasFocus())
     {
         p_restTimeInput->SetValue(reflProbe->GetRestTime().GetSeconds());
     }
@@ -195,7 +195,7 @@ void CIWReflectionProbe::OnValueChangedCIW(
     reflProbe->SetRenderSize(p_reflectionProbSizeInput->GetSelectedValue());
 
     RH<TextureCubeMap> tcmRH;
-    if(p_textureCubeMapInput->GetPath().IsFile())
+    if (p_textureCubeMapInput->GetPath().IsFile())
     {
         tcmRH =
             Resources::Load<TextureCubeMap>(p_textureCubeMapInput->GetPath());

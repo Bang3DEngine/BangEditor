@@ -111,8 +111,8 @@ void AESNode::Update()
 
     Color nodeColor = Color::White.WithValue(0.95f);
     RectTransform *rt = GetRectTransform();
-    if(p_focusable->IsBeingPressed() &&
-       !Input::GetMouseButton(MouseButton::MIDDLE))
+    if (p_focusable->IsBeingPressed() &&
+        !Input::GetMouseButton(MouseButton::MIDDLE))
     {
         float localPosZ = rt->GetLocalPosition().z;
         Vector3 newLocalPos = Vector3(
@@ -123,29 +123,29 @@ void AESNode::Update()
     }
     else
     {
-        if(Input::GetMouseButtonDown(MouseButton::LEFT))
+        if (Input::GetMouseButtonDown(MouseButton::LEFT))
         {
-            if(p_toConnectionLineBeingDragged &&
-               m_framesPassedSinceLineDragStarted >= 1)
+            if (p_toConnectionLineBeingDragged &&
+                m_framesPassedSinceLineDragStarted >= 1)
             {
                 OnDragConnectionLineEnd();
             }
         }
-        if(p_focusable->IsMouseOver())
+        if (p_focusable->IsMouseOver())
         {
             nodeColor = UITheme::GetOverColor();
         }
     }
 
-    if(AnimatorStateMachineNode *smNode = GetSMNode())
+    if (AnimatorStateMachineNode *smNode = GetSMNode())
     {
         SetNodeName(smNode->GetName());
         p_entryNodeText->SetEnabled(GetAnimatorSM()->GetEntryNode() == smNode);
-        if(Animator *animator = GetCurrentAnimator())
+        if (Animator *animator = GetCurrentAnimator())
         {
-            if(AnimatorStateMachinePlayer *player = animator->GetPlayer())
+            if (AnimatorStateMachinePlayer *player = animator->GetPlayer())
             {
-                if(player->GetCurrentNode() == smNode)
+                if (player->GetCurrentNode() == smNode)
                 {
                     nodeColor = Color::Green;
                 }
@@ -164,7 +164,7 @@ void AESNode::SetAsEntryNode()
 
 void AESNode::SetNodeName(const String &nodeName)
 {
-    if(nodeName != GetNodeName())
+    if (nodeName != GetNodeName())
     {
         m_nodeName = nodeName;
         p_nodeNameText->SetContent(GetNodeName());
@@ -226,14 +226,14 @@ AESConnectionLine *AESNode::CreateAndAddDefinitiveConnection()
 void AESNode::OnDragConnectionLineEnd()
 {
     AESNode *nodeToConnectTo = nullptr;
-    if(UICanvas *canvas = UICanvas::GetActive(this))
+    if (UICanvas *canvas = UICanvas::GetActive(this))
     {
-        if(UIFocusable *overedFocus = canvas->GetFocusableUnderMouseTopMost())
+        if (UIFocusable *overedFocus = canvas->GetFocusableUnderMouseTopMost())
         {
             GameObject *overedGo = overedFocus->GetGameObject();
-            if(auto overedNode = DCAST<AESNode *>(overedGo))
+            if (auto overedNode = DCAST<AESNode *>(overedGo))
             {
-                if(this != overedNode)
+                if (this != overedNode)
                 {
                     nodeToConnectTo = overedNode;
                 }
@@ -241,7 +241,7 @@ void AESNode::OnDragConnectionLineEnd()
         }
     }
 
-    if(nodeToConnectTo)
+    if (nodeToConnectTo)
     {
         // Consolidate connection
         DestroyLineUsedForDragging();
@@ -261,7 +261,7 @@ void AESNode::OnDragConnectionLineEnd()
 void AESNode::RemoveSelf()
 {
     uint idx = GetIndexInStateMachine();
-    if(idx != -1u)
+    if (idx != -1u)
     {
         DestroyLineUsedForDragging();
         GetAnimatorSM()->RemoveNode(GetAnimatorSM()->GetNodes()[idx]);
@@ -284,7 +284,7 @@ void AESNode::Duplicate()
     float localPosZ = newAESNode->GetRectTransform()->GetLocalPosition().z;
     newAESNode->GetRectTransform()->SetLocalPosition(
         Vector3(GetAESScene()->GetMousePositionInSceneSpace(), localPosZ));
-    if(UICanvas *canvas = UICanvas::GetActive(this))
+    if (UICanvas *canvas = UICanvas::GetActive(this))
     {
         canvas->SetFocus(newAESNode->GetFocusable());
     }
@@ -292,7 +292,7 @@ void AESNode::Duplicate()
 
 void AESNode::DestroyLineUsedForDragging()
 {
-    if(p_toConnectionLineBeingDragged)
+    if (p_toConnectionLineBeingDragged)
     {
         GameObject::Destroy(p_toConnectionLineBeingDragged);
         p_toConnectionLineBeingDragged = nullptr;
@@ -335,7 +335,7 @@ void AESNode::OnConnectionAdded(AnimatorStateMachineNode *node,
 
     AnimatorStateMachineNode *nodeTo = connection->GetNodeTo();
     ASSERT(nodeTo);
-    if(!p_nodeConnectedToToConnectionLine.ContainsKey(nodeTo))
+    if (!p_nodeConnectedToToConnectionLine.ContainsKey(nodeTo))
     {
         AnimatorStateMachine *sm = GetAnimatorSM();
         uint nodeFromIdx = sm->GetNodes().IndexOf(connection->GetNodeFrom());
@@ -352,7 +352,7 @@ void AESNode::OnConnectionAdded(AnimatorStateMachineNode *node,
 void AESNode::OnConnectionRemoved(AnimatorStateMachineNode *node,
                                   AnimatorStateMachineConnection *connToRemove)
 {
-    if(!GetAnimatorSM())
+    if (!GetAnimatorSM())
     {
         return;
     }
@@ -361,19 +361,19 @@ void AESNode::OnConnectionRemoved(AnimatorStateMachineNode *node,
 
     AnimatorStateMachineNode *nodeTo = connToRemove->GetNodeTo();
     ASSERT(nodeTo);
-    if(p_nodeConnectedToToConnectionLine.ContainsKey(nodeTo))
+    if (p_nodeConnectedToToConnectionLine.ContainsKey(nodeTo))
     {
         bool theresStillSomeConnectionToNodeTo = false;
-        for(AnimatorStateMachineConnection *conn : node->GetConnections())
+        for (AnimatorStateMachineConnection *conn : node->GetConnections())
         {
-            if(conn->GetNodeTo() == nodeTo)
+            if (conn->GetNodeTo() == nodeTo)
             {
                 theresStillSomeConnectionToNodeTo = true;
                 break;
             }
         }
 
-        if(!theresStillSomeConnectionToNodeTo)
+        if (!theresStillSomeConnectionToNodeTo)
         {
             AESConnectionLine *connLine =
                 p_nodeConnectedToToConnectionLine.Get(nodeTo);
@@ -386,7 +386,7 @@ void AESNode::OnConnectionRemoved(AnimatorStateMachineNode *node,
 
 UIEventResult AESNode::OnUIEvent(UIFocusable *, const UIEvent &event)
 {
-    switch(event.type)
+    switch (event.type)
     {
         case UIEvent::Type::FOCUS_LOST:
             GameObjectFactory::MakeBorderNotFocused(p_border);
@@ -396,7 +396,7 @@ UIEventResult AESNode::OnUIEvent(UIFocusable *, const UIEvent &event)
         case UIEvent::Type::FOCUS_TAKEN:
         {
             GameObjectFactory::MakeBorderFocused(p_border);
-            if(Inspector *insp = Inspector::GetActive())
+            if (Inspector *insp = Inspector::GetActive())
             {
                 GIWAESNode *aesNodeInspWidget =
                     GameObject::Create<GIWAESNode>();
@@ -409,7 +409,7 @@ UIEventResult AESNode::OnUIEvent(UIFocusable *, const UIEvent &event)
         break;
 
         case UIEvent::Type::MOUSE_CLICK_DOWN:
-            if(event.mouse.button == MouseButton::LEFT)
+            if (event.mouse.button == MouseButton::LEFT)
             {
                 m_grabOffset =
                     GetAESScene()->GetMousePositionInSceneSpace() -
@@ -419,10 +419,10 @@ UIEventResult AESNode::OnUIEvent(UIFocusable *, const UIEvent &event)
             break;
 
         case UIEvent::Type::KEY_DOWN:
-            switch(event.key.key)
+            switch (event.key.key)
             {
                 case Key::D:
-                    if(event.key.modifiers.IsOn(KeyModifier::LCTRL))
+                    if (event.key.modifiers.IsOn(KeyModifier::LCTRL))
                     {
                         Duplicate();
                     }

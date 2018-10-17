@@ -66,7 +66,7 @@ void UITextureCubeMapPreviewer::Update()
     GameObject::Update();
 
     Vector2i arSize(1, 1);
-    if(GetTextureCubeMap())
+    if (GetTextureCubeMap())
     {
         arSize = GetTextureCubeMap()->GetSize();
     }
@@ -87,7 +87,7 @@ void UITextureCubeMapPreviewer::Update()
 
     GL::Pop(GL::Pushable::SHADER_PROGRAM);
 
-    if(p_focusable->IsBeingPressed())
+    if (p_focusable->IsBeingPressed())
     {
         InvalidateRenderer();
         m_rotationRads += Vector2(Input::GetMouseDelta()) * 0.01f;
@@ -105,7 +105,7 @@ void UITextureCubeMapPreviewer::InvalidateRenderer()
 
 void UITextureCubeMapPreviewer::SetTextureCubeMap(TextureCubeMap *texCubeMap)
 {
-    if(texCubeMap != GetTextureCubeMap())
+    if (texCubeMap != GetTextureCubeMap())
     {
         p_textureCubeMap.Set(texCubeMap);
         EventEmitter<IEventsValueChanged>::PropagateToListeners(

@@ -79,6 +79,6 @@ void MaterialPreviewFactory::OnUpdateTextureEnd(
     Material *material,
     const ResourcePreviewFactoryParameters &params)
 {
-    BANG_UNUSED_5(previewScene, previewCamera, previewGoContainer, material,
-                  params);
+    BANG_UNUSED_5(
+        previewScene, previewCamera, previewGoContainer, material, params);
 }

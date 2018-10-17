@@ -36,7 +36,7 @@ void CIWPointLight::UpdateFromReference()
 {
     CIWLight::UpdateFromReference();
 
-    if(!p_rangeInput->HasFocus())
+    if (!p_rangeInput->HasFocus())
     {
         p_rangeInput->SetValue(GetPointLight()->GetRange());
     }

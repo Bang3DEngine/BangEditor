@@ -72,7 +72,7 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
 
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback([this](MenuItem *menuRootItem) {
-        if(GetAnimatorSM() && !IsMouseOverSomeConnectionLine())
+        if (GetAnimatorSM() && !IsMouseOverSomeConnectionLine())
         {
             menuRootItem->SetFontSize(12);
 
@@ -102,17 +102,17 @@ void AnimatorSMEditorScene::Update()
 {
     GameObject::Update();
 
-    if(UICanvas::GetActive(this)->HasFocus(this, true))
+    if (UICanvas::GetActive(this)->HasFocus(this, true))
     {
-        if(Input::GetMouseButton(MouseButton::MIDDLE))
+        if (Input::GetMouseButton(MouseButton::MIDDLE))
         {
             Vector2 mouseDelta(Input::GetMouseDelta());
             m_panning += mouseDelta;
         }
     }
 
-    if(Time::GetPassedTimeSince(m_lastTimeAnimatorSMWasExported) >=
-       Time::Seconds(2.0f))
+    if (Time::GetPassedTimeSince(m_lastTimeAnimatorSMWasExported) >=
+        Time::Seconds(2.0f))
     {
         ExportCurrentAnimatorStateMachineIfAny();
     }
@@ -138,7 +138,7 @@ void AnimatorSMEditorScene::CreateAndAddNode(AnimatorStateMachineNode *smNode,
 
 void AnimatorSMEditorScene::SetAnimatorSM(AnimatorStateMachine *animatorSM)
 {
-    if(animatorSM != GetAnimatorSM())
+    if (animatorSM != GetAnimatorSM())
     {
         ExportCurrentAnimatorStateMachineIfAny();
 
@@ -148,7 +148,7 @@ void AnimatorSMEditorScene::SetAnimatorSM(AnimatorStateMachine *animatorSM)
         GetAnimatorSM()
             ->EventEmitter<IEventsAnimatorStateMachine>::RegisterListener(this);
 
-        for(uint i = 0; i < GetAnimatorSM()->GetNodes().Size(); ++i)
+        for (uint i = 0; i < GetAnimatorSM()->GetNodes().Size(); ++i)
         {
             ASSERT(i < GetAnimatorSM()->GetNodes().Size());
 
@@ -158,12 +158,12 @@ void AnimatorSMEditorScene::SetAnimatorSM(AnimatorStateMachine *animatorSM)
             OnNodeCreated(GetAnimatorSM(), i, smNode);
         }
 
-        for(uint i = 0; i < GetAnimatorSM()->GetNodes().Size(); ++i)
+        for (uint i = 0; i < GetAnimatorSM()->GetNodes().Size(); ++i)
         {
             AESNode *aesNode = GetAESNodes()[i];
             AnimatorStateMachineNode *smNode = GetAnimatorSM()->GetNode(i);
-            for(AnimatorStateMachineConnection *conn :
-                GetAnimatorSM()->GetNode(i)->GetConnections())
+            for (AnimatorStateMachineConnection *conn :
+                 GetAnimatorSM()->GetNode(i)->GetConnections())
             {
                 aesNode->OnConnectionAdded(smNode, conn);
             }
@@ -200,7 +200,7 @@ void AnimatorSMEditorScene::CenterScene()
     UpdatePanningAndZoomOnTransforms();
 
     AARect boundingRect;
-    for(AESNode *aesNode : GetAESNodes())
+    for (AESNode *aesNode : GetAESNodes())
     {
         boundingRect = AARect::Union(
             boundingRect, aesNode->GetRectTransform()->GetViewportAARect());
@@ -216,7 +216,7 @@ void AnimatorSMEditorScene::CenterScene()
 
 void AnimatorSMEditorScene::Clear()
 {
-    if(GetAnimatorSM())
+    if (GetAnimatorSM())
     {
         GetAnimatorSM()
             ->EventEmitter<IEventsAnimatorStateMachine>::UnRegisterListener(
@@ -224,7 +224,7 @@ void AnimatorSMEditorScene::Clear()
     }
     p_animatorSM.Set(nullptr);
 
-    for(AESNode *node : p_nodes)
+    for (AESNode *node : p_nodes)
     {
         GameObject::Destroy(node);
     }
@@ -261,7 +261,7 @@ void AnimatorSMEditorScene::UpdatePanningAndZoomOnTransforms()
     p_gridContainer->GetRectTransform()->SetLocalPosition(
         Vector3(Vector2(m_panning), 0));
 
-    for(AESNode *node : p_nodes)
+    for (AESNode *node : p_nodes)
     {
         node->OnZoomScaleChanged(GetZoomScale());
     }
@@ -269,11 +269,11 @@ void AnimatorSMEditorScene::UpdatePanningAndZoomOnTransforms()
 
 bool AnimatorSMEditorScene::IsMouseOverSomeConnectionLine() const
 {
-    for(AESNode *aesNode : GetAESNodes())
+    for (AESNode *aesNode : GetAESNodes())
     {
-        for(AESConnectionLine *cl : aesNode->GetConnectionLines())
+        for (AESConnectionLine *cl : aesNode->GetConnectionLines())
         {
-            if(cl->IsMouseOver())
+            if (cl->IsMouseOver())
             {
                 return true;
             }
@@ -284,16 +284,16 @@ bool AnimatorSMEditorScene::IsMouseOverSomeConnectionLine() const
 
 void AnimatorSMEditorScene::ImportCurrentAnimatorStateMachineExtraInformation()
 {
-    if(GetAnimatorSM())
+    if (GetAnimatorSM())
     {
         Path metaPath = MetaFilesManager::GetMetaFilepath(
             GetAnimatorSM()->GetResourceFilepath());
-        if(metaPath.IsFile())
+        if (metaPath.IsFile())
         {
             MetaNode meta;
             meta.Import(metaPath);
             Array<Vector2> nodesPos = meta.GetArray<Vector2>("NodePositions");
-            for(uint i = 0; i < nodesPos.Size(); ++i)
+            for (uint i = 0; i < nodesPos.Size(); ++i)
             {
                 GetAESNodes()[i]->ImportPosition(nodesPos[i]);
             }
@@ -303,7 +303,7 @@ void AnimatorSMEditorScene::ImportCurrentAnimatorStateMachineExtraInformation()
 
 void AnimatorSMEditorScene::ExportCurrentAnimatorStateMachineIfAny()
 {
-    if(GetAnimatorSM() && GetAnimatorSM()->GetResourceFilepath().IsFile())
+    if (GetAnimatorSM() && GetAnimatorSM()->GetResourceFilepath().IsFile())
     {
         Path metaPath = MetaFilesManager::GetMetaFilepath(
             GetAnimatorSM()->GetResourceFilepath());
@@ -313,7 +313,7 @@ void AnimatorSMEditorScene::ExportCurrentAnimatorStateMachineIfAny()
             MetaNode meta;
             meta.Import(metaPath);
             Array<Vector2> nodesPos;
-            for(AESNode *node : GetAESNodes())
+            for (AESNode *node : GetAESNodes())
             {
                 nodesPos.PushBack(node->GetExportPosition());
             }
@@ -348,7 +348,7 @@ void AnimatorSMEditorScene::OnNodeRemoved(AnimatorStateMachine *stateMachine,
 UIEventResult AnimatorSMEditorScene::OnUIEvent(UIFocusable *,
                                                const UIEvent &event)
 {
-    switch(event.type)
+    switch (event.type)
     {
         case UIEvent::Type::FOCUS_LOST:
             GameObjectFactory::MakeBorderNotFocused(p_border);
@@ -363,7 +363,7 @@ UIEventResult AnimatorSMEditorScene::OnUIEvent(UIFocusable *,
         case UIEvent::Type::WHEEL:
         {
             Vector2 mouseWheel = (Input::GetMouseWheel() * Vector2(0.05f));
-            if(mouseWheel != Vector2::Zero)
+            if (mouseWheel != Vector2::Zero)
             {
                 SetZoomScale(GetZoomScale() + mouseWheel.y);
                 return UIEventResult::INTERCEPT;

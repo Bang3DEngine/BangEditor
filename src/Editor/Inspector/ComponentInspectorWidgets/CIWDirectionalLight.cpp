@@ -39,7 +39,7 @@ void CIWDirectionalLight::UpdateFromReference()
 {
     CIWLight::UpdateFromReference();
 
-    if(!p_shadowDistanceInput->HasFocus())
+    if (!p_shadowDistanceInput->HasFocus())
     {
         p_shadowDistanceInput->SetValue(
             GetDirectionalLight()->GetShadowDistance());

@@ -177,15 +177,15 @@ void MenuBar::RegisterShortcut(const Shortcut &shortcut)
 
 void MenuBar::OnShortcutPressed(const Shortcut &shortcut)
 {
-    if(shortcut.GetName() == "SaveScene")
+    if (shortcut.GetName() == "SaveScene")
     {
         OnSaveScene(nullptr);
     }
-    else if(shortcut.GetName() == "SaveSceneAs")
+    else if (shortcut.GetName() == "SaveSceneAs")
     {
         OnSaveSceneAs(nullptr);
     }
-    else if(shortcut.GetName() == "OpenScene")
+    else if (shortcut.GetName() == "OpenScene")
     {
         OnOpenScene(nullptr);
     }
@@ -198,7 +198,7 @@ void MenuBar::Update()
     // Force show
     UICanvas *canvas = UICanvas::GetActive(this);
     bool hasFocusRecursive = canvas->HasFocus(this, true);
-    for(MenuItem *item : m_items)
+    for (MenuItem *item : m_items)
     {
         // Drop down enabled if we have focus. Can't otherwise.
         item->SetDropDownEnabled(hasFocusRecursive);
@@ -206,9 +206,9 @@ void MenuBar::Update()
         // Force show on top item if mouse over and menu bar has focus
         bool needToShowThisItem =
             (hasFocusRecursive && canvas->IsMouseOver(item, true));
-        if(needToShowThisItem && item != p_currentTopItemBeingShown)
+        if (needToShowThisItem && item != p_currentTopItemBeingShown)
         {
-            if(p_currentTopItemBeingShown)  // Unforce show on the other
+            if (p_currentTopItemBeingShown)  // Unforce show on the other
             {
                 p_currentTopItemBeingShown->SetForceShow(false);
                 p_currentTopItemBeingShown->Close(true);
@@ -218,19 +218,19 @@ void MenuBar::Update()
             p_currentTopItemBeingShown = item;
         }
 
-        if(p_currentTopItemBeingShown != item)
+        if (p_currentTopItemBeingShown != item)
         {
             item->Close(true);
         }
 
-        if(!hasFocusRecursive)
+        if (!hasFocusRecursive)
         {
             item->SetForceShow(false);
             item->Close(true);
         }
     }
 
-    if(!hasFocusRecursive)
+    if (!hasFocusRecursive)
     {
         p_currentTopItemBeingShown = nullptr;
     }
@@ -320,12 +320,12 @@ void MenuBar::CreateGameObjectMiscMenuInto(
     alignViewWithGameObjectItem->SetSelectedCallback(
         MenuBar::OnAlignViewWithGameObject);
 
-    if(alignGameObjectWithViewItemOut)
+    if (alignGameObjectWithViewItemOut)
     {
         *alignGameObjectWithViewItemOut = alignGameObjectWithViewItem;
     }
 
-    if(alignViewWithGameObjectItemOut)
+    if (alignViewWithGameObjectItemOut)
     {
         *alignViewWithGameObjectItemOut = alignViewWithGameObjectItem;
     }
@@ -588,7 +588,7 @@ T *OnAddComponent()
 {
     T *comp = nullptr;
     GameObject *selectedGameObject = Editor::GetSelectedGameObject();
-    if(selectedGameObject)
+    if (selectedGameObject)
     {
         MetaNode undoMetaBefore = selectedGameObject->GetMeta();
 
@@ -638,9 +638,10 @@ void MenuBar::OnAddExistingBehaviour(MenuItem *)
     Path behaviourPath;
     EditorDialog::GetAsset("Select an existing Behaviour...",
                            Extensions::GetSourceFileExtensions(),
-                           &behaviourPath, &accepted);
+                           &behaviourPath,
+                           &accepted);
 
-    if(accepted)
+    if (accepted)
     {
         BehaviourContainer *behaviourContainer =
             OnAddComponent<BehaviourContainer>();
@@ -672,8 +673,8 @@ void MenuBar::OnAddSphereCollider(MenuItem *)
 void MenuBar::OnAddMeshCollider(MenuItem *item)
 {
     MeshCollider *meshCollider = OnAddComponent<MeshCollider>();
-    if(MeshRenderer *meshRenderer =
-           meshCollider->GetGameObject()->GetComponent<MeshRenderer>())
+    if (MeshRenderer *meshRenderer =
+            meshCollider->GetGameObject()->GetComponent<MeshRenderer>())
     {
         meshCollider->SetMesh(meshRenderer->GetActiveMesh());
     }
@@ -944,9 +945,9 @@ void MenuBar::OnCreateUITextGO(MenuItem *)
 
 void MenuBar::OnAlignGameObjectWithView(MenuItem *)
 {
-    if(GameObject *go = Editor::GetSelectedGameObject())
+    if (GameObject *go = Editor::GetSelectedGameObject())
     {
-        if(Transform *tr = go->GetTransform())
+        if (Transform *tr = go->GetTransform())
         {
             EditorCamera *edCam =
                 EditSceneGameObjects::GetInstance()->GetEditorCamera();
@@ -963,7 +964,7 @@ void MenuBar::OnAlignGameObjectWithView(MenuItem *)
 
 void MenuBar::OnAlignViewWithGameObject(MenuItem *)
 {
-    if(GameObject *go = Editor::GetSelectedGameObject())
+    if (GameObject *go = Editor::GetSelectedGameObject())
     {
         EditSceneGameObjects::GetInstance()
             ->GetEditorCamera()
@@ -980,12 +981,12 @@ void MenuBar::OnCreatePlane(MenuItem *)
 void MenuBar::OnEndCreateGameObjectFromMenuBar(GameObject *go)
 {
     GameObject *parentGo = Editor::GetSelectedGameObject();
-    if(!parentGo)
+    if (!parentGo)
     {
         parentGo = EditorSceneManager::GetOpenScene();
     }
 
-    if(parentGo)
+    if (parentGo)
     {
         go->SetParent(parentGo, -1, true);
 
@@ -998,16 +999,16 @@ void MenuBar::OnEndCreateGameObjectFromMenuBar(GameObject *go)
 void MenuBar::OnEndCreateUIGameObjectFromMenuBar(GameObject *uiGo)
 {
     GameObject *parentGo = Editor::GetSelectedGameObject();
-    if(!parentGo)
+    if (!parentGo)
     {
         parentGo = EditorSceneManager::GetOpenScene();
     }
 
-    if(parentGo)
+    if (parentGo)
     {
         uiGo->SetParent(parentGo);
 
-        if(!UICanvas::GetActive(uiGo))
+        if (!UICanvas::GetActive(uiGo))
         {
             UICanvas *createdCanvas = OnCreateUICanvasGO(nullptr);
             GameObject *createdCanvasGo = createdCanvas->GetGameObject();
@@ -1025,20 +1026,22 @@ Path MenuBar::CreateNewBehaviour()
     String behaviourName = "";
     do
     {
-        behaviourName = Dialog::GetString(
-            "Specify Behaviour name...",
-            "Please, the name of the new Behaviour: ", "NewBehaviour");
+        behaviourName =
+            Dialog::GetString("Specify Behaviour name...",
+                              "Please, the name of the new Behaviour: ",
+                              "NewBehaviour");
 
-        if(behaviourName == "")
+        if (behaviourName == "")
         {
             return Path::Empty;
         }
-    } while(
+    } while (
         !BehaviourCreator::CanCreateNewBehaviour(behaviourDir, behaviourName));
 
     Path behaviourHeaderPath;
     Path behaviourSourcePath;
-    BehaviourCreator::CreateNewBehaviour(behaviourDir, behaviourName,
+    BehaviourCreator::CreateNewBehaviour(behaviourDir,
+                                         behaviourName,
                                          &behaviourHeaderPath,
                                          &behaviourSourcePath);
 

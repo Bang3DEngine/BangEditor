@@ -41,9 +41,9 @@ RH<Texture2D> ModelPreviewFactory::GetPreviewTextureFor(
     const ResourcePreviewFactoryParameters &params)
 {
     RH<Texture2D> texRH;
-    if(model)
+    if (model)
     {
-        if(model->GetMeshes().Size() >= 1)
+        if (model->GetMeshes().Size() >= 1)
         {
             texRH = ModelPreviewFactory::GetActive()->GetPreviewTextureFor_(
                 model, params);
@@ -89,7 +89,7 @@ void ModelPreviewFactory::OnUpdateTextureBegin(
     // Modify material
     Array<MeshRenderer *> meshRenderers =
         previewGoContainer->GetComponentsInDescendantsAndThis<MeshRenderer>();
-    for(MeshRenderer *mr : meshRenderers)
+    for (MeshRenderer *mr : meshRenderers)
     {
         mr->GetMaterial()->SetCullFace(GL::CullFaceExt::NONE);
     }

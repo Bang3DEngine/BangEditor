@@ -46,17 +46,17 @@ void CIWTransform::UpdateFromReference()
 {
     ComponentInspectorWidget::UpdateFromReference();
 
-    if(!p_posIV->HasFocus())
+    if (!p_posIV->HasFocus())
     {
         p_posIV->Set(GetTransform()->GetLocalPosition());
     }
 
-    if(!p_rotIV->HasFocus())
+    if (!p_rotIV->HasFocus())
     {
         p_rotIV->Set(GetTransform()->GetLocalEuler());
     }
 
-    if(!p_scaleIV->HasFocus())
+    if (!p_scaleIV->HasFocus())
     {
         p_scaleIV->Set(GetTransform()->GetLocalScale());
     }

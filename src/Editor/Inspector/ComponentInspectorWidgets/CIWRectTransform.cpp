@@ -55,29 +55,29 @@ void CIWRectTransform::UpdateFromReference()
 {
     CIWTransform::UpdateFromReference();
 
-    if(!p_anchorMinInput->HasFocus())
+    if (!p_anchorMinInput->HasFocus())
     {
         p_anchorMinInput->Set(GetRectTransform()->GetAnchorMin());
     }
 
-    if(!p_anchorMaxInput->HasFocus())
+    if (!p_anchorMaxInput->HasFocus())
     {
         p_anchorMaxInput->Set(GetRectTransform()->GetAnchorMax());
     }
 
-    if(!p_marginLeftBotInput->HasFocus())
+    if (!p_marginLeftBotInput->HasFocus())
     {
         p_marginLeftBotInput->Set(
             Vector2(GetRectTransform()->GetMarginLeftBot()));
     }
 
-    if(!p_marginRightTopInput->HasFocus())
+    if (!p_marginRightTopInput->HasFocus())
     {
         p_marginRightTopInput->Set(
             Vector2(GetRectTransform()->GetMarginRightTop()));
     }
 
-    if(!p_pivotPositionInput->HasFocus())
+    if (!p_pivotPositionInput->HasFocus())
     {
         p_pivotPositionInput->Set(GetRectTransform()->GetPivotPosition());
     }

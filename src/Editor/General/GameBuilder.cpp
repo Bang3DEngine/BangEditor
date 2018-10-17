@@ -36,9 +36,11 @@ void GameBuilder::BuildGame()
     Path gameExecPath = GameBuilder::GetExecutablePath();
     File::CreateDirectory(gameExecPath.GetDirectory());
 
-    GameBuilder::BuildGame(gameExecPath.GetName(), gameExecPath.GetDirectory(),
+    GameBuilder::BuildGame(gameExecPath.GetName(),
+                           gameExecPath.GetDirectory(),
                            // BinType::BIN_DEBUG,
-                           BinType::BIN_RELEASE, true);
+                           BinType::BIN_RELEASE,
+                           true);
 }
 
 void GameBuilder::BuildGame(const String &gameName,
@@ -48,16 +50,15 @@ void GameBuilder::BuildGame(const String &gameName,
 {
     Array<Path> sceneFiles = Paths::GetProjectAssetsDir().GetFiles(
         FindFlag::RECURSIVE, {Extensions::GetSceneExtension()});
-    if(sceneFiles.IsEmpty())
+    if (sceneFiles.IsEmpty())
     {
-        Debug_Error(
-            "Please save at least one scene in the "
-            "Assets directory to build the game");
+        Debug_Error("Please save at least one scene in the "
+                    "Assets directory to build the game");
         return;
     }
 
 #define BANG_BUILD_GAME_CHECK_EXISTANCE(path)       \
-    if(!path.Exists())                              \
+    if (!path.Exists())                             \
     {                                               \
         Debug_Error("'" << path << "' not found."); \
         return;                                     \
@@ -72,16 +73,16 @@ void GameBuilder::BuildGame(const String &gameName,
     BANG_BUILD_GAME_CHECK_EXISTANCE(gameBinaryTemplatePath);
 
     Debug_Log("Copying assets into data directory...");
-    if(!GameBuilder::CreateDataDirectory(gameDir))
+    if (!GameBuilder::CreateDataDirectory(gameDir))
     {
         Debug_Error("Could not create data directory");
         return;
     }
 
-    if(compileBehaviours)
+    if (compileBehaviours)
     {
         Debug_Log("Compiling behaviours...");
-        if(!GameBuilder::CreateBehavioursLibrary(gameDir, binaryType))
+        if (!GameBuilder::CreateBehavioursLibrary(gameDir, binaryType))
         {
             Debug_Error("Could not compile behaviours!");
             return;
@@ -92,10 +93,10 @@ void GameBuilder::BuildGame(const String &gameName,
     File::Duplicate(gameBinaryTemplatePath, gameBinaryPath);
     File::AddExecutablePermission(gameBinaryPath);
 
-    Debug_Log(
-        "Build finished successfully! "
-        "Game path: '"
-        << gameBinaryPath << "'");
+    Debug_Log("Build finished successfully! "
+              "Game path: '"
+              << gameBinaryPath
+              << "'");
 }
 
 bool GameBuilder::CompileGameExecutable(BinType binaryType)
@@ -149,7 +150,7 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
 {
     Path dataDir = executableDir.Append("Data");
     File::Remove(dataDir);
-    if(!File::CreateDirectory(dataDir))
+    if (!File::CreateDirectory(dataDir))
     {
         return false;
     }
@@ -157,26 +158,30 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
     // Copy the Engine needed directories into the Data directory
     Path bangDataDir = dataDir.Append("Bang");
     Path bangAssetsDataDir = bangDataDir.Append("Assets");
-    if(!File::CreateDirectory(bangDataDir))
+    if (!File::CreateDirectory(bangDataDir))
     {
         return false;
     }
 
-    if(!File::DuplicateDir(Paths::GetEngineAssetsDir(), bangAssetsDataDir))
+    if (!File::DuplicateDir(Paths::GetEngineAssetsDir(), bangAssetsDataDir))
     {
         Debug_Error("Could not duplicate engine assets directory '"
-                    << Paths::GetEngineAssetsDir() << "' into '"
-                    << bangAssetsDataDir << "'");
+                    << Paths::GetEngineAssetsDir()
+                    << "' into '"
+                    << bangAssetsDataDir
+                    << "'");
         return false;
     }
 
     // Copy the Project Assets in the Data directory
     Path gameDataAssetsDir = dataDir.Append("Assets");
-    if(!File::DuplicateDir(Paths::GetProjectAssetsDir(), gameDataAssetsDir))
+    if (!File::DuplicateDir(Paths::GetProjectAssetsDir(), gameDataAssetsDir))
     {
         Debug_Error("Could not duplicate assets directory '"
-                    << Paths::GetProjectAssetsDir() << "' into '"
-                    << gameDataAssetsDir << "'");
+                    << Paths::GetProjectAssetsDir()
+                    << "' into '"
+                    << gameDataAssetsDir
+                    << "'");
         return false;
     }
 
@@ -195,7 +200,7 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
         FindFlag::RECURSIVE, Extensions::GetSourceFileExtensions());
 
     // Preprocess behaviours
-    for(const Path &behaviourSourcePath : behavioursSourceFiles)
+    for (const Path &behaviourSourcePath : behavioursSourceFiles)
     {
         Path behaviourHeader = behaviourSourcePath.WithExtension("h");
         BangPreprocessor::Preprocess(behaviourHeader);
@@ -205,17 +210,18 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
     behaviourMgr->WaitForAsyncCompileJobs();
 
     // Compile
-    for(const Path &behaviourSourcePath : behavioursSourceFiles)
+    for (const Path &behaviourSourcePath : behavioursSourceFiles)
     {
         Path outputObjPath = dataLibsDir.Append(behaviourSourcePath.GetName())
                                  .AppendExtension("o");
 
         Debug_Log("Compiling '" << behaviourSourcePath << "' into '"
-                                << outputObjPath << "'...");
+                                << outputObjPath
+                                << "'...");
         Compiler::Result res = behaviourMgr->CompileBehaviourObject(
             behaviourSourcePath, outputObjPath, binType);
 
-        if(!outputObjPath.IsFile())
+        if (!outputObjPath.IsFile())
         {
             Debug_Error(res.output);
             return false;
@@ -230,11 +236,12 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
             .AppendExtension("so")
             .AppendExtension(String::ToString(Time::GetNow().GetMillis()));
     Debug_Log("Merging behaviour objects " << behaviourObjectsPaths << " into '"
-                                           << outputLibPath << "'...");
+                                           << outputLibPath
+                                           << "'...");
 
     Compiler::Result res = behaviourMgr->MergeBehaviourObjects(
         behaviourObjectsPaths, outputLibPath, binType);
-    if(!outputLibPath.IsFile())
+    if (!outputLibPath.IsFile())
     {
         Debug_Error(res.output);
         return false;

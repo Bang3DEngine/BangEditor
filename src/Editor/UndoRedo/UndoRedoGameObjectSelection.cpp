@@ -14,14 +14,14 @@ UndoRedoGameObjectSelection::UndoRedoGameObjectSelection(
     GameObject *newSelectedGameObject)
 {
     p_previousSelectedGameObject = previousSelectedGameObject;
-    if(p_previousSelectedGameObject)
+    if (p_previousSelectedGameObject)
     {
         p_previousSelectedGameObject
             ->EventEmitter<IEventsDestroy>::RegisterListener(this);
     }
 
     p_newSelectedGameObject = newSelectedGameObject;
-    if(p_newSelectedGameObject)
+    if (p_newSelectedGameObject)
     {
         p_newSelectedGameObject->EventEmitter<IEventsDestroy>::RegisterListener(
             this);
@@ -34,7 +34,7 @@ UndoRedoGameObjectSelection::~UndoRedoGameObjectSelection()
 
 void UndoRedoGameObjectSelection::Undo()
 {
-    if(p_previousSelectedGameObject)
+    if (p_previousSelectedGameObject)
     {
         Editor::GetInstance()->SelectGameObject(p_previousSelectedGameObject,
                                                 false);
@@ -43,7 +43,7 @@ void UndoRedoGameObjectSelection::Undo()
 
 void UndoRedoGameObjectSelection::Redo()
 {
-    if(p_newSelectedGameObject)
+    if (p_newSelectedGameObject)
     {
         Editor::GetInstance()->SelectGameObject(p_newSelectedGameObject, false);
     }
@@ -57,12 +57,12 @@ bool UndoRedoGameObjectSelection::IsRedundant() const
 void UndoRedoGameObjectSelection::OnDestroyed(
     EventEmitter<IEventsDestroy> *object)
 {
-    if(object == p_previousSelectedGameObject)
+    if (object == p_previousSelectedGameObject)
     {
         p_previousSelectedGameObject = nullptr;
     }
 
-    if(object == p_newSelectedGameObject)
+    if (object == p_newSelectedGameObject)
     {
         p_newSelectedGameObject = nullptr;
     }

@@ -96,13 +96,13 @@ ExplorerItem::~ExplorerItem()
 
 UIEventResult ExplorerItem::OnUIEvent(UIFocusable *, const UIEvent &event)
 {
-    switch(event.type)
+    switch (event.type)
     {
         case UIEvent::Type::FOCUS_TAKEN:
             SetSelected(true);
-            if(event.focus.type == FocusType::AUTO_TAB)
+            if (event.focus.type == FocusType::AUTO_TAB)
             {
-                if(Explorer *exp = Explorer::GetInstance())
+                if (Explorer *exp = Explorer::GetInstance())
                 {
                     exp->SelectPath(GetPath());
                 }
@@ -116,7 +116,7 @@ UIEventResult ExplorerItem::OnUIEvent(UIFocusable *, const UIEvent &event)
             break;
 
         case UIEvent::Type::MOUSE_CLICK_FULL:
-            if(Explorer *exp = Explorer::GetInstance())
+            if (Explorer *exp = Explorer::GetInstance())
             {
                 exp->SelectPath(GetPath());
                 return UIEventResult::INTERCEPT;
@@ -124,9 +124,9 @@ UIEventResult ExplorerItem::OnUIEvent(UIFocusable *, const UIEvent &event)
             break;
 
         case UIEvent::Type::KEY_DOWN:
-            if(event.key.modifiers == KeyModifier::LCTRL)
+            if (event.key.modifiers == KeyModifier::LCTRL)
             {
-                switch(event.key.key)
+                switch (event.key.key)
                 {
                     case Key::D:
                         Duplicate();
@@ -148,7 +148,7 @@ UIEventResult ExplorerItem::OnUIEvent(UIFocusable *, const UIEvent &event)
             }
             else
             {
-                switch(event.key.key)
+                switch (event.key.key)
                 {
                     case Key::F2:
                         Rename();
@@ -166,7 +166,7 @@ UIEventResult ExplorerItem::OnUIEvent(UIFocusable *, const UIEvent &event)
             break;
 
         case UIEvent::Type::MOUSE_ENTER:
-            if(!IsSelected() && p_bg)
+            if (!IsSelected() && p_bg)
             {
                 p_bg->SetTint(UITheme::GetOverColor());
             }
@@ -174,7 +174,7 @@ UIEventResult ExplorerItem::OnUIEvent(UIFocusable *, const UIEvent &event)
             break;
 
         case UIEvent::Type::MOUSE_EXIT:
-            if(!IsSelected() && p_bg)
+            if (!IsSelected() && p_bg)
             {
                 p_bg->SetTint(Color::Zero);
             }
@@ -188,7 +188,7 @@ UIEventResult ExplorerItem::OnUIEvent(UIFocusable *, const UIEvent &event)
 
 void ExplorerItem::SetPath(const Path &path)
 {
-    if(GetPath() != path)
+    if (GetPath() != path)
     {
         m_path = path;
 
@@ -199,7 +199,7 @@ void ExplorerItem::SetPath(const Path &path)
                                 : UIImageRenderer::Mode::TEXTURE);
         p_icon->SetTint(EditorTextureFactory::GetPathIconTint(GetPath()));
 
-        if(iconTex)
+        if (iconTex)
         {
             p_aspectRatioFitter->SetAspectRatio(iconTex->GetSize());
         }
@@ -216,7 +216,7 @@ void ExplorerItem::SetSelected(bool selected)
 {
     m_selected = selected;
 
-    if(p_bg)
+    if (p_bg)
     {
         p_bg->SetTint(IsSelected() ? UITheme::GetSelectedColor() : Color::Zero);
     }
@@ -274,7 +274,7 @@ void ExplorerItem::Duplicate()
 
 void ExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
 {
-    if(GetPathString() != "..")
+    if (GetPathString() != "..")
     {
         menuRootItem->SetFontSize(12);
 
@@ -291,7 +291,7 @@ void ExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
         copy->SetSelectedCallback(
             [this](MenuItem *) { EditorClipboard::CopyPath(GetPath()); });
 
-        if(GetPath().IsDir())
+        if (GetPath().IsDir())
         {
             MenuItem *pasteItem = menuRootItem->AddItem("Paste");
             pasteItem->SetOverAndActionEnabled(
@@ -305,26 +305,26 @@ void ExplorerItem::OnDrop(EventEmitter<IEventsDragDrop> *dd_)
 {
     IEventsDragDrop::OnDrop(dd_);
 
-    if(!GetRectTransform()->IsMouseOver(true))
+    if (!GetRectTransform()->IsMouseOver(true))
     {
         return;
     }
 
     UIDragDroppable *dd = DCAST<UIDragDroppable *>(dd_);
-    if(ExplorerItem *expItem = DCAST<ExplorerItem *>(dd->GetGameObject()))
+    if (ExplorerItem *expItem = DCAST<ExplorerItem *>(dd->GetGameObject()))
     {
-        if(expItem != this && GetRectTransform()->IsMouseOver() &&
-           GetPath().IsDir())
+        if (expItem != this && GetRectTransform()->IsMouseOver() &&
+            GetPath().IsDir())
         {
             Path newDir = GetPath();
             Path droppedPath = expItem->GetPath();
-            if(droppedPath.Exists())
+            if (droppedPath.Exists())
             {
                 File::Rename(droppedPath,
                              newDir.Append(droppedPath.GetNameExt()));
 
                 // Move import file if any
-                if(MetaFilesManager::HasMetaFile(droppedPath))
+                if (MetaFilesManager::HasMetaFile(droppedPath))
                 {
                     Path metaDroppedPath =
                         MetaFilesManager::GetMetaFilepath(droppedPath);

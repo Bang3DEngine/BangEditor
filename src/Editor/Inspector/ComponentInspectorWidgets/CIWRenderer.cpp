@@ -104,25 +104,25 @@ void CIWRenderer::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChangedCIW(object);
 
-    if(object == p_visibleCheckBox)
+    if (object == p_visibleCheckBox)
     {
         GetRenderer()->SetVisible(p_visibleCheckBox->IsChecked());
     }
-    else if(object == p_castsShadowsCheckBox)
+    else if (object == p_castsShadowsCheckBox)
     {
         GetRenderer()->SetCastsShadows(p_castsShadowsCheckBox->IsChecked());
     }
-    else if(object == p_receivesShadowsCheckBox)
+    else if (object == p_receivesShadowsCheckBox)
     {
         GetRenderer()->SetReceivesShadows(
             p_receivesShadowsCheckBox->IsChecked());
     }
-    else if(object == p_useReflectionProbesCheckBox)
+    else if (object == p_useReflectionProbesCheckBox)
     {
         GetRenderer()->SetUseReflectionProbes(
             p_useReflectionProbesCheckBox->IsChecked());
     }
-    else if(object == p_materialInputFile)
+    else if (object == p_materialInputFile)
     {
         RH<Material> mat =
             Resources::Load<Material>(p_materialInputFile->GetPath());

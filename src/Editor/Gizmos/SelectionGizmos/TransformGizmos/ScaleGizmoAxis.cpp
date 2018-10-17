@@ -80,12 +80,12 @@ void ScaleGizmoAxis::Update()
 {
     TransformGizmoAxis::Update();
     GameObject *refGo = GetReferencedGameObject();
-    if(!refGo || !refGo->GetTransform())
+    if (!refGo || !refGo->GetTransform())
     {
         return;
     }
 
-    if(IsBeingGrabbed())
+    if (IsBeingGrabbed())
     {
         Camera *cam = GetEditorCamera();
         Transform *camT = cam->GetGameObject()->GetTransform();
@@ -93,14 +93,14 @@ void ScaleGizmoAxis::Update()
         Transform *refGoT = refGo->GetTransform();
         Vector3 refGoCenter = refGoT->GetPosition();
 
-        if(GrabHasJustChanged())
+        if (GrabHasJustChanged())
         {
             m_startGrabLocalScale = refGoT->GetLocalScale();
         }
 
         Plane plane;
         plane.SetPoint(refGoCenter);
-        if(GetAxis() != Axis3DExt::XYZ)
+        if (GetAxis() != Axis3DExt::XYZ)
         {
             // Find the plane parallel to the axes, and which faces the
             // camera the most.
@@ -124,12 +124,12 @@ void ScaleGizmoAxis::Update()
 
         bool intersected;
         Vector3 intersection;
-        Geometry::IntersectRayPlane(mouseRay, plane, &intersected,
-                                    &intersection);
+        Geometry::IntersectRayPlane(
+            mouseRay, plane, &intersected, &intersection);
 
-        if(GetAxis() != Axis3DExt::XYZ)
+        if (GetAxis() != Axis3DExt::XYZ)
         {
-            if(intersected)
+            if (intersected)
             {
                 Vector3 centerToMousePointV = (intersection - refGoCenter);
                 Vector3 centerToMousePointProjV =
@@ -138,7 +138,7 @@ void ScaleGizmoAxis::Update()
                 Vector3 centerToMousePointProjLocalV =
                     refGoT->FromWorldToLocalDirection(centerToMousePointProjV);
 
-                if(GrabHasJustChanged())
+                if (GrabHasJustChanged())
                 {
                     m_startGrabCenterToMousePointProjLocalV =
                         centerToMousePointProjLocalV;
@@ -194,13 +194,13 @@ void ScaleGizmoAxis::SetAxis(Axis3DExt axis)
 
 void ScaleGizmoAxis::UpdatePoints(float localAxisLength)
 {
-    if(!GetParent())
+    if (!GetParent())
     {
         return;
     }
 
     Vector3 axisFwd = GetAxisVectorLocal() * localAxisLength;
-    if(GetAxis() == Axis3DExt::XYZ)
+    if (GetAxis() == Axis3DExt::XYZ)
     {
         axisFwd = Vector3::Zero;
     }
@@ -209,7 +209,7 @@ void ScaleGizmoAxis::UpdatePoints(float localAxisLength)
     p_arrowCap->GetTransform()->SetLocalPosition(axisFwd);
 
     float baseScale = 0.2f;
-    if(GetAxis() == Axis3DExt::XYZ)
+    if (GetAxis() == Axis3DExt::XYZ)
     {
         baseScale += 0.4f;
     }

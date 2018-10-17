@@ -106,12 +106,12 @@ UISceneContainer::~UISceneContainer()
 
 void UISceneContainer::BeforeChildrenRender(RenderPass rp)
 {
-    if(rp == RenderPass::CANVAS)
+    if (rp == RenderPass::CANVAS)
     {
         RenderContainedSceneIfNeeded();
 
         bool showSceneImg = false;
-        if(Camera *cam = GetSceneCamera(GetContainedScene()))
+        if (Camera *cam = GetSceneCamera(GetContainedScene()))
         {
             Vector2i sceneImgSize(p_sceneImage->GetRectTransform()
                                       ->GetViewportAARect()
@@ -128,9 +128,9 @@ void UISceneContainer::BeforeChildrenRender(RenderPass rp)
 
 void UISceneContainer::RenderContainedSceneIfNeeded()
 {
-    if(NeedsToRenderContainedScene(GetContainedScene()))
+    if (NeedsToRenderContainedScene(GetContainedScene()))
     {
-        if(Camera *cam = GetSceneCamera(GetContainedScene()))
+        if (Camera *cam = GetSceneCamera(GetContainedScene()))
         {
             cam->SetRenderSize(Vector2i(GetSceneImage()
                                             ->GetRectTransform()
@@ -151,14 +151,14 @@ void UISceneContainer::RenderContainedSceneIfNeeded()
 
 void UISceneContainer::SetScene(Scene *scene)
 {
-    if(GetContainedScene())
+    if (GetContainedScene())
     {
         GetContainedScene()->EventEmitter<IEventsDestroy>::UnRegisterListener(
             this);
     }
 
     p_containedScene = scene;
-    if(GetContainedScene())
+    if (GetContainedScene())
     {
         GetContainedScene()->EventEmitter<IEventsDestroy>::RegisterListener(
             this);
@@ -199,7 +199,7 @@ UISceneToolbarDown *UISceneContainer::GetSceneToolbarDown() const
 void UISceneContainer::OnTransformChanged()
 {
     Scene *containerScene = GetContainedScene();
-    if(containerScene)
+    if (containerScene)
     {
         containerScene->InvalidateCanvas();
     }
@@ -224,7 +224,7 @@ void UISceneContainer::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 
 UIEventResult UISceneContainer::OnUIEvent(UIFocusable *, const UIEvent &event)
 {
-    switch(event.type)
+    switch (event.type)
     {
         case UIEvent::Type::FOCUS_TAKEN:
             GameObjectFactory::MakeBorderFocused(p_border);

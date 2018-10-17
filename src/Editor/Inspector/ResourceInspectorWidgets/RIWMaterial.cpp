@@ -284,13 +284,13 @@ Texture2D *RIWMaterial::GetIconTexture() const
 void RIWMaterial::OnValueChangedRIWResource(
     EventEmitter<IEventsValueChanged> *obj)
 {
-    if(!GetMaterial())
+    if (!GetMaterial())
     {
         return;
     }
 
     Path albedoTexPath = p_albedoTextureInput->GetPath();
-    if(albedoTexPath.IsFile())
+    if (albedoTexPath.IsFile())
     {
         RH<Texture2D> tex = Resources::Load<Texture2D>(albedoTexPath);
         GetMaterial()->SetAlbedoTexture(tex.Get());
@@ -301,7 +301,7 @@ void RIWMaterial::OnValueChangedRIWResource(
     }
 
     Path roughnessTexPath = p_roughnessTextureInput->GetPath();
-    if(roughnessTexPath.IsFile())
+    if (roughnessTexPath.IsFile())
     {
         RH<Texture2D> tex = Resources::Load<Texture2D>(roughnessTexPath);
         GetMaterial()->SetRoughnessTexture(tex.Get());
@@ -312,7 +312,7 @@ void RIWMaterial::OnValueChangedRIWResource(
     }
 
     Path metalnessTexPath = p_metalnessTextureInput->GetPath();
-    if(metalnessTexPath.IsFile())
+    if (metalnessTexPath.IsFile())
     {
         RH<Texture2D> tex = Resources::Load<Texture2D>(metalnessTexPath);
         GetMaterial()->SetMetalnessTexture(tex.Get());
@@ -323,7 +323,7 @@ void RIWMaterial::OnValueChangedRIWResource(
     }
 
     Path normalMapTexPath = p_normalMapTextureInput->GetPath();
-    if(normalMapTexPath.IsFile())
+    if (normalMapTexPath.IsFile())
     {
         RH<Texture2D> tex = Resources::Load<Texture2D>(normalMapTexPath);
         GetMaterial()->SetNormalMapTexture(tex.Get());
@@ -347,14 +347,14 @@ void RIWMaterial::OnValueChangedRIWResource(
     GetMaterial()->GetNeededUniforms().SetTo(SCAST<FlagsPrimitiveType>(
         p_neededUniformsInput->GetSelectedValuesForFlag()));
 
-    if(obj == p_renderPassInput)
+    if (obj == p_renderPassInput)
     {
         // Change renderPass, and shaders if the user has not changed the
         // material default shaders (if he did, auto changing this is annoying).
         RenderPass rp =
             SCAST<RenderPass>(p_renderPassInput->GetSelectedValue());
-        if(GetMaterial()->GetShaderProgram() ==
-           ShaderProgramFactory::GetDefault(GetMaterial()->GetRenderPass()))
+        if (GetMaterial()->GetShaderProgram() ==
+            ShaderProgramFactory::GetDefault(GetMaterial()->GetRenderPass()))
         {
             GetMaterial()->SetShaderProgram(
                 ShaderProgramFactory::GetDefault(rp));

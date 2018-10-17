@@ -104,7 +104,7 @@ Texture2D *RIWMesh::GetIconTexture() const
 
 void RIWMesh::OnValueChangedRIWResource(EventEmitter<IEventsValueChanged> *)
 {
-    if(!GetMesh())
+    if (!GetMesh())
     {
         return;
     }

@@ -57,18 +57,18 @@ void SIWPhysicsSettings::UpdateFromReference()
 {
     SettingsInspectorWidget::UpdateFromReference();
 
-    if(!p_stepSleepTimeInput->HasFocus())
+    if (!p_stepSleepTimeInput->HasFocus())
     {
         p_stepSleepTimeInput->SetValue(
             Physics::GetInstance()->GetStepSleepTime().GetSeconds());
     }
 
-    if(!p_maxSubStepsInput->HasFocus())
+    if (!p_maxSubStepsInput->HasFocus())
     {
         p_maxSubStepsInput->SetValue(Physics::GetInstance()->GetMaxSubSteps());
     }
 
-    if(!p_gravityInput->HasFocus())
+    if (!p_gravityInput->HasFocus())
     {
         p_gravityInput->Set(Physics::GetInstance()->GetGravity());
     }

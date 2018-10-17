@@ -133,11 +133,11 @@ void AnimatorSMEditor::Update()
 
     p_centerSceneButton->SetBlocked((p_animatorEditorScene == nullptr));
 
-    if(Explorer *exp = Explorer::GetInstance())
+    if (Explorer *exp = Explorer::GetInstance())
     {
         Path selectedPath = exp->GetSelectedPath();
-        if(selectedPath.HasExtension(
-               Extensions::GetAnimatorStateMachineExtension()))
+        if (selectedPath.HasExtension(
+                Extensions::GetAnimatorStateMachineExtension()))
         {
             RH<AnimatorStateMachine> animSMRH =
                 Resources::Load<AnimatorStateMachine>(selectedPath);
@@ -145,10 +145,10 @@ void AnimatorSMEditor::Update()
         }
     }
 
-    if(GetAnimatorSM())
+    if (GetAnimatorSM())
     {
-        if(Time::GetPassedTimeSince(m_lastVariablesInputUpdateTime) >=
-           Time::Seconds(0.2f))
+        if (Time::GetPassedTimeSince(m_lastVariablesInputUpdateTime) >=
+            Time::Seconds(0.2f))
         {
             p_variablesInput->UpdateRows(GetAnimatorSM()->GetVariables());
             m_lastVariablesInputUpdateTime = Time::GetNow();
@@ -158,7 +158,7 @@ void AnimatorSMEditor::Update()
 
 void AnimatorSMEditor::SetAnimatorSM(AnimatorStateMachine *animatorSM)
 {
-    if(animatorSM != GetAnimatorSM())
+    if (animatorSM != GetAnimatorSM())
     {
         Clear();
 
@@ -180,12 +180,12 @@ void AnimatorSMEditor::Clear()
 
 void AnimatorSMEditor::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 {
-    if(!GetAnimatorSM())
+    if (!GetAnimatorSM())
     {
         return;
     }
 
-    if(ee == p_variablesInput)
+    if (ee == p_variablesInput)
     {
         p_variablesInput->UpdateReferences<AnimatorStateMachineVariable>(
             GetAnimatorSM()->GetVariables(),

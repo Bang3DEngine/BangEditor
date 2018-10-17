@@ -32,9 +32,9 @@ bool QtProjectManager::IsQtCreatorOpenedCurrentProject()
 
     bool alreadyOpened = false;
     Array<String> outputLines = output.Split<Array>('\n');
-    for(const String &line : outputLines)
+    for (const String &line : outputLines)
     {
-        if(line.Contains("qtcreator") && !line.Contains("Bang.pro"))
+        if (line.Contains("qtcreator") && !line.Contains("Bang.pro"))
         {
             alreadyOpened = true;
             break;
@@ -87,7 +87,7 @@ void QtProjectManager::OpenBehaviourInQtCreator(const Path &behFilepath)
 {
     bool alreadyOpened = QtProjectManager::IsQtCreatorOpenedCurrentProject();
     List<String> args = {};
-    if(alreadyOpened)
+    if (alreadyOpened)
     {
         args.PushBack("-client");
     }

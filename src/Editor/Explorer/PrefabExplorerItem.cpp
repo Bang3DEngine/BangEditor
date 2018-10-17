@@ -27,10 +27,10 @@ void PrefabExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
     MenuItem *createGo = menuRootItem->AddItem("Create GameObject from prefab");
     createGo->SetSelectedCallback([this](MenuItem *) {
         Scene *openScene = EditorSceneManager::GetOpenScene();
-        if(openScene)
+        if (openScene)
         {
             RH<Prefab> prefabRH = Resources::Load<Prefab>(GetPath());
-            if(prefabRH)
+            if (prefabRH)
             {
                 GameObject *gameObject = prefabRH.Get()->Instantiate();
                 gameObject->SetParent(openScene);

@@ -3,10 +3,10 @@
 
 #include "Bang/BangDefines.h"
 #include "Bang/GameObject.h"
+#include "Bang/IEventsValueChanged.h"
 #include "Bang/List.h"
 #include "Bang/String.h"
 #include "Bang/UMap.h"
-#include "Bang/IEventsValueChanged.h"
 #include "BangEditor/BangEditor.h"
 
 namespace Bang

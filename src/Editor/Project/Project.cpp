@@ -57,7 +57,7 @@ void Project::SetProjectFilepath(const Path &projectFilepath)
 bool Project::OpenFirstFoundScene() const
 {
     Path firstFoundScenePath = GetFirstFoundScenePath();
-    if(firstFoundScenePath.IsFile())
+    if (firstFoundScenePath.IsFile())
     {
         SceneOpenerSaver::GetInstance()->OpenSceneInEditor(firstFoundScenePath);
     }
@@ -75,24 +75,24 @@ Path Project::GetFirstFoundScenePath() const
 
 void Project::ImportMeta(const MetaNode &metaNode)
 {
-    if(metaNode.Contains("RandomID"))
+    if (metaNode.Contains("RandomID"))
     {
         m_id = metaNode.Get<GUID>("RandomID");
     }
 
-    if(metaNode.Contains("Physics_StepSleepTime"))
+    if (metaNode.Contains("Physics_StepSleepTime"))
     {
         Physics::GetInstance()->SetStepSleepTime(
             Time::Seconds(metaNode.Get<float>("Physics_StepSleepTime")));
     }
 
-    if(metaNode.Contains("Physics_MaxSubSteps"))
+    if (metaNode.Contains("Physics_MaxSubSteps"))
     {
         Physics::GetInstance()->SetMaxSubSteps(
             metaNode.Get<int>("Physics_MaxSubSteps"));
     }
 
-    if(metaNode.Contains("Physics_Gravity"))
+    if (metaNode.Contains("Physics_Gravity"))
     {
         Physics::GetInstance()->SetGravity(
             metaNode.Get<Vector3>("Physics_Gravity"));

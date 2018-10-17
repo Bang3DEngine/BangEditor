@@ -40,7 +40,7 @@ TranslateGizmoAxis::TranslateGizmoAxis()
         MaterialFactory::GetGizmosUnLightedOverlay().Get());
 
     p_arrowCap = GameObjectFactory::CreateGameObject(true);
-    for(MeshRenderer *mr : p_arrowCap->GetComponents<MeshRenderer>())
+    for (MeshRenderer *mr : p_arrowCap->GetComponents<MeshRenderer>())
     {
         mr->SetMaterial(MaterialFactory::GetGizmosUnLightedOverlay().Get());
         mr->GetMaterial()->SetRenderPass(RenderPass::OVERLAY);
@@ -78,12 +78,13 @@ void TranslateGizmoAxis::Update()
 {
     TransformGizmoAxis::Update();
 
-    if(!GetReferencedGameObject() || !GetReferencedGameObject()->GetTransform())
+    if (!GetReferencedGameObject() ||
+        !GetReferencedGameObject()->GetTransform())
     {
         return;
     }
 
-    if(IsBeingGrabbed())
+    if (IsBeingGrabbed())
     {
         // Move along axis.
         // First. Find the plane parallel to the axes, and which faces the
@@ -108,11 +109,11 @@ void TranslateGizmoAxis::Update()
 
         bool intersected;
         Vector3 intersection;
-        Geometry::IntersectRayPlane(mouseRay, plane, &intersected,
-                                    &intersection);
+        Geometry::IntersectRayPlane(
+            mouseRay, plane, &intersected, &intersection);
 
         // Then, move the object to the intersection
-        if(intersected)
+        if (intersected)
         {
             GameObject *refGo = GetReferencedGameObject();
             Transform *refGoT = refGo->GetTransform();
@@ -120,7 +121,7 @@ void TranslateGizmoAxis::Update()
             Vector3 mousePoint = (intersection - refGoCenter);
             mousePoint = mousePoint.ProjectedOnVector(GetAxisVectorWorld());
 
-            if(GrabHasJustChanged())
+            if (GrabHasJustChanged())
             {
                 m_startGrabPoint = mousePoint;
             }
@@ -128,7 +129,7 @@ void TranslateGizmoAxis::Update()
             {
                 mousePoint -= m_startGrabPoint;
 
-                if(Input::GetKey(Key::LSHIFT))
+                if (Input::GetKey(Key::LSHIFT))
                 {
                     constexpr float SnappingDist = 1.0f;
                     float dl = mousePoint.Length();

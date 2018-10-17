@@ -55,15 +55,15 @@ void ComponentsGizmos::Render(RenderPass rp, bool renderChildren)
 {
     GameObject::Render(rp, renderChildren);
 
-    if(rp == RenderPass::OVERLAY)
+    if (rp == RenderPass::OVERLAY)
     {
-        if(GameObject *selectedGameObject = Editor::GetSelectedGameObject())
+        if (GameObject *selectedGameObject = Editor::GetSelectedGameObject())
         {
-            for(Component *comp : selectedGameObject->GetComponents())
+            for (Component *comp : selectedGameObject->GetComponents())
             {
-                if(comp && comp->IsActiveRecursively())
+                if (comp && comp->IsActiveRecursively())
                 {
-                    if(!Selection::IsBeingRendered())
+                    if (!Selection::IsBeingRendered())
                     {
                         RenderComponentGizmos(comp, true);
                     }
@@ -72,7 +72,7 @@ void ComponentsGizmos::Render(RenderPass rp, bool renderChildren)
         }
 
         Scene *openScene = EditorSceneManager::GetOpenScene();
-        if(openScene)
+        if (openScene)
         {
             RenderComponentGizmosWhenNotSelected(openScene);
         }
@@ -83,10 +83,10 @@ float ComponentsGizmos::GetCameraDistScale(const Vector3 &position) const
 {
     float camDistScale = 1.0f;
 
-    if(Camera *cam = Camera::GetActive())
+    if (Camera *cam = Camera::GetActive())
     {
         Vector3 camPos = cam->GetGameObject()->GetTransform()->GetPosition();
-        if(cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
+        if (cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
         {
             camDistScale = Vector3::Distance(camPos, position);
         }
@@ -97,17 +97,17 @@ float ComponentsGizmos::GetCameraDistScale(const Vector3 &position) const
 
 void ComponentsGizmos::RenderComponentGizmosWhenNotSelected(GameObject *go)
 {
-    for(Component *comp : go->GetComponents())
+    for (Component *comp : go->GetComponents())
     {
-        if(comp)
+        if (comp)
         {
             RenderComponentGizmos(comp, false);
         }
     }
 
-    for(GameObject *child : go->GetChildren())
+    for (GameObject *child : go->GetChildren())
     {
-        if(child)
+        if (child)
         {
             RenderComponentGizmosWhenNotSelected(child);
         }
@@ -119,53 +119,53 @@ void ComponentsGizmos::RenderComponentGizmos(Component *comp,
 {
     SelectionFramebuffer *sfb = Selection::GetSelectionFramebuffer();
 
-    if(!isBeingSelected && Selection::IsBeingRendered())
+    if (!isBeingSelected && Selection::IsBeingRendered())
     {
         sfb->SetNextRenderSelectable(comp->GetGameObject());
     }
 
-    if(Camera *cam = DCAST<Camera *>(comp))
+    if (Camera *cam = DCAST<Camera *>(comp))
     {
         RenderCameraGizmo(cam, isBeingSelected);
     }
-    else if(PointLight *pl = DCAST<PointLight *>(comp))
+    else if (PointLight *pl = DCAST<PointLight *>(comp))
     {
         RenderPointLightGizmo(pl, isBeingSelected);
     }
-    else if(BoxCollider *bc = DCAST<BoxCollider *>(comp))
+    else if (BoxCollider *bc = DCAST<BoxCollider *>(comp))
     {
         RenderBoxColliderGizmo(bc, isBeingSelected);
     }
-    else if(CapsuleCollider *cc = DCAST<CapsuleCollider *>(comp))
+    else if (CapsuleCollider *cc = DCAST<CapsuleCollider *>(comp))
     {
         RenderCapsuleColliderGizmo(cc, isBeingSelected);
     }
-    else if(SphereCollider *sc = DCAST<SphereCollider *>(comp))
+    else if (SphereCollider *sc = DCAST<SphereCollider *>(comp))
     {
         RenderSphereColliderGizmo(sc, isBeingSelected);
     }
-    else if(DirectionalLight *dl = DCAST<DirectionalLight *>(comp))
+    else if (DirectionalLight *dl = DCAST<DirectionalLight *>(comp))
     {
         RenderDirectionalLightGizmo(dl, isBeingSelected);
     }
-    else if(ReflectionProbe *rp = DCAST<ReflectionProbe *>(comp))
+    else if (ReflectionProbe *rp = DCAST<ReflectionProbe *>(comp))
     {
         RenderReflectionProbeGizmo(rp, isBeingSelected);
     }
-    else if(ParticleSystem *ps = DCAST<ParticleSystem *>(comp))
+    else if (ParticleSystem *ps = DCAST<ParticleSystem *>(comp))
     {
         RenderParticleSystemGizmo(ps, isBeingSelected);
     }
-    else if(Rope *rope = DCAST<Rope *>(comp))
+    else if (Rope *rope = DCAST<Rope *>(comp))
     {
         RenderRopeGizmo(rope, isBeingSelected);
     }
-    else if(AudioSource *as = DCAST<AudioSource *>(comp))
+    else if (AudioSource *as = DCAST<AudioSource *>(comp))
     {
         RenderAudioSourceGizmo(as, isBeingSelected);
     }
 
-    if(!isBeingSelected && Selection::IsBeingRendered())
+    if (!isBeingSelected && Selection::IsBeingRendered())
     {
         sfb->SetNextRenderSelectable(nullptr);
     }
@@ -174,7 +174,7 @@ void ComponentsGizmos::RenderComponentGizmos(Component *comp,
 void ComponentsGizmos::RenderBoxColliderGizmo(BoxCollider *bc,
                                               bool isBeingSelected)
 {
-    if(isBeingSelected && bc->IsEnabledRecursively())
+    if (isBeingSelected && bc->IsEnabledRecursively())
     {
         GBuffer *gb = GEngine::GetActiveGBuffer();
         gb->PushDepthStencilTexture();
@@ -199,7 +199,7 @@ void ComponentsGizmos::RenderBoxColliderGizmo(BoxCollider *bc,
 void ComponentsGizmos::RenderCapsuleColliderGizmo(CapsuleCollider *cc,
                                                   bool isBeingSelected)
 {
-    if(isBeingSelected && cc->IsEnabledRecursively())
+    if (isBeingSelected && cc->IsEnabledRecursively())
     {
         GBuffer *gb = GEngine::GetActiveGBuffer();
         gb->PushDepthStencilTexture();
@@ -215,7 +215,7 @@ void ComponentsGizmos::RenderCapsuleColliderGizmo(CapsuleCollider *cc,
         params.position = tr->GetPosition();
 
         params.rotation = tr->GetRotation();
-        switch(cc->GetAxis())
+        switch (cc->GetAxis())
         {
             case Axis3D::X:
                 params.rotation =
@@ -246,7 +246,7 @@ void ComponentsGizmos::RenderCapsuleColliderGizmo(CapsuleCollider *cc,
 void ComponentsGizmos::RenderSphereColliderGizmo(SphereCollider *sc,
                                                  bool isBeingSelected)
 {
-    if(isBeingSelected && sc->IsEnabledRecursively())
+    if (isBeingSelected && sc->IsEnabledRecursively())
     {
         GBuffer *gb = GEngine::GetActiveGBuffer();
         gb->PushDepthStencilTexture();
@@ -262,8 +262,8 @@ void ComponentsGizmos::RenderSphereColliderGizmo(SphereCollider *sc,
         Vector3 centerDisplacement = params.rotation * sc->GetCenter();
         Vector3 center = tr->GetPosition() + centerDisplacement;
         params.position = center;
-        RenderFactory::RenderWireframeSphere(sc->GetScaledRadius() + 0.01f,
-                                             false, params, 2, 2);
+        RenderFactory::RenderWireframeSphere(
+            sc->GetScaledRadius() + 0.01f, false, params, 2, 2);
 
         gb->PopDepthStencilTexture();
     }
@@ -273,13 +273,13 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam, bool isBeingSelected)
 {
     Transform *camTransform = cam->GetGameObject()->GetTransform();
 
-    if(!isBeingSelected)
+    if (!isBeingSelected)
     {
         RenderFactory::Parameters params;
         params.position = camTransform->GetPosition();
         params.scale = Vector3(0.1f);
-        RenderFactory::RenderIcon(EditorTextureFactory::GetComponentIcon(cam),
-                                  true, params);
+        RenderFactory::RenderIcon(
+            EditorTextureFactory::GetComponentIcon(cam), true, params);
 
         // RH<Mesh> cameraMesh = MeshFactory::GetCamera();
         // Transform *camTransform = cam->GetGameObject()->GetTransform();
@@ -306,12 +306,16 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam, bool isBeingSelected)
         params.color = Color::Green;
         params.receivesLighting = false;
 
-        if(cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
+        if (cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
         {
-            RenderFactory::RenderFrustum(
-                camTransform->GetForward(), camTransform->GetUp(),
-                camTransform->GetPosition(), cam->GetZNear(), cam->GetZFar(),
-                cam->GetFovDegrees(), GL::GetViewportAspectRatio(), params);
+            RenderFactory::RenderFrustum(camTransform->GetForward(),
+                                         camTransform->GetUp(),
+                                         camTransform->GetPosition(),
+                                         cam->GetZNear(),
+                                         cam->GetZFar(),
+                                         cam->GetFovDegrees(),
+                                         GL::GetViewportAspectRatio(),
+                                         params);
         }
         else
         {
@@ -340,7 +344,7 @@ void ComponentsGizmos::RenderPointLightGizmo(PointLight *pointLight,
     params.position =
         pointLight->GetGameObject()->GetTransform()->GetPosition();
 
-    if(!isBeingSelected)
+    if (!isBeingSelected)
     {
         params.scale = Vector3(0.1f);
         RenderFactory::RenderIcon(
@@ -353,8 +357,8 @@ void ComponentsGizmos::RenderPointLightGizmo(PointLight *pointLight,
         gb->SetSceneDepthStencil();
 
         params.thickness = 2.0f;
-        RenderFactory::RenderWireframeSphere(pointLight->GetRange(), true,
-                                             params, 1, 2, 32);
+        RenderFactory::RenderWireframeSphere(
+            pointLight->GetRange(), true, params, 1, 2, 32);
 
         gb->PopDepthStencilTexture();
     }
@@ -367,7 +371,7 @@ void ComponentsGizmos::RenderDirectionalLightGizmo(DirectionalLight *dirLight,
     params.receivesLighting = false;
     params.color = dirLight->GetColor().WithAlpha(1.0f);
 
-    if(!isBeingSelected)
+    if (!isBeingSelected)
     {
         params.position =
             dirLight->GetGameObject()->GetTransform()->GetPosition();
@@ -394,12 +398,12 @@ void ComponentsGizmos::RenderDirectionalLightGizmo(DirectionalLight *dirLight,
         const Vector3 center = lightGo->GetTransform()->GetPosition();
 
         params.thickness = 2.0f;
-        for(float ang = 0.0f; ang <= 2 * Math::Pi; ang += Math::Pi / 4.0f)
+        for (float ang = 0.0f; ang <= 2 * Math::Pi; ang += Math::Pi / 4.0f)
         {
             const Vector3 offx = right * Math::Cos(ang);
             const Vector3 offy = up * Math::Sin(ang);
-            RenderFactory::RenderLine(center + offx + offy,
-                                      center + offx + offy + forward, params);
+            RenderFactory::RenderLine(
+                center + offx + offy, center + offx + offy + forward, params);
         }
 
         gb->PopDepthStencilTexture();
@@ -420,7 +424,7 @@ void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
 
     RenderFactory::RenderSphere(1.0f, params);
 
-    if(isBeingSelected)
+    if (isBeingSelected)
     {
         GBuffer *gb = GEngine::GetActiveGBuffer();
         gb->PushDepthStencilTexture();
@@ -433,7 +437,7 @@ void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
         AABox reflProbeBox = AABox(reflProbeCenter + reflProbSize * 0.5f,
                                    reflProbeCenter - reflProbSize * 0.5f);
 
-        if(reflProbe->GetIsBoxed())
+        if (reflProbe->GetIsBoxed())
         {
             params.thickness = 0.1f;
             params.wireframe = false;
@@ -463,10 +467,11 @@ void ComponentsGizmos::RenderParticleSystemGizmo(ParticleSystem *particleSystem,
     params.scale = Vector3(0.1);
     params.position = center;
 
-    if(!isBeingSelected)
+    if (!isBeingSelected)
     {
         RenderFactory::RenderIcon(
-            EditorTextureFactory::GetComponentIcon(particleSystem), true,
+            EditorTextureFactory::GetComponentIcon(particleSystem),
+            true,
             params);
     }
     else
@@ -479,7 +484,7 @@ void ComponentsGizmos::RenderParticleSystemGizmo(ParticleSystem *particleSystem,
 
         Quaternion rot = tr->GetRotation();
 
-        switch(particleSystem->GetGenerationShape())
+        switch (particleSystem->GetGenerationShape())
         {
             case ParticleGenerationShape::BOX:
             {
@@ -532,10 +537,10 @@ void ComponentsGizmos::RenderRopeGizmo(Rope *rope, bool isBeingSelected)
     params.scale = Vector3(0.1);
     params.position = center;
 
-    if(!isBeingSelected)
+    if (!isBeingSelected)
     {
-        RenderFactory::RenderIcon(EditorTextureFactory::GetComponentIcon(rope),
-                                  true, params);
+        RenderFactory::RenderIcon(
+            EditorTextureFactory::GetComponentIcon(rope), true, params);
     }
 }
 
@@ -548,7 +553,7 @@ void ComponentsGizmos::RenderAudioSourceGizmo(AudioSource *audioSource,
     params.position =
         audioSource->GetGameObject()->GetTransform()->GetPosition();
 
-    if(!isBeingSelected)
+    if (!isBeingSelected)
     {
         params.scale = Vector3(0.1f);
         RenderFactory::RenderIcon(
@@ -561,8 +566,8 @@ void ComponentsGizmos::RenderAudioSourceGizmo(AudioSource *audioSource,
         gb->SetSceneDepthStencil();
 
         params.thickness = 2.0f;
-        RenderFactory::RenderWireframeSphere(audioSource->GetRange(), true,
-                                             params, 1, 2, 32);
+        RenderFactory::RenderWireframeSphere(
+            audioSource->GetRange(), true, params, 1, 2, 32);
 
         gb->PopDepthStencilTexture();
     }

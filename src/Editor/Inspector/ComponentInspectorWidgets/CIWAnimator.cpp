@@ -90,14 +90,14 @@ void CIWAnimator::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 
     Animator *animator = GetAnimator();
 
-    if(object == p_animatorSMInput)
+    if (object == p_animatorSMInput)
     {
         animator->SetStateMachine(
             Resources::Load<AnimatorStateMachine>(p_animatorSMInput->GetPath())
                 .Get());
     }
 
-    if(object == p_playOnStartInput)
+    if (object == p_playOnStartInput)
     {
         GetAnimator()->SetPlayOnStart(p_playOnStartInput->IsChecked());
     }

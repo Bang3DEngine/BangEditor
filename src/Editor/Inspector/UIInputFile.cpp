@@ -59,9 +59,9 @@ UIInputFile::UIInputFile()
     p_searchButton->AddClickedCallback([this]() {
         Path openPath;
         bool accepted;
-        EditorDialog::GetAsset("Get Asset...", GetExtensions(), &openPath,
-                               &accepted);
-        if(accepted)
+        EditorDialog::GetAsset(
+            "Get Asset...", GetExtensions(), &openPath, &accepted);
+        if (accepted)
         {
             SetPath(openPath);
         }
@@ -73,7 +73,7 @@ UIInputFile::UIInputFile()
     p_openFileInInspectorButton->SetIcon(rightArrowIcon, Vector2i(16));
     p_openFileInInspectorButton->GetIcon()->SetTint(Color::Black);
     p_openFileInInspectorButton->AddClickedCallback([this]() {
-        if(!Paths::IsEnginePath(GetPath()))
+        if (!Paths::IsEnginePath(GetPath()))
         {
             Explorer::GetInstance()->SelectPath(GetPath(), true);
         }
@@ -105,8 +105,8 @@ void UIInputFile::OnDragUpdate(EventEmitter<IEventsDragDrop> *dd_)
     IEventsDragDrop::OnDragUpdate(dd_);
 
     UIDragDroppable *dragDroppable = DCAST<UIDragDroppable *>(dd_);
-    if(ExplorerItem *expItem =
-           DCAST<ExplorerItem *>(dragDroppable->GetGameObject()))
+    if (ExplorerItem *expItem =
+            DCAST<ExplorerItem *>(dragDroppable->GetGameObject()))
     {
         Path draggedPath = expItem->GetPath();
         bool acceptedFileType = draggedPath.HasExtension(GetExtensions());
@@ -114,8 +114,8 @@ void UIInputFile::OnDragUpdate(EventEmitter<IEventsDragDrop> *dd_)
         Color backgroundColor = (acceptedFileType ? Color::Green : Color::Red);
 
         UICanvas *canvas = UICanvas::GetActive(this);
-        if(acceptedFileType &&
-           canvas->IsMouseOver(GetInputText()->GetFocusable()))
+        if (acceptedFileType &&
+            canvas->IsMouseOver(GetInputText()->GetFocusable()))
         {
             backgroundColor = backgroundColor.WithSaturation(0.3f);
         }
@@ -130,19 +130,19 @@ void UIInputFile::OnDrop(EventEmitter<IEventsDragDrop> *dd_)
 {
     IEventsDragDrop::OnDrop(dd_);
 
-    if(UICanvas *canvas = UICanvas::GetActive(this))
+    if (UICanvas *canvas = UICanvas::GetActive(this))
     {
-        if(UIDragDroppable *dragDroppable = DCAST<UIDragDroppable *>(dd_))
+        if (UIDragDroppable *dragDroppable = DCAST<UIDragDroppable *>(dd_))
         {
-            if(ExplorerItem *expItem =
-                   DCAST<ExplorerItem *>(dragDroppable->GetGameObject()))
+            if (ExplorerItem *expItem =
+                    DCAST<ExplorerItem *>(dragDroppable->GetGameObject()))
             {
-                if(canvas->IsMouseOver(GetInputText()->GetFocusable()))
+                if (canvas->IsMouseOver(GetInputText()->GetFocusable()))
                 {
                     Path draggedPath = expItem->GetPath();
                     bool acceptedFileType =
                         draggedPath.HasExtension(GetExtensions());
-                    if(acceptedFileType)
+                    if (acceptedFileType)
                     {
                         SetPath(draggedPath);
                     }
@@ -156,7 +156,7 @@ void UIInputFile::OnDrop(EventEmitter<IEventsDragDrop> *dd_)
 
 void UIInputFile::SetPath(const Path &path)
 {
-    if(path != GetPath())
+    if (path != GetPath())
     {
         m_path = path;
 
