@@ -6,6 +6,7 @@
 #include "Bang/List.h"
 #include "Bang/String.h"
 #include "Bang/UMap.h"
+#include "Bang/IEventsValueChanged.h"
 #include "BangEditor/BangEditor.h"
 
 namespace Bang
@@ -23,12 +24,20 @@ namespace BangEditor
 {
 class InspectorWidgetTitle;
 
-class InspectorWidget : public GameObject
+class InspectorWidget : public GameObject,
+                        public EventListener<IEventsValueChanged>
 {
     GAMEOBJECT_EDITOR(InspectorWidget);
 
 public:
     virtual void Init();
+
+    void AddLabel(const String &content, int height = -1, int width = -1);
+    void AddWidget(GameObject *widget, int height = DefaultWidgetHeight);
+    void AddWidget(const String &labelContent,
+                   GameObject *widget,
+                   int height = DefaultWidgetHeight);
+    void RemoveWidget(GameObject *widget);
 
     const String &GetTitle() const;
     void SetBackgroundColor(const Color &bgColor);
@@ -50,13 +59,6 @@ protected:
 
     virtual void UpdateFromReference();
 
-    void AddLabel(const String &content, int height = -1, int width = -1);
-    void AddWidget(GameObject *widget, int height = DefaultWidgetHeight);
-    void AddWidget(const String &labelContent,
-                   GameObject *widget,
-                   int height = DefaultWidgetHeight);
-    void RemoveWidget(GameObject *widget);
-
     void SetWidgetEnabled(GameObject *widget, bool enabled);
 
     int GetLabelsWidth() const;
@@ -65,6 +67,9 @@ protected:
 protected:
     virtual InspectorWidgetTitle *CreateTitleGameObject();
     InspectorWidgetTitle *GetInspectorWidgetTitle() const;
+
+    // IEventsValueChanged
+    virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *ee) override;
 
 private:
     int m_labelsWidth = -1;

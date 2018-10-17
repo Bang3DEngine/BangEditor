@@ -7,7 +7,6 @@
 #include "Bang/String.h"
 #include "Bang/Time.h"
 #include "BangEditor/BangEditor.h"
-#include "BangEditor/CIWBehaviour.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
 namespace Bang
@@ -37,16 +36,20 @@ public:
     BehaviourContainer *GetBehaviourContainer() const;
 
 private:
-    UIInputFileWithPreview *p_sourceInputFile = nullptr;
+    mutable BPReflectedStruct m_behaviourReflectStruct;
+    mutable Time m_prevTimeHeaderChanged;
 
-    CIWBehaviourHelper m_ciwBehaviourHelper;
-    Time m_prevTimeHeaderChanged;
+    UIInputFileWithPreview *p_sourceInputFile = nullptr;
 
     CIWBehaviourContainer();
     virtual ~CIWBehaviourContainer() override;
 
     void UpdateFromReflection(const BPReflectedStruct &reflectStruct);
     void UpdateInitializationMetaFromWidgets();
+
+    // ComponentInspectorWidget
+    void OnComponentSet() override;
+    BPReflectedStruct GetComponentReflectStruct() const override;
 
     // ComponentInspectorWidget
     void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;

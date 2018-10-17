@@ -9,7 +9,6 @@
 #include "Bang/EventEmitter.tcc"
 #include "Bang/EventListener.h"
 #include "Bang/IEvents.h"
-#include "Bang/IEventsValueChanged.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SettingsInspectorWidget.h"
 
@@ -26,8 +25,7 @@ namespace BangEditor
 {
 class UIInputVector;
 
-class SIWPhysicsSettings : public SettingsInspectorWidget,
-                           public EventListener<IEventsValueChanged>
+class SIWPhysicsSettings : public SettingsInspectorWidget
 {
 public:
     SIWPhysicsSettings();

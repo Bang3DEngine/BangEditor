@@ -3,7 +3,6 @@
 
 #include "Bang/EventEmitter.h"
 #include "Bang/IEventsResource.h"
-#include "Bang/IEventsValueChanged.h"
 #include "Bang/MetaNode.h"
 #include "Bang/Path.h"
 #include "Bang/Resource.h"
@@ -19,12 +18,11 @@ class UndoRedoSerializableChange;
 
 template <class T>
 class RIWResource : public ResourceInspectorWidget,
-                    public EventListener<IEventsValueChanged>,
                     public EventListener<IEventsResource>
 {
 protected:
     RIWResource() = default;
-    virtual ~RIWResource() = default;
+    virtual ~RIWResource() override = default;
 
     // InspectorWidget
     virtual void InitInnerWidgets() override;

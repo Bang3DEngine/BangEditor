@@ -76,6 +76,8 @@ void SIWPhysicsSettings::UpdateFromReference()
 
 void SIWPhysicsSettings::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 {
+    SettingsInspectorWidget::OnValueChanged(ee);
+
     Physics::GetInstance()->SetStepSleepTime(
         Time::Seconds(p_stepSleepTimeInput->GetValue()));
     Physics::GetInstance()->SetMaxSubSteps(p_maxSubStepsInput->GetValue());

@@ -9,7 +9,6 @@
 #include "Bang/EventEmitter.tcc"
 #include "Bang/EventListener.h"
 #include "Bang/IEvents.h"
-#include "Bang/IEventsValueChanged.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/InspectorWidget.h"
 
@@ -28,8 +27,7 @@ namespace BangEditor
 class AESNode;
 class UIInputFileWithPreview;
 
-class GIWAESNode : public InspectorWidget,
-                   public EventListener<IEventsValueChanged>
+class GIWAESNode : public InspectorWidget
 {
 public:
     GIWAESNode();

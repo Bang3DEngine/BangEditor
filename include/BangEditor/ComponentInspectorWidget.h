@@ -11,13 +11,13 @@
 #include "Bang/EventListener.h"
 #include "Bang/IEvents.h"
 #include "Bang/IEventsFocus.h"
-#include "Bang/IEventsValueChanged.h"
 #include "Bang/MetaNode.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/InspectorWidget.h"
 #include "BangEditor/UIContextMenu.h"
+#include "BangEditor/ReflectWidgetsManager.h"
 
 namespace Bang
 {
@@ -36,8 +36,7 @@ namespace BangEditor
 class MenuItem;
 class UIContextMenu;
 
-class ComponentInspectorWidget : public InspectorWidget,
-                                 public EventListener<IEventsValueChanged>
+class ComponentInspectorWidget : public InspectorWidget
 {
     GAMEOBJECT_EDITOR(InspectorWidget);
 
@@ -64,17 +63,21 @@ protected:
     virtual Color GetComponentIconTint() const;
     virtual void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object);
 
+    virtual void OnComponentSet();
+    virtual bool MustShowEnabledCheckbox() const;
+
+    ReflectWidgetsManager *GetReflectWidgetsManager() const;
+    virtual BPReflectedStruct GetComponentReflectStruct() const;
+
 private:
     Component *p_component = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
+    mutable ReflectWidgetsManager m_reflectWidgetsManager;
 
     // UIContextMenu
     virtual void OnCreateContextMenu(MenuItem *menuRootItem);
 
     void MoveComponent(Component *comp, int offset);
-
-    virtual void OnComponentSet();
-    virtual bool MustShowEnabledCheckbox() const;
 
     // IEventsValueChanged
     virtual void OnValueChanged(

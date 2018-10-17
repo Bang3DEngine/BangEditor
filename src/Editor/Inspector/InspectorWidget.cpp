@@ -248,6 +248,11 @@ InspectorWidgetTitle *InspectorWidget::GetInspectorWidgetTitle() const
     return p_inspectorWidgetTitleGo;
 }
 
+void InspectorWidget::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
+{
+    BANG_UNUSED(ee);
+}
+
 InspectorWidgetTitle::InspectorWidgetTitle()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);

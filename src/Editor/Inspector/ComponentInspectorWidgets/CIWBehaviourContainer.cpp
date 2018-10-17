@@ -23,6 +23,7 @@
 #include "Bang/Path.h"
 #include "BangEditor/CIWBehaviour.h"
 #include "BangEditor/EditorFileTracker.h"
+#include "BangEditor/ReflectWidgetsManager.h"
 #include "BangEditor/UIInputFileWithPreview.h"
 
 namespace Bang
@@ -59,39 +60,22 @@ void CIWBehaviourContainer::InitInnerWidgets()
     SetLabelsWidth(80);
 }
 
-void CIWBehaviourContainer::UpdateFromReflection(
-    const BPReflectedStruct &reflectStruct)
-{
-    // Clear
-    for(GameObject *widget : m_ciwBehaviourHelper.GetWidgets())
-    {
-        RemoveWidget(widget);
-    }
-
-    // Add
-    m_ciwBehaviourHelper.RecreateWidgetsFromReflection(reflectStruct, this);
-    for(GameObject *widget : m_ciwBehaviourHelper.GetWidgets())
-    {
-        String name = m_ciwBehaviourHelper.GetWidgetToReflectedVar()
-                          .Get(widget)
-                          .GetName();
-        AddWidget(name, widget);
-    }
-    m_ciwBehaviourHelper.UpdateWidgetsFromMeta(
-        GetBehaviourContainer()->GetInitializationMeta());
-    UpdateInitializationMetaFromWidgets();
-}
-
 void CIWBehaviourContainer::UpdateInitializationMetaFromWidgets()
 {
-    MetaNode initializationMeta = m_ciwBehaviourHelper.GetMetaFromWidgets();
+    MetaNode initializationMeta = GetReflectWidgetsManager()->GetMetaFromWidgets();
     GetBehaviourContainer()->SetInitializationMeta(initializationMeta);
 }
 
-void CIWBehaviourContainer::UpdateFromReference()
+void CIWBehaviourContainer::OnComponentSet()
 {
-    ComponentInspectorWidget::UpdateFromReference();
+    MetaNode initMeta = GetBehaviourContainer()->GetInitializationMeta();
 
+    ComponentInspectorWidget::OnComponentSet();
+    GetReflectWidgetsManager()->UpdateWidgetsContentFromMeta(initMeta);
+}
+
+BPReflectedStruct CIWBehaviourContainer::GetComponentReflectStruct() const
+{
     Path srcPath = GetBehaviourContainer()->GetSourceFilepath();
     if(srcPath.IsFile())
     {
@@ -102,16 +86,31 @@ void CIWBehaviourContainer::UpdateFromReference()
         {
             Array<BPReflectedStruct> reflStructs =
                 BangPreprocessor::GetReflectStructs(headerPath);
-            m_prevTimeHeaderChanged = timeHeaderChanged;
-            if(reflStructs.Size() >= 1)
+            if (reflStructs.Size() >= 1)
             {
-                UpdateFromReflection(reflStructs.Front());
+                m_behaviourReflectStruct = reflStructs.Front();
             }
+            else
+            {
+                m_behaviourReflectStruct = BPReflectedStruct();
+            }
+            m_prevTimeHeaderChanged = timeHeaderChanged;
         }
+    }
+    return m_behaviourReflectStruct;
+}
 
+void CIWBehaviourContainer::UpdateFromReference()
+{
+    ComponentInspectorWidget::UpdateFromReference();
+
+    Path srcPath = GetBehaviourContainer()->GetSourceFilepath();
+    if(srcPath.IsFile())
+    {
         SetTitle(srcPath.GetName());
         p_sourceInputFile->SetPath(srcPath);
     }
+    UpdateInitializationMetaFromWidgets();
 }
 
 void CIWBehaviourContainer::OnValueChangedCIW(

@@ -12,9 +12,10 @@ AllowShortIfStatementsOnASingleLine: 'false'
 AllowShortLoopsOnASingleLine: 'false'
 AlwaysBreakAfterDefinitionReturnType: None
 AlwaysBreakAfterReturnType: None
-AlwaysBreakBeforeMultilineStrings: 'true'
+AlwaysBreakBeforeMultilineStrings: 'false'
 AlwaysBreakTemplateDeclarations: 'true'
 BinPackParameters: 'false'
+BinPackArguments: 'false'
 BreakBeforeBraces: Allman
 BreakBeforeTernaryOperators: 'true'
 ColumnLimit: '80'
@@ -33,7 +34,7 @@ PointerAlignment: Right
 SortIncludes: 'true'
 # SpaceAfterTemplateKeyword: 'true'
 SpaceBeforeAssignmentOperators: 'true'
-SpaceBeforeParens: Never
+SpaceBeforeParens: Always
 SpaceInEmptyParentheses: 'false'
 SpacesInAngles: 'false'
 SpacesInCStyleCastParentheses: 'false'

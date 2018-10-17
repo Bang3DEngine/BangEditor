@@ -10,7 +10,6 @@
 #include "Bang/EventListener.h"
 #include "Bang/IEvents.h"
 #include "Bang/IEventsFocus.h"
-#include "Bang/IEventsValueChanged.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
@@ -29,8 +28,7 @@ class EventEmitter;
 using namespace Bang;
 namespace BangEditor
 {
-class GameObjectInspectorWidget : public InspectorWidget,
-                                  public EventListener<IEventsValueChanged>
+class GameObjectInspectorWidget : public InspectorWidget
 {
     GAMEOBJECT_EDITOR(GameObjectInspectorWidget);
 

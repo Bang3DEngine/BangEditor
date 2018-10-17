@@ -10,7 +10,6 @@
 #include "Bang/EventListener.h"
 #include "Bang/IEvents.h"
 #include "Bang/IEventsDestroy.h"
-#include "Bang/IEventsValueChanged.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/InspectorWidget.h"
 
@@ -37,8 +36,7 @@ namespace BangEditor
 class AESConnectionLine;
 class UIInputArray;
 
-class GIWAESConnectionLine : public InspectorWidget,
-                             public EventListener<IEventsValueChanged>
+class GIWAESConnectionLine : public InspectorWidget
 {
 public:
     GIWAESConnectionLine();

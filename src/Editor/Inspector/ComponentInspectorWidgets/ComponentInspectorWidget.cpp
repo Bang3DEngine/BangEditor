@@ -46,6 +46,7 @@ void ComponentInspectorWidget::InitInnerWidgets()
         ->GetEnabledCheckBox()
         ->GetGameObject()
         ->SetEnabled(MustShowEnabledCheckbox());
+
     GetInspectorWidgetTitle()
         ->GetEnabledCheckBox()
         ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
@@ -55,6 +56,12 @@ void ComponentInspectorWidget::UpdateFromReference()
 {
     GetInspectorWidgetTitle()->GetEnabledCheckBox()->SetChecked(
         GetComponent()->IsEnabled());
+
+    BPReflectedStruct reflectStruct = GetComponentReflectStruct();
+    m_reflectWidgetsManager.UpdateWidgetsFromReflection(reflectStruct, this);
+
+    MetaNode componentMeta = GetComponent()->GetMeta();
+    m_reflectWidgetsManager.UpdateWidgetsContentFromMeta(componentMeta);
 }
 
 void ComponentInspectorWidget::SetComponent(Component *comp)
@@ -66,7 +73,6 @@ void ComponentInspectorWidget::SetComponent(Component *comp)
     icon->SetImageTexture(GetComponentIconTexture());
     icon->SetTint(GetComponentIconTint());
     OnComponentSet();
-    Update();
 }
 
 Component *ComponentInspectorWidget::GetComponent() const
@@ -97,6 +103,9 @@ void ComponentInspectorWidget::OnValueChangedCIW(
         GetComponent()->SetEnabled(
             GetInspectorWidgetTitle()->GetEnabledCheckBox()->IsChecked());
     }
+
+    MetaNode meta = m_reflectWidgetsManager.GetMetaFromWidgets();
+    GetComponent()->ImportMeta(meta);
 }
 
 void ComponentInspectorWidget::OnValueChanged(
@@ -232,10 +241,32 @@ void ComponentInspectorWidget::MoveComponent(Component *comp, int offset)
 
 void ComponentInspectorWidget::OnComponentSet()
 {
-    // Empty
+    EventListener<IEventsValueChanged>::SetReceiveEvents(false);
+
+    BPReflectedStruct reflectStruct = GetComponentReflectStruct();
+    m_reflectWidgetsManager.UpdateWidgetsFromReflection(reflectStruct, this);
+
+    UpdateFromReference();
+
+    EventListener<IEventsValueChanged>::SetReceiveEvents(true);
 }
 
 bool ComponentInspectorWidget::MustShowEnabledCheckbox() const
 {
     return true;
+}
+
+ReflectWidgetsManager *ComponentInspectorWidget::GetReflectWidgetsManager() const
+{
+    return &m_reflectWidgetsManager;
+}
+
+BPReflectedStruct ComponentInspectorWidget::GetComponentReflectStruct() const
+{
+    BPReflectedStruct reflectStruct;
+    if (GetComponent())
+    {
+        reflectStruct = GetComponent()->GetReflectionInfo();
+    }
+    return reflectStruct;
 }

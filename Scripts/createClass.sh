@@ -43,8 +43,9 @@ echo "\
 #include \"Bang/Bang.h\"
 #include \"BangEditor/BangEditor.h\"
 
-USING_NAMESPACE_BANG
-NAMESPACE_BANG_EDITOR_BEGIN
+using namespace Bang;
+namespace BangEditor
+{
 
 class ${CLASS_NAME}
 {
@@ -53,7 +54,7 @@ public:
 	virtual ~${CLASS_NAME}();
 };
 
-NAMESPACE_BANG_EDITOR_END
+}
 
 #endif // ${CLASS_INC}
 " > "${CLASS_HEADER}"
@@ -61,8 +62,8 @@ NAMESPACE_BANG_EDITOR_END
 echo "\
 #include \"BangEditor/${CLASS_NAME}.h\"
 
-USING_NAMESPACE_BANG
-USING_NAMESPACE_BANG_EDITOR
+using namespace Bang;
+using namespace BangEditor;
 
 ${CLASS_NAME}::${CLASS_NAME}()
 {

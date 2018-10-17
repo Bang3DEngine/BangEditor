@@ -137,6 +137,8 @@ void RIWResource<T>::UpdateFromFileWhenChanged()
 template <class T>
 void RIWResource<T>::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
 {
+    ResourceInspectorWidget::OnValueChanged(object);
+
     if(GetResource())
     {
         BeginUndoRedo();
