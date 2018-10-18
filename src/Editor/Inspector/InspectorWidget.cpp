@@ -86,6 +86,11 @@ void InspectorWidget::SetBackgroundColor(const Color &bgColor)
     p_bgRenderer->SetTint(bgColor);
 }
 
+const UMap<GameObject *, UILabel *> &InspectorWidget::GetWidgetToLabel() const
+{
+    return m_widgetToLabel;
+}
+
 void InspectorWidget::SetTitle(const String &title)
 {
     p_inspectorWidgetTitleGo->GetText()->SetContent(title);

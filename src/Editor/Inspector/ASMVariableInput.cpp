@@ -54,7 +54,7 @@ ASMVariableInput::ASMVariableInput()
     p_varTypeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     GameObject *varInputGo = GameObjectFactory::CreateUIGameObject();
-    UIHorizontalLayout *varHL = varInputGo->AddComponent<UIHorizontalLayout>();
+    varInputGo->AddComponent<UIHorizontalLayout>();
     UILayoutElement *varInputLE = varInputGo->AddComponent<UILayoutElement>();
     varInputLE->SetFlexibleWidth(1.0f);
     varInputLE->SetMinWidth(40);

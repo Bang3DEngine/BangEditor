@@ -37,7 +37,10 @@ void UndoRedoManager::Undo()
     if (UndoRedoManager::CanUndo())
     {
         UndoRedoManager *urm = UndoRedoManager::GetInstance();
-        const Array<UndoRedoAction *> &actions = urm->m_undoActions.Front();
+        const Array<UndoRedoAction *> actions = urm->m_undoActions.Front();
+
+        urm->m_redoActions.PushFront(actions);
+        urm->m_undoActions.PopFront();
 
         urm->m_undoingOrRedoing = true;
         for (UndoRedoAction *action : actions)
@@ -47,9 +50,6 @@ void UndoRedoManager::Undo()
                 &IEventsUndoRedo::OnUndo, action);
         }
         urm->m_undoingOrRedoing = false;
-
-        urm->m_redoActions.PushFront(actions);
-        urm->m_undoActions.PopFront();
 
         if (urm->m_redoActions.Size() > UndoRedoManager::UndoListSize)
         {
@@ -130,7 +130,6 @@ void UndoRedoManager::PushActionsInSameStep(
 {
     UndoRedoManager *urm = UndoRedoManager::GetInstance();
     ASSERT(urm);
-    ASSERT(!urm->m_undoingOrRedoing);
 
     bool allStepsRedundant = true;
     for (UndoRedoAction *pushedAction : actionsInSameStep)

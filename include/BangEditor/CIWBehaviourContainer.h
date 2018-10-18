@@ -17,6 +17,7 @@ class IEventsValueChanged;
 class UIInputFileWithPreview;
 template <class>
 class EventEmitter;
+class UIButton;
 }
 
 using namespace Bang;
@@ -36,16 +37,14 @@ public:
     BehaviourContainer *GetBehaviourContainer() const;
 
 private:
-    mutable ReflectStruct m_behaviourReflectStruct;
-    mutable Time m_prevTimeHeaderChanged;
-
     UIInputFileWithPreview *p_sourceInputFile = nullptr;
+    UIButton *p_resetValuesButton = nullptr;
 
     CIWBehaviourContainer();
     virtual ~CIWBehaviourContainer() override;
 
     void UpdateFromReflection(const ReflectStruct &reflectStruct);
-    void UpdateInitializationMetaFromWidgets();
+    void UpdateModifiedInitializationMetaFromWidget(GameObject *widget);
 
     // ComponentInspectorWidget
     void OnComponentSet() override;

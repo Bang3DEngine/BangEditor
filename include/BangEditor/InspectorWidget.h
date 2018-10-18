@@ -43,6 +43,7 @@ public:
 
     const String &GetTitle() const;
     void SetBackgroundColor(const Color &bgColor);
+    const UMap<GameObject *, UILabel *> &GetWidgetToLabel() const;
 
 protected:
     static constexpr int DefaultLabelWidth = 50;

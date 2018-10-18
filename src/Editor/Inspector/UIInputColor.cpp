@@ -44,6 +44,8 @@ UIInputColor::UIInputColor()
     UILayoutElement *colorImgLE = colorImgCont->AddComponent<UILayoutElement>();
     colorImgLE->SetFlexibleWidth(1.0f);
 
+    GameObjectFactory::AddOuterBorder(colorImgCont);
+
     p_bgCheckerboardImage = colorImgCont->AddComponent<UIImageRenderer>();
     p_bgCheckerboardImage->SetImageTexture(TextureFactory::GetCheckerboard());
     p_bgCheckerboardImage->GetMaterial()->SetAlbedoUvMultiply(Vector2(1, 1));

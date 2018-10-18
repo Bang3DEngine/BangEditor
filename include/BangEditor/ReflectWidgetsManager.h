@@ -28,6 +28,7 @@ public:
                                      InspectorWidget *inspectorWidget);
     void UpdateWidgetsContentFromMeta(const MetaNode &meta);
 
+    MetaNode GetMetaFromWidget(GameObject *widget) const;
     MetaNode GetMetaFromWidgets() const;
 
     const Map<GameObject *, ReflectVariable> &GetWidgetToReflectedVar() const;
