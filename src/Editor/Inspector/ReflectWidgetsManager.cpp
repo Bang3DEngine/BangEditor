@@ -34,14 +34,14 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
         {
             GameObject *widgetToAdd = nullptr;
             String widgetName = reflVar.GetName();
-            if (reflVar.GetType() == ReflectVariable::Type::FLOAT ||
-                reflVar.GetType() == ReflectVariable::Type::DOUBLE ||
-                reflVar.GetType() == ReflectVariable::Type::INT)
+            if (reflVar.GetVariant().GetType() == Variant::Type::FLOAT ||
+                reflVar.GetVariant().GetType() == Variant::Type::DOUBLE ||
+                reflVar.GetVariant().GetType() == Variant::Type::INT)
             {
                 UIInputNumber *inputNumber =
                     GameObjectFactory::CreateUIInputNumber();
                 inputNumber->SetValue(String::ToFloat(reflVar.GetInitValue()));
-                if (reflVar.GetType() == ReflectVariable::Type::INT)
+                if (reflVar.GetVariant().GetType() == Variant::Type::INT)
                 {
                     inputNumber->SetDecimalPlaces(0);
                 }
@@ -50,7 +50,7 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
                         inspectorWidget);
                 widgetToAdd = inputNumber->GetGameObject();
             }
-            else if (reflVar.GetType() == ReflectVariable::Type::BOOL)
+            else if (reflVar.GetVariant().GetType() == Variant::Type::BOOL)
             {
                 UICheckBox *checkBox = GameObjectFactory::CreateUICheckBox();
                 checkBox->SetChecked(
@@ -59,7 +59,7 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
                     inspectorWidget);
                 widgetToAdd = checkBox->GetGameObject();
             }
-            else if (reflVar.GetType() == ReflectVariable::Type::STRING)
+            else if (reflVar.GetVariant().GetType() == Variant::Type::STRING)
             {
                 UIInputText *inputText = GameObjectFactory::CreateUIInputText();
                 inputText->GetText()->SetContent(reflVar.GetInitValue());
@@ -67,17 +67,19 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
                     inspectorWidget);
                 widgetToAdd = inputText->GetGameObject();
             }
-            else if (reflVar.GetType() == ReflectVariable::Type::VECTOR2 ||
-                     reflVar.GetType() == ReflectVariable::Type::VECTOR3 ||
-                     reflVar.GetType() == ReflectVariable::Type::VECTOR4 ||
-                     reflVar.GetType() == ReflectVariable::Type::QUATERNION)
+            else if (reflVar.GetVariant().GetType() == Variant::Type::VECTOR2 ||
+                     reflVar.GetVariant().GetType() == Variant::Type::VECTOR3 ||
+                     reflVar.GetVariant().GetType() == Variant::Type::VECTOR4 ||
+                     reflVar.GetVariant().GetType() ==
+                         Variant::Type::QUATERNION)
             {
                 int numComps = 4;
-                if (reflVar.GetType() == ReflectVariable::Type::VECTOR2)
+                if (reflVar.GetVariant().GetType() == Variant::Type::VECTOR2)
                 {
                     numComps = 2;
                 }
-                else if (reflVar.GetType() == ReflectVariable::Type::VECTOR3)
+                else if (reflVar.GetVariant().GetType() ==
+                         Variant::Type::VECTOR3)
                 {
                     numComps = 3;
                 }
@@ -88,7 +90,7 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
                     inspectorWidget);
                 widgetToAdd = inputVec;
             }
-            else if (reflVar.GetType() == ReflectVariable::Type::COLOR)
+            else if (reflVar.GetVariant().GetType() == Variant::Type::COLOR)
             {
                 UIInputColor *inputColor = GameObject::Create<UIInputColor>();
                 inputColor->SetColor(Color::White);
