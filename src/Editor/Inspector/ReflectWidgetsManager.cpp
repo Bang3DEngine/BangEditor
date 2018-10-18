@@ -99,9 +99,12 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
                 widgetToAdd = inputColor;
             }
 
-            m_varNameToWidget.Add(reflVar.GetName(), widgetToAdd);
-            m_widgetToReflectedVar.Add(widgetToAdd, reflVar);
-            m_widgets.PushBack(widgetToAdd);
+            if (widgetToAdd)
+            {
+                m_varNameToWidget.Add(reflVar.GetName(), widgetToAdd);
+                m_widgetToReflectedVar.Add(widgetToAdd, reflVar);
+                m_widgets.PushBack(widgetToAdd);
+            }
         }
 
         // Add reflect widgets

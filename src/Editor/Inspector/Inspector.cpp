@@ -239,8 +239,7 @@ void Inspector::ShowGameObject(GameObject *go)
     GetCurrentGameObject()->EventEmitter<IEventsDestroy>::RegisterListener(
         this);
 
-    GameObjectInspectorWidget *giw =
-        new GameObjectInspectorWidget();
+    GameObjectInspectorWidget *giw = new GameObjectInspectorWidget();
     giw->Init();
     giw->SetGameObject(go);
     AddWidget(giw, 0);

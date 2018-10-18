@@ -398,8 +398,7 @@ UIEventResult AESNode::OnUIEvent(UIFocusable *, const UIEvent &event)
             GameObjectFactory::MakeBorderFocused(p_border);
             if (Inspector *insp = Inspector::GetActive())
             {
-                GIWAESNode *aesNodeInspWidget =
-                    new GIWAESNode();
+                GIWAESNode *aesNodeInspWidget = new GIWAESNode();
                 aesNodeInspWidget->SetAESNode(this);
                 aesNodeInspWidget->Init();
                 insp->ShowInspectorWidget(aesNodeInspWidget);

@@ -65,8 +65,7 @@ void CIWAnimator::InitInnerWidgets()
 
 UIInputFileWithPreview *CIWAnimator::CreateAnimationEntry()
 {
-    UIInputFileWithPreview *entry =
-        new UIInputFileWithPreview();
+    UIInputFileWithPreview *entry = new UIInputFileWithPreview();
     entry->SetExtensions({Extensions::GetAnimationExtension()});
     entry->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     entry->SetZoomable(false);
