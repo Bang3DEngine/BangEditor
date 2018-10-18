@@ -53,9 +53,9 @@ RotateGizmo::RotateGizmo()
     p_sphereGo->SetParent(this);
     p_sphereBoundsGo->SetParent(this);
 
-    p_axisX = GameObject::Create<RotateGizmoAxis>();
-    p_axisY = GameObject::Create<RotateGizmoAxis>();
-    p_axisZ = GameObject::Create<RotateGizmoAxis>();
+    p_axisX = new RotateGizmoAxis();
+    p_axisY = new RotateGizmoAxis();
+    p_axisZ = new RotateGizmoAxis();
 
     p_axisX->SetAxis(Axis3DExt::X);
     p_axisY->SetAxis(Axis3DExt::Y);

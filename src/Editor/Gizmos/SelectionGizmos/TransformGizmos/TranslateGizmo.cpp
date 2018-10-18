@@ -13,9 +13,9 @@ TranslateGizmo::TranslateGizmo()
 {
     AddComponent<Transform>();
 
-    p_axisX = GameObject::Create<TranslateGizmoAxis>();
-    p_axisY = GameObject::Create<TranslateGizmoAxis>();
-    p_axisZ = GameObject::Create<TranslateGizmoAxis>();
+    p_axisX = new TranslateGizmoAxis();
+    p_axisY = new TranslateGizmoAxis();
+    p_axisZ = new TranslateGizmoAxis();
 
     p_axisX->SetAxis(Axis3DExt::X);
     p_axisY->SetAxis(Axis3DExt::Y);

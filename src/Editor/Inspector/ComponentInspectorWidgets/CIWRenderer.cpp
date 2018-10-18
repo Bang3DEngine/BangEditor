@@ -61,7 +61,7 @@ void CIWRenderer::InitInnerWidgets()
     p_useReflectionProbesCheckBox
         ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_materialInputFile = GameObject::Create<UIInputFileWithPreview>();
+    p_materialInputFile = new UIInputFileWithPreview();
     p_materialInputFile->SetExtensions({Extensions::GetMaterialExtension()});
     p_materialInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);

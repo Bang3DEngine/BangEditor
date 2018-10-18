@@ -42,7 +42,7 @@ void SIWPhysicsSettings::InitInnerWidgets()
     p_maxSubStepsInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 
-    p_gravityInput = GameObject::Create<UIInputVector>();
+    p_gravityInput = new UIInputVector();
     p_gravityInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     AddWidget("Step sleep time (s)", p_stepSleepTimeInput->GetGameObject());

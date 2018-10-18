@@ -25,13 +25,14 @@ class CIWTransform : public ComponentInspectorWidget
     GAMEOBJECT_EDITOR(CIWTransform);
 
 public:
+    CIWTransform() = default;
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
 
 protected:
-    CIWTransform() = default;
-    virtual ~CIWTransform() = default;
+    virtual ~CIWTransform() override = default;
 
     virtual bool CanBeRemovedFromContextMenu() const override;
 

@@ -36,6 +36,8 @@ public:
         SEPARATOR
     };
 
+    MenuItem(MenuItemType itemType = MenuItemType::NORMAL);
+
     // GameObject
     void Update() override;
 
@@ -71,7 +73,6 @@ public:
         std::function<void(MenuItem *selectedItem)> selectedCallback);
 
 protected:
-    MenuItem(MenuItemType itemType = MenuItemType::NORMAL);
     virtual ~MenuItem() override;
 
 private:

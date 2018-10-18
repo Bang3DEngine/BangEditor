@@ -73,7 +73,7 @@ AnimatorSMEditor::AnimatorSMEditor()
         nodesSceneLE->SetMinSize(Vector2i(200));
         nodesSceneLE->SetFlexibleSize(Vector2(3.0f, 1.0f));
 
-        p_animatorEditorScene = GameObject::Create<AnimatorSMEditorScene>();
+        p_animatorEditorScene = new AnimatorSMEditorScene();
         p_animatorEditorScene->SetParent(animatorEditorSceneContainer);
     }
 
@@ -96,9 +96,9 @@ AnimatorSMEditor::AnimatorSMEditor()
         GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5)
             ->SetParent(inspectorContainer);
 
-        p_variablesInput = GameObject::Create<UIInputArray>();
+        p_variablesInput = new UIInputArray();
         p_variablesInput->SetCreateNewRowGameObjectFunction([]() {
-            ASMVariableInput *varInput = GameObject::Create<ASMVariableInput>();
+            ASMVariableInput *varInput = new ASMVariableInput();
             return varInput;
         });
         p_variablesInput->EventEmitter<IEventsValueChanged>::RegisterListener(

@@ -89,7 +89,7 @@ void UITabContainer::AddTab(const String &title,
 {
     if (!GetTabbedChildren().Contains(tabbedChild))
     {
-        UITabHeader *tabHeader = GameObject::Create<UITabHeader>();
+        UITabHeader *tabHeader = new UITabHeader();
         tabHeader->SetTitle(title);
         tabHeader->SetTabbedChild(tabbedChild);
         AddTabByTabHeader(tabHeader, index);

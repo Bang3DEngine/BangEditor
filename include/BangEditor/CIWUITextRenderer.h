@@ -29,6 +29,8 @@ class CIWUITextRenderer : public ComponentInspectorWidget
     GAMEOBJECT_EDITOR(CIWUITextRenderer);
 
 public:
+    CIWUITextRenderer() = default;
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
@@ -47,7 +49,6 @@ private:
     UIComboBox *p_verticalAlignmentInput = nullptr;
     UIInputFileWithPreview *p_fontFileInput = nullptr;
 
-    CIWUITextRenderer() = default;
     virtual ~CIWUITextRenderer() = default;
 };
 }

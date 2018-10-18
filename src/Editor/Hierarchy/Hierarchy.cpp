@@ -500,7 +500,7 @@ void Hierarchy::AddGameObject(GameObject *go)
     {
         bool topItem = (go->GetScene() == go->GetParent());
 
-        HierarchyItem *hItem = GameObject::Create<HierarchyItem>();
+        HierarchyItem *hItem = new HierarchyItem();
         hItem->SetReferencedGameObject(go);
 
         // Get index inside parent, without counting hidden ones

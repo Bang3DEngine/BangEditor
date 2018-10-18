@@ -24,6 +24,8 @@ class CIWDirectionalLight : public CIWLight
     GAMEOBJECT_EDITOR(CIWDirectionalLight);
 
 public:
+    CIWDirectionalLight() = default;
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
@@ -36,7 +38,6 @@ private:
     // ComponentInspectorWidget
     void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 
-    CIWDirectionalLight() = default;
     virtual ~CIWDirectionalLight() override = default;
 };
 }

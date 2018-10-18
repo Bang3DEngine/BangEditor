@@ -36,13 +36,14 @@ class UIInputColor : public GameObject,
     GAMEOBJECT_EDITOR(UIInputColor);
 
 public:
+    UIInputColor();
+
     void SetColor(const Color &color);
 
     const Color &GetColor() const;
     bool HasFocus() const;
 
 protected:
-    UIInputColor();
     virtual ~UIInputColor() override;
 
     // GameObject

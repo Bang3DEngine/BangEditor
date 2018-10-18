@@ -32,13 +32,14 @@ class RIWAnimatorStateMachine : public RIWResource<AnimatorStateMachine>
     GAMEOBJECT_EDITOR(RIWAnimatorStateMachine);
 
 public:
+    RIWAnimatorStateMachine();
+
     // InspectorWidget
     void Init() override;
 
 private:
     UIButton *p_openInEditorButton = nullptr;
 
-    RIWAnimatorStateMachine();
     virtual ~RIWAnimatorStateMachine() override;
 
     // RIWResource

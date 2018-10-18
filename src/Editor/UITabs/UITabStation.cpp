@@ -78,7 +78,7 @@ UITabStation::UITabStation()
         p_separators[s]->GetGameObject()->SetEnabled(false);
     }
 
-    p_tabContainer = GameObject::Create<UITabContainer>();
+    p_tabContainer = new UITabContainer();
 
     p_tabStationGos[SCAST<int>(Side::LEFT)]->SetParent(this);
     p_separators[SCAST<int>(Side::LEFT)]->GetGameObject()->SetParent(this);
@@ -113,7 +113,7 @@ UITabStation *UITabStation::GetChildStationAndCreateIfNeeded(Side side)
     int s = SCAST<int>(side);
     if (!p_tabStations[s])
     {
-        p_tabStations[s] = GameObject::Create<UITabStation>();
+        p_tabStations[s] = new UITabStation();
         UITabStation *tabStation = p_tabStations[s];
         p_separators[s]->GetGameObject()->SetEnabled(true);
         p_tabStationGos[s]->SetEnabled(true);

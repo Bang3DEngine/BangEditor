@@ -26,6 +26,8 @@ class CIWUIImageRenderer : public ComponentInspectorWidget
     GAMEOBJECT_EDITOR(CIWUIImageRenderer);
 
 public:
+    CIWUIImageRenderer();
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
@@ -40,7 +42,6 @@ private:
     UIInputColor *p_tintInput = nullptr;
     UIInputTexture *p_imageInput = nullptr;
 
-    CIWUIImageRenderer();
     virtual ~CIWUIImageRenderer() override;
 };
 }

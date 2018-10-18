@@ -39,7 +39,7 @@ void CIWAudioSource::InitInnerWidgets()
     SetName("CIWAudioSource");
     SetTitle("AudioSource");
 
-    p_audioClipFileInput = GameObject::Create<UIInputFileWithPreview>();
+    p_audioClipFileInput = new UIInputFileWithPreview();
     p_audioClipFileInput->SetExtensions(Extensions::GetAudioClipExtensions());
     p_audioClipFileInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);

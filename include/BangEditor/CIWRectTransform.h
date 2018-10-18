@@ -25,6 +25,8 @@ class CIWRectTransform : public CIWTransform
     GAMEOBJECT_EDITOR(CIWRectTransform);
 
 public:
+    CIWRectTransform() = default;
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
@@ -49,7 +51,6 @@ private:
 
     UIInputVector *p_pivotPositionInput = nullptr;
 
-    CIWRectTransform() = default;
     virtual ~CIWRectTransform() override = default;
 };
 }

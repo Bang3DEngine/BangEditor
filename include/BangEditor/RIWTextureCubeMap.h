@@ -36,6 +36,8 @@ class RIWTextureCubeMap : public RIWResource<TextureCubeMap>
     GAMEOBJECT_EDITOR(RIWTextureCubeMap);
 
 public:
+    RIWTextureCubeMap();
+
     // InspectorWidget
     void Init() override;
 
@@ -49,7 +51,6 @@ private:
     UITextureCubeMapPreviewer *p_textureCMPreviewer = nullptr;
     UILabel *p_warningLabel = nullptr;
 
-    RIWTextureCubeMap();
     virtual ~RIWTextureCubeMap() override;
 
     TextureCubeMap *GetTextureCubeMap() const;

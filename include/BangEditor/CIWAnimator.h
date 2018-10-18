@@ -27,6 +27,8 @@ class CIWAnimator : public ComponentInspectorWidget
     GAMEOBJECT_EDITOR(CIWAnimator);
 
 public:
+    CIWAnimator();
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
 
@@ -37,7 +39,6 @@ private:
     UICheckBox *p_playOnStartInput = nullptr;
     UIInputFileWithPreview *p_animatorSMInput = nullptr;
 
-    CIWAnimator();
     virtual ~CIWAnimator() override;
 
     UIInputFileWithPreview *CreateAnimationEntry();

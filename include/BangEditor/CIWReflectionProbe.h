@@ -33,6 +33,8 @@ class CIWReflectionProbe : public ComponentInspectorWidget
     GAMEOBJECT_EDITOR(CIWReflectionProbe);
 
 public:
+    CIWReflectionProbe();
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
@@ -54,7 +56,6 @@ private:
 
     UITextureCubeMapPreviewer *p_previewCMRenderer = nullptr;
 
-    CIWReflectionProbe();
     virtual ~CIWReflectionProbe() override;
 
     ReflectionProbe *GetReflectionProbe() const;

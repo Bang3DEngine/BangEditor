@@ -52,7 +52,7 @@ void RIWMesh::Init()
     meshPreviewGo->GetRectTransform()->SetAnchors(Vector2::Zero);
     meshPreviewGo->GetRectTransform()->SetPivotPosition(Vector2::Zero);
 
-    p_meshPreviewViewer = GameObject::Create<PreviewViewer>();
+    p_meshPreviewViewer = new PreviewViewer();
 
     p_numVertices = GameObjectFactory::CreateUIInputNumber();
     p_numVertices->SetDecimalPlaces(0);

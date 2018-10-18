@@ -37,7 +37,7 @@ void UIContextMenu::ShowMenu()
 
     // if (!IsMenuBeingShown())
     {
-        p_menu = GameObject::Create<ContextMenu>();
+        p_menu = new ContextMenu();
         p_menu->EventEmitter<IEventsDestroy>::RegisterListener(this);
 
         if (m_createContextMenuCallback)
@@ -110,7 +110,7 @@ ContextMenu::ContextMenu()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
-    p_rootItem = GameObject::Create<MenuItem>(MenuItem::MenuItemType::ROOT);
+    p_rootItem = new MenuItem(MenuItem::MenuItemType::ROOT);
 
     RectTransform *rt = GetRootItem()->GetRectTransform();
     Vector2 mousePosNDC = Input::GetMousePositionNDC();

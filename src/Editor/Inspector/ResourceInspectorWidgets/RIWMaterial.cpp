@@ -58,42 +58,42 @@ void RIWMaterial::Init()
     SetName("RIWMaterial");
     SetTitle("Material");
 
-    p_albedoTextureInput = GameObject::Create<UIInputTexture>();
+    p_albedoTextureInput = new UIInputTexture();
     p_albedoTextureInput->SetExtensions(Extensions::GetImageExtensions());
     p_albedoTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 
-    p_albedoUvMultiplyInput = GameObject::Create<UIInputVector>();
+    p_albedoUvMultiplyInput = new UIInputVector();
     p_albedoUvMultiplyInput->SetSize(2);
     p_albedoUvMultiplyInput
         ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_albedoUvOffsetInput = GameObject::Create<UIInputVector>();
+    p_albedoUvOffsetInput = new UIInputVector();
     p_albedoUvOffsetInput->SetSize(2);
     p_albedoUvOffsetInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 
-    p_roughnessTextureInput = GameObject::Create<UIInputTexture>();
+    p_roughnessTextureInput = new UIInputTexture();
     p_roughnessTextureInput->SetExtensions(Extensions::GetImageExtensions());
     p_roughnessTextureInput
         ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_metalnessTextureInput = GameObject::Create<UIInputTexture>();
+    p_metalnessTextureInput = new UIInputTexture();
     p_metalnessTextureInput->SetExtensions(Extensions::GetImageExtensions());
     p_metalnessTextureInput
         ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_normalMapTextureInput = GameObject::Create<UIInputTexture>();
+    p_normalMapTextureInput = new UIInputTexture();
     p_normalMapTextureInput->SetExtensions(Extensions::GetImageExtensions());
     p_normalMapTextureInput
         ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_normalMapUvMultiplyInput = GameObject::Create<UIInputVector>();
+    p_normalMapUvMultiplyInput = new UIInputVector();
     p_normalMapUvMultiplyInput->SetSize(2);
     p_normalMapUvMultiplyInput
         ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_normalMapUvOffsetInput = GameObject::Create<UIInputVector>();
+    p_normalMapUvOffsetInput = new UIInputVector();
     p_normalMapUvOffsetInput->SetSize(2);
     p_normalMapUvOffsetInput
         ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
@@ -102,7 +102,7 @@ void RIWMaterial::Init()
     p_normalMapMultiplyFactorInput
         ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_albedoColorInput = GameObject::Create<UIInputColor>();
+    p_albedoColorInput = new UIInputColor();
     p_albedoColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 
@@ -155,13 +155,13 @@ void RIWMaterial::Init()
     p_neededUniformsInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 
-    p_vertexShaderInput = GameObject::Create<UIInputFileWithPreview>();
+    p_vertexShaderInput = new UIInputFileWithPreview();
     p_vertexShaderInput->SetExtensions(Extensions::GetVertexShaderExtensions());
     p_vertexShaderInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
     p_vertexShaderInput->SetZoomable(false);
 
-    p_fragmentShaderInput = GameObject::Create<UIInputFileWithPreview>();
+    p_fragmentShaderInput = new UIInputFileWithPreview();
     p_fragmentShaderInput->SetExtensions(
         Extensions::GetFragmentShaderExtensions());
     p_fragmentShaderInput->EventEmitter<IEventsValueChanged>::RegisterListener(
@@ -184,7 +184,7 @@ void RIWMaterial::Init()
     p_renderWireframe->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 
-    p_materialPreviewViewer = GameObject::Create<PreviewViewer>();
+    p_materialPreviewViewer = new PreviewViewer();
 
     AddWidget(p_materialPreviewViewer, 256);
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 10);

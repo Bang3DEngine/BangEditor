@@ -32,6 +32,8 @@ class CIWParticleSystem : public CIWRenderer
     GAMEOBJECT_EDITOR(CIWParticleSystem);
 
 public:
+    CIWParticleSystem() = default;
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
@@ -61,7 +63,6 @@ protected:
     UIInputNumber *p_gravityMultiplierInput = nullptr;
     UIInputNumber *p_initialVelocityMultiplier = nullptr;
 
-    CIWParticleSystem() = default;
     virtual ~CIWParticleSystem() override = default;
 
     void EnableOnlyNeededWidgets();

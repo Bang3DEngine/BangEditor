@@ -32,6 +32,8 @@ public:
         CENTER
     };
 
+    RectTransformCornerSelectionGizmo();
+
     // GameObject
     void Update() override;
     void Render(RenderPass renderPass, bool renderChildren) override;
@@ -55,7 +57,6 @@ private:
     UIImageRenderer *p_cornerRenderer = nullptr;
     UIImageRenderer *p_selectionRenderer = nullptr;
 
-    RectTransformCornerSelectionGizmo();
     virtual ~RectTransformCornerSelectionGizmo() override;
 
     void UpdateBasedOnCornerSide();

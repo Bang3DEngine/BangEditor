@@ -27,6 +27,8 @@ class MenuBar : public GameObject
     GAMEOBJECT_EDITOR(MenuBar);
 
 public:
+    MenuBar();
+
     void Update() override;
 
     MenuItem *AddItem();
@@ -46,7 +48,6 @@ public:
     }
 
 protected:
-    MenuBar();
     virtual ~MenuBar() override;
 
 private:

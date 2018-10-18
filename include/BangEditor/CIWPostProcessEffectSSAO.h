@@ -27,6 +27,8 @@ class CIWPostProcessEffectSSAO : public ComponentInspectorWidget
     GAMEOBJECT_EDITOR(CIWPostProcessEffectSSAO);
 
 public:
+    CIWPostProcessEffectSSAO();
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
@@ -44,7 +46,6 @@ private:
     UICheckBox *p_bilateralBlurInput = nullptr;
     UICheckBox *p_separableInput = nullptr;
 
-    CIWPostProcessEffectSSAO();
     virtual ~CIWPostProcessEffectSSAO() override;
 
     PostProcessEffectSSAO *GetPostProcessEffectSSAO() const;

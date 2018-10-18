@@ -24,6 +24,8 @@ class CIWMeshRenderer : public CIWRenderer
     GAMEOBJECT_EDITOR(CIWMeshRenderer);
 
 public:
+    CIWMeshRenderer() = default;
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
@@ -31,7 +33,6 @@ public:
 protected:
     UIInputFileWithPreview *p_meshInputFile = nullptr;
 
-    CIWMeshRenderer() = default;
     virtual ~CIWMeshRenderer() override = default;
 
     MeshRenderer *GetMeshRenderer() const;

@@ -14,8 +14,8 @@ using namespace BangEditor;
 
 EditSceneGameObjects::EditSceneGameObjects()
 {
-    m_editorFloor = GameObject::Create<EditorFloor>();
-    m_editorCamera = GameObject::Create<EditorCamera>();
+    m_editorFloor = new EditorFloor();
+    m_editorCamera = new EditorCamera();
     m_gizmosManager = new GizmosManager();
 }
 

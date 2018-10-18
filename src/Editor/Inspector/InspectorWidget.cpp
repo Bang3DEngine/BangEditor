@@ -239,7 +239,7 @@ GameObject *InspectorWidget::GetWidgetsContainer() const
 InspectorWidgetTitle *InspectorWidget::CreateTitleGameObject()
 {
     InspectorWidgetTitle *widgetTitleGo =
-        GameObject::Create<InspectorWidgetTitle>();
+        new InspectorWidgetTitle();
     return widgetTitleGo;
 }
 

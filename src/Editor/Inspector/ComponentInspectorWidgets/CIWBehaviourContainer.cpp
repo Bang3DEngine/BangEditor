@@ -49,7 +49,7 @@ void CIWBehaviourContainer::InitInnerWidgets()
     SetName("CIWBehaviourContainer");
     SetTitle("Behaviour");
 
-    p_sourceInputFile = GameObject::Create<UIInputFileWithPreview>();
+    p_sourceInputFile = new UIInputFileWithPreview();
     p_sourceInputFile->SetExtensions(Extensions::GetSourceFileExtensions());
     p_sourceInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);

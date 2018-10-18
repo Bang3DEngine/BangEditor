@@ -31,6 +31,8 @@ class UITabContainer : public GameObject,
     GAMEOBJECT_EDITOR(UITabContainer);
 
 public:
+    UITabContainer();
+
     void AddTab(const String &title, GameObject *tabbedChild, uint index = -1u);
     void AddTabByTabHeader(UITabHeader *tabHeader, uint index = -1u);
     void RemoveTab(GameObject *tabbedChild, bool destroy = true);
@@ -64,7 +66,6 @@ private:
     UITabHeader *GetTabHeaderFromChild(GameObject *tabbedChild) const;
     GameObject *GetChildFromTabHeader(UITabHeader *tabHeader) const;
 
-    UITabContainer();
     virtual ~UITabContainer() override;
 };
 }

@@ -57,7 +57,7 @@ void RIWModel::Init()
     modelPreviewGo->GetRectTransform()->SetAnchors(Vector2::Zero);
     modelPreviewGo->GetRectTransform()->SetPivotPosition(Vector2::Zero);
 
-    p_modelPreviewViewer = GameObject::Create<PreviewViewer>();
+    p_modelPreviewViewer = new PreviewViewer();
 
     p_numMeshes = GameObjectFactory::CreateUIInputNumber();
     p_numMeshes->SetDecimalPlaces(0);

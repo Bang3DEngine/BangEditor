@@ -24,6 +24,8 @@ class CIWPointLight : public CIWLight
     GAMEOBJECT_EDITOR(CIWPointLight);
 
 public:
+    CIWPointLight() = default;
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
@@ -36,7 +38,6 @@ private:
     // ComponentInspectorWidget
     void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 
-    CIWPointLight() = default;
     virtual ~CIWPointLight() override = default;
 };
 }

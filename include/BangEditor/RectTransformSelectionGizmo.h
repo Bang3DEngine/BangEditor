@@ -25,6 +25,8 @@ class RectTransformSelectionGizmo : public SelectionGizmo
     GAMEOBJECT_EDITOR(RectTransformSelectionGizmo);
 
 public:
+    RectTransformSelectionGizmo();
+
     // GameObject
     void Update() override;
     void Render(RenderPass renderPass, bool renderChildren) override;
@@ -45,7 +47,6 @@ private:
     RectTransformAnchorSelectionGizmo *p_rightTopAnchor = nullptr;
     RectTransformAnchorSelectionGizmo *p_rightBotAnchor = nullptr;
 
-    RectTransformSelectionGizmo();
     virtual ~RectTransformSelectionGizmo() override;
 };
 }

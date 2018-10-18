@@ -49,107 +49,107 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     String cName = component->GetClassName();
     if (DCAST<Behaviour *>(component))
     {
-        ciw = GameObject::Create<CIWBehaviour>();
+        ciw = new CIWBehaviour();
     }
     else if (cName == "Transform")
     {
-        ciw = GameObject::Create<CIWTransform>();
+        ciw = new CIWTransform();
     }
     else if (cName == "RectTransform")
     {
-        ciw = GameObject::Create<CIWRectTransform>();
+        ciw = new CIWRectTransform();
     }
     else if (cName == "UITextRenderer")
     {
-        ciw = GameObject::Create<CIWUITextRenderer>();
+        ciw = new CIWUITextRenderer();
     }
     else if (cName == "UIImageRenderer")
     {
-        ciw = GameObject::Create<CIWUIImageRenderer>();
+        ciw = new CIWUIImageRenderer();
     }
     else if (cName == "MeshRenderer")
     {
-        ciw = GameObject::Create<CIWMeshRenderer>();
+        ciw = new CIWMeshRenderer();
     }
     else if (cName == "RigidBody")
     {
-        ciw = GameObject::Create<CIWRigidBody>();
+        ciw = new CIWRigidBody();
     }
     else if (cName == "Rope")
     {
-        ciw = GameObject::Create<CIWRope>();
+        ciw = new CIWRope();
     }
     else if (cName == "ParticleSystem")
     {
-        ciw = GameObject::Create<CIWParticleSystem>();
+        ciw = new CIWParticleSystem();
     }
     else if (cName == "BoxCollider")
     {
-        ciw = GameObject::Create<CIWBoxCollider>();
+        ciw = new CIWBoxCollider();
     }
     else if (cName == "MeshCollider")
     {
-        ciw = GameObject::Create<CIWMeshCollider>();
+        ciw = new CIWMeshCollider();
     }
     else if (cName == "CapsuleCollider")
     {
-        ciw = GameObject::Create<CIWCapsuleCollider>();
+        ciw = new CIWCapsuleCollider();
     }
     else if (cName == "SphereCollider")
     {
-        ciw = GameObject::Create<CIWSphereCollider>();
+        ciw = new CIWSphereCollider();
     }
     else if (cName == "WaterRenderer")
     {
-        ciw = GameObject::Create<CIWWaterRenderer>();
+        ciw = new CIWWaterRenderer();
     }
     else if (cName == "SkinnedMeshRenderer")
     {
-        ciw = GameObject::Create<CIWSkinnedMeshRenderer>();
+        ciw = new CIWSkinnedMeshRenderer();
     }
     else if (cName == "BehaviourContainer")
     {
-        ciw = GameObject::Create<CIWBehaviourContainer>();
+        ciw = new CIWBehaviourContainer();
     }
     else if (cName == "DirectionalLight")
     {
-        ciw = GameObject::Create<CIWDirectionalLight>();
+        ciw = new CIWDirectionalLight();
     }
     else if (cName == "PointLight")
     {
-        ciw = GameObject::Create<CIWPointLight>();
+        ciw = new CIWPointLight();
     }
     else if (cName == "Camera")
     {
-        ciw = GameObject::Create<CIWCamera>();
+        ciw = new CIWCamera();
     }
     else if (cName == "AudioListener")
     {
-        ciw = GameObject::Create<CIWAudioListener>();
+        ciw = new CIWAudioListener();
     }
     else if (cName == "AudioSource")
     {
-        ciw = GameObject::Create<CIWAudioSource>();
+        ciw = new CIWAudioSource();
     }
     else if (cName == "Animator")
     {
-        ciw = GameObject::Create<CIWAnimator>();
+        ciw = new CIWAnimator();
     }
     else if (cName == "ReflectionProbe")
     {
-        ciw = GameObject::Create<CIWReflectionProbe>();
+        ciw = new CIWReflectionProbe();
     }
     else if (cName == "PostProcessEffect")
     {
-        ciw = GameObject::Create<CIWPostProcessEffect>();
+        ciw = new CIWPostProcessEffect();
     }
     else if (cName == "PostProcessEffectSSAO")
     {
-        ciw = GameObject::Create<CIWPostProcessEffectSSAO>();
+        ciw = new CIWPostProcessEffectSSAO();
     }
     else
     {
-        ciw = GameObject::Create<ComponentInspectorWidget>();
+        ciw = new ComponentInspectorWidget();
     }
 
     if (ciw)

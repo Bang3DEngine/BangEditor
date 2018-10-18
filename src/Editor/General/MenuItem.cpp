@@ -339,7 +339,7 @@ void MenuItem::SetSelectedCallback(
 
 void MenuItem::AddSeparator()
 {
-    MenuItem *separator = GameObject::Create<MenuItem>(MenuItemType::SEPARATOR);
+    MenuItem *separator = new MenuItem(MenuItemType::SEPARATOR);
     GameObjectFactory::CreateUIHSeparator(LayoutSizeType::MIN, 1)
         ->SetParent(separator);
     separator->p_parentItem = this;
@@ -354,7 +354,7 @@ void MenuItem::AddItem(MenuItem *childItem)
 
 MenuItem *MenuItem::AddItem(const String &text)
 {
-    MenuItem *newItem = GameObject::Create<MenuItem>(MenuItemType::NORMAL);
+    MenuItem *newItem = new MenuItem(MenuItemType::NORMAL);
     newItem->GetText()->SetContent(text);
     newItem->GetText()->SetTextSize(GetFontSize());
     newItem->SetName(text);

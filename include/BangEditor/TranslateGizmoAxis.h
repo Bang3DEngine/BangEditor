@@ -25,6 +25,8 @@ class TranslateGizmoAxis : public TransformGizmoAxis
     GAMEOBJECT_EDITOR(TranslateGizmoAxis);
 
 public:
+    TranslateGizmoAxis();
+
     // GameObject
     void Update() override;
     void Render(RenderPass renderPass, bool renderChildren) override;
@@ -44,7 +46,6 @@ private:
 
     void SetColor(const Color &color) override;
 
-    TranslateGizmoAxis();
     virtual ~TranslateGizmoAxis() override;
 };
 }

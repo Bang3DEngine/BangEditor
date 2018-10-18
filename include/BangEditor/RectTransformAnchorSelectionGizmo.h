@@ -31,6 +31,8 @@ public:
         RIGHT_BOT
     };
 
+    RectTransformAnchorSelectionGizmo();
+
     // GameObject
     void Update() override;
     void Render(RenderPass renderPass, bool renderChildren) override;
@@ -54,7 +56,6 @@ private:
     UIImageRenderer *p_anchorRenderer = nullptr;
     UIImageRenderer *p_selectionRenderer = nullptr;
 
-    RectTransformAnchorSelectionGizmo();
     virtual ~RectTransformAnchorSelectionGizmo() override;
 
     void UpdateBasedOnAnchorSide();

@@ -47,7 +47,7 @@ UISceneImage::UISceneImage()
     UILayoutElement *imgLE = sceneImgGo->AddComponent<UILayoutElement>();
     imgLE->SetFlexibleSize(Vector2::One);
 
-    p_sceneDebugStats = GameObject::Create<UISceneDebugStats>();
+    p_sceneDebugStats = new UISceneDebugStats();
 
     sceneImgGo->SetParent(this);
     p_sceneDebugStats->SetParent(this);

@@ -39,9 +39,9 @@ void CIWUIImageRenderer::InitInnerWidgets()
     SetName("CIWUIImageRenderer");
     SetTitle("UI Image Renderer");
 
-    p_tintInput = GameObject::Create<UIInputColor>();
+    p_tintInput = new UIInputColor();
 
-    p_imageInput = GameObject::Create<UIInputTexture>();
+    p_imageInput = new UIInputTexture();
     p_imageInput->SetExtensions(Extensions::GetImageExtensions());
 
     p_tintInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);

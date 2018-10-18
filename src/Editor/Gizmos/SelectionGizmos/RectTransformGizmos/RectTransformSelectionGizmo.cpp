@@ -20,11 +20,11 @@ RectTransformSelectionGizmo::RectTransformSelectionGizmo()
 
     GameObjectFactory::CreateUIGameObjectInto(this);
 
-    p_leftBotCorner = GameObject::Create<RectTransformCornerSelectionGizmo>();
-    p_leftTopCorner = GameObject::Create<RectTransformCornerSelectionGizmo>();
-    p_rightTopCorner = GameObject::Create<RectTransformCornerSelectionGizmo>();
-    p_rightBotCorner = GameObject::Create<RectTransformCornerSelectionGizmo>();
-    p_centerCorner = GameObject::Create<RectTransformCornerSelectionGizmo>();
+    p_leftBotCorner = new RectTransformCornerSelectionGizmo();
+    p_leftTopCorner = new RectTransformCornerSelectionGizmo();
+    p_rightTopCorner = new RectTransformCornerSelectionGizmo();
+    p_rightBotCorner = new RectTransformCornerSelectionGizmo();
+    p_centerCorner = new RectTransformCornerSelectionGizmo();
     p_leftBotCorner->SetCornerSide(
         RectTransformCornerSelectionGizmo::CornerSide::LEFT_BOT);
     p_leftTopCorner->SetCornerSide(
@@ -36,10 +36,10 @@ RectTransformSelectionGizmo::RectTransformSelectionGizmo()
     p_centerCorner->SetCornerSide(
         RectTransformCornerSelectionGizmo::CornerSide::CENTER);
 
-    p_leftBotAnchor = GameObject::Create<RectTransformAnchorSelectionGizmo>();
-    p_leftTopAnchor = GameObject::Create<RectTransformAnchorSelectionGizmo>();
-    p_rightTopAnchor = GameObject::Create<RectTransformAnchorSelectionGizmo>();
-    p_rightBotAnchor = GameObject::Create<RectTransformAnchorSelectionGizmo>();
+    p_leftBotAnchor = new RectTransformAnchorSelectionGizmo();
+    p_leftTopAnchor = new RectTransformAnchorSelectionGizmo();
+    p_rightTopAnchor = new RectTransformAnchorSelectionGizmo();
+    p_rightBotAnchor = new RectTransformAnchorSelectionGizmo();
     p_leftBotAnchor->SetAnchorSide(
         RectTransformAnchorSelectionGizmo::AnchorSide::LEFT_BOT);
     p_leftTopAnchor->SetAnchorSide(

@@ -123,7 +123,7 @@ void AnimatorSMEditorScene::Update()
 void AnimatorSMEditorScene::CreateAndAddNode(AnimatorStateMachineNode *smNode,
                                              uint addIdx)
 {
-    AESNode *aesNode = GameObject::Create<AESNode>();
+    AESNode *aesNode = new AESNode();
     aesNode->p_aesScene = this;
     aesNode->SetParent(p_mainContainer);
 

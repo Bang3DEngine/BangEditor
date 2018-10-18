@@ -30,12 +30,13 @@ class CIWCamera : public ComponentInspectorWidget
     GAMEOBJECT_EDITOR(CIWCamera);
 
 public:
+    CIWCamera() = default;
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
 
 protected:
-    CIWCamera() = default;
     virtual ~CIWCamera() override = default;
 
     Camera *GetCamera() const;

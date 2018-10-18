@@ -83,7 +83,7 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
                 {
                     numComps = 3;
                 }
-                UIInputVector *inputVec = GameObject::Create<UIInputVector>();
+                UIInputVector *inputVec = new UIInputVector();
                 inputVec->SetSize(numComps);
                 inputVec->Set(Vector4::Zero);
                 inputVec->EventEmitter<IEventsValueChanged>::RegisterListener(
@@ -92,7 +92,7 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
             }
             else if (reflVar.GetVariant().GetType() == Variant::Type::COLOR)
             {
-                UIInputColor *inputColor = GameObject::Create<UIInputColor>();
+                UIInputColor *inputColor = new UIInputColor();
                 inputColor->SetColor(Color::White);
                 inputColor->EventEmitter<IEventsValueChanged>::RegisterListener(
                     inspectorWidget);

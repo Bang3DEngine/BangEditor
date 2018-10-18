@@ -15,11 +15,12 @@ class CIWSkinnedMeshRenderer : public CIWMeshRenderer
     GAMEOBJECT_EDITOR(CIWMeshRenderer);
 
 public:
+    CIWSkinnedMeshRenderer();
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
 
 protected:
-    CIWSkinnedMeshRenderer();
     virtual ~CIWSkinnedMeshRenderer() override;
 };
 }

@@ -36,7 +36,7 @@ void CIWBoxCollider::InitInnerWidgets()
     SetName("CIWBoxCollider");
     SetTitle("BoxCollider");
 
-    p_extentsInput = GameObject::Create<UIInputVector>();
+    p_extentsInput = new UIInputVector();
     for (UIInputNumber *inputNumber : p_extentsInput->GetInputNumbers())
     {
         inputNumber->SetMinValue(0.01f);

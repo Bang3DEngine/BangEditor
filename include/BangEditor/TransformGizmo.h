@@ -37,6 +37,8 @@ class TransformGizmo : public SelectionGizmo
     GAMEOBJECT_EDITOR(TransformGizmo);
 
 public:
+    TransformGizmo();
+
     // GameObject
     void Update() override;
     void Render(RenderPass rp, bool renderChildren) override;
@@ -64,7 +66,6 @@ private:
     ScaleGizmo *p_scaleGizmo = nullptr;
     RectTransformSelectionGizmo *p_rectTransformGizmo = nullptr;
 
-    TransformGizmo();
     virtual ~TransformGizmo() override;
 };
 }

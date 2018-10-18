@@ -59,7 +59,7 @@ void GIWAESNode::InitInnerWidgets()
     p_nameInput = GameObjectFactory::CreateUIInputText();
     p_nameInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_nodeAnimationInput = GameObject::Create<UIInputFileWithPreview>();
+    p_nodeAnimationInput = new UIInputFileWithPreview();
     p_nodeAnimationInput->SetExtensions({Extensions::GetAnimationExtension()});
     p_nodeAnimationInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);

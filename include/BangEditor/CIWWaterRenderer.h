@@ -23,12 +23,13 @@ class CIWWaterRenderer : public CIWRenderer
     GAMEOBJECT_EDITOR(CIWWaterRenderer);
 
 public:
+    CIWWaterRenderer();
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
 
 private:
-    CIWWaterRenderer();
     virtual ~CIWWaterRenderer() override;
 
     WaterRenderer *GetWaterRenderer() const;

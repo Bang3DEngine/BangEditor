@@ -37,6 +37,8 @@ class UIInputFile : public GameObject,
     GAMEOBJECT_EDITOR(UIInputFile);
 
 public:
+    UIInputFile();
+
     virtual void SetPath(const Path &path);
     void SetExtensions(const Array<String> &extensions);
 
@@ -45,7 +47,6 @@ public:
     const Array<String> &GetExtensions() const;
 
 protected:
-    UIInputFile();
     virtual ~UIInputFile() override;
 
     // IEventsDragDrop

@@ -26,6 +26,8 @@ class CIWRope : public CIWRenderer
     GAMEOBJECT_EDITOR(CIWRope);
 
 public:
+    CIWRope();
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
@@ -35,14 +37,12 @@ public:
         EventEmitter<IEventsValueChanged> *object) override;
 
 private:
-    UIInputNumber *p_numPointsInput = nullptr;
     UISlider *p_bouncinessInput = nullptr;
     UISlider *p_dampingInput = nullptr;
     UIInputNumber *p_springsForceInput = nullptr;
     UIInputNumber *p_ropeLengthInput = nullptr;
     UICheckBox *p_seeDebugPointsInput = nullptr;
 
-    CIWRope();
     virtual ~CIWRope() override;
 
     Rope *GetRope() const;

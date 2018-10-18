@@ -119,7 +119,7 @@ void AESConnectionLine::BeforeRender()
                 m_hasFocus = true;
 
                 GIWAESConnectionLine *aesConnLine =
-                    GameObject::Create<GIWAESConnectionLine>();
+                    new GIWAESConnectionLine();
                 aesConnLine->SetAESConnectionLine(this);
                 aesConnLine->Init();
                 Inspector::GetActive()->ShowInspectorWidget(aesConnLine);

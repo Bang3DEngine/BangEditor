@@ -46,13 +46,15 @@ class Console : public GameObject, public EventListener<IEventsDebug>
 {
     GAMEOBJECT_EDITOR(Console);
 
+public:
+    Console();
+
 private:
     Mutex m_mutex;
     UIList *p_messageList = nullptr;
     List<ConsoleMessage> m_messages;
     Array<ConsoleMessage> m_queuedMessages;
 
-    Console();
     virtual ~Console() override;
 
     void AddMessage(const ConsoleMessage &cMsg);

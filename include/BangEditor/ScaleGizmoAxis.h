@@ -25,6 +25,8 @@ class ScaleGizmoAxis : public TransformGizmoAxis
     GAMEOBJECT_EDITOR(ScaleGizmoAxis);
 
 public:
+    ScaleGizmoAxis();
+
     // GameObject
     void Update() override;
     void Render(RenderPass renderPass, bool renderChildren) override;
@@ -48,7 +50,6 @@ private:
     MeshRenderer *p_meshRenderer = nullptr;
     MeshRenderer *p_selectionRenderer = nullptr;
 
-    ScaleGizmoAxis();
     virtual ~ScaleGizmoAxis() override;
 
     void UpdatePoints(float localAxisLength);

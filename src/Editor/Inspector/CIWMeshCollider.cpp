@@ -41,7 +41,7 @@ void CIWMeshCollider::InitInnerWidgets()
     SetName("CIWMeshCollider");
     SetTitle("MeshCollider");
 
-    p_meshInput = GameObject::Create<UIInputFile>();
+    p_meshInput = new UIInputFile();
     p_meshInput->SetExtensions({Extensions::GetMeshExtension()});
     p_meshInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 

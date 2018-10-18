@@ -83,12 +83,12 @@ void CIWCamera::InitInnerWidgets()
     p_clearModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Clear Mode", p_clearModeInput->GetGameObject());
 
-    p_clearColorInput = GameObject::Create<UIInputColor>();
+    p_clearColorInput = new UIInputColor();
     p_clearColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
     AddWidget("Clear Color", p_clearColorInput);
 
-    p_textureCubeMapInput = GameObject::Create<UIInputFileWithPreview>();
+    p_textureCubeMapInput = new UIInputFileWithPreview();
     p_textureCubeMapInput->SetExtensions(
         {Extensions::GetTextureCubeMapExtension()});
     p_textureCubeMapInput->EventEmitter<IEventsValueChanged>::RegisterListener(

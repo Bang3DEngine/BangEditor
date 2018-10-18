@@ -44,7 +44,7 @@ void CIWAnimator::InitInnerWidgets()
     SetName("CIWAnimator");
     SetTitle("Animator");
 
-    p_animatorSMInput = GameObject::Create<UIInputFileWithPreview>();
+    p_animatorSMInput = new UIInputFileWithPreview();
     p_animatorSMInput->SetExtensions(
         {Extensions::GetAnimatorStateMachineExtension()});
     p_animatorSMInput->SetZoomable(false);
@@ -66,7 +66,7 @@ void CIWAnimator::InitInnerWidgets()
 UIInputFileWithPreview *CIWAnimator::CreateAnimationEntry()
 {
     UIInputFileWithPreview *entry =
-        GameObject::Create<UIInputFileWithPreview>();
+        new UIInputFileWithPreview();
     entry->SetExtensions({Extensions::GetAnimationExtension()});
     entry->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     entry->SetZoomable(false);

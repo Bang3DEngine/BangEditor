@@ -26,6 +26,8 @@ class RotateGizmo : public SelectionGizmo
     GAMEOBJECT_EDITOR(RotateGizmo);
 
 public:
+    RotateGizmo();
+
     // GameObject
     void Update() override;
     void Render(RenderPass rp, bool renderChildren) override;
@@ -43,7 +45,6 @@ private:
     MeshRenderer *p_sphereRenderer = nullptr;
     LineRenderer *p_sphereBoundsRenderer = nullptr;
 
-    RotateGizmo();
     virtual ~RotateGizmo() override;
 
     void CreateSphereBoundsPoints();

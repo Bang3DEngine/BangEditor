@@ -27,9 +27,9 @@ void CIWTransform::InitInnerWidgets()
     SetName("CIWTransform");
     SetTitle("Transform");
 
-    p_posIV = GameObject::Create<UIInputVector>(3);
-    p_rotIV = GameObject::Create<UIInputVector>(3);
-    p_scaleIV = GameObject::Create<UIInputVector>(3);
+    p_posIV = new UIInputVector(3);
+    p_rotIV = new UIInputVector(3);
+    p_scaleIV = new UIInputVector(3);
 
     p_posIV->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     p_rotIV->EventEmitter<IEventsValueChanged>::RegisterListener(this);

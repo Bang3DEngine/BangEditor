@@ -24,43 +24,43 @@ InspectorWidget *ResourceInspectorWidgetFactory::Create(const Path &path)
     ResourceInspectorWidget *riw = nullptr;
     if (path.HasExtension(Extensions::GetMaterialExtension()))
     {
-        riw = GameObject::Create<RIWMaterial>();
+        riw = new RIWMaterial();
     }
     else if (path.HasExtension(Extensions::GetPhysicsMaterialExtension()))
     {
-        riw = GameObject::Create<RIWPhysicsMaterial>();
+        riw = new RIWPhysicsMaterial();
     }
     else if (path.HasExtension(Extensions::GetAnimatorStateMachineExtension()))
     {
-        riw = GameObject::Create<RIWAnimatorStateMachine>();
+        riw = new RIWAnimatorStateMachine();
     }
     else if (path.HasExtension(Extensions::GetImageExtensions()))
     {
-        riw = GameObject::Create<RIWTexture>();
+        riw = new RIWTexture();
     }
     else if (path.HasExtension(Extensions::GetModelExtensions()))
     {
-        riw = GameObject::Create<RIWModel>();
+        riw = new RIWModel();
     }
     else if (path.HasExtension(Extensions::GetMeshExtension()))
     {
-        riw = GameObject::Create<RIWMesh>();
+        riw = new RIWMesh();
     }
     else if (path.HasExtension(Extensions::GetAudioClipExtensions()))
     {
-        riw = GameObject::Create<RIWAudioClip>();
+        riw = new RIWAudioClip();
     }
     else if (path.HasExtension(Extensions::GetAnimationExtension()))
     {
-        riw = GameObject::Create<RIWAnimation>();
+        riw = new RIWAnimation();
     }
     else if (path.HasExtension(Extensions::GetTextureCubeMapExtension()))
     {
-        riw = GameObject::Create<RIWTextureCubeMap>();
+        riw = new RIWTextureCubeMap();
     }
     else if (path.HasExtension(Extensions::GetBehaviourExtensions()))
     {
-        riw = GameObject::Create<RIWBehaviour>();
+        riw = new RIWBehaviour();
     }
 
     if (riw)

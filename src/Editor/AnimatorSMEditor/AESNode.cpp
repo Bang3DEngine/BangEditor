@@ -209,14 +209,14 @@ void AESNode::CreateAndAddConnectionToBeginDrag()
 {
     DestroyLineUsedForDragging();
     m_framesPassedSinceLineDragStarted = 0;
-    p_toConnectionLineBeingDragged = GameObject::Create<AESConnectionLine>();
+    p_toConnectionLineBeingDragged = new AESConnectionLine();
     p_toConnectionLineBeingDragged->SetNodeFrom(this);
     p_toConnectionLineBeingDragged->SetParent(this);
 }
 
 AESConnectionLine *AESNode::CreateAndAddDefinitiveConnection()
 {
-    AESConnectionLine *connLine = GameObject::Create<AESConnectionLine>();
+    AESConnectionLine *connLine = new AESConnectionLine();
     connLine->SetNodeFrom(this);
     connLine->SetParent(this);
     p_connectionLinesTo.PushBack(connLine);
@@ -399,7 +399,7 @@ UIEventResult AESNode::OnUIEvent(UIFocusable *, const UIEvent &event)
             if (Inspector *insp = Inspector::GetActive())
             {
                 GIWAESNode *aesNodeInspWidget =
-                    GameObject::Create<GIWAESNode>();
+                    new GIWAESNode();
                 aesNodeInspWidget->SetAESNode(this);
                 aesNodeInspWidget->Init();
                 insp->ShowInspectorWidget(aesNodeInspWidget);

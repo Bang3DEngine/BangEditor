@@ -253,7 +253,7 @@ void MenuBar::Update()
 
 MenuItem *MenuBar::AddItem()
 {
-    MenuItem *item = GameObject::Create<MenuItem>(MenuItem::MenuItemType::TOP);
+    MenuItem *item = new MenuItem(MenuItem::MenuItemType::TOP);
     item->SetParent(this);
     m_items.PushBack(item);
     return item;
@@ -516,21 +516,21 @@ void MenuBar::OnRedo(MenuItem *)
 
 void MenuBar::OnEditorSettings(MenuItem *)
 {
-    SIWEditorSettings *siw = GameObject::Create<SIWEditorSettings>();
+    SIWEditorSettings *siw = new SIWEditorSettings();
     siw->Init();
     Inspector::GetActive()->ShowInspectorWidget(siw);
 }
 
 void MenuBar::OnRenderSettings(MenuItem *)
 {
-    SIWRenderSettings *siw = GameObject::Create<SIWRenderSettings>();
+    SIWRenderSettings *siw = new SIWRenderSettings();
     siw->Init();
     Inspector::GetActive()->ShowInspectorWidget(siw);
 }
 
 void MenuBar::OnPhysicsSettings(MenuItem *)
 {
-    SIWPhysicsSettings *siw = GameObject::Create<SIWPhysicsSettings>();
+    SIWPhysicsSettings *siw = new SIWPhysicsSettings();
     siw->Init();
     Inspector::GetActive()->ShowInspectorWidget(siw);
 }

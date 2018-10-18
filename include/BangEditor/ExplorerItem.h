@@ -51,6 +51,8 @@ class ExplorerItem : public GameObject,
     GAMEOBJECT_EDITOR(ExplorerItem);
 
 public:
+    ExplorerItem();
+
     void SetPath(const Path &path);
     void SetSelected(bool selected);
     void SetPathString(const String &string);
@@ -73,7 +75,6 @@ public:
     void OnDrop(EventEmitter<IEventsDragDrop> *dragDroppable) override;
 
 protected:
-    ExplorerItem();
     virtual ~ExplorerItem() override;
 
 private:

@@ -73,9 +73,9 @@ UISceneContainer::UISceneContainer()
     UILayoutElement *vlLE = vlGo->AddComponent<UILayoutElement>();
     vlLE->SetFlexibleSize(Vector2::One);
 
-    p_sceneToolbar = GameObject::Create<UISceneToolbar>();
-    p_sceneImage = GameObject::Create<UISceneImage>();
-    p_sceneToolbarDown = GameObject::Create<UISceneToolbarDown>();
+    p_sceneToolbar = new UISceneToolbar();
+    p_sceneImage = new UISceneImage();
+    p_sceneToolbarDown = new UISceneToolbarDown();
 
     GetSceneToolbar()->SetParent(vlGo);
     GameObjectFactory::CreateUIVSpacer(LayoutSizeType::PREFERRED, 5)

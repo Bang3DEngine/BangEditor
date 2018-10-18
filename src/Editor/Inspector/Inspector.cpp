@@ -240,7 +240,7 @@ void Inspector::ShowGameObject(GameObject *go)
         this);
 
     GameObjectInspectorWidget *giw =
-        GameObject::Create<GameObjectInspectorWidget>();
+        new GameObjectInspectorWidget();
     giw->Init();
     giw->SetGameObject(go);
     AddWidget(giw, 0);

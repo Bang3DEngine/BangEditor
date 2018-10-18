@@ -46,29 +46,29 @@ void CIWParticleSystem::InitInnerWidgets()
     SetName("CIWParticleSystem");
     SetTitle("Particle System");
 
-    p_meshInputFile = GameObject::Create<UIInputFileWithPreview>();
+    p_meshInputFile = new UIInputFileWithPreview();
     p_meshInputFile->SetExtensions({Extensions::GetMeshExtension()});
     p_meshInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_lifeTimeInput = GameObject::Create<UIInputComplexRandom>();
+    p_lifeTimeInput = new UIInputComplexRandom();
     p_lifeTimeInput->SetRangeMinValue(0);
     p_lifeTimeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_startTimeInput = GameObject::Create<UIInputComplexRandom>();
+    p_startTimeInput = new UIInputComplexRandom();
     p_startTimeInput->SetRangeMinValue(0);
     p_startTimeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_startSizeInput = GameObject::Create<UIInputComplexRandom>();
+    p_startSizeInput = new UIInputComplexRandom();
     p_startSizeInput->SetRangeMinValue(0);
     p_startSizeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_billboardInput = GameObjectFactory::CreateUICheckBox();
     p_billboardInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_textureInput = GameObject::Create<UIInputTexture>();
+    p_textureInput = new UIInputTexture();
     p_textureInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_sheetSizeInput = GameObject::Create<UIInputVector>();
+    p_sheetSizeInput = new UIInputVector();
     for (int i = 0; i < 2; ++i)
     {
         p_sheetSizeInput->GetInputNumbers()[i]->SetDecimalPlaces(0);
@@ -89,11 +89,11 @@ void CIWParticleSystem::InitInnerWidgets()
     p_particleRenderModeInput
         ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_startColorInput = GameObject::Create<UIInputColor>();
+    p_startColorInput = new UIInputColor();
     p_startColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 
-    p_endColorInput = GameObject::Create<UIInputColor>();
+    p_endColorInput = new UIInputColor();
     p_endColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_numParticlesInput = GameObjectFactory::CreateUIInputNumber();
@@ -115,7 +115,7 @@ void CIWParticleSystem::InitInnerWidgets()
     p_generationShapeInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 
-    p_generationShapeBoxSizeInput = GameObject::Create<UIInputVector>();
+    p_generationShapeBoxSizeInput = new UIInputVector();
     p_generationShapeBoxSizeInput->SetSize(3);
     p_generationShapeBoxSizeInput->SetMinValue(Vector4::Zero);
     p_generationShapeBoxSizeInput

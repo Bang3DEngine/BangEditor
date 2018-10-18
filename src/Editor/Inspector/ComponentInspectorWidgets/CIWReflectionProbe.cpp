@@ -58,7 +58,7 @@ void CIWReflectionProbe::InitInnerWidgets()
     p_filterForIBLCheckBox->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 
-    p_sizeInput = GameObject::Create<UIInputVector>();
+    p_sizeInput = new UIInputVector();
     p_sizeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     p_sizeInput->SetMinValue(Vector4::Zero);
     p_sizeInput->SetSize(3);
@@ -88,17 +88,17 @@ void CIWReflectionProbe::InitInnerWidgets()
     p_clearModeInput->AddItem("SkyBox", SCAST<int>(CameraClearMode::SKY_BOX));
     p_clearModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_clearColorInput = GameObject::Create<UIInputColor>();
+    p_clearColorInput = new UIInputColor();
     p_clearColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 
-    p_textureCubeMapInput = GameObject::Create<UIInputFileWithPreview>();
+    p_textureCubeMapInput = new UIInputFileWithPreview();
     p_textureCubeMapInput->SetExtensions(
         {Extensions::GetTextureCubeMapExtension()});
     p_textureCubeMapInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 
-    p_previewCMRenderer = GameObject::Create<UITextureCubeMapPreviewer>();
+    p_previewCMRenderer = new UITextureCubeMapPreviewer();
 
     AddWidget("Render size", p_reflectionProbSizeInput->GetGameObject());
     AddWidget("Rest time sec.", p_restTimeInput->GetGameObject());

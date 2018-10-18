@@ -33,7 +33,7 @@ void CIWMeshRenderer::InitInnerWidgets()
     SetName("CIWMeshRenderer");
     SetTitle("Mesh Renderer");
 
-    p_meshInputFile = GameObject::Create<UIInputFileWithPreview>();
+    p_meshInputFile = new UIInputFileWithPreview();
     p_meshInputFile->SetExtensions({Extensions::GetMeshExtension()});
     p_meshInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 

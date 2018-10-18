@@ -13,7 +13,7 @@ class HideInHierarchy : public Component
 {
     COMPONENT_WITH_FAST_DYNAMIC_CAST(HideInHierarchy)
 
-private:
+public:
     HideInHierarchy()
     {
         CONSTRUCT_CLASS_ID(HideInHierarchy);

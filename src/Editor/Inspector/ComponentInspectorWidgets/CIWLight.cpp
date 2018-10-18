@@ -36,7 +36,7 @@ void CIWLight::InitInnerWidgets()
     p_intensityInput->SetMinValue(0.0f);
     AddWidget("Intensity", p_intensityInput->GetGameObject());
 
-    p_colorInput = GameObject::Create<UIInputColor>();
+    p_colorInput = new UIInputColor();
     p_colorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     AddWidget("Color", p_colorInput);
 

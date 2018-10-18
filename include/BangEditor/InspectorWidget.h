@@ -30,6 +30,8 @@ class InspectorWidget : public GameObject,
     GAMEOBJECT_EDITOR(InspectorWidget);
 
 public:
+    InspectorWidget();
+
     virtual void Init();
 
     void AddLabel(const String &content, int height = -1, int width = -1);
@@ -46,7 +48,6 @@ protected:
     static constexpr int DefaultLabelWidth = 50;
     static constexpr int DefaultWidgetHeight = 20;
 
-    InspectorWidget();
     virtual ~InspectorWidget() override;
 
     virtual void InitInnerWidgets();

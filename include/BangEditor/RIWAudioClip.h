@@ -36,6 +36,8 @@ class RIWAudioClip : public RIWResource<AudioClip>
     GAMEOBJECT_EDITOR(RIWAudioClip);
 
 public:
+    RIWAudioClip();
+
     // InspectorWidget
     void Init() override;
 
@@ -49,7 +51,6 @@ private:
     UIInputNumber *p_bufferSize = nullptr;
     UIInputNumber *p_numChannels = nullptr;
 
-    RIWAudioClip();
     virtual ~RIWAudioClip() override;
 
     void Play();

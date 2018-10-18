@@ -72,6 +72,8 @@ class ContextMenu : public GameObject, public EventListener<IEventsFocus>
     GAMEOBJECT_EDITOR(ContextMenu);
 
 public:
+    ContextMenu();
+
     // GameObject
     void Update() override;
 
@@ -83,8 +85,7 @@ private:
     MenuItem *p_rootItem = nullptr;
     UIFocusable *p_focusable = nullptr;
 
-    ContextMenu();
-    virtual ~ContextMenu() = default;
+    virtual ~ContextMenu() override = default;
 
     // IEventsFocus
     virtual UIEventResult OnUIEvent(UIFocusable *focusable,

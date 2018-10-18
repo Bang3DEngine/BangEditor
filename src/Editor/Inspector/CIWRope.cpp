@@ -29,11 +29,6 @@ void CIWRope::InitInnerWidgets()
     SetName("CIWRope");
     SetTitle("Rope");
 
-    p_numPointsInput = GameObjectFactory::CreateUIInputNumber();
-    p_numPointsInput->SetMinValue(2.0f);
-    p_numPointsInput->SetDecimalPlaces(0);
-    p_numPointsInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-
     p_bouncinessInput = GameObjectFactory::CreateUISlider();
     p_bouncinessInput->SetMinMaxValues(0.0f, 1.0f);
     p_bouncinessInput->EventEmitter<IEventsValueChanged>::RegisterListener(
@@ -57,7 +52,6 @@ void CIWRope::InitInnerWidgets()
     p_seeDebugPointsInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 
-    AddWidget("Num. Points", p_numPointsInput->GetGameObject());
     AddWidget("Bounciness", p_bouncinessInput->GetGameObject());
     AddWidget("Damping", p_dampingInput->GetGameObject());
     AddWidget("Rope Length", p_ropeLengthInput->GetGameObject());
@@ -71,7 +65,6 @@ void CIWRope::UpdateFromReference()
 {
     CIWRenderer::UpdateFromReference();
 
-    p_numPointsInput->SetValue(GetRope()->GetNumPoints());
     p_bouncinessInput->SetValue(GetRope()->GetBounciness());
     p_ropeLengthInput->SetValue(GetRope()->GetRopeLength());
     p_dampingInput->SetValue(GetRope()->GetDamping());
@@ -83,11 +76,7 @@ void CIWRope::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
     CIWRenderer::OnValueChangedCIW(object);
 
-    if (object == p_numPointsInput)
-    {
-        GetRope()->SetNumPoints(SCAST<uint>(p_numPointsInput->GetValue()));
-    }
-    else if (object == p_bouncinessInput)
+    if (object == p_bouncinessInput)
     {
         GetRope()->SetBounciness(p_bouncinessInput->GetValue());
     }

@@ -32,6 +32,9 @@ class UIInputVector : public GameObject,
     GAMEOBJECT_EDITOR(UIInputVector);
 
 public:
+    UIInputVector();
+    UIInputVector(int size);
+
     void SetSize(int size);
 
     void Set(const Vector2 &v);
@@ -56,8 +59,6 @@ public:
     void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
 protected:
-    UIInputVector();
-    UIInputVector(int size);
     virtual ~UIInputVector() override;
 
 private:

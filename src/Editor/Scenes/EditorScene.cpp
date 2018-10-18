@@ -82,7 +82,7 @@ void EditorScene::Init()
     mainEdVL->SetPaddings(5, 30, 5, 0);
     m_mainEditorVLGo->SetParent(this);
 
-    m_menuBar = GameObject::Create<MenuBar>();
+    m_menuBar = new MenuBar();
     m_menuBar->GetTransform()->TranslateLocal(Vector3(0, 0, -0.1));
     m_menuBar->SetParent(m_mainEditorVLGo);
 
@@ -92,15 +92,15 @@ void EditorScene::Init()
     m_editSceneGameObjects = new EditSceneGameObjects();
 
     // Inspector, Hierarchy, etc. creation
-    p_sceneEditContainer = GameObject::Create<UISceneEditContainer>();
-    p_scenePlayContainer = GameObject::Create<UIScenePlayContainer>();
-    p_animatorSMEditor = GameObject::Create<AnimatorSMEditor>();
-    p_inspector = GameObject::Create<Inspector>();
-    p_hierarchy = GameObject::Create<Hierarchy>();
-    p_console = GameObject::Create<Console>();
-    p_explorer = GameObject::Create<Explorer>();
+    p_sceneEditContainer = new UISceneEditContainer();
+    p_scenePlayContainer = new UIScenePlayContainer();
+    p_animatorSMEditor = new AnimatorSMEditor();
+    p_inspector = new Inspector();
+    p_hierarchy = new Hierarchy();
+    p_console = new Console();
+    p_explorer = new Explorer();
 
-    p_tabStation = GameObject::Create<UITabStation>();
+    p_tabStation = new UITabStation();
     p_tabStation->SetParent(m_mainEditorVLGo);
 
     p_tabStation->GetTabContainer()->AddTab("Scene", p_sceneEditContainer);

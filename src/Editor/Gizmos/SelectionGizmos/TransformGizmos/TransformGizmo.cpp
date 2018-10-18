@@ -44,10 +44,10 @@ TransformGizmo::TransformGizmo()
     p_worldGizmoContainer->SetParent(this);
     p_canvasGizmoContainer->SetParent(this);
 
-    p_translateGizmo = GameObject::Create<TranslateGizmo>();
-    p_rotateGizmo = GameObject::Create<RotateGizmo>();
-    p_scaleGizmo = GameObject::Create<ScaleGizmo>();
-    p_rectTransformGizmo = GameObject::Create<RectTransformSelectionGizmo>();
+    p_translateGizmo = new TranslateGizmo();
+    p_rotateGizmo = new RotateGizmo();
+    p_scaleGizmo = new ScaleGizmo();
+    p_rectTransformGizmo = new RectTransformSelectionGizmo();
 
     p_translateGizmo->SetParent(p_worldGizmoContainer);
     p_rotateGizmo->SetParent(p_worldGizmoContainer);

@@ -96,10 +96,10 @@ void GIWAESConnectionLine::InitInnerWidgets()
 
     p_transitionsListSeparator = GameObjectFactory::CreateUIHSeparator();
 
-    p_transitionConditionsInput = GameObject::Create<UIInputArray>();
+    p_transitionConditionsInput = new UIInputArray();
     p_transitionConditionsInput->SetCreateNewRowGameObjectFunction([]() {
         ASMCTransitionConditionInput *transitionConditionInput =
-            GameObject::Create<ASMCTransitionConditionInput>();
+            new ASMCTransitionConditionInput();
         return transitionConditionInput;
     });
     p_transitionConditionsInput

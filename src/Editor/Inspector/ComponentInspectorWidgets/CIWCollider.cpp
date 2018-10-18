@@ -44,14 +44,14 @@ void CIWCollider::InitInnerWidgets()
     SetName("CIWCollider");
     SetTitle("Collider");
 
-    p_centerInput = GameObject::Create<UIInputVector>();
+    p_centerInput = new UIInputVector();
     p_centerInput->SetSize(3);
     p_centerInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_isTriggerInput = GameObjectFactory::CreateUICheckBox();
     p_isTriggerInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_physicsMaterialInput = GameObject::Create<UIInputFileWithPreview>();
+    p_physicsMaterialInput = new UIInputFileWithPreview();
     p_physicsMaterialInput->SetExtensions(
         {Extensions::GetPhysicsMaterialExtension()});
     p_physicsMaterialInput->EventEmitter<IEventsValueChanged>::RegisterListener(

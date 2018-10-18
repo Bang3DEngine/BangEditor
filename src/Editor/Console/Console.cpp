@@ -91,7 +91,7 @@ void Console::Update()
 
     for (const ConsoleMessage &cMsg : m_queuedMessages)
     {
-        ConsoleUIListEntry *entryGo = GameObject::Create<ConsoleUIListEntry>();
+        ConsoleUIListEntry *entryGo = new ConsoleUIListEntry();
         entryGo->SetConsoleMessage(cMsg);
         p_messageList->AddItem(entryGo);
         m_messages.PushBack(cMsg);

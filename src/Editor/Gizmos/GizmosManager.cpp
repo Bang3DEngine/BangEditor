@@ -18,16 +18,15 @@ using namespace BangEditor;
 
 GizmosManager::GizmosManager()
 {
-    TransformGizmo *tg = GameObject::Create<TransformGizmo>();
+    TransformGizmo *tg = new TransformGizmo();
     p_transformGizmo = tg;
     GetTransformGizmo()->SetReferencedGameObject(nullptr);
 
-    GameObjectSelectionGizmo *gsg =
-        GameObject::Create<GameObjectSelectionGizmo>();
+    GameObjectSelectionGizmo *gsg = new GameObjectSelectionGizmo();
     p_gameObjectSelectionGizmo = gsg;
     GetGameObjectSelectionGizmo()->SetReferencedGameObject(nullptr);
 
-    ComponentsGizmos *csg = GameObject::Create<ComponentsGizmos>();
+    ComponentsGizmos *csg = new ComponentsGizmos();
     p_componentsGizmos = csg;
 
     Editor::GetInstance()->EventEmitter<IEventsEditor>::RegisterListener(this);

@@ -27,15 +27,15 @@ ExplorerItem *ExplorerItemFactory::CreateExplorerItem(const Path &path)
     ExplorerItem *explorerItem = nullptr;
     if (path.HasExtension(Extensions::GetModelExtensions()))
     {
-        explorerItem = GameObject::Create<ModelExplorerItem>();
+        explorerItem = new ModelExplorerItem();
     }
     else if (path.HasExtension(Extensions::GetPrefabExtension()))
     {
-        explorerItem = GameObject::Create<PrefabExplorerItem>();
+        explorerItem = new PrefabExplorerItem();
     }
     else
     {
-        explorerItem = GameObject::Create<ExplorerItem>();
+        explorerItem = new ExplorerItem();
     }
 
     explorerItem->SetPath(path);

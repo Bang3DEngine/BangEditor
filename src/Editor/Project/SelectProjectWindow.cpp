@@ -58,7 +58,7 @@ void SelectProjectWindow::Init()
     SetMinSize(500, 500);
     SetMaxSize(500, 500);
 
-    Scene *scene = GameObject::Create<SelectProjectScene>();
+    Scene *scene = new SelectProjectScene();
     EditorSceneManager::LoadScene(scene, true);
 }
 
@@ -155,8 +155,7 @@ SelectProjectScene::SelectProjectScene()
         EditorSettings::GetRecentProjectFilepathsOpen();
     for (const Path &recentProjectPath : recentProjects)
     {
-        GameObject *entry =
-            GameObject::Create<RecentProjectListEntry>(recentProjectPath);
+        GameObject *entry = new RecentProjectListEntry(recentProjectPath);
         recentProjectsList->AddItem(entry);
     }
 

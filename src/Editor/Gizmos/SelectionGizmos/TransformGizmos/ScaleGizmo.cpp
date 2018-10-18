@@ -13,10 +13,10 @@ ScaleGizmo::ScaleGizmo()
 {
     AddComponent<Transform>();
 
-    p_axisX = GameObject::Create<ScaleGizmoAxis>();
-    p_axisY = GameObject::Create<ScaleGizmoAxis>();
-    p_axisZ = GameObject::Create<ScaleGizmoAxis>();
-    p_axisXYZ = GameObject::Create<ScaleGizmoAxis>();
+    p_axisX = new ScaleGizmoAxis();
+    p_axisY = new ScaleGizmoAxis();
+    p_axisZ = new ScaleGizmoAxis();
+    p_axisXYZ = new ScaleGizmoAxis();
 
     p_axisX->SetAxis(Axis3DExt::X);
     p_axisY->SetAxis(Axis3DExt::Y);

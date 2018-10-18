@@ -27,6 +27,8 @@ class CIWPostProcessEffect : public ComponentInspectorWidget
     GAMEOBJECT_EDITOR(CIWPostProcessEffect);
 
 public:
+    CIWPostProcessEffect() = default;
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
     virtual void UpdateFromReference() override;
@@ -42,7 +44,6 @@ private:
     virtual void OnValueChangedCIW(
         EventEmitter<IEventsValueChanged> *object) override;
 
-    CIWPostProcessEffect() = default;
     virtual ~CIWPostProcessEffect() override = default;
 };
 }

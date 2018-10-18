@@ -27,8 +27,11 @@ class RotateGizmoAxis : public TransformGizmoAxis
     GAMEOBJECT_EDITOR(RotateGizmoAxis);
 
 public:
+    RotateGizmoAxis();
+
     // GameObject
     void Update() override;
+
     void Render(RenderPass renderPass, bool renderChildren) override;
 
     void SetAxis(Axis3DExt axis) override;
@@ -45,7 +48,6 @@ private:
 
     LineRenderer *p_circleRenderer = nullptr;
 
-    RotateGizmoAxis();
     virtual ~RotateGizmoAxis() override;
 
     void UpdateCirclePoints();

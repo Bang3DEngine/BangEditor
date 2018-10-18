@@ -29,6 +29,8 @@ class CIWAudioSource : public ComponentInspectorWidget
     GAMEOBJECT_EDITOR(CIWAudioSource);
 
 public:
+    CIWAudioSource() = default;
+
     // InspectorWidget
     virtual void InitInnerWidgets() override;
 
@@ -52,7 +54,6 @@ private:
 
     AudioSource *GetAudioSource() const;
 
-    CIWAudioSource() = default;
     virtual ~CIWAudioSource() override = default;
 };
 }

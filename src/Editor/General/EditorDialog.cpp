@@ -143,7 +143,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
                 ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
                     assetPath, false);
 
-            ExplorerItem *assetExpItem = GameObject::Create<ExplorerItem>();
+            ExplorerItem *assetExpItem = new ExplorerItem();
             assetExpItem->SetPath(assetPath);
             expItems.PushFront(assetExpItem);
 
@@ -206,7 +206,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
     };
 
     // Add tabs
-    UITabContainer *tabContainer = GameObject::Create<UITabContainer>();
+    UITabContainer *tabContainer = new UITabContainer();
 
     Array<Path> engineAssetPaths =
         Paths::GetEngineAssetsDir().GetFiles(FindFlag::RECURSIVE);
@@ -443,7 +443,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(
         }
     };
 
-    Handle *handle = GameObject::Create<Handle>();
+    Handle *handle = new Handle();
     handle->SetParent(colorPanelImg->GetGameObject());
 
     class Controller : public GameObject,
@@ -537,7 +537,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(
         }
     };
 
-    Controller *controller = GameObject::Create<Controller>();
+    Controller *controller = new Controller();
     controller->p_colorImgSP = colorPanelImgSP.Get();
     controller->p_sliderHue = hueSlider;
     controller->p_sliderRGB_R = sliderR;

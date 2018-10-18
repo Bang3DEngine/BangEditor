@@ -27,11 +27,11 @@ void CIWRectTransform::InitInnerWidgets()
     SetName("CIWRectTransform");
     SetTitle("Rect Transform");
 
-    p_anchorMinInput = GameObject::Create<UIInputVector>(2);
-    p_anchorMaxInput = GameObject::Create<UIInputVector>(2);
-    p_marginLeftBotInput = GameObject::Create<UIInputVector>(2);
-    p_marginRightTopInput = GameObject::Create<UIInputVector>(2);
-    p_pivotPositionInput = GameObject::Create<UIInputVector>(2);
+    p_anchorMinInput = new UIInputVector(2);
+    p_anchorMaxInput = new UIInputVector(2);
+    p_marginLeftBotInput = new UIInputVector(2);
+    p_marginRightTopInput = new UIInputVector(2);
+    p_pivotPositionInput = new UIInputVector(2);
 
     p_anchorMinInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     p_anchorMaxInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);

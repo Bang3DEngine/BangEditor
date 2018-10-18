@@ -23,6 +23,8 @@ class ScaleGizmo : public SelectionGizmo
     GAMEOBJECT_EDITOR(ScaleGizmo);
 
 public:
+    ScaleGizmo();
+
     // SelectionGizmo
     void SetReferencedGameObject(GameObject *referencedGameObject) override;
 
@@ -32,7 +34,6 @@ private:
     ScaleGizmoAxis *p_axisZ = nullptr;
     ScaleGizmoAxis *p_axisXYZ = nullptr;
 
-    ScaleGizmo();
     virtual ~ScaleGizmo() override;
 };
 }

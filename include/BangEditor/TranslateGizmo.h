@@ -23,6 +23,8 @@ class TranslateGizmo : public SelectionGizmo
     GAMEOBJECT_EDITOR(TranslateGizmo);
 
 public:
+    TranslateGizmo();
+
     // SelectionGizmo
     void SetReferencedGameObject(GameObject *referencedGameObject) override;
 
@@ -31,7 +33,6 @@ private:
     TranslateGizmoAxis *p_axisY = nullptr;
     TranslateGizmoAxis *p_axisZ = nullptr;
 
-    TranslateGizmo();
     virtual ~TranslateGizmo() override;
 };
 }
