@@ -5,8 +5,6 @@
 
 #include "Bang/Array.h"
 #include "Bang/Array.tcc"
-#include "Bang/BPReflectedStruct.h"
-#include "Bang/BPReflectedVariable.h"
 #include "Bang/BangPreprocessor.h"
 #include "Bang/BehaviourContainer.h"
 #include "Bang/EventEmitter.h"
@@ -21,6 +19,8 @@
 #include "Bang/Map.tcc"
 #include "Bang/MetaNode.h"
 #include "Bang/Path.h"
+#include "Bang/ReflectStruct.h"
+#include "Bang/ReflectVariable.h"
 #include "BangEditor/CIWBehaviour.h"
 #include "BangEditor/EditorFileTracker.h"
 #include "BangEditor/ReflectWidgetsManager.h"
@@ -75,7 +75,7 @@ void CIWBehaviourContainer::OnComponentSet()
     GetReflectWidgetsManager()->UpdateWidgetsContentFromMeta(initMeta);
 }
 
-BPReflectedStruct CIWBehaviourContainer::GetComponentReflectStruct() const
+ReflectStruct CIWBehaviourContainer::GetComponentReflectStruct() const
 {
     Path srcPath = GetBehaviourContainer()->GetSourceFilepath();
     if (srcPath.IsFile())
@@ -85,7 +85,7 @@ BPReflectedStruct CIWBehaviourContainer::GetComponentReflectStruct() const
             EditorFileTracker::GetInstance()->GetModificationTime(headerPath);
         if (timeHeaderChanged > m_prevTimeHeaderChanged)
         {
-            Array<BPReflectedStruct> reflStructs =
+            Array<ReflectStruct> reflStructs =
                 BangPreprocessor::GetReflectStructs(headerPath);
             if (reflStructs.Size() >= 1)
             {
@@ -93,7 +93,7 @@ BPReflectedStruct CIWBehaviourContainer::GetComponentReflectStruct() const
             }
             else
             {
-                m_behaviourReflectStruct = BPReflectedStruct();
+                m_behaviourReflectStruct = ReflectStruct();
             }
             m_prevTimeHeaderChanged = timeHeaderChanged;
         }

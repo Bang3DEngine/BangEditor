@@ -13,7 +13,7 @@ using namespace Bang;
 using namespace BangEditor;
 
 void ReflectWidgetsManager::UpdateWidgetsFromReflection(
-    const BPReflectedStruct &reflectStruct,
+    const ReflectStruct &reflectStruct,
     InspectorWidget *inspectorWidget)
 {
     if (reflectStruct != m_previousReflectedStruct)
@@ -30,18 +30,18 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
         m_varNameToWidget.Clear();
 
         // Add widgets to structures
-        for (const BPReflectedVariable &reflVar : reflectStruct.GetVariables())
+        for (const ReflectVariable &reflVar : reflectStruct.GetVariables())
         {
             GameObject *widgetToAdd = nullptr;
             String widgetName = reflVar.GetName();
-            if (reflVar.GetType() == BPReflectedVariable::Type::FLOAT ||
-                reflVar.GetType() == BPReflectedVariable::Type::DOUBLE ||
-                reflVar.GetType() == BPReflectedVariable::Type::INT)
+            if (reflVar.GetType() == ReflectVariable::Type::FLOAT ||
+                reflVar.GetType() == ReflectVariable::Type::DOUBLE ||
+                reflVar.GetType() == ReflectVariable::Type::INT)
             {
                 UIInputNumber *inputNumber =
                     GameObjectFactory::CreateUIInputNumber();
                 inputNumber->SetValue(String::ToFloat(reflVar.GetInitValue()));
-                if (reflVar.GetType() == BPReflectedVariable::Type::INT)
+                if (reflVar.GetType() == ReflectVariable::Type::INT)
                 {
                     inputNumber->SetDecimalPlaces(0);
                 }
@@ -50,7 +50,7 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
                         inspectorWidget);
                 widgetToAdd = inputNumber->GetGameObject();
             }
-            else if (reflVar.GetType() == BPReflectedVariable::Type::BOOL)
+            else if (reflVar.GetType() == ReflectVariable::Type::BOOL)
             {
                 UICheckBox *checkBox = GameObjectFactory::CreateUICheckBox();
                 checkBox->SetChecked(
@@ -59,7 +59,7 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
                     inspectorWidget);
                 widgetToAdd = checkBox->GetGameObject();
             }
-            else if (reflVar.GetType() == BPReflectedVariable::Type::STRING)
+            else if (reflVar.GetType() == ReflectVariable::Type::STRING)
             {
                 UIInputText *inputText = GameObjectFactory::CreateUIInputText();
                 inputText->GetText()->SetContent(reflVar.GetInitValue());
@@ -67,18 +67,17 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
                     inspectorWidget);
                 widgetToAdd = inputText->GetGameObject();
             }
-            else if (reflVar.GetType() == BPReflectedVariable::Type::VECTOR2 ||
-                     reflVar.GetType() == BPReflectedVariable::Type::VECTOR3 ||
-                     reflVar.GetType() == BPReflectedVariable::Type::VECTOR4 ||
-                     reflVar.GetType() == BPReflectedVariable::Type::QUATERNION)
+            else if (reflVar.GetType() == ReflectVariable::Type::VECTOR2 ||
+                     reflVar.GetType() == ReflectVariable::Type::VECTOR3 ||
+                     reflVar.GetType() == ReflectVariable::Type::VECTOR4 ||
+                     reflVar.GetType() == ReflectVariable::Type::QUATERNION)
             {
                 int numComps = 4;
-                if (reflVar.GetType() == BPReflectedVariable::Type::VECTOR2)
+                if (reflVar.GetType() == ReflectVariable::Type::VECTOR2)
                 {
                     numComps = 2;
                 }
-                else if (reflVar.GetType() ==
-                         BPReflectedVariable::Type::VECTOR3)
+                else if (reflVar.GetType() == ReflectVariable::Type::VECTOR3)
                 {
                     numComps = 3;
                 }
@@ -89,7 +88,7 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
                     inspectorWidget);
                 widgetToAdd = inputVec;
             }
-            else if (reflVar.GetType() == BPReflectedVariable::Type::COLOR)
+            else if (reflVar.GetType() == ReflectVariable::Type::COLOR)
             {
                 UIInputColor *inputColor = GameObject::Create<UIInputColor>();
                 inputColor->SetColor(Color::White);
@@ -192,14 +191,14 @@ MetaNode ReflectWidgetsManager::GetMetaFromWidgets() const
     for (const auto &it : GetWidgetToReflectedVar())
     {
         GameObject *widget = it.first;
-        const BPReflectedVariable &reflVar = it.second;
+        const ReflectVariable &reflVar = it.second;
         String value = GetStringValueFromWidget(widget);
         meta.Set(reflVar.GetName(), value);
     }
     return meta;
 }
 
-const Map<GameObject *, BPReflectedVariable>
+const Map<GameObject *, ReflectVariable>
     &ReflectWidgetsManager::GetWidgetToReflectedVar() const
 {
     return m_widgetToReflectedVar;

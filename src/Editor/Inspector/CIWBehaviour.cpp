@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "Bang/Assert.h"
-#include "Bang/BPReflectedStruct.h"
 #include "Bang/BangPreprocessor.h"
 #include "Bang/Behaviour.h"
 #include "Bang/Color.h"
@@ -17,6 +16,7 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/IEvents.h"
 #include "Bang/MetaAttribute.h"
+#include "Bang/ReflectStruct.h"
 #include "Bang/Serializable.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIInputNumber.h"

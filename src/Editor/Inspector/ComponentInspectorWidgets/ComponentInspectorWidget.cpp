@@ -57,7 +57,7 @@ void ComponentInspectorWidget::UpdateFromReference()
     GetInspectorWidgetTitle()->GetEnabledCheckBox()->SetChecked(
         GetComponent()->IsEnabled());
 
-    BPReflectedStruct reflectStruct = GetComponentReflectStruct();
+    ReflectStruct reflectStruct = GetComponentReflectStruct();
     m_reflectWidgetsManager.UpdateWidgetsFromReflection(reflectStruct, this);
 
     MetaNode componentMeta = GetComponent()->GetMeta();
@@ -243,7 +243,7 @@ void ComponentInspectorWidget::OnComponentSet()
 {
     EventListener<IEventsValueChanged>::SetReceiveEvents(false);
 
-    BPReflectedStruct reflectStruct = GetComponentReflectStruct();
+    ReflectStruct reflectStruct = GetComponentReflectStruct();
     m_reflectWidgetsManager.UpdateWidgetsFromReflection(reflectStruct, this);
 
     UpdateFromReference();
@@ -262,9 +262,9 @@ ReflectWidgetsManager *ComponentInspectorWidget::GetReflectWidgetsManager()
     return &m_reflectWidgetsManager;
 }
 
-BPReflectedStruct ComponentInspectorWidget::GetComponentReflectStruct() const
+ReflectStruct ComponentInspectorWidget::GetComponentReflectStruct() const
 {
-    BPReflectedStruct reflectStruct;
+    ReflectStruct reflectStruct;
     if (GetComponent())
     {
         reflectStruct = GetComponent()->GetReflectionInfo();

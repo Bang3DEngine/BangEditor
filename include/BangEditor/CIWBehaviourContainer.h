@@ -1,9 +1,9 @@
 #ifndef CIWBEHAVIOURCONTAINER_H
 #define CIWBEHAVIOURCONTAINER_H
 
-#include "Bang/BPReflectedVariable.h"
 #include "Bang/BangDefines.h"
 #include "Bang/IEventsValueChanged.h"
+#include "Bang/ReflectVariable.h"
 #include "Bang/String.h"
 #include "Bang/Time.h"
 #include "BangEditor/BangEditor.h"
@@ -12,7 +12,7 @@
 namespace Bang
 {
 class BehaviourContainer;
-class BPReflectedStruct;
+class ReflectStruct;
 class IEventsValueChanged;
 class UIInputFileWithPreview;
 template <class>
@@ -36,7 +36,7 @@ public:
     BehaviourContainer *GetBehaviourContainer() const;
 
 private:
-    mutable BPReflectedStruct m_behaviourReflectStruct;
+    mutable ReflectStruct m_behaviourReflectStruct;
     mutable Time m_prevTimeHeaderChanged;
 
     UIInputFileWithPreview *p_sourceInputFile = nullptr;
@@ -44,12 +44,12 @@ private:
     CIWBehaviourContainer();
     virtual ~CIWBehaviourContainer() override;
 
-    void UpdateFromReflection(const BPReflectedStruct &reflectStruct);
+    void UpdateFromReflection(const ReflectStruct &reflectStruct);
     void UpdateInitializationMetaFromWidgets();
 
     // ComponentInspectorWidget
     void OnComponentSet() override;
-    BPReflectedStruct GetComponentReflectStruct() const override;
+    ReflectStruct GetComponentReflectStruct() const override;
 
     // ComponentInspectorWidget
     void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;

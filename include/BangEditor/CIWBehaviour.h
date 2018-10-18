@@ -5,12 +5,12 @@
 
 #include "Bang/Array.h"
 #include "Bang/Array.tcc"
-#include "Bang/BPReflectedVariable.h"
 #include "Bang/BangDefines.h"
 #include "Bang/IEventsValueChanged.h"
 #include "Bang/Map.h"
 #include "Bang/Map.tcc"
 #include "Bang/MetaNode.h"
+#include "Bang/ReflectVariable.h"
 #include "Bang/String.h"
 #include "Bang/Time.h"
 #include "BangEditor/BangEditor.h"
@@ -21,7 +21,7 @@ namespace Bang
 {
 class Behaviour;
 class UIInputFileWithPreview;
-class BPReflectedStruct;
+class ReflectStruct;
 class GameObject;
 class IEventsValueChanged;
 template <class>

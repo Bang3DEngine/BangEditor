@@ -67,7 +67,7 @@ protected:
     virtual bool MustShowEnabledCheckbox() const;
 
     ReflectWidgetsManager *GetReflectWidgetsManager() const;
-    virtual BPReflectedStruct GetComponentReflectStruct() const;
+    virtual ReflectStruct GetComponentReflectStruct() const;
 
 private:
     Component *p_component = nullptr;
