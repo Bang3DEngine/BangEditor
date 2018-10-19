@@ -267,7 +267,7 @@ ReflectStruct ComponentInspectorWidget::GetComponentReflectStruct() const
     ReflectStruct reflectStruct;
     if (GetComponent())
     {
-        reflectStruct = GetComponent()->GetReflectionInfo();
+        reflectStruct = GetComponent()->GetReflectStruct();
     }
     return reflectStruct;
 }

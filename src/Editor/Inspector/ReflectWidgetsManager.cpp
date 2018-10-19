@@ -36,7 +36,8 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
             String widgetName = reflVar.GetName();
             if (reflVar.GetVariant().GetType() == Variant::Type::FLOAT ||
                 reflVar.GetVariant().GetType() == Variant::Type::DOUBLE ||
-                reflVar.GetVariant().GetType() == Variant::Type::INT)
+                reflVar.GetVariant().GetType() == Variant::Type::INT ||
+                reflVar.GetVariant().GetType() == Variant::Type::UINT)
             {
                 UIInputNumber *inputNumber =
                     GameObjectFactory::CreateUIInputNumber();
@@ -50,9 +51,14 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
                     inputNumber->SetValue(reflVar.GetInitValue().GetInt());
                 }
 
-                if (reflVar.GetVariant().GetType() == Variant::Type::INT)
+                if (reflVar.GetVariant().GetType() == Variant::Type::INT ||
+                    reflVar.GetVariant().GetType() == Variant::Type::UINT)
                 {
                     inputNumber->SetDecimalPlaces(0);
+                    if (reflVar.GetVariant().GetType() == Variant::Type::UINT)
+                    {
+                        inputNumber->SetMinValue(0.0f);
+                    }
                 }
                 inputNumber
                     ->EventEmitter<IEventsValueChanged>::RegisterListener(
