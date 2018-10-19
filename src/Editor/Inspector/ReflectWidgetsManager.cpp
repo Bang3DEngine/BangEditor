@@ -2,6 +2,7 @@
 
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UICheckBox.h"
+#include "Bang/UIComboBox.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UISlider.h"
@@ -40,40 +41,65 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
                 reflVar.GetVariant().GetType() == Variant::Type::INT ||
                 reflVar.GetVariant().GetType() == Variant::Type::UINT)
             {
-                UIInputNumber *inputNumber = nullptr;
-                if (reflVar.GetHints().GetIsSlider())
+                if (reflVar.GetHints().GetIsEnum())
                 {
-                    UISlider *slider = GameObjectFactory::CreateUISlider();
-
-                    slider->SetMinMaxValues(reflVar.GetHints().GetMinValue().x,
-                                            reflVar.GetHints().GetMaxValue().x);
-                    slider->SetValue(reflVar.GetInitValue().GetFloat());
-
-                    inputNumber = slider->GetInputNumber();
-
-                    slider->EventEmitter<IEventsValueChanged>::RegisterListener(
-                        inspectorWidget);
-                    widgetToAdd = slider->GetGameObject();
+                    UIComboBox *enumInput =
+                        GameObjectFactory::CreateUIComboBox();
+                    const auto &enumFields =
+                        reflectStruct.GetEnumFields(reflVar.GetName());
+                    if (enumFields.Size() >= 1)
+                    {
+                        for (const auto &enumFieldNameValuePair : enumFields)
+                        {
+                            const String &enumFieldName =
+                                enumFieldNameValuePair.first;
+                            uint enumFieldValue = enumFieldNameValuePair.second;
+                            enumInput->AddItem(enumFieldName,
+                                               SCAST<int>(enumFieldValue));
+                        }
+                        enumInput->EventEmitter<IEventsValueChanged>::
+                            RegisterListener(inspectorWidget);
+                    }
+                    widgetToAdd = enumInput->GetGameObject();
                 }
                 else
                 {
-                    inputNumber = GameObjectFactory::CreateUIInputNumber();
+                    UIInputNumber *inputNumber = nullptr;
+                    if (reflVar.GetHints().GetIsSlider())
+                    {
+                        UISlider *slider = GameObjectFactory::CreateUISlider();
 
-                    inputNumber->SetMinMaxValues(
-                        reflVar.GetHints().GetMinValue().x,
-                        reflVar.GetHints().GetMaxValue().x);
-                    inputNumber->SetValue(reflVar.GetInitValue().GetFloat());
+                        slider->SetMinMaxValues(
+                            reflVar.GetHints().GetMinValue().x,
+                            reflVar.GetHints().GetMaxValue().x);
+                        slider->SetValue(reflVar.GetInitValue().GetFloat());
 
-                    inputNumber
-                        ->EventEmitter<IEventsValueChanged>::RegisterListener(
-                            inspectorWidget);
-                    widgetToAdd = inputNumber->GetGameObject();
-                }
+                        inputNumber = slider->GetInputNumber();
 
-                if (reflVar.GetVariant().GetType() == Variant::Type::INT ||
-                    reflVar.GetVariant().GetType() == Variant::Type::UINT)
-                {
-                    inputNumber->SetDecimalPlaces(0);
+                        slider->EventEmitter<IEventsValueChanged>::
+                            RegisterListener(inspectorWidget);
+                        widgetToAdd = slider->GetGameObject();
+                    }
+                    else
+                    {
+                        inputNumber = GameObjectFactory::CreateUIInputNumber();
+
+                        inputNumber->SetMinMaxValues(
+                            reflVar.GetHints().GetMinValue().x,
+                            reflVar.GetHints().GetMaxValue().x);
+                        inputNumber->SetValue(
+                            reflVar.GetInitValue().GetFloat());
+
+                        inputNumber->EventEmitter<IEventsValueChanged>::
+                            RegisterListener(inspectorWidget);
+                        widgetToAdd = inputNumber->GetGameObject();
+                    }
+
+                    if (reflVar.GetVariant().GetType() == Variant::Type::INT ||
+                        reflVar.GetVariant().GetType() == Variant::Type::UINT)
+                    {
+                        inputNumber->SetDecimalPlaces(0);
+                    }
                 }
             }
             else if (reflVar.GetVariant().GetType() == Variant::Type::BOOL)
@@ -165,6 +191,10 @@ void ReflectWidgetsManager::UpdateWidgetsContentFromMeta(const MetaNode &meta)
             {
                 inputColor->SetColor(metaAttr.Get<Color>());
             }
+            else if (UIComboBox *comboBox = widget->GetComponent<UIComboBox>())
+            {
+                comboBox->SetSelectionByValue(metaAttr.Get<int>());
+            }
             else if (UIInputNumber *inputNumber =
                          widget->GetComponent<UIInputNumber>())
             {
@@ -201,6 +231,10 @@ String GetStringValueFromWidget(GameObject *widget)
 
             default: value = String::ToString(inputVec->GetVector4()); break;
         }
+    }
+    else if (UIComboBox *comboBox = widget->GetComponent<UIComboBox>())
+    {
+        value = String::ToString(comboBox->GetSelectedValue());
     }
     else if (UIInputColor *inputColor = DCAST<UIInputColor *>(widget))
     {

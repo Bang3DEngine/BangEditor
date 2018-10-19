@@ -35,7 +35,6 @@ class CIWCapsuleCollider : public CIWCollider
 private:
     UIInputNumber *p_radiusInput = nullptr;
     UIInputNumber *p_heightInput = nullptr;
-    UIComboBox *p_axisInput = nullptr;
 
     CIWCapsuleCollider();
     virtual ~CIWCapsuleCollider() override;

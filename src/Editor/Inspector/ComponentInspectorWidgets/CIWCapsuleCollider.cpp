@@ -44,15 +44,8 @@ void CIWCapsuleCollider::InitInnerWidgets()
     p_heightInput->SetMinValue(0.0f);
     p_heightInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_axisInput = GameObjectFactory::CreateUIComboBox();
-    p_axisInput->AddItem("X", SCAST<int>(Axis3D::X));
-    p_axisInput->AddItem("Y", SCAST<int>(Axis3D::Y));
-    p_axisInput->AddItem("Z", SCAST<int>(Axis3D::Z));
-    p_axisInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-
     AddWidget("Radius", p_radiusInput->GetGameObject());
     AddWidget("Height", p_heightInput->GetGameObject());
-    AddWidget("Axis", p_axisInput->GetGameObject());
 
     SetLabelsWidth(95);
 }
@@ -70,10 +63,6 @@ void CIWCapsuleCollider::UpdateFromReference()
     {
         p_heightInput->SetValue(cc->GetHeight());
     }
-    if (!p_axisInput->HasFocus())
-    {
-        p_axisInput->SetSelectionByValue(SCAST<int>(cc->GetAxis()));
-    }
 }
 
 void CIWCapsuleCollider::OnValueChangedCIW(
@@ -84,7 +73,6 @@ void CIWCapsuleCollider::OnValueChangedCIW(
     CapsuleCollider *capsuleCollider = GetCapsuleCollider();
     capsuleCollider->SetRadius(p_radiusInput->GetValue());
     capsuleCollider->SetHeight(p_heightInput->GetValue());
-    capsuleCollider->SetAxis(SCAST<Axis3D>(p_axisInput->GetSelectedValue()));
 }
 
 CapsuleCollider *CIWCapsuleCollider::GetCapsuleCollider() const
