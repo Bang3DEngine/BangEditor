@@ -15,7 +15,6 @@
 #include "Bang/Time.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ComponentInspectorWidget.h"
-#include "BangEditor/ReflectWidgetsManager.h"
 
 namespace Bang
 {

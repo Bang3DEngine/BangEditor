@@ -33,7 +33,7 @@ ComponentInspectorWidget::~ComponentInspectorWidget()
 
 void ComponentInspectorWidget::InitInnerWidgets()
 {
-    InspectorWidget::InitInnerWidgets();
+    SerializableInspectorWidget::InitInnerWidgets();
 
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback(
@@ -54,14 +54,10 @@ void ComponentInspectorWidget::InitInnerWidgets()
 
 void ComponentInspectorWidget::UpdateFromReference()
 {
+    SerializableInspectorWidget::UpdateFromReference();
+
     GetInspectorWidgetTitle()->GetEnabledCheckBox()->SetChecked(
         GetComponent()->IsEnabled());
-
-    ReflectStruct reflectStruct = GetComponentReflectStruct();
-    m_reflectWidgetsManager.UpdateWidgetsFromReflection(reflectStruct, this);
-
-    MetaNode componentMeta = GetComponent()->GetMeta();
-    m_reflectWidgetsManager.UpdateWidgetsContentFromMeta(componentMeta);
 }
 
 void ComponentInspectorWidget::SetComponent(Component *comp)
@@ -72,7 +68,8 @@ void ComponentInspectorWidget::SetComponent(Component *comp)
     UIImageRenderer *icon = GetInspectorWidgetTitle()->GetIcon();
     icon->SetImageTexture(GetComponentIconTexture());
     icon->SetTint(GetComponentIconTint());
-    OnComponentSet();
+
+    SetSerializable(comp);
 }
 
 Component *ComponentInspectorWidget::GetComponent() const
@@ -103,9 +100,6 @@ void ComponentInspectorWidget::OnValueChangedCIW(
         GetComponent()->SetEnabled(
             GetInspectorWidgetTitle()->GetEnabledCheckBox()->IsChecked());
     }
-
-    MetaNode meta = m_reflectWidgetsManager.GetMetaFromWidgets();
-    GetComponent()->ImportMeta(meta);
 }
 
 void ComponentInspectorWidget::OnValueChanged(
@@ -117,6 +111,7 @@ void ComponentInspectorWidget::OnValueChanged(
         undoMetaBefore = GetComponent()->GetMeta();
     }
 
+    SerializableInspectorWidget::OnValueChanged(object);
     OnValueChangedCIW(object);
 
     if (GetComponent())
@@ -241,14 +236,7 @@ void ComponentInspectorWidget::MoveComponent(Component *comp, int offset)
 
 void ComponentInspectorWidget::OnComponentSet()
 {
-    EventListener<IEventsValueChanged>::SetReceiveEvents(false);
-
-    ReflectStruct reflectStruct = GetComponentReflectStruct();
-    m_reflectWidgetsManager.UpdateWidgetsFromReflection(reflectStruct, this);
-
-    UpdateFromReference();
-
-    EventListener<IEventsValueChanged>::SetReceiveEvents(true);
+    // Empty
 }
 
 bool ComponentInspectorWidget::MustShowEnabledCheckbox() const
@@ -256,18 +244,8 @@ bool ComponentInspectorWidget::MustShowEnabledCheckbox() const
     return true;
 }
 
-ReflectWidgetsManager *ComponentInspectorWidget::GetReflectWidgetsManager()
-    const
+void ComponentInspectorWidget::OnReflectableSet()
 {
-    return &m_reflectWidgetsManager;
-}
-
-ReflectStruct ComponentInspectorWidget::GetComponentReflectStruct() const
-{
-    ReflectStruct reflectStruct;
-    if (GetComponent())
-    {
-        reflectStruct = GetComponent()->GetReflectStruct();
-    }
-    return reflectStruct;
+    SerializableInspectorWidget::OnReflectableSet();
+    OnComponentSet();
 }

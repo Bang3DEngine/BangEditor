@@ -15,8 +15,7 @@
 #include "Bang/ResourceHandle.h"
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
-#include "BangEditor/InspectorWidget.h"
-#include "BangEditor/ReflectWidgetsManager.h"
+#include "BangEditor/SerializableInspectorWidget.h"
 #include "BangEditor/UIContextMenu.h"
 
 namespace Bang
@@ -36,9 +35,9 @@ namespace BangEditor
 class MenuItem;
 class UIContextMenu;
 
-class ComponentInspectorWidget : public InspectorWidget
+class ComponentInspectorWidget : public SerializableInspectorWidget
 {
-    GAMEOBJECT_EDITOR(InspectorWidget);
+    GAMEOBJECT_EDITOR(ComponentInspectorWidget);
 
 protected:
     ComponentInspectorWidget();
@@ -66,13 +65,12 @@ protected:
     virtual void OnComponentSet();
     virtual bool MustShowEnabledCheckbox() const;
 
-    ReflectWidgetsManager *GetReflectWidgetsManager() const;
-    virtual ReflectStruct GetComponentReflectStruct() const;
+    // ReflectableInspectorWidget
+    void OnReflectableSet() override;
 
 private:
     Component *p_component = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
-    mutable ReflectWidgetsManager m_reflectWidgetsManager;
 
     // UIContextMenu
     virtual void OnCreateContextMenu(MenuItem *menuRootItem);

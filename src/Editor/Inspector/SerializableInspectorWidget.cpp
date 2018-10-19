@@ -1,4 +1,4 @@
-#include "BangEditor/ReflectWidgetsManager.h"
+#include "BangEditor/SerializableInspectorWidget.h"
 
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UICheckBox.h"
@@ -7,6 +7,7 @@
 #include "Bang/UIInputText.h"
 #include "Bang/UISlider.h"
 
+#include "Bang/Serializable.h"
 #include "BangEditor/InspectorWidget.h"
 #include "BangEditor/UIInputColor.h"
 #include "BangEditor/UIInputVector.h"
@@ -14,11 +15,45 @@
 using namespace Bang;
 using namespace BangEditor;
 
-void ReflectWidgetsManager::UpdateWidgetsFromReflection(
+SerializableInspectorWidget::SerializableInspectorWidget()
+{
+}
+
+SerializableInspectorWidget::~SerializableInspectorWidget()
+{
+}
+
+void SerializableInspectorWidget::InitInnerWidgets()
+{
+    InspectorWidget::InitInnerWidgets();
+}
+
+void SerializableInspectorWidget::UpdateFromReference()
+{
+    InspectorWidget::UpdateFromReference();
+
+    ReflectStruct reflectStruct = GetReflectableReflectStruct();
+    UpdateReflectWidgetsFromReflection(reflectStruct, this);
+
+    MetaNode reflectableMeta = GetSerializable()->GetMeta();
+    UpdateWidgetsContentFromMeta(reflectableMeta);
+}
+
+void SerializableInspectorWidget::SetSerializable(Serializable *serializable)
+{
+    if (serializable != GetSerializable())
+    {
+        p_serializable = serializable;
+
+        OnReflectableSet();
+    }
+}
+
+void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
     const ReflectStruct &reflectStruct,
     InspectorWidget *inspectorWidget)
 {
-    if (reflectStruct != m_previousReflectedStruct)
+    if (reflectStruct != m_previousReflectStruct)
     {
         // Clear old reflect widgets (if any)
         for (GameObject *widget : GetWidgets())
@@ -27,9 +62,9 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
         }
 
         // Clear structures
-        m_widgets.Clear();
-        m_widgetToReflectedVar.Clear();
-        m_varNameToWidget.Clear();
+        m_reflectWidgets.Clear();
+        m_reflectWidgetToReflectVar.Clear();
+        m_varNameToReflectWidget.Clear();
 
         // Add widgets to structures
         for (const ReflectVariable &reflVar : reflectStruct.GetVariables())
@@ -155,9 +190,9 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
 
             if (widgetToAdd)
             {
-                m_varNameToWidget.Add(reflVar.GetName(), widgetToAdd);
-                m_widgetToReflectedVar.Add(widgetToAdd, reflVar);
-                m_widgets.PushBack(widgetToAdd);
+                m_varNameToReflectWidget.Add(reflVar.GetName(), widgetToAdd);
+                m_reflectWidgetToReflectVar.Add(widgetToAdd, reflVar);
+                m_reflectWidgets.PushBack(widgetToAdd);
             }
         }
 
@@ -168,11 +203,12 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
             inspectorWidget->AddWidget(name, widget);
         }
 
-        m_previousReflectedStruct = reflectStruct;
+        m_previousReflectStruct = reflectStruct;
     }
 }
 
-void ReflectWidgetsManager::UpdateWidgetsContentFromMeta(const MetaNode &meta)
+void SerializableInspectorWidget::UpdateWidgetsContentFromMeta(
+    const MetaNode &meta)
 {
     for (const auto &pair : meta.GetAttributes())
     {
@@ -262,7 +298,8 @@ String GetStringValueFromWidget(GameObject *widget)
     return value;
 }
 
-MetaNode ReflectWidgetsManager::GetMetaFromWidget(GameObject *widget) const
+MetaNode SerializableInspectorWidget::GetMetaFromWidget(
+    GameObject *widget) const
 {
     MetaNode meta;
     auto it = GetWidgetToReflectedVar().Find(widget);
@@ -281,7 +318,7 @@ MetaNode ReflectWidgetsManager::GetMetaFromWidget(GameObject *widget) const
     return meta;
 }
 
-MetaNode ReflectWidgetsManager::GetMetaFromWidgets() const
+MetaNode SerializableInspectorWidget::GetMetaFromReflectWidgets() const
 {
     MetaNode meta;
     for (const auto &it : GetWidgetToReflectedVar())
@@ -295,18 +332,54 @@ MetaNode ReflectWidgetsManager::GetMetaFromWidgets() const
 }
 
 const Map<GameObject *, ReflectVariable>
-    &ReflectWidgetsManager::GetWidgetToReflectedVar() const
+    &SerializableInspectorWidget::GetWidgetToReflectedVar() const
 {
-    return m_widgetToReflectedVar;
+    return m_reflectWidgetToReflectVar;
 }
 
-const Map<String, GameObject *> &ReflectWidgetsManager::GetVarNameToWidget()
-    const
+const Map<String, GameObject *>
+    &SerializableInspectorWidget::GetVarNameToWidget() const
 {
-    return m_varNameToWidget;
+    return m_varNameToReflectWidget;
 }
 
-const Array<GameObject *> &ReflectWidgetsManager::GetWidgets() const
+const Array<GameObject *> &SerializableInspectorWidget::GetWidgets() const
 {
-    return m_widgets;
+    return m_reflectWidgets;
+}
+
+Serializable *SerializableInspectorWidget::GetSerializable() const
+{
+    return p_serializable;
+}
+
+void SerializableInspectorWidget::OnReflectableSet()
+{
+    EventListener<IEventsValueChanged>::SetReceiveEvents(false);
+
+    ReflectStruct reflectStruct = GetReflectableReflectStruct();
+    UpdateReflectWidgetsFromReflection(reflectStruct, this);
+
+    UpdateFromReference();
+
+    EventListener<IEventsValueChanged>::SetReceiveEvents(true);
+}
+
+ReflectStruct SerializableInspectorWidget::GetReflectableReflectStruct() const
+{
+    ReflectStruct reflectStruct;
+    if (GetSerializable())
+    {
+        reflectStruct = GetSerializable()->GetReflectStruct();
+    }
+    return reflectStruct;
+}
+
+void SerializableInspectorWidget::OnValueChanged(
+    EventEmitter<IEventsValueChanged> *object)
+{
+    InspectorWidget::OnValueChanged(object);
+
+    MetaNode meta = GetMetaFromReflectWidgets();
+    GetSerializable()->ImportMeta(meta);
 }

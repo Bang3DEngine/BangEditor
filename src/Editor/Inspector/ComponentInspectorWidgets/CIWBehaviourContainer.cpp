@@ -26,7 +26,6 @@
 #include "Bang/UITextRenderer.h"
 #include "BangEditor/CIWBehaviour.h"
 #include "BangEditor/EditorFileTracker.h"
-#include "BangEditor/ReflectWidgetsManager.h"
 #include "BangEditor/UIInputFileWithPreview.h"
 
 namespace Bang
@@ -73,21 +72,23 @@ void CIWBehaviourContainer::InitInnerWidgets()
 void CIWBehaviourContainer::UpdateModifiedInitializationMetaFromWidget(
     GameObject *widget)
 {
-    MetaNode widgetMeta = GetReflectWidgetsManager()->GetMetaFromWidget(widget);
+    MetaNode widgetMeta = GetMetaFromWidget(widget);
     GetBehaviourContainer()->GetIntializationModificationMetaPtr()->Import(
         widgetMeta.ToString());
 }
 
 void CIWBehaviourContainer::OnComponentSet()
 {
+    ComponentInspectorWidget::OnComponentSet();
+
     MetaNode modifiedInitMeta =
         GetBehaviourContainer()->GetInitializationModificationsMeta();
 
     ComponentInspectorWidget::OnComponentSet();
-    GetReflectWidgetsManager()->UpdateWidgetsContentFromMeta(modifiedInitMeta);
+    UpdateWidgetsContentFromMeta(modifiedInitMeta);
 }
 
-ReflectStruct CIWBehaviourContainer::GetComponentReflectStruct() const
+ReflectStruct CIWBehaviourContainer::GetReflectableReflectStruct() const
 {
     return GetBehaviourContainer()->GetBehaviourReflectStruct();
 }
@@ -105,7 +106,7 @@ void CIWBehaviourContainer::UpdateFromReference()
     ComponentInspectorWidget::UpdateFromReference();
 
     MetaNode initMeta = GetBehaviourContainer()->GetInitializationMeta();
-    GetReflectWidgetsManager()->UpdateWidgetsContentFromMeta(initMeta);
+    UpdateWidgetsContentFromMeta(initMeta);
 
     MetaNode initializationModificationMeta =
         GetBehaviourContainer()->GetInitializationModificationsMeta();

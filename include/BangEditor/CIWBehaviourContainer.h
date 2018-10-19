@@ -48,7 +48,7 @@ private:
 
     // ComponentInspectorWidget
     void OnComponentSet() override;
-    ReflectStruct GetComponentReflectStruct() const override;
+    ReflectStruct GetReflectableReflectStruct() const override;
 
     // ComponentInspectorWidget
     void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
