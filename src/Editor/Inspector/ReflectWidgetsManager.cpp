@@ -4,6 +4,7 @@
 #include "Bang/UICheckBox.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UIInputText.h"
+#include "Bang/UISlider.h"
 
 #include "BangEditor/InspectorWidget.h"
 #include "BangEditor/UIInputColor.h"
@@ -39,31 +40,41 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
                 reflVar.GetVariant().GetType() == Variant::Type::INT ||
                 reflVar.GetVariant().GetType() == Variant::Type::UINT)
             {
-                UIInputNumber *inputNumber =
-                    GameObjectFactory::CreateUIInputNumber();
-                if (reflVar.GetVariant().GetType() == Variant::Type::FLOAT ||
-                    reflVar.GetVariant().GetType() == Variant::Type::DOUBLE)
+                UIInputNumber *inputNumber = nullptr;
+                if (reflVar.GetHints().GetIsSlider())
                 {
-                    inputNumber->SetValue(reflVar.GetInitValue().GetFloat());
+                    UISlider *slider = GameObjectFactory::CreateUISlider();
+
+                    slider->SetMinMaxValues(reflVar.GetHints().GetMinValue().x,
+                                            reflVar.GetHints().GetMaxValue().x);
+                    slider->SetValue(reflVar.GetInitValue().GetFloat());
+
+                    inputNumber = slider->GetInputNumber();
+
+                    slider->EventEmitter<IEventsValueChanged>::RegisterListener(
+                        inspectorWidget);
+                    widgetToAdd = slider->GetGameObject();
                 }
                 else
                 {
-                    inputNumber->SetValue(reflVar.GetInitValue().GetInt());
+                    inputNumber = GameObjectFactory::CreateUIInputNumber();
+
+                    inputNumber->SetMinMaxValues(
+                        reflVar.GetHints().GetMinValue().x,
+                        reflVar.GetHints().GetMaxValue().x);
+                    inputNumber->SetValue(reflVar.GetInitValue().GetFloat());
+
+                    inputNumber
+                        ->EventEmitter<IEventsValueChanged>::RegisterListener(
+                            inspectorWidget);
+                    widgetToAdd = inputNumber->GetGameObject();
                 }
 
                 if (reflVar.GetVariant().GetType() == Variant::Type::INT ||
                     reflVar.GetVariant().GetType() == Variant::Type::UINT)
                 {
                     inputNumber->SetDecimalPlaces(0);
-                    if (reflVar.GetVariant().GetType() == Variant::Type::UINT)
-                    {
-                        inputNumber->SetMinValue(0.0f);
-                    }
                 }
-                inputNumber
-                    ->EventEmitter<IEventsValueChanged>::RegisterListener(
-                        inspectorWidget);
-                widgetToAdd = inputNumber->GetGameObject();
             }
             else if (reflVar.GetVariant().GetType() == Variant::Type::BOOL)
             {
@@ -101,6 +112,8 @@ void ReflectWidgetsManager::UpdateWidgetsFromReflection(
                 UIInputVector *inputVec = new UIInputVector();
                 inputVec->SetSize(numComps);
                 inputVec->Set(reflVar.GetInitValue().GetVector4());
+                inputVec->SetMinValue(reflVar.GetHints().GetMinValue());
+                inputVec->SetMaxValue(reflVar.GetHints().GetMaxValue());
                 inputVec->EventEmitter<IEventsValueChanged>::RegisterListener(
                     inspectorWidget);
                 widgetToAdd = inputVec;
@@ -157,6 +170,10 @@ void ReflectWidgetsManager::UpdateWidgetsContentFromMeta(const MetaNode &meta)
             {
                 inputNumber->SetValue(SCAST<float>(metaAttr.Get<double>()));
             }
+            else if (UISlider *inputSlider = widget->GetComponent<UISlider>())
+            {
+                inputSlider->SetValue(SCAST<float>(metaAttr.Get<double>()));
+            }
             else if (UIInputText *inputText =
                          widget->GetComponent<UIInputText>())
             {
@@ -192,6 +209,12 @@ String GetStringValueFromWidget(GameObject *widget)
     else if (UICheckBox *inputCheckBox = widget->GetComponent<UICheckBox>())
     {
         value = inputCheckBox->IsChecked() ? "True" : "False";
+    }
+    else if (UISlider *slider = widget->GetComponent<UISlider>())
+    {
+        value = String::ToString(
+            slider->GetValue(),
+            SCAST<int>(slider->GetInputNumber()->GetDecimalPlaces()));
     }
     else if (UIInputNumber *inputNumber = widget->GetComponent<UIInputNumber>())
     {
