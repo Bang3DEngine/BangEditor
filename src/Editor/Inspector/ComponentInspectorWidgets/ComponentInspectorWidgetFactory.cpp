@@ -12,10 +12,8 @@
 #include "BangEditor/CIWBehaviour.h"
 #include "BangEditor/CIWBehaviourContainer.h"
 #include "BangEditor/CIWCamera.h"
-#include "BangEditor/CIWDirectionalLight.h"
 #include "BangEditor/CIWMeshRenderer.h"
 #include "BangEditor/CIWParticleSystem.h"
-#include "BangEditor/CIWPointLight.h"
 #include "BangEditor/CIWPostProcessEffect.h"
 #include "BangEditor/CIWPostProcessEffectSSAO.h"
 #include "BangEditor/CIWRectTransform.h"
@@ -90,14 +88,6 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     else if (cName == "BehaviourContainer")
     {
         ciw = new CIWBehaviourContainer();
-    }
-    else if (cName == "DirectionalLight")
-    {
-        ciw = new CIWDirectionalLight();
-    }
-    else if (cName == "PointLight")
-    {
-        ciw = new CIWPointLight();
     }
     else if (cName == "Camera")
     {
