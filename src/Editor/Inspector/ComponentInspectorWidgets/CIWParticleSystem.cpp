@@ -41,7 +41,7 @@ using namespace BangEditor;
 
 void CIWParticleSystem::InitInnerWidgets()
 {
-    CIWRenderer::InitInnerWidgets();
+    ComponentInspectorWidget::InitInnerWidgets();
 
     SetName("CIWParticleSystem");
     SetTitle("Particle System");
@@ -182,7 +182,7 @@ void CIWParticleSystem::InitInnerWidgets()
 
 void CIWParticleSystem::UpdateFromReference()
 {
-    CIWRenderer::UpdateFromReference();
+    ComponentInspectorWidget::UpdateFromReference();
 
     Mesh *mesh = GetParticleSystem()->GetMesh();
     Path meshPath = mesh ? mesh->GetResourceFilepath() : Path::Empty;
@@ -287,10 +287,10 @@ void CIWParticleSystem::UpdateFromReference()
 
 void CIWParticleSystem::EnableOnlyNeededWidgets()
 {
-    SetWidgetEnabled(p_materialInputFile, false);
+    SetWidgetEnabled(GetWidgetFromLabel("Material"), false);
     // SetWidgetEnabled(p_castsShadowsCheckBox->GetGameObject(), false);
     // SetWidgetEnabled(p_receivesShadowsCheckBox->GetGameObject(), false);
-    SetWidgetEnabled(p_useReflectionProbesCheckBox->GetGameObject(), false);
+    SetWidgetEnabled(GetWidgetFromLabel("Use Refl Probes"), false);
 
     Array<GameObject *> allWidgetsToEnableOrDisable;
     allWidgetsToEnableOrDisable.PushBack(p_generationShapeBoxSizeInput);
@@ -323,7 +323,7 @@ void CIWParticleSystem::EnableOnlyNeededWidgets()
 void CIWParticleSystem::OnValueChangedCIW(
     EventEmitter<IEventsValueChanged> *object)
 {
-    CIWRenderer::OnValueChangedCIW(object);
+    ComponentInspectorWidget::OnValueChangedCIW(object);
 
     if (object == p_meshInputFile)
     {
@@ -438,5 +438,5 @@ void CIWParticleSystem::OnValueChangedCIW(
 
 ParticleSystem *CIWParticleSystem::GetParticleSystem() const
 {
-    return SCAST<ParticleSystem *>(GetRenderer());
+    return SCAST<ParticleSystem *>(GetComponent());
 }

@@ -236,6 +236,20 @@ int InspectorWidget::GetLabelsWidth() const
     return m_labelsWidth;
 }
 
+GameObject *InspectorWidget::GetWidgetFromLabel(const String &labelStr) const
+{
+    for (const auto &pair : GetWidgetToLabel())
+    {
+        String thisLabelStr = pair.second->GetText()->GetContent();
+        if (thisLabelStr == labelStr)
+        {
+            GameObject *widget = pair.first;
+            return widget;
+        }
+    }
+    return nullptr;
+}
+
 GameObject *InspectorWidget::GetWidgetsContainer() const
 {
     return p_widgetsContainer;

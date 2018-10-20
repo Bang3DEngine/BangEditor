@@ -78,6 +78,11 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
         {
             GameObject *widgetToAdd = nullptr;
             String widgetName = reflVar.GetName();
+            if (reflVar.GetHints().GetIsHidden())
+            {
+                continue;
+            }
+
             if (reflVar.GetVariant().GetType() == Variant::Type::FLOAT ||
                 reflVar.GetVariant().GetType() == Variant::Type::DOUBLE ||
                 reflVar.GetVariant().GetType() == Variant::Type::INT ||

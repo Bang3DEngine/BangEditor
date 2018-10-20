@@ -4,7 +4,7 @@
 #include "Bang/BangDefines.h"
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
-#include "BangEditor/CIWRenderer.h"
+#include "BangEditor/ComponentInspectorWidget.h"
 
 namespace Bang
 {
@@ -27,7 +27,7 @@ class UIInputFileWithPreview;
 class UIInputTexture;
 class UIInputVector;
 
-class CIWParticleSystem : public CIWRenderer
+class CIWParticleSystem : public ComponentInspectorWidget
 {
     GAMEOBJECT_EDITOR(CIWParticleSystem);
 

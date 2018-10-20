@@ -12,19 +12,15 @@
 #include "BangEditor/CIWBehaviour.h"
 #include "BangEditor/CIWBehaviourContainer.h"
 #include "BangEditor/CIWCamera.h"
-#include "BangEditor/CIWMeshRenderer.h"
 #include "BangEditor/CIWParticleSystem.h"
 #include "BangEditor/CIWPostProcessEffect.h"
 #include "BangEditor/CIWPostProcessEffectSSAO.h"
 #include "BangEditor/CIWRectTransform.h"
 #include "BangEditor/CIWReflectionProbe.h"
 #include "BangEditor/CIWRigidBody.h"
-#include "BangEditor/CIWRope.h"
-#include "BangEditor/CIWSkinnedMeshRenderer.h"
 #include "BangEditor/CIWTransform.h"
 #include "BangEditor/CIWUIImageRenderer.h"
 #include "BangEditor/CIWUITextRenderer.h"
-#include "BangEditor/CIWWaterRenderer.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 
 namespace Bang
@@ -61,29 +57,13 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     {
         ciw = new CIWUIImageRenderer();
     }
-    else if (cName == "MeshRenderer")
-    {
-        ciw = new CIWMeshRenderer();
-    }
     else if (cName == "RigidBody")
     {
         ciw = new CIWRigidBody();
     }
-    else if (cName == "Rope")
-    {
-        ciw = new CIWRope();
-    }
     else if (cName == "ParticleSystem")
     {
         ciw = new CIWParticleSystem();
-    }
-    else if (cName == "WaterRenderer")
-    {
-        ciw = new CIWWaterRenderer();
-    }
-    else if (cName == "SkinnedMeshRenderer")
-    {
-        ciw = new CIWSkinnedMeshRenderer();
     }
     else if (cName == "BehaviourContainer")
     {

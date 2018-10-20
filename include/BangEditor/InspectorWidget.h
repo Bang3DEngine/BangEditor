@@ -64,6 +64,7 @@ protected:
     void SetWidgetEnabled(GameObject *widget, bool enabled);
 
     int GetLabelsWidth() const;
+    GameObject *GetWidgetFromLabel(const String &labelStr) const;
     GameObject *GetWidgetsContainer() const;
 
 protected:
