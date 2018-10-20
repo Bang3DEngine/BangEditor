@@ -80,8 +80,6 @@ void CIWRenderer::UpdateFromReference()
 {
     ComponentInspectorWidget::UpdateFromReference();
 
-    EventListener<IEventsValueChanged>::SetReceiveEvents(false);
-
     p_visibleCheckBox->SetChecked(GetRenderer()->IsVisible());
     p_castsShadowsCheckBox->SetChecked(GetRenderer()->GetCastsShadows());
     p_receivesShadowsCheckBox->SetChecked(GetRenderer()->GetReceivesShadows());
@@ -91,8 +89,6 @@ void CIWRenderer::UpdateFromReference()
     Material *mat = GetRenderer()->GetSharedMaterial();
     Path matPath = mat ? mat->GetResourceFilepath() : Path::Empty;
     p_materialInputFile->SetPath(matPath);
-
-    EventListener<IEventsValueChanged>::SetReceiveEvents(true);
 }
 
 Renderer *CIWRenderer::GetRenderer() const

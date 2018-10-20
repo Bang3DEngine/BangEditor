@@ -1,11 +1,11 @@
-#include "Bang/Behaviour.h"
 #include "Bang/All.h"
+#include "Bang/Behaviour.h"
 
 #include ".BEHAVIOUR_NAME.refl.h"
 
 using namespace Bang;
 
-BANG_REFLECT_CLASS(BEHAVIOUR_NAME)
+BANG_CLASS(BEHAVIOUR_NAME)
 class BEHAVIOUR_NAME : public Behaviour
 {
     COMPONENT(BEHAVIOUR_NAME);
@@ -18,10 +18,10 @@ public:
     void OnUpdate() override;
 
 private:
-    BANG_REFLECT_VARIABLE(RotationSpeed)
+    BANG_VARIABLE(RotationSpeed)
     float m_rotationSpeed = 6.0f;
 
-    BANG_REFLECT_DEFINITIONS(BEHAVIOUR_NAME)
+    BANG_BEHAVIOUR_DEFINITIONS(BEHAVIOUR_NAME)
 };
 
 BANG_BEHAVIOUR_CLASS(BEHAVIOUR_NAME);

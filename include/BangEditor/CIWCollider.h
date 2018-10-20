@@ -44,11 +44,6 @@ protected:
 
     Collider *GetCollider() const;
 
-private:
-    UICheckBox *p_isTriggerInput = nullptr;
-    UIInputVector *p_centerInput = nullptr;
-    UIInputFileWithPreview *p_physicsMaterialInput = nullptr;
-
     friend class ComponentInspectorWidgetFactory;
 };
 }
