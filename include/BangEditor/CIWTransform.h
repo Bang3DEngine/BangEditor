@@ -40,10 +40,6 @@ protected:
     void OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
-    UIInputVector *p_posIV = nullptr;
-    UIInputVector *p_rotIV = nullptr;
-    UIInputVector *p_scaleIV = nullptr;
-
     Transform *GetTransform() const;
 
     // ComponentWidget

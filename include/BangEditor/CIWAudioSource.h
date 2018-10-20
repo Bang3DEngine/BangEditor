@@ -38,13 +38,7 @@ public:
     virtual void UpdateFromReference() override;
 
 private:
-    UIInputNumber *p_rangeInput = nullptr;
-    UISlider *p_pitchSlider = nullptr;
-    UISlider *p_volumeSlider = nullptr;
     UIButton *p_playStopButton = nullptr;
-    UICheckBox *p_loopingCheckbox = nullptr;
-    UICheckBox *p_playOnStartCheckbox = nullptr;
-    UIInputFileWithPreview *p_audioClipFileInput = nullptr;
 
     void OnPlayClicked();
 

@@ -43,14 +43,6 @@ protected:
     bool MustShowEnabledCheckbox() const override;
 
 private:
-    UIInputVector *p_anchorMinInput = nullptr;
-    UIInputVector *p_anchorMaxInput = nullptr;
-
-    UIInputVector *p_marginLeftBotInput = nullptr;
-    UIInputVector *p_marginRightTopInput = nullptr;
-
-    UIInputVector *p_pivotPositionInput = nullptr;
-
     virtual ~CIWRectTransform() override = default;
 };
 }

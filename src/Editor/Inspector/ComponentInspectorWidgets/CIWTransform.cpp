@@ -27,39 +27,12 @@ void CIWTransform::InitInnerWidgets()
     SetName("CIWTransform");
     SetTitle("Transform");
 
-    p_posIV = new UIInputVector(3);
-    p_rotIV = new UIInputVector(3);
-    p_scaleIV = new UIInputVector(3);
-
-    p_posIV->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-    p_rotIV->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-    p_scaleIV->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-
-    AddWidget("Position", p_posIV);
-    AddWidget("Rotation", p_rotIV);
-    AddWidget("Scale", p_scaleIV);
-
     SetLabelsWidth(60);
 }
 
 void CIWTransform::UpdateFromReference()
 {
     ComponentInspectorWidget::UpdateFromReference();
-
-    if (!p_posIV->HasFocus())
-    {
-        p_posIV->Set(GetTransform()->GetLocalPosition());
-    }
-
-    if (!p_rotIV->HasFocus())
-    {
-        p_rotIV->Set(GetTransform()->GetLocalEuler());
-    }
-
-    if (!p_scaleIV->HasFocus())
-    {
-        p_scaleIV->Set(GetTransform()->GetLocalScale());
-    }
 }
 
 bool CIWTransform::CanBeRemovedFromContextMenu() const
@@ -75,10 +48,6 @@ Transform *CIWTransform::GetTransform() const
 void CIWTransform::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
 {
     ComponentInspectorWidget::OnValueChangedCIW(object);
-
-    GetTransform()->SetLocalPosition(p_posIV->GetVector3());
-    GetTransform()->SetLocalEuler(p_rotIV->GetVector3());
-    GetTransform()->SetLocalScale(p_scaleIV->GetVector3());
 }
 
 bool CIWTransform::MustShowEnabledCheckbox() const

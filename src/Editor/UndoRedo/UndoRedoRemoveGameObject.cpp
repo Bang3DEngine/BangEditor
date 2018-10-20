@@ -21,10 +21,11 @@ UndoRedoRemoveGameObject::UndoRedoRemoveGameObject(
     }
 
     p_previousParent = p_removedGameObject->GetParent();
-    m_indexInPreviousParent =
-        p_previousParent->GetChildren().IndexOf(p_removedGameObject);
+
     if (p_previousParent)
     {
+        m_indexInPreviousParent =
+            p_previousParent->GetChildren().IndexOf(p_removedGameObject);
         p_previousParent->EventEmitter<IEventsDestroy>::RegisterListener(this);
     }
 }
