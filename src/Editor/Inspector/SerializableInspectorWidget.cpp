@@ -46,6 +46,8 @@ void SerializableInspectorWidget::SetSerializable(Serializable *serializable)
     {
         p_serializable = serializable;
 
+        SetTitle(GetSerializable()->GetClassName());
+
         EventListener<IEventsValueChanged>::SetReceiveEvents(false);
         OnReflectableSet();
         EventListener<IEventsValueChanged>::SetReceiveEvents(true);
@@ -68,6 +70,8 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
         m_reflectWidgets.Clear();
         m_reflectWidgetToReflectVar.Clear();
         m_varNameToReflectWidget.Clear();
+
+        int totalLabelsWidth = GetLabelsWidth();
 
         // Add widgets to structures
         for (const ReflectVariable &reflVar : reflectStruct.GetVariables())
@@ -215,7 +219,13 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
         {
             String name = GetWidgetToReflectedVar().Get(widget).GetName();
             inspectorWidget->AddWidget(name, widget);
+
+            UILabel *label = inspectorWidget->GetWidgetToLabel().Get(widget);
+            label->GetText()->CalculateLayout(Axis::HORIZONTAL);
+            int labelWidth = label->GetText()->GetPreferredSize().x + 10;
+            totalLabelsWidth = Math::Max(labelWidth, totalLabelsWidth);
         }
+        SetLabelsWidth(totalLabelsWidth);
 
         m_previousReflectStruct = reflectStruct;
     }

@@ -11,11 +11,8 @@
 #include "BangEditor/CIWAudioSource.h"
 #include "BangEditor/CIWBehaviour.h"
 #include "BangEditor/CIWBehaviourContainer.h"
-#include "BangEditor/CIWBoxCollider.h"
 #include "BangEditor/CIWCamera.h"
-#include "BangEditor/CIWCapsuleCollider.h"
 #include "BangEditor/CIWDirectionalLight.h"
-#include "BangEditor/CIWMeshCollider.h"
 #include "BangEditor/CIWMeshRenderer.h"
 #include "BangEditor/CIWParticleSystem.h"
 #include "BangEditor/CIWPointLight.h"
@@ -26,7 +23,6 @@
 #include "BangEditor/CIWRigidBody.h"
 #include "BangEditor/CIWRope.h"
 #include "BangEditor/CIWSkinnedMeshRenderer.h"
-#include "BangEditor/CIWSphereCollider.h"
 #include "BangEditor/CIWTransform.h"
 #include "BangEditor/CIWUIImageRenderer.h"
 #include "BangEditor/CIWUITextRenderer.h"
@@ -82,22 +78,6 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     else if (cName == "ParticleSystem")
     {
         ciw = new CIWParticleSystem();
-    }
-    else if (cName == "BoxCollider")
-    {
-        ciw = new CIWBoxCollider();
-    }
-    else if (cName == "MeshCollider")
-    {
-        ciw = new CIWMeshCollider();
-    }
-    else if (cName == "CapsuleCollider")
-    {
-        ciw = new CIWCapsuleCollider();
-    }
-    else if (cName == "SphereCollider")
-    {
-        ciw = new CIWSphereCollider();
     }
     else if (cName == "WaterRenderer")
     {
