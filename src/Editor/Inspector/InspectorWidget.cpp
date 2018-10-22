@@ -202,7 +202,10 @@ void InspectorWidget::RemoveWidget(GameObject *widget)
 
 void InspectorWidget::SetWidgetEnabled(GameObject *widget, bool enabled)
 {
-    widget->GetParent()->SetEnabled(enabled);
+    if (widget)
+    {
+        widget->GetParent()->SetEnabled(enabled);
+    }
 }
 
 UILabel *InspectorWidget::CreateWidgetLabel(const String &content,

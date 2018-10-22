@@ -11,6 +11,7 @@
 #include "Bang/BoxCollider.h"
 #include "Bang/Camera.h"
 #include "Bang/CapsuleCollider.h"
+#include "Bang/Cloth.h"
 #include "Bang/Color.h"
 #include "Bang/Dialog.h"
 #include "Bang/DirectionalLight.h"
@@ -364,6 +365,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addCapsuleCollider = addColliders->AddItem("CapsuleCollider");
     MenuItem *addMeshCollider = addColliders->AddItem("MeshCollider");
     MenuItem *addRope = addPhysics->AddItem("Rope");
+    MenuItem *addCloth = addPhysics->AddItem("Cloth");
     MenuItem *addPostProcessEffects = rootItem->AddItem("Post Process Effects");
     MenuItem *addPostProcessEffect =
         addPostProcessEffects->AddItem("PostProcessEffect");
@@ -394,6 +396,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     addSphereCollider->SetSelectedCallback(MenuBar::OnAddSphereCollider);
     addMeshCollider->SetSelectedCallback(MenuBar::OnAddMeshCollider);
     addRope->SetSelectedCallback(MenuBar::OnAddRope);
+    addCloth->SetSelectedCallback(MenuBar::OnAddCloth);
     addAnimator->SetSelectedCallback(MenuBar::OnAddAnimator);
     addAudioListener->SetSelectedCallback(MenuBar::OnAddAudioListener);
     addAudioSource->SetSelectedCallback(MenuBar::OnAddAudioSource);
@@ -828,6 +831,11 @@ void MenuBar::OnAddPostProcessEffect(MenuItem *)
 void MenuBar::OnAddRope(MenuItem *)
 {
     OnAddComponent<Rope>();
+}
+
+void MenuBar::OnAddCloth(MenuItem *)
+{
+    OnAddComponent<Cloth>();
 }
 
 void MenuBar::OnAddSSAO(MenuItem *)

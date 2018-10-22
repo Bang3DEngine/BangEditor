@@ -114,6 +114,7 @@ private:
     static void OnAddRectTransform(MenuItem *item);
     static void OnAddPostProcessEffect(MenuItem *item);
     static void OnAddRope(MenuItem *item);
+    static void OnAddCloth(MenuItem *item);
     static void OnAddSSAO(MenuItem *item);
     static void OnAddRigidBody(MenuItem *item);
     static void OnAddUIAutoFocuser(MenuItem *item);
