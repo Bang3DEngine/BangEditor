@@ -58,7 +58,7 @@ public:
                           std::function<T *()> createNewReferenceFunction,
                           std::function<void(T *)> removeReferenceFunction);
 
-    void Clear();
+    void Clear(bool synchronize = false);
     uint Size() const;
 
     const Array<GameObject *> &GetRowGameObjects() const;

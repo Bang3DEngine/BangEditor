@@ -71,15 +71,18 @@ private:
     UIFocusable *p_focusable = nullptr;
     GameObject *p_gridContainer = nullptr;
     UIImageRenderer *p_gridImg = nullptr;
+    GameObject *p_zoomContainer = nullptr;
     GameObject *p_mainContainer = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
     DPtr<UIImageRenderer> p_border = nullptr;
     Time m_lastTimeAnimatorSMWasExported = Time(0);
 
+    uint m_framesAfterNewAnimatorSMSetAndVisible = 0;
+
     float m_zoomScale = 1.0f;
     Vector2 m_panning = Vector2::Zero;
 
-    void SetZoomScale(float zoomScale);
+    void SetZoomScale(float zoomScale, bool centerOnMouse);
     void UpdatePanningAndZoomOnTransforms();
     bool IsMouseOverSomeConnectionLine() const;
 

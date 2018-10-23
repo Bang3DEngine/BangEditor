@@ -162,12 +162,19 @@ void UIInputArray::UpdateSerializables(
     }
 }
 
-void UIInputArray::Clear()
+void UIInputArray::Clear(bool synchronize)
 {
+    if (!synchronize)
+    {
+        EventEmitter<IEventsValueChanged>::SetEmitEvents(false);
+    }
+
     while (!GetRowGameObjects().IsEmpty())
     {
         RemoveRow(GetRowGameObjects().Size() - 1);
     }
+
+    EventEmitter<IEventsValueChanged>::SetEmitEvents(true);
 }
 
 void UIInputArray::AddRow(GameObject *rowGameObject, uint index)

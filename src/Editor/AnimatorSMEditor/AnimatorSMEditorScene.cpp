@@ -4,6 +4,7 @@
 #include "Bang/AnimatorStateMachineNode.h"
 #include "Bang/Assert.h"
 #include "Bang/Color.h"
+#include "Bang/Debug.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/File.h"
 #include "Bang/GameObject.tcc"
@@ -58,9 +59,12 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
     p_focusable = AddComponent<UIFocusable>();
     p_focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
 
+    p_zoomContainer = GameObjectFactory::CreateUIGameObject();
+    p_zoomContainer->SetParent(this);
+
     p_mainContainer = GameObjectFactory::CreateUIGameObject();
     p_mainContainer->GetRectTransform()->SetPivotPosition(Vector2::Zero);
-    p_mainContainer->SetParent(this);
+    p_mainContainer->SetParent(p_zoomContainer);
 
     p_gridContainer = GameObjectFactory::CreateUIGameObject();
     p_gridContainer->GetRectTransform()->SetAnchors(Vector2::Zero);
@@ -108,6 +112,16 @@ AnimatorSMEditorScene::~AnimatorSMEditorScene()
 void AnimatorSMEditorScene::Update()
 {
     GameObject::Update();
+
+    // Center scene gracefully...xd
+    if (IsVisibleRecursively())
+    {
+        if (++m_framesAfterNewAnimatorSMSetAndVisible == 5)
+        {
+            CenterScene();
+        }
+    }
+    p_mainContainer->SetVisible(m_framesAfterNewAnimatorSMSetAndVisible >= 5);
 
     if (UICanvas::GetActive(this)->HasFocus(this, true))
     {
@@ -176,12 +190,9 @@ void AnimatorSMEditorScene::SetAnimatorSM(AnimatorStateMachine *animatorSM)
             }
         }
 
-        m_panning = Vector2::Zero;
-        m_zoomScale = 1.0f;
-
         ImportCurrentAnimatorStateMachineExtraInformation();
-        UpdatePanningAndZoomOnTransforms();
-        CenterScene();
+        m_framesAfterNewAnimatorSMSetAndVisible = 0;
+        p_mainContainer->SetVisible(false);  // To handle scene centering nice
     }
 }
 
@@ -203,7 +214,8 @@ Vector2 AnimatorSMEditorScene::GetWorldPositionInSceneSpace(
 void AnimatorSMEditorScene::CenterScene()
 {
     m_panning = Vector2::Zero;
-    SetZoomScale(1.0f);
+    UpdatePanningAndZoomOnTransforms();
+    SetZoomScale(1.0f, false);
     UpdatePanningAndZoomOnTransforms();
 
     AARect boundingRect;
@@ -215,9 +227,17 @@ void AnimatorSMEditorScene::CenterScene()
 
     RectTransform *contRT = p_mainContainer->GetRectTransform();
     Vector2 boundingRectCenter = boundingRect.GetCenter();
+    Vector2 boundingRectSize = boundingRect.GetSize();
     Vector2 contSize = contRT->GetViewportAARectWithoutTransform().GetCenter();
+
     m_panning = -boundingRectCenter + contSize;
-    SetZoomScale(1.0f);
+    UpdatePanningAndZoomOnTransforms();
+
+    Vector2 zoomVec = (contSize / boundingRectSize);
+    float zoom = Math::Min(zoomVec.x, zoomVec.y);
+    zoom = Math::Min(zoom, 1.0f);
+    SetZoomScale(zoom, false);
+
     UpdatePanningAndZoomOnTransforms();
 }
 
@@ -253,18 +273,58 @@ AnimatorStateMachine *AnimatorSMEditorScene::GetAnimatorSM() const
     return p_animatorSM.Get();
 }
 
-void AnimatorSMEditorScene::SetZoomScale(float zoomScale)
+void AnimatorSMEditorScene::SetZoomScale(float zoomScale, bool centerOnMouse)
 {
-    m_zoomScale = Math::Clamp(zoomScale, 0.1f, 2.0f);
+    if (zoomScale != GetZoomScale())
+    {
+        m_zoomScale = Math::Clamp(zoomScale, 0.1f, 2.0f);
+
+        RectTransform *zoomContRT = p_zoomContainer->GetRectTransform();
+        if (zoomScale != 1.0f)
+        {
+            Vector2 mousePosWorld(Input::GetMousePosition());
+
+            Vector2 prevMousePosLocal =
+                zoomContRT->FromWorldToLocalPoint(mousePosWorld.xy0()).xy();
+
+            zoomContRT->SetLocalScale(GetZoomScale());
+
+            if (centerOnMouse)
+            {
+                Vector2 newMousePosLocal =
+                    zoomContRT->FromWorldToLocalPoint(mousePosWorld.xy0()).xy();
+
+                Vector2 correctionDisplacementLocal =
+                    (prevMousePosLocal - newMousePosLocal);
+                Vector2 correctionDisplacementWorld =
+                    zoomContRT
+                        ->FromLocalToWorldVector(
+                            correctionDisplacementLocal.xy0())
+                        .xy();
+
+                zoomContRT->SetLocalPosition(zoomContRT->GetLocalPosition() -
+                                             correctionDisplacementWorld.xy0());
+            }
+            else
+            {
+                zoomContRT->SetLocalPosition(Vector3::Zero);
+            }
+        }
+        else
+        {
+            zoomContRT->SetLocalScale(1.0f);
+            zoomContRT->SetLocalPosition(Vector3::Zero);
+        }
+    }
 }
 
 void AnimatorSMEditorScene::UpdatePanningAndZoomOnTransforms()
 {
     RectTransform *mainContRT = p_mainContainer->GetRectTransform();
     mainContRT->SetLocalPosition(Vector3(Vector2(m_panning), 0.0f));
-    mainContRT->SetLocalScale(Vector3(Vector2(GetZoomScale()), 1.0f));
-    p_gridContainer->GetRectTransform()->SetLocalPosition(
-        Vector3(Vector2(GetZoomScale()), 0));
+
+    // p_gridContainer->GetRectTransform()->SetLocalScale(
+    //     Vector3(Vector2(GetZoomScale()), 0));
     p_gridContainer->GetRectTransform()->SetLocalPosition(
         Vector3(Vector2(m_panning), 0));
 
@@ -372,7 +432,7 @@ UIEventResult AnimatorSMEditorScene::OnUIEvent(UIFocusable *,
             Vector2 mouseWheel = (Input::GetMouseWheel() * Vector2(0.05f));
             if (mouseWheel != Vector2::Zero)
             {
-                SetZoomScale(GetZoomScale() + mouseWheel.y);
+                SetZoomScale(GetZoomScale() + mouseWheel.y, true);
                 return UIEventResult::INTERCEPT;
             }
         }

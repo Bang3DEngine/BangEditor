@@ -116,6 +116,11 @@ void AESNode::Update()
     if (p_focusable->IsBeingPressed() &&
         !Input::GetMouseButton(MouseButton::MIDDLE))
     {
+        Vector2 mousePos(Input::GetMousePosition());
+        Vector2 mousePosLocal =
+            rt->FromWorldToLocalPoint(Vector3(mousePos, 0)).xy();
+        rt->SetAnchors(mousePosLocal);
+
         float localPosZ = rt->GetLocalPosition().z;
         Vector3 newLocalPos = Vector3(
             GetAESScene()->GetMousePositionInSceneSpace() - m_grabOffset,
@@ -351,7 +356,7 @@ AnimatorStateMachineNode *AESNode::GetSMNode() const
 void AESNode::OnConnectionAdded(AnimatorStateMachineNode *node,
                                 AnimatorStateMachineConnection *connection)
 {
-    ASSERT(node == GetSMNode());
+    // ASSERT(node == GetSMNode());
     ASSERT(connection->GetNodeTo());
     ASSERT(connection->GetNodeFrom());
 
