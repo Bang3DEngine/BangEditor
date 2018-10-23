@@ -255,7 +255,7 @@ void RIWMaterial::UpdateInputsFromResource()
     p_renderPassInput->SetSelectionByValue(
         SCAST<int>(GetMaterial()->GetRenderPass()));
 
-    p_renderWireframe->SetChecked(GetMaterial()->IsRenderWireframe());
+    p_renderWireframe->SetChecked(GetMaterial()->GetRenderWireframe());
     p_cullFaceInput->SetSelectionByValue(
         SCAST<int>(GetMaterial()->GetCullFace()));
     p_lineWidthInput->SetValue(GetMaterial()->GetLineWidth());

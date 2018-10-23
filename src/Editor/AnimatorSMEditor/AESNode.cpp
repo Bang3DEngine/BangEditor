@@ -34,6 +34,8 @@
 #include "BangEditor/Inspector.h"
 #include "BangEditor/MenuItem.h"
 #include "BangEditor/UIContextMenu.h"
+#include "BangEditor/UndoRedoManager.h"
+#include "BangEditor/UndoRedoSerializableChange.h"
 
 using namespace Bang;
 using namespace BangEditor;
@@ -159,7 +161,12 @@ void AESNode::Update()
 
 void AESNode::SetAsEntryNode()
 {
+    MetaNode previousMeta = GetAnimatorSM()->GetMeta();
+
     GetAnimatorSM()->SetEntryNode(GetSMNode());
+
+    UndoRedoManager::PushAction(new UndoRedoSerializableChange(
+        GetAnimatorSM(), previousMeta, GetAnimatorSM()->GetMeta()));
 }
 
 void AESNode::SetNodeName(const String &nodeName)
@@ -246,11 +253,16 @@ void AESNode::OnDragConnectionLineEnd()
         // Consolidate connection
         DestroyLineUsedForDragging();
 
+        MetaNode previousMeta = GetAnimatorSM()->GetMeta();
+
         AnimatorStateMachineNode *fromSMNode = GetSMNode();
         AnimatorStateMachineNode *toSMNode = nodeToConnectTo->GetSMNode();
         ASSERT(fromSMNode);
         ASSERT(toSMNode);
         fromSMNode->CreateConnectionTo(toSMNode);
+
+        UndoRedoManager::PushAction(new UndoRedoSerializableChange(
+            GetAnimatorSM(), previousMeta, GetAnimatorSM()->GetMeta()));
     }
     else
     {
@@ -260,16 +272,23 @@ void AESNode::OnDragConnectionLineEnd()
 
 void AESNode::RemoveSelf()
 {
+    MetaNode previousMeta = GetAnimatorSM()->GetMeta();
+
     uint idx = GetIndexInStateMachine();
     if (idx != -1u)
     {
         DestroyLineUsedForDragging();
         GetAnimatorSM()->RemoveNode(GetAnimatorSM()->GetNodes()[idx]);
     }
+
+    UndoRedoManager::PushAction(new UndoRedoSerializableChange(
+        GetAnimatorSM(), previousMeta, GetAnimatorSM()->GetMeta()));
 }
 
 void AESNode::Duplicate()
 {
+    MetaNode previousMeta = GetAnimatorSM()->GetMeta();
+
     uint idx = GetIndexInStateMachine();
     ASSERT(idx != -1u);
 
@@ -288,6 +307,9 @@ void AESNode::Duplicate()
     {
         canvas->SetFocus(newAESNode->GetFocusable());
     }
+
+    UndoRedoManager::PushAction(new UndoRedoSerializableChange(
+        GetAnimatorSM(), previousMeta, GetAnimatorSM()->GetMeta()));
 }
 
 void AESNode::DestroyLineUsedForDragging()
@@ -357,7 +379,8 @@ void AESNode::OnConnectionRemoved(AnimatorStateMachineNode *node,
         return;
     }
 
-    ASSERT(node == GetSMNode());
+    AnimatorStateMachineNode *smNode = GetSMNode();
+    ASSERT(node == smNode);
 
     AnimatorStateMachineNode *nodeTo = connToRemove->GetNodeTo();
     ASSERT(nodeTo);

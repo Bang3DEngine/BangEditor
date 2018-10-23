@@ -35,6 +35,8 @@
 #include "BangEditor/Inspector.h"
 #include "BangEditor/MenuItem.h"
 #include "BangEditor/UIContextMenu.h"
+#include "BangEditor/UndoRedoManager.h"
+#include "BangEditor/UndoRedoSerializableChange.h"
 
 using namespace Bang;
 using namespace BangEditor;
@@ -301,11 +303,16 @@ void AESConnectionLine::RemoveSelf()
     AnimatorStateMachineNode *smNode = GetAESNodeFrom()->GetSMNode();
     ASSERT(smNode);
 
+    MetaNode previousMeta = smNode->GetMeta();
+
     const auto connections = GetSMConnections();
     for (AnimatorStateMachineConnection *smConn : connections)
     {
         smNode->RemoveConnection(smConn);
     }
+
+    UndoRedoManager::PushAction(new UndoRedoSerializableChange(
+        smNode, previousMeta, smNode->GetMeta()));
 }
 
 AESNode *AESConnectionLine::GetFirstFoundNode() const

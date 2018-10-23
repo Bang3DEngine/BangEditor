@@ -29,6 +29,8 @@
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/MenuItem.h"
 #include "BangEditor/UIContextMenu.h"
+#include "BangEditor/UndoRedoManager.h"
+#include "BangEditor/UndoRedoSerializableChange.h"
 
 namespace Bang
 {
@@ -78,7 +80,12 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
 
             MenuItem *createNode = menuRootItem->AddItem("Create new node");
             createNode->SetSelectedCallback([this](MenuItem *) {
+                MetaNode previousMeta = GetAnimatorSM()->GetMeta();
+
                 GetAnimatorSM()->CreateAndAddNode();
+
+                UndoRedoManager::PushAction(new UndoRedoSerializableChange(
+                    GetAnimatorSM(), previousMeta, GetAnimatorSM()->GetMeta()));
 
                 AESNode *aesNode = p_nodes[p_nodes.Size() - 1];
                 RectTransform *nodeRT = aesNode->GetRectTransform();
