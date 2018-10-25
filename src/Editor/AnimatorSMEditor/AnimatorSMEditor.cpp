@@ -102,8 +102,20 @@ AnimatorSMEditor::AnimatorSMEditor()
             ->SetParent(inspectorContainer);
 
         p_variablesInput = new UIInputArray();
-        p_variablesInput->SetCreateNewRowGameObjectFunction(
-            []() { return new ASMVariableInput(); });
+        p_variablesInput->SetFunctions<AnimatorStateMachineVariable>(
+            []() { return new ASMVariableInput(); },
+            [this]() {
+                ASSERT(GetAnimatorSM());
+                auto newVar = GetAnimatorSM()->CreateNewVariable();
+                return newVar;
+            },
+            [this](uint oldIndex, uint newIndex) {
+                GetAnimatorSM()->MoveVariable(oldIndex, newIndex);
+            },
+            [this](AnimatorStateMachineVariable *varToRemove) {
+                ASSERT(GetAnimatorSM());
+                GetAnimatorSM()->RemoveVariable(varToRemove);
+            });
         p_variablesInput->EventEmitter<IEventsValueChanged>::RegisterListener(
             this);
         p_variablesInput->SetParent(inspectorContainer);
@@ -128,13 +140,26 @@ AnimatorSMEditor::AnimatorSMEditor()
             ->SetParent(inspectorContainer);
 
         p_layersInput = new UIInputArray();
-        p_layersInput->SetCreateNewRowGameObjectFunction([this]() {
-            ASMLayerInput *layerInput = new ASMLayerInput();
-            layerInput->EventEmitter<IEventsASMLayerInput>::RegisterListener(
-                this);
+        p_layersInput->SetFunctions<AnimatorStateMachineLayer>(
+            [this]() {
+                ASMLayerInput *layerInput = new ASMLayerInput();
+                layerInput
+                    ->EventEmitter<IEventsASMLayerInput>::RegisterListener(
+                        this);
 
-            return layerInput;
-        });
+                return layerInput;
+            },
+            [this]() {
+                ASSERT(GetAnimatorSM());
+                return GetAnimatorSM()->CreateNewLayer();
+            },
+            [this](uint oldIndex, uint newIndex) {
+                GetAnimatorSM()->MoveLayer(oldIndex, newIndex);
+            },
+            [this](AnimatorStateMachineLayer *layerToRemove) {
+                ASSERT(GetAnimatorSM());
+                GetAnimatorSM()->RemoveLayer(layerToRemove);
+            });
         p_layersInput->EventEmitter<IEventsUIInputArray>::RegisterListener(
             this);
         p_layersInput->EventEmitter<IEventsValueChanged>::RegisterListener(
@@ -262,28 +287,11 @@ void AnimatorSMEditor::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
     if (ee == p_variablesInput)
     {
         p_variablesInput->UpdateReferences<AnimatorStateMachineVariable>(
-            GetAnimatorSM()->GetVariables(),
-            [this]() {
-                ASSERT(GetAnimatorSM());
-                auto newVar = GetAnimatorSM()->CreateNewVariable();
-                return newVar;
-            },
-            [this](AnimatorStateMachineVariable *varToRemove) {
-                ASSERT(GetAnimatorSM());
-                GetAnimatorSM()->RemoveVariable(varToRemove);
-            });
+            GetAnimatorSM()->GetVariables());
     }
     else if (ee == p_layersInput)
     {
         p_layersInput->UpdateReferences<AnimatorStateMachineLayer>(
-            GetAnimatorSM()->GetLayers(),
-            [this]() {
-                ASSERT(GetAnimatorSM());
-                return GetAnimatorSM()->CreateNewLayer();
-            },
-            [this](AnimatorStateMachineLayer *layerToRemove) {
-                ASSERT(GetAnimatorSM());
-                GetAnimatorSM()->RemoveLayer(layerToRemove);
-            });
+            GetAnimatorSM()->GetLayers());
     }
 }

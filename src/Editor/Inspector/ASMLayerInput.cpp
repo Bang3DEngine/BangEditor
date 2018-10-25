@@ -101,6 +101,11 @@ ASMLayerInput::~ASMLayerInput()
 {
 }
 
+void ASMLayerInput::Update()
+{
+    GameObject::Update();
+}
+
 void ASMLayerInput::Select()
 {
     m_selected = true;

@@ -93,11 +93,11 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
                     GetAnimatorSM(), previousMeta, GetAnimatorSM()->GetMeta()));
 
                 AESNode *aesNode = p_nodes[p_nodes.Size() - 1];
-                RectTransform *nodeRT = aesNode->GetRectTransform();
-                float localPosZ = nodeRT->GetLocalPosition().z;
+                RectTransform *aesNodeRT = aesNode->GetRectTransform();
+                float localPosZ = aesNodeRT->GetLocalPosition().z;
                 Vector3 localPos =
                     Vector3(GetMousePositionInSceneSpace(), localPosZ);
-                nodeRT->SetLocalPosition(localPos);
+                aesNodeRT->SetLocalPosition(localPos);
             });
         }
     });

@@ -43,6 +43,9 @@ public:
     ASMLayerInput();
     virtual ~ASMLayerInput() override;
 
+    // GameObject
+    void Update() override;
+
     void Select();
     void UnSelect();
     bool IsSelected() const;

@@ -45,8 +45,8 @@ UIInputArray::UIInputArray()
     addButton->GetIcon()->SetTint(Color::Green.WithValue(0.75f));
     addButton->GetGameObject()->SetParent(m_addNewRowButtonRow);
     addButton->AddClickedCallback([this]() {
-        ASSERT(m_createNewRowGameObjectFunction);
-        GameObject *newElement = m_createNewRowGameObjectFunction();
+        ASSERT(m_createNewRowFunction);
+        GameObject *newElement = m_createNewRowFunction();
         AddRow(newElement);
     });
 
@@ -199,12 +199,19 @@ void UIInputArray::RemoveRow(uint index)
 
 void UIInputArray::MoveRow(UIInputArrayRow *row, int displacement)
 {
-    int numChildren = SCAST<int>(GetChildren().Size() - 1);
+    int numChildren = SCAST<int>(GetChildren().Size());
     int oldIndex = row->GetIndexInsideParent();
     int newIndex = (oldIndex + displacement + numChildren) % numChildren;
 
+    ASSERT(m_moveReferenceFunction);
+    m_moveReferenceFunction(oldIndex, newIndex);
+
+    numChildren = SCAST<int>(GetChildren().Size() - 1);
+    newIndex = (oldIndex + displacement + numChildren) % numChildren;
+
     RemoveRow(row, false);
     AddRow_(row->GetContainedGameObject(), newIndex, false);
+
     EventEmitter<IEventsValueChanged>::PropagateToListeners(
         &IEventsValueChanged::OnValueChanged, this);
 }
@@ -212,12 +219,6 @@ void UIInputArray::MoveRow(UIInputArrayRow *row, int displacement)
 void UIInputArray::RemoveRow(UIInputArrayRow *row, bool propagateChangeEvent)
 {
     RemoveRow_(row->GetContainedGameObject(), propagateChangeEvent);
-}
-
-void UIInputArray::SetCreateNewRowGameObjectFunction(
-    UIInputArray::CreateNewRowGameObjectFunction function)
-{
-    m_createNewRowGameObjectFunction = function;
 }
 
 uint UIInputArray::Size() const

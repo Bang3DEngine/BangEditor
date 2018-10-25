@@ -64,20 +64,21 @@ public:
     virtual ~UIInputArray() override;
 
     void AddRow(GameObject *rowGameObject, uint index = -1u);
+    void MoveRow(UIInputArrayRow *row, int displacement);
     void RemoveRow(GameObject *rowGameObject);
     void RemoveRow(uint index);
 
-    using CreateNewRowGameObjectFunction = std::function<GameObject *()>;
-    void SetCreateNewRowGameObjectFunction(
-        std::function<GameObject *()> function);
+    template <class T>
+    void SetFunctions(std::function<GameObject *()> createNewRowFunction,
+                      std::function<T *()> createNewReferenceFunction,
+                      std::function<void(uint, uint)> moveReferenceFunction,
+                      std::function<void(T *)> removeReferenceFunction);
 
     template <class T>
     void UpdateRows(const Array<T *> &referenceSerializables);
 
     template <class T>
-    void UpdateReferences(const Array<T *> &referenceSerializables,
-                          std::function<T *()> createNewReferenceFunction,
-                          std::function<void(T *)> removeReferenceFunction);
+    void UpdateReferences(const Array<T *> &referenceSerializables);
 
     void Clear(bool synchronize = false);
     uint Size() const;
@@ -89,7 +90,10 @@ private:
     Array<GameObject *> m_rowGameObjects;
     GameObject *m_addNewRowButtonRow = nullptr;
 
-    CreateNewRowGameObjectFunction m_createNewRowGameObjectFunction;
+    std::function<GameObject *()> m_createNewRowFunction;
+    std::function<Serializable *()> m_createNewReferenceFunction;
+    std::function<void(uint, uint)> m_moveReferenceFunction;
+    std::function<void(Serializable *)> m_removeReferenceFunction;
 
     void AddRow_(GameObject *rowGameObject,
                  uint index,
@@ -105,7 +109,6 @@ private:
         bool updatingInputRows);
 
     void MoveAddNewRowButtonRowToEnd();
-    void MoveRow(UIInputArrayRow *row, int displacement);
     void RemoveRow(UIInputArrayRow *row, bool propagateChangeEvent);
     UIInputArrayRow *GetRowFromRowGameObject(GameObject *rowGameObject) const;
 
@@ -128,8 +131,7 @@ void UIInputArray::UpdateRows(const Array<T *> &referenceSerializables)
         UpdateSerializables(rowGameObjectsCasted,
                             referenceSerializablesCasted,
                             [this]() {
-                                GameObject *newObj =
-                                    m_createNewRowGameObjectFunction();
+                                GameObject *newObj = m_createNewRowFunction();
                                 AddRow_(newObj, -1u, false);
                                 return SCAST<Serializable *>(newObj);
                             },
@@ -143,10 +145,28 @@ void UIInputArray::UpdateRows(const Array<T *> &referenceSerializables)
 }
 
 template <class T>
-void UIInputArray::UpdateReferences(
-    const Array<T *> &referenceSerializables,
+void UIInputArray::SetFunctions(
+    std::function<GameObject *()> createNewRowFunction,
     std::function<T *()> createNewReferenceFunction,
+    std::function<void(uint, uint)> moveReferenceFunction,
     std::function<void(T *)> removeReferenceFunction)
+{
+    m_createNewRowFunction = createNewRowFunction;
+
+    m_createNewReferenceFunction = [createNewReferenceFunction]() {
+        T *newObj = createNewReferenceFunction();
+        return SCAST<Serializable *>(newObj);
+    };
+
+    m_moveReferenceFunction = moveReferenceFunction;
+
+    m_removeReferenceFunction = [removeReferenceFunction](Serializable *s) {
+        removeReferenceFunction(SCAST<T *>(s));
+    };
+}
+
+template <class T>
+void UIInputArray::UpdateReferences(const Array<T *> &referenceSerializables)
 {
     if (!m_updatingRowsOrReferences)
     {
@@ -155,16 +175,12 @@ void UIInputArray::UpdateReferences(
             GetRowGameObjects().template To<Array, Serializable *>();
         auto referenceSerializablesCasted =
             referenceSerializables.template To<Array, Serializable *>();
-        UpdateSerializables(
-            referenceSerializablesCasted,
-            rowGameObjectsCasted,
-            [&]() {
-                T *newObj = createNewReferenceFunction();
-                return SCAST<Serializable *>(newObj);
-            },
-            [&](Serializable *s) { removeReferenceFunction(SCAST<T *>(s)); },
-            true,
-            false);
+        UpdateSerializables(referenceSerializablesCasted,
+                            rowGameObjectsCasted,
+                            m_createNewReferenceFunction,
+                            m_removeReferenceFunction,
+                            true,
+                            false);
         m_updatingRowsOrReferences = false;
     }
 }

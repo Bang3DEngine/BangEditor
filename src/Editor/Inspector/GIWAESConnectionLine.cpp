@@ -97,11 +97,26 @@ void GIWAESConnectionLine::InitInnerWidgets()
     p_transitionsListSeparator = GameObjectFactory::CreateUIHSeparator();
 
     p_transitionConditionsInput = new UIInputArray();
-    p_transitionConditionsInput->SetCreateNewRowGameObjectFunction([]() {
-        ASMTransitionConditionInput *transitionConditionInput =
-            new ASMTransitionConditionInput();
-        return transitionConditionInput;
-    });
+    p_transitionConditionsInput
+        ->SetFunctions<AnimatorStateMachineTransitionCondition>(
+            []() {
+                ASMTransitionConditionInput *transitionConditionInput =
+                    new ASMTransitionConditionInput();
+                return transitionConditionInput;
+            },
+            [this]() {
+                auto smConnection = GetSelectedSMTransition();
+                AnimatorStateMachineTransitionCondition *transCond =
+                    smConnection->CreateAndAddTransitionCondition();
+                return transCond;
+            },
+            [](uint, uint) {
+                // No move
+            },
+            [this](AnimatorStateMachineTransitionCondition *transitionCond) {
+                auto smConnection = GetSelectedSMTransition();
+                smConnection->RemoveTransitionCondition(transitionCond);
+            });
     p_transitionConditionsInput
         ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
@@ -309,18 +324,7 @@ void GIWAESConnectionLine::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 
         p_transitionConditionsInput
             ->UpdateReferences<AnimatorStateMachineTransitionCondition>(
-                GetSelectedSMTransition()->GetTransitionConditions(),
-                [this]() {
-                    auto smConnection = GetSelectedSMTransition();
-                    AnimatorStateMachineTransitionCondition *transCond =
-                        smConnection->CreateAndAddTransitionCondition();
-                    return transCond;
-                },
-                [this](
-                    AnimatorStateMachineTransitionCondition *transitionCond) {
-                    auto smConnection = GetSelectedSMTransition();
-                    smConnection->RemoveTransitionCondition(transitionCond);
-                });
+                GetSelectedSMTransition()->GetTransitionConditions());
     }
 }
 
