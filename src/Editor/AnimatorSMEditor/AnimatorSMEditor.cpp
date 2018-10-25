@@ -2,6 +2,7 @@
 
 #include "Bang/Alignment.h"
 #include "Bang/AnimatorStateMachine.h"
+#include "Bang/AnimatorStateMachineLayer.h"
 #include "Bang/AnimatorStateMachineVariable.h"
 #include "Bang/Assert.h"
 #include "Bang/Color.h"
@@ -24,6 +25,7 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIVerticalLayout.h"
+#include "BangEditor/ASMLayerInput.h"
 #include "BangEditor/ASMVariableInput.h"
 #include "BangEditor/AnimatorSMEditorScene.h"
 #include "BangEditor/EditorTextureFactory.h"
@@ -92,22 +94,49 @@ AnimatorSMEditor::AnimatorSMEditor()
         varsLabel->GetText()->SetTextColor(Color::Black);
         varsLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::LEFT);
         varsLabel->GetGameObject()->SetParent(inspectorContainer);
+        varsLabel->GetGameObject()
+            ->GetComponent<UILayoutElement>()
+            ->SetFlexibleHeight(0.0f);
 
         GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5)
             ->SetParent(inspectorContainer);
 
         p_variablesInput = new UIInputArray();
-        p_variablesInput->SetCreateNewRowGameObjectFunction([]() {
-            ASMVariableInput *varInput = new ASMVariableInput();
-            return varInput;
-        });
+        p_variablesInput->SetCreateNewRowGameObjectFunction(
+            []() { return new ASMVariableInput(); });
         p_variablesInput->EventEmitter<IEventsValueChanged>::RegisterListener(
             this);
         p_variablesInput->SetParent(inspectorContainer);
 
         UILayoutElement *varsLE =
             p_variablesInput->AddComponent<UILayoutElement>();
-        varsLE->SetFlexibleSize(Vector2(9999.9f));
+        varsLE->SetFlexibleSize(Vector2(1.0f));
+
+        GameObjectFactory::CreateUIVSpacer(LayoutSizeType::PREFERRED, 20)
+            ->SetParent(inspectorContainer);
+
+        UILabel *layersLabel = GameObjectFactory::CreateUILabel();
+        layersLabel->GetText()->SetContent("Layers");
+        layersLabel->GetText()->SetTextColor(Color::Black);
+        layersLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::LEFT);
+        layersLabel->GetGameObject()->SetParent(inspectorContainer);
+        layersLabel->GetGameObject()
+            ->GetComponent<UILayoutElement>()
+            ->SetFlexibleHeight(0.0f);
+
+        GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5)
+            ->SetParent(inspectorContainer);
+
+        p_layersInput = new UIInputArray();
+        p_layersInput->SetCreateNewRowGameObjectFunction(
+            []() { return new ASMLayerInput(); });
+        p_layersInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+            this);
+        p_layersInput->SetParent(inspectorContainer);
+
+        UILayoutElement *layersLE =
+            p_layersInput->AddComponent<UILayoutElement>();
+        layersLE->SetFlexibleSize(Vector2(1.0f));
 
         UIImageRenderer *inspectorBG =
             inspectorContainer->AddComponent<UIImageRenderer>();
@@ -150,6 +179,7 @@ void AnimatorSMEditor::Update()
         if (Time::GetPassedTimeSince(m_lastVariablesInputUpdateTime) >=
             Time::Seconds(0.2f))
         {
+            p_layersInput->UpdateRows(GetAnimatorSM()->GetLayers());
             p_variablesInput->UpdateRows(GetAnimatorSM()->GetVariables());
             m_lastVariablesInputUpdateTime = Time::GetNow();
         }
@@ -163,7 +193,17 @@ void AnimatorSMEditor::SetAnimatorSM(AnimatorStateMachine *animatorSM)
         Clear();
 
         p_animatorSM.Set(animatorSM);
-        p_animatorEditorScene->SetAnimatorSM(GetAnimatorSM());
+
+        if (GetAnimatorSM())
+        {
+            if (GetAnimatorSM()->GetLayers().IsEmpty())
+            {
+                GetAnimatorSM()->CreateNewLayer();
+            }
+
+            p_animatorEditorScene->SetAnimatorSMLayer(
+                GetAnimatorSM()->GetLayers().Front());
+        }
     }
 }
 
@@ -175,6 +215,7 @@ AnimatorStateMachine *AnimatorSMEditor::GetAnimatorSM() const
 void AnimatorSMEditor::Clear()
 {
     p_animatorEditorScene->Clear();
+    p_layersInput->Clear();
     p_variablesInput->Clear();
 }
 
@@ -197,6 +238,19 @@ void AnimatorSMEditor::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
             [this](AnimatorStateMachineVariable *varToRemove) {
                 ASSERT(GetAnimatorSM());
                 GetAnimatorSM()->RemoveVariable(varToRemove);
+            });
+    }
+    else if (ee == p_layersInput)
+    {
+        p_layersInput->UpdateReferences<AnimatorStateMachineLayer>(
+            GetAnimatorSM()->GetLayers(),
+            [this]() {
+                ASSERT(GetAnimatorSM());
+                return GetAnimatorSM()->CreateNewLayer();
+            },
+            [this](AnimatorStateMachineLayer *layerToRemove) {
+                ASSERT(GetAnimatorSM());
+                GetAnimatorSM()->RemoveLayer(layerToRemove);
             });
     }
 }

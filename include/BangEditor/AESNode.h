@@ -23,7 +23,8 @@ namespace Bang
 {
 class Animator;
 class AnimatorStateMachine;
-class AnimatorStateMachineConnection;
+class AnimatorStateMachineLayer;
+class AnimatorStateMachineTransition;
 class AnimatorStateMachineNode;
 class IEventsAnimatorStateMachineNode;
 class UIFocusable;
@@ -61,6 +62,7 @@ public:
     Animator *GetCurrentAnimator() const;
     AnimatorSMEditorScene *GetAESScene() const;
     AnimatorStateMachine *GetAnimatorSM() const;
+    AnimatorStateMachineLayer *GetAnimatorSMLayer() const;
     AnimatorStateMachineNode *GetSMNode() const;
     const Array<AESConnectionLine *> &GetConnectionLines() const;
 
@@ -75,6 +77,7 @@ private:
 
     Vector2 m_grabOffset = Vector2::Zero;
     AnimatorSMEditorScene *p_aesScene = nullptr;
+    AnimatorStateMachineNode *p_smNode = nullptr;
     Array<AESConnectionLine *> p_connectionLinesTo;
     Map<AnimatorStateMachineNode *, AESConnectionLine *>
         p_nodeConnectedToToConnectionLine;
@@ -88,17 +91,18 @@ private:
     void RemoveSelf();
     void Duplicate();
     void DestroyLineUsedForDragging();
+    void SetSMNode(AnimatorStateMachineNode *smNode);
 
     Vector2 GetExportPosition() const;
     void ImportPosition(const Vector2 &position);
 
     // IEventsAnimatorStateMachineNode
-    virtual void OnConnectionAdded(
+    virtual void OnTransitionAdded(
         AnimatorStateMachineNode *node,
-        AnimatorStateMachineConnection *connection) override;
-    virtual void OnConnectionRemoved(
+        AnimatorStateMachineTransition *transition) override;
+    virtual void OnTransitionRemoved(
         AnimatorStateMachineNode *node,
-        AnimatorStateMachineConnection *connection) override;
+        AnimatorStateMachineTransition *transition) override;
 
     // IEventsFocus
     virtual UIEventResult OnUIEvent(UIFocusable *focusable,

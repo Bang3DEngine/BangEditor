@@ -25,6 +25,7 @@ public:
     GameObject *GetContainedGameObject() const;
 
 private:
+    GameObject *p_rowHLGo = nullptr;
     GameObject *p_containedGameObject = nullptr;
 };
 }

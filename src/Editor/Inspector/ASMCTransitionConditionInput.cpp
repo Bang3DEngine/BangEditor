@@ -4,7 +4,10 @@
 #include <ostream>
 
 #include "Bang/AnimatorStateMachine.h"
-#include "Bang/AnimatorStateMachineConnectionTransitionCondition.h"
+#include "Bang/AnimatorStateMachineLayer.h"
+#include "Bang/AnimatorStateMachineNode.h"
+#include "Bang/AnimatorStateMachineTransition.h"
+#include "Bang/AnimatorStateMachineTransitionCondition.h"
 #include "Bang/Array.h"
 #include "Bang/EventEmitter.tcc"
 #include "Bang/GameObject.tcc"
@@ -21,7 +24,7 @@
 using namespace Bang;
 using namespace BangEditor;
 
-ASMCTransitionConditionInput::ASMCTransitionConditionInput()
+ASMTransitionConditionInput::ASMTransitionConditionInput()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
@@ -48,22 +51,22 @@ ASMCTransitionConditionInput::ASMCTransitionConditionInput()
     p_floatInput->GetGameObject()->SetParent(this);
 }
 
-ASMCTransitionConditionInput::~ASMCTransitionConditionInput()
+ASMTransitionConditionInput::~ASMTransitionConditionInput()
 {
 }
 
-void ASMCTransitionConditionInput::BeforeRender()
+void ASMTransitionConditionInput::BeforeRender()
 {
     GameObject::BeforeRender();
 
-    if (p_animatorSM)
+    if (GetStateMachineLayer())
     {
         UpdateFromVariable();
         p_varNameInput->SetSelectionByLabel(m_selectedVarName);
     }
 }
 
-void ASMCTransitionConditionInput::SetVariableType(
+void ASMTransitionConditionInput::SetVariableType(
     AnimatorStateMachineVariable::Type type)
 {
     if (type != m_varType)
@@ -77,10 +80,12 @@ void ASMCTransitionConditionInput::SetVariableType(
                 p_floatInput->GetGameObject()->SetEnabled(false);
                 p_comparatorInput->AddItem(
                     "True",
-                    SCAST<uint>(ASMCTransitionCondition::Comparator::IS_TRUE));
+                    SCAST<uint>(AnimatorStateMachineTransitionCondition::
+                                    Comparator::IS_TRUE));
                 p_comparatorInput->AddItem(
                     "False",
-                    SCAST<uint>(ASMCTransitionCondition::Comparator::IS_FALSE));
+                    SCAST<uint>(AnimatorStateMachineTransitionCondition::
+                                    Comparator::IS_FALSE));
 
                 break;
 
@@ -88,37 +93,64 @@ void ASMCTransitionConditionInput::SetVariableType(
                 p_floatInput->GetGameObject()->SetEnabled(true);
                 p_comparatorInput->AddItem(
                     "Greater",
-                    SCAST<uint>(ASMCTransitionCondition::Comparator::GREATER));
+                    SCAST<uint>(AnimatorStateMachineTransitionCondition::
+                                    Comparator::GREATER));
                 p_comparatorInput->AddItem(
                     "Less",
-                    SCAST<uint>(ASMCTransitionCondition::Comparator::LESS));
+                    SCAST<uint>(AnimatorStateMachineTransitionCondition::
+                                    Comparator::LESS));
                 break;
         }
     }
 }
 
-void ASMCTransitionConditionInput::SetAnimatorStateMachine(
-    AnimatorStateMachine *animatorSM)
+void ASMTransitionConditionInput::SetStateMachineTransition(
+    AnimatorStateMachineTransition *transition)
 {
-    if (animatorSM != p_animatorSM)
+    if (transition != p_stateMachineTransition)
     {
-        p_animatorSM = animatorSM;
+        p_stateMachineTransition = transition;
         UpdateFromVariable();
     }
 }
 
-void ASMCTransitionConditionInput::UpdateFromVariable()
+AnimatorStateMachine *ASMTransitionConditionInput::GetStateMachine() const
 {
-    if (p_animatorSM && !m_updatingFromVariable)
+    return GetStateMachineLayer() ? GetStateMachineLayer()->GetStateMachine()
+                                  : nullptr;
+}
+
+AnimatorStateMachineLayer *ASMTransitionConditionInput::GetStateMachineLayer()
+    const
+{
+    return GetStateMachineNode() ? GetStateMachineNode()->GetLayer() : nullptr;
+}
+
+AnimatorStateMachineNode *ASMTransitionConditionInput::GetStateMachineNode()
+    const
+{
+    return GetStateMachineTransition() ? p_stateMachineTransition->GetNodeFrom()
+                                       : nullptr;
+}
+
+AnimatorStateMachineTransition *
+ASMTransitionConditionInput::GetStateMachineTransition() const
+{
+    return p_stateMachineTransition;
+}
+
+void ASMTransitionConditionInput::UpdateFromVariable()
+{
+    if (GetStateMachineLayer() && !m_updatingFromVariable)
     {
         m_updatingFromVariable = true;
 
         bool updateVariablesComboBox = false;
-        updateVariablesComboBox |= (p_animatorSM->GetVariables().Size() !=
+        updateVariablesComboBox |= (GetStateMachine()->GetVariables().Size() !=
                                     p_varNameInput->GetNumItems());
         if (!updateVariablesComboBox)
         {
-            const auto &refVars = p_animatorSM->GetVariables();
+            const auto &refVars = GetStateMachine()->GetVariables();
             const auto &comboLabels = p_varNameInput->GetLabels();
             for (uint i = 0; i < refVars.Size(); ++i)
             {
@@ -134,14 +166,14 @@ void ASMCTransitionConditionInput::UpdateFromVariable()
         {
             p_varNameInput->ClearItems();
             for (AnimatorStateMachineVariable *var :
-                 p_animatorSM->GetVariables())
+                 GetStateMachine()->GetVariables())
             {
                 p_varNameInput->AddItem(var->GetName(), 0);
             }
         }
 
         if (AnimatorStateMachineVariable *var =
-                p_animatorSM->GetVariable(m_selectedVarName))
+                GetStateMachine()->GetVariable(m_selectedVarName))
         {
             SetVariableType(var->GetType());
         }
@@ -150,7 +182,7 @@ void ASMCTransitionConditionInput::UpdateFromVariable()
     }
 }
 
-void ASMCTransitionConditionInput::OnValueChanged(
+void ASMTransitionConditionInput::OnValueChanged(
     EventEmitter<IEventsValueChanged> *ee)
 {
     if (ee == p_varNameInput)
@@ -163,7 +195,7 @@ void ASMCTransitionConditionInput::OnValueChanged(
         &IEventsValueChanged::OnValueChanged, this);
 }
 
-void ASMCTransitionConditionInput::ImportMeta(const MetaNode &metaNode)
+void ASMTransitionConditionInput::ImportMeta(const MetaNode &metaNode)
 {
     Serializable::ImportMeta(metaNode);
 
@@ -187,7 +219,7 @@ void ASMCTransitionConditionInput::ImportMeta(const MetaNode &metaNode)
     UpdateFromVariable();
 }
 
-void ASMCTransitionConditionInput::ExportMeta(MetaNode *metaNode) const
+void ASMTransitionConditionInput::ExportMeta(MetaNode *metaNode) const
 {
     Serializable::ExportMeta(metaNode);
 

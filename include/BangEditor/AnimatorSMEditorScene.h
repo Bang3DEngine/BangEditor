@@ -16,7 +16,7 @@
 #include "Bang/EventListener.tcc"
 #include "Bang/GameObject.h"
 #include "Bang/IEvents.h"
-#include "Bang/IEventsAnimatorStateMachine.h"
+#include "Bang/IEventsAnimatorStateMachineLayer.h"
 #include "Bang/IEventsAnimatorStateMachineNode.h"
 #include "Bang/IEventsFocus.h"
 #include "Bang/ResourceHandle.h"
@@ -27,7 +27,7 @@
 
 namespace Bang
 {
-class AnimatorStateMachine;
+class AnimatorStateMachineLayer;
 class AnimatorStateMachineNode;
 class IEventsAnimatorStateMachine;
 class UIFocusable;
@@ -40,9 +40,10 @@ namespace BangEditor
 class AESNode;
 class UIContextMenu;
 
-class AnimatorSMEditorScene : public GameObject,
-                              public EventListener<IEventsFocus>,
-                              public EventListener<IEventsAnimatorStateMachine>
+class AnimatorSMEditorScene
+    : public GameObject,
+      public EventListener<IEventsFocus>,
+      public EventListener<IEventsAnimatorStateMachineLayer>
 {
     GAMEOBJECT_EDITOR(AnimatorSMEditorScene);
 
@@ -54,7 +55,7 @@ public:
     void Update() override;
 
     void CreateAndAddNode(AnimatorStateMachineNode *smNode, uint addIdx);
-    void SetAnimatorSM(AnimatorStateMachine *animatorSM);
+    void SetAnimatorSMLayer(AnimatorStateMachineLayer *animatorSMLayer);
     Vector2 GetMousePositionInSceneSpace() const;
     Vector2 GetWorldPositionInSceneSpace(const Vector2 &pos) const;
     void CenterScene();
@@ -63,9 +64,10 @@ public:
     float GetZoomScale() const;
     const Array<AESNode *> &GetAESNodes() const;
     AnimatorStateMachine *GetAnimatorSM() const;
+    AnimatorStateMachineLayer *GetAnimatorSMLayer() const;
 
 private:
-    RH<AnimatorStateMachine> p_animatorSM;
+    AnimatorStateMachineLayer *p_animatorSMLayer = nullptr;
 
     Array<AESNode *> p_nodes;
     UIFocusable *p_focusable = nullptr;
@@ -89,12 +91,10 @@ private:
     void ImportCurrentAnimatorStateMachineExtraInformation();
     void ExportCurrentAnimatorStateMachineIfAny();
 
-    // IEventsAnimatorStateMachine
-    virtual void OnNodeCreated(AnimatorStateMachine *stateMachine,
-                               uint newNodeIdx,
+    // IEventsAnimatorStateMachineLayer
+    virtual void OnNodeCreated(uint newNodeIdx,
                                AnimatorStateMachineNode *newNode) override;
-    virtual void OnNodeRemoved(AnimatorStateMachine *stateMachine,
-                               uint removedNodeIdx,
+    virtual void OnNodeRemoved(uint removedNodeIdx,
                                AnimatorStateMachineNode *removedNode) override;
 
     // IEventsFocus

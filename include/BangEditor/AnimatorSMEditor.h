@@ -55,6 +55,7 @@ private:
     AnimatorSMEditorScene *p_animatorEditorScene = nullptr;
 
     UIButton *p_centerSceneButton = nullptr;
+    UIInputArray *p_layersInput = nullptr;
     UIInputArray *p_variablesInput = nullptr;
 
     void Clear();

@@ -16,7 +16,6 @@
 
 namespace Bang
 {
-class AnimatorStateMachine;
 class IEventsValueChanged;
 class Texture2D;
 class UIButton;

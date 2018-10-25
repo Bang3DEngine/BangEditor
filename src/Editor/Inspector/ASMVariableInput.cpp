@@ -126,8 +126,11 @@ void ASMVariableInput::ImportMeta(const MetaNode &metaNode)
 
     if (metaNode.Contains("VariableName"))
     {
-        p_varNameInput->GetText()->SetContent(
-            metaNode.Get<String>("VariableName"));
+        if (p_varNameInput->GetText())
+        {
+            p_varNameInput->GetText()->SetContent(
+                metaNode.Get<String>("VariableName"));
+        }
     }
 
     if (metaNode.Contains("VariableType"))

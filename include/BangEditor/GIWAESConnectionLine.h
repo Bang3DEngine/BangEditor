@@ -15,7 +15,7 @@
 
 namespace Bang
 {
-class AnimatorStateMachineConnection;
+class AnimatorStateMachineTransition;
 class AnimatorStateMachineNode;
 class GameObject;
 class IEventsDestroy;
@@ -49,7 +49,7 @@ public:
 
 private:
     AESConnectionLine *p_aesConnectionLine = nullptr;
-    AnimatorStateMachineConnection *p_selectedSMConnection = nullptr;
+    AnimatorStateMachineTransition *p_selectedSMTransition = nullptr;
 
     UIList *p_transitionsList = nullptr;
     GameObject *p_transitionsListSeparator = nullptr;
@@ -60,12 +60,12 @@ private:
     UIInputArray *p_transitionConditionsInput = nullptr;
 
     void EnableNeededWidgets();
-    void SetSelectedSMConnection(AnimatorStateMachineConnection *connection);
+    void SetSelectedSMTransition(AnimatorStateMachineTransition *transition);
 
     AnimatorStateMachineNode *GetSMNodeTo() const;
     AnimatorStateMachineNode *GetSMNodeFrom() const;
     AESConnectionLine *GetAESConnectionLine() const;
-    AnimatorStateMachineConnection *GetSelectedSMConnection() const;
+    AnimatorStateMachineTransition *GetSelectedSMTransition() const;
 
     // InspectorWidget
     virtual void UpdateFromReference() override;

@@ -22,7 +22,8 @@ namespace Bang
 {
 class LineRenderer;
 class AnimatorStateMachine;
-class AnimatorStateMachineConnection;
+class AnimatorStateMachineLayer;
+class AnimatorStateMachineTransition;
 class AnimatorStateMachineNode;
 class UIImageRenderer;
 }
@@ -53,7 +54,7 @@ public:
     AESNode *GetAESNodeTo() const;
     AESNode *GetAESNodeFrom() const;
     AnimatorStateMachine *GetAnimatorSM() const;
-    Array<AnimatorStateMachineConnection *> GetSMConnections() const;
+    Array<AnimatorStateMachineTransition *> GetSMTransitions() const;
 
 private:
     bool m_hasFocus = false;

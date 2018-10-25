@@ -144,10 +144,10 @@ void AESConnectionLine::BeforeRender()
 
     if (Animator *animator = GetAESNodeFrom()->GetCurrentAnimator())
     {
-        if (AnimatorStateMachinePlayer *player = animator->GetPlayer())
+        for (AnimatorStateMachinePlayer *player : animator->GetPlayers())
         {
             if (player->GetCurrentTransition() &&
-                GetSMConnections().Contains(player->GetCurrentTransition()))
+                GetSMTransitions().Contains(player->GetCurrentTransition()))
             {
                 lineColor = Color::Green;
             }
@@ -212,7 +212,7 @@ void AESConnectionLine::BeforeRender()
 
         if (i != 1)
         {
-            p_arrowImgs[i]->SetEnabled(GetSMConnections().Size() >= 2);
+            p_arrowImgs[i]->SetEnabled(GetSMTransitions().Size() >= 2);
         }
     }
 }
@@ -251,17 +251,17 @@ AnimatorStateMachine *AESConnectionLine::GetAnimatorSM() const
     return GetAESNodeTo() ? GetAESNodeTo()->GetAnimatorSM() : nullptr;
 }
 
-Array<AnimatorStateMachineConnection *> AESConnectionLine::GetSMConnections()
+Array<AnimatorStateMachineTransition *> AESConnectionLine::GetSMTransitions()
     const
 {
-    Array<AnimatorStateMachineConnection *> connections;
+    Array<AnimatorStateMachineTransition *> transitions;
     if (GetAESNodeFrom() && GetAESNodeTo())
     {
         AnimatorStateMachineNode *smNodeFrom = GetAESNodeFrom()->GetSMNode();
         AnimatorStateMachineNode *smNodeTo = GetAESNodeTo()->GetSMNode();
-        connections = smNodeFrom->GetConnectionsTo(smNodeTo);
+        transitions = smNodeFrom->GetTransitionsTo(smNodeTo);
     }
-    return connections;
+    return transitions;
 }
 
 bool AESConnectionLine::IsMouseOver() const
@@ -305,10 +305,10 @@ void AESConnectionLine::RemoveSelf()
 
     MetaNode previousMeta = smNode->GetMeta();
 
-    const auto connections = GetSMConnections();
-    for (AnimatorStateMachineConnection *smConn : connections)
+    const auto &transitions = GetSMTransitions();
+    for (AnimatorStateMachineTransition *smTransition : transitions)
     {
-        smNode->RemoveConnection(smConn);
+        smNode->RemoveTransition(smTransition);
     }
 
     UndoRedoManager::PushAction(new UndoRedoSerializableChange(

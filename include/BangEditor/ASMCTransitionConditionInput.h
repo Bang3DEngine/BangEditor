@@ -1,5 +1,5 @@
-#ifndef ASMCTRANSITIONCONDITIONINPUT_H
-#define ASMCTRANSITIONCONDITIONINPUT_H
+#ifndef ASMTRANSITIONCONDITIONINPUT_H
+#define ASMTRANSITIONCONDITIONINPUT_H
 
 #include <vector>
 
@@ -20,6 +20,9 @@
 namespace Bang
 {
 class AnimatorStateMachine;
+class AnimatorStateMachineNode;
+class AnimatorStateMachineTransition;
+class AnimatorStateMachineLayer;
 class IEventsValueChanged;
 class UIComboBox;
 class UIInputNumber;
@@ -28,24 +31,29 @@ class UIInputNumber;
 using namespace Bang;
 namespace BangEditor
 {
-class ASMCTransitionConditionInput : public GameObject,
-                                     public EventEmitter<IEventsValueChanged>,
-                                     public EventListener<IEventsValueChanged>
+class ASMTransitionConditionInput : public GameObject,
+                                    public EventEmitter<IEventsValueChanged>,
+                                    public EventListener<IEventsValueChanged>
 {
 public:
-    ASMCTransitionConditionInput();
-    virtual ~ASMCTransitionConditionInput() override;
+    ASMTransitionConditionInput();
+    virtual ~ASMTransitionConditionInput() override;
 
     // GameObject
     void BeforeRender() override;
 
     void SetVariableType(AnimatorStateMachineVariable::Type type);
-    void SetAnimatorStateMachine(AnimatorStateMachine *animatorSM);
+    void SetStateMachineTransition(AnimatorStateMachineTransition *transition);
+
+    AnimatorStateMachine *GetStateMachine() const;
+    AnimatorStateMachineLayer *GetStateMachineLayer() const;
+    AnimatorStateMachineNode *GetStateMachineNode() const;
+    AnimatorStateMachineTransition *GetStateMachineTransition() const;
 
 private:
     String m_selectedVarName = "";
     bool m_updatingFromVariable = false;
-    AnimatorStateMachine *p_animatorSM = nullptr;
+    AnimatorStateMachineTransition *p_stateMachineTransition = nullptr;
     UIComboBox *p_varNameInput = nullptr;
     UIComboBox *p_comparatorInput = nullptr;
     UIInputNumber *p_floatInput = nullptr;
@@ -63,4 +71,4 @@ private:
 };
 }
 
-#endif  // ASMCTRANSITIONCONDITIONINPUT_H
+#endif  // ASMTRANSITIONCONDITIONINPUT_H

@@ -27,13 +27,22 @@ void UIInputArrayRow::Init(UIInputArray *inputArray)
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
-    UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
-    hl->SetSpacing(10);
+    p_rowHLGo = this;
+    UIHorizontalLayout *rowHL = p_rowHLGo->AddComponent<UIHorizontalLayout>();
+    rowHL->SetSpacing(10);
+
+    GameObject *rowButtonsVLContainer = GameObjectFactory::CreateUIGameObject();
+    UIVerticalLayout *rowButtonsVL =
+        rowButtonsVLContainer->AddComponent<UIVerticalLayout>();
+
+    GameObject *rowButtonsContainer = GameObjectFactory::CreateUIGameObject();
+    UIHorizontalLayout *rowButtonsHL =
+        rowButtonsContainer->AddComponent<UIHorizontalLayout>();
+    rowButtonsHL->SetSpacing(5);
 
     UIButton *removeButton = GameObjectFactory::CreateUIButton(
         "", EditorTextureFactory::GetLessIcon());
     removeButton->GetIcon()->SetTint(Color::Red.WithValue(0.75f));
-    removeButton->GetGameObject()->SetParent(this);
     removeButton->AddClickedCallback(
         [this, inputArray]() { inputArray->RemoveRow(this, true); });
 
@@ -41,7 +50,6 @@ void UIInputArrayRow::Init(UIInputArray *inputArray)
     UIVerticalLayout *vl =
         moveButtonsContainer->AddComponent<UIVerticalLayout>();
     vl->SetSpacing(0);
-
     auto CreateUpDownButton = [this, inputArray](bool up) {
         UIButton *upDownButton = GameObjectFactory::CreateUIButton(
             "",
@@ -61,7 +69,12 @@ void UIInputArrayRow::Init(UIInputArray *inputArray)
     moveUpButton->GetGameObject()->SetParent(moveButtonsContainer);
     moveDownButton->GetGameObject()->SetParent(moveButtonsContainer);
 
-    moveButtonsContainer->SetParent(this);
+    rowButtonsVLContainer->SetParent(p_rowHLGo);
+    rowButtonsContainer->SetParent(rowButtonsVLContainer);
+    removeButton->GetGameObject()->SetParent(rowButtonsContainer);
+    moveButtonsContainer->SetParent(rowButtonsContainer);
+    GameObjectFactory::CreateUIVSpacer(LayoutSizeType::FLEXIBLE, 9999.0f)
+        ->SetParent(rowButtonsVLContainer);
 }
 
 void UIInputArrayRow::SetContainedGameObject(GameObject *containedGo)
@@ -74,7 +87,7 @@ void UIInputArrayRow::SetContainedGameObject(GameObject *containedGo)
         }
 
         p_containedGameObject = containedGo;
-        GetContainedGameObject()->SetParent(this);
+        GetContainedGameObject()->SetParent(p_rowHLGo);
     }
 }
 

@@ -1,6 +1,7 @@
 #include "BangEditor/AnimatorSMEditorScene.h"
 
 #include "Bang/AnimatorStateMachine.h"
+#include "Bang/AnimatorStateMachineLayer.h"
 #include "Bang/AnimatorStateMachineNode.h"
 #include "Bang/Assert.h"
 #include "Bang/Color.h"
@@ -35,7 +36,7 @@
 
 namespace Bang
 {
-class AnimatorStateMachineConnection;
+class AnimatorStateMachineTransition;
 class IEventsAnimatorStateMachineNode;
 }
 
@@ -86,7 +87,7 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
             createNode->SetSelectedCallback([this](MenuItem *) {
                 MetaNode previousMeta = GetAnimatorSM()->GetMeta();
 
-                GetAnimatorSM()->CreateAndAddNode();
+                GetAnimatorSMLayer()->CreateAndAddNode();
 
                 UndoRedoManager::PushAction(new UndoRedoSerializableChange(
                     GetAnimatorSM(), previousMeta, GetAnimatorSM()->GetMeta()));
@@ -133,7 +134,7 @@ void AnimatorSMEditorScene::Update()
     }
 
     if (Time::GetPassedTimeSince(m_lastTimeAnimatorSMWasExported) >=
-        Time::Seconds(2.0f))
+        Time::Seconds(1.0f))
     {
         ExportCurrentAnimatorStateMachineIfAny();
     }
@@ -146,6 +147,7 @@ void AnimatorSMEditorScene::CreateAndAddNode(AnimatorStateMachineNode *smNode,
 {
     AESNode *aesNode = new AESNode();
     aesNode->p_aesScene = this;
+    aesNode->SetSMNode(smNode);
     aesNode->SetParent(p_mainContainer);
 
     smNode->EventEmitter<IEventsAnimatorStateMachineNode>::RegisterListener(
@@ -157,36 +159,36 @@ void AnimatorSMEditorScene::CreateAndAddNode(AnimatorStateMachineNode *smNode,
     UpdatePanningAndZoomOnTransforms();
 }
 
-void AnimatorSMEditorScene::SetAnimatorSM(AnimatorStateMachine *animatorSM)
+void AnimatorSMEditorScene::SetAnimatorSMLayer(
+    AnimatorStateMachineLayer *animatorSMLayer)
 {
-    if (animatorSM != GetAnimatorSM())
+    if (animatorSMLayer != GetAnimatorSMLayer())
     {
         ExportCurrentAnimatorStateMachineIfAny();
 
         Clear();
-        p_animatorSM.Set(animatorSM);
+        p_animatorSMLayer = animatorSMLayer;
 
-        GetAnimatorSM()
-            ->EventEmitter<IEventsAnimatorStateMachine>::RegisterListener(this);
+        GetAnimatorSMLayer()
+            ->EventEmitter<IEventsAnimatorStateMachineLayer>::RegisterListener(
+                this);
 
-        for (uint i = 0; i < GetAnimatorSM()->GetNodes().Size(); ++i)
+        for (uint i = 0; i < GetAnimatorSMLayer()->GetNodes().Size(); ++i)
         {
-            ASSERT(i < GetAnimatorSM()->GetNodes().Size());
-
-            AnimatorStateMachineNode *smNode = animatorSM->GetNode(i);
+            AnimatorStateMachineNode *smNode = animatorSMLayer->GetNode(i);
             ASSERT(smNode);
 
-            OnNodeCreated(GetAnimatorSM(), i, smNode);
+            OnNodeCreated(i, smNode);
         }
 
-        for (uint i = 0; i < GetAnimatorSM()->GetNodes().Size(); ++i)
+        for (uint i = 0; i < GetAnimatorSMLayer()->GetNodes().Size(); ++i)
         {
             AESNode *aesNode = GetAESNodes()[i];
-            AnimatorStateMachineNode *smNode = GetAnimatorSM()->GetNode(i);
-            for (AnimatorStateMachineConnection *conn :
-                 GetAnimatorSM()->GetNode(i)->GetConnections())
+            AnimatorStateMachineNode *smNode = GetAnimatorSMLayer()->GetNode(i);
+            for (AnimatorStateMachineTransition *conn :
+                 GetAnimatorSMLayer()->GetNode(i)->GetTransitions())
             {
-                aesNode->OnConnectionAdded(smNode, conn);
+                aesNode->OnTransitionAdded(smNode, conn);
             }
         }
 
@@ -243,13 +245,14 @@ void AnimatorSMEditorScene::CenterScene()
 
 void AnimatorSMEditorScene::Clear()
 {
-    if (GetAnimatorSM())
+    if (GetAnimatorSMLayer())
     {
-        GetAnimatorSM()
-            ->EventEmitter<IEventsAnimatorStateMachine>::UnRegisterListener(
-                this);
+        GetAnimatorSMLayer()
+            ->EventEmitter<
+                IEventsAnimatorStateMachineLayer>::UnRegisterListener(this);
     }
-    p_animatorSM.Set(nullptr);
+
+    p_animatorSMLayer = nullptr;
 
     for (AESNode *node : p_nodes)
     {
@@ -270,7 +273,13 @@ const Array<AESNode *> &AnimatorSMEditorScene::GetAESNodes() const
 
 AnimatorStateMachine *AnimatorSMEditorScene::GetAnimatorSM() const
 {
-    return p_animatorSM.Get();
+    return GetAnimatorSMLayer() ? GetAnimatorSMLayer()->GetStateMachine()
+                                : nullptr;
+}
+
+AnimatorStateMachineLayer *AnimatorSMEditorScene::GetAnimatorSMLayer() const
+{
+    return p_animatorSMLayer;
 }
 
 void AnimatorSMEditorScene::SetZoomScale(float zoomScale, bool centerOnMouse)
@@ -360,7 +369,9 @@ void AnimatorSMEditorScene::ImportCurrentAnimatorStateMachineExtraInformation()
             MetaNode meta;
             meta.Import(metaPath);
             Array<Vector2> nodesPos = meta.GetArray<Vector2>("NodePositions");
-            for (uint i = 0; i < nodesPos.Size(); ++i)
+            for (uint i = 0;
+                 i < Math::Min(GetAESNodes().Size(), nodesPos.Size());
+                 ++i)
             {
                 GetAESNodes()[i]->ImportPosition(nodesPos[i]);
             }
@@ -392,19 +403,16 @@ void AnimatorSMEditorScene::ExportCurrentAnimatorStateMachineIfAny()
     }
 }
 
-void AnimatorSMEditorScene::OnNodeCreated(AnimatorStateMachine *stateMachine,
-                                          uint newNodeIdx,
+void AnimatorSMEditorScene::OnNodeCreated(uint newNodeIdx,
                                           AnimatorStateMachineNode *newNode)
 {
-    ASSERT(stateMachine == GetAnimatorSM());
     CreateAndAddNode(newNode, newNodeIdx);
 }
 
-void AnimatorSMEditorScene::OnNodeRemoved(AnimatorStateMachine *stateMachine,
-                                          uint removedNodeIdx,
+void AnimatorSMEditorScene::OnNodeRemoved(uint removedNodeIdx,
                                           AnimatorStateMachineNode *removedNode)
 {
-    ASSERT(stateMachine == GetAnimatorSM());
+    BANG_UNUSED(removedNode);
     ASSERT(removedNodeIdx < p_nodes.Size());
 
     AESNode *aesNodeToRemove = p_nodes[removedNodeIdx];

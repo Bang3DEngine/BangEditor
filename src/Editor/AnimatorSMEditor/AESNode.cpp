@@ -3,9 +3,10 @@
 #include "Bang/Alignment.h"
 #include "Bang/Animator.h"
 #include "Bang/AnimatorStateMachine.h"
-#include "Bang/AnimatorStateMachineConnection.h"
+#include "Bang/AnimatorStateMachineLayer.h"
 #include "Bang/AnimatorStateMachineNode.h"
 #include "Bang/AnimatorStateMachinePlayer.h"
+#include "Bang/AnimatorStateMachineTransition.h"
 #include "Bang/Assert.h"
 #include "Bang/Color.h"
 #include "Bang/Cursor.h"
@@ -116,11 +117,6 @@ void AESNode::Update()
     if (p_focusable->IsBeingPressed() &&
         !Input::GetMouseButton(MouseButton::MIDDLE))
     {
-        Vector2 mousePos(Input::GetMousePosition());
-        Vector2 mousePosLocal =
-            rt->FromWorldToLocalPoint(Vector3(mousePos, 0)).xy();
-        rt->SetAnchors(mousePosLocal);
-
         float localPosZ = rt->GetLocalPosition().z;
         Vector3 newLocalPos = Vector3(
             GetAESScene()->GetMousePositionInSceneSpace() - m_grabOffset,
@@ -147,10 +143,11 @@ void AESNode::Update()
     if (AnimatorStateMachineNode *smNode = GetSMNode())
     {
         SetNodeName(smNode->GetName());
-        p_entryNodeText->SetEnabled(GetAnimatorSM()->GetEntryNode() == smNode);
+        p_entryNodeText->SetEnabled(GetAnimatorSMLayer()->GetEntryNode() ==
+                                    smNode);
         if (Animator *animator = GetCurrentAnimator())
         {
-            if (AnimatorStateMachinePlayer *player = animator->GetPlayer())
+            for (AnimatorStateMachinePlayer *player : animator->GetPlayers())
             {
                 if (player->GetCurrentNode() == smNode)
                 {
@@ -168,7 +165,7 @@ void AESNode::SetAsEntryNode()
 {
     MetaNode previousMeta = GetAnimatorSM()->GetMeta();
 
-    GetAnimatorSM()->SetEntryNode(GetSMNode());
+    GetAnimatorSMLayer()->SetEntryNode(GetSMNode());
 
     UndoRedoManager::PushAction(new UndoRedoSerializableChange(
         GetAnimatorSM(), previousMeta, GetAnimatorSM()->GetMeta()));
@@ -264,7 +261,7 @@ void AESNode::OnDragConnectionLineEnd()
         AnimatorStateMachineNode *toSMNode = nodeToConnectTo->GetSMNode();
         ASSERT(fromSMNode);
         ASSERT(toSMNode);
-        fromSMNode->CreateConnectionTo(toSMNode);
+        fromSMNode->CreateTransitionTo(toSMNode);
 
         UndoRedoManager::PushAction(new UndoRedoSerializableChange(
             GetAnimatorSM(), previousMeta, GetAnimatorSM()->GetMeta()));
@@ -283,7 +280,7 @@ void AESNode::RemoveSelf()
     if (idx != -1u)
     {
         DestroyLineUsedForDragging();
-        GetAnimatorSM()->RemoveNode(GetAnimatorSM()->GetNodes()[idx]);
+        GetAnimatorSMLayer()->RemoveNode(GetAnimatorSMLayer()->GetNodes()[idx]);
     }
 
     UndoRedoManager::PushAction(new UndoRedoSerializableChange(
@@ -297,7 +294,8 @@ void AESNode::Duplicate()
     uint idx = GetIndexInStateMachine();
     ASSERT(idx != -1u);
 
-    AnimatorStateMachineNode *newNode = GetAnimatorSM()->CreateAndAddNode();
+    AnimatorStateMachineNode *newNode =
+        GetAnimatorSMLayer()->CreateAndAddNode();
     AESNode *newAESNode = GetAESScene()->GetAESNodes().Back();
     ASSERT(newNode);
 
@@ -326,6 +324,11 @@ void AESNode::DestroyLineUsedForDragging()
     }
 }
 
+void AESNode::SetSMNode(AnimatorStateMachineNode *smNode)
+{
+    p_smNode = smNode;
+}
+
 Vector2 AESNode::GetExportPosition() const
 {
     return GetRectTransform()->GetLocalPosition().xy();
@@ -347,26 +350,31 @@ AnimatorStateMachine *AESNode::GetAnimatorSM() const
     return GetAESScene()->GetAnimatorSM();
 }
 
-AnimatorStateMachineNode *AESNode::GetSMNode() const
+AnimatorStateMachineLayer *AESNode::GetAnimatorSMLayer() const
 {
-    return GetAnimatorSM() ? GetAnimatorSM()->GetNode(GetIndexInStateMachine())
-                           : nullptr;
+    return GetSMNode() ? GetSMNode()->GetLayer() : nullptr;
 }
 
-void AESNode::OnConnectionAdded(AnimatorStateMachineNode *node,
-                                AnimatorStateMachineConnection *connection)
+AnimatorStateMachineNode *AESNode::GetSMNode() const
 {
-    // ASSERT(node == GetSMNode());
-    ASSERT(connection->GetNodeTo());
-    ASSERT(connection->GetNodeFrom());
+    return p_smNode;
+}
 
-    AnimatorStateMachineNode *nodeTo = connection->GetNodeTo();
+void AESNode::OnTransitionAdded(AnimatorStateMachineNode *node,
+                                AnimatorStateMachineTransition *transition)
+{
+    ASSERT(node == GetSMNode());
+    ASSERT(transition->GetNodeTo());
+    ASSERT(transition->GetNodeFrom());
+
+    AnimatorStateMachineNode *nodeTo = transition->GetNodeTo();
     ASSERT(nodeTo);
     if (!p_nodeConnectedToToConnectionLine.ContainsKey(nodeTo))
     {
-        AnimatorStateMachine *sm = GetAnimatorSM();
-        uint nodeFromIdx = sm->GetNodes().IndexOf(connection->GetNodeFrom());
-        uint nodeToIdx = sm->GetNodes().IndexOf(connection->GetNodeTo());
+        AnimatorStateMachineLayer *smLayer = GetAnimatorSMLayer();
+        uint nodeFromIdx =
+            smLayer->GetNodes().IndexOf(transition->GetNodeFrom());
+        uint nodeToIdx = smLayer->GetNodes().IndexOf(transition->GetNodeTo());
         AESConnectionLine *connLine = CreateAndAddDefinitiveConnection();
         AESNode *aesNodeFrom = GetAESScene()->GetAESNodes()[nodeFromIdx];
         AESNode *aesNodeTo = GetAESScene()->GetAESNodes()[nodeToIdx];
@@ -376,8 +384,9 @@ void AESNode::OnConnectionAdded(AnimatorStateMachineNode *node,
     }
 }
 
-void AESNode::OnConnectionRemoved(AnimatorStateMachineNode *node,
-                                  AnimatorStateMachineConnection *connToRemove)
+void AESNode::OnTransitionRemoved(
+    AnimatorStateMachineNode *node,
+    AnimatorStateMachineTransition *transitionToRemove)
 {
     if (!GetAnimatorSM())
     {
@@ -387,12 +396,12 @@ void AESNode::OnConnectionRemoved(AnimatorStateMachineNode *node,
     AnimatorStateMachineNode *smNode = GetSMNode();
     ASSERT(node == smNode);
 
-    AnimatorStateMachineNode *nodeTo = connToRemove->GetNodeTo();
+    AnimatorStateMachineNode *nodeTo = transitionToRemove->GetNodeTo();
     ASSERT(nodeTo);
     if (p_nodeConnectedToToConnectionLine.ContainsKey(nodeTo))
     {
         bool theresStillSomeConnectionToNodeTo = false;
-        for (AnimatorStateMachineConnection *conn : node->GetConnections())
+        for (AnimatorStateMachineTransition *conn : node->GetTransitions())
         {
             if (conn->GetNodeTo() == nodeTo)
             {
