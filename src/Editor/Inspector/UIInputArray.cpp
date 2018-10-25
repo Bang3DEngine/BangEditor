@@ -118,7 +118,8 @@ void UIInputArray::UpdateSerializables(
     Array<Serializable *> serializablesToUpdateFrom,
     std::function<Serializable *()> createNewSerializableFunction,
     std::function<void(Serializable *)> removeSerializableFunction,
-    bool newCreatedSerializablesUpdateTheFromSerializable)
+    bool newCreatedSerializablesUpdateTheFromSerializable,
+    bool updatingInputRows)
 {
     // Add or remove needed or unneeded elements (if any)
     uint prevSerializablesToUpdateSize = serializablesToUpdate.Size();
@@ -149,16 +150,18 @@ void UIInputArray::UpdateSerializables(
         bool isNewElement = (i >= prevSerializablesToUpdateSize);
         if (isNewElement && newCreatedSerializablesUpdateTheFromSerializable)
         {
-            const MetaNode &newSerializableMeta =
-                serializableToUpdate->GetMeta();
-            serializableToUpdateFrom->ImportMeta(newSerializableMeta);
+            std::swap(serializableToUpdate, serializableToUpdateFrom);
         }
-        else
-        {
-            const MetaNode &updateFromMeta =
-                serializableToUpdateFrom->GetMeta();
-            serializableToUpdate->ImportMeta(updateFromMeta);
-        }
+
+        MetaNode updateFromMeta = serializableToUpdateFrom->GetMeta();
+        serializableToUpdate->ImportMeta(updateFromMeta);
+
+        EventEmitter<IEventsUIInputArray>::PropagateToListeners(
+            (updatingInputRows ? &IEventsUIInputArray::OnInputRowUpdated
+                               : &IEventsUIInputArray::OnReferenceUpdated),
+            this,
+            serializableToUpdate,
+            serializableToUpdateFrom);
     }
 }
 

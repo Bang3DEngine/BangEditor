@@ -253,10 +253,11 @@ void AnimatorSMEditorScene::Clear()
     }
 
     p_animatorSMLayer = nullptr;
+    m_smNodeToPosition.Clear();
 
     for (AESNode *node : p_nodes)
     {
-        GameObject::Destroy(node);
+        GameObject::DestroyImmediate(node);
     }
     p_nodes.Clear();
 }
@@ -368,12 +369,31 @@ void AnimatorSMEditorScene::ImportCurrentAnimatorStateMachineExtraInformation()
         {
             MetaNode meta;
             meta.Import(metaPath);
-            Array<Vector2> nodesPos = meta.GetArray<Vector2>("NodePositions");
-            for (uint i = 0;
-                 i < Math::Min(GetAESNodes().Size(), nodesPos.Size());
-                 ++i)
+            const auto &layersMetas = meta.GetChildren("Layers");
+            for (uint i = 0; i < layersMetas.Size(); ++i)
             {
-                GetAESNodes()[i]->ImportPosition(nodesPos[i]);
+                const MetaNode &layerMeta = layersMetas[i];
+                AnimatorStateMachineLayer *smLayer =
+                    GetAnimatorSM()->GetLayers()[i];
+
+                const auto &nodesMetas = layerMeta.GetChildren("Nodes");
+                for (uint j = 0; j < nodesMetas.Size(); ++j)
+                {
+                    const MetaNode &smNodeMeta = nodesMetas[j];
+                    const Vector2 aesNodePos =
+                        smNodeMeta.Get<Vector2>("Position");
+                    AnimatorStateMachineNode *smNode = smLayer->GetNodes()[j];
+                    if (smLayer == GetAnimatorSMLayer())
+                    {
+                        if (j < GetAESNodes().Size())
+                        {
+                            ASSERT(j < GetAESNodes().Size());
+                            AESNode *aesNode = GetAESNodes()[j];
+                            aesNode->ImportPosition(aesNodePos);
+                        }
+                    }
+                    m_smNodeToPosition.Add(smNode, aesNodePos);
+                }
             }
         }
     }
@@ -385,18 +405,36 @@ void AnimatorSMEditorScene::ExportCurrentAnimatorStateMachineIfAny()
     {
         Path metaPath = MetaFilesManager::GetMetaFilepath(
             GetAnimatorSM()->GetResourceFilepath());
-        GetAnimatorSM()->ExportMetaToFile(metaPath);
 
         {
-            MetaNode meta;
-            meta.Import(metaPath);
-            Array<Vector2> nodesPos;
-            for (AESNode *node : GetAESNodes())
+            MetaNode smMeta = GetAnimatorSM()->GetMeta();
+
+            for (uint i = 0; i < GetAnimatorSM()->GetLayers().Size(); ++i)
             {
-                nodesPos.PushBack(node->GetExportPosition());
+                AnimatorStateMachineLayer *smLayer =
+                    GetAnimatorSM()->GetLayers()[i];
+                MetaNode *smLayerMeta = smMeta.GetChild("Layers", i);
+                for (uint j = 0; j < smLayer->GetNodes().Size(); ++j)
+                {
+                    AnimatorStateMachineNode *smNode = smLayer->GetNodes()[j];
+                    MetaNode *smNodeMeta = smLayerMeta->GetChild("Nodes", j);
+                    Vector2 aesNodePos = Vector2::Zero;
+                    if (smLayer == GetAnimatorSMLayer())
+                    {
+                        AESNode *aesNode = GetAESNodes()[j];
+                        aesNodePos = aesNode->GetRectTransform()
+                                         ->GetLocalPosition()
+                                         .xy();
+                    }
+                    else
+                    {
+                        aesNodePos = m_smNodeToPosition[smNode];
+                    }
+                    smNodeMeta->Set("Position", aesNodePos);
+                }
             }
-            meta.SetArray<Vector2>("NodePositions", nodesPos);
-            File::Write(metaPath, meta.ToString());
+
+            File::Write(metaPath, smMeta.ToString());
 
             m_lastTimeAnimatorSMWasExported = Time::GetNow();
         }

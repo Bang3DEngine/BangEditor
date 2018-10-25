@@ -128,8 +128,15 @@ AnimatorSMEditor::AnimatorSMEditor()
             ->SetParent(inspectorContainer);
 
         p_layersInput = new UIInputArray();
-        p_layersInput->SetCreateNewRowGameObjectFunction(
-            []() { return new ASMLayerInput(); });
+        p_layersInput->SetCreateNewRowGameObjectFunction([this]() {
+            ASMLayerInput *layerInput = new ASMLayerInput();
+            layerInput->EventEmitter<IEventsASMLayerInput>::RegisterListener(
+                this);
+
+            return layerInput;
+        });
+        p_layersInput->EventEmitter<IEventsUIInputArray>::RegisterListener(
+            this);
         p_layersInput->EventEmitter<IEventsValueChanged>::RegisterListener(
             this);
         p_layersInput->SetParent(inspectorContainer);
@@ -176,6 +183,8 @@ void AnimatorSMEditor::Update()
 
     if (GetAnimatorSM())
     {
+        AnimatorStateMachineLayer *currentSelectedLayer = nullptr;
+
         if (Time::GetPassedTimeSince(m_lastVariablesInputUpdateTime) >=
             Time::Seconds(0.2f))
         {
@@ -201,8 +210,12 @@ void AnimatorSMEditor::SetAnimatorSM(AnimatorStateMachine *animatorSM)
                 GetAnimatorSM()->CreateNewLayer();
             }
 
-            p_animatorEditorScene->SetAnimatorSMLayer(
-                GetAnimatorSM()->GetLayers().Front());
+            p_layersInput->UpdateRows(GetAnimatorSM()->GetLayers());
+            ASSERT(p_layersInput->GetRowGameObjects().Size() >= 1);
+
+            // Select first layer
+            SCAST<ASMLayerInput *>(p_layersInput->GetRowGameObjects()[0])
+                ->Select();
         }
     }
 }
@@ -217,6 +230,26 @@ void AnimatorSMEditor::Clear()
     p_animatorEditorScene->Clear();
     p_layersInput->Clear();
     p_variablesInput->Clear();
+}
+
+void AnimatorSMEditor::OnLayerInputSelected(ASMLayerInput *selectedLayerInput)
+{
+    for (GameObject *layerInputRow : p_layersInput->GetRowGameObjects())
+    {
+        ASMLayerInput *layerInput = DCAST<ASMLayerInput *>(layerInputRow);
+        ASSERT(layerInput);
+
+        if (layerInput != selectedLayerInput)
+        {
+            layerInput->UnSelect();
+        }
+    }
+
+    uint selectedLayerIndex =
+        p_layersInput->GetRowGameObjects().IndexOf(selectedLayerInput);
+    ASSERT(selectedLayerIndex < GetAnimatorSM()->GetLayers().Size());
+    p_animatorEditorScene->SetAnimatorSMLayer(
+        GetAnimatorSM()->GetLayers()[selectedLayerIndex]);
 }
 
 void AnimatorSMEditor::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)

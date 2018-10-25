@@ -326,7 +326,9 @@ void AESNode::DestroyLineUsedForDragging()
 
 void AESNode::SetSMNode(AnimatorStateMachineNode *smNode)
 {
+    ASSERT(!p_smNode);
     p_smNode = smNode;
+    p_smNode->EventEmitter<IEventsDestroy>::RegisterListener(this);
 }
 
 Vector2 AESNode::GetExportPosition() const
@@ -475,4 +477,16 @@ UIEventResult AESNode::OnUIEvent(UIFocusable *, const UIEvent &event)
         default: break;
     }
     return UIEventResult::IGNORE;
+}
+
+void AESNode::OnDestroyed(EventEmitter<IEventsDestroy> *object)
+{
+    if (object == GetSMNode())
+    {
+        GameObject::DestroyImmediate(this);
+    }
+    else
+    {
+        GameObject::OnDestroyed(object);
+    }
 }

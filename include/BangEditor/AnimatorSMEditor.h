@@ -15,7 +15,9 @@
 #include "Bang/String.h"
 #include "Bang/Time.h"
 #include "Bang/UIButton.h"
+#include "BangEditor/ASMLayerInput.h"
 #include "BangEditor/BangEditor.h"
+#include "BangEditor/UIInputArray.h"
 
 namespace Bang
 {
@@ -34,7 +36,9 @@ class AnimatorSMEditorScene;
 class UIInputArray;
 
 class AnimatorSMEditor : public GameObject,
-                         public EventListener<IEventsValueChanged>
+                         public EventListener<IEventsValueChanged>,
+                         public EventListener<IEventsASMLayerInput>,
+                         public EventListener<IEventsUIInputArray>
 {
     GAMEOBJECT_EDITOR(AnimatorSMEditor);
 
@@ -59,6 +63,9 @@ private:
     UIInputArray *p_variablesInput = nullptr;
 
     void Clear();
+
+    // IEventsASMLayerInput
+    void OnLayerInputSelected(ASMLayerInput *selectedLayerInput) override;
 
     // IEventsValueChanged
     virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *ee) override;

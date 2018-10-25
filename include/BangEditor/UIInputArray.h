@@ -30,11 +30,32 @@ namespace BangEditor
 {
 class UIInputArrayRow;
 
+class IEventsUIInputArray
+{
+    IEVENTS(IEventsUIInputArray);
+
+public:
+    void OnInputRowUpdated(UIInputArray *inputArray,
+                           Serializable *inputRow,
+                           Serializable *reference)
+    {
+        BANG_UNUSED_3(inputArray, inputRow, reference);
+    }
+
+    virtual void OnReferenceUpdated(UIInputArray *inputArray,
+                                    Serializable *inputRow,
+                                    Serializable *reference)
+    {
+        BANG_UNUSED_3(inputArray, inputRow, reference);
+    }
+};
+
 // The GameObject's in each row will use MetaNode's to serialize/deserialize
 // and update array elements
 class UIInputArray : public GameObject,
                      public EventListener<IEventsValueChanged>,
-                     public EventEmitter<IEventsValueChanged>
+                     public EventEmitter<IEventsValueChanged>,
+                     public EventEmitter<IEventsUIInputArray>
 {
     GAMEOBJECT_EDITOR(UIInputArray);
 
@@ -80,7 +101,8 @@ private:
         Array<Serializable *> serializablesToUpdateFrom,
         std::function<Serializable *()> createNewSerializableFunction,
         std::function<void(Serializable *)> removeSerializableFunction,
-        bool newCreatedSerializablesUpdateTheFromSerializable);
+        bool newCreatedSerializablesUpdateTheFromSerializable,
+        bool updatingInputRows);
 
     void MoveAddNewRowButtonRowToEnd();
     void MoveRow(UIInputArrayRow *row, int displacement);
@@ -114,7 +136,8 @@ void UIInputArray::UpdateRows(const Array<T *> &referenceSerializables)
                             [this](Serializable *s) {
                                 RemoveRow_(SCAST<GameObject *>(s), false);
                             },
-                            false);
+                            false,
+                            true);
         m_updatingRowsOrReferences = false;
     }
 }
@@ -140,7 +163,8 @@ void UIInputArray::UpdateReferences(
                 return SCAST<Serializable *>(newObj);
             },
             [&](Serializable *s) { removeReferenceFunction(SCAST<T *>(s)); },
-            true);
+            true,
+            false);
         m_updatingRowsOrReferences = false;
     }
 }

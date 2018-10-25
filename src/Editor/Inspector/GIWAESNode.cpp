@@ -117,6 +117,8 @@ void GIWAESNode::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     GameObject::OnDestroyed(object);
 
-    ASSERT(object == p_aesNode);
-    Inspector::GetActive()->Clear();
+    if (object == GetAESNode())
+    {
+        Inspector::GetActive()->Clear();
+    }
 }

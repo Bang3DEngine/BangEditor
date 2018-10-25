@@ -108,6 +108,9 @@ private:
     virtual UIEventResult OnUIEvent(UIFocusable *focusable,
                                     const UIEvent &event) override;
 
+    // IEventsDestroy
+    void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
+
     friend class AnimatorSMEditorScene;
 };
 }
