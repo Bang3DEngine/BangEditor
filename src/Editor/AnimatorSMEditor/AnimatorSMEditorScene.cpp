@@ -217,6 +217,37 @@ Vector2 AnimatorSMEditorScene::GetWorldPositionInSceneSpace(
     return posLocal;
 }
 
+void AnimatorSMEditorScene::OnLayerMoved(uint oldIndex, uint newIndex)
+{
+    MetaNode oldExtraInfoMeta;
+    Path extraMetaInfoPath = GetAnimatorSMExtraInfoPath();
+    oldExtraInfoMeta.Import(File::GetContents(extraMetaInfoPath));
+
+    Array<MetaNode> oldLayersMetas = oldExtraInfoMeta.GetChildren("Layers");
+    for (uint i = 0; i < GetAnimatorSM()->GetLayers().Size(); ++i)
+    {
+        if (i >= oldLayersMetas.Size())
+        {
+            oldLayersMetas.PushBack(MetaNode());
+        }
+    }
+
+    MetaNode finalExtraInfoMetaAfterMove = MetaNode();
+    Array<MetaNode> finalLayersMetasAfterMove = oldLayersMetas;
+    MetaNode metaToMove = oldLayersMetas[oldIndex];
+    finalLayersMetasAfterMove.RemoveByIndex(oldIndex);
+    finalLayersMetasAfterMove.Insert(metaToMove, newIndex);
+
+    for (const MetaNode &finalLayerMetaAfterMove : finalLayersMetasAfterMove)
+    {
+        finalExtraInfoMetaAfterMove.AddChild(finalLayerMetaAfterMove, "Layers");
+    }
+
+    File::Write(extraMetaInfoPath, finalExtraInfoMetaAfterMove.ToString());
+
+    ImportCurrentAnimatorStateMachineExtraInformation();
+}
+
 void AnimatorSMEditorScene::CenterScene()
 {
     m_panning = Vector2::Zero;
@@ -454,6 +485,8 @@ void AnimatorSMEditorScene::ExportCurrentAnimatorStateMachineIfAny()
             }
         }
 
+        GetAnimatorSM()->ExportMetaToFile(MetaFilesManager::GetMetaFilepath(
+            GetAnimatorSM()->GetResourceFilepath()));
         File::Write(extraInfoPath, extraInfoMeta.ToString());
 
         m_lastTimeAnimatorSMWasExported = Time::GetNow();

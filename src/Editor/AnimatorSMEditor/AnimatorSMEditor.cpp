@@ -261,39 +261,10 @@ void AnimatorSMEditor::OnInputRowMoved(UIInputArray *inputArray,
                                        uint oldIndex,
                                        uint newIndex)
 {
+    BANG_UNUSED(inputRow);
     if (inputArray == p_layersInput)
     {
-        MetaNode oldExtraInfoMeta;
-        Path extraMetaInfoPath =
-            p_animatorEditorScene->GetAnimatorSMExtraInfoPath();
-        oldExtraInfoMeta.Import(File::GetContents(extraMetaInfoPath));
-
-        Array<MetaNode> oldLayersMetas = oldExtraInfoMeta.GetChildren("Layers");
-        for (uint i = 0; i < GetAnimatorSM()->GetLayers().Size(); ++i)
-        {
-            if (i >= oldLayersMetas.Size())
-            {
-                oldLayersMetas.PushBack(MetaNode());
-            }
-        }
-
-        MetaNode finalExtraInfoMetaAfterMove = MetaNode();
-        Array<MetaNode> finalLayersMetasAfterMove = oldLayersMetas;
-        MetaNode metaToMove = oldLayersMetas[oldIndex];
-        finalLayersMetasAfterMove.RemoveByIndex(oldIndex);
-        finalLayersMetasAfterMove.Insert(metaToMove, newIndex);
-
-        for (const MetaNode &finalLayerMetaAfterMove :
-             finalLayersMetasAfterMove)
-        {
-            finalExtraInfoMetaAfterMove.AddChild(finalLayerMetaAfterMove,
-                                                 "Layers");
-        }
-
-        File::Write(extraMetaInfoPath, finalExtraInfoMetaAfterMove.ToString());
-
-        p_animatorEditorScene
-            ->ImportCurrentAnimatorStateMachineExtraInformation();
+        p_animatorEditorScene->OnLayerMoved(oldIndex, newIndex);
     }
 }
 

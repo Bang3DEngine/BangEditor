@@ -58,6 +58,7 @@ public:
     void SetAnimatorSMLayer(AnimatorStateMachineLayer *animatorSMLayer);
     Vector2 GetMousePositionInSceneSpace() const;
     Vector2 GetWorldPositionInSceneSpace(const Vector2 &pos) const;
+    void OnLayerMoved(uint oldIndex, uint newIndex);
     void CenterScene();
     void Clear();
 
