@@ -64,6 +64,12 @@ private:
 
     void Clear();
 
+    // IEventsUIInputArray
+    void OnInputRowMoved(UIInputArray *inputArray,
+                         Serializable *inputRow,
+                         uint oldIndex,
+                         uint newIndex) override;
+
     // IEventsASMLayerInput
     void OnLayerInputSelected(ASMLayerInput *selectedLayerInput) override;
 

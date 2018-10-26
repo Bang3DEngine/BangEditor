@@ -35,9 +35,16 @@ class IEventsUIInputArray
     IEVENTS(IEventsUIInputArray);
 
 public:
-    void OnInputRowUpdated(UIInputArray *inputArray,
-                           Serializable *inputRow,
-                           Serializable *reference)
+    virtual void OnInputRowMoved(UIInputArray *inputArray,
+                                 Serializable *inputRow,
+                                 uint oldIndex,
+                                 uint newIndex)
+    {
+        BANG_UNUSED_4(inputArray, inputRow, oldIndex, newIndex);
+    }
+    virtual void OnInputRowUpdated(UIInputArray *inputArray,
+                                   Serializable *inputRow,
+                                   Serializable *reference)
     {
         BANG_UNUSED_3(inputArray, inputRow, reference);
     }
@@ -95,9 +102,9 @@ private:
     std::function<void(uint, uint)> m_moveReferenceFunction;
     std::function<void(Serializable *)> m_removeReferenceFunction;
 
-    void AddRow_(GameObject *rowGameObject,
-                 uint index,
-                 bool propagateChangeEvent);
+    UIInputArrayRow *AddRow_(GameObject *rowGameObject,
+                             uint index,
+                             bool propagateChangeEvent);
     void RemoveRow_(GameObject *rowGameObject, bool propagateChangeEvent);
 
     void UpdateSerializables(

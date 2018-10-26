@@ -59,9 +59,9 @@ UIInputArray::~UIInputArray()
 {
 }
 
-void UIInputArray::AddRow_(GameObject *rowGameObject,
-                           uint index_,
-                           bool propagateChangeEvent)
+UIInputArrayRow *UIInputArray::AddRow_(GameObject *rowGameObject,
+                                       uint index_,
+                                       bool propagateChangeEvent)
 {
     if (!GetRowGameObjects().Contains(rowGameObject))
     {
@@ -84,7 +84,9 @@ void UIInputArray::AddRow_(GameObject *rowGameObject,
             EventEmitter<IEventsValueChanged>::PropagateToListeners(
                 &IEventsValueChanged::OnValueChanged, this);
         }
+        return row;
     }
+    return nullptr;
 }
 
 void UIInputArray::RemoveRow_(GameObject *rowGameObject,
@@ -199,19 +201,22 @@ void UIInputArray::RemoveRow(uint index)
 
 void UIInputArray::MoveRow(UIInputArrayRow *row, int displacement)
 {
-    int numChildren = SCAST<int>(GetChildren().Size());
+    int numChildren = SCAST<int>(GetChildren().Size() - 1);
     int oldIndex = row->GetIndexInsideParent();
     int newIndex = (oldIndex + displacement + numChildren) % numChildren;
 
     ASSERT(m_moveReferenceFunction);
     m_moveReferenceFunction(oldIndex, newIndex);
 
-    numChildren = SCAST<int>(GetChildren().Size() - 1);
-    newIndex = (oldIndex + displacement + numChildren) % numChildren;
-
     RemoveRow(row, false);
     AddRow_(row->GetContainedGameObject(), newIndex, false);
 
+    EventEmitter<IEventsUIInputArray>::PropagateToListeners(
+        &IEventsUIInputArray::OnInputRowMoved,
+        this,
+        row->GetContainedGameObject(),
+        oldIndex,
+        newIndex);
     EventEmitter<IEventsValueChanged>::PropagateToListeners(
         &IEventsValueChanged::OnValueChanged, this);
 }

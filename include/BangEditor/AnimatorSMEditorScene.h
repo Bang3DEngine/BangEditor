@@ -79,7 +79,6 @@ private:
     DPtr<UIImageRenderer> p_border = nullptr;
     Time m_lastTimeAnimatorSMWasExported = Time(0);
 
-    Map<AnimatorStateMachineNode *, Vector2> m_smNodeToPosition;
     uint m_framesAfterNewAnimatorSMSetAndVisible = 0;
 
     float m_zoomScale = 1.0f;
@@ -89,6 +88,7 @@ private:
     void UpdatePanningAndZoomOnTransforms();
     bool IsMouseOverSomeConnectionLine() const;
 
+    Path GetAnimatorSMExtraInfoPath() const;
     void ImportCurrentAnimatorStateMachineExtraInformation();
     void ExportCurrentAnimatorStateMachineIfAny();
 

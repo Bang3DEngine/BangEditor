@@ -9,6 +9,7 @@
 #include "Bang/EventEmitter.h"
 #include "Bang/EventListener.tcc"
 #include "Bang/Extensions.h"
+#include "Bang/File.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/IEventsValueChanged.h"
@@ -208,8 +209,6 @@ void AnimatorSMEditor::Update()
 
     if (GetAnimatorSM())
     {
-        AnimatorStateMachineLayer *currentSelectedLayer = nullptr;
-
         if (Time::GetPassedTimeSince(m_lastVariablesInputUpdateTime) >=
             Time::Seconds(0.2f))
         {
@@ -257,6 +256,47 @@ void AnimatorSMEditor::Clear()
     p_variablesInput->Clear();
 }
 
+void AnimatorSMEditor::OnInputRowMoved(UIInputArray *inputArray,
+                                       Serializable *inputRow,
+                                       uint oldIndex,
+                                       uint newIndex)
+{
+    if (inputArray == p_layersInput)
+    {
+        MetaNode oldExtraInfoMeta;
+        Path extraMetaInfoPath =
+            p_animatorEditorScene->GetAnimatorSMExtraInfoPath();
+        oldExtraInfoMeta.Import(File::GetContents(extraMetaInfoPath));
+
+        Array<MetaNode> oldLayersMetas = oldExtraInfoMeta.GetChildren("Layers");
+        for (uint i = 0; i < GetAnimatorSM()->GetLayers().Size(); ++i)
+        {
+            if (i >= oldLayersMetas.Size())
+            {
+                oldLayersMetas.PushBack(MetaNode());
+            }
+        }
+
+        MetaNode finalExtraInfoMetaAfterMove = MetaNode();
+        Array<MetaNode> finalLayersMetasAfterMove = oldLayersMetas;
+        MetaNode metaToMove = oldLayersMetas[oldIndex];
+        finalLayersMetasAfterMove.RemoveByIndex(oldIndex);
+        finalLayersMetasAfterMove.Insert(metaToMove, newIndex);
+
+        for (const MetaNode &finalLayerMetaAfterMove :
+             finalLayersMetasAfterMove)
+        {
+            finalExtraInfoMetaAfterMove.AddChild(finalLayerMetaAfterMove,
+                                                 "Layers");
+        }
+
+        File::Write(extraMetaInfoPath, finalExtraInfoMetaAfterMove.ToString());
+
+        p_animatorEditorScene
+            ->ImportCurrentAnimatorStateMachineExtraInformation();
+    }
+}
+
 void AnimatorSMEditor::OnLayerInputSelected(ASMLayerInput *selectedLayerInput)
 {
     for (GameObject *layerInputRow : p_layersInput->GetRowGameObjects())
@@ -294,4 +334,6 @@ void AnimatorSMEditor::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
         p_layersInput->UpdateReferences<AnimatorStateMachineLayer>(
             GetAnimatorSM()->GetLayers());
     }
+
+    p_animatorEditorScene->ImportCurrentAnimatorStateMachineExtraInformation();
 }

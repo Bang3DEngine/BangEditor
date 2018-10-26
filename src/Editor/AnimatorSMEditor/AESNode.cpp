@@ -41,6 +41,7 @@
 using namespace Bang;
 using namespace BangEditor;
 
+#include "Bang/Debug.h"
 AESNode::AESNode()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
@@ -483,7 +484,8 @@ void AESNode::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
     if (object == GetSMNode())
     {
-        GameObject::DestroyImmediate(this);
+        GameObject::Destroy(this);
+        Object::PropagateObjectDestruction(this);
     }
     else
     {
