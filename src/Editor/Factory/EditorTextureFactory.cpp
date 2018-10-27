@@ -116,6 +116,11 @@ Texture2D *EditorTextureFactory::GetAnimatorSMIcon()
     return EditorTextureFactory::GetTexture2D("AnimatorSMIcon.png");
 }
 
+Texture2D *EditorTextureFactory::GetAnimatorLayerMaskIcon()
+{
+    return EditorTextureFactory::GetTexture2D("AnimatorLayerMaskIcon.png");
+}
+
 Texture2D *EditorTextureFactory::GetGreenSphereIcon()
 {
     return EditorTextureFactory::GetTexture2D("GreenSphere.png");
@@ -421,6 +426,11 @@ Texture2D *EditorTextureFactory::GetIconForExtension(const String &ext)
     else if (Extensions::Equals(ext, Extensions::GetModelExtensions()))
     {
         return EditorTextureFactory::GetCubeIcon();
+    }
+    else if (Extensions::Equals(ext,
+                                Extensions::GetAnimatorLayerMaskExtension()))
+    {
+        return EditorTextureFactory::GetAnimatorLayerMaskIcon();
     }
     else if (Extensions::Equals(ext, Extensions::GetPhysicsMaterialExtension()))
     {

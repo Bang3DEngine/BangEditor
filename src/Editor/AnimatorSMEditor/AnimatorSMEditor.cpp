@@ -80,30 +80,30 @@ AnimatorSMEditor::AnimatorSMEditor()
         p_animatorEditorScene->SetParent(animatorEditorSceneContainer);
     }
 
-    GameObject *inspectorContainer = GameObjectFactory::CreateUIGameObject();
+    p_sidebar = GameObjectFactory::CreateUIGameObject();
     {
-        UILayoutElement *inspectorLE =
-            inspectorContainer->AddComponent<UILayoutElement>();
-        inspectorLE->SetFlexibleSize(Vector2(0.5f, 1.0f));
+        UILayoutElement *sidebarLE =
+            p_sidebar->AddComponent<UILayoutElement>();
+        sidebarLE->SetFlexibleSize(Vector2(0.5f, 1.0f));
 
         UIVerticalLayout *inspVL =
-            inspectorContainer->AddComponent<UIVerticalLayout>();
+            p_sidebar->AddComponent<UIVerticalLayout>();
         inspVL->SetPaddingLeft(10);
 
         UILabel *varsLabel = GameObjectFactory::CreateUILabel();
         varsLabel->GetText()->SetContent("Variables");
         varsLabel->GetText()->SetTextColor(Color::Black);
         varsLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::LEFT);
-        varsLabel->GetGameObject()->SetParent(inspectorContainer);
+        varsLabel->GetGameObject()->SetParent(p_sidebar);
         varsLabel->GetGameObject()
             ->GetComponent<UILayoutElement>()
             ->SetFlexibleHeight(0.0f);
 
         GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5)
-            ->SetParent(inspectorContainer);
+            ->SetParent(p_sidebar);
 
         p_variablesInput = new UIInputArray();
-        p_variablesInput->SetFunctions<AnimatorStateMachineVariable>(
+        p_variablesInput->SetUpdateFunctions<AnimatorStateMachineVariable>(
             []() { return new ASMVariableInput(); },
             [this]() {
                 ASSERT(GetAnimatorSM());
@@ -119,29 +119,29 @@ AnimatorSMEditor::AnimatorSMEditor()
             });
         p_variablesInput->EventEmitter<IEventsValueChanged>::RegisterListener(
             this);
-        p_variablesInput->SetParent(inspectorContainer);
+        p_variablesInput->SetParent(p_sidebar);
 
         UILayoutElement *varsLE =
             p_variablesInput->AddComponent<UILayoutElement>();
         varsLE->SetFlexibleSize(Vector2(1.0f));
 
         GameObjectFactory::CreateUIVSpacer(LayoutSizeType::PREFERRED, 20)
-            ->SetParent(inspectorContainer);
+            ->SetParent(p_sidebar);
 
         UILabel *layersLabel = GameObjectFactory::CreateUILabel();
         layersLabel->GetText()->SetContent("Layers");
         layersLabel->GetText()->SetTextColor(Color::Black);
         layersLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::LEFT);
-        layersLabel->GetGameObject()->SetParent(inspectorContainer);
+        layersLabel->GetGameObject()->SetParent(p_sidebar);
         layersLabel->GetGameObject()
             ->GetComponent<UILayoutElement>()
             ->SetFlexibleHeight(0.0f);
 
         GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5)
-            ->SetParent(inspectorContainer);
+            ->SetParent(p_sidebar);
 
         p_layersInput = new UIInputArray();
-        p_layersInput->SetFunctions<AnimatorStateMachineLayer>(
+        p_layersInput->SetUpdateFunctions<AnimatorStateMachineLayer>(
             [this]() {
                 ASMLayerInput *layerInput = new ASMLayerInput();
                 layerInput
@@ -165,14 +165,14 @@ AnimatorSMEditor::AnimatorSMEditor()
             this);
         p_layersInput->EventEmitter<IEventsValueChanged>::RegisterListener(
             this);
-        p_layersInput->SetParent(inspectorContainer);
+        p_layersInput->SetParent(p_sidebar);
 
         UILayoutElement *layersLE =
             p_layersInput->AddComponent<UILayoutElement>();
         layersLE->SetFlexibleSize(Vector2(1.0f));
 
         UIImageRenderer *inspectorBG =
-            inspectorContainer->AddComponent<UIImageRenderer>();
+            p_sidebar->AddComponent<UIImageRenderer>();
         inspectorBG->SetTint(Color::LightGray);
     }
 
@@ -182,7 +182,7 @@ AnimatorSMEditor::AnimatorSMEditor()
     // GameObjectFactory::CreateUIDirLayoutMovableHSeparator()->
     //                    GetGameObject()->SetParent(botHLGo);
     GameObjectFactory::CreateUIVSeparator()->SetParent(botHLGo);
-    inspectorContainer->SetParent(botHLGo);
+    p_sidebar->SetParent(botHLGo);
 }
 
 AnimatorSMEditor::~AnimatorSMEditor()
@@ -193,7 +193,9 @@ void AnimatorSMEditor::Update()
 {
     GameObject::Update();
 
-    p_centerSceneButton->SetBlocked((p_animatorEditorScene == nullptr));
+    bool editingSM = (p_animatorEditorScene->GetAnimatorSM() != nullptr);
+    p_sidebar->SetEnabled(editingSM);
+    p_centerSceneButton->SetBlocked(!editingSM);
 
     if (Explorer *exp = Explorer::GetInstance())
     {
@@ -304,7 +306,7 @@ void AnimatorSMEditor::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
     {
         p_layersInput->UpdateReferences<AnimatorStateMachineLayer>(
             GetAnimatorSM()->GetLayers());
+        p_animatorEditorScene
+            ->ImportCurrentAnimatorStateMachineExtraInformation();
     }
-
-    p_animatorEditorScene->ImportCurrentAnimatorStateMachineExtraInformation();
 }

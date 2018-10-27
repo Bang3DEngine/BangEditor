@@ -58,6 +58,7 @@ private:
     RH<AnimatorStateMachine> p_animatorSM;
     AnimatorSMEditorScene *p_animatorEditorScene = nullptr;
 
+    GameObject *p_sidebar = nullptr;
     UIButton *p_centerSceneButton = nullptr;
     UIInputArray *p_layersInput = nullptr;
     UIInputArray *p_variablesInput = nullptr;

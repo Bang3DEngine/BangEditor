@@ -98,7 +98,7 @@ void GIWAESConnectionLine::InitInnerWidgets()
 
     p_transitionConditionsInput = new UIInputArray();
     p_transitionConditionsInput
-        ->SetFunctions<AnimatorStateMachineTransitionCondition>(
+        ->SetUpdateFunctions<AnimatorStateMachineTransitionCondition>(
             []() {
                 ASMTransitionConditionInput *transitionConditionInput =
                     new ASMTransitionConditionInput();
@@ -183,7 +183,7 @@ AESConnectionLine *GIWAESConnectionLine::GetAESConnectionLine() const
 
 void GIWAESConnectionLine::EnableNeededWidgets()
 {
-    if (GetAESConnectionLine())
+    if (GetAESConnectionLine() && GetAESConnectionLine()->GetAnimatorSM())
     {
         bool moreThanOneTransition =
             GetAESConnectionLine()->GetSMTransitions().Size() >= 2;
@@ -212,12 +212,16 @@ void GIWAESConnectionLine::SetSelectedSMTransition(
 
 AnimatorStateMachineNode *GIWAESConnectionLine::GetSMNodeTo() const
 {
-    return GetAESConnectionLine()->GetAESNodeTo()->GetSMNode();
+    return GetAESConnectionLine() && GetAESConnectionLine()->GetAESNodeTo()
+               ? GetAESConnectionLine()->GetAESNodeTo()->GetSMNode()
+               : nullptr;
 }
 
 AnimatorStateMachineNode *GIWAESConnectionLine::GetSMNodeFrom() const
 {
-    return GetAESConnectionLine()->GetAESNodeFrom()->GetSMNode();
+    return GetAESConnectionLine() && GetAESConnectionLine()->GetAESNodeFrom()
+               ? GetAESConnectionLine()->GetAESNodeFrom()->GetSMNode()
+               : nullptr;
 }
 
 AnimatorStateMachineTransition *GIWAESConnectionLine::GetSelectedSMTransition()

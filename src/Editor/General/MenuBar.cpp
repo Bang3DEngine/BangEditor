@@ -3,6 +3,7 @@
 #include <utility>
 
 #include "Bang/Animator.h"
+#include "Bang/AnimatorLayerMask.h"
 #include "Bang/AnimatorStateMachine.h"
 #include "Bang/Array.tcc"
 #include "Bang/AudioListener.h"
@@ -444,11 +445,15 @@ void BangEditor::MenuBar::CreateAssetsMenuInto(BangEditor::MenuItem *rootItem)
     MenuItem *createMaterial = rootItem->AddItem("Material");
     MenuItem *createPhysicsMaterial = rootItem->AddItem("Physics Material");
     MenuItem *createAnimatorSM = rootItem->AddItem("Animator State Machine");
+    MenuItem *createAnimatorLayerMask =
+        rootItem->AddItem("Animator Layer Mask");
     MenuItem *createBehaviour = rootItem->AddItem("Behaviour");
     MenuItem *createTextureCubeMap = rootItem->AddItem("Texture Cube Map");
     createMaterial->SetSelectedCallback(MenuBar::OnCreateMaterial);
     createAnimatorSM->SetSelectedCallback(
         MenuBar::OnCreateAnimatorStateMachine);
+    createAnimatorLayerMask->SetSelectedCallback(
+        MenuBar::OnCreateAnimatorLayerMask);
     createPhysicsMaterial->SetSelectedCallback(
         MenuBar::OnCreatePhysicsMaterial);
     createBehaviour->SetSelectedCallback(MenuBar::OnCreateBehaviour);
@@ -572,6 +577,12 @@ void MenuBar::OnCreatePhysicsMaterial(MenuItem *)
 {
     OnCreateAssetFile<PhysicsMaterial>(
         "PhysicsMaterial", Extensions::GetPhysicsMaterialExtension());
+}
+
+void MenuBar::OnCreateAnimatorLayerMask(MenuItem *)
+{
+    OnCreateAssetFile<AnimatorStateMachine>(
+        "AnimatorLayerMask", Extensions::GetAnimatorLayerMaskExtension());
 }
 
 void MenuBar::OnCreateAnimatorStateMachine(MenuItem *)

@@ -85,6 +85,7 @@ Texture2D *RIWAnimation::GetIconTexture() const
 void RIWAnimation::OnValueChangedRIWResource(
     EventEmitter<IEventsValueChanged> *object)
 {
+    BANG_UNUSED(object);
     GetAnimation()->SetSpeed(p_speedInput->GetValue());
     GetAnimation()->SetWrapMode(
         SCAST<AnimationWrapMode>(p_wrapModeInput->GetSelectedValue()));

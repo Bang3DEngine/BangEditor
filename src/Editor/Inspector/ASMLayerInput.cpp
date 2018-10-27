@@ -1,7 +1,12 @@
 #include "BangEditor/ASMLayerInput.h"
 
+#include "Bang/AnimatorLayerMask.h"
 #include "Bang/AnimatorStateMachineLayer.h"
+#include "Bang/Extensions.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/MetaFilesManager.h"
+#include "Bang/Resources.h"
+#include "Bang/UICheckBox.h"
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UILabel.h"
@@ -9,6 +14,7 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/UITheme.h"
 #include "Bang/UIVerticalLayout.h"
+#include "BangEditor/UIInputFileWithPreview.h"
 
 using namespace Bang;
 using namespace BangEditor;
@@ -21,9 +27,6 @@ ASMLayerInput::ASMLayerInput()
     p_focusable->SetConsiderForTabbing(false);
     p_focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
 
-    p_focusBg = AddComponent<UIImageRenderer>();
-    p_focusBg->SetTint(Color::Zero);
-
     UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
     vl->SetSpacing(5);
     vl->SetPaddings(5);
@@ -31,6 +34,24 @@ ASMLayerInput::ASMLayerInput()
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinHeight(100);
     le->SetFlexibleSize(Vector2(1.0f));
+
+    GameObject *contentGo = GameObjectFactory::CreateUIGameObject();
+    contentGo->SetParent(this);
+
+    UIVerticalLayout *contentVL = contentGo->AddComponent<UIVerticalLayout>();
+    contentVL->SetSpacing(5);
+    contentVL->SetPaddings(5);
+
+    p_focusBg = contentGo->AddComponent<UIImageRenderer>();
+    p_focusBg->SetTint(Color::Zero);
+
+    UILayoutElement *contentLE = contentGo->AddComponent<UILayoutElement>();
+    contentLE->SetFlexibleSize(Vector2(1.0f));
+
+    GameObject *labelHLGo = GameObjectFactory::CreateUIGameObject();
+    UIHorizontalLayout *labelHL = labelHLGo->AddComponent<UIHorizontalLayout>();
+    labelHL->SetSpacing(10);
+    labelHLGo->SetParent(contentGo);
 
     p_layerTopNameLabel = GameObjectFactory::CreateUILabel();
     p_layerTopNameLabel->GetText()->SetContent("Label");
@@ -41,7 +62,19 @@ ASMLayerInput::ASMLayerInput()
     p_layerTopNameLabel->GetGameObject()
         ->GetComponent<UILayoutElement>()
         ->SetFlexibleSize(Vector2(1, 1));
-    p_layerTopNameLabel->GetGameObject()->SetParent(this);
+    p_layerTopNameLabel->GetGameObject()->SetParent(labelHLGo);
+
+    GameObjectFactory::CreateUIHSpacer(LayoutSizeType::FLEXIBLE, 9999.9f)
+        ->SetParent(labelHLGo);
+
+    UILabel *enabledLabel = GameObjectFactory::CreateUILabel();
+    enabledLabel->GetText()->SetContent("Enabled");
+    enabledLabel->GetGameObject()->SetParent(labelHLGo);
+
+    p_layerEnabledInput = GameObjectFactory::CreateUICheckBox();
+    p_layerEnabledInput->GetGameObject()->SetParent(labelHLGo);
+    p_layerEnabledInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
 
     GameObject *layerNameRow = GameObjectFactory::CreateUIGameObject();
     {
@@ -66,18 +99,18 @@ ASMLayerInput::ASMLayerInput()
             this);
         p_layerNameInput->GetGameObject()->SetParent(layerNameRow);
     }
-    layerNameRow->SetParent(this);
+    layerNameRow->SetParent(contentGo);
 
-    GameObject *boneNameRow = GameObjectFactory::CreateUIGameObject();
+    GameObject *layerMaskRow = GameObjectFactory::CreateUIGameObject();
     {
         UIHorizontalLayout *rowHL =
-            boneNameRow->AddComponent<UIHorizontalLayout>();
+            layerMaskRow->AddComponent<UIHorizontalLayout>();
         rowHL->SetSpacing(5);
 
         UILabel *label = GameObjectFactory::CreateUILabel();
-        label->GetText()->SetContent("Bone name:");
+        label->GetText()->SetContent("Mask:");
         label->GetText()->SetHorizontalAlign(HorizontalAlignment::LEFT);
-        label->GetGameObject()->SetParent(boneNameRow);
+        label->GetGameObject()->SetParent(layerMaskRow);
         UILayoutElement *labelLE =
             label->GetGameObject()->AddComponent<UILayoutElement>();
         labelLE->SetMinSize(Vector2i(100, 20));
@@ -85,13 +118,15 @@ ASMLayerInput::ASMLayerInput()
         labelLE->SetFlexibleSize(Vector2(0, 1));
         labelLE->SetLayoutPriority(2);
 
-        p_boneNameInput = GameObjectFactory::CreateUIInputText();
-        p_boneNameInput->GetText()->SetContent("BoneName");
-        p_boneNameInput->EventEmitter<IEventsValueChanged>::RegisterListener(
+        p_layerMaskInput = new UIInputFileWithPreview();
+        p_layerMaskInput->SetExtensions(
+            {Extensions::GetAnimatorLayerMaskExtension()});
+        p_layerMaskInput->SetZoomable(false);
+        p_layerMaskInput->EventEmitter<IEventsValueChanged>::RegisterListener(
             this);
-        p_boneNameInput->GetGameObject()->SetParent(boneNameRow);
+        p_layerMaskInput->SetParent(layerMaskRow);
     }
-    boneNameRow->SetParent(this);
+    layerMaskRow->SetParent(contentGo);
 
     GameObjectFactory::CreateUIHSeparator(LayoutSizeType::MIN, 10)
         ->SetParent(this);
@@ -132,10 +167,7 @@ UIEventResult ASMLayerInput::OnUIEvent(UIFocusable *focusable,
     BANG_UNUSED(focusable);
     switch (event.type)
     {
-        case UIEvent::Type::MOUSE_CLICK_FULL:
-            Select();
-            return UIEventResult::INTERCEPT;
-            break;
+        case UIEvent::Type::MOUSE_CLICK_FULL: Select(); break;
 
         default: break;
     }
@@ -143,7 +175,7 @@ UIEventResult ASMLayerInput::OnUIEvent(UIFocusable *focusable,
     return UIEventResult::IGNORE;
 }
 
-void ASMLayerInput::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
+void ASMLayerInput::OnValueChanged(EventEmitter<IEventsValueChanged> *)
 {
     EventEmitter<IEventsValueChanged>::PropagateToListeners(
         &IEventsValueChanged::OnValueChanged, this);
@@ -160,10 +192,18 @@ void ASMLayerInput::ImportMeta(const MetaNode &metaNode)
         p_layerTopNameLabel->GetText()->SetContent(layerName);
     }
 
-    if (metaNode.Contains("BoneName"))
+    if (metaNode.Contains("Enabled"))
     {
-        String boneName = metaNode.Get<String>("BoneName");
-        p_boneNameInput->GetText()->SetContent(boneName);
+        p_layerEnabledInput->SetChecked(metaNode.Get<bool>("Enabled"));
+    }
+
+    if (metaNode.Contains("LayerMask"))
+    {
+        RH<AnimatorLayerMask> layerMask =
+            Resources::Load<AnimatorLayerMask>(metaNode.Get<GUID>("LayerMask"));
+        p_layerMaskInput->SetPath(layerMask.Get()
+                                      ? layerMask.Get()->GetResourceFilepath()
+                                      : Path::Empty);
     }
 
     m_layerNodesMetas = metaNode.GetChildren("Nodes");
@@ -174,7 +214,9 @@ void ASMLayerInput::ExportMeta(MetaNode *metaNode) const
     Serializable::ExportMeta(metaNode);
 
     metaNode->Set("LayerName", p_layerNameInput->GetText()->GetContent());
-    metaNode->Set("BoneName", p_boneNameInput->GetText()->GetContent());
+    metaNode->Set("Enabled", p_layerEnabledInput->IsChecked());
+    metaNode->Set("LayerMask",
+                  MetaFilesManager::GetGUID(p_layerMaskInput->GetPath()));
 
     for (const MetaNode &nodeMeta : m_layerNodesMetas)
     {

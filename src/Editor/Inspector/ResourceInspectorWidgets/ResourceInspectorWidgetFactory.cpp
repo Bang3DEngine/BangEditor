@@ -5,6 +5,7 @@
 #include "Bang/GameObject.tcc"
 #include "Bang/Path.h"
 #include "BangEditor/RIWAnimation.h"
+#include "BangEditor/RIWAnimatorLayerMask.h"
 #include "BangEditor/RIWAnimatorStateMachine.h"
 #include "BangEditor/RIWAudioClip.h"
 #include "BangEditor/RIWBehaviour.h"
@@ -37,6 +38,10 @@ InspectorWidget *ResourceInspectorWidgetFactory::Create(const Path &path)
     else if (path.HasExtension(Extensions::GetImageExtensions()))
     {
         riw = new RIWTexture();
+    }
+    else if (path.HasExtension(Extensions::GetAnimatorLayerMaskExtension()))
+    {
+        riw = new RIWAnimatorLayerMask();
     }
     else if (path.HasExtension(Extensions::GetModelExtensions()))
     {

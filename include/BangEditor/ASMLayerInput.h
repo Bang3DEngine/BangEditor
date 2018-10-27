@@ -12,6 +12,7 @@
 namespace Bang
 {
 class AnimatorStateMachineLayer;
+class UICheckBox;
 class UIFocusable;
 class UIInputText;
 class UILabel;
@@ -22,6 +23,7 @@ using namespace Bang;
 namespace BangEditor
 {
 class ASMLayerInput;
+class UIInputFileWithPreview;
 
 class IEventsASMLayerInput
 {
@@ -57,8 +59,9 @@ private:
     UIFocusable *p_focusable = nullptr;
     UIImageRenderer *p_focusBg = nullptr;
     UILabel *p_layerTopNameLabel = nullptr;
+    UICheckBox *p_layerEnabledInput = nullptr;
     UIInputText *p_layerNameInput = nullptr;
-    UIInputText *p_boneNameInput = nullptr;
+    UIInputFileWithPreview *p_layerMaskInput = nullptr;
 
     // IEventsFocus
     UIEventResult OnUIEvent(UIFocusable *focusable,

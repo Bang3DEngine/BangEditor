@@ -65,6 +65,7 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
 
     p_mainContainer = GameObjectFactory::CreateUIGameObject();
     p_mainContainer->GetRectTransform()->SetPivotPosition(Vector2::Zero);
+    p_mainContainer->SetVisible(false);
     p_mainContainer->SetParent(p_zoomContainer);
 
     p_gridContainer = GameObjectFactory::CreateUIGameObject();
@@ -122,6 +123,7 @@ void AnimatorSMEditorScene::Update()
             CenterScene();
         }
     }
+    p_gridContainer->SetVisible(m_framesAfterNewAnimatorSMSetAndVisible >= 5);
     p_mainContainer->SetVisible(m_framesAfterNewAnimatorSMSetAndVisible >= 5);
 
     if (UICanvas::GetActive(this)->HasFocus(this, true))
@@ -129,7 +131,7 @@ void AnimatorSMEditorScene::Update()
         if (Input::GetMouseButton(MouseButton::MIDDLE))
         {
             Vector2 mouseDelta(Input::GetMouseDelta());
-            m_panning += mouseDelta;
+            m_panning += mouseDelta * (1.0f / GetZoomScale());
         }
     }
 
@@ -198,6 +200,7 @@ void AnimatorSMEditorScene::SetAnimatorSMLayer(
             ImportCurrentAnimatorStateMachineExtraInformation();
         }
         m_framesAfterNewAnimatorSMSetAndVisible = 0;
+        p_gridContainer->SetVisible(false);
         p_mainContainer->SetVisible(false);  // To handle scene centering nice
     }
 }

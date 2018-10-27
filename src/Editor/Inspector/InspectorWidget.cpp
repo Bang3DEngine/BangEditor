@@ -225,7 +225,7 @@ UILabel *InspectorWidget::CreateWidgetLabel(const String &content,
         label->GetGameObject()->AddComponent<UILayoutElement>();
     labelLE->SetMinWidth(width);
     labelLE->SetPreferredWidth(width);
-    labelLE->SetPreferredHeight(height);
+    labelLE->SetMinHeight(height);
     labelLE->SetFlexibleWidth(0);
     labelLE->SetLayoutPriority(2);
 
@@ -294,7 +294,7 @@ InspectorWidgetTitle::InspectorWidgetTitle()
     p_icon = GameObjectFactory::CreateUIImage(Color::White);
     GameObject *iconGo = p_icon->GetGameObject();
     UILayoutElement *iconLE = iconGo->AddComponent<UILayoutElement>();
-    iconLE->SetPreferredSize(Vector2i(16));
+    iconLE->SetMinSize(Vector2i(16));
     p_icon->SetTint(Color::DarkGray);
 
     GameObject *titleTextGo = GameObjectFactory::CreateUIGameObject();

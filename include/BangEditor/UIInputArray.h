@@ -76,10 +76,11 @@ public:
     void RemoveRow(uint index);
 
     template <class T>
-    void SetFunctions(std::function<GameObject *()> createNewRowFunction,
-                      std::function<T *()> createNewReferenceFunction,
-                      std::function<void(uint, uint)> moveReferenceFunction,
-                      std::function<void(T *)> removeReferenceFunction);
+    void SetUpdateFunctions(
+        std::function<GameObject *()> createNewRowFunction,
+        std::function<T *()> createNewReferenceFunction = nullptr,
+        std::function<void(uint, uint)> moveReferenceFunction = nullptr,
+        std::function<void(T *)> removeReferenceFunction = nullptr);
 
     template <class T>
     void UpdateRows(const Array<T *> &referenceSerializables);
@@ -152,7 +153,7 @@ void UIInputArray::UpdateRows(const Array<T *> &referenceSerializables)
 }
 
 template <class T>
-void UIInputArray::SetFunctions(
+void UIInputArray::SetUpdateFunctions(
     std::function<GameObject *()> createNewRowFunction,
     std::function<T *()> createNewReferenceFunction,
     std::function<void(uint, uint)> moveReferenceFunction,
