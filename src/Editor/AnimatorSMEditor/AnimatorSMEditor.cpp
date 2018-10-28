@@ -82,12 +82,10 @@ AnimatorSMEditor::AnimatorSMEditor()
 
     p_sidebar = GameObjectFactory::CreateUIGameObject();
     {
-        UILayoutElement *sidebarLE =
-            p_sidebar->AddComponent<UILayoutElement>();
+        UILayoutElement *sidebarLE = p_sidebar->AddComponent<UILayoutElement>();
         sidebarLE->SetFlexibleSize(Vector2(0.5f, 1.0f));
 
-        UIVerticalLayout *inspVL =
-            p_sidebar->AddComponent<UIVerticalLayout>();
+        UIVerticalLayout *inspVL = p_sidebar->AddComponent<UIVerticalLayout>();
         inspVL->SetPaddingLeft(10);
 
         UILabel *varsLabel = GameObjectFactory::CreateUILabel();

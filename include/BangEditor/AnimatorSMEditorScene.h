@@ -30,6 +30,7 @@ namespace Bang
 class AnimatorStateMachineLayer;
 class AnimatorStateMachineNode;
 class IEventsAnimatorStateMachine;
+class UITextRenderer;
 class UIFocusable;
 class UIImageRenderer;
 }
@@ -78,6 +79,7 @@ private:
     GameObject *p_mainContainer = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
     DPtr<UIImageRenderer> p_border = nullptr;
+    UITextRenderer *p_selectAnASMText = nullptr;
     Time m_lastTimeAnimatorSMWasExported = Time(0);
 
     uint m_framesAfterNewAnimatorSMSetAndVisible = 0;

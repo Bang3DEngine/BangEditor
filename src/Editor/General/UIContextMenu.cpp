@@ -115,7 +115,7 @@ ContextMenu::ContextMenu()
     RectTransform *rt = GetRootItem()->GetRectTransform();
     Vector2 mousePosNDC = Input::GetMousePositionNDC();
     rt->SetAnchors(mousePosNDC);
-    rt->TranslateLocal(Vector3(0, 0, -0.001f));
+    rt->TranslateLocal(Vector3(0, 0, -0.01f));
 
     p_focusable = AddComponent<UIFocusable>();
     p_focusable->EventEmitter<IEventsFocus>::RegisterListener(this);

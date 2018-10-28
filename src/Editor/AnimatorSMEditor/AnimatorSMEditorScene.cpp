@@ -24,6 +24,7 @@
 #include "Bang/UIFocusable.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UIRectMask.h"
+#include "Bang/UITextRenderer.h"
 #include "Bang/Vector.tcc"
 #include "Bang/Vector2.h"
 #include "BangEditor/AESConnectionLine.h"
@@ -56,6 +57,13 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
     p_border = GameObjectFactory::AddInnerBorder(borderGo);
     borderGo->GetRectTransform()->SetLocalPosition(Vector3(0, 0, -0.04f));
     borderGo->SetParent(this);
+
+    GameObject *selectAnASMTextGo = GameObjectFactory::CreateUIGameObject();
+    p_selectAnASMText = selectAnASMTextGo->AddComponent<UITextRenderer>();
+    p_selectAnASMText->SetContent("Select an AnimatorStateMachine");
+    p_selectAnASMText->SetTextColor(Color::White);
+    p_selectAnASMText->SetTextSize(20);
+    selectAnASMTextGo->SetParent(this);
 
     p_focusable = AddComponent<UIFocusable>();
     p_focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
@@ -125,6 +133,7 @@ void AnimatorSMEditorScene::Update()
     }
     p_gridContainer->SetVisible(m_framesAfterNewAnimatorSMSetAndVisible >= 5);
     p_mainContainer->SetVisible(m_framesAfterNewAnimatorSMSetAndVisible >= 5);
+    p_selectAnASMText->SetVisible(GetAnimatorSM() == nullptr);
 
     if (UICanvas::GetActive(this)->HasFocus(this, true))
     {
