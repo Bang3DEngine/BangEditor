@@ -60,7 +60,7 @@ private:
     bool m_hasFocus = false;
     UIContextMenu *p_contextMenu = nullptr;
     LineRenderer *p_lineRenderer = nullptr;
-    std::array<UIImageRenderer *, 3> p_arrowImgs = {nullptr, nullptr, nullptr};
+    std::array<UIImageRenderer *, 3> p_arrowImgs;
 
     DPtr<AESNode> p_aesNodeTo;
     DPtr<AESNode> p_aesNodeFrom;
