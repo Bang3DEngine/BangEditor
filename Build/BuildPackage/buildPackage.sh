@@ -16,7 +16,7 @@ make VERBOSE=1 -j6
 if [ $? -ne 0 ] ; then exit 1 ; fi
 
 cd ..
-#tar -czvf BangEditor.tar.gz BangEditor/
+tar -czvf BangEditor.tar.gz BangEditor/
 if [ $? -ne 0 ] ; then exit 1 ; fi
 
 # rm -rf BangEditor
