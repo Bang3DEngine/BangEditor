@@ -81,10 +81,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)\Binaries</OutDir>
     <IntDir>$(ProjectDir)\buildIntermediate\$(Configuration)\$(Platform)\</IntDir>
+    <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(ProjectDir)\Binaries</OutDir>
     <IntDir>$(ProjectDir)\buildIntermediate\$(Configuration)\$(Platform)\</IntDir>
+    <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -121,6 +123,8 @@ xcopy /Y $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\openal-soft\
       <EntryPointSymbol>
       </EntryPointSymbol>
       <SubSystem>Console</SubSystem>
+      <AllowIsolation>false</AllowIsolation>
+      <IgnoreEmbeddedIDL>true</IgnoreEmbeddedIDL>
     </Link>
     <PreLinkEvent>
       <Command>xcopy /Y $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\SDL2-2.0.8\build\$(Configuration)\bin\SDL2d.dll $(OutDir)
@@ -168,6 +172,8 @@ xcopy /Y $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\openal-soft\
       <EntryPointSymbol>
       </EntryPointSymbol>
       <SubSystem>Console</SubSystem>
+      <AllowIsolation>false</AllowIsolation>
+      <IgnoreEmbeddedIDL>true</IgnoreEmbeddedIDL>
     </Link>
     <PreLinkEvent>
       <Command>xcopy /Y $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\SDL2-2.0.8\build\$(Configuration)\bin\SDL2d.dll $(OutDir)
@@ -182,145 +188,144 @@ xcopy /Y $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\openal-soft\
     <ClInclude Include="include\BangEditor\*.tcc" />
   </ItemGroup>
   <ItemGroup>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\Common\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\Common\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\Common\include\windows\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\Common\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\Common\src\windows\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\headers\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\ccd\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\common\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\contact\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\convex\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\distance\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\gjk\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\hf\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\intersection\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\mesh\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\pcm\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\sweep\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\ImmediateMode\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\ImmediateMode\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\API\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\API\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\API\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\common\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\common\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\common\include\collision\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\common\include\pipeline\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\common\include\utils\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\common\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\common\src\collision\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\common\src\pipeline\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\software\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\software\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\software\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelAABB\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelAABB\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelAABB\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelCloth\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelCloth\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelCloth\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelCloth\src\avx\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelCloth\src\scalar\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelCloth\src\sse2\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelDynamics\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelDynamics\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelDynamics\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelParticles\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelParticles\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelParticles\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelParticles\src\gpu\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\src\buffering\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\src\cloth\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\src\device\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\src\device\windows\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\src\gpu\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\src\particles\*.cpp"/>
-	<!--ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\src\windows\*.cpp"/-->
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXCharacterKinematic\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXCharacterKinematic\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXCooking\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXCooking\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXCooking\src\convex\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXCooking\src\mesh\*.cpp"/>
-	<!--ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXCooking\src\windows\*.cpp"/-->
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXExtensions\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXExtensions\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXExtensions\src\serialization\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXExtensions\src\serialization\Binary\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXExtensions\src\serialization\File\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXExtensions\src\serialization\Xml\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXGpu\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXGpu\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXMetaData\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXMetaData\core\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXMetaData\core\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXMetaData\core\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXMetaData\extensions\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXMetaData\extensions\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXMetaData\extensions\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXVehicle\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXVehicle\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXVehicle\src\PhysXMetaData\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXVehicle\src\PhysXMetaData\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXVehicle\src\PhysXMetaData\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\SceneQuery\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\SceneQuery\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\SceneQuery\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\SimulationController\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\SimulationController\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\SimulationController\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\SimulationController\src\cloth\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\SimulationController\src\particles\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\include\cudamanager\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\include\filebuf\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\include\foundation\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\include\foundation\windows\*.cpp"/>
-	<!--ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\include\pvd\*.cpp"/-->
-	<!--ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\include\pvd\windows\*.cpp"/-->
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\include\task\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\resource_x64\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\resource_x86\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\vc12win32\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\vc12win64\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\vc14win32\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\vc14win64\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\vc15win32\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\vc15win64\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\cudamanager\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\cudamanager\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\fastxml\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\fastxml\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\fastxml\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\filebuf\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\filebuf\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\doc\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\externals\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\externals\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\externals\src\android\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\include\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\include\windows\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\src\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\src\windows\*.cpp"/>
-	<!--ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\pvd\*.cpp"/>
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\Common\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\Common\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\Common\include\windows\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\Common\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\Common\src\windows\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\headers\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\ccd\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\common\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\contact\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\convex\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\distance\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\gjk\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\hf\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\intersection\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\mesh\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\pcm\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\GeomUtils\src\sweep\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\ImmediateMode\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\ImmediateMode\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\API\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\API\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\API\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\common\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\common\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\common\include\collision\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\common\include\pipeline\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\common\include\utils\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\common\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\common\src\collision\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\common\src\pipeline\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\software\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\software\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevel\software\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelAABB\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelAABB\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelAABB\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelCloth\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelCloth\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelCloth\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelCloth\src\avx\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelCloth\src\scalar\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelCloth\src\sse2\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelDynamics\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelDynamics\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelDynamics\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelParticles\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelParticles\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelParticles\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\LowLevelParticles\src\gpu\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\src\buffering\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\src\cloth\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\src\device\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\src\device\windows\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\src\gpu\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\src\particles\*.cpp" />
+    <!--ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysX\src\windows\*.cpp"/-->
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXCharacterKinematic\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXCharacterKinematic\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXCooking\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXCooking\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXCooking\src\convex\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXCooking\src\mesh\*.cpp" />
+    <!--ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXCooking\src\windows\*.cpp"/-->
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXExtensions\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXExtensions\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXExtensions\src\serialization\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXExtensions\src\serialization\Binary\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXExtensions\src\serialization\File\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXExtensions\src\serialization\Xml\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXGpu\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXGpu\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXMetaData\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXMetaData\core\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXMetaData\core\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXMetaData\core\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXMetaData\extensions\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXMetaData\extensions\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXMetaData\extensions\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXVehicle\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXVehicle\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXVehicle\src\PhysXMetaData\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXVehicle\src\PhysXMetaData\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\PhysXVehicle\src\PhysXMetaData\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\SceneQuery\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\SceneQuery\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\SceneQuery\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\SimulationController\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\SimulationController\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\SimulationController\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\SimulationController\src\cloth\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PhysX_3.4\Source\SimulationController\src\particles\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\include\cudamanager\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\include\filebuf\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\include\foundation\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\include\foundation\windows\*.cpp" />
+    <!--ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\include\pvd\*.cpp"/-->
+    <!--ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\include\pvd\windows\*.cpp"/-->
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\include\task\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\resource_x64\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\resource_x86\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\vc12win32\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\vc12win64\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\vc14win32\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\vc14win64\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\vc15win32\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\compiler\vc15win64\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\cudamanager\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\cudamanager\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\fastxml\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\fastxml\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\fastxml\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\filebuf\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\filebuf\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\doc\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\externals\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\externals\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\externals\src\android\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\include\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\include\windows\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\src\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\foundation\src\windows\*.cpp" />
+    <!--ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\pvd\*.cpp"/>
 	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\pvd\include\*.cpp"/>
 	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\pvd\src\*.cpp"/>
 	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\pvd\src\windows\*.cpp"/-->
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\task\*.cpp"/>
-	<ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\task\src\*.cpp"/>
-	
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\task\*.cpp" />
+    <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\PhysX\PxShared\src\task\src\*.cpp" />
     <ClCompile Include="Bang\Compile\CompileDependencies\ThirdParty\yaml-cpp\src\*.cpp" />
     <ClCompile Include="src\*\*.cpp" />
     <ClCompile Include="src\*\*\*.cpp" />

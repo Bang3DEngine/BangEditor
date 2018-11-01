@@ -293,9 +293,9 @@ Scene *EditorDialog::CreateGetColorSceneInto(
 
     Path edShadersPath = EditorPaths::GetEditorAssetsDir().Append("Shaders");
     RH<ShaderProgram> colorPanelImgSP;
-    colorPanelImgSP.Set(
-        ShaderProgramFactory::Get(EPATH("Shaders/UIImageRenderer.vert"),
-                                  edShadersPath.Append("UIInputColor.frag")));
+    colorPanelImgSP.Set(ShaderProgramFactory::Get(
+        EPATH("Shaders").Append("UIImageRenderer.vert"),
+        edShadersPath.Append("UIInputColor.frag")));
     colorPanelImg->GetMaterial()->SetShaderProgram(colorPanelImgSP.Get());
 
     UISlider *hueSlider = GameObjectFactory::CreateUISlider();

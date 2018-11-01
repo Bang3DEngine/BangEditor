@@ -41,7 +41,7 @@ UISceneImage::UISceneImage()
     p_sceneImg = sceneImgGo->AddComponent<UISceneImageRenderer>();
     p_sceneImg->SetMode(UIImageRenderer::Mode::TEXTURE);
     p_sceneImg->GetMaterial()->SetShaderProgram(ShaderProgramFactory::Get(
-        EPATH("Shaders/UIImageRenderer.vert"),
+        EPATH("Shaders").Append("UIImageRenderer.vert"),
         EditorPaths::GetEditorAssetsDir().Append("Shaders").Append(
             "UISceneImage.frag")));
 
