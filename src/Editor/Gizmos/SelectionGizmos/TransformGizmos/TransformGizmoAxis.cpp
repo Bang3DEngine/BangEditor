@@ -6,7 +6,6 @@
 #include "Bang/GameObject.tcc"
 #include "Bang/Math.h"
 #include "Bang/Transform.h"
-#include "Bang/Vector.tcc"
 #include "Bang/Vector3.h"
 #include "BangEditor/EditorCamera.h"
 

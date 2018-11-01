@@ -20,7 +20,6 @@
 #include "Bang/UIAspectRatioFitter.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/UIImageRenderer.h"
-#include "Bang/Vector.tcc"
 #include "Bang/Vector2.h"
 #include "BangEditor/EditorPaths.h"
 

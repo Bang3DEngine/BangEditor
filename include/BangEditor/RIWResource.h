@@ -2,12 +2,12 @@
 #define RIWRESOURCE_H
 
 #include "Bang/EventEmitter.h"
+#include "Bang/EventListener.h"
 #include "Bang/IEventsResource.h"
 #include "Bang/MetaNode.h"
 #include "Bang/Path.h"
 #include "Bang/Resource.h"
 #include "Bang/ResourceHandle.h"
-
 #include "BangEditor/ResourceInspectorWidget.h"
 
 using namespace Bang;
@@ -56,7 +56,7 @@ private:
     // IEventsResource
     virtual void OnResourceChanged(Resource *res) override;
 };
-}
+}  // namespace BangEditor
 
 #include "BangEditor/RIWResource.tcc"
 

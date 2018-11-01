@@ -23,7 +23,7 @@ namespace Bang
 class IEventsDestroy;
 class IEventsValueChanged;
 class Texture2D;
-}
+}  // namespace Bang
 
 using namespace Bang;
 using namespace BangEditor;
@@ -111,9 +111,9 @@ void RIWAudioClip::UpdateInputsFromResource()
         String::ToString(GetAudioClip()->GetLength()) + "s.");
     p_frequency->GetText()->SetContent(
         String::ToString(GetAudioClip()->GetFrequency()) + " hz.");
-    p_bitDepth->SetValue(GetAudioClip()->GetBitDepth());
-    p_bufferSize->SetValue(GetAudioClip()->GetBufferSize());
-    p_numChannels->SetValue(GetAudioClip()->GetChannels());
+    p_bitDepth->SetValue(SCAST<float>(GetAudioClip()->GetBitDepth()));
+    p_bufferSize->SetValue(SCAST<float>(GetAudioClip()->GetBufferSize()));
+    p_numChannels->SetValue(SCAST<float>(GetAudioClip()->GetChannels()));
 }
 
 Texture2D *RIWAudioClip::GetIconTexture() const

@@ -19,7 +19,6 @@
 #include "Bang/MeshRenderer.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/Transform.h"
-#include "Bang/Vector.tcc"
 #include "Bang/Vector3.h"
 #include "BangEditor/RotateGizmoAxis.h"
 
@@ -91,7 +90,7 @@ void RotateGizmo::Render(RenderPass rp, bool renderChildren)
 void RotateGizmo::CreateSphereBoundsPoints()
 {
     constexpr int numSegments = 32;
-    constexpr float angleStep = (Math::Pi * 2.0f) / numSegments;
+    constexpr float angleStep = SCAST<float>((Math::Pi * 2.0f) / numSegments);
 
     // Get circle points
     Array<Vector3> circlePoints;

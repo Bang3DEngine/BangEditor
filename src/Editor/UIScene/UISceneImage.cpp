@@ -36,6 +36,7 @@ UISceneImage::UISceneImage()
     // UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
     // BANG_UNUSED(vl);
 
+    const Path engShadersDir = Paths::GetEngineAssetsDir().Append("Shaders");
     GameObject *sceneImgGo = GameObjectFactory::CreateUIGameObject();
     p_sceneImg = sceneImgGo->AddComponent<UISceneImageRenderer>();
     p_sceneImg->SetMode(UIImageRenderer::Mode::TEXTURE);

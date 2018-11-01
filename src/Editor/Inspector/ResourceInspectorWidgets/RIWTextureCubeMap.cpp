@@ -7,14 +7,13 @@
 #include "Bang/GameObject.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/Image.tcc"
+#include "Bang/Image.h"
 #include "Bang/ImageIO.h"
 #include "Bang/Path.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UILabel.h"
 #include "Bang/UITextRenderer.h"
-#include "Bang/Vector.tcc"
 #include "BangEditor/RIWResource.tcc"
 #include "BangEditor/ResourceInspectorWidget.h"
 #include "BangEditor/UIInputFile.h"
@@ -176,11 +175,10 @@ void RIWTextureCubeMap::UpdateInputsFromResource()
 
 Texture2D *RIWTextureCubeMap::GetIconTexture() const
 {
-    return GetTextureCubeMap()
-               ? GetTextureCubeMap()
-                     ->GetSideTexture(GL::CubeMapDir::FRONT)
-                     .Get()
-               : nullptr;
+    return GetTextureCubeMap() ? GetTextureCubeMap()
+                                     ->GetSideTexture(GL::CubeMapDir::FRONT)
+                                     .Get()
+                               : nullptr;
 }
 
 void RIWTextureCubeMap::OnValueChangedRIWResource(
@@ -188,11 +186,12 @@ void RIWTextureCubeMap::OnValueChangedRIWResource(
 {
     if (ee != p_textureCMPreviewer)
     {
-        auto Refresh = [this](
-            UIInputFile *inputFile, TextureCubeMap *tcm, GL::CubeMapDir cmdir) {
+        auto Refresh = [this](UIInputFile *inputFile,
+                              TextureCubeMap *tcm,
+                              GL::CubeMapDir cmdir) {
             if (inputFile->GetPath().IsFile())
             {
-                Imageb img;
+                Image img;
                 RH<Texture2D> tex = tcm->GetSideTexture(cmdir);
                 ImageIO::Import(inputFile->GetPath(), &img, tex.Get());
                 tcm->SetSideTexture(cmdir, tex.Get());

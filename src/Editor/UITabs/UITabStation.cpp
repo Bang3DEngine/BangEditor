@@ -20,7 +20,6 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/UITheme.h"
 #include "Bang/UIVerticalLayout.h"
-#include "Bang/Vector.tcc"
 #include "Bang/Vector2.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
@@ -32,7 +31,7 @@ namespace Bang
 class IEventsDestroy;
 template <class>
 class EventEmitter;
-}
+}  // namespace Bang
 
 using namespace Bang;
 using namespace BangEditor;
@@ -360,7 +359,8 @@ void UITabStation::OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter)
                     GetChildStationAndCreateIfNeeded(
                         m_dragPutInSideTabContainerSide)
                         ->GetTabContainer();
-                draggedTabHeader->m_dragTabContainerDestinyIndex = -1u;
+                draggedTabHeader->m_dragTabContainerDestinyIndex =
+                    SCAST<uint>(-1);
             }
 
             m_dragPutInThisTabContainer = false;

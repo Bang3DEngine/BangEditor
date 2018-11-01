@@ -25,7 +25,6 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UIRectMask.h"
 #include "Bang/UITextRenderer.h"
-#include "Bang/Vector.tcc"
 #include "Bang/Vector2.h"
 #include "BangEditor/AESConnectionLine.h"
 #include "BangEditor/AESNode.h"
@@ -39,7 +38,7 @@ namespace Bang
 {
 class AnimatorStateMachineTransition;
 class IEventsAnimatorStateMachineNode;
-}
+}  // namespace Bang
 
 using namespace Bang;
 using namespace BangEditor;
@@ -294,9 +293,8 @@ void AnimatorSMEditorScene::Clear()
 {
     if (GetAnimatorSMLayer())
     {
-        GetAnimatorSMLayer()
-            ->EventEmitter<
-                IEventsAnimatorStateMachineLayer>::UnRegisterListener(this);
+        GetAnimatorSMLayer()->EventEmitter<IEventsAnimatorStateMachineLayer>::
+            UnRegisterListener(this);
     }
 
     p_animatorSMLayer = nullptr;

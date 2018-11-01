@@ -20,7 +20,6 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIVerticalLayout.h"
-#include "Bang/Vector.tcc"
 #include "Bang/Vector2.h"
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/UISceneToolbar.h"

@@ -22,15 +22,6 @@
 #include "BangEditor/UndoRedoRemoveGameObject.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
 
-namespace Bang
-{
-class UndoRedoAction;
-class UndoRedoCreateGameObject;
-class UndoRedoMoveGameObject;
-class UndoRedoRemoveGameObject;
-class UndoRedoSerializableChange;
-}
-
 using namespace Bang;
 using namespace BangEditor;
 

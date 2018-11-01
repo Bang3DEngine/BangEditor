@@ -11,7 +11,6 @@
 #include "Bang/Rect.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
-#include "Bang/Vector.tcc"
 #include "Bang/Vector2.h"
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/Selection.h"
@@ -75,11 +74,12 @@ void RectTransformCornerSelectionGizmo::Update()
             refRT->FromViewportPointToLocalPoint(m_startGrabMousePos);
         Vector2 mousePosLocal = refRT->FromViewportPointToLocalPoint(mousePos);
 
-        Vector2 displacement(mousePos - m_startGrabMousePos);
+        Vector2 displacementF(mousePos - m_startGrabMousePos);
         Vector2 displacementLocal = mousePosLocal - startGrabMousePosLocal;
         Vector2 dispDir = displacementLocal.NormalizedSafe();
-        displacement = dispDir * displacement.Length();
+        displacementF = dispDir * displacementF.Length();
 
+        Vector2i displacement(displacementF);
         Vector2i newMarginLeftBot = m_startMarginLeftBot;
         Vector2i newMarginRightTop = m_startMarginRightTop;
         switch (m_cornerSide)

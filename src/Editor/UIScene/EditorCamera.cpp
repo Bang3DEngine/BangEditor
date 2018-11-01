@@ -23,7 +23,6 @@
 #include "Bang/Sphere.h"
 #include "Bang/Time.h"
 #include "Bang/Transform.h"
-#include "Bang/Vector.tcc"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "Bang/Window.h"
@@ -157,13 +156,15 @@ void EditorCamera::InterpolatePositionAndRotation(double extraInterpPos,
     double dts = dt.GetSeconds();
 
     double interpPosSpeed = 2.0;
-    float posT = Math::Min((dts * interpPosSpeed) + extraInterpPos, 1.0);
+    float posT =
+        SCAST<float>(Math::Min((dts * interpPosSpeed) + extraInterpPos, 1.0));
     Vector3 newPos =
         Vector3::Lerp(GetTransform()->GetPosition(), m_targetPosition, posT);
     GetTransform()->SetLocalPosition(newPos);
 
     float interpRotSpeed = 3.0f;
-    float rotT = Math::Min((dts * interpRotSpeed) + extraInterpRot, 1.0);
+    float rotT =
+        SCAST<float>(Math::Min((dts * interpRotSpeed) + extraInterpRot, 1.0));
     Quaternion newRot = Quaternion::SLerp(
         GetTransform()->GetRotation(), m_targetRotation, rotT);
     GetTransform()->SetLocalRotation(newRot);
@@ -235,7 +236,7 @@ void EditorCamera::HandleKeyMovement()
 
     if (!Input::GetKey(Key::LCTRL) && !Input::GetKey(Key::LSHIFT))
     {
-        float dt = Time::GetDeltaTime().GetSeconds();
+        float dt = SCAST<float>(Time::GetDeltaTime().GetSeconds());
         Vector3 m = Vector3::Zero;
         if (Input::GetKey(Key::W))
         {

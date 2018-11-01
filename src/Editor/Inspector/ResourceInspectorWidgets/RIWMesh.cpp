@@ -23,7 +23,7 @@ namespace Bang
 class IEventsValueChanged;
 template <class>
 class EventEmitter;
-}
+}  // namespace Bang
 
 namespace BangEditor
 {
@@ -84,9 +84,9 @@ Mesh *RIWMesh::GetMesh() const
 void RIWMesh::OnResourceSet()
 {
     RIWResource<Mesh>::OnResourceSet();
-    p_numVertices->SetValue(GetMesh()->GetNumVertices());
-    p_numTriangles->SetValue(GetMesh()->GetNumTriangles());
-    p_numBones->SetValue(GetMesh()->GetBonesPool().Size());
+    p_numVertices->SetValue(SCAST<float>(GetMesh()->GetNumVertices()));
+    p_numTriangles->SetValue(SCAST<float>(GetMesh()->GetNumTriangles()));
+    p_numBones->SetValue(SCAST<float>(GetMesh()->GetBonesPool().Size()));
 }
 
 void RIWMesh::UpdateInputsFromResource()

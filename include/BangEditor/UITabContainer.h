@@ -33,12 +33,15 @@ class UITabContainer : public GameObject,
 public:
     UITabContainer();
 
-    void AddTab(const String &title, GameObject *tabbedChild, uint index = -1u);
-    void AddTabByTabHeader(UITabHeader *tabHeader, uint index = -1u);
+    void AddTab(const String &title,
+                GameObject *tabbedChild,
+                uint index = SCAST<uint>(-1));
+    void AddTabByTabHeader(UITabHeader *tabHeader,
+                           uint index = SCAST<uint>(-1));
     void RemoveTab(GameObject *tabbedChild, bool destroy = true);
     void RemoveTabByHeader(UITabHeader *tabHeader, bool destroy = true);
 
-    void SetCurrentTabIndex(int index);
+    void SetCurrentTabIndex(uint index);
     void SetCurrentTabChild(GameObject *currentTabChild);
     void SetTabTitle(GameObject *tabbedChild, const String &title);
 
@@ -50,7 +53,7 @@ public:
     const Array<GameObject *> &GetTabbedChildren() const;
 
 private:
-    uint m_currentTabIndex = -1u;
+    uint m_currentTabIndex = SCAST<uint>(-1);
     Array<GameObject *> p_tabbedChildren;
     UMap<GameObject *, UITabHeader *> m_childrenToHeader;
 
@@ -68,6 +71,6 @@ private:
 
     virtual ~UITabContainer() override;
 };
-}
+}  // namespace BangEditor
 
 #endif  // UITABCONTAINER_H

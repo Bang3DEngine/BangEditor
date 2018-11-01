@@ -28,13 +28,13 @@ private:
     Path m_path;
 
     Byte *m_previousContents = nullptr;
-    std::size_t m_previousContentsSize = -1u;
+    std::size_t m_previousContentsSize = SCAST<uint>(-1);
 
     Byte *m_newContents = nullptr;
-    std::size_t m_newContentsSize = -1u;
+    std::size_t m_newContentsSize = SCAST<uint>(-1);
 
     void Read(Byte **bytePointer, std::size_t *sizePointer);
 };
-}
+}  // namespace BangEditor
 
 #endif  // UNDOREDOFILECHANGE_H

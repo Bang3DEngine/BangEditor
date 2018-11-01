@@ -63,7 +63,7 @@ void CIWPostProcessEffect::UpdateFromReference()
 {
     PostProcessEffect *ppe = GetPostProcessEffect();
 
-    p_priorityInput->SetValue(ppe->GetPriority());
+    p_priorityInput->SetValue(SCAST<float>(ppe->GetPriority()));
     p_fragmentShaderInput->SetPath(ppe->GetPostProcessShaderFilepath());
     p_typeComboBox->SetSelectionByValue(SCAST<int>(ppe->GetType()));
 }

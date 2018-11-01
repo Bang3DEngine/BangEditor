@@ -24,7 +24,6 @@
 #include "Bang/Scene.h"
 #include "Bang/SphereCollider.h"
 #include "Bang/Transform.h"
-#include "Bang/Vector.tcc"
 #include "Bang/Vector3.h"
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorSceneManager.h"
@@ -220,13 +219,15 @@ void ComponentsGizmos::RenderCapsuleColliderGizmo(CapsuleCollider *cc,
             case Axis3D::X:
                 params.rotation =
                     params.rotation *
-                    Quaternion::AngleAxis(Math::Pi * 0.5f, Vector3::Forward);
+                    Quaternion::AngleAxis(SCAST<float>(Math::Pi) * 0.5f,
+                                          Vector3::Forward);
                 break;
 
             case Axis3D::Z:
                 params.rotation =
                     params.rotation *
-                    Quaternion::AngleAxis(Math::Pi * 0.5f, Vector3::Right);
+                    Quaternion::AngleAxis(SCAST<float>(Math::Pi) * 0.5f,
+                                          Vector3::Right);
                 break;
 
             default: break;
@@ -398,7 +399,8 @@ void ComponentsGizmos::RenderDirectionalLightGizmo(DirectionalLight *dirLight,
         const Vector3 center = lightGo->GetTransform()->GetPosition();
 
         params.thickness = 2.0f;
-        for (float ang = 0.0f; ang <= 2 * Math::Pi; ang += Math::Pi / 4.0f)
+        for (float ang = 0.0f; ang <= 2 * SCAST<float>(Math::Pi);
+             ang += SCAST<float>(Math::Pi) / 4.0f)
         {
             const Vector3 offx = right * Math::Cos(ang);
             const Vector3 offy = up * Math::Sin(ang);
@@ -464,7 +466,7 @@ void ComponentsGizmos::RenderParticleSystemGizmo(ParticleSystem *particleSystem,
 
     RenderFactory::Parameters params;
     params.receivesLighting = false;
-    params.scale = Vector3(0.1);
+    params.scale = Vector3(0.1f);
     params.position = center;
 
     if (!isBeingSelected)
@@ -534,7 +536,7 @@ void ComponentsGizmos::RenderRopeGizmo(Rope *rope, bool isBeingSelected)
 
     RenderFactory::Parameters params;
     params.receivesLighting = false;
-    params.scale = Vector3(0.1);
+    params.scale = Vector3(0.1f);
     params.position = center;
 
     if (!isBeingSelected)

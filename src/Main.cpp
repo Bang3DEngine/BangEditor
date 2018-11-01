@@ -21,16 +21,11 @@ using namespace BangEditor;
 int main(int argc, char **argv)
 {
     EditorApplication editorApplication;
-    const Path engPath = Paths::GetResolvedPath(Path("" BANG_ENGINE_ROOT));
-    const Path edtPath = Paths::GetResolvedPath(Path("" BANG_EDITOR_ROOT));
-    Debug_Log("BangEngineRoot: "
-              << "" BANG_ENGINE_ROOT
-              << " => "
-              << engPath);
-    Debug_Log("BangEditorRoot: "
-              << "" BANG_EDITOR_ROOT
-              << " => "
-              << edtPath);
+    const Path edtPath = Paths::GetResolvedPath(
+        Paths::GetExecutablePath().GetDirectory().GetDirectory());
+    const Path engPath = Paths::GetResolvedPath(edtPath.Append("Bang"));
+    Debug_Log("BangEngineRoot: " << engPath);
+    Debug_Log("BangEditorRoot: " << edtPath);
     editorApplication.InitEditorApplication(engPath, edtPath);
 
     Path projectToBeOpen = Path::Empty;

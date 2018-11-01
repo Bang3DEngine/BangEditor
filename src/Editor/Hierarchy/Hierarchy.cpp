@@ -24,7 +24,6 @@
 #include "Bang/Resources.h"
 #include "Bang/Resources.tcc"
 #include "Bang/Scene.h"
-#include "Bang/TypeTraits.h"
 #include "Bang/UICanvas.h"
 #include "Bang/UIDirLayout.h"
 #include "Bang/UIDragDroppable.h"
@@ -60,7 +59,7 @@ namespace Bang
 {
 class IEventsChildren;
 class IEventsDestroy;
-}
+}  // namespace Bang
 
 namespace BangEditor
 {
@@ -490,7 +489,7 @@ Hierarchy *Hierarchy::GetInstance()
 
 void Hierarchy::TreeSelectionCallback(GOItem *item, UIList::Action action)
 {
-    HierarchyItem *hItem = Cast<HierarchyItem *>(item);
+    HierarchyItem *hItem = SCAST<HierarchyItem *>(item);
     hItem->OnSelectionCallback(action);
 }
 

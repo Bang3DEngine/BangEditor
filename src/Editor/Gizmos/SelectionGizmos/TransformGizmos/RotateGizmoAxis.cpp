@@ -26,7 +26,6 @@
 #include "Bang/Resources.tcc"
 #include "Bang/Sphere.h"
 #include "Bang/Transform.h"
-#include "Bang/Vector.tcc"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "BangEditor/Selection.h"
@@ -244,7 +243,7 @@ void RotateGizmoAxis::UpdateCirclePoints()
     Transform *camT = cam->GetGameObject()->GetTransform();
 
     constexpr int numSegments = 32;
-    constexpr float angleStep = (Math::Pi * 2.0f) / numSegments;
+    constexpr float angleStep = SCAST<float>((Math::Pi * 2.0f) / numSegments);
 
     // Get circle points
     Array<Vector3> circlePoints;

@@ -26,7 +26,6 @@
 #include "Bang/UIRectMask.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UITheme.h"
-#include "Bang/Vector.tcc"
 #include "Bang/Vector2.h"
 #include "BangEditor/AESConnectionLine.h"
 #include "BangEditor/AnimatorSMEditorScene.h"
@@ -74,7 +73,6 @@ AESNode::AESNode()
         MenuItem *setAsEntry = menuRootItem->AddItem("Set as entry");
         setAsEntry->SetSelectedCallback(
             [this](MenuItem *) { SetAsEntryNode(); });
-
     });
     p_contextMenu->SetFocusable(p_focusable);
 
@@ -183,8 +181,8 @@ void AESNode::SetNodeName(const String &nodeName)
 
 void AESNode::OnZoomScaleChanged(float zoomScale)
 {
-    p_nodeNameText->SetTextSize(18 * zoomScale);
-    p_entryNodeText->SetTextSize(12 * zoomScale);
+    p_nodeNameText->SetTextSize(SCAST<int>(18 * zoomScale));
+    p_entryNodeText->SetTextSize(SCAST<int>(12 * zoomScale));
 }
 
 const String &AESNode::GetNodeName() const
@@ -278,7 +276,7 @@ void AESNode::RemoveSelf()
     MetaNode previousMeta = GetAnimatorSM()->GetMeta();
 
     uint idx = GetIndexInStateMachine();
-    if (idx != -1u)
+    if (idx != SCAST<uint>(-1))
     {
         DestroyLineUsedForDragging();
         GetAnimatorSMLayer()->RemoveNode(GetAnimatorSMLayer()->GetNodes()[idx]);
@@ -293,7 +291,7 @@ void AESNode::Duplicate()
     MetaNode previousMeta = GetAnimatorSM()->GetMeta();
 
     uint idx = GetIndexInStateMachine();
-    ASSERT(idx != -1u);
+    ASSERT(idx != SCAST<uint>(-1));
 
     AnimatorStateMachineNode *newNode =
         GetAnimatorSMLayer()->CreateAndAddNode();

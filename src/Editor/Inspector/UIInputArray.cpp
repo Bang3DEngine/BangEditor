@@ -65,7 +65,8 @@ UIInputArrayRow *UIInputArray::AddRow_(GameObject *rowGameObject,
 {
     if (!GetRowGameObjects().Contains(rowGameObject))
     {
-        uint index = (index_ == -1u) ? m_rowGameObjects.Size() : index_;
+        uint index =
+            (index_ == SCAST<uint>(-1)) ? m_rowGameObjects.Size() : index_;
         UIInputArrayRow *row = new UIInputArrayRow();
         row->Init(this);
         row->SetContainedGameObject(rowGameObject);

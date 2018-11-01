@@ -26,7 +26,7 @@ class AnimatorStateMachineLayer;
 class AnimatorStateMachineTransition;
 class AnimatorStateMachineNode;
 class UIImageRenderer;
-}
+}  // namespace Bang
 
 using namespace Bang;
 namespace BangEditor
@@ -72,6 +72,6 @@ private:
     Vector3 GetConnectionPointLinePosition(AESNode *connPoint) const;
     void OffsetLinePositions() const;
 };
-}
+}  // namespace BangEditor
 
 #endif  // AESCONNECTIONLINE_H

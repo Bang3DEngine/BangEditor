@@ -2,7 +2,9 @@
 #define INSPECTORWIDGET_H
 
 #include "Bang/BangDefines.h"
+#include "Bang/EventListener.h"
 #include "Bang/GameObject.h"
+#include "Bang/IEventsDestroy.h"
 #include "Bang/IEventsValueChanged.h"
 #include "Bang/List.h"
 #include "Bang/String.h"
@@ -17,7 +19,7 @@ class UIImageRenderer;
 class UILabel;
 class UILayoutElement;
 class UITextRenderer;
-}
+}  // namespace Bang
 
 using namespace Bang;
 namespace BangEditor
@@ -112,6 +114,6 @@ private:
     UITextRenderer *p_enabledText = nullptr;
     UICheckBox *p_enabledCheckBox = nullptr;
 };
-}
+}  // namespace BangEditor
 
 #endif  // INSPECTORWIDGET_H

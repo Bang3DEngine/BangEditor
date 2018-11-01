@@ -392,21 +392,22 @@ void Explorer::AddItem(ExplorerItem *explorerItem)
 
     explorerItem->SetParent(p_itemsContainer);
 
-    explorerItem->GetFocusable()->AddEventCallback([this, explorerItem](
-        UIFocusable *focusable, const UIEvent &event) {
-        if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
-        {
-            bool travelToDirectory = (explorerItem->GetPathString() != "..");
-            SelectPath(explorerItem->GetPath(), true, travelToDirectory);
-            return UIEventResult::INTERCEPT;
-        }
-        else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
-        {
-            OnItemDoubleClicked(focusable);
-            return UIEventResult::INTERCEPT;
-        }
-        return UIEventResult::IGNORE;
-    });
+    explorerItem->GetFocusable()->AddEventCallback(
+        [this, explorerItem](UIFocusable *focusable, const UIEvent &event) {
+            if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
+            {
+                bool travelToDirectory =
+                    (explorerItem->GetPathString() != "..");
+                SelectPath(explorerItem->GetPath(), true, travelToDirectory);
+                return UIEventResult::INTERCEPT;
+            }
+            else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
+            {
+                OnItemDoubleClicked(focusable);
+                return UIEventResult::INTERCEPT;
+            }
+            return UIEventResult::IGNORE;
+        });
     explorerItem->EventEmitter<IEventsExplorerItem>::RegisterListener(this);
 
     p_items.PushBack(explorerItem);
@@ -599,7 +600,8 @@ bool Explorer::IsInsideRootPath(const Path &path) const
 
 void Explorer::OnValueChanged(EventEmitter<IEventsValueChanged> *)
 {
-    p_explorerGridLayout->SetCellSize(Vector2i(p_iconSizeSlider->GetValue()));
+    p_explorerGridLayout->SetCellSize(
+        Vector2i(SCAST<int>(p_iconSizeSlider->GetValue())));
 }
 
 void Explorer::OnCreateContextMenu(MenuItem *menuRootItem)
@@ -610,7 +612,7 @@ void Explorer::OnCreateContextMenu(MenuItem *menuRootItem)
     createDirItem->SetSelectedCallback([this](MenuItem *) {
         Path newDirPath =
             GetCurrentPath().Append("New_directory").GetDuplicatePath();
-        File::CreateDirectory(newDirPath);
+        File::CreateDir(newDirPath);
         ForceCheckFileChanges();
         SelectPath(newDirPath);
     });

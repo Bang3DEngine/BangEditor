@@ -13,7 +13,6 @@
 #include "Bang/Input.h"
 #include "Bang/MouseButton.h"
 #include "Bang/Transform.h"
-#include "Bang/Vector.tcc"
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/Selection.h"
 
@@ -21,7 +20,7 @@ namespace Bang
 {
 class IEventsDestroy;
 class Object;
-}
+}  // namespace Bang
 
 using namespace Bang;
 using namespace BangEditor;

@@ -43,8 +43,8 @@ if (NOT DEFINED BANG_EDITOR_ROOT_DEFINE)
     file(RELATIVE_PATH BANG_EDITOR_ROOT_DEFINE ${EXECUTABLE_OUTPUT_PATH} ${BANG_EDITOR_ROOT})
 endif()
 
-include(${BANG_ENGINE_ROOT}/Build/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
-include(${BANG_ENGINE_ROOT}/Build/CMakeIncludes/CMakeMacros.cmake REQUIRED)
+include(${BANG_ENGINE_ROOT}/Compile/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
+include(${BANG_ENGINE_ROOT}/Compile/CMakeIncludes/CMakeMacros.cmake REQUIRED)
 #=================================================================
 #=================================================================
 #=================================================================

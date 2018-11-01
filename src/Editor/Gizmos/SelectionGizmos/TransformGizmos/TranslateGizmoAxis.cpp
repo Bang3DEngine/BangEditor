@@ -19,7 +19,6 @@
 #include "Bang/Ray.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/Transform.h"
-#include "Bang/Vector.tcc"
 #include "Bang/Vector3.h"
 #include "BangEditor/Selection.h"
 

@@ -34,7 +34,7 @@ Path GameBuilder::GetExecutablePath()
 void GameBuilder::BuildGame()
 {
     Path gameExecPath = GameBuilder::GetExecutablePath();
-    File::CreateDirectory(gameExecPath.GetDirectory());
+    File::CreateDir(gameExecPath.GetDirectory());
 
     GameBuilder::BuildGame(gameExecPath.GetName(),
                            gameExecPath.GetDirectory(),
@@ -95,8 +95,7 @@ void GameBuilder::BuildGame(const String &gameName,
 
     Debug_Log("Build finished successfully! "
               "Game path: '"
-              << gameBinaryPath
-              << "'");
+              << gameBinaryPath << "'");
 }
 
 bool GameBuilder::CompileGameExecutable(BinType binaryType)
@@ -150,7 +149,7 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
 {
     Path dataDir = executableDir.Append("Data");
     File::Remove(dataDir);
-    if (!File::CreateDirectory(dataDir))
+    if (!File::CreateDir(dataDir))
     {
         return false;
     }
@@ -158,7 +157,7 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
     // Copy the Engine needed directories into the Data directory
     Path bangDataDir = dataDir.Append("Bang");
     Path bangAssetsDataDir = bangDataDir.Append("Assets");
-    if (!File::CreateDirectory(bangDataDir))
+    if (!File::CreateDir(bangDataDir))
     {
         return false;
     }
@@ -166,10 +165,8 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
     if (!File::DuplicateDir(Paths::GetEngineAssetsDir(), bangAssetsDataDir))
     {
         Debug_Error("Could not duplicate engine assets directory '"
-                    << Paths::GetEngineAssetsDir()
-                    << "' into '"
-                    << bangAssetsDataDir
-                    << "'");
+                    << Paths::GetEngineAssetsDir() << "' into '"
+                    << bangAssetsDataDir << "'");
         return false;
     }
 
@@ -178,10 +175,8 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
     if (!File::DuplicateDir(Paths::GetProjectAssetsDir(), gameDataAssetsDir))
     {
         Debug_Error("Could not duplicate assets directory '"
-                    << Paths::GetProjectAssetsDir()
-                    << "' into '"
-                    << gameDataAssetsDir
-                    << "'");
+                    << Paths::GetProjectAssetsDir() << "' into '"
+                    << gameDataAssetsDir << "'");
         return false;
     }
 
@@ -193,7 +188,7 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
 {
     // Create Libraries directory
     Path dataLibsDir = Path(executableDir).Append("Data").Append("Libraries");
-    File::CreateDirectory(dataLibsDir);
+    File::CreateDir(dataLibsDir);
 
     // Compile every behaviour into its .o
     Array<Path> behavioursSourceFiles = Paths::GetProjectAssetsDir().GetFiles(
@@ -216,8 +211,7 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
                                  .AppendExtension("o");
 
         Debug_Log("Compiling '" << behaviourSourcePath << "' into '"
-                                << outputObjPath
-                                << "'...");
+                                << outputObjPath << "'...");
         Compiler::Result res = behaviourMgr->CompileBehaviourObject(
             behaviourSourcePath, outputObjPath, binType);
 
@@ -236,8 +230,7 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
             .AppendExtension("so")
             .AppendExtension(String::ToString(Time::GetNow().GetMillis()));
     Debug_Log("Merging behaviour objects " << behaviourObjectsPaths << " into '"
-                                           << outputLibPath
-                                           << "'...");
+                                           << outputLibPath << "'...");
 
     Compiler::Result res = behaviourMgr->MergeBehaviourObjects(
         behaviourObjectsPaths, outputLibPath, binType);

@@ -75,7 +75,7 @@ Project *ProjectManager::CreateNewProject(const Path &projectDirPath,
     Path projectDir(projectDirPath.Append(projectName));
     if (!projectDir.Exists())
     {
-        if (!File::CreateDirectory(projectDir))
+        if (!File::CreateDir(projectDir))
         {
             Debug_Error("Could not create project in directory '" << projectDir
                                                                   << "'.");
@@ -96,8 +96,8 @@ Project *ProjectManager::CreateNewProject(const Path &projectDirPath,
         CreateNewProjectFileOnly(projectFilepath);
     ProjectManager::s_currentProject->SetProjectFilepath(projectFilepath);
 
-    File::CreateDirectory(projectDir.Append("Assets"));
-    File::CreateDirectory(projectDir.Append("Libraries"));
+    File::CreateDir(projectDir.Append("Assets"));
+    File::CreateDir(projectDir.Append("Libraries"));
 
     return ProjectManager::s_currentProject;
 }

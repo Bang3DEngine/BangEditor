@@ -1,11 +1,9 @@
 #pragma once
 
-#include "BangEditor/RIWResource.h"
-
 #include "Bang/MetaFilesManager.h"
 #include "Bang/Resources.h"
 #include "Bang/UIImageRenderer.h"
-
+#include "BangEditor/RIWResource.h"
 #include "BangEditor/UndoRedoFileChange.h"
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
@@ -135,7 +133,8 @@ void RIWResource<T>::UpdateFromFileWhenChanged()
 }
 
 template <class T>
-void RIWResource<T>::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void RIWResource<T>::OnValueChanged(
+    Bang::EventEmitter<IEventsValueChanged> *object)
 {
     ResourceInspectorWidget::OnValueChanged(object);
 
@@ -180,4 +179,4 @@ void RIWResource<T>::OnResourceChanged(Resource *res)
         IEventListenerCommon::SetReceiveEventsCommon(true);
     }
 }
-}
+}  // namespace BangEditor

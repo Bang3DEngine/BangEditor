@@ -23,7 +23,7 @@ namespace Bang
 {
 class IEventsValueChanged;
 class Serializable;
-}
+}  // namespace Bang
 
 using namespace Bang;
 namespace BangEditor
@@ -70,7 +70,7 @@ public:
     UIInputArray();
     virtual ~UIInputArray() override;
 
-    void AddRow(GameObject *rowGameObject, uint index = -1u);
+    void AddRow(GameObject *rowGameObject, uint index = SCAST<uint>(-1));
     void MoveRow(UIInputArrayRow *row, int displacement);
     void RemoveRow(GameObject *rowGameObject);
     void RemoveRow(uint index);
@@ -140,7 +140,7 @@ void UIInputArray::UpdateRows(const Array<T *> &referenceSerializables)
                             referenceSerializablesCasted,
                             [this]() {
                                 GameObject *newObj = m_createNewRowFunction();
-                                AddRow_(newObj, -1u, false);
+                                AddRow_(newObj, SCAST<uint>(-1), false);
                                 return SCAST<Serializable *>(newObj);
                             },
                             [this](Serializable *s) {
@@ -192,6 +192,6 @@ void UIInputArray::UpdateReferences(const Array<T *> &referenceSerializables)
         m_updatingRowsOrReferences = false;
     }
 }
-}
+}  // namespace BangEditor
 
 #endif  // UIINPUTARRAY_H

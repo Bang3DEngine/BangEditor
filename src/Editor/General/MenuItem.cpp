@@ -22,7 +22,6 @@
 #include "Bang/UIList.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UITheme.h"
-#include "Bang/Vector.tcc"
 #include "Bang/Vector2.h"
 
 using namespace BangEditor;
@@ -455,7 +454,7 @@ bool MenuItem::GetDestroyOnClose() const
 {
     return m_destroyOnClose;
 }
-float MenuItem::GetFontSize() const
+uint MenuItem::GetFontSize() const
 {
     return m_fontSize;
 }

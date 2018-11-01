@@ -84,11 +84,11 @@ void CIWPostProcessEffectSSAO::UpdateFromReference()
 {
     PostProcessEffectSSAO *ppe = GetPostProcessEffectSSAO();
 
-    p_intensityInput->SetValue(ppe->GetSSAOIntensity());
-    p_radiusInput->SetValue(ppe->GetSSAORadius());
-    p_blurRadiusInput->SetValue(ppe->GetBlurRadius());
-    p_numRandAxesInput->SetValue(ppe->GetNumRandomAxes());
-    p_numRandSamplesInput->SetValue(ppe->GetNumRandomSamples());
+    p_intensityInput->SetValue(SCAST<float>(ppe->GetSSAOIntensity()));
+    p_radiusInput->SetValue(SCAST<float>(ppe->GetSSAORadius()));
+    p_blurRadiusInput->SetValue(SCAST<float>(ppe->GetBlurRadius()));
+    p_numRandAxesInput->SetValue(SCAST<float>(ppe->GetNumRandomAxes()));
+    p_numRandSamplesInput->SetValue(SCAST<float>(ppe->GetNumRandomSamples()));
     p_bilateralBlurInput->SetChecked(ppe->GetBilateralBlurEnabled());
     p_separableInput->SetChecked(ppe->GetSeparable());
 }

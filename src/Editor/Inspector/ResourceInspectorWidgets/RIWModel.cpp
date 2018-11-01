@@ -28,7 +28,7 @@ namespace Bang
 class IEventsValueChanged;
 template <class>
 class EventEmitter;
-}
+}  // namespace Bang
 
 namespace BangEditor
 {
@@ -122,20 +122,21 @@ void RIWModel::OnResourceSet()
         numTriangles += static_cast<uint>(mesh->GetNumTriangles());
     }
 
-    p_numMeshes->SetValue(numMeshes);
-    p_numBones->SetValue(numBones);
-    p_numMaterials->SetValue(numMaterials);
-    p_numAnimations->SetValue(numAnimations);
-    p_numVertices->SetValue(numVertices);
-    p_numTriangles->SetValue(numTriangles);
+    p_numMeshes->SetValue(SCAST<float>(numMeshes));
+    p_numBones->SetValue(SCAST<float>(numBones));
+    p_numMaterials->SetValue(SCAST<float>(numMaterials));
+    p_numAnimations->SetValue(SCAST<float>(numAnimations));
+    p_numVertices->SetValue(SCAST<float>(numVertices));
+    p_numTriangles->SetValue(SCAST<float>(numTriangles));
 }
 
 void RIWModel::UpdateInputsFromResource()
 {
-    p_modelPreviewViewer->SetPreviewImageProvider([this](
-        const ResourcePreviewFactoryParameters &params) {
-        return ModelPreviewFactory::GetPreviewTextureFor(GetModel(), params);
-    });
+    p_modelPreviewViewer->SetPreviewImageProvider(
+        [this](const ResourcePreviewFactoryParameters &params) {
+            return ModelPreviewFactory::GetPreviewTextureFor(GetModel(),
+                                                             params);
+        });
 }
 
 Texture2D *RIWModel::GetIconTexture() const

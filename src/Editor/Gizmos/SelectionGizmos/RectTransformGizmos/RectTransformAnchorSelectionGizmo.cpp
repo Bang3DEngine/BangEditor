@@ -11,7 +11,6 @@
 #include "Bang/Quaternion.h"
 #include "Bang/RectTransform.h"
 #include "Bang/UIImageRenderer.h"
-#include "Bang/Vector.tcc"
 #include "Bang/Vector2.h"
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/Selection.h"

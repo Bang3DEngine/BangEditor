@@ -244,7 +244,8 @@ void CIWParticleSystem::UpdateFromReference()
 
     if (!p_numParticlesInput->HasFocus())
     {
-        p_numParticlesInput->SetValue(GetParticleSystem()->GetNumParticles());
+        p_numParticlesInput->SetValue(
+            SCAST<float>(GetParticleSystem()->GetNumParticles()));
     }
 
     if (!p_bouncinessInput->HasFocus())
@@ -389,7 +390,8 @@ void CIWParticleSystem::OnValueChangedCIW(
 
     if (object == p_numParticlesInput)
     {
-        GetParticleSystem()->SetNumParticles(p_numParticlesInput->GetValue());
+        GetParticleSystem()->SetNumParticles(
+            SCAST<uint>(p_numParticlesInput->GetValue()));
     }
 
     if (object == p_physicsStepModeInput)

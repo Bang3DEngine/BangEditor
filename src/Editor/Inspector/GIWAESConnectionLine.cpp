@@ -69,7 +69,7 @@ void GIWAESConnectionLine::InitInnerWidgets()
                 case UIList::Action::SELECTION_IN:
                 {
                     uint itemIdx = p_transitionsList->GetItems().IndexOf(item);
-                    ASSERT(itemIdx != -1u);
+                    ASSERT(itemIdx != SCAST<uint>(-1));
 
                     auto transitionsToNodeTo =
                         GetSMNodeFrom()->GetTransitionsTo(GetSMNodeTo());
@@ -287,8 +287,8 @@ void GIWAESConnectionLine::UpdateFromReference()
         p_immediateTransitionInput->SetChecked(
             GetSelectedSMTransition()->GetImmediateTransition());
 
-        p_transitionDurationInput->SetValue(
-            GetSelectedSMTransition()->GetTransitionDuration().GetSeconds());
+        p_transitionDurationInput->SetValue(SCAST<float>(
+            GetSelectedSMTransition()->GetTransitionDuration().GetSeconds()));
 
         p_transitionConditionsInput->UpdateRows(
             GetSelectedSMTransition()->GetTransitionConditions());

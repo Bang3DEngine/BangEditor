@@ -38,7 +38,6 @@
 #include "Bang/UIFocusable.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutIgnorer.h"
-#include "Bang/Vector.tcc"
 #include "Bang/Vector2.h"
 #include "BangEditor/EditSceneGameObjects.h"
 #include "BangEditor/Editor.h"
@@ -461,8 +460,7 @@ void UISceneEditContainer::OnDestroyed(EventEmitter<IEventsDestroy> *object)
         p_lastOveredGameObject = nullptr;
     }
 
-    MeshRenderer *mr = DCAST<MeshRenderer *>(mr);
-    if (mr)
+    if (MeshRenderer *mr = DCAST<MeshRenderer *>(object))
     {
         m_matDragMeshRenderersToPrevMaterials.Remove(mr);
     }

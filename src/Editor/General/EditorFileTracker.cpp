@@ -28,7 +28,7 @@ namespace Bang
 {
 class Resource;
 class String;
-}
+}  // namespace Bang
 
 namespace BangEditor
 {
@@ -135,7 +135,7 @@ void EditorFileTracker::CheckForShaderModifications(const Path &modifiedPath)
                 Set<Path> processedPaths;
                 Array<Path> incPaths = CodePreprocessor::GetSourceIncludePaths(
                     shader->GetResourceFilepath(), shadersIncPaths);
-                for (int i = 0; i < incPaths.Size();
+                for (uint i = 0; i < incPaths.Size();
                      ++i)  // const Path &incPath : incPaths)
                 {
                     const Path incPath = incPaths[i];

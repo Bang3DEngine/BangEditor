@@ -14,7 +14,6 @@
 #include "Bang/Quaternion.h"
 #include "Bang/ResourceHandle.h"
 #include "Bang/UMap.tcc"
-#include "Bang/Vector.tcc"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/ResourcePreviewFactory.h"
 
@@ -24,7 +23,7 @@ class Camera;
 class GameObject;
 class Scene;
 class Texture2D;
-}
+}  // namespace Bang
 
 using namespace Bang;
 namespace BangEditor
@@ -59,6 +58,6 @@ private:
         Mesh *mesh,
         const ResourcePreviewFactoryParameters &params) override;
 };
-}
+}  // namespace BangEditor
 
 #endif  // MESHPREVIEWFACTORY_H

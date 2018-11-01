@@ -192,11 +192,11 @@ Color SelectionFramebuffer::GetSelectionColor(GameObject *go) const
 Color SelectionFramebuffer::MapIdToColor(IdType id)
 {
     constexpr IdType C = 255;
-    Color color(double(id % C),
-                double((id / C) % C),
-                double(((id / C) / C) % C),
-                double((((id / C) / C) / C) % C));
-    return color / double(C);
+    Color color(SCAST<float>(id % C),
+                SCAST<float>((id / C) % C),
+                SCAST<float>(((id / C) / C) % C),
+                SCAST<float>((((id / C) / C) / C) % C));
+    return color / SCAST<float>(C);
 }
 
 typename SelectionFramebuffer::IdType SelectionFramebuffer::MapColorToId(

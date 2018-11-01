@@ -246,7 +246,7 @@ Compiler::Result EditorBehaviourManager::CompileBehaviourObject(
 {
     EditorBehaviourManager::RemoveBehaviourLibrariesOf(
         outputObjectFilepath.GetName());
-    File::CreateDirectory(outputObjectFilepath.GetDirectory());
+    File::CreateDir(outputObjectFilepath.GetDirectory());
 
     Compiler::Job job = EditorBehaviourManager::CreateCompileBehaviourJob(
         behaviourFilepath, outputObjectFilepath, binaryType);
@@ -394,7 +394,7 @@ Compiler::Result EditorBehaviourManager::MergeBehaviourObjects(
     BinType binaryType)
 {
     EditorBehaviourManager::RemoveOrphanBehaviourLibrariesAndObjects();
-    File::CreateDirectory(outputLibFilepath.GetDirectory());
+    File::CreateDir(outputLibFilepath.GetDirectory());
 
     Compiler::Job job = EditorBehaviourManager::CreateBaseJob(binaryType, true);
     job.outputMode = Compiler::OutputType::SHARED_LIB;
@@ -612,9 +612,9 @@ void EditorBehaviourManager::BehaviourCompileRunnable::Run()
     const Path &outputPath = compileResult.compileJob.outputFile;
     if (!outputPath.IsFile())
     {
-        Debug_Error("Behaviour '" << outputPath.GetName()
-                                  << "' did not compile correctly: "
-                                  << compileResult.output);
+        Debug_Error("Behaviour '"
+                    << outputPath.GetName()
+                    << "' did not compile correctly: " << compileResult.output);
     }
     else
     {

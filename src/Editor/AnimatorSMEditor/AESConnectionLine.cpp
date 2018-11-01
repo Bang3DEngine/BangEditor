@@ -26,7 +26,6 @@
 #include "Bang/UIFocusable.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UITheme.h"
-#include "Bang/Vector.tcc"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "BangEditor/AESNode.h"
@@ -206,7 +205,7 @@ void AESConnectionLine::BeforeRender()
         Vector2 p1w =
             GetRectTransform()->FromLocalToWorldPoint(Vector3(p1, 0)).xy();
         float angle = Math::ATan2((p1w - p0w).x, (p1w - p0w).y);
-        angle += (Math::Pi * 1.5f);
+        angle += SCAST<float>(Math::Pi * 1.5f);
         Quaternion rotation = Quaternion::AngleAxis(angle, Vector3::Forward);
         arrowRT->SetLocalRotation(rotation);
 
@@ -356,7 +355,7 @@ void AESConnectionLine::OffsetLinePositions() const
         (lineToPos - lineFromPos) * (isLesserNode ? 1.0f : -1.0f);
 
     const float zoomScale = GetAESNodeFrom()->GetAESScene()->GetZoomScale();
-    const int offsetPx = (30 * zoomScale);
+    const float offsetPx = (30 * zoomScale);
     Vector3 offsetAnchorPerIndex(
         (1.0f / GetRectTransform()->GetViewportAARect().GetSize()) *
             Vector2(offsetPx),

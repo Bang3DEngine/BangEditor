@@ -59,13 +59,14 @@ void SIWPhysicsSettings::UpdateFromReference()
 
     if (!p_stepSleepTimeInput->HasFocus())
     {
-        p_stepSleepTimeInput->SetValue(
-            Physics::GetInstance()->GetStepSleepTime().GetSeconds());
+        p_stepSleepTimeInput->SetValue(SCAST<float>(
+            Physics::GetInstance()->GetStepSleepTime().GetSeconds()));
     }
 
     if (!p_maxSubStepsInput->HasFocus())
     {
-        p_maxSubStepsInput->SetValue(Physics::GetInstance()->GetMaxSubSteps());
+        p_maxSubStepsInput->SetValue(
+            SCAST<float>(Physics::GetInstance()->GetMaxSubSteps()));
     }
 
     if (!p_gravityInput->HasFocus())
@@ -80,7 +81,8 @@ void SIWPhysicsSettings::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 
     Physics::GetInstance()->SetStepSleepTime(
         Time::Seconds(p_stepSleepTimeInput->GetValue()));
-    Physics::GetInstance()->SetMaxSubSteps(p_maxSubStepsInput->GetValue());
+    Physics::GetInstance()->SetMaxSubSteps(
+        SCAST<int>(p_maxSubStepsInput->GetValue()));
     Physics::GetInstance()->SetGravity(p_gravityInput->GetVector3());
 
     ProjectManager::ExportCurrentProject();
