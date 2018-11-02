@@ -95,7 +95,7 @@ if (ADD_MISC_FILES)
                                   "${BANG_EDITOR_ROOT}/Assets/Shaders/*.vert"
                                   "${BANG_EDITOR_ROOT}/Assets/Shaders/*.glsl"
                                   "${BANG_EDITOR_ROOT}/Scripts/*.py"
-                                  "${BANG_EDITOR_ROOT}/Build/BuildPackage/CMakeLists.txt")
+                                  "${BANG_EDITOR_ROOT}/Compile/CompilePackage/CMakeLists.txt")
     add_misc_files(${OTHER_FILES})
 endif()
 #=================================================================
@@ -117,10 +117,10 @@ file(GLOB_RECURSE EDITOR_SRC_FILES "${EDITOR_SRC_DIR}/*.cpp")
 set (CMAKE_POSITION_INDEPENDENT_CODE OFF)
 
 get_target_property(BANG_ENGINE_INCLUDE_DIRS_0 BangEngineObjects INCLUDE_DIRECTORIES)
-get_target_property(BANG_ENGINE_INCLUDE_DIRS_1 BangLib           INCLUDE_DIRECTORIES)
+# get_target_property(BANG_ENGINE_INCLUDE_DIRS_1 BangLib           INCLUDE_DIRECTORIES)
 set(BANG_ENGINE_INCLUDE_DIRS "")
 list(APPEND BANG_ENGINE_INCLUDE_DIRS ${BANG_ENGINE_INCLUDE_DIRS_0})
-list(APPEND BANG_ENGINE_INCLUDE_DIRS ${BANG_ENGINE_INCLUDE_DIRS_1})
+# list(APPEND BANG_ENGINE_INCLUDE_DIRS ${BANG_ENGINE_INCLUDE_DIRS_1})
 list(APPEND BANG_ENGINE_INCLUDE_DIRS ${DEPENDENCIES_INCLUDE_DIRS})
 
 if (${BUILD_SHARED_LIBS})
