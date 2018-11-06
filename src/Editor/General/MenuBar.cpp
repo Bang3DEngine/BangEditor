@@ -199,15 +199,24 @@ void MenuBar::Update()
 
     // Force show
     UICanvas *canvas = UICanvas::GetActive(this);
-    bool hasFocusRecursive = canvas->HasFocus(this, true);
+    bool menuBarHasFocus = false;
+    for (MenuItem *item : m_items)
+    {
+        if (canvas->HasFocus(item->GetFocusable()))
+        {
+            menuBarHasFocus = true;
+            break;
+        }
+    }
+
     for (MenuItem *item : m_items)
     {
         // Drop down enabled if we have focus. Can't otherwise.
-        item->SetDropDownEnabled(hasFocusRecursive);
+        item->SetDropDownEnabled(menuBarHasFocus);
 
         // Force show on top item if mouse over and menu bar has focus
         bool needToShowThisItem =
-            (hasFocusRecursive && canvas->IsMouseOver(item, true));
+            (menuBarHasFocus && canvas->IsMouseOver(item, true));
         if (needToShowThisItem && item != p_currentTopItemBeingShown)
         {
             if (p_currentTopItemBeingShown)  // Unforce show on the other
@@ -220,19 +229,19 @@ void MenuBar::Update()
             p_currentTopItemBeingShown = item;
         }
 
-        if (p_currentTopItemBeingShown != item)
+        if (item != p_currentTopItemBeingShown)
         {
             item->Close(true);
         }
 
-        if (!hasFocusRecursive)
+        if (!menuBarHasFocus)
         {
             item->SetForceShow(false);
             item->Close(true);
         }
     }
 
-    if (!hasFocusRecursive)
+    if (!menuBarHasFocus)
     {
         p_currentTopItemBeingShown = nullptr;
     }
