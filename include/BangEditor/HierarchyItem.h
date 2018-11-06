@@ -50,6 +50,9 @@ public:
     HierarchyItem();
     virtual ~HierarchyItem() override;
 
+    // GameObject
+    void Update() override;
+
     void SetReferencedGameObject(GameObject *referencedGameObject);
 
     void Rename();

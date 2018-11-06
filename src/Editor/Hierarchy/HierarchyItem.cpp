@@ -59,6 +59,16 @@ HierarchyItem::~HierarchyItem()
 {
 }
 
+void HierarchyItem::Update()
+{
+    GameObject::Update();
+
+    if (IsVisibleRecursively())
+    {
+        UpdateEnabledDisabledColor();
+    }
+}
+
 void HierarchyItem::SetReferencedGameObject(GameObject *referencedGameObject)
 {
     if (referencedGameObject != GetReferencedGameObject())
