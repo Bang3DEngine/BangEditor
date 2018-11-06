@@ -42,7 +42,7 @@ void CIWAudioSource::InitInnerWidgets()
     p_playStopButton = GameObjectFactory::CreateUIButton("Play");
     p_playStopButton->AddClickedCallback([this]() { OnPlayClicked(); });
 
-    AddWidget(p_playStopButton->GetGameObject());
+    AddWidget(p_playStopButton->GetGameObject(), -1);
 
     SetLabelsWidth(75);
 }

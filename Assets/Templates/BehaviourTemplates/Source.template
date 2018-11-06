@@ -14,7 +14,7 @@ void BEHAVIOUR_NAME::OnUpdate()
     // This code is executed every frame
     GetGameObject()->GetTransform()->RotateLocal(
         Quaternion::AngleAxis(m_rotationSpeed * Time::GetDeltaTime().GetSeconds(),
-                              Vector3::Up));
+                              Vector3::Up()));
 }
 
 BANG_BEHAVIOUR_CLASS_IMPL(BEHAVIOUR_NAME);
