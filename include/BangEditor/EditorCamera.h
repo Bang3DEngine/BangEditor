@@ -76,11 +76,11 @@ private:
     SelectionFramebuffer *m_selectionFramebuffer = nullptr;
     Set<GameObject *> m_blockRequests;
 
-    Vector3 m_targetPosition = Vector3::Zero;
-    Quaternion m_targetRotation = Quaternion::Identity;
+    Vector3 m_targetPosition = Vector3::Zero();
+    Quaternion m_targetRotation = Quaternion::Identity();
 
-    Vector3 m_previousPlayStateChangePos = Vector3::Zero;
-    Quaternion m_previousPlayStateChangeRot = Quaternion::Identity;
+    Vector3 m_previousPlayStateChangePos = Vector3::Zero();
+    Quaternion m_previousPlayStateChangeRot = Quaternion::Identity();
 
     // WASD
     float m_keysMoveAccel = 1.0f;

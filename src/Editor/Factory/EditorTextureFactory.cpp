@@ -359,50 +359,50 @@ Color EditorTextureFactory::GetComponentIconTint(const String &componentName)
 {
     if (componentName == "MeshRenderer")
     {
-        return Color::White.WithValue(0.2f);
+        return Color::White().WithValue(0.2f);
     }
     else if (componentName == "SkinnedMeshRenderer")
     {
-        return Color::White.WithValue(0.2f);
+        return Color::White().WithValue(0.2f);
     }
     else if (componentName == "DirectionalLight")
     {
-        return Color::White.WithValue(0.2f);
+        return Color::White().WithValue(0.2f);
     }
     else if (componentName == "PointLight")
     {
-        return Color::White.WithValue(0.2f);
+        return Color::White().WithValue(0.2f);
     }
     else if (componentName == "AudioSource")
     {
-        return Color::White.WithValue(0.2f);
+        return Color::White().WithValue(0.2f);
     }
     else if (componentName == "AudioListener")
     {
-        return Color::White.WithValue(0.2f);
+        return Color::White().WithValue(0.2f);
     }
     else if (componentName == "BehaviourContainer")
     {
-        return Color::White.WithValue(0.2f);
+        return Color::White().WithValue(0.2f);
     }
     else if (componentName == "Behaviour" ||
              componentName == "BehaviourContainer")
     {
-        return Color::White.WithValue(0.2f);
+        return Color::White().WithValue(0.2f);
     }
     else if (componentName == "ParticleSystem")
     {
-        return Color::White.WithValue(0.2f);
+        return Color::White().WithValue(0.2f);
     }
     else if (componentName == "MeshCollider")
     {
-        return Color::Green.WithValue(0.8f);
+        return Color::Green().WithValue(0.8f);
     }
     else if (componentName == "Camera")
     {
-        return Color::White.WithValue(0.2f);
+        return Color::White().WithValue(0.2f);
     }
-    return Color::White;
+    return Color::White();
 }
 
 Texture2D *EditorTextureFactory::GetIconForExtension(const String &ext)
@@ -470,14 +470,14 @@ Color EditorTextureFactory::GetExtensionIconTint(const String &extension)
 {
     if (Extensions::Equals(extension, Extensions::GetSceneExtension()))
     {
-        return Color::Black;
+        return Color::Black();
     }
     else if (Extensions::Equals(extension,
                                 Extensions::GetBehaviourExtensions()))
     {
-        return Color::Black;
+        return Color::Black();
     }
-    return Color::White;
+    return Color::White();
 }
 
 Texture2D *EditorTextureFactory::GetComponentIcon(const Component *component)

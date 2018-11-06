@@ -30,7 +30,7 @@ EditorFloor::EditorFloor()
     AddComponent<Transform>();
     m_lineRenderer = AddComponent<LineRenderer>();
     m_lineRenderer->SetMaterial(MaterialFactory::GetDefaultUnLighted().Get());
-    m_lineRenderer->GetMaterial()->SetAlbedoColor(Color::White);
+    m_lineRenderer->GetMaterial()->SetAlbedoColor(Color::White());
     m_lineRenderer->GetMaterial()->SetReceivesLighting(false);
     m_lineRenderer->GetMaterial()->SetLineWidth(2.0f);
     m_lineRenderer->SetReceivesShadows(false);

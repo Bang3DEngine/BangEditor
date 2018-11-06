@@ -80,9 +80,9 @@ void TransformGizmo::Update()
     switch (transformGizmoMode)
     {
         case TransformGizmoMode::RECT:
-            GetTransform()->SetLocalPosition(Vector3::Zero);
-            GetTransform()->SetLocalRotation(Quaternion::Identity);
-            GetTransform()->SetLocalScale(Vector3::One);
+            GetTransform()->SetLocalPosition(Vector3::Zero());
+            GetTransform()->SetLocalRotation(Quaternion::Identity());
+            GetTransform()->SetLocalScale(Vector3::One());
             break;
 
         default:

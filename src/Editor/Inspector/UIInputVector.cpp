@@ -25,7 +25,7 @@ UIInputVector::UIInputVector()
     hl->SetSpacing(5);
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetFlexibleSize(Vector2::One);
+    le->SetFlexibleSize(Vector2::One());
 
     m_inputNumbers.PushBack(GameObjectFactory::CreateUIInputNumber());
     m_inputNumbers.PushBack(GameObjectFactory::CreateUIInputNumber());

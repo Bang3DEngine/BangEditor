@@ -74,8 +74,8 @@ Hierarchy::Hierarchy()
     SetName("Hierarchy");
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetMinSize(Vector2i(200));
-    le->SetFlexibleSize(Vector2::One);
+    le->SetMinSize(Vector2i(100));
+    le->SetFlexibleSize(Vector2::One());
 
     GameObjectFactory::CreateUIGameObjectInto(this);
 
@@ -84,7 +84,7 @@ Hierarchy::Hierarchy()
 
     UIScrollPanel *scrollPanel = GetUITree()->GetUIList()->GetScrollPanel();
     scrollPanel->SetVerticalScrollBarSide(HorizontalSide::LEFT);
-    scrollPanel->GetScrollArea()->GetBackground()->SetTint(Color::Zero);
+    scrollPanel->GetScrollArea()->GetBackground()->SetTint(Color::Zero());
     scrollPanel->SetVerticalShowScrollMode(ShowScrollMode::ALWAYS);
     scrollPanel->SetHorizontalShowScrollMode(ShowScrollMode::ALWAYS);
     scrollPanel->SetVerticalScrollEnabled(true);
@@ -92,14 +92,14 @@ Hierarchy::Hierarchy()
 
     GameObject *treeGo = GetUITree()->GetGameObject();
     UILayoutElement *treeLE = treeGo->AddComponent<UILayoutElement>();
-    treeLE->SetFlexibleSize(Vector2::One);
+    treeLE->SetFlexibleSize(Vector2::One());
     GetUITree()->GetUIList()->GetDirLayout()->SetPaddingTop(10);
     GetUITree()
         ->GetUIList()
         ->GetScrollPanel()
         ->GetScrollArea()
         ->GetBackground()
-        ->SetTint(Color::White.WithValue(0.7f));
+        ->SetTint(Color::White().WithValue(0.7f));
 
     GetUITree()->SetSelectionCallback(
         [this](GOItem *item, UIList::Action action) {

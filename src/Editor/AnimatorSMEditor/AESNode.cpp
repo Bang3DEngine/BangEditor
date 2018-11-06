@@ -46,8 +46,8 @@ AESNode::AESNode()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     RectTransform *rt = GetRectTransform();
-    rt->SetAnchors(-Vector2::One);
-    rt->SetPivotPosition(Vector2::Zero);
+    rt->SetAnchors(-Vector2::One());
+    rt->SetPivotPosition(Vector2::Zero());
     rt->SetSizeFromPivot(Vector2i(180, 65));
 
     p_focusable = AddComponent<UIFocusable>();
@@ -85,13 +85,13 @@ AESNode::AESNode()
 
     GameObject *nameTextContainer = GameObjectFactory::CreateUIGameObject();
     p_nodeNameText = nameTextContainer->AddComponent<UITextRenderer>();
-    p_nodeNameText->SetTextColor(Color::Black);
+    p_nodeNameText->SetTextColor(Color::Black());
     nameTextContainer->SetParent(panelGo);
 
     GameObject *entryNodeTextContainer =
         GameObjectFactory::CreateUIGameObject();
     p_entryNodeText = entryNodeTextContainer->AddComponent<UITextRenderer>();
-    p_entryNodeText->SetTextColor(Color::Black);
+    p_entryNodeText->SetTextColor(Color::Black());
     p_entryNodeText->SetContent("-Entry-");
     p_entryNodeText->SetHorizontalAlign(HorizontalAlignment::LEFT);
     p_entryNodeText->SetVerticalAlign(VerticalAlignment::TOP);
@@ -111,7 +111,7 @@ void AESNode::Update()
 {
     GameObject::Update();
 
-    Color nodeColor = Color::White.WithValue(0.95f);
+    Color nodeColor = Color::White().WithValue(0.95f);
     RectTransform *rt = GetRectTransform();
     if (p_focusable->IsBeingPressed() &&
         !Input::GetMouseButton(MouseButton::MIDDLE))
@@ -150,7 +150,7 @@ void AESNode::Update()
             {
                 if (player->GetCurrentNode() == smNode)
                 {
-                    nodeColor = Color::Green;
+                    nodeColor = Color::Green();
                 }
             }
         }

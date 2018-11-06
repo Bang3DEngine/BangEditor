@@ -99,7 +99,7 @@ void RectTransformSelectionGizmo::Render(RenderPass renderPass,
 
         RenderFactory::Parameters params;
         params.thickness = 2.0f;
-        params.color = Color::White;
+        params.color = Color::White();
         RenderFactory::RenderRect(
             refGo->GetRectTransform()->GetViewportRect().GetPoints(), params);
     }

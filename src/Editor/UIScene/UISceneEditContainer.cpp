@@ -162,7 +162,7 @@ bool UISceneEditContainer::IsMouseOver()
 
 Vector2i UISceneEditContainer::GetMousePositionInOpenScene()
 {
-    Vector2i mousePosInOpenScene = Vector2i::Zero;
+    Vector2i mousePosInOpenScene = Vector2i::Zero();
     if (UISceneEditContainer *sec = UISceneEditContainer::GetActive())
     {
         AARecti vp = GL::GetViewportRect();

@@ -51,7 +51,7 @@ void GameObjectSelectionGizmo::Render(RenderPass rp, bool renderChildren)
 
             RenderFactory::Parameters params;
             params.thickness = 2.0f;
-            params.color = Color::Orange;
+            params.color = Color::Orange();
             params.receivesLighting = false;
             RenderFactory::RenderOutline(GetReferencedGameObject(), params);
 

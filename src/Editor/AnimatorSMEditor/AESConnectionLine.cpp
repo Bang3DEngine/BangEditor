@@ -47,16 +47,16 @@ AESConnectionLine::AESConnectionLine()
     p_lineRenderer = AddComponent<LineRenderer>();
     p_lineRenderer->SetViewProjMode(GL::ViewProjMode::CANVAS);
     p_lineRenderer->GetMaterial()->SetRenderPass(RenderPass::CANVAS);
-    p_lineRenderer->SetPoints({Vector3::Zero, Vector3::Zero});
+    p_lineRenderer->SetPoints({Vector3::Zero(), Vector3::Zero()});
 
     for (uint i : {0u, 1u, 2u})
     {
         GameObject *arrowImgGo = GameObjectFactory::CreateUIGameObject();
         p_arrowImgs[i] = arrowImgGo->AddComponent<UIImageRenderer>();
         p_arrowImgs[i]->SetImageTexture(TextureFactory::GetRightArrowIcon());
-        arrowImgGo->GetRectTransform()->SetAnchors(Vector2::Zero);
+        arrowImgGo->GetRectTransform()->SetAnchors(Vector2::Zero());
         arrowImgGo->GetRectTransform()->SetSizeFromPivot(Vector2i(20));
-        arrowImgGo->GetRectTransform()->SetPivotPosition(Vector2::Zero);
+        arrowImgGo->GetRectTransform()->SetPivotPosition(Vector2::Zero());
         arrowImgGo->SetParent(this);
     }
 
@@ -78,7 +78,7 @@ void AESConnectionLine::BeforeRender()
     GameObject::BeforeRender();
 
     float lineWidth = 2.0f;
-    Color lineColor = Color::White;
+    Color lineColor = Color::White();
     AESNode *provisionalToNode = nullptr;
     if (!GetAESNodeTo())
     {
@@ -148,7 +148,7 @@ void AESConnectionLine::BeforeRender()
             if (player->GetCurrentTransition() &&
                 GetSMTransitions().Contains(player->GetCurrentTransition()))
             {
-                lineColor = Color::Green;
+                lineColor = Color::Green();
             }
         }
     }
@@ -206,7 +206,7 @@ void AESConnectionLine::BeforeRender()
             GetRectTransform()->FromLocalToWorldPoint(Vector3(p1, 0)).xy();
         float angle = Math::ATan2((p1w - p0w).x, (p1w - p0w).y);
         angle += SCAST<float>(Math::Pi * 1.5f);
-        Quaternion rotation = Quaternion::AngleAxis(angle, Vector3::Forward);
+        Quaternion rotation = Quaternion::AngleAxis(angle, Vector3::Forward());
         arrowRT->SetLocalRotation(rotation);
 
         if (i != 1)

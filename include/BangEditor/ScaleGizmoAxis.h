@@ -41,8 +41,8 @@ private:
 
     static float ArrowCapScale;
 
-    Vector3 m_startGrabLocalScale = Vector3::Zero;
-    Vector3 m_startGrabCenterToMousePointProjLocalV = Vector3::Zero;
+    Vector3 m_startGrabLocalScale = Vector3::Zero();
+    Vector3 m_startGrabCenterToMousePointProjLocalV = Vector3::Zero();
 
     GameObject *p_arrowCap = nullptr;
     GameObject *p_selectionGo = nullptr;

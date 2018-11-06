@@ -67,7 +67,7 @@ UISceneToolbar::UISceneToolbar()
         UIToolButton *button = GameObjectFactory::CreateUIToolButton("", icon);
         button->SetIcon(icon, Vector2i(14));
         button->GetLayoutElement()->SetMinSize(Vector2i(ToolBarHeight));
-        button->GetIcon()->SetTint(Color::DarkGray);
+        button->GetIcon()->SetTint(Color::DarkGray());
         button->AddClickedCallback(callbackFunc);
         button->GetGameObject()->SetParent(this);
         *buttonPtr = button;
@@ -151,7 +151,7 @@ UISceneToolbar::UISceneToolbar()
     showDebugStatsText->SetTextSize(11);
     showDebugStatsText->SetContent("Stats");
 
-    GameObjectFactory::CreateUISpacer(LayoutSizeType::FLEXIBLE, Vector2::One)
+    GameObjectFactory::CreateUISpacer(LayoutSizeType::FLEXIBLE, Vector2::One())
         ->SetParent(this);
     p_renderModeInput->GetGameObject()->SetParent(this);
     showDebugStatsTextGo->SetParent(this);

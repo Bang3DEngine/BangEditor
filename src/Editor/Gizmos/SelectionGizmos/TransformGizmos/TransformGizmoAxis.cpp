@@ -111,9 +111,9 @@ void TransformGizmoAxis::SetColor(SelectionState state)
             SetColor(GetAxisColor(GetAxis()).WithAlpha(alpha));
             break;
 
-        case SelectionState::OVER: SetColor(Color::Orange); break;
+        case SelectionState::OVER: SetColor(Color::Orange()); break;
 
-        case SelectionState::GRABBED: SetColor(Color::Yellow); break;
+        case SelectionState::GRABBED: SetColor(Color::Yellow()); break;
     }
 }
 

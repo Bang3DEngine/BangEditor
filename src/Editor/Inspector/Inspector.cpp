@@ -70,8 +70,8 @@ Inspector::Inspector()
     SetName("Inspector");
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetMinSize(Vector2i(300));
-    le->SetFlexibleSize(Vector2::One);
+    le->SetMinSize(Vector2i(100));
+    le->SetFlexibleSize(Vector2::One());
 
     GameObjectFactory::CreateUIGameObjectInto(this);
 
@@ -79,16 +79,16 @@ Inspector::Inspector()
     UIVerticalLayout *mainVL = mainVLGo->AddComponent<UIVerticalLayout>();
     BANG_UNUSED(mainVL);
     UILayoutElement *mainVLLE = mainVLGo->AddComponent<UILayoutElement>();
-    mainVLLE->SetFlexibleSize(Vector2::One);
+    mainVLLE->SetFlexibleSize(Vector2::One());
 
     UIScrollPanel *scrollPanel = GameObjectFactory::CreateUIScrollPanel();
     scrollPanel->GetScrollArea()->GetBackground()->SetVisible(false);
     scrollPanel->GetScrollArea()->GetBackground()->SetTint(
-        Color::White.WithValue(0.7f));
+        Color::White().WithValue(0.7f));
 
     UILayoutElement *scrollLE =
         scrollPanel->GetGameObject()->AddComponent<UILayoutElement>();
-    scrollLE->SetFlexibleSize(Vector2::One);
+    scrollLE->SetFlexibleSize(Vector2::One());
 
     // GameObject *topSpacer =
     // GameObjectFactory::CreateUISpacer(LayoutSizeType::Min,
@@ -132,7 +132,8 @@ Inspector::Inspector()
         ->SetParent(mainVLGo);
     scrollPanel->GetGameObject()->SetParent(mainVLGo);
 
-    p_blockLayer = GameObjectFactory::CreateUIImage(Color::Red.WithAlpha(0.3f));
+    p_blockLayer =
+        GameObjectFactory::CreateUIImage(Color::Red().WithAlpha(0.3f));
     p_blockLayer->GetGameObject()->AddComponent<UIFocusable>();
     p_blockLayer->GetGameObject()->SetParent(GetScrollPanel()->GetGameObject());
     SetCurrentWidgetBlocked(false);
@@ -401,7 +402,7 @@ void Inspector::AddWidget(InspectorWidget *widget, int _index)
     int index = _index >= 0 ? _index : int(m_widgets.Size());
 
     m_widgets.Insert(widget, index);
-    Color bgColor = Color::LightGray.WithValue(0.9f);
+    Color bgColor = Color::LightGray().WithValue(0.9f);
     widget->SetBackgroundColor(bgColor);
     widget->SetParent(GetWidgetsContainer(), index);
 }
@@ -452,7 +453,7 @@ void Inspector::SetCurrentWidgetBlocked(bool blocked)
 void Inspector::Clear()
 {
     p_titleText->SetContent("");
-    GetScrollPanel()->SetScrolling(Vector2i::Zero);
+    GetScrollPanel()->SetScrolling(Vector2i::Zero());
 
     while (!m_widgets.IsEmpty())
     {

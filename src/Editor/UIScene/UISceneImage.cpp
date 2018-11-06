@@ -29,9 +29,9 @@ UISceneImage::UISceneImage()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetFlexibleSize(Vector2::One);
+    le->SetFlexibleSize(Vector2::One());
 
-    AddComponent<UIImageRenderer>()->SetTint(Color::Black);
+    AddComponent<UIImageRenderer>()->SetTint(Color::Black());
 
     // UIVerticalLayout *vl = AddComponent<UIVerticalLayout>();
     // BANG_UNUSED(vl);
@@ -46,7 +46,7 @@ UISceneImage::UISceneImage()
             "UISceneImage.frag")));
 
     UILayoutElement *imgLE = sceneImgGo->AddComponent<UILayoutElement>();
-    imgLE->SetFlexibleSize(Vector2::One);
+    imgLE->SetFlexibleSize(Vector2::One());
 
     p_sceneDebugStats = new UISceneDebugStats();
 

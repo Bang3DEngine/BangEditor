@@ -250,7 +250,7 @@ void RotateGizmoAxis::UpdateCirclePoints()
     for (uint i = 0; i < numSegments + 1; ++i)
     {
         float angle = angleStep * i;
-        Vector3 newPoint = Vector3::Zero;
+        Vector3 newPoint = Vector3::Zero();
         float sin = Math::Sin(angle);
         float cos = Math::Cos(angle);
         switch (GetAxis())
@@ -315,9 +315,9 @@ void RotateGizmoAxis::UpdateCirclePoints()
 
             Vector3 p0p1 = (p1 - p0);
             Vector3 norm0_c =
-                (p0 - Vector3::Zero).Normalized() * SelectionMeshThickness;
+                (p0 - Vector3::Zero()).Normalized() * SelectionMeshThickness;
             Vector3 norm1_c =
-                (p1 - Vector3::Zero).Normalized() * SelectionMeshThickness;
+                (p1 - Vector3::Zero()).Normalized() * SelectionMeshThickness;
             Vector3 norm0_n = Vector3::Cross(p0p1, norm0_c).Normalized() *
                               SelectionMeshThickness;
             Vector3 norm1_n = Vector3::Cross(p0p1, norm1_c).Normalized() *

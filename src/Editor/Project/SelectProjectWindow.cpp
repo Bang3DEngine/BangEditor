@@ -76,7 +76,7 @@ SelectProjectScene::SelectProjectScene()
     UICanvas *canvas = GameObjectFactory::CreateUICanvas();
     GameObject *canvasGo = canvas->GetGameObject();
     UIImageRenderer *bg = canvasGo->AddComponent<UIImageRenderer>();
-    bg->SetTint(Color::One.WithValue(0.75f));
+    bg->SetTint(Color::One().WithValue(0.75f));
     canvas->GetGameObject()->SetParent(this);
 
     GameObject *mainVLGo = GameObjectFactory::CreateUIGameObject();
@@ -108,9 +108,9 @@ SelectProjectScene::SelectProjectScene()
     UILabel *recentPLLabel = GameObjectFactory::CreateUILabel();
     UILayoutElement *recentPLLabelLE =
         recentPLLabel->GetGameObject()->GetComponent<UILayoutElement>();
-    recentPLLabelLE->SetFlexibleSize(Vector2::Zero);
+    recentPLLabelLE->SetFlexibleSize(Vector2::Zero());
     recentPLLabel->GetText()->SetContent("Recent projects:");
-    recentPLLabel->GetText()->SetTextColor(Color::Black);
+    recentPLLabel->GetText()->SetTextColor(Color::Black());
     recentPLLabel->GetText()->SetTextSize(16);
     recentPLLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::LEFT);
     recentPLLabel->GetGameObject()->SetParent(mainVLGo);
@@ -256,7 +256,7 @@ SelectProjectScene::RecentProjectListEntry::RecentProjectListEntry(
     UITextRenderer *text = container->AddComponent<UITextRenderer>();
     text->SetContent(projectPath.GetAbsolute());
     text->SetTextSize(12);
-    text->SetTextColor(Color::Black);
+    text->SetTextColor(Color::Black());
     text->SetHorizontalAlign(HorizontalAlignment::LEFT);
 
     container->SetParent(this);

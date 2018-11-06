@@ -50,7 +50,7 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
     AddComponent<UIRectMask>();
 
     UIImageRenderer *nodesSceneBG = AddComponent<UIImageRenderer>();
-    nodesSceneBG->SetTint(Color::DarkGray);
+    nodesSceneBG->SetTint(Color::DarkGray());
 
     GameObject *borderGo = GameObjectFactory::CreateUIGameObject();
     p_border = GameObjectFactory::AddInnerBorder(borderGo);
@@ -60,7 +60,7 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
     GameObject *selectAnASMTextGo = GameObjectFactory::CreateUIGameObject();
     p_selectAnASMText = selectAnASMTextGo->AddComponent<UITextRenderer>();
     p_selectAnASMText->SetContent("Select an AnimatorStateMachine");
-    p_selectAnASMText->SetTextColor(Color::White);
+    p_selectAnASMText->SetTextColor(Color::White());
     p_selectAnASMText->SetTextSize(20);
     selectAnASMTextGo->SetParent(this);
 
@@ -71,13 +71,13 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
     p_zoomContainer->SetParent(this);
 
     p_mainContainer = GameObjectFactory::CreateUIGameObject();
-    p_mainContainer->GetRectTransform()->SetPivotPosition(Vector2::Zero);
+    p_mainContainer->GetRectTransform()->SetPivotPosition(Vector2::Zero());
     p_mainContainer->SetVisible(false);
     p_mainContainer->SetParent(p_zoomContainer);
 
     p_gridContainer = GameObjectFactory::CreateUIGameObject();
-    p_gridContainer->GetRectTransform()->SetAnchors(Vector2::Zero);
-    p_gridContainer->GetRectTransform()->SetPivotPosition(Vector2::Zero);
+    p_gridContainer->GetRectTransform()->SetAnchors(Vector2::Zero());
+    p_gridContainer->GetRectTransform()->SetPivotPosition(Vector2::Zero());
     p_gridContainer->GetRectTransform()->SetSizeFromPivot(Vector2i(100000));
     p_gridContainer->SetParent(this);
 
@@ -261,7 +261,7 @@ void AnimatorSMEditorScene::OnLayerMoved(uint oldIndex, uint newIndex)
 
 void AnimatorSMEditorScene::CenterScene()
 {
-    m_panning = Vector2::Zero;
+    m_panning = Vector2::Zero();
     UpdatePanningAndZoomOnTransforms();
     SetZoomScale(1.0f, false);
     UpdatePanningAndZoomOnTransforms();
@@ -293,8 +293,9 @@ void AnimatorSMEditorScene::Clear()
 {
     if (GetAnimatorSMLayer())
     {
-        GetAnimatorSMLayer()->EventEmitter<IEventsAnimatorStateMachineLayer>::
-            UnRegisterListener(this);
+        GetAnimatorSMLayer()
+            ->EventEmitter<
+                IEventsAnimatorStateMachineLayer>::UnRegisterListener(this);
     }
 
     p_animatorSMLayer = nullptr;
@@ -361,13 +362,13 @@ void AnimatorSMEditorScene::SetZoomScale(float zoomScale, bool centerOnMouse)
             }
             else
             {
-                zoomContRT->SetLocalPosition(Vector3::Zero);
+                zoomContRT->SetLocalPosition(Vector3::Zero());
             }
         }
         else
         {
             zoomContRT->SetLocalScale(1.0f);
-            zoomContRT->SetLocalPosition(Vector3::Zero);
+            zoomContRT->SetLocalPosition(Vector3::Zero());
         }
     }
 }
@@ -538,7 +539,7 @@ UIEventResult AnimatorSMEditorScene::OnUIEvent(UIFocusable *,
         case UIEvent::Type::WHEEL:
         {
             Vector2 mouseWheel = (Input::GetMouseWheel() * Vector2(0.05f));
-            if (mouseWheel != Vector2::Zero)
+            if (mouseWheel != Vector2::Zero())
             {
                 SetZoomScale(GetZoomScale() + mouseWheel.y, true);
                 return UIEventResult::INTERCEPT;

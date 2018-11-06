@@ -74,7 +74,7 @@ void CIWParticleSystem::InitInnerWidgets()
         p_sheetSizeInput->GetInputNumbers()[i]->SetDecimalPlaces(0);
     }
     p_sheetSizeInput->SetSize(2);
-    p_sheetSizeInput->SetMinValue(Vector4::One);
+    p_sheetSizeInput->SetMinValue(Vector4::One());
     p_sheetSizeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_animationSpeedInput = GameObjectFactory::CreateUIInputNumber();
@@ -117,7 +117,7 @@ void CIWParticleSystem::InitInnerWidgets()
 
     p_generationShapeBoxSizeInput = new UIInputVector();
     p_generationShapeBoxSizeInput->SetSize(3);
-    p_generationShapeBoxSizeInput->SetMinValue(Vector4::Zero);
+    p_generationShapeBoxSizeInput->SetMinValue(Vector4::Zero());
     p_generationShapeBoxSizeInput
         ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 

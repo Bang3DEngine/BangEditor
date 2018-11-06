@@ -125,7 +125,7 @@ void EditorCamera::Update()
     else
     {
         GetCamera()->SetClearMode(CameraClearMode::COLOR);
-        GetCamera()->SetClearColor(Color::White.WithValue(0.3f));
+        GetCamera()->SetClearColor(Color::White().WithValue(0.3f));
     }
 
     if (unwrapMouse)
@@ -202,10 +202,10 @@ bool EditorCamera::HandleMouseRotation()
 
         Quaternion newRot = GetTransform()->GetRotation();
         Quaternion rotX =
-            Quaternion::AngleAxis(Math::DegToRad(delta.x), Vector3::Up);
+            Quaternion::AngleAxis(Math::DegToRad(delta.x), Vector3::Up());
         newRot = rotX * newRot;
         Quaternion rotY = Quaternion::AngleAxis(Math::DegToRad(delta.y),
-                                                newRot * Vector3::Right);
+                                                newRot * Vector3::Right());
         newRot = rotY * newRot;
 
         SetRotationDirectly(newRot);
@@ -237,7 +237,7 @@ void EditorCamera::HandleKeyMovement()
     if (!Input::GetKey(Key::LCTRL) && !Input::GetKey(Key::LSHIFT))
     {
         float dt = SCAST<float>(Time::GetDeltaTime().GetSeconds());
-        Vector3 m = Vector3::Zero;
+        Vector3 m = Vector3::Zero();
         if (Input::GetKey(Key::W))
         {
             m += m_keysCurrentMoveSpeed * dt * p_camt->GetForward();
@@ -265,7 +265,7 @@ void EditorCamera::FocusScene(Scene *scene)
     if (scene)
     {
         float sceneRadius = 1.0f;
-        Vector3 sceneCenter = Vector3::Zero;
+        Vector3 sceneCenter = Vector3::Zero();
 
         Sphere bSphere = scene->GetBoundingSphere();
         if (!Math::IsInfinity(bSphere.GetRadius()) &&
@@ -275,7 +275,7 @@ void EditorCamera::FocusScene(Scene *scene)
             sceneCenter = bSphere.GetCenter();
         }
 
-        m_targetPosition = (sceneCenter + Vector3::One * sceneRadius * 1.1f);
+        m_targetPosition = (sceneCenter + Vector3::One() * sceneRadius * 1.1f);
         m_targetRotation =
             Quaternion::LookDirection(sceneCenter - m_targetPosition);
     }
@@ -295,9 +295,9 @@ void EditorCamera::SetRotationDirectly(const Quaternion &rotation)
 
 void EditorCamera::AlignViewWithGameObject(GameObject *selected)
 {
-    p_camt->SetLocalRotation(Quaternion::Identity);
+    p_camt->SetLocalRotation(Quaternion::Identity());
     m_targetPosition = selected->GetTransform()->GetPosition();
-    Vector3 up = Vector3::Up;
+    Vector3 up = Vector3::Up();
     m_targetRotation =
         Quaternion::LookDirection(selected->GetTransform()->GetForward(), up);
 }
@@ -347,7 +347,7 @@ void EditorCamera::GetLookAtFocusParams(GameObject *lookAtGo,
     Vector3 focusDir = (focusPos - thisPos).NormalizedSafe();
 
     // LookAt Rotation
-    *targetRot = Quaternion::LookDirection(focusDir, Vector3::Up);
+    *targetRot = Quaternion::LookDirection(focusDir, Vector3::Up());
 
     // LookAt Move
     float radius = focusBSphere.GetRadius();

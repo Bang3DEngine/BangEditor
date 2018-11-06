@@ -52,12 +52,12 @@ UITabStation::UITabStation()
     p_dragMarker->SetParent(EditorSceneManager::GetEditorScene());
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetFlexibleSize(Vector2::One);
+    le->SetFlexibleSize(Vector2::One());
 
     p_tabContainerGo = GameObjectFactory::CreateUIGameObject();
     p_tabContainerGo->AddComponent<UIVerticalLayout>();
     auto contLE = p_tabContainerGo->AddComponent<UILayoutElement>();
-    contLE->SetFlexibleSize(Vector2::One);
+    contLE->SetFlexibleSize(Vector2::One());
 
     for (int s = 0; s < 4; ++s)
     {
@@ -67,7 +67,7 @@ UITabStation::UITabStation()
         p_tabStationGos[s]->AddComponent<UIVerticalLayout>();
         p_tabStationGos[s]->SetEnabled(false);
         auto stationGoLE = p_tabStationGos[s]->AddComponent<UILayoutElement>();
-        stationGoLE->SetFlexibleSize(Vector2::One);
+        stationGoLE->SetFlexibleSize(Vector2::One());
 
         Side side = SCAST<Side>(s);
         p_separators[s] =
@@ -294,8 +294,8 @@ void UITabStation::OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDropEmitter)
                 }
                 else
                 {
-                    p_dragMarker->GetRectTransform()->SetAnchors(-Vector2::One,
-                                                                 Vector2::One);
+                    p_dragMarker->GetRectTransform()->SetAnchors(
+                        -Vector2::One(), Vector2::One());
                     p_dragMarker->SetParent(GetTabContainer());
                 }
                 p_dragMarker->SetEnabled(true);

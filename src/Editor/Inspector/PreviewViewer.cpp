@@ -24,8 +24,8 @@ PreviewViewer::PreviewViewer()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
-    GetRectTransform()->SetAnchors(Vector2::Zero);
-    GetRectTransform()->SetPivotPosition(Vector2::Zero);
+    GetRectTransform()->SetAnchors(Vector2::Zero());
+    GetRectTransform()->SetPivotPosition(Vector2::Zero());
 
     p_imgRenderer = AddComponent<UIImageRenderer>();
     p_imgRenderer->SetMode(UIImageRenderer::Mode::TEXTURE);
@@ -81,12 +81,12 @@ UIEventResult PreviewViewer::OnUIEvent(UIFocusable *, const UIEvent &event)
     switch (event.type)
     {
         case UIEvent::Type::FOCUS_TAKEN:
-            p_border->SetTint(Color::Orange);
+            p_border->SetTint(Color::Orange());
             return UIEventResult::INTERCEPT;
             break;
 
         case UIEvent::Type::FOCUS_LOST:
-            p_border->SetTint(Color::Black);
+            p_border->SetTint(Color::Black());
             return UIEventResult::INTERCEPT;
             break;
 

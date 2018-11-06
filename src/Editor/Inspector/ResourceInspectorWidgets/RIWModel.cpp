@@ -54,8 +54,8 @@ void RIWModel::Init()
     SetTitle("Model");
 
     GameObject *modelPreviewGo = GameObjectFactory::CreateUIGameObject();
-    modelPreviewGo->GetRectTransform()->SetAnchors(Vector2::Zero);
-    modelPreviewGo->GetRectTransform()->SetPivotPosition(Vector2::Zero);
+    modelPreviewGo->GetRectTransform()->SetAnchors(Vector2::Zero());
+    modelPreviewGo->GetRectTransform()->SetPivotPosition(Vector2::Zero());
 
     p_modelPreviewViewer = new PreviewViewer();
 
@@ -132,11 +132,10 @@ void RIWModel::OnResourceSet()
 
 void RIWModel::UpdateInputsFromResource()
 {
-    p_modelPreviewViewer->SetPreviewImageProvider(
-        [this](const ResourcePreviewFactoryParameters &params) {
-            return ModelPreviewFactory::GetPreviewTextureFor(GetModel(),
-                                                             params);
-        });
+    p_modelPreviewViewer->SetPreviewImageProvider([this](
+        const ResourcePreviewFactoryParameters &params) {
+        return ModelPreviewFactory::GetPreviewTextureFor(GetModel(), params);
+    });
 }
 
 Texture2D *RIWModel::GetIconTexture() const

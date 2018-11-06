@@ -38,7 +38,7 @@ ASMVariableInput::ASMVariableInput()
     GameObject *varNameGo = GameObjectFactory::CreateUIGameObject();
     varNameGo->AddComponent<UIVerticalLayout>();
     UILayoutElement *varNameGoLE = varNameGo->AddComponent<UILayoutElement>();
-    varNameGoLE->SetFlexibleSize(Vector2::One);
+    varNameGoLE->SetFlexibleSize(Vector2::One());
     varNameGoLE->SetMinHeight(20);
     varNameGoLE->SetMinWidth(40);
 

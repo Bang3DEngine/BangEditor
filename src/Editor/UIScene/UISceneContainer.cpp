@@ -41,7 +41,7 @@ UISceneContainer::UISceneContainer()
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinSize(Vector2i(400));
-    le->SetFlexibleSize(Vector2::One);
+    le->SetFlexibleSize(Vector2::One());
 
     UIVerticalLayout *mainVL = AddComponent<UIVerticalLayout>();
     mainVL->SetChildrenHorizontalStretch(Stretch::FULL);
@@ -50,14 +50,14 @@ UISceneContainer::UISceneContainer()
 
     UIImageRenderer *camOverlayImg =
         p_noCameraOverlay->AddComponent<UIImageRenderer>();
-    camOverlayImg->SetTint(Color::Black);
+    camOverlayImg->SetTint(Color::Black());
 
     UITextRenderer *noCameraText =
         p_noCameraOverlay->AddComponent<UITextRenderer>();
     noCameraText->SetContent("No scene camera. Please assign one.");
     noCameraText->SetVerticalAlign(VerticalAlignment::CENTER);
     noCameraText->SetHorizontalAlign(HorizontalAlignment::CENTER);
-    noCameraText->SetTextColor(Color::White);
+    noCameraText->SetTextColor(Color::White());
     noCameraText->SetTextSize(20);
 
     p_noCameraOverlay->AddComponent<UIFocusable>();
@@ -70,7 +70,7 @@ UISceneContainer::UISceneContainer()
     vl->SetSpacing(3);
 
     UILayoutElement *vlLE = vlGo->AddComponent<UILayoutElement>();
-    vlLE->SetFlexibleSize(Vector2::One);
+    vlLE->SetFlexibleSize(Vector2::One());
 
     p_sceneToolbar = new UISceneToolbar();
     p_sceneImage = new UISceneImage();
@@ -119,7 +119,7 @@ void UISceneContainer::BeforeChildrenRender(RenderPass rp)
             showSceneImg = renderSizeMatches;
         }
         p_sceneImage->GetSceneImageRenderer()->SetTint(
-            showSceneImg ? Color::Blue : Color::Black);
+            showSceneImg ? Color::Blue() : Color::Black());
     }
 
     GameObject::BeforeChildrenRender(rp);
@@ -142,7 +142,7 @@ void UISceneContainer::RenderContainedSceneIfNeeded()
         }
         else
         {
-            p_sceneImage->GetSceneImageRenderer()->SetTint(Color::Black);
+            p_sceneImage->GetSceneImageRenderer()->SetTint(Color::Black());
             p_noCameraOverlay->SetEnabled(true);
         }
     }

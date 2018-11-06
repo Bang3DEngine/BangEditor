@@ -55,7 +55,7 @@ MenuItem::MenuItem(MenuItemType itemType)
             GameObject *textGo = GameObjectFactory::CreateUIGameObject();
             p_text = textGo->AddComponent<UITextRenderer>();
             GetText()->SetContent("MenuItem");
-            GetText()->SetTextColor(Color::Black);
+            GetText()->SetTextColor(Color::Black());
             GetText()->SetTextSize(GetFontSize());
             GetText()->SetVerticalAlign(VerticalAlignment::CENTER);
             GetText()->SetHorizontalAlign(HorizontalAlignment::LEFT);
@@ -70,7 +70,7 @@ MenuItem::MenuItem(MenuItemType itemType)
             if (GetItemType() != MenuItemType::TOP)
             {
                 p_rightArrow = GameObjectFactory::CreateUIImage();
-                p_rightArrow->SetTint(Color::Black);
+                p_rightArrow->SetTint(Color::Black());
                 p_rightArrow->SetImageTexture(
                     TextureFactory::GetRightArrowIcon());
 
@@ -105,7 +105,7 @@ MenuItem::MenuItem(MenuItemType itemType)
     childrenListGo->AddComponent<UILayoutIgnorer>();
     GetChildrenList()->SetSelectionCallback(&MenuItem::OnListSelectionCallback);
     GetChildrenList()->SetSelectedColor(GetChildrenList()->GetOverColor());
-    GetChildrenList()->SetOverColor(Color::LightGray.WithValue(0.9f));
+    GetChildrenList()->SetOverColor(Color::LightGray().WithValue(0.9f));
     GetChildrenList()->SetIdleColor(GetChildrenList()->GetOverColor());
 }
 
@@ -168,7 +168,7 @@ void MenuItem::AdjustToBeInsideScreen()
     }
     else
     {
-        Vector2 anchors = Vector2::Zero;
+        Vector2 anchors = Vector2::Zero();
         Vector2 pivotPos = thisListRT->GetPivotPosition();
         for (int axis = 0; axis < 2; ++axis)  // X and Y
         {
@@ -216,7 +216,7 @@ void MenuItem::Update()
         bool mouseOver = canvas->IsMouseOver(this, true);
         bool tintBg = mouseOver && !IsForcedShow();
 
-        Color topBgColor = Color::Zero;
+        Color topBgColor = Color::Zero();
         if (tintBg && mouseOver)
         {
             topBgColor = UITheme::GetOverColor();
@@ -227,7 +227,7 @@ void MenuItem::Update()
         }
         else
         {
-            topBgColor = Color::Zero;
+            topBgColor = Color::Zero();
         }
 
         p_topBg->SetTint(topBgColor);
@@ -371,11 +371,11 @@ void MenuItem::SetForceShow(bool forceShow)
         {
             if (IsForcedShow())
             {
-                GetText()->SetTextColor(Color::Black);
+                GetText()->SetTextColor(Color::Black());
             }
             else
             {
-                p_topBg->SetTint(Color::Zero);
+                p_topBg->SetTint(Color::Zero());
             }
         }
     }
@@ -388,8 +388,8 @@ void MenuItem::SetOverAndActionEnabled(bool enabled)
         m_overAndActionEnabled = enabled;
         if (GetItemType() == MenuItemType::NORMAL)
         {
-            GetText()->SetTextColor(IsOverAndActionEnabled() ? Color::Black
-                                                             : Color::DarkGray);
+            GetText()->SetTextColor(
+                IsOverAndActionEnabled() ? Color::Black() : Color::DarkGray());
         }
     }
 }

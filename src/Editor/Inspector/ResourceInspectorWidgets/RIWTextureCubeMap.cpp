@@ -114,7 +114,7 @@ void RIWTextureCubeMap::CheckValidity() const
 
     if (!topTex || !botTex || !leftTex || !rightTex || !frontTex || !backTex)
     {
-        p_warningLabel->GetText()->SetTextColor(Color::Red);
+        p_warningLabel->GetText()->SetTextColor(Color::Red());
         p_warningLabel->GetText()->SetContent(
             "Please set all images so that cubemap "
             "is fully configured. Until then, "
@@ -132,14 +132,14 @@ void RIWTextureCubeMap::CheckValidity() const
                           backTex.Get()->GetSize() == size;
         if (!allSizesCorrect)
         {
-            p_warningLabel->GetText()->SetTextColor(Color::Red);
+            p_warningLabel->GetText()->SetTextColor(Color::Red());
             p_warningLabel->GetText()->SetContent(
                 "All image sizes must be square "
                 "and all sides must have the same size.");
         }
         else
         {
-            p_warningLabel->GetText()->SetTextColor(Color::Black);
+            p_warningLabel->GetText()->SetTextColor(Color::Black());
             p_warningLabel->GetText()->SetContent(
                 "Cubemap correctly configured!");
         }
@@ -175,10 +175,11 @@ void RIWTextureCubeMap::UpdateInputsFromResource()
 
 Texture2D *RIWTextureCubeMap::GetIconTexture() const
 {
-    return GetTextureCubeMap() ? GetTextureCubeMap()
-                                     ->GetSideTexture(GL::CubeMapDir::FRONT)
-                                     .Get()
-                               : nullptr;
+    return GetTextureCubeMap()
+               ? GetTextureCubeMap()
+                     ->GetSideTexture(GL::CubeMapDir::FRONT)
+                     .Get()
+               : nullptr;
 }
 
 void RIWTextureCubeMap::OnValueChangedRIWResource(
@@ -186,9 +187,8 @@ void RIWTextureCubeMap::OnValueChangedRIWResource(
 {
     if (ee != p_textureCMPreviewer)
     {
-        auto Refresh = [this](UIInputFile *inputFile,
-                              TextureCubeMap *tcm,
-                              GL::CubeMapDir cmdir) {
+        auto Refresh = [this](
+            UIInputFile *inputFile, TextureCubeMap *tcm, GL::CubeMapDir cmdir) {
             if (inputFile->GetPath().IsFile())
             {
                 Image img;

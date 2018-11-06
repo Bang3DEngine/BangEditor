@@ -49,8 +49,8 @@ void RIWMesh::Init()
     SetTitle("Mesh");
 
     GameObject *meshPreviewGo = GameObjectFactory::CreateUIGameObject();
-    meshPreviewGo->GetRectTransform()->SetAnchors(Vector2::Zero);
-    meshPreviewGo->GetRectTransform()->SetPivotPosition(Vector2::Zero);
+    meshPreviewGo->GetRectTransform()->SetAnchors(Vector2::Zero());
+    meshPreviewGo->GetRectTransform()->SetPivotPosition(Vector2::Zero());
 
     p_meshPreviewViewer = new PreviewViewer();
 

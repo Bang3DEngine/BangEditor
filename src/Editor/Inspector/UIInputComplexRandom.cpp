@@ -22,7 +22,7 @@ UIInputComplexRandom::UIInputComplexRandom()
     hl->SetSpacing(5);
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetFlexibleSize(Vector2::One);
+    le->SetFlexibleSize(Vector2::One());
 
     p_minRangeInputNumber = GameObjectFactory::CreateUIInputNumber();
     p_maxRangeInputNumber = GameObjectFactory::CreateUIInputNumber();

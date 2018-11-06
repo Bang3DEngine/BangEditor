@@ -130,12 +130,16 @@ void RectTransformAnchorSelectionGizmo::Render(RenderPass renderPass,
     Color color;
     switch (GetSelectionState())
     {
-        case SelectionGizmo::SelectionState::IDLE: color = Color::White; break;
+        case SelectionGizmo::SelectionState::IDLE:
+            color = Color::White();
+            break;
 
-        case SelectionGizmo::SelectionState::OVER: color = Color::Orange; break;
+        case SelectionGizmo::SelectionState::OVER:
+            color = Color::Orange();
+            break;
 
         case SelectionGizmo::SelectionState::GRABBED:
-            color = Color::Yellow;
+            color = Color::Yellow();
             break;
     }
     p_anchorRenderer->GetMaterial()->SetAlbedoColor(color);
@@ -197,7 +201,7 @@ void RectTransformAnchorSelectionGizmo::UpdateBasedOnAnchorSide()
     }
 
     Vector2 vpAnchorNDC = localAnchor;
-    Quaternion parentRot = Quaternion::Identity;
+    Quaternion parentRot = Quaternion::Identity();
     GameObject *parent = refGo->GetParent();
     RectTransform *parentRT = parent ? parent->GetRectTransform() : nullptr;
     if (parentRT)
@@ -227,7 +231,7 @@ void RectTransformAnchorSelectionGizmo::UpdateBasedOnAnchorSide()
             localAnchorRot += 180.0f;
         }
         Quaternion anchorRot = Quaternion::AngleAxis(
-            Math::DegToRad(localAnchorRot), Vector3::Forward);
+            Math::DegToRad(localAnchorRot), Vector3::Forward());
         anchorRot = anchorRot * parentRot;
         rt->SetLocalRotation(anchorRot);
     }

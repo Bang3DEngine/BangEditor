@@ -146,7 +146,7 @@ void EditorScene::Init()
     cam->AddRenderPass(RenderPass::OVERLAY);
 #endif
 
-    cam->SetClearColor(Color::White.WithValue(0.8f));
+    cam->SetClearColor(Color::White().WithValue(0.8f));
     cam->SetClearMode(CameraClearMode::COLOR);
     cam->SetRenderFlags(RenderFlags(RenderFlag::NONE)
                             .SetOn(RenderFlag::CLEAR_COLOR)

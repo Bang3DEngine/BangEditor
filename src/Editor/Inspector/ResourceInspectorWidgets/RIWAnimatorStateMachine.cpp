@@ -47,7 +47,7 @@ void RIWAnimatorStateMachine::Init()
 
     UILayoutElement *buttonLE =
         p_openInEditorButton->GetGameObject()->AddComponent<UILayoutElement>();
-    buttonLE->SetFlexibleSize(Vector2::One);
+    buttonLE->SetFlexibleSize(Vector2::One());
     buttonLE->SetLayoutPriority(3);
 
     AddWidget(p_openInEditorButton->GetGameObject());

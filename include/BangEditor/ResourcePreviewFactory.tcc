@@ -60,7 +60,7 @@ void ResourcePreviewFactory<T>::CreatePreviewScene()
 
     GameObject *camGo = GameObjectFactory::CreateGameObject();
     camGo->GetTransform()->SetPosition(Vector3(1.3f));
-    camGo->GetTransform()->LookAt(Vector3::Zero);
+    camGo->GetTransform()->LookAt(Vector3::Zero());
     camGo->SetParent(scene);
 
     Camera *previewCamera = camGo->AddComponent<Camera>();
@@ -161,8 +161,8 @@ void ResourcePreviewFactory<T>::FillTextureWithPreview(
     camDist *= params.camDistanceMultiplier;
     const Vector2 &angles = params.camOrbitAnglesDegs;
     Vector3 camDir =
-        (Quaternion::AngleAxis(Math::DegToRad(-angles.x), Vector3::Up) *
-         Quaternion::AngleAxis(Math::DegToRad(angles.y), Vector3::Right) *
+        (Quaternion::AngleAxis(Math::DegToRad(-angles.x), Vector3::Up()) *
+         Quaternion::AngleAxis(Math::DegToRad(angles.y), Vector3::Right()) *
          Vector3(0, 0, 1))
             .Normalized();
     camTR->SetPosition(goSphere.GetCenter() + camDir * camDist);

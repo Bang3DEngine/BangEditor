@@ -53,7 +53,7 @@ protected:
     void OnValueChanged(EventEmitter<IEventsValueChanged> *object) override;
 
 private:
-    Color m_color = Color::Zero;
+    Color m_color = Color::Zero();
     ColorPickerReporter *m_colorPickerReporter = nullptr;
 
     UIImageRenderer *p_colorImage = nullptr;

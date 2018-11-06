@@ -124,7 +124,7 @@ void GIWAESConnectionLine::InitInnerWidgets()
     p_notificationLabel->GetText()->SetContent(
         "Create at least one variable to "
         "add transition conditions");
-    p_notificationLabel->GetText()->SetTextColor(Color::Red);
+    p_notificationLabel->GetText()->SetTextColor(Color::Red());
 
     p_immediateTransitionInput = GameObjectFactory::CreateUICheckBox();
     p_immediateTransitionInput
@@ -258,7 +258,7 @@ void GIWAESConnectionLine::UpdateFromReference()
             removeButton->SetIcon(EditorTextureFactory::GetLessIcon(),
                                   Vector2i(12));
             removeButton->GetDirLayout()->SetPaddings(5, 0, 5, 0);
-            removeButton->GetIcon()->SetTint(Color::Red);
+            removeButton->GetIcon()->SetTint(Color::Red());
             removeButton->AddClickedCallback([this, smConn]() {
                 GetSMNodeFrom()->RemoveTransition(smConn);
             });

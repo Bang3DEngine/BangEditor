@@ -183,7 +183,7 @@ void ComponentsGizmos::RenderBoxColliderGizmo(BoxCollider *bc,
         RenderFactory::Parameters params;
         params.thickness = 2.0f;
         params.wireframe = true;
-        params.color = Color::Green;
+        params.color = Color::Green();
         params.rotation = tr->GetRotation();
         params.cullFace = GL::CullFaceExt::BACK;
         Vector3 centerDisplacement = params.rotation * bc->GetCenter();
@@ -208,7 +208,7 @@ void ComponentsGizmos::RenderCapsuleColliderGizmo(CapsuleCollider *cc,
         RenderFactory::Parameters params;
         params.thickness = 2.0f;
         params.wireframe = true;
-        params.color = Color::Green;
+        params.color = Color::Green();
         params.cullFace = GL::CullFaceExt::BACK;
 
         params.position = tr->GetPosition();
@@ -220,14 +220,14 @@ void ComponentsGizmos::RenderCapsuleColliderGizmo(CapsuleCollider *cc,
                 params.rotation =
                     params.rotation *
                     Quaternion::AngleAxis(SCAST<float>(Math::Pi) * 0.5f,
-                                          Vector3::Forward);
+                                          Vector3::Forward());
                 break;
 
             case Axis3D::Z:
                 params.rotation =
                     params.rotation *
                     Quaternion::AngleAxis(SCAST<float>(Math::Pi) * 0.5f,
-                                          Vector3::Right);
+                                          Vector3::Right());
                 break;
 
             default: break;
@@ -257,7 +257,7 @@ void ComponentsGizmos::RenderSphereColliderGizmo(SphereCollider *sc,
         RenderFactory::Parameters params;
         params.thickness = 2.0f;
         params.wireframe = true;
-        params.color = Color::Green;
+        params.color = Color::Green();
         params.rotation = tr->GetRotation();
         params.cullFace = GL::CullFaceExt::BACK;
         Vector3 centerDisplacement = params.rotation * sc->GetCenter();
@@ -304,7 +304,7 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam, bool isBeingSelected)
         gb->SetSceneDepthStencil();
 
         RenderFactory::Parameters params;
-        params.color = Color::Green;
+        params.color = Color::Green();
         params.receivesLighting = false;
 
         if (cam->GetProjectionMode() == CameraProjectionMode::PERSPECTIVE)
@@ -419,7 +419,7 @@ void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
         reflProbe->GetGameObject()->GetTransform()->GetPosition();
 
     RenderFactory::Parameters params;
-    params.color = Color::Green.WithValue(0.8f);
+    params.color = Color::Green().WithValue(0.8f);
     params.scale = Vector3(0.15f);
     params.receivesLighting = false;
     params.position = reflProbeCenter;
@@ -434,7 +434,7 @@ void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
 
         Vector3 reflProbSize = reflProbe->GetSize();
 
-        params.scale = Vector3::One;
+        params.scale = Vector3::One();
         params.cullFace = GL::CullFaceExt::NONE;
         AABox reflProbeBox = AABox(reflProbeCenter + reflProbSize * 0.5f,
                                    reflProbeCenter - reflProbSize * 0.5f);
@@ -443,14 +443,14 @@ void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
         {
             params.thickness = 0.1f;
             params.wireframe = false;
-            params.position = Vector3::Zero;
+            params.position = Vector3::Zero();
             params.color = params.color.WithAlpha(0.25f);
             RenderFactory::RenderBox(reflProbeBox, params);
         }
 
         params.wireframe = true;
         params.thickness = 3.0f;
-        params.position = Vector3::Zero;
+        params.position = Vector3::Zero();
         params.color = params.color.WithAlpha(1.0f);
         RenderFactory::RenderWireframeBox(reflProbeBox, params);
 
@@ -478,7 +478,7 @@ void ComponentsGizmos::RenderParticleSystemGizmo(ParticleSystem *particleSystem,
     }
     else
     {
-        params.color = Color::Green;
+        params.color = Color::Green();
 
         GBuffer *gb = GEngine::GetActiveGBuffer();
         gb->PushDepthStencilTexture();
@@ -507,12 +507,12 @@ void ComponentsGizmos::RenderParticleSystemGizmo(ParticleSystem *particleSystem,
                     particleSystem->GetGenerationShapeConeFOVRads() * 0.5f;
                 params.position = center + rot * Vector3(0, 0, -1.0f);
                 params.rotation = tr->GetRotation();
-                params.scale = Vector3::One;
+                params.scale = Vector3::One();
                 float r = 2 * Math::Tan(hFovR);
                 RenderFactory::RenderWireframeCircle(r, params, 32, false);
 
-                params.position = Vector3::Zero;
-                params.rotation = Quaternion::Identity;
+                params.position = Vector3::Zero();
+                params.rotation = Quaternion::Identity();
                 RenderFactory::RenderLine(
                     center, center + rot * Vector3(0, r, -1), params);
                 RenderFactory::RenderLine(
@@ -550,7 +550,7 @@ void ComponentsGizmos::RenderAudioSourceGizmo(AudioSource *audioSource,
                                               bool isBeingSelected)
 {
     RenderFactory::Parameters params;
-    params.color = Color::White;
+    params.color = Color::White();
     params.receivesLighting = false;
     params.position =
         audioSource->GetGameObject()->GetTransform()->GetPosition();

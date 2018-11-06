@@ -163,7 +163,7 @@ GameObject *SelectionFramebuffer::GetGameObjectInViewportPoint(
     Color colorUnderMouse = ReadColor(vpPoint.x, vpPoint.y, AttColor);
     IdType id = MapColorToId(colorUnderMouse);
 
-    if (colorUnderMouse != Color::Zero && m_id_To_GameObject.ContainsKey(id))
+    if (colorUnderMouse != Color::Zero() && m_id_To_GameObject.ContainsKey(id))
     {
         return m_id_To_GameObject[id];
     }

@@ -44,7 +44,7 @@ Texture2D *ResourceInspectorWidget::GetIconTexture() const
 
 Color ResourceInspectorWidget::GetIconTint() const
 {
-    return Color::White;
+    return Color::White();
 }
 
 void ResourceInspectorWidget::UpdateIcon()

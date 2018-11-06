@@ -99,7 +99,7 @@ MenuBar::MenuBar()
     p_focusable = AddComponent<UIFocusable>();
 
     UIImageRenderer *bg = AddComponent<UIImageRenderer>();
-    bg->SetTint(Color::White.WithValue(0.85f));
+    bg->SetTint(Color::White().WithValue(0.85f));
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinHeight(20);

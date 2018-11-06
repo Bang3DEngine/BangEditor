@@ -135,7 +135,7 @@ Color ComponentInspectorWidget::GetComponentIconTint() const
     {
         return EditorTextureFactory::GetComponentIconTint(GetComponent());
     }
-    return Color::White;
+    return Color::White();
 }
 
 void ComponentInspectorWidget::PushCurrentStateToUndoRedo(

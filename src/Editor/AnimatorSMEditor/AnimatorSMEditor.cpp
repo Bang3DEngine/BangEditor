@@ -42,7 +42,7 @@ AnimatorSMEditor::AnimatorSMEditor()
 
     AddComponent<UIVerticalLayout>();
     UILayoutElement *mainLE = AddComponent<UILayoutElement>();
-    mainLE->SetFlexibleSize(Vector2::One);
+    mainLE->SetFlexibleSize(Vector2::One());
 
     GameObject *toolbar = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *toolbarHL = toolbar->AddComponent<UIHorizontalLayout>();
@@ -54,14 +54,14 @@ AnimatorSMEditor::AnimatorSMEditor()
 
     p_centerSceneButton = GameObjectFactory::CreateUIButton(
         "", EditorTextureFactory::GetEyeIcon());
-    p_centerSceneButton->GetIcon()->SetTint(Color::DarkGray);
+    p_centerSceneButton->GetIcon()->SetTint(Color::DarkGray());
     p_centerSceneButton->AddClickedCallback(
         [this]() { p_animatorEditorScene->CenterScene(); });
     p_centerSceneButton->GetGameObject()->SetParent(toolbar);
 
     GameObject *botHLGo = GameObjectFactory::CreateUIGameObject();
     UILayoutElement *botHLLE = botHLGo->AddComponent<UILayoutElement>();
-    botHLLE->SetFlexibleSize(Vector2::One);
+    botHLLE->SetFlexibleSize(Vector2::One());
 
     UIHorizontalLayout *botHL = botHLGo->AddComponent<UIHorizontalLayout>();
     botHL->SetChildrenVerticalStretch(Stretch::FULL);
@@ -90,7 +90,7 @@ AnimatorSMEditor::AnimatorSMEditor()
 
         UILabel *varsLabel = GameObjectFactory::CreateUILabel();
         varsLabel->GetText()->SetContent("Variables");
-        varsLabel->GetText()->SetTextColor(Color::Black);
+        varsLabel->GetText()->SetTextColor(Color::Black());
         varsLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::LEFT);
         varsLabel->GetGameObject()->SetParent(p_sidebar);
         varsLabel->GetGameObject()
@@ -128,7 +128,7 @@ AnimatorSMEditor::AnimatorSMEditor()
 
         UILabel *layersLabel = GameObjectFactory::CreateUILabel();
         layersLabel->GetText()->SetContent("Layers");
-        layersLabel->GetText()->SetTextColor(Color::Black);
+        layersLabel->GetText()->SetTextColor(Color::Black());
         layersLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::LEFT);
         layersLabel->GetGameObject()->SetParent(p_sidebar);
         layersLabel->GetGameObject()
@@ -171,7 +171,7 @@ AnimatorSMEditor::AnimatorSMEditor()
 
         UIImageRenderer *inspectorBG =
             p_sidebar->AddComponent<UIImageRenderer>();
-        inspectorBG->SetTint(Color::LightGray);
+        inspectorBG->SetTint(Color::LightGray());
     }
 
     toolbar->SetParent(this);

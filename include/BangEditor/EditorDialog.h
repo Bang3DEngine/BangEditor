@@ -68,7 +68,7 @@ public:
     bool IsPicking() const;
 
 private:
-    Color m_pickedColor = Color::White;
+    Color m_pickedColor = Color::White();
     bool m_isPicking = false;
     bool m_hasFinished = true;
 

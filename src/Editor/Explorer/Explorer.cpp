@@ -75,7 +75,7 @@ Explorer::Explorer()
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinSize(Vector2i(100));
-    le->SetFlexibleSize(Vector2::One);
+    le->SetFlexibleSize(Vector2::One());
 
     GameObjectFactory::CreateUIGameObjectInto(this);
 
@@ -99,11 +99,11 @@ Explorer::Explorer()
     // Scroll Panel
     p_scrollPanel = GameObjectFactory::CreateUIScrollPanel();
     p_scrollPanel->GetScrollArea()->GetBackground()->SetTint(
-        Color::White.WithValue(0.7f));
+        Color::White().WithValue(0.7f));
 
     GameObject *scrollPanelGo = p_scrollPanel->GetGameObject();
     UILayoutElement *spLE = scrollPanelGo->AddComponent<UILayoutElement>();
-    spLE->SetFlexibleSize(Vector2::One);
+    spLE->SetFlexibleSize(Vector2::One());
 
     // Back button
     Texture2D *backButtonTex = EditorTextureFactory::GetBackArrowIcon();
@@ -146,7 +146,7 @@ Explorer::Explorer()
 
     UIImageRenderer *eyeImg = GameObjectFactory::CreateUIImage();
     eyeImg->SetImageTexture(EditorTextureFactory::GetEyeIcon());
-    eyeImg->SetTint(Color::Black);
+    eyeImg->SetTint(Color::Black());
     UILayoutElement *eyeImgLE =
         eyeImg->GetGameObject()->AddComponent<UILayoutElement>();
     eyeImgLE->SetPreferredSize(Vector2i(20, ToolBarHeight));
@@ -274,7 +274,7 @@ void Explorer::SetCurrentPath(const Path &path)
         {
             AddItem(expItem);
         }
-        p_scrollPanel->SetScrolling(Vector2i::Zero);
+        p_scrollPanel->SetScrolling(Vector2i::Zero());
     }
 }
 
@@ -392,22 +392,21 @@ void Explorer::AddItem(ExplorerItem *explorerItem)
 
     explorerItem->SetParent(p_itemsContainer);
 
-    explorerItem->GetFocusable()->AddEventCallback(
-        [this, explorerItem](UIFocusable *focusable, const UIEvent &event) {
-            if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
-            {
-                bool travelToDirectory =
-                    (explorerItem->GetPathString() != "..");
-                SelectPath(explorerItem->GetPath(), true, travelToDirectory);
-                return UIEventResult::INTERCEPT;
-            }
-            else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
-            {
-                OnItemDoubleClicked(focusable);
-                return UIEventResult::INTERCEPT;
-            }
-            return UIEventResult::IGNORE;
-        });
+    explorerItem->GetFocusable()->AddEventCallback([this, explorerItem](
+        UIFocusable *focusable, const UIEvent &event) {
+        if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
+        {
+            bool travelToDirectory = (explorerItem->GetPathString() != "..");
+            SelectPath(explorerItem->GetPath(), true, travelToDirectory);
+            return UIEventResult::INTERCEPT;
+        }
+        else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
+        {
+            OnItemDoubleClicked(focusable);
+            return UIEventResult::INTERCEPT;
+        }
+        return UIEventResult::IGNORE;
+    });
     explorerItem->EventEmitter<IEventsExplorerItem>::RegisterListener(this);
 
     p_items.PushBack(explorerItem);

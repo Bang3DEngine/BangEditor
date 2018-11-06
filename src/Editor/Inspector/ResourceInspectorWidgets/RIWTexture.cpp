@@ -114,7 +114,7 @@ Texture2D *RIWTexture::GetTexture() const
 void RIWTexture::UpdateInputsFromResource()
 {
     p_textureImageRend->SetImageTexture(GetTexture());
-    p_textureImageRend->SetTint(Color::White);
+    p_textureImageRend->SetTint(Color::White());
     p_imageAspectRatioFitter->SetAspectRatio(GetTexture()->GetSize());
     p_imageAspectRatioFitter->Invalidate();
 

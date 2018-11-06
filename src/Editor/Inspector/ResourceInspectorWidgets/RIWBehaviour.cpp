@@ -40,7 +40,7 @@ void RIWBehaviour::Init()
     p_codeText = codeTextGo->AddComponent<UITextRenderer>();
     p_codeText->SetTextSize(12);
     p_codeText->SetWrapping(false);
-    p_codeText->SetTextColor(Color::Black);
+    p_codeText->SetTextColor(Color::Black());
     p_codeText->SetVerticalAlign(VerticalAlignment::TOP);
     p_codeText->SetHorizontalAlign(HorizontalAlignment::LEFT);
 
@@ -65,7 +65,7 @@ void RIWBehaviour::Init()
     codeScrollPanel->GetScrollArea()->SetContainedGameObject(codeContainer);
     GameObject *scrollPanelGo = codeScrollPanel->GetGameObject();
     UILayoutElement *spLE = scrollPanelGo->AddComponent<UILayoutElement>();
-    spLE->SetFlexibleSize(Vector2::One);
+    spLE->SetFlexibleSize(Vector2::One());
 
     p_openButton = GameObjectFactory::CreateUIButton("Open in editor");
     p_openButton->AddClickedCallback(

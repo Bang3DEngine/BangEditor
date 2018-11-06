@@ -85,7 +85,7 @@ private:
     uint m_framesAfterNewAnimatorSMSetAndVisible = 0;
 
     float m_zoomScale = 1.0f;
-    Vector2 m_panning = Vector2::Zero;
+    Vector2 m_panning = Vector2::Zero();
 
     void SetZoomScale(float zoomScale, bool centerOnMouse);
     void UpdatePanningAndZoomOnTransforms();

@@ -43,7 +43,7 @@ ASMLayerInput::ASMLayerInput()
     contentVL->SetPaddings(5);
 
     p_focusBg = contentGo->AddComponent<UIImageRenderer>();
-    p_focusBg->SetTint(Color::Zero);
+    p_focusBg->SetTint(Color::Zero());
 
     UILayoutElement *contentLE = contentGo->AddComponent<UILayoutElement>();
     contentLE->SetFlexibleSize(Vector2(1.0f));
@@ -153,7 +153,7 @@ void ASMLayerInput::Select()
 void ASMLayerInput::UnSelect()
 {
     m_selected = false;
-    p_focusBg->SetTint(Color::Zero);
+    p_focusBg->SetTint(Color::Zero());
 }
 
 bool ASMLayerInput::IsSelected() const

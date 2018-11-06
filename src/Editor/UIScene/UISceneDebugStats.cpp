@@ -17,11 +17,11 @@ UISceneDebugStats::UISceneDebugStats()
     GameObjectFactory::CreateUIGameObjectInto(this);
 
     RectTransform *rt = GetRectTransform();
-    rt->SetAnchors(Vector2::One);
-    rt->SetMargins(Vector2i(-80, -30), Vector2i::Zero);
+    rt->SetAnchors(Vector2::One());
+    rt->SetMargins(Vector2i(-80, -30), Vector2i::Zero());
 
     UIImageRenderer *bg = AddComponent<UIImageRenderer>();
-    bg->SetTint(Color::White.WithAlpha(0.65f));
+    bg->SetTint(Color::White().WithAlpha(0.65f));
 
     GameObject *debugStatsTextGo = GameObjectFactory::CreateUIGameObject();
     debugStatsTextGo->GetRectTransform()->SetMargins(8, 8, 0, 0);
@@ -32,7 +32,7 @@ UISceneDebugStats::UISceneDebugStats()
     p_debugStatsText = debugStatsTextGo->AddComponent<UITextRenderer>();
     p_debugStatsText->SetHorizontalAlign(HorizontalAlignment::LEFT);
     p_debugStatsText->SetVerticalAlign(VerticalAlignment::TOP);
-    p_debugStatsText->SetTextColor(Color::Black);
+    p_debugStatsText->SetTextColor(Color::Black());
     p_debugStatsText->SetWrapping(true);
     p_debugStatsText->SetTextSize(11);
 

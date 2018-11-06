@@ -201,10 +201,10 @@ void ScaleGizmoAxis::UpdatePoints(float localAxisLength)
     Vector3 axisFwd = GetAxisVectorLocal() * localAxisLength;
     if (GetAxis() == Axis3DExt::XYZ)
     {
-        axisFwd = Vector3::Zero;
+        axisFwd = Vector3::Zero();
     }
 
-    p_lineRenderer->SetPoints({Vector3::Zero, axisFwd});
+    p_lineRenderer->SetPoints({Vector3::Zero(), axisFwd});
     p_arrowCap->GetTransform()->SetLocalPosition(axisFwd);
 
     float baseScale = 0.2f;

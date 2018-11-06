@@ -46,7 +46,7 @@ RotateGizmo::RotateGizmo()
     p_sphereBoundsRenderer = p_sphereBoundsGo->AddComponent<LineRenderer>();
     p_sphereBoundsRenderer->SetMaterial(
         MaterialFactory::GetGizmosUnLightedOverlay().Get());
-    p_sphereBoundsRenderer->GetMaterial()->SetAlbedoColor(Color::Black);
+    p_sphereBoundsRenderer->GetMaterial()->SetAlbedoColor(Color::Black());
     CreateSphereBoundsPoints();
 
     p_sphereGo->SetParent(this);

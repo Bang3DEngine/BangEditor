@@ -97,7 +97,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
 {
     GameObjectFactory::CreateUISceneInto(scene);
 
-    scene->GetCamera()->SetClearColor(Color::White.WithValue(0.7f));
+    scene->GetCamera()->SetClearColor(Color::White().WithValue(0.7f));
 
     UIVerticalLayout *vl = scene->AddComponent<UIVerticalLayout>();
     vl->SetPaddings(5);
@@ -107,12 +107,13 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
         [scene, &extensions](const Array<Path> &assetPaths) -> GameObject * {
         UIScrollPanel *gridScrollPanel =
             GameObjectFactory::CreateUIScrollPanel();
-        gridScrollPanel->GetScrollArea()->GetBackground()->SetTint(Color::Zero);
+        gridScrollPanel->GetScrollArea()->GetBackground()->SetTint(
+            Color::Zero());
 
         GameObject *gridScrollPanelGo = gridScrollPanel->GetGameObject();
         UILayoutElement *spLE =
             gridScrollPanelGo->AddComponent<UILayoutElement>();
-        spLE->SetFlexibleSize(Vector2::One);
+        spLE->SetFlexibleSize(Vector2::One());
 
         GameObject *gridLayoutGo = GameObjectFactory::CreateUIGameObject();
 
@@ -128,7 +129,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
         gridLayout->SetSpacing(10);
 
         UILayoutElement *gridLE = gridLayoutGo->AddComponent<UILayoutElement>();
-        gridLE->SetFlexibleSize(Vector2::One);
+        gridLE->SetFlexibleSize(Vector2::One());
 
         gridScrollPanelGo->SetParent(scene);
         gridScrollPanel->GetScrollArea()->SetContainedGameObject(gridLayoutGo);
@@ -151,7 +152,8 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
                 Path path = expItem->GetPath();
                 if (path.IsEmpty() || path.HasExtension(extensions))
                 {
-                    expItem->GetLabel()->GetText()->SetTextColor(Color::Black);
+                    expItem->GetLabel()->GetText()->SetTextColor(
+                        Color::Black());
 
                     if (path.IsEmpty())
                     {
@@ -221,7 +223,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
 
     UILayoutElement *tabContainerLE =
         tabContainer->AddComponent<UILayoutElement>();
-    tabContainerLE->SetFlexibleSize(Vector2::One);
+    tabContainerLE->SetFlexibleSize(Vector2::One());
 
     tabContainer->AddTab("Project", projectAssetsGo);
     tabContainer->AddTab("Engine", engineAssetsGo);
@@ -261,7 +263,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(
     ColorPickerReporter *colorPickerReporter)
 {
     GameObjectFactory::CreateUISceneInto(scene);
-    scene->GetCamera()->SetClearColor(Color::White.WithValue(0.7f));
+    scene->GetCamera()->SetClearColor(Color::White().WithValue(0.7f));
 
     UIVerticalLayout *mainVL = scene->AddComponent<UIVerticalLayout>();
     mainVL->SetPaddings(40);
@@ -277,7 +279,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(
     UIVerticalLayout *colorVL = colorVLGo->AddComponent<UIVerticalLayout>();
     UILayoutElement *colorVLLE = colorVLGo->AddComponent<UILayoutElement>();
     colorVLLE->SetPreferredSize(Vector2i(250, 350));
-    colorVLLE->SetFlexibleSize(Vector2::Zero);
+    colorVLLE->SetFlexibleSize(Vector2::Zero());
     colorVL->SetPaddingBot(5);
     colorVL->SetSpacing(10);
     colorVLGo->SetParent(mainHLGo);
@@ -288,7 +290,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(
     colorPanelFocusable->SetCursorType(Cursor::Type::HAND);
     UILayoutElement *colorPanelImgLE =
         colorPanelImg->GetGameObject()->AddComponent<UILayoutElement>();
-    colorPanelImgLE->SetFlexibleSize(Vector2::One);
+    colorPanelImgLE->SetFlexibleSize(Vector2::One());
     colorPanelImg->GetGameObject()->SetParent(colorVLGo);
 
     Path edShadersPath = EditorPaths::GetEditorAssetsDir().Append("Shaders");
@@ -313,7 +315,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(
     UIImageRenderer *hueSliderGuide = hueSlider->GetGuideRenderer();
     hueSliderGuide->GetMaterial()->SetShaderProgram(hueImgSP.Get());
     hueSliderGuide->GetGameObject()->GetRectTransform()->SetAnchors(
-        -Vector2::One, Vector2::One);
+        -Vector2::One(), Vector2::One());
 
     GameObject *controlsVLGo = GameObjectFactory::CreateUIGameObject();
     UIVerticalLayout *controlsVL =
@@ -346,10 +348,10 @@ Scene *EditorDialog::CreateGetColorSceneInto(
 
         return slider;
     };
-    UISlider *sliderR = CreateRGBSlider("R: ", Color::Red);
-    UISlider *sliderG = CreateRGBSlider("G: ", Color::Green.WithValue(0.3f));
-    UISlider *sliderB = CreateRGBSlider("B: ", Color::Blue);
-    UISlider *sliderA = CreateRGBSlider("A: ", Color::Black);
+    UISlider *sliderR = CreateRGBSlider("R: ", Color::Red());
+    UISlider *sliderG = CreateRGBSlider("G: ", Color::Green().WithValue(0.3f));
+    UISlider *sliderB = CreateRGBSlider("B: ", Color::Blue());
+    UISlider *sliderA = CreateRGBSlider("A: ", Color::Black());
     sliderR->SetValue(initialColor.r);
     sliderG->SetValue(initialColor.g);
     sliderB->SetValue(initialColor.b);
@@ -367,7 +369,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(
         ->GetComponent<UILayoutElement>()
         ->SetFlexibleHeight(0.0f);
     resultLabel->GetText()->SetContent("Result:");
-    resultLabel->GetText()->SetTextColor(Color::Black);
+    resultLabel->GetText()->SetTextColor(Color::Black());
     resultLabel->GetText()->SetHorizontalAlign(HorizontalAlignment::LEFT);
     resultLabel->GetGameObject()->SetParent(controlsVLGo);
 
@@ -402,7 +404,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(
             p_img->SetImageTexture(TextureFactory::GetCircleIcon());
             p_img->GetGameObject()->GetRectTransform()->SetMargins(-5);
             p_img->GetGameObject()->GetRectTransform()->SetAnchors(
-                Vector2::Zero);
+                Vector2::Zero());
         }
 
         Vector2 GetPositionRelativeToColorPanel() const
@@ -433,7 +435,7 @@ Scene *EditorDialog::CreateGetColorSceneInto(
                 Vector2 mouseCoordsAnchor =
                     parentRT->FromViewportPointToLocalPointNDC(mouseCoordsVP);
                 mouseCoordsAnchor = Vector2::Clamp(
-                    mouseCoordsAnchor, -Vector2::One, Vector2::One);
+                    mouseCoordsAnchor, -Vector2::One(), Vector2::One());
                 p_img->GetGameObject()->GetRectTransform()->SetAnchors(
                     mouseCoordsAnchor);
                 EventEmitter<IEventsValueChanged>::PropagateToListeners(

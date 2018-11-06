@@ -54,7 +54,7 @@ void GIWAESNode::InitInnerWidgets()
         ->SetEnabled(false);
     GetInspectorWidgetTitle()->GetIcon()->SetImageTexture(
         EditorTextureFactory::GetAnimatorSMIcon());
-    GetInspectorWidgetTitle()->GetIcon()->SetTint(Color::White);
+    GetInspectorWidgetTitle()->GetIcon()->SetTint(Color::White());
 
     p_nameInput = GameObjectFactory::CreateUIInputText();
     p_nameInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);

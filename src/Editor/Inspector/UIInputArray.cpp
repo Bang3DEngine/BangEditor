@@ -42,7 +42,7 @@ UIInputArray::UIInputArray()
 
     UIButton *addButton = GameObjectFactory::CreateUIButton(
         "", EditorTextureFactory::GetAddIcon());
-    addButton->GetIcon()->SetTint(Color::Green.WithValue(0.75f));
+    addButton->GetIcon()->SetTint(Color::Green().WithValue(0.75f));
     addButton->GetGameObject()->SetParent(m_addNewRowButtonRow);
     addButton->AddClickedCallback([this]() {
         ASSERT(m_createNewRowFunction);

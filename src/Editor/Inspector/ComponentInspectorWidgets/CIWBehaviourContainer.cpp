@@ -116,10 +116,10 @@ void CIWBehaviourContainer::UpdateFromReference()
         {
             String labelStr = label->GetText()->GetContent();
             bool isModified = initializationModificationMeta.Contains(labelStr);
-            Color labelColor = Color::Black;
+            Color labelColor = Color::Black();
             if (initMeta.Contains(labelStr))
             {
-                labelColor = (isModified ? Color::Black : Color::Blue);
+                labelColor = (isModified ? Color::Black() : Color::Blue());
             }
             label->GetText()->SetTextColor(labelColor);
         }

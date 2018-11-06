@@ -132,12 +132,14 @@ void RectTransformCornerSelectionGizmo::Render(RenderPass renderPass,
     Color color;
     switch (GetSelectionState())
     {
-        case SelectionGizmo::SelectionState::IDLE: color = Color::Blue; break;
+        case SelectionGizmo::SelectionState::IDLE: color = Color::Blue(); break;
 
-        case SelectionGizmo::SelectionState::OVER: color = Color::Orange; break;
+        case SelectionGizmo::SelectionState::OVER:
+            color = Color::Orange();
+            break;
 
         case SelectionGizmo::SelectionState::GRABBED:
-            color = Color::Yellow;
+            color = Color::Yellow();
             break;
     }
     p_cornerRenderer->GetMaterial()->SetAlbedoColor(color);
@@ -183,7 +185,7 @@ void RectTransformCornerSelectionGizmo::UpdateBasedOnCornerSide()
     Vector2 centerNDC(
         GL::FromViewportPointToViewportPointNDC(refRect.GetCenter()));
 
-    Vector2 cornerAnchor = Vector2::Zero;
+    Vector2 cornerAnchor = Vector2::Zero();
     switch (m_cornerSide)
     {
         case CornerSide::LEFT_BOT:

@@ -39,7 +39,7 @@ void InspectorWidget::Init()
     // p_bgRenderer->SetImageTexture(
     // TextureFactory::Get9SliceRoundRectTexture().Get() );
     // p_bgRenderer->SetMode(UIImageRenderer::Mode::SLICE_9);
-    p_bgRenderer->SetTint(Color::Zero);
+    p_bgRenderer->SetTint(Color::Zero());
 
     GameObjectFactory::AddInnerBorder(this);
 
@@ -175,7 +175,7 @@ void InspectorWidget::AddWidgetInternal(const String &labelContent,
         UILayoutElement *widgetContLE =
             widgetContainer->AddComponent<UILayoutElement>();
         widgetContLE->SetPreferredHeight(height);
-        widgetContLE->SetFlexibleSize(Vector2::One);
+        widgetContLE->SetFlexibleSize(Vector2::One());
         widgetContLE->SetLayoutPriority(1);
     }
 
@@ -287,15 +287,15 @@ InspectorWidgetTitle::InspectorWidgetTitle()
     UIImageRenderer *bg = AddComponent<UIImageRenderer>();
     bg->SetImageTexture(TextureFactory::GetButtonIdle());
     bg->SetMode(UIImageRenderer::Mode::SLICE_9_INV_UVY);
-    bg->SetTint(Color::White.WithValue(1.1f));
+    bg->SetTint(Color::White().WithValue(1.1f));
 
     GameObjectFactory::AddInnerBorder(this);
 
-    p_icon = GameObjectFactory::CreateUIImage(Color::White);
+    p_icon = GameObjectFactory::CreateUIImage(Color::White());
     GameObject *iconGo = p_icon->GetGameObject();
     UILayoutElement *iconLE = iconGo->AddComponent<UILayoutElement>();
     iconLE->SetMinSize(Vector2i(16));
-    p_icon->SetTint(Color::DarkGray);
+    p_icon->SetTint(Color::DarkGray());
 
     GameObject *titleTextGo = GameObjectFactory::CreateUIGameObject();
     UITextRenderer *titleText = titleTextGo->AddComponent<UITextRenderer>();

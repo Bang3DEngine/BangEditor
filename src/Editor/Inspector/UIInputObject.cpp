@@ -27,7 +27,7 @@ UIInputObject::UIInputObject()
     p_objectInputText = GameObjectFactory::CreateUIInputText();
     p_objectInputText->SetBlocked(true);
     p_objectInputText->GetText()->SetTextSize(12);
-    p_objectInputText->GetBackground()->SetTint(Color::White);
+    p_objectInputText->GetBackground()->SetTint(Color::White());
     UILayoutElement *objectInputTextLE =
         p_objectInputText->GetGameObject()->AddComponent<UILayoutElement>();
     objectInputTextLE->SetFlexibleSize(Vector2(9999.9f));

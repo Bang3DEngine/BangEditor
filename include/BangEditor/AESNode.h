@@ -75,7 +75,7 @@ private:
     UITextRenderer *p_nodeNameText = nullptr;
     UITextRenderer *p_entryNodeText = nullptr;
 
-    Vector2 m_grabOffset = Vector2::Zero;
+    Vector2 m_grabOffset = Vector2::Zero();
     AnimatorSMEditorScene *p_aesScene = nullptr;
     AnimatorStateMachineNode *p_smNode = nullptr;
     Array<AESConnectionLine *> p_connectionLinesTo;

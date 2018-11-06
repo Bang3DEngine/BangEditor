@@ -60,7 +60,7 @@ void CIWReflectionProbe::InitInnerWidgets()
 
     p_sizeInput = new UIInputVector();
     p_sizeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
-    p_sizeInput->SetMinValue(Vector4::Zero);
+    p_sizeInput->SetMinValue(Vector4::Zero());
     p_sizeInput->SetSize(3);
 
     p_restTimeInput = GameObjectFactory::CreateUIInputNumber();

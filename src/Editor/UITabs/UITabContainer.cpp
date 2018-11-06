@@ -29,7 +29,7 @@ UITabContainer::UITabContainer()
     BANG_UNUSED(mainVL);
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetFlexibleSize(Vector2::One);
+    le->SetFlexibleSize(Vector2::One());
 
     p_headersBar = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *headerBarHL =
@@ -48,13 +48,13 @@ UITabContainer::UITabContainer()
 
     GameObject *botPart = GameObjectFactory::CreateUIGameObject();
     UILayoutElement *botPartLE = botPart->AddComponent<UILayoutElement>();
-    botPartLE->SetFlexibleSize(Vector2::One);
+    botPartLE->SetFlexibleSize(Vector2::One());
     botPart->AddComponent<UIVerticalLayout>();
 
     p_currentTabContainer = GameObjectFactory::CreateUIGameObject();
     UILayoutElement *containerLE =
         GetVisibleContainer()->AddComponent<UILayoutElement>();
-    containerLE->SetFlexibleSize(Vector2::One);
+    containerLE->SetFlexibleSize(Vector2::One());
     GetVisibleContainer()->AddComponent<UIHorizontalLayout>();
 
     /*

@@ -48,10 +48,10 @@ ExplorerItem::ExplorerItem()
 
     GameObject *iconGo = GameObjectFactory::CreateUIGameObject();
     RectTransform *iconRT = iconGo->GetRectTransform();
-    iconRT->SetAnchors(Vector2::Zero);
-    iconRT->SetPivotPosition(Vector2::Zero);
+    iconRT->SetAnchors(Vector2::Zero());
+    iconRT->SetPivotPosition(Vector2::Zero());
     p_icon = iconGo->AddComponent<UIImageRenderer>();
-    p_icon->SetTint(Color::Zero);
+    p_icon->SetTint(Color::Zero());
 
     p_aspectRatioFitter = iconGo->AddComponent<UIAspectRatioFitter>();
     p_aspectRatioFitter->SetAspectRatioMode(AspectRatioMode::KEEP);
@@ -176,7 +176,7 @@ UIEventResult ExplorerItem::OnUIEvent(UIFocusable *, const UIEvent &event)
         case UIEvent::Type::MOUSE_EXIT:
             if (!IsSelected() && p_bg)
             {
-                p_bg->SetTint(Color::Zero);
+                p_bg->SetTint(Color::Zero());
             }
             return UIEventResult::INTERCEPT;
             break;
@@ -218,7 +218,8 @@ void ExplorerItem::SetSelected(bool selected)
 
     if (p_bg)
     {
-        p_bg->SetTint(IsSelected() ? UITheme::GetSelectedColor() : Color::Zero);
+        p_bg->SetTint(IsSelected() ? UITheme::GetSelectedColor()
+                                   : Color::Zero());
     }
 }
 

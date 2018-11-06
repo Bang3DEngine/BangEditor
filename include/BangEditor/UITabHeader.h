@@ -64,7 +64,7 @@ private:
     String m_title = "Tab";
     bool m_inForeground = false;
     DPtr<GameObject> p_tabbedChild = nullptr;
-    Color m_currentHeaderColor = Color::Zero;
+    Color m_currentHeaderColor = Color::Zero();
     DPtr<UITabContainer> p_tabContainer = nullptr;
 
     UIImageRenderer *p_bg = nullptr;

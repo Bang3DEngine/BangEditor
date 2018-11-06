@@ -47,9 +47,9 @@ private:
     static const int AnchorSelectionSize;
 
     AnchorSide m_anchorSide = AnchorSide::LEFT_BOT;
-    Vector2 m_startGrabMousePos = Vector2::Zero;
-    Vector2 m_startLocalAnchorMin = Vector2::Zero;
-    Vector2 m_startLocalAnchorMax = Vector2::Zero;
+    Vector2 m_startGrabMousePos = Vector2::Zero();
+    Vector2 m_startLocalAnchorMin = Vector2::Zero();
+    Vector2 m_startLocalAnchorMax = Vector2::Zero();
 
     GameObject *p_anchorGO = nullptr;
     GameObject *p_selectionGO = nullptr;

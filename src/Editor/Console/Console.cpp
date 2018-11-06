@@ -36,7 +36,7 @@ Console::Console()
 
     UILayoutElement *le = AddComponent<UILayoutElement>();
     le->SetMinSize(Vector2i(100));
-    le->SetFlexibleSize(Vector2::One);
+    le->SetFlexibleSize(Vector2::One());
 
     GameObjectFactory::CreateUIGameObjectInto(this);
 
@@ -68,7 +68,7 @@ Console::Console()
     // p_messageList->GetScrollPanel()->SetForceHorizontalFit(false);
     p_messageList->GetScrollPanel()->SetForceHorizontalFit(true);
     p_messageList->GetScrollPanel()->GetScrollArea()->GetBackground()->SetTint(
-        Color::White.WithValue(0.7f));
+        Color::White().WithValue(0.7f));
     p_messageList->GetScrollPanel()->SetVerticalScrollBarSide(
         HorizontalSide::RIGHT);
     UILayoutElement *listLE =
@@ -148,7 +148,7 @@ ConsoleUIListEntry::ConsoleUIListEntry()
     p_typeIconImg->SetImageTexture(TextureFactory::GetWarningIcon());
     UILayoutElement *iconLE = typeIconGo->AddComponent<UILayoutElement>();
     iconLE->SetMinSize(Vector2i(20));
-    iconLE->SetFlexibleSize(Vector2::Zero);
+    iconLE->SetFlexibleSize(Vector2::Zero());
 
     GameObject *textGo = GameObjectFactory::CreateUIGameObject();
     p_msgText = textGo->AddComponent<UITextRenderer>();
@@ -157,7 +157,7 @@ ConsoleUIListEntry::ConsoleUIListEntry()
     p_msgText->SetWrapping(true);
     p_msgText->SetTextSize(12);
     UILayoutElement *textLE = textGo->AddComponent<UILayoutElement>();
-    textLE->SetFlexibleSize(Vector2::One);
+    textLE->SetFlexibleSize(Vector2::One());
 
     typeIconGo->SetParent(this);
     textGo->SetParent(this);

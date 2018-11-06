@@ -134,11 +134,11 @@ void HierarchyItem::UpdateEnabledDisabledColor()
 {
     if (GetReferencedGameObject()->IsEnabledRecursively())
     {
-        p_textRenderer->SetTextColor(Color::Black);
+        p_textRenderer->SetTextColor(Color::Black());
     }
     else
     {
-        p_textRenderer->SetTextColor(Color::DarkGray);
+        p_textRenderer->SetTextColor(Color::DarkGray());
     }
 }
 

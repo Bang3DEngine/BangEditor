@@ -49,7 +49,7 @@ public:
 private:
     UIFocusable *p_focusable = nullptr;
     RH<TextureCubeMap> p_textureCubeMap;
-    Vector2 m_rotationRads = Vector2::Zero;
+    Vector2 m_rotationRads = Vector2::Zero();
     RH<Material> p_previewImageRendererMaterial;
     UIImageRenderer *p_previewImageRenderer = nullptr;
     UIAspectRatioFitter *p_previewImgAspectRatioFitter = nullptr;

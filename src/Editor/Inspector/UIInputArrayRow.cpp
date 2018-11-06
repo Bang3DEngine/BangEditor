@@ -42,7 +42,7 @@ void UIInputArrayRow::Init(UIInputArray *inputArray)
 
     UIButton *removeButton = GameObjectFactory::CreateUIButton(
         "", EditorTextureFactory::GetLessIcon());
-    removeButton->GetIcon()->SetTint(Color::Red.WithValue(0.75f));
+    removeButton->GetIcon()->SetTint(Color::Red().WithValue(0.75f));
     removeButton->AddClickedCallback(
         [this, inputArray]() { inputArray->RemoveRow(this, true); });
 
@@ -58,7 +58,7 @@ void UIInputArrayRow::Init(UIInputArray *inputArray)
         upDownButton->AddClickedCallback([this, inputArray, up]() {
             inputArray->MoveRow(this, (up ? -1 : 1));
         });
-        upDownButton->GetIcon()->SetTint(Color::Black);
+        upDownButton->GetIcon()->SetTint(Color::Black());
         upDownButton->GetLayoutElement()->SetMinHeight(10);
         upDownButton->SetIconSize(Vector2i(8, 10));
         return upDownButton;

@@ -21,8 +21,8 @@
 using namespace Bang;
 using namespace BangEditor;
 
-const Color UITabHeader::ForegroundColor = Color::Zero;
-const Color UITabHeader::BackgroundColor = Color::DarkGray.WithValue(1.3f);
+const Color UITabHeader::ForegroundColor = Color::Zero();
+const Color UITabHeader::BackgroundColor = Color::DarkGray().WithValue(1.3f);
 
 UITabHeader::UITabHeader()
 {
@@ -95,7 +95,7 @@ void UITabHeader::SetInForeground(bool inForeground)
     m_currentHeaderColor = (inForeground ? UITabHeader::ForegroundColor
                                          : UITabHeader::BackgroundColor);
     p_bg->SetTint(m_currentHeaderColor);
-    p_border->SetTint(inForeground ? Color::Zero : Color::Black);
+    p_border->SetTint(inForeground ? Color::Zero() : Color::Black());
 }
 
 void UITabHeader::SetTitle(const String &title)
