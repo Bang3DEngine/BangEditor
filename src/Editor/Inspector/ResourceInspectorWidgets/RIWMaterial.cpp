@@ -37,7 +37,7 @@ class IEventsValueChanged;
 
 namespace BangEditor
 {
-class ResourcePreviewFactoryParameters;
+struct ResourcePreviewFactoryParameters;
 }
 
 using namespace Bang;

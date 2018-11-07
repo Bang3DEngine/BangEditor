@@ -102,9 +102,9 @@ void CIWPostProcessEffectSSAO::OnValueChangedCIW(
 
     ppe->SetSSAOIntensity(p_intensityInput->GetValue());
     ppe->SetSSAORadius(p_radiusInput->GetValue());
-    ppe->SetBlurRadius(p_blurRadiusInput->GetValue());
-    ppe->SetNumRandomAxes(p_numRandAxesInput->GetValue());
-    ppe->SetNumRandomSamples(p_numRandSamplesInput->GetValue());
+    ppe->SetBlurRadius(SCAST<int>(p_blurRadiusInput->GetValue()));
+    ppe->SetNumRandomAxes(SCAST<int>(p_numRandAxesInput->GetValue()));
+    ppe->SetNumRandomSamples(SCAST<int>(p_numRandSamplesInput->GetValue()));
     ppe->SetBilateralBlurEnabled(p_bilateralBlurInput->IsChecked());
     ppe->SetSeparable(p_separableInput->IsChecked());
 }

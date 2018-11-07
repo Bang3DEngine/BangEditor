@@ -283,7 +283,7 @@ void UITabStation::OnDragUpdate(EventEmitter<IEventsDragDrop> *dragDropEmitter)
                         prevTabHeader ? prevTabHeader : nextTabHeader)
                 {
                     bool markingPrev = (tabHeaderToMark == prevTabHeader);
-                    float markX = markingPrev ? 1 : -1;
+                    float markX = markingPrev ? 1.0f : -1.0f;
                     RectTransform *dragMarkerRT =
                         p_dragMarker->GetRectTransform();
                     dragMarkerRT->SetAnchors(Vector2(markX, -1),
