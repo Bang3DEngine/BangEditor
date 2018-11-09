@@ -128,15 +128,48 @@ xcopy /Y $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\openal-soft\
     </Link>
     <PreLinkEvent>
       <Command>mkdir $(ProjectDir)\Libraries\$(Configuration)
-xcopy /Y $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\SDL2-2.0.8\build\$(Configuration)\bin\SDL2d.dll $(OutDir)
-xcopy /Y $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\glew-2.1.0\Windows\bin\Release\$(Platform)\glew32.dll $(OutDir)
-xcopy /Y $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\openal-soft\Windows\bin\OpenAL32.dll $(OutDir)
-xcopy /Y $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.lib $(OutDir)
-xcopy /Y $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.dll $(OutDir)
-xcopy /Y $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.lib $(ProjectDir)\Libraries\$(Configuration)
-xcopy /Y $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.dll $(ProjectDir)\Libraries\$(Configuration)
-xcopy /Y $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfile\bin\libsndfile-1.dll $(OutDir)
-</Command>
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\SDL2-2.0.8\build\$(Configuration)\bin\SDL2d.dll $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\SDL2-2.0.8\build\$(Configuration)\bin\SDL2d.dll $(ProjectDir)\Libraries\$(Configuration)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\SDL2-2.0.8\build\$(Configuration)\lib\SDL2d.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\SDL2-2.0.8\build\$(Configuration)\lib\SDL2d.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\glew-2.1.0\Windows\bin\Release\$(Platform)\glew32.dll $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\glew-2.1.0\Windows\bin\Release\$(Platform)\glew32.dll $(ProjectDir)\Libraries\$(Configuration)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\glew-2.1.0\Windows\lib\Release\x64\glew32.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\glew-2.1.0\Windows\lib\Release\x64\glew32.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\openal-soft\Windows\bin\OpenAL32.dll $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\openal-soft\Windows\bin\OpenAL32.dll $(ProjectDir)\Libraries\$(Configuration)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\openal-soft\Windows\libs\Win64\OpenAL32.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\openal-soft\Windows\libs\Win64\OpenAL32.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libjpeg-turbo\build\$(Configuration)\x64\bin\turbojpeg.dll $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libjpeg-turbo\build\$(Configuration)\x64\bin\turbojpeg.dll $(ProjectDir)\Libraries\$(Configuration)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libjpeg-turbo\build\$(Configuration)\x64\lib\turbojpeg.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libjpeg-turbo\build\$(Configuration)\x64\lib\turbojpeg.lib $(ProjectDir)\Libraries\$(Configuration)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libjpeg-turbo\build\$(Configuration)\x64\bin\jpeg.dll $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libjpeg-turbo\build\$(Configuration)\x64\bin\jpeg.dll $(ProjectDir)\Libraries\$(Configuration)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libjpeg-turbo\build\$(Configuration)\x64\lib\jpeg.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libjpeg-turbo\build\$(Configuration)\x64\lib\jpeg.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libpng-1.6.34\build\$(Configuration)\x64\bin\libpng16d.dll $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libpng-1.6.34\build\$(Configuration)\x64\bin\libpng16d.dll $(ProjectDir)\Libraries\$(Configuration)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libpng-1.6.34\build\$(Configuration)\x64\lib\libpng16d.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libpng-1.6.34\build\$(Configuration)\x64\lib\libpng16d.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfile\bin\libsndfile-1.dll $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfile\bin\libsndfile-1.dll $(ProjectDir)\Libraries\$(Configuration)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfile\lib\libsndfile-1.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfile\lib\libsndfile-1.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.lib $(ProjectDir)\Libraries\$(Configuration)
+
+if exist $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.dll ( 
+  xcopy /Y /c $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.dll $(OutDir)
+  xcopy /Y /c $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.dll $(ProjectDir)\Libraries\$(Configuration)
+)</Command>
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -187,10 +220,49 @@ xcopy /Y $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\openal-soft\
       <IgnoreEmbeddedIDL>true</IgnoreEmbeddedIDL>
     </Link>
     <PreLinkEvent>
-      <Command>xcopy /Y $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\SDL2-2.0.8\build\$(Configuration)\bin\SDL2.dll $(OutDir)
-xcopy /Y $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\glew-2.1.0\Windows\bin\Release\$(Platform)\glew32.dll $(OutDir)
-xcopy /Y $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\openal-soft\Windows\bin\OpenAL32.dll $(OutDir)
-xcopy /Y $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfile\bin\libsndfile-1.dll $(OutDir)</Command>
+      <Command>mkdir $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\SDL2-2.0.8\build\$(Configuration)\bin\SDL2d.dll $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\SDL2-2.0.8\build\$(Configuration)\bin\SDL2d.dll $(ProjectDir)\Libraries\$(Configuration)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\SDL2-2.0.8\build\$(Configuration)\lib\SDL2d.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\SDL2-2.0.8\build\$(Configuration)\lib\SDL2d.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\glew-2.1.0\Windows\bin\Release\$(Platform)\glew32.dll $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\glew-2.1.0\Windows\bin\Release\$(Platform)\glew32.dll $(ProjectDir)\Libraries\$(Configuration)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\glew-2.1.0\Windows\lib\Release\x64\glew32.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\glew-2.1.0\Windows\lib\Release\x64\glew32.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\openal-soft\Windows\bin\OpenAL32.dll $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\openal-soft\Windows\bin\OpenAL32.dll $(ProjectDir)\Libraries\$(Configuration)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\openal-soft\Windows\libs\Win64\OpenAL32.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\openal-soft\Windows\libs\Win64\OpenAL32.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libjpeg-turbo\build\$(Configuration)\x64\bin\turbojpeg.dll $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libjpeg-turbo\build\$(Configuration)\x64\bin\turbojpeg.dll $(ProjectDir)\Libraries\$(Configuration)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libjpeg-turbo\build\$(Configuration)\x64\lib\turbojpeg.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libjpeg-turbo\build\$(Configuration)\x64\lib\turbojpeg.lib $(ProjectDir)\Libraries\$(Configuration)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libjpeg-turbo\build\$(Configuration)\x64\bin\jpeg.dll $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libjpeg-turbo\build\$(Configuration)\x64\bin\jpeg.dll $(ProjectDir)\Libraries\$(Configuration)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libjpeg-turbo\build\$(Configuration)\x64\lib\jpeg.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libjpeg-turbo\build\$(Configuration)\x64\lib\jpeg.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libpng-1.6.34\build\$(Configuration)\x64\bin\libpng16d.dll $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libpng-1.6.34\build\$(Configuration)\x64\bin\libpng16d.dll $(ProjectDir)\Libraries\$(Configuration)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libpng-1.6.34\build\$(Configuration)\x64\lib\libpng16d.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libpng-1.6.34\build\$(Configuration)\x64\lib\libpng16d.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfile\bin\libsndfile-1.dll $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfile\bin\libsndfile-1.dll $(ProjectDir)\Libraries\$(Configuration)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfile\lib\libsndfile-1.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfile\lib\libsndfile-1.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.lib $(ProjectDir)\Libraries\$(Configuration)
+
+if exist $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.dll ( 
+  xcopy /Y /c $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.dll $(OutDir)
+  xcopy /Y /c $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.dll $(ProjectDir)\Libraries\$(Configuration)
+)</Command>
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

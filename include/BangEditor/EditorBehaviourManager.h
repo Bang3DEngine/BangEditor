@@ -86,7 +86,7 @@ private:
 
     static Array<Path> GetCompiledObjectsPaths();
     static Array<Path> GetBehaviourSourcesPaths();
-    static Compiler::Job CreateBaseJob(BinType binaryType, bool addLibs);
+    static Compiler::Job CreateBaseCompileJob(BinType binaryType, bool addLibs);
     static Path GetObjectOutputPath(const Path &inputBehaviourPath);
     static Compiler::Job CreateCompileBehaviourJob(
         const Path &behaviourFilepath,

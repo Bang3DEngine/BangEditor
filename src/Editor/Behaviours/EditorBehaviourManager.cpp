@@ -308,8 +308,8 @@ void EditorBehaviourManager::RemoveOrphanBehaviourLibrariesAndObjects()
     // Clean up unused behaviours shared libs
     if (EditorFileTracker *edf = EditorFileTracker::GetInstance())
     {
-        Array<Path> currentSharedLibPaths =
-            edf->GetTrackedPathsWithExtensions({"so"});
+        Array<Path> currentSharedLibPaths = edf->GetTrackedPathsWithExtensions(
+            {Extensions::GetDynamicLibExtension()});
         Library *behavioursLib =
             EditorBehaviourManager::GetActive()->GetBehavioursLibrary();
         {
@@ -332,12 +332,16 @@ void EditorBehaviourManager::RemoveOrphanBehaviourLibrariesAndObjects()
         }
 
         // Clean up unused obj's
-        Array<Path> currentObjPaths = edf->GetTrackedPathsWithExtensions({"o"});
+        Array<Path> currentObjPaths =
+            edf->GetTrackedPathsWithExtensions({Extensions::GetObjExtension()});
         for (const Path &objPath : currentObjPaths)
         {
-            if (!behaviourSourcesNames.Contains(objPath.GetName()))
+            if (objPath.GetDirectory().GetName() == "Libraries")
             {
-                File::Remove(objPath);
+                if (!behaviourSourcesNames.Contains(objPath.GetName()))
+                {
+                    File::Remove(objPath);
+                }
             }
         }
 
@@ -366,7 +370,7 @@ void EditorBehaviourManager::MergeIntoBehavioursLibrary()
     Path outputLibPath =
         Paths::GetProjectLibrariesDir()
             .Append("Behaviours")
-            .AppendExtension("so")
+            .AppendExtension(Extensions::GetDynamicLibExtension())
             .AppendExtension(String(Time::GetNow().GetNanos()));
 
     if (EditorFileTracker *edf = EditorFileTracker::GetInstance())
@@ -396,7 +400,8 @@ Compiler::Result EditorBehaviourManager::MergeBehaviourObjects(
     EditorBehaviourManager::RemoveOrphanBehaviourLibrariesAndObjects();
     File::CreateDir(outputLibFilepath.GetDirectory());
 
-    Compiler::Job job = EditorBehaviourManager::CreateBaseJob(binaryType, true);
+    Compiler::Job job =
+        EditorBehaviourManager::CreateBaseCompileJob(binaryType, true);
     job.outputMode = Compiler::OutputType::SHARED_LIB;
     // job.libDirs.PushBack( Paths::GetEngineLibrariesDir( BinType::BIN_DEBUG )
     // );
@@ -411,15 +416,21 @@ Array<Path> EditorBehaviourManager::GetCompiledObjectsPaths()
     Array<Path> objPaths;
     if (EditorFileTracker *edf = EditorFileTracker::GetInstance())
     {
-        objPaths = edf->GetTrackedPathsWithExtensions({"o"});
+        objPaths =
+            edf->GetTrackedPathsWithExtensions({Extensions::GetObjExtension()});
         for (auto it = objPaths.Begin(); it != objPaths.End();)
         {
+            bool removed = false;
+
             const Path &objPath = *it;
-            if (objPath.IsHiddenFile())
+            if (objPath.IsHiddenFile() ||
+                (objPath.GetDirectory().GetName() != "Libraries"))
             {
                 it = objPaths.Remove(it);
+                removed = true;
             }
-            else
+
+            if (!removed)
             {
                 ++it;
             }
@@ -438,8 +449,8 @@ Array<Path> EditorBehaviourManager::GetBehaviourSourcesPaths()
     return Array<Path>();
 }
 
-Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType,
-                                                    bool addLibs)
+Compiler::Job EditorBehaviourManager::CreateBaseCompileJob(BinType binaryType,
+                                                           bool addLibs)
 {
     const Path bangLibPath = EditorPaths::GetBangLatestLibPath();
     if (!bangLibPath.Exists())
@@ -450,7 +461,6 @@ Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType,
     }
 
     Compiler::Job job;
-    job.compilerPath = Paths::GetCompilerPath();
 
     if (addLibs)
     {
@@ -472,6 +482,35 @@ Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType,
             job.libraries.PushBack("Bang");
         }
     }
+
+#ifdef _WIN32
+    job.libraries.PushBack("kernel32.lib");
+    job.libraries.PushBack("user32.lib");
+    job.libraries.PushBack("gdi32.lib");
+    job.libraries.PushBack("winspool.lib");
+    job.libraries.PushBack("comdlg32.lib");
+    job.libraries.PushBack("advapi32.lib");
+    job.libraries.PushBack("shell32.lib");
+    job.libraries.PushBack("ole32.lib");
+    job.libraries.PushBack("oleaut32.lib");
+    job.libraries.PushBack("uuid.lib");
+    job.libraries.PushBack("odbc32.lib");
+    job.libraries.PushBack("opengl32.lib");
+    job.libraries.PushBack("glu32.lib");
+    job.libraries.PushBack("odbccp32.lib");
+    job.libraries.PushBack("shlwapi.lib");
+
+    Array<Path> dependenciesLibPaths = EditorPaths::GetEditorLibrariesDir()
+                                           .Append(Paths::GetBuildType())
+                                           .GetSubPaths(Bang::FindFlag::SIMPLE);
+    for (const Path &depLib : dependenciesLibPaths)
+    {
+        if (depLib.GetExtension() == Extensions::GetStaticLibExtension())
+        {
+            job.libraries.PushBack(depLib.GetAbsolute());
+        }
+    }
+#endif
 
 #ifdef __linux__
     job.flags = {"-fPIC", "--std=c++11", "-Wl,-O0,--export-dynamic"};
@@ -509,7 +548,7 @@ Path EditorBehaviourManager::GetObjectOutputPath(const Path &inputBehaviourPath)
 {
     return Paths::GetProjectLibrariesDir()
         .Append(inputBehaviourPath.GetName())
-        .AppendExtension("o")
+        .AppendExtension(Extensions::GetObjExtension())
         .AppendExtension(String(Time::GetNow().GetNanos()));
 }
 
@@ -519,7 +558,7 @@ Compiler::Job EditorBehaviourManager::CreateCompileBehaviourJob(
     BinType binaryType)
 {
     Compiler::Job job =
-        EditorBehaviourManager::CreateBaseJob(binaryType, false);
+        EditorBehaviourManager::CreateBaseCompileJob(binaryType, false);
     job.outputMode = Compiler::OutputType::OBJECT;
     job.includePaths.PushBack(Paths::GetEngineIncludeDirs());
     // job.includePaths.PushBack( EditorPaths::GetEditorIncludeDirs() );
