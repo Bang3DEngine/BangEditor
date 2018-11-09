@@ -156,17 +156,17 @@ void RIWTextureCubeMap::UpdateInputsFromResource()
     const RH<Texture2D> frontTex = tcm->GetSideTexture(GL::CubeMapDir::FRONT);
     const RH<Texture2D> backTex = tcm->GetSideTexture(GL::CubeMapDir::BACK);
     p_topTextureInput->SetPath(topTex ? topTex.Get()->GetResourceFilepath()
-                                      : Path::Empty);
+                                      : Path::Empty());
     p_botTextureInput->SetPath(botTex ? botTex.Get()->GetResourceFilepath()
-                                      : Path::Empty);
+                                      : Path::Empty());
     p_leftTextureInput->SetPath(leftTex ? leftTex.Get()->GetResourceFilepath()
-                                        : Path::Empty);
+                                        : Path::Empty());
     p_rightTextureInput->SetPath(
-        rightTex ? rightTex.Get()->GetResourceFilepath() : Path::Empty);
+        rightTex ? rightTex.Get()->GetResourceFilepath() : Path::Empty());
     p_frontTextureInput->SetPath(
-        frontTex ? frontTex.Get()->GetResourceFilepath() : Path::Empty);
+        frontTex ? frontTex.Get()->GetResourceFilepath() : Path::Empty());
     p_backTextureInput->SetPath(backTex ? backTex.Get()->GetResourceFilepath()
-                                        : Path::Empty);
+                                        : Path::Empty());
 
     p_textureCMPreviewer->SetTextureCubeMap(tcm);
 
@@ -175,11 +175,10 @@ void RIWTextureCubeMap::UpdateInputsFromResource()
 
 Texture2D *RIWTextureCubeMap::GetIconTexture() const
 {
-    return GetTextureCubeMap()
-               ? GetTextureCubeMap()
-                     ->GetSideTexture(GL::CubeMapDir::FRONT)
-                     .Get()
-               : nullptr;
+    return GetTextureCubeMap() ? GetTextureCubeMap()
+                                     ->GetSideTexture(GL::CubeMapDir::FRONT)
+                                     .Get()
+                               : nullptr;
 }
 
 void RIWTextureCubeMap::OnValueChangedRIWResource(
@@ -187,8 +186,9 @@ void RIWTextureCubeMap::OnValueChangedRIWResource(
 {
     if (ee != p_textureCMPreviewer)
     {
-        auto Refresh = [this](
-            UIInputFile *inputFile, TextureCubeMap *tcm, GL::CubeMapDir cmdir) {
+        auto Refresh = [this](UIInputFile *inputFile,
+                              TextureCubeMap *tcm,
+                              GL::CubeMapDir cmdir) {
             if (inputFile->GetPath().IsFile())
             {
                 Image img;

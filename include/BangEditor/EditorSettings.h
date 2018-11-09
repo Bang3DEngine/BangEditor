@@ -4,12 +4,14 @@
 #include "Bang/Array.h"
 #include "Bang/BangDefines.h"
 #include "Bang/Path.h"
+#include "Bang/Settings.h"
+
 #include "BangEditor/BangEditor.h"
 
 using namespace Bang;
 namespace BangEditor
 {
-class EditorSettings
+class EditorSettings : public Settings
 {
 public:
     static void AddRecentProjectFilepathOpen(
@@ -22,7 +24,7 @@ private:
     EditorSettings();
     virtual ~EditorSettings();
 
-    void Init();
+    void Init() override;
     void ExportToFile();
     void ImportFromFile();
     static Path GetEditorSettingsPath();
@@ -31,7 +33,8 @@ private:
 
     friend class Editor;
     friend class EditorScene;
+    friend class EditorApplication;
 };
-}
+}  // namespace BangEditor
 
 #endif  // EDITORSETTINGS_H

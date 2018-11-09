@@ -222,12 +222,12 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
         }
     }
 
-    // Merge into .so
+    // Merge into dynamic/shared lib
     Array<Path> behaviourObjectsPaths =
         dataLibsDir.GetFiles(FindFlag::SIMPLE, {"o"});
     Path outputLibPath =
         dataLibsDir.Append("Behaviours")
-            .AppendExtension("so")
+            .AppendExtension(Extensions::GetDynamicLibExtension())
             .AppendExtension(String::ToString(Time::GetNow().GetMillis()));
     Debug_Log("Merging behaviour objects " << behaviourObjectsPaths << " into '"
                                            << outputLibPath << "'...");

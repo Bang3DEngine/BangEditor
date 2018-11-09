@@ -34,10 +34,10 @@ protected:
     void UpdateIcon();
 
 private:
-    Path m_path = Path::Empty;
+    Path m_path = Path::Empty();
 
     friend class ResourceInspectorWidgetFactory;
 };
-}
+}  // namespace BangEditor
 
 #endif  // FILEINSPECTORWIDGET_H

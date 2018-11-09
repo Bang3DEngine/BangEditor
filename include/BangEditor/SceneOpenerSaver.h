@@ -21,7 +21,7 @@ namespace Bang
 {
 class IEventsSceneManager;
 class Scene;
-}
+}  // namespace Bang
 
 using namespace Bang;
 namespace BangEditor
@@ -59,11 +59,11 @@ public:
 private:
     int m_numActionsDoneSinceLastSave = 0;
 
-    Path m_previousLoadedScenePath = Path::Empty;
-    Path m_previousOpenScenePath = Path::Empty;
+    Path m_previousLoadedScenePath = Path::Empty();
+    Path m_previousOpenScenePath = Path::Empty();
 
-    Path m_currentLoadedScenePath = Path::Empty;
-    Path m_currentOpenScenePath = Path::Empty;
+    Path m_currentLoadedScenePath = Path::Empty();
+    Path m_currentOpenScenePath = Path::Empty();
 
     bool OnSaveScene(bool saveAs);
     Dialog::YesNoCancel Overwrite(const Path &path);
@@ -80,6 +80,6 @@ private:
     void OnPlayStateChanged(PlayState previousPlayState,
                             PlayState newPlayState) override;
 };
-}
+}  // namespace BangEditor
 
 #endif  // SCENEOPENERSAVER_H

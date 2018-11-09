@@ -203,7 +203,7 @@ void ASMLayerInput::ImportMeta(const MetaNode &metaNode)
             Resources::Load<AnimatorLayerMask>(metaNode.Get<GUID>("LayerMask"));
         p_layerMaskInput->SetPath(layerMask.Get()
                                       ? layerMask.Get()->GetResourceFilepath()
-                                      : Path::Empty);
+                                      : Path::Empty());
     }
 
     m_layerNodesMetas = metaNode.GetChildren("Nodes");

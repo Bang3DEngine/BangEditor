@@ -79,7 +79,7 @@ void CIWAnimator::UpdateFromReference()
     Animator *animator = GetAnimator();
     AnimatorStateMachine *sm = animator->GetStateMachine();
 
-    p_animatorSMInput->SetPath(sm ? sm->GetResourceFilepath() : Path::Empty);
+    p_animatorSMInput->SetPath(sm ? sm->GetResourceFilepath() : Path::Empty());
     p_playOnStartInput->SetChecked(animator->GetPlayOnStart());
 }
 

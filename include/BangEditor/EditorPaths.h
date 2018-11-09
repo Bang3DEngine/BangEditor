@@ -33,7 +33,7 @@ public:
     static Path CreateEditorPath(const String &path);
 
 private:
-    Path c_editorRoot = Path::Empty;
+    Path m_editorRootPath = Path::Empty();
 
     EditorPaths();
     virtual ~EditorPaths() override;
@@ -42,6 +42,6 @@ private:
 
     friend class EditorApplication;
 };
-}
+}  // namespace BangEditor
 
 #endif  // EDITORPATHS_H

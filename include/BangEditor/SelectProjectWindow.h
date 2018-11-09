@@ -49,10 +49,10 @@ private:
         RecentProjectListEntry(const Path &projectPath);
         virtual ~RecentProjectListEntry() override;
 
-        Path m_projectPath = Path::Empty;
+        Path m_projectPath = Path::Empty();
     };
 
-    Path m_selectedRecentPath = Path::Empty;
+    Path m_selectedRecentPath = Path::Empty();
     UIButton *p_newProjectButton = nullptr;
     UIButton *p_openProjectButton = nullptr;
     UIButton *p_openSelectedProjectButton = nullptr;
@@ -64,6 +64,6 @@ private:
     void OpenProject();
     void ConfirmOpenProject(const Path &projectFilepath);
 };
-}
+}  // namespace BangEditor
 
 #endif  // SELECTPROJECTWINDOW_H

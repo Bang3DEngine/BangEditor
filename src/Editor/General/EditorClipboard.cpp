@@ -84,7 +84,7 @@ bool EditorClipboard::HasCopiedPath()
 
 void EditorClipboard::ClearCopiedPath()
 {
-    EditorClipboard::GetInstance()->m_copiedPath = Path::Empty;
+    EditorClipboard::GetInstance()->m_copiedPath = Path::Empty();
 }
 
 EditorClipboard *EditorClipboard::GetInstance()

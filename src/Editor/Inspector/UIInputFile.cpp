@@ -88,7 +88,7 @@ UIInputFile::UIInputFile()
     p_searchButton->GetGameObject()->SetParent(this);
     p_openFileInInspectorButton->GetGameObject()->SetParent(this);
 
-    SetPath(Path::Empty);
+    SetPath(Path::Empty());
 }
 
 UIInputFile::~UIInputFile()

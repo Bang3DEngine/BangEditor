@@ -92,7 +92,7 @@ void GIWAESNode::UpdateFromReference()
         p_nodeAnimationInput->SetPath(
             smNode->GetAnimation()
                 ? smNode->GetAnimation()->GetResourceFilepath()
-                : Path::Empty);
+                : Path::Empty());
     }
 }
 

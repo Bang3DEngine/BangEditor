@@ -28,9 +28,9 @@ int main(int argc, char **argv)
     const Path engPath = Paths::GetResolvedPath(edtPath.Append("Bang"));
     Debug_Log("BangEngineRoot: " << engPath);
     Debug_Log("BangEditorRoot: " << edtPath);
-    editorApplication.InitEditorApplication(engPath, edtPath);
+    editorApplication.Init(engPath, edtPath);
 
-    Path projectToBeOpen = Path::Empty;
+    Path projectToBeOpen = Path::Empty();
     if (argc < 2)
     {
         // Select project window

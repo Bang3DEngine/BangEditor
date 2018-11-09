@@ -10,7 +10,7 @@ namespace Bang
 {
 class Component;
 class GameObject;
-}
+}  // namespace Bang
 
 using namespace Bang;
 namespace BangEditor
@@ -39,10 +39,10 @@ public:
 private:
     Component *m_copiedComponent = nullptr;
     GameObject *m_copiedGameObject = nullptr;
-    Path m_copiedPath = Path::Empty;
+    Path m_copiedPath = Path::Empty();
 
     static EditorClipboard *GetInstance();
 };
-}
+}  // namespace BangEditor
 
 #endif  // EDITORCLIPBOARD_H

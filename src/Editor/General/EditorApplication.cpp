@@ -9,6 +9,7 @@
 #include "BangEditor/EditorResources.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/EditorSettings.h"
 
 namespace Bang
 {
@@ -16,7 +17,7 @@ class Debug;
 class Path;
 class Paths;
 class Resources;
-}
+}  // namespace Bang
 
 using namespace Bang;
 using namespace BangEditor;
@@ -30,13 +31,14 @@ EditorApplication::~EditorApplication()
     delete m_editor;
 }
 
-void EditorApplication::InitEditorApplication(const Path &engineRootPath,
-                                              const Path &editorRootPath)
+void EditorApplication::Init(const Path &engineRootPath,
+                             const Path &editorRootPath)
 {
-    Application::Init(engineRootPath);
+    Application::Init_(engineRootPath);
+    GetEditorPaths()->InitEditorPath(editorRootPath);
+    InitAfterPathsInit_();
     EditorResources::GetInstance()->InitAfterGLIsInited();
 
-    GetEditorPaths()->InitEditorPath(editorRootPath);
     MetaFilesManager::CreateMissingMetaFiles(EditorPaths::GetEditorAssetsDir());
     MetaFilesManager::LoadMetaFilepathGUIDs(EditorPaths::GetEditorAssetsDir());
 
@@ -46,6 +48,11 @@ void EditorApplication::InitEditorApplication(const Path &engineRootPath,
 EditorPaths *EditorApplication::GetEditorPaths() const
 {
     return SCAST<EditorPaths *>(GetPaths());
+}
+
+EditorSettings *BangEditor::EditorApplication::GetEditorSettings() const
+{
+    return SCAST<EditorSettings *>(GetSettings());
 }
 
 void EditorApplication::OpenEditorScene()
@@ -69,6 +76,11 @@ Debug *EditorApplication::CreateDebug() const
 Paths *EditorApplication::CreatePaths() const
 {
     return new EditorPaths();
+}
+
+Settings *EditorApplication::CreateSettings() const
+{
+    return new EditorSettings();
 }
 
 Resources *EditorApplication::CreateResources() const

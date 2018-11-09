@@ -450,15 +450,21 @@ Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType,
     }
 
     Compiler::Job job;
+    job.compilerPath = Paths::GetCompilerPath();
+
     if (addLibs)
     {
         bool isBangLibStatic = (bangLibPath.GetExtension() == "a");
         if (isBangLibStatic)
         {
             String Quote = "\"";
+#ifdef __linux__
             job.AddInputFile("   -Wl,--whole-archive " + Quote +
                              bangLibPath.GetAbsolute() + Quote +
                              " -Wl,--no-whole-archive");
+#elif _WIN32
+            job.AddInputFile(bangLibPath.GetAbsolute());
+#endif
         }
         else
         {
@@ -467,17 +473,35 @@ Compiler::Job EditorBehaviourManager::CreateBaseJob(BinType binaryType,
         }
     }
 
+#ifdef __linux__
     job.flags = {"-fPIC", "--std=c++11", "-Wl,-O0,--export-dynamic"};
     if (binaryType == BinType::BIN_DEBUG)
     {
-        job.flags.PushBack(List<String>({"-O0", "-g", "-Wl,-O0"}));
+        job.flags.PushBack(Array<String>({"-O0", "-g", "-Wl,-O0"}));
         job.flags.PushBack("-D_DEBUG");
     }
     else
     {
-        job.flags.PushBack(List<String>({"-O3", "-Wl,-O3"}));
+        job.flags.PushBack(Array<String>({"-O3", "-Wl,-O3"}));
         job.flags.PushBack("-DNDEBUG");
     }
+
+#elif _WIN32
+
+    job.flags = {""};
+    if (binaryType == BinType::BIN_DEBUG)
+    {
+        job.flags.PushBack(Array<String>({""}));
+        job.flags.PushBack("-D_DEBUG");
+    }
+    else
+    {
+        job.flags.PushBack(Array<String>({""}));
+        job.flags.PushBack("-DNDEBUG");
+    }
+
+#endif
+
     return job;
 }
 

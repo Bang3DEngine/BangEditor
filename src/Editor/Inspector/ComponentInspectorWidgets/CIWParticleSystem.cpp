@@ -185,7 +185,7 @@ void CIWParticleSystem::UpdateFromReference()
     ComponentInspectorWidget::UpdateFromReference();
 
     Mesh *mesh = GetParticleSystem()->GetMesh();
-    Path meshPath = mesh ? mesh->GetResourceFilepath() : Path::Empty;
+    Path meshPath = mesh ? mesh->GetResourceFilepath() : Path::Empty();
     p_meshInputFile->SetPath(meshPath);
 
     if (!p_lifeTimeInput->HasFocus())

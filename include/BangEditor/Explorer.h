@@ -36,7 +36,7 @@ class UIScrollPanel;
 class UISlider;
 template <class>
 class EventEmitter;
-}
+}  // namespace Bang
 
 using namespace Bang;
 namespace BangEditor
@@ -104,9 +104,9 @@ public:
     static Explorer *GetInstance();
 
 private:
-    Path m_rootPath = Path::Empty;
-    Path m_currentPath = Path::Empty;
-    Path m_selectedPath = Path::Empty;
+    Path m_rootPath = Path::Empty();
+    Path m_currentPath = Path::Empty();
+    Path m_selectedPath = Path::Empty();
 
     List<ExplorerItem *> p_items;
     UMap<Path, ExplorerItem *> m_pathsToItem;
@@ -141,6 +141,6 @@ private:
 
     friend class UndoRedoExplorerSelect;
 };
-}
+}  // namespace BangEditor
 
 #endif  // EXPLORER_H

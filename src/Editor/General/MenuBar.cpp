@@ -1061,7 +1061,7 @@ Path MenuBar::CreateNewBehaviour()
 
         if (behaviourName == "")
         {
-            return Path::Empty;
+            return Path::Empty();
         }
     } while (
         !BehaviourCreator::CanCreateNewBehaviour(behaviourDir, behaviourName));

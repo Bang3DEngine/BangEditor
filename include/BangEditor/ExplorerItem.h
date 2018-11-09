@@ -35,7 +35,7 @@ class UIDragDroppable;
 class UIFocusable;
 class UIImageRenderer;
 class UILabel;
-}
+}  // namespace Bang
 
 using namespace Bang;
 namespace BangEditor
@@ -79,7 +79,7 @@ protected:
 
 private:
     bool m_selected = false;
-    Path m_path = Path::Empty;
+    Path m_path = Path::Empty();
     String m_pathString = "";
 
     DPtr<UILabel> p_label;
@@ -94,6 +94,6 @@ private:
     virtual UIEventResult OnUIEvent(UIFocusable *focusable,
                                     const UIEvent &event) override;
 };
-}
+}  // namespace BangEditor
 
 #endif  // EXPLORERITEM_H

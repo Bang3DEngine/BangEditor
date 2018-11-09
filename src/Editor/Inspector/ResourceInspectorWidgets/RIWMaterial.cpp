@@ -227,21 +227,21 @@ void RIWMaterial::UpdateInputsFromResource()
 {
     Texture2D *albedoTex = GetMaterial()->GetAlbedoTexture();
     p_albedoTextureInput->SetPath(albedoTex ? albedoTex->GetResourceFilepath()
-                                            : Path::Empty);
+                                            : Path::Empty());
     p_albedoUvOffsetInput->Set(GetMaterial()->GetAlbedoUvOffset());
     p_albedoUvMultiplyInput->Set(GetMaterial()->GetAlbedoUvMultiply());
 
     Texture2D *roughnessTex = GetMaterial()->GetRoughnessTexture();
     p_roughnessTextureInput->SetPath(
-        roughnessTex ? roughnessTex->GetResourceFilepath() : Path::Empty);
+        roughnessTex ? roughnessTex->GetResourceFilepath() : Path::Empty());
 
     Texture2D *metalnessTex = GetMaterial()->GetMetalnessTexture();
     p_metalnessTextureInput->SetPath(
-        metalnessTex ? metalnessTex->GetResourceFilepath() : Path::Empty);
+        metalnessTex ? metalnessTex->GetResourceFilepath() : Path::Empty());
 
     Texture2D *normalMapTex = GetMaterial()->GetNormalMapTexture();
     p_normalMapTextureInput->SetPath(
-        normalMapTex ? normalMapTex->GetResourceFilepath() : Path::Empty);
+        normalMapTex ? normalMapTex->GetResourceFilepath() : Path::Empty());
     p_normalMapUvOffsetInput->Set(GetMaterial()->GetNormalMapUvOffset());
     p_normalMapUvMultiplyInput->Set(GetMaterial()->GetNormalMapUvMultiply());
     p_normalMapMultiplyFactorInput->SetValue(
@@ -271,9 +271,10 @@ void RIWMaterial::UpdateInputsFromResource()
     ShaderProgram *sp = GetMaterial()->GetShaderProgram();
     Shader *vs = sp ? sp->GetVertexShader() : nullptr;
     Shader *fs = sp ? sp->GetFragmentShader() : nullptr;
-    p_vertexShaderInput->SetPath(vs ? vs->GetResourceFilepath() : Path::Empty);
+    p_vertexShaderInput->SetPath(vs ? vs->GetResourceFilepath()
+                                    : Path::Empty());
     p_fragmentShaderInput->SetPath(fs ? fs->GetResourceFilepath()
-                                      : Path::Empty);
+                                      : Path::Empty());
 }
 
 Texture2D *RIWMaterial::GetIconTexture() const

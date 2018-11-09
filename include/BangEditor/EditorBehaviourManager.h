@@ -28,7 +28,7 @@ namespace Bang
 class Behaviour;
 class Library;
 class IEventsFileTracker;
-}
+}  // namespace Bang
 
 using namespace Bang;
 namespace BangEditor
@@ -101,7 +101,7 @@ private:
     {
     public:
         EditorBehaviourManager *m_behaviourManager = nullptr;
-        Path m_behaviourPath = Path::Empty;
+        Path m_behaviourPath = Path::Empty();
         void Run() override;
     };
 
@@ -113,6 +113,6 @@ private:
     friend class GameBuilder;
     friend class BehaviourCompileRunnable;
 };
-}
+}  // namespace BangEditor
 
 #endif  // EDITORBEHAVIOURMANAGER_H

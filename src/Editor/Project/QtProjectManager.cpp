@@ -86,7 +86,7 @@ void QtProjectManager::CreateQtProjectFile()
 void QtProjectManager::OpenBehaviourInQtCreator(const Path &behFilepath)
 {
     bool alreadyOpened = QtProjectManager::IsQtCreatorOpenedCurrentProject();
-    List<String> args = {};
+    Array<String> args;
     if (alreadyOpened)
     {
         args.PushBack("-client");

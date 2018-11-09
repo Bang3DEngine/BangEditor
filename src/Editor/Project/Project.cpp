@@ -70,7 +70,7 @@ Path Project::GetFirstFoundScenePath() const
     Array<Path> sceneFilepaths = GetProjectAssetsFilepath().GetFiles(
         FindFlag::RECURSIVE, {Extensions::GetSceneExtension()});
     Paths::SortPathsByName(&sceneFilepaths);
-    return !sceneFilepaths.IsEmpty() ? sceneFilepaths.Back() : Path::Empty;
+    return !sceneFilepaths.IsEmpty() ? sceneFilepaths.Back() : Path::Empty();
 }
 
 void Project::ImportMeta(const MetaNode &metaNode)

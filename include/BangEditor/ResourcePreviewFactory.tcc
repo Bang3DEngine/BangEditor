@@ -169,7 +169,7 @@ void ResourcePreviewFactory<T>::FillTextureWithPreview(
     camTR->LookAt(goSphere.GetCenter());
     GetPreviewCamera()->SetZFar((camDist + goSphere.GetRadius() * 2.0f) * 1.2f);
     /*
-    */
+     */
 
     GL::SetViewport(0, 0, previewTextureSize, previewTextureSize);
     GEngine::GetInstance()->Render(GetPreviewScene(), GetPreviewCamera());
@@ -243,4 +243,4 @@ GameObject *ResourcePreviewFactory<T>::GetPreviewGameObjectContainer() const
 {
     return p_previewGameObjectContainer;
 }
-}
+}  // namespace BangEditor

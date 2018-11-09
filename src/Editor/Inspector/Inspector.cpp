@@ -10,7 +10,6 @@
 #include "Bang/Component.h"
 #include "Bang/ComponentMacros.h"
 #include "Bang/EventEmitter.h"
-#include "Bang/EventEmitter.h"
 #include "Bang/EventListener.tcc"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
@@ -60,7 +59,7 @@ class IEventsFocus;
 class Object;
 class Scene;
 class Serializable;
-}
+}  // namespace Bang
 
 using namespace Bang;
 using namespace BangEditor;
@@ -470,6 +469,6 @@ void Inspector::Clear()
         p_currentGameObject = nullptr;
     }
 
-    m_currentOpenPath = Path::Empty;
+    m_currentOpenPath = Path::Empty();
     SetCurrentWidgetBlocked(false);
 }

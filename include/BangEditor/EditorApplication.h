@@ -15,7 +15,7 @@ class Resources;
 class Scene;
 class Texture2D;
 class UIImageRenderer;
-}
+}  // namespace Bang
 
 using namespace Bang;
 namespace BangEditor
@@ -25,6 +25,7 @@ class EditorDebug;
 class EditorPaths;
 class EditorResources;
 class EditorScene;
+class EditorSettings;
 
 class EditorApplication : public Application
 {
@@ -32,17 +33,18 @@ public:
     EditorApplication();
     virtual ~EditorApplication() override;
 
-    void InitEditorApplication(const Path &engineRootPath,
-                               const Path &editorRootPath);
+    void Init(const Path &engineRootPath, const Path &editorRootPath);
     void OpenEditorScene();
 
     EditorPaths *GetEditorPaths() const;
+    EditorSettings *GetEditorSettings() const;
 
 private:
     Editor *m_editor = nullptr;
 
     Debug *CreateDebug() const override;
     Paths *CreatePaths() const override;
+    Settings *CreateSettings() const override;
     Resources *CreateResources() const override;
 
     Editor *GetEditor() const;
@@ -52,6 +54,6 @@ private:
     friend class EditorPaths;
     friend class EditorBehaviourManager;
 };
-}
+}  // namespace BangEditor
 
 #endif  // EDITORAPPLICATION_H

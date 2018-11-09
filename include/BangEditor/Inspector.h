@@ -23,10 +23,6 @@
 namespace Bang
 {
 class Component;
-class IEventsComponent;
-class IEventsDestroy;
-class IEventsFileTracker;
-class IEventsSceneManager;
 class Object;
 class Scene;
 class Serializable;
@@ -36,7 +32,7 @@ class UIScrollPanel;
 class UIVerticalLayout;
 template <class>
 class EventEmitter;
-}
+}  // namespace Bang
 
 using namespace Bang;
 namespace BangEditor
@@ -77,7 +73,7 @@ private:
     List<InspectorWidget *> m_widgets;
     UMap<Object *, InspectorWidget *> m_objToWidget;
 
-    Path m_currentOpenPath = Path::Empty;
+    Path m_currentOpenPath = Path::Empty();
     GameObject *p_currentGameObject = nullptr;
     UIVerticalLayout *p_mainVL = nullptr;
     UIScrollPanel *p_scrollPanel = nullptr;
@@ -115,6 +111,6 @@ private:
     void OnComponentRemoved(Component *removedComponent,
                             GameObject *previousGameObject) override;
 };
-}
+}  // namespace BangEditor
 
 #endif  // INSPECTOR_H

@@ -42,7 +42,7 @@ class Array;
 using namespace Bang;
 using namespace BangEditor;
 
-Path SelectProjectWindow::SelectedProjectPath = Path::EmptyPath();
+Path SelectProjectWindow::SelectedProjectPath = Path::Empty();
 
 SelectProjectWindow::SelectProjectWindow()
 {

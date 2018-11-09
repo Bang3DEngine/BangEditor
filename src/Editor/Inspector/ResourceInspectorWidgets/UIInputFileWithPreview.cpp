@@ -67,7 +67,7 @@ void UIInputFileWithPreview::SetResource(Resource *resource)
     }
     else
     {
-        SetPath(Path::Empty);
+        SetPath(Path::Empty());
     }
 }
 

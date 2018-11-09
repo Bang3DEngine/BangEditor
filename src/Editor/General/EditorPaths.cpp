@@ -4,6 +4,7 @@
 
 #include "Bang/Application.h"
 #include "Bang/Debug.h"
+#include "Bang/Extensions.h"
 #include "Bang/List.tcc"
 #include "Bang/StreamOperators.h"
 #include "Bang/Time.h"
@@ -22,13 +23,12 @@ EditorPaths::~EditorPaths()
 
 void EditorPaths::InitEditorPath(const Path &editorRootPath)
 {
-    c_editorRoot = editorRootPath;
+    m_editorRootPath = editorRootPath;
 
     if (EditorPaths::GetEditorAssetsDir().IsDir())
     {
         Debug_DLog("Picking as EditorPaths Bang Editor Root: '"
-                   << EditorPaths::GetEditorDir()
-                   << "'");
+                   << EditorPaths::GetEditorDir() << "'");
     }
     else
     {
@@ -46,7 +46,7 @@ List<Path> EditorPaths::GetEditorIncludeDirs()
 
 const Path &EditorPaths::GetEditorDir()
 {
-    return EditorPaths::GetInstance()->c_editorRoot;
+    return EditorPaths::GetInstance()->m_editorRootPath;
 }
 
 Path EditorPaths::GetEditorAssetsDir()
@@ -75,12 +75,14 @@ Path EditorPaths::GetEditorBuildDir()
 
 Path EditorPaths::GetBangStaticLibPath()
 {
-    return EditorPaths::GetEditorLibrariesDir().Append("libBang.a");
+    return EditorPaths::GetEditorLibrariesDir().Append("libBang").WithExtension(
+        Extensions::GetStaticLibExtension());
 }
 
 Path EditorPaths::GetBangDynamicLibPath()
 {
-    return EditorPaths::GetEditorLibrariesDir().Append("libBang.so");
+    return EditorPaths::GetEditorLibrariesDir().Append("libBang").WithExtension(
+        Extensions::GetDynamicLibExtension());
 }
 
 Path EditorPaths::CreateEditorPath(const String &path)

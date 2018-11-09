@@ -10,6 +10,7 @@
 #include "Bang/EventListener.h"
 #include "Bang/IEvents.h"
 #include "Bang/IEventsDestroy.h"
+#include "Bang/IEventsFileTracker.h"
 #include "Bang/Scene.h"
 #include "Bang/SceneManager.h"
 #include "Bang/String.h"
@@ -28,14 +29,11 @@ class Scene;
 class Texture2D;
 class UIImageRenderer;
 class UITextRenderer;
-class IEventsDestroy;
-class IEventsSceneManager;
-class IEventsWindow;
 class Path;
 class Window;
 template <class>
 class EventEmitter;
-}
+}  // namespace Bang
 
 using namespace Bang;
 namespace BangEditor
@@ -151,6 +149,6 @@ private:
     friend class EditorApplication;
     friend class EditorSceneManager;
 };
-}
+}  // namespace BangEditor
 
 #endif  // EDITORSCENE_H

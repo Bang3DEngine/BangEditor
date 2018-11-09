@@ -8,7 +8,6 @@
 #include "Bang/Path.h"
 #include "Bang/SceneManager.h"
 #include "BangEditor/EditorApplication.h"
-#include "BangEditor/EditorSettings.h"
 #include "BangEditor/IEventsEditor.h"
 #include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/PlayState.h"
@@ -21,13 +20,10 @@ using namespace BangEditor;
 
 Editor::Editor()
 {
-    m_editorSettings = new EditorSettings();
-    GetEditorSettings()->Init();
 }
 
 Editor::~Editor()
 {
-    delete m_editorSettings;
 }
 
 void Editor::Init()
@@ -107,12 +103,6 @@ bool Editor::IsEditingScene()
 {
     return ScenePlayer::GetPlayState() == PlayState::EDITING;
 }
-
-EditorSettings *Editor::GetEditorSettings() const
-{
-    return m_editorSettings;
-}
-
 void Editor::OnSceneLoaded(Scene *, const Path &)
 {
     Editor::SelectGameObject(nullptr, false);

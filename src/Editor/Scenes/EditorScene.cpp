@@ -10,6 +10,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/IEventsFileTracker.h"
 #include "Bang/IEventsSceneManager.h"
 #include "Bang/Input.h"
 #include "Bang/Path.h"
@@ -48,12 +49,6 @@
 #include "BangEditor/UITabHeader.h"
 #include "BangEditor/UITabStation.h"
 #include "BangEditor/UndoRedoManager.h"
-
-namespace Bang
-{
-class IEventsDestroy;
-class IEventsFileTracker;
-}
 
 using namespace Bang;
 using namespace BangEditor;
@@ -410,7 +405,9 @@ void EditorScene::OnPlayStateChanged(PlayState previousPlayState,
     // Change tab when play/stop
     switch (newPlayState)
     {
-        case PlayState::EDITING: { OpenTab(GetSceneEditContainer());
+        case PlayState::EDITING:
+        {
+            OpenTab(GetSceneEditContainer());
         }
         break;
 

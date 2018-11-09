@@ -48,7 +48,7 @@ using namespace Bang;
 using namespace BangEditor;
 
 bool EditorDialog::s_accepted = false;
-Path EditorDialog::s_assetPathResult = Path::EmptyPath();
+Path EditorDialog::s_assetPathResult = Path::Empty();
 
 EditorDialog::EditorDialog()
 {
@@ -67,7 +67,7 @@ void EditorDialog::GetAsset(const String &title,
     ASSERT(accepted);
 
     EditorDialog::s_accepted = false;
-    EditorDialog::s_assetPathResult = Path::Empty;
+    EditorDialog::s_assetPathResult = Path::Empty();
 
     Dialog::BeginDialogCreation(title, 500, 400, true, true);
     Scene *scene = GameObjectFactory::CreateScene(false);
@@ -211,13 +211,13 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
 
     Array<Path> engineAssetPaths =
         Paths::GetEngineAssetsDir().GetFiles(FindFlag::RECURSIVE);
-    engineAssetPaths.PushFront(Path::Empty);
+    engineAssetPaths.PushFront(Path::Empty());
     GameObject *engineAssetsGo =
         CreateAssetContainerGameObject(engineAssetPaths);
 
     Array<Path> projectAssetPaths =
         Paths::GetProjectAssetsDir().GetFiles(FindFlag::RECURSIVE);
-    projectAssetPaths.PushFront(Path::Empty);
+    projectAssetPaths.PushFront(Path::Empty());
     GameObject *projectAssetsGo =
         CreateAssetContainerGameObject(projectAssetPaths);
 
@@ -238,7 +238,7 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
     UIButton *cancelButton = GameObjectFactory::CreateUIButton("Cancel");
     cancelButton->AddClickedCallback([]() {
         EditorDialog::s_accepted = false;
-        EditorDialog::s_assetPathResult = Path::Empty;
+        EditorDialog::s_assetPathResult = Path::Empty();
         Dialog::EndCurrentDialog();
     });
 

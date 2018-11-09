@@ -23,11 +23,11 @@ public:
     bool IsRedundant() const override;
 
 private:
-    Path m_previousSelectedPath = Path::Empty;
-    Path m_newSelectedPath = Path::Empty;
+    Path m_previousSelectedPath = Path::Empty();
+    Path m_newSelectedPath = Path::Empty();
 
     void RestorePath(const Path &path);
 };
-}
+}  // namespace BangEditor
 
 #endif  // UNDOREDOEXPLORERSELECT_H

@@ -26,12 +26,11 @@ class IEventsDestroy;
 class IEventsSceneManager;
 class Path;
 class Scene;
-}
+}  // namespace Bang
 
 using namespace Bang;
 namespace BangEditor
 {
-class EditorSettings;
 class IEventsEditor;
 
 class Editor : public EventEmitter<IEventsEditor>,
@@ -49,7 +48,6 @@ public:
 
 private:
     GameObject *p_selectedGameObject = nullptr;
-    EditorSettings *m_editorSettings = nullptr;
 
     Editor();
     virtual ~Editor() override;
@@ -57,8 +55,6 @@ private:
     void Init();
 
     static void OnPathSelected(const Path &path);
-
-    EditorSettings *GetEditorSettings() const;
 
     void SelectGameObject_(GameObject *selectedGameObject, bool registerUndo);
 
@@ -69,10 +65,9 @@ private:
     void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
     friend class Explorer;
-    friend class EditorSettings;
     friend class EditorApplication;
     friend class UndoRedoGameObjectSelection;
 };
-}
+}  // namespace BangEditor
 
 #endif  // EDITOR_H

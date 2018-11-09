@@ -293,9 +293,8 @@ void AnimatorSMEditorScene::Clear()
 {
     if (GetAnimatorSMLayer())
     {
-        GetAnimatorSMLayer()
-            ->EventEmitter<
-                IEventsAnimatorStateMachineLayer>::UnRegisterListener(this);
+        GetAnimatorSMLayer()->EventEmitter<IEventsAnimatorStateMachineLayer>::
+            UnRegisterListener(this);
     }
 
     p_animatorSMLayer = nullptr;
@@ -417,7 +416,7 @@ Path AnimatorSMEditorScene::GetAnimatorSMExtraInfoPath() const
                 metaResourcePath.GetAbsolute().Replace(".meta", ".metaed"));
         }
     }
-    return Path::Empty;
+    return Path::Empty();
 }
 
 void AnimatorSMEditorScene::ImportCurrentAnimatorStateMachineExtraInformation()

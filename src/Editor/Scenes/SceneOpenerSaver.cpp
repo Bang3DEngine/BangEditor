@@ -142,7 +142,7 @@ bool SceneOpenerSaver::OnSaveScene(bool saveAs)
                                      hintName);
         }
 
-        bool saveScene = (saveScenePath != Path::Empty);
+        bool saveScene = (saveScenePath != Path::Empty());
         if (saveScene && saveScenePath.IsFile() &&
             saveScenePath != GetOpenScenePath())
         {
@@ -201,8 +201,8 @@ bool SceneOpenerSaver::CloseScene()
     }
 
     m_numActionsDoneSinceLastSave = 0;
-    m_currentOpenScenePath = Path::Empty;
-    m_currentLoadedScenePath = Path::Empty;
+    m_currentOpenScenePath = Path::Empty();
+    m_currentLoadedScenePath = Path::Empty();
     SceneManager::LoadScene(nullptr, false);
     return true;
 }
