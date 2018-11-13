@@ -51,6 +51,11 @@ void EditorSettings::ExportToFile()
     MetaNode metaNode;
     metaNode.SetName("EditorSettings");
     metaNode.SetArray("RecentProjectFilesOpen", m_recentProjectFilesOpen);
+    metaNode.Set("CompilerPath", Paths::GetCompilerPath());
+    metaNode.Set("LinkerPath", Paths::GetLinkerPath());
+    metaNode.Set("MSVCConfigureArchitecturePath",
+                 Paths::GetMSVCConfigureArchitectureBatPath());
+    metaNode.SetArray("CompilerIncludePaths", Paths::GetCompilerIncludePaths());
 
     File::Write(EditorSettings::GetEditorSettingsPath(), metaNode.ToString());
 }
@@ -67,6 +72,24 @@ void EditorSettings::ImportFromFile()
     if (settingsMeta.Contains("CompilerPath"))
     {
         Paths::SetCompilerPath(settingsMeta.Get<Path>("CompilerPath"));
+    }
+
+    if (settingsMeta.Contains("LinkerPath"))
+    {
+        Paths::SetLinkerPath(settingsMeta.Get<Path>("LinkerPath"));
+    }
+
+    if (settingsMeta.Contains("MSVCConfigureArchitecturePath"))
+    {
+        Paths::SetMSVCConfigureArchitecturePath(
+            settingsMeta.Get<Path>("MSVCConfigureArchitecturePath"));
+    }
+
+    Array<Path> includePaths =
+        settingsMeta.GetArray<Path>("CompilerIncludePaths");
+    for (const Path &includePath : includePaths)
+    {
+        Paths::AddCompilerIncludePath(includePath);
     }
 
     ExportToFile();

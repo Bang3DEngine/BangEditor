@@ -37,6 +37,7 @@ void EditorApplication::Init(const Path &engineRootPath,
     Application::Init_(engineRootPath);
     GetEditorPaths()->InitEditorPath(editorRootPath);
     InitAfterPathsInit_();
+    GetEditorSettings()->ExportToFile();
     EditorResources::GetInstance()->InitAfterGLIsInited();
 
     MetaFilesManager::CreateMissingMetaFiles(EditorPaths::GetEditorAssetsDir());
