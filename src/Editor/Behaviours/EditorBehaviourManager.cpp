@@ -467,8 +467,8 @@ Compiler::Job EditorBehaviourManager::CreateBaseCompileJob(BinType binaryType,
         bool isBangLibStatic = (bangLibPath.GetExtension() == "a");
         if (isBangLibStatic)
         {
-            String Quote = "\"";
 #ifdef __linux__
+            const String Quote = "\"";
             job.AddInputFile("   -Wl,--whole-archive " + Quote +
                              bangLibPath.GetAbsolute() + Quote +
                              " -Wl,--no-whole-archive");
@@ -479,11 +479,16 @@ Compiler::Job EditorBehaviourManager::CreateBaseCompileJob(BinType binaryType,
         else
         {
             job.libDirs.PushBack(EditorPaths::GetEditorLibrariesDir());
+#ifdef __linux__
             job.libraries.PushBack("Bang");
+#elif _WIN32
+            job.libraries.PushBack("libBang.lib");
+#endif
         }
     }
 
 #ifdef _WIN32
+    // System
     job.libraries.PushBack("kernel32.lib");
     job.libraries.PushBack("user32.lib");
     job.libraries.PushBack("gdi32.lib");
@@ -499,6 +504,19 @@ Compiler::Job EditorBehaviourManager::CreateBaseCompileJob(BinType binaryType,
     job.libraries.PushBack("glu32.lib");
     job.libraries.PushBack("odbccp32.lib");
     job.libraries.PushBack("shlwapi.lib");
+
+    // Bang deps
+    job.libraries.PushBack("glew32.lib");
+    job.libraries.PushBack("jpeg.lib");
+    job.libraries.PushBack("libpng16d.lib");
+    job.libraries.PushBack("libsndfile-1.lib");
+    job.libraries.PushBack("SDL2d.lib");
+    job.libraries.PushBack("OpenAL32.lib");
+    job.libraries.PushBack("assimp-vc140-mt.lib");
+    job.libraries.PushBack("libsdl2_ttf.lib");
+    job.libraries.PushBack("libfreetype2.lib");
+    job.libraries.PushBack("IrrXML.lib");
+    job.libraries.PushBack("zlibstaticd.lib");
 
     Array<Path> dependenciesLibPaths = EditorPaths::GetEditorLibrariesDir()
                                            .Append(Paths::GetBuildType())
@@ -531,12 +549,12 @@ Compiler::Job EditorBehaviourManager::CreateBaseCompileJob(BinType binaryType,
     if (binaryType == BinType::BIN_DEBUG)
     {
         job.flags.PushBack(Array<String>({""}));
-        job.flags.PushBack("-D_DEBUG");
+        job.flags.PushBack("/D_DEBUG");
     }
     else
     {
         job.flags.PushBack(Array<String>({""}));
-        job.flags.PushBack("-DNDEBUG");
+        job.flags.PushBack("/DNDEBUG");
     }
 
 #endif
@@ -561,7 +579,6 @@ Compiler::Job EditorBehaviourManager::CreateCompileBehaviourJob(
         EditorBehaviourManager::CreateBaseCompileJob(binaryType, false);
     job.outputMode = Compiler::OutputType::OBJECT;
     job.includePaths.PushBack(Paths::GetEngineIncludeDirs());
-    // job.includePaths.PushBack( EditorPaths::GetEditorIncludeDirs() );
     job.includePaths.PushBack(Paths::GetProjectIncludeDirs());
     job.AddInputFile(behaviourFilepath);
     job.outputFile = outputObjectFilepath;

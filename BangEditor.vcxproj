@@ -163,6 +163,21 @@ xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfil
 xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfile\lib\libsndfile-1.lib $(OutDir)
 xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfile\lib\libsndfile-1.lib $(ProjectDir)\Libraries\$(Configuration)
 
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\SDL2_ttf-2.0.14\CompileSDL2_TTF\$(Configuration)\$(Platform)\libsdl2_ttf.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\SDL2_ttf-2.0.14\CompileSDL2_TTF\$(Configuration)\$(Platform)\libsdl2_ttf.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\assimp\build\$(Configuration)\code\$(Configuration)\assimp-vc140-mt.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\assimp\build\$(Configuration)\code\$(Configuration)\assimp-vc140-mt.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\freetype-2.4.0\CompileFreetype\$(Configuration)\$(Platform)\libfreetype2.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\freetype-2.4.0\CompileFreetype\$(Configuration)\$(Platform)\libfreetype2.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(ProjectDir)\Bang\Compile\CompileDependencies\ThirdParty\zlib-1.2.11\build\$(Configuration)\$(Platform)\lib\zlibstaticd.lib $(OutDir)
+xcopy /Y /c $(ProjectDir)\Bang\Compile\CompileDependencies\ThirdParty\zlib-1.2.11\build\$(Configuration)\$(Platform)\lib\zlibstaticd.lib  $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(ProjectDir)\Bang\Compile\CompileDependencies\ThirdParty\assimp\build\$(Configuration)\contrib\irrXML\$(Configuration)\IrrXML.lib $(OutDir)
+xcopy /Y /c $(ProjectDir)\Bang\Compile\CompileDependencies\ThirdParty\assimp\build\$(Configuration)\contrib\irrXML\$(Configuration)\IrrXML.lib $(ProjectDir)\Libraries\$(Configuration)
+
 xcopy /Y /c $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.lib $(OutDir)
 xcopy /Y /c $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.lib $(ProjectDir)\Libraries\$(Configuration)
 
@@ -255,6 +270,21 @@ xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfil
 xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfile\bin\libsndfile-1.dll $(ProjectDir)\Libraries\$(Configuration)
 xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfile\lib\libsndfile-1.lib $(OutDir)
 xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\libsndfile\lib\libsndfile-1.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\SDL2_ttf-2.0.14\CompileSDL2_TTF\$(Configuration)\$(Platform)\libsdl2_ttf.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\SDL2_ttf-2.0.14\CompileSDL2_TTF\$(Configuration)\$(Platform)\libsdl2_ttf.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\assimp\build\$(Configuration)\code\$(Configuration)\assimp-vc140-mt.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\assimp\build\$(Configuration)\code\$(Configuration)\assimp-vc140-mt.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\freetype-2.4.0\CompileFreetype\$(Configuration)\$(Platform)\libfreetype2.lib $(OutDir)
+xcopy /Y /c $(SolutionDir)\Bang\Compile\CompileDependencies\ThirdParty\freetype-2.4.0\CompileFreetype\$(Configuration)\$(Platform)\libfreetype2.lib $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(ProjectDir)\Bang\Compile\CompileDependencies\ThirdParty\zlib-1.2.11\build\$(Configuration)\$(Platform)\lib\zlibstaticd.lib $(OutDir)
+xcopy /Y /c $(ProjectDir)\Bang\Compile\CompileDependencies\ThirdParty\zlib-1.2.11\build\$(Configuration)\$(Platform)\lib\zlibstaticd.lib  $(ProjectDir)\Libraries\$(Configuration)
+
+xcopy /Y /c $(ProjectDir)\Bang\Compile\CompileDependencies\ThirdParty\assimp\build\$(Configuration)\contrib\irrXML\$(Configuration)\IrrXML.lib $(OutDir)
+xcopy /Y /c $(ProjectDir)\Bang\Compile\CompileDependencies\ThirdParty\assimp\build\$(Configuration)\contrib\irrXML\$(Configuration)\IrrXML.lib $(ProjectDir)\Libraries\$(Configuration)
 
 xcopy /Y /c $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.lib $(OutDir)
 xcopy /Y /c $(SolutionDir)\Bang\Libraries\$(Configuration)\libBang.lib $(ProjectDir)\Libraries\$(Configuration)
