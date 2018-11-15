@@ -18,6 +18,7 @@
 #include "Bang/String.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIImageRenderer.h"
+#include "Bang/UIInputNumber.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UITextRenderer.h"
 #include "BangEditor/AESNode.h"
@@ -64,7 +65,12 @@ void GIWAESNode::InitInnerWidgets()
     p_nodeAnimationInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 
+    p_speedInputNumber = GameObjectFactory::CreateUIInputNumber();
+    p_speedInputNumber->EventEmitter<IEventsValueChanged>::RegisterListener(
+        this);
+
     AddWidget("Name", p_nameInput->GetGameObject());
+    AddWidget("Speed", p_speedInputNumber->GetGameObject());
     AddWidget("Animation", p_nodeAnimationInput);
 
     SetLabelsWidth(100);
@@ -93,6 +99,7 @@ void GIWAESNode::UpdateFromReference()
             smNode->GetAnimation()
                 ? smNode->GetAnimation()->GetResourceFilepath()
                 : Path::Empty());
+        p_speedInputNumber->SetValue(smNode->GetSpeed());
     }
 }
 
@@ -109,6 +116,10 @@ void GIWAESNode::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
             smNode->SetAnimation(
                 Resources::Load<Animation>(p_nodeAnimationInput->GetPath())
                     .Get());
+        }
+        else if (ee == p_speedInputNumber)
+        {
+            smNode->SetSpeed(p_speedInputNumber->GetValue());
         }
     }
 }

@@ -3,6 +3,7 @@
 #include "Bang/Alignment.h"
 #include "Bang/Animator.h"
 #include "Bang/AnimatorStateMachine.h"
+#include "Bang/AnimatorStateMachineBlendTreeNode.h"
 #include "Bang/AnimatorStateMachineLayer.h"
 #include "Bang/AnimatorStateMachineNode.h"
 #include "Bang/AnimatorStateMachinePlayer.h"
@@ -31,6 +32,7 @@
 #include "BangEditor/AnimatorSMEditorScene.h"
 #include "BangEditor/Editor.h"
 #include "BangEditor/GIWAESNode.h"
+#include "BangEditor/GIWAESNodeBlendTree.h"
 #include "BangEditor/Inspector.h"
 #include "BangEditor/MenuItem.h"
 #include "BangEditor/UIContextMenu.h"
@@ -293,8 +295,8 @@ void AESNode::Duplicate()
     uint idx = GetIndexInStateMachine();
     ASSERT(idx != SCAST<uint>(-1));
 
-    AnimatorStateMachineNode *newNode =
-        GetAnimatorSMLayer()->CreateAndAddNode();
+    AnimatorStateMachineNode *newNode = new AnimatorStateMachineNode();
+    GetAnimatorSMLayer()->AddNode(newNode);
     AESNode *newAESNode = GetAESScene()->GetAESNodes().Back();
     ASSERT(newNode);
 
@@ -436,7 +438,15 @@ UIEventResult AESNode::OnUIEvent(UIFocusable *, const UIEvent &event)
             GameObjectFactory::MakeBorderFocused(p_border);
             if (Inspector *insp = Inspector::GetActive())
             {
-                GIWAESNode *aesNodeInspWidget = new GIWAESNode();
+                GIWAESNode *aesNodeInspWidget = nullptr;
+                if (DCAST<AnimatorStateMachineBlendTreeNode *>(GetSMNode()))
+                {
+                    aesNodeInspWidget = new GIWAESNodeBlendTree();
+                }
+                else
+                {
+                    aesNodeInspWidget = new GIWAESNode();
+                }
                 aesNodeInspWidget->SetAESNode(this);
                 aesNodeInspWidget->Init();
                 insp->ShowInspectorWidget(aesNodeInspWidget);

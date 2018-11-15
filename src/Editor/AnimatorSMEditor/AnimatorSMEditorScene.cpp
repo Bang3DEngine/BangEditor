@@ -1,6 +1,7 @@
 #include "BangEditor/AnimatorSMEditorScene.h"
 
 #include "Bang/AnimatorStateMachine.h"
+#include "Bang/AnimatorStateMachineBlendTreeNode.h"
 #include "Bang/AnimatorStateMachineLayer.h"
 #include "Bang/AnimatorStateMachineNode.h"
 #include "Bang/Assert.h"
@@ -92,10 +93,16 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
             menuRootItem->SetFontSize(12);
 
             MenuItem *createNode = menuRootItem->AddItem("Create new node");
-            createNode->SetSelectedCallback([this](MenuItem *) {
+            MenuItem *createBlendTreeNode =
+                menuRootItem->AddItem("Create new blend tree node");
+
+            auto createNodeFunction = [this](bool blendTree) {
                 MetaNode previousMeta = GetAnimatorSM()->GetMeta();
 
-                GetAnimatorSMLayer()->CreateAndAddNode();
+                AnimatorStateMachineNode *newNode =
+                    (blendTree ? new AnimatorStateMachineBlendTreeNode()
+                               : new AnimatorStateMachineNode());
+                GetAnimatorSMLayer()->AddNode(newNode);
 
                 UndoRedoManager::PushAction(new UndoRedoSerializableChange(
                     GetAnimatorSM(), previousMeta, GetAnimatorSM()->GetMeta()));
@@ -106,7 +113,12 @@ AnimatorSMEditorScene::AnimatorSMEditorScene()
                 Vector3 localPos =
                     Vector3(GetMousePositionInSceneSpace(), localPosZ);
                 aesNodeRT->SetLocalPosition(localPos);
-            });
+            };
+
+            createNode->SetSelectedCallback([this, createNodeFunction](
+                MenuItem *) { createNodeFunction(false); });
+            createBlendTreeNode->SetSelectedCallback([this, createNodeFunction](
+                MenuItem *) { createNodeFunction(true); });
         }
     });
     p_contextMenu->SetFocusable(p_focusable);
@@ -293,8 +305,9 @@ void AnimatorSMEditorScene::Clear()
 {
     if (GetAnimatorSMLayer())
     {
-        GetAnimatorSMLayer()->EventEmitter<IEventsAnimatorStateMachineLayer>::
-            UnRegisterListener(this);
+        GetAnimatorSMLayer()
+            ->EventEmitter<
+                IEventsAnimatorStateMachineLayer>::UnRegisterListener(this);
     }
 
     p_animatorSMLayer = nullptr;

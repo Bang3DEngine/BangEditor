@@ -16,6 +16,7 @@ namespace Bang
 {
 class IEventsDestroy;
 class IEventsValueChanged;
+class UIInputNumber;
 class UIInputText;
 template <class>
 class EventEmitter;
@@ -38,9 +39,10 @@ public:
 
     void SetAESNode(AESNode *node);
 
-private:
+protected:
     AESNode *p_aesNode = nullptr;
     UIInputText *p_nameInput = nullptr;
+    UIInputNumber *p_speedInputNumber = nullptr;
     UIInputFileWithPreview *p_nodeAnimationInput = nullptr;
 
     AESNode *GetAESNode() const;

@@ -221,7 +221,8 @@ void EditorCamera::HandleMousePanning()
 {
     if (Input::GetMouseButton(MouseButton::MIDDLE))
     {
-        Vector2 delta = -Vector2(Input::GetMouseDelta()) * m_mousePanPerPixel;
+        Vector2 delta = -Vector2(Input::GetMouseDelta()) * m_mousePanPerPixel *
+                        m_zoomSpeedMultiplier;
         SetPositionDirectly(
             GetTransform()->GetPosition() +
             (p_camt->GetRight() * delta.x + p_camt->GetUp() * delta.y));
