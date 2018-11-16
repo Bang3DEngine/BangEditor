@@ -452,7 +452,7 @@ Array<Path> EditorBehaviourManager::GetBehaviourSourcesPaths()
 Compiler::Job EditorBehaviourManager::CreateBaseCompileJob(BinType binaryType,
                                                            bool addLibs)
 {
-    const Path bangLibPath = EditorPaths::GetBangLatestLibPath();
+    const Path bangLibPath = EditorPaths::GetBangDynamicLibPath();
     if (!bangLibPath.Exists())
     {
         Debug_Error(bangLibPath << " not found! Needed to build behaviours..."

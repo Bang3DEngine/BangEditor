@@ -28,7 +28,8 @@ void EditorPaths::InitEditorPath(const Path &editorRootPath)
     if (EditorPaths::GetEditorAssetsDir().IsDir())
     {
         Debug_DLog("Picking as EditorPaths Bang Editor Root: '"
-                   << EditorPaths::GetEditorDir() << "'");
+                   << EditorPaths::GetEditorDir()
+                   << "'");
     }
     else
     {
@@ -93,16 +94,4 @@ Path EditorPaths::CreateEditorPath(const String &path)
 EditorPaths *EditorPaths::GetInstance()
 {
     return EditorApplication::GetInstance()->GetEditorPaths();
-}
-
-Bang::Path BangEditor::EditorPaths::GetBangLatestLibPath()
-{
-    Path staticLibPath = EditorPaths::GetBangStaticLibPath();
-    Path dynamicLibPath = EditorPaths::GetBangDynamicLibPath();
-    if (staticLibPath.IsFile() && (staticLibPath.GetModificationTime() >
-                                   dynamicLibPath.GetModificationTime()))
-    {
-        return staticLibPath;
-    }
-    return dynamicLibPath;
 }

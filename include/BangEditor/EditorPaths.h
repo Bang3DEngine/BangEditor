@@ -26,7 +26,6 @@ public:
     static Path GetEditorBuildDir();
     static Path GetBangStaticLibPath();
     static Path GetBangDynamicLibPath();
-    static Path GetBangLatestLibPath();
 
     static List<Path> GetEditorIncludeDirs();
 
