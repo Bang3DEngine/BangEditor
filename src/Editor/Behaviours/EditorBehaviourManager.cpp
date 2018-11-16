@@ -536,6 +536,7 @@ Compiler::Job EditorBehaviourManager::CreateBaseCompileJob(BinType binaryType,
     {
         job.flags.PushBack(Array<String>({"-O0", "-g", "-Wl,-O0"}));
         job.flags.PushBack("-D_DEBUG");
+        job.flags.PushBack("-DDEBUG");
     }
     else
     {
@@ -550,6 +551,7 @@ Compiler::Job EditorBehaviourManager::CreateBaseCompileJob(BinType binaryType,
     {
         job.flags.PushBack(Array<String>({""}));
         job.flags.PushBack("/D_DEBUG");
+        job.flags.PushBack("/DDEBUG");
     }
     else
     {
@@ -692,9 +694,9 @@ void EditorBehaviourManager::BehaviourCompileRunnable::Run()
     const Path &outputPath = compileResult.compileJob.outputFile;
     if (!outputPath.IsFile())
     {
-        Debug_Error("Behaviour '"
-                    << outputPath.GetName()
-                    << "' did not compile correctly: " << compileResult.output);
+        Debug_Error("Behaviour '" << outputPath.GetName()
+                                  << "' did not compile correctly: "
+                                  << compileResult.output);
     }
     else
     {

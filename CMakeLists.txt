@@ -26,11 +26,14 @@ option(FORCE_NO_PIE "Whether to force no -pie build option." OFF)
 #=================================================================
 # Check input params and set some paths ==========================
 #=================================================================
-set(BANG_EDITOR_ROOT          "${CMAKE_CURRENT_LIST_DIR}")
-set(BANG_EDITOR_LIBRARIES_DIR "${BANG_EDITOR_ROOT}/Libraries/${CMAKE_BUILD_TYPE}")
+set(BANG_EDITOR_ROOT "${CMAKE_CURRENT_LIST_DIR}")
+set(BANG_ENGINE_ROOT "${BANG_EDITOR_ROOT}/Bang")
+include(${BANG_ENGINE_ROOT}/Compile/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
+include(${BANG_ENGINE_ROOT}/Compile/CMakeIncludes/CMakeMacros.cmake REQUIRED)
+
+set(BANG_EDITOR_LIBRARIES_DIR "${BANG_EDITOR_ROOT}/Libraries/${LIBRARIES_SUBDIR_NAME}")
 set(BANG_EDITOR_BINARIES_DIR  "${BANG_EDITOR_ROOT}/Binaries/${CMAKE_BUILD_TYPE}")
-set(BANG_ENGINE_ROOT          "${BANG_EDITOR_ROOT}/Bang")
-set(BANG_ENGINE_LIBRARIES_DIR "${BANG_ENGINE_ROOT}/Libraries/${CMAKE_BUILD_TYPE}")
+set(BANG_ENGINE_LIBRARIES_DIR "${BANG_ENGINE_ROOT}/Libraries/${LIBRARIES_SUBDIR_NAME}")
 set(BANG_ENGINE_INCLUDE_DIR   "${BANG_ENGINE_ROOT}/include")
 set(EXECUTABLE_OUTPUT_PATH    "${BANG_EDITOR_BINARIES_DIR}")
 set(LIBRARY_OUTPUT_PATH       "${BANG_EDITOR_LIBRARIES_DIR}")
@@ -42,9 +45,6 @@ endif()
 if (NOT DEFINED BANG_EDITOR_ROOT_DEFINE)
     file(RELATIVE_PATH BANG_EDITOR_ROOT_DEFINE ${EXECUTABLE_OUTPUT_PATH} ${BANG_EDITOR_ROOT})
 endif()
-
-include(${BANG_ENGINE_ROOT}/Compile/CMakeIncludes/CMakeCheckInputParams.cmake REQUIRED)
-include(${BANG_ENGINE_ROOT}/Compile/CMakeIncludes/CMakeMacros.cmake REQUIRED)
 #=================================================================
 #=================================================================
 #=================================================================
