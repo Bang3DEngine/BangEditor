@@ -45,12 +45,11 @@ private:
     UIInputNumber *p_floatInput = nullptr;
     UICheckBox *p_boolInput = nullptr;
 
-    AnimatorStateMachineVariable::Type m_varType =
-        Undef<AnimatorStateMachineVariable::Type>();
+    Variant::Type m_varType = Undef<Variant::Type>();
 
-    void SetVarType(AnimatorStateMachineVariable::Type type);
+    void SetVarType(Variant::Type type);
 
-    AnimatorStateMachineVariable::Type GetVarType() const;
+    Variant::Type GetVarType() const;
 
     // IEventsValueChanged
     virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *ee) override;

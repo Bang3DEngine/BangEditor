@@ -66,8 +66,7 @@ void ASMTransitionConditionInput::BeforeRender()
     }
 }
 
-void ASMTransitionConditionInput::SetVariableType(
-    AnimatorStateMachineVariable::Type type)
+void ASMTransitionConditionInput::SetVariableType(Variant::Type type)
 {
     if (type != m_varType)
     {
@@ -76,7 +75,7 @@ void ASMTransitionConditionInput::SetVariableType(
         p_comparatorInput->ClearItems();
         switch (m_varType)
         {
-            case AnimatorStateMachineVariable::Type::BOOL:
+            case Variant::Type::BOOL:
                 p_floatInput->GetGameObject()->SetEnabled(false);
                 p_comparatorInput->AddItem(
                     "True",
@@ -89,7 +88,7 @@ void ASMTransitionConditionInput::SetVariableType(
 
                 break;
 
-            case AnimatorStateMachineVariable::Type::FLOAT:
+            case Variant::Type::FLOAT:
                 p_floatInput->GetGameObject()->SetEnabled(true);
                 p_comparatorInput->AddItem(
                     "Greater",
@@ -100,6 +99,7 @@ void ASMTransitionConditionInput::SetVariableType(
                     SCAST<uint>(AnimatorStateMachineTransitionCondition::
                                     Comparator::LESS));
                 break;
+            default: break;
         }
     }
 }

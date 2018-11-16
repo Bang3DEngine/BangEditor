@@ -47,10 +47,8 @@ ASMVariableInput::ASMVariableInput()
     p_varNameInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_varTypeInput = GameObjectFactory::CreateUIComboBox();
-    p_varTypeInput->AddItem(
-        "Float", SCAST<uint>(AnimatorStateMachineVariable::Type::FLOAT));
-    p_varTypeInput->AddItem(
-        "Bool", SCAST<uint>(AnimatorStateMachineVariable::Type::BOOL));
+    p_varTypeInput->AddItem("Float", SCAST<uint>(Variant::Type::FLOAT));
+    p_varTypeInput->AddItem("Bool", SCAST<uint>(Variant::Type::BOOL));
     p_varTypeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     GameObject *varInputGo = GameObjectFactory::CreateUIGameObject();
@@ -74,14 +72,14 @@ ASMVariableInput::ASMVariableInput()
     p_floatInput->GetGameObject()->SetParent(varInputGo);
     p_boolInput->GetGameObject()->SetParent(varInputGo);
 
-    SetVarType(AnimatorStateMachineVariable::Type::FLOAT);
+    SetVarType(Variant::Type::FLOAT);
 }
 
 ASMVariableInput::~ASMVariableInput()
 {
 }
 
-void ASMVariableInput::SetVarType(AnimatorStateMachineVariable::Type type)
+void ASMVariableInput::SetVarType(Variant::Type type)
 {
     if (type != GetVarType())
     {
@@ -91,19 +89,21 @@ void ASMVariableInput::SetVarType(AnimatorStateMachineVariable::Type type)
 
         switch (GetVarType())
         {
-            case AnimatorStateMachineVariable::Type::BOOL:
+            case Variant::Type::BOOL:
                 p_boolInput->GetGameObject()->SetEnabled(true);
                 break;
 
-            case AnimatorStateMachineVariable::Type::FLOAT:
+            case Variant::Type::FLOAT:
                 p_floatInput->GetGameObject()->SetEnabled(true);
                 break;
+
+            default: break;
         }
         p_varTypeInput->SetSelectionByValue(SCAST<uint>(GetVarType()));
     }
 }
 
-AnimatorStateMachineVariable::Type ASMVariableInput::GetVarType() const
+Variant::Type ASMVariableInput::GetVarType() const
 {
     return m_varType;
 }
@@ -112,8 +112,7 @@ void ASMVariableInput::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 {
     if (ee == p_varTypeInput)
     {
-        SetVarType(SCAST<AnimatorStateMachineVariable::Type>(
-            p_varTypeInput->GetSelectedValue()));
+        SetVarType(SCAST<Variant::Type>(p_varTypeInput->GetSelectedValue()));
     }
 
     EventEmitter<IEventsValueChanged>::PropagateToListeners(
@@ -138,15 +137,13 @@ void ASMVariableInput::ImportMeta(const MetaNode &metaNode)
         p_varTypeInput->SetSelectionByValue(metaNode.Get<uint>("VariableType"));
     }
 
-    if (metaNode.Contains("ValueFloat"))
+    Variant variant;
+    if (metaNode.Contains("Variant"))
     {
-        p_floatInput->SetValue(metaNode.Get<float>("ValueFloat"));
+        variant = metaNode.Get<Variant>("Variant");
     }
-
-    if (metaNode.Contains("ValueBool"))
-    {
-        p_boolInput->SetChecked(metaNode.Get<bool>("ValueBool"));
-    }
+    p_boolInput->SetChecked(variant.GetBool());
+    p_floatInput->SetValue(variant.GetFloat());
 }
 
 void ASMVariableInput::ExportMeta(MetaNode *metaNode) const
@@ -155,6 +152,10 @@ void ASMVariableInput::ExportMeta(MetaNode *metaNode) const
 
     metaNode->Set("VariableName", p_varNameInput->GetText()->GetContent());
     metaNode->Set("VariableType", p_varTypeInput->GetSelectedValue());
-    metaNode->Set("ValueFloat", p_floatInput->GetValue());
-    metaNode->Set("ValueBool", p_boolInput->IsChecked());
+
+    Variant variant;
+    variant.SetFloat(p_floatInput->GetValue());
+    variant.SetBool(p_boolInput->IsChecked());
+    variant.SetType(SCAST<Variant::Type>(p_varTypeInput->GetSelectedValue()));
+    metaNode->Set("Variant", variant);
 }
