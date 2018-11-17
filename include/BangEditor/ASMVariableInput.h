@@ -19,6 +19,7 @@
 
 namespace Bang
 {
+class Animator;
 class IEventsValueChanged;
 class UICheckBox;
 class UIComboBox;
@@ -47,9 +48,13 @@ private:
 
     Variant::Type m_varType = Undef<Variant::Type>();
 
+    Animator *GetSelectedAnimator() const;
     void SetVarType(Variant::Type type);
 
     Variant::Type GetVarType() const;
+
+    // GameObject
+    void Update() override;
 
     // IEventsValueChanged
     virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *ee) override;

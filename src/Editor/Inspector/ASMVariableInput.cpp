@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <ostream>
 
+#include "Bang/Animator.h"
 #include "Bang/AnimatorStateMachineVariable.h"
 #include "Bang/EventEmitter.tcc"
 #include "Bang/GameObject.tcc"
@@ -20,6 +21,7 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIVerticalLayout.h"
+#include "BangEditor/Editor.h"
 
 using namespace Bang;
 using namespace BangEditor;
@@ -79,6 +81,16 @@ ASMVariableInput::~ASMVariableInput()
 {
 }
 
+Animator *ASMVariableInput::GetSelectedAnimator() const
+{
+    GameObject *selectedGameObject =
+        Editor::GetInstance()->GetSelectedGameObject();
+    Animator *selectedAnimator =
+        selectedGameObject ? selectedGameObject->GetComponent<Animator>()
+                           : nullptr;
+    return selectedAnimator;
+}
+
 void ASMVariableInput::SetVarType(Variant::Type type)
 {
     if (type != GetVarType())
@@ -106,6 +118,11 @@ void ASMVariableInput::SetVarType(Variant::Type type)
 Variant::Type ASMVariableInput::GetVarType() const
 {
     return m_varType;
+}
+
+void ASMVariableInput::Update()
+{
+    GameObject::Update();
 }
 
 void ASMVariableInput::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
@@ -137,13 +154,23 @@ void ASMVariableInput::ImportMeta(const MetaNode &metaNode)
         p_varTypeInput->SetSelectionByValue(metaNode.Get<uint>("VariableType"));
     }
 
-    Variant variant;
+    Variant defaultValueVariant;
     if (metaNode.Contains("Variant"))
     {
-        variant = metaNode.Get<Variant>("Variant");
+        defaultValueVariant = metaNode.Get<Variant>("Variant");
     }
-    p_boolInput->SetChecked(variant.GetBool());
-    p_floatInput->SetValue(variant.GetFloat());
+
+    if (Animator *selectedAnimator = GetSelectedAnimator())
+    {
+        String varName = p_varNameInput->GetText()->GetContent();
+        p_boolInput->SetChecked(selectedAnimator->GetVariableBool(varName));
+        p_floatInput->SetValue(selectedAnimator->GetVariableFloat(varName));
+    }
+    else
+    {
+        p_boolInput->SetChecked(defaultValueVariant.GetBool());
+        p_floatInput->SetValue(defaultValueVariant.GetFloat());
+    }
 }
 
 void ASMVariableInput::ExportMeta(MetaNode *metaNode) const
@@ -153,9 +180,10 @@ void ASMVariableInput::ExportMeta(MetaNode *metaNode) const
     metaNode->Set("VariableName", p_varNameInput->GetText()->GetContent());
     metaNode->Set("VariableType", p_varTypeInput->GetSelectedValue());
 
-    Variant variant;
-    variant.SetFloat(p_floatInput->GetValue());
-    variant.SetBool(p_boolInput->IsChecked());
-    variant.SetType(SCAST<Variant::Type>(p_varTypeInput->GetSelectedValue()));
-    metaNode->Set("Variant", variant);
+    Variant defaultValueVariant;
+    defaultValueVariant.SetFloat(p_floatInput->GetValue());
+    defaultValueVariant.SetBool(p_boolInput->IsChecked());
+    defaultValueVariant.SetType(
+        SCAST<Variant::Type>(p_varTypeInput->GetSelectedValue()));
+    metaNode->Set("Variant", defaultValueVariant);
 }
