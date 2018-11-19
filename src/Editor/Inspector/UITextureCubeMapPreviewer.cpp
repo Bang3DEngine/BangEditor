@@ -67,7 +67,7 @@ void UITextureCubeMapPreviewer::Update()
     Vector2i arSize(1, 1);
     if (GetTextureCubeMap())
     {
-        arSize = GetTextureCubeMap()->GetSize();
+        arSize = Vector2i(GetTextureCubeMap()->GetSize());
     }
     p_previewImgAspectRatioFitter->SetAspectRatio(arSize);
     p_previewImgAspectRatioFitter->Invalidate();

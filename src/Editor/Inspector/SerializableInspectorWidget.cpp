@@ -318,10 +318,15 @@ String GetStringValueFromWidget(GameObject *widget)
             default: value = String::ToString(inputVec->GetVector4()); break;
         }
     }
-    else if (UIInputFile *inputFile = DCAST<UIInputFile *>(widget))
+    else if (UIInputFileWithPreview *inputFile =
+                 DCAST<UIInputFileWithPreview *>(widget))
     {
         value =
             String::ToString(MetaFilesManager::GetGUID(inputFile->GetPath()));
+    }
+    else if (UIInputFile *inputFile = DCAST<UIInputFile *>(widget))
+    {
+        value = inputFile->GetPath().GetAbsolute();
     }
     else if (UIComboBox *comboBox = widget->GetComponent<UIComboBox>())
     {
