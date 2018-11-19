@@ -64,6 +64,7 @@
 #include "Bang/UISlider.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIVerticalLayout.h"
+#include "Bang/VolumeRenderer.h"
 #include "Bang/WaterRenderer.h"
 #include "BangEditor/BehaviourCreator.h"
 #include "BangEditor/EditSceneGameObjects.h"
@@ -275,6 +276,25 @@ MenuItem *MenuBar::GetItem(int i)
     return m_items[i];
 }
 
+template <class T>
+T *OnAddComponent()
+{
+    T *comp = nullptr;
+    GameObject *selectedGameObject = Editor::GetSelectedGameObject();
+    if (selectedGameObject)
+    {
+        MetaNode undoMetaBefore = selectedGameObject->GetMeta();
+
+        comp = selectedGameObject->AddComponent<T>();
+
+        MetaNode currentMeta = selectedGameObject->GetMeta();
+        UndoRedoManager::PushAction(new UndoRedoSerializableChange(
+            selectedGameObject, undoMetaBefore, currentMeta));
+    }
+
+    return comp;
+}
+
 void MenuBar::CreateGameObjectCreateMenuInto(MenuItem *rootItem)
 {
     MenuItem *createEmpty = rootItem->AddItem("Empty");
@@ -362,6 +382,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addMeshRenderer = addRenderer->AddItem("MeshRenderer");
     MenuItem *addSkinnedMeshRenderer =
         addRenderer->AddItem("SkinnedMeshRenderer");
+    MenuItem *addVolumeRenderer = addRenderer->AddItem("VolumeRenderer");
     MenuItem *addWaterRenderer = addRenderer->AddItem("WaterRenderer");
     MenuItem *addParticleSystem = addRenderer->AddItem("ParticleSystem");
     MenuItem *addTransforms = rootItem->AddItem("Transform");
@@ -418,6 +439,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     addDirectionalLight->SetSelectedCallback(MenuBar::OnAddDirectionalLight);
     addLineRenderer->SetSelectedCallback(MenuBar::OnAddLineRenderer);
     addMeshRenderer->SetSelectedCallback(MenuBar::OnAddMeshRenderer);
+    addVolumeRenderer->SetSelectedCallback(MenuBar::OnAddVolumeRenderer);
     addSkinnedMeshRenderer->SetSelectedCallback(
         MenuBar::OnAddSkinnedMeshRenderer);
     addWaterRenderer->SetSelectedCallback(MenuBar::OnAddWaterRenderer);
@@ -606,25 +628,6 @@ void MenuBar::OnCreateTextureCubeMap(MenuItem *)
                                       Extensions::GetTextureCubeMapExtension());
 }
 
-template <class T>
-T *OnAddComponent()
-{
-    T *comp = nullptr;
-    GameObject *selectedGameObject = Editor::GetSelectedGameObject();
-    if (selectedGameObject)
-    {
-        MetaNode undoMetaBefore = selectedGameObject->GetMeta();
-
-        comp = selectedGameObject->AddComponent<T>();
-
-        MetaNode currentMeta = selectedGameObject->GetMeta();
-        UndoRedoManager::PushAction(new UndoRedoSerializableChange(
-            selectedGameObject, undoMetaBefore, currentMeta));
-    }
-
-    return comp;
-}
-
 void MenuBar::OnAddAnimator(MenuItem *)
 {
     OnAddComponent<Animator>();
@@ -721,6 +724,11 @@ void MenuBar::OnAddLineRenderer(MenuItem *)
 void MenuBar::OnAddMeshRenderer(MenuItem *)
 {
     OnAddComponent<MeshRenderer>();
+}
+
+void MenuBar::OnAddVolumeRenderer(MenuItem *item)
+{
+    OnAddComponent<VolumeRenderer>();
 }
 
 void MenuBar::OnAddSkinnedMeshRenderer(MenuItem *)

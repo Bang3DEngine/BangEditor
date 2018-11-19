@@ -168,6 +168,15 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                     inspectorWidget);
                 widgetToAdd = inputFile;
             }
+            else if (reflVar.GetVariant().GetType() == Variant::Type::PATH)
+            {
+                UIInputFile *inputFile = new UIInputFile();
+                inputFile->SetPath(Path::Empty());
+                inputFile->SetExtensions(reflVar.GetHints().GetExtensions());
+                inputFile->EventEmitter<IEventsValueChanged>::RegisterListener(
+                    inspectorWidget);
+                widgetToAdd = inputFile;
+            }
             else if (reflVar.GetVariant().GetType() == Variant::Type::STRING)
             {
                 UIInputText *inputText = GameObjectFactory::CreateUIInputText();
@@ -252,10 +261,16 @@ void SerializableInspectorWidget::UpdateWidgetsContentFromMeta(
             {
                 inputVec->Set(metaAttr.Get<Vector4>());
             }
-            else if (UIInputFile *inputFile = DCAST<UIInputFile *>(widget))
+            else if (UIInputFileWithPreview *inputFile =
+                         DCAST<UIInputFileWithPreview *>(widget))
             {
                 GUID guid = metaAttr.Get<GUID>();
                 Path inputFilePath = MetaFilesManager::GetFilepath(guid);
+                inputFile->SetPath(inputFilePath);
+            }
+            else if (UIInputFile *inputFile = DCAST<UIInputFile *>(widget))
+            {
+                Path inputFilePath = metaAttr.Get<Path>();
                 inputFile->SetPath(inputFilePath);
             }
             else if (UIInputColor *inputColor = DCAST<UIInputColor *>(widget))
