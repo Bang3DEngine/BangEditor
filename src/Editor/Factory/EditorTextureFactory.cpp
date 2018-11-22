@@ -51,8 +51,12 @@ Texture2D *EditorTextureFactory::GetIconForPath(const Path &path)
         }
         else if (path.HasExtension(Extensions::GetMeshExtension()))
         {
-            RH<Mesh> mesh = Resources::Load<Mesh>(path);
-            icon = MeshPreviewFactory::GetPreviewTextureFor(mesh.Get());
+            RH<Model> model = Resources::Load<Model>(path.GetDirectory());
+            if (model)
+            {
+                RH<Mesh> mesh = Resources::Load<Mesh>(path);
+                icon = MeshPreviewFactory::GetPreviewTextureFor(mesh.Get());
+            }
         }
         else if (path.HasExtension(Extensions::GetMaterialExtension()))
         {

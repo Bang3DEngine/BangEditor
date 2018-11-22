@@ -42,6 +42,7 @@ class AnimatorSMEditor;
 class Console;
 class EditSceneGameObjects;
 class EditorApplication;
+class EditorMeshFactoryUITab;
 class EditorClipboard;
 class EditorFileTracker;
 class Explorer;
@@ -89,6 +90,7 @@ public:
     EditorClipboard *GetEditorClipboard() const;
     UndoRedoManager *GetUndoRedoManager() const;
     AnimatorSMEditor *GetAnimatorSMEditor() const;
+    EditorMeshFactoryUITab *GetEditorMeshFactoryTab() const;
     SceneOpenerSaver *GetSceneOpenerSaver() const;
     EditorFileTracker *GetEditorFileTracker() const;
     UISceneEditContainer *GetSceneEditContainer() const;
@@ -119,6 +121,7 @@ private:
     Inspector *p_inspector = nullptr;
     Hierarchy *p_hierarchy = nullptr;
     AnimatorSMEditor *p_animatorSMEditor = nullptr;
+    EditorMeshFactoryUITab *p_editorMeshFactoryTab = nullptr;
     UISceneEditContainer *p_sceneEditContainer = nullptr;
     UIScenePlayContainer *p_scenePlayContainer = nullptr;
 

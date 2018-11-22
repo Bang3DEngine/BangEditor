@@ -31,6 +31,7 @@
 #include "BangEditor/EditorBehaviourManager.h"
 #include "BangEditor/EditorClipboard.h"
 #include "BangEditor/EditorFileTracker.h"
+#include "BangEditor/EditorMeshFactoryUITab.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorWindow.h"
 #include "BangEditor/Explorer.h"
@@ -94,6 +95,7 @@ void EditorScene::Init()
     p_hierarchy = new Hierarchy();
     p_console = new Console();
     p_explorer = new Explorer();
+    p_editorMeshFactoryTab = new EditorMeshFactoryUITab();
 
     p_tabStation = new UITabStation();
     p_tabStation->SetParent(m_mainEditorVLGo);
@@ -102,6 +104,8 @@ void EditorScene::Init()
     p_tabStation->GetTabContainer()->AddTab("Game", p_scenePlayContainer);
     p_tabStation->GetTabContainer()->AddTab("AnimatorSM Editor",
                                             p_animatorSMEditor);
+    p_tabStation->GetTabContainer()->AddTab("Mesh Factory",
+                                            p_editorMeshFactoryTab);
     p_tabStation->GetChildStationAndCreateIfNeeded(Side::LEFT)
         ->GetTabContainer()
         ->AddTab("Hierarchy", p_hierarchy);
@@ -362,6 +366,11 @@ AnimatorSMEditor *EditorScene::GetAnimatorSMEditor() const
     return p_animatorSMEditor;
 }
 
+EditorMeshFactoryUITab *EditorScene::GetEditorMeshFactoryTab() const
+{
+    return p_editorMeshFactoryTab;
+}
+
 EditorClipboard *EditorScene::GetEditorClipboard() const
 {
     return m_editorClipboard;
@@ -405,9 +414,7 @@ void EditorScene::OnPlayStateChanged(PlayState previousPlayState,
     // Change tab when play/stop
     switch (newPlayState)
     {
-        case PlayState::EDITING:
-        {
-            OpenTab(GetSceneEditContainer());
+        case PlayState::EDITING: { OpenTab(GetSceneEditContainer());
         }
         break;
 
