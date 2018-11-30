@@ -58,7 +58,7 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
     const ReflectStruct &reflectStruct,
     InspectorWidget *inspectorWidget)
 {
-    if (reflectStruct != m_previousReflectStruct)
+    if (!reflectStruct.EqualsWithoutValue(m_previousReflectStruct))
     {
         // Clear old reflect widgets (if any)
         for (GameObject *widget : GetWidgets())
@@ -78,7 +78,8 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
         {
             GameObject *widgetToAdd = nullptr;
             String widgetName = reflVar.GetName();
-            if (reflVar.GetHints().GetIsHidden())
+
+            if (!reflVar.GetHints().GetIsShown())
             {
                 continue;
             }
@@ -141,6 +142,8 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                             RegisterListener(inspectorWidget);
                         widgetToAdd = inputNumber->GetGameObject();
                     }
+
+                    inputNumber->SetStep(reflVar.GetHints().GetStepValue());
 
                     if (reflVar.GetVariant().GetType() == Variant::Type::INT ||
                         reflVar.GetVariant().GetType() == Variant::Type::UINT)
@@ -205,6 +208,7 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                 UIInputVector *inputVec = new UIInputVector();
                 inputVec->SetSize(numComps);
                 inputVec->Set(reflVar.GetInitValue().GetVector4());
+                inputVec->SetStep(Vector4(reflVar.GetHints().GetStepValue()));
                 inputVec->SetMinValue(reflVar.GetHints().GetMinValue());
                 inputVec->SetMaxValue(reflVar.GetHints().GetMaxValue());
                 inputVec->EventEmitter<IEventsValueChanged>::RegisterListener(
@@ -238,6 +242,8 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
             label->GetText()->CalculateLayout(Axis::HORIZONTAL);
             int labelWidth = label->GetText()->GetPreferredSize().x + 10;
             totalLabelsWidth = Math::Max(labelWidth, totalLabelsWidth);
+
+            ReflectVariable reflVar = m_reflectWidgetToReflectVar.Get(widget);
         }
         SetLabelsWidth(totalLabelsWidth);
 
@@ -321,8 +327,8 @@ String GetStringValueFromWidget(GameObject *widget)
     else if (UIInputFileWithPreview *inputFile =
                  DCAST<UIInputFileWithPreview *>(widget))
     {
-        value =
-            String::ToString(MetaFilesManager::GetGUID(inputFile->GetPath()));
+        GUID guid = MetaFilesManager::GetGUID(inputFile->GetPath());
+        value = String::ToString(guid);
     }
     else if (UIInputFile *inputFile = DCAST<UIInputFile *>(widget))
     {

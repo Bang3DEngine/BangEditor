@@ -32,8 +32,7 @@ void UIInputArrayRow::Init(UIInputArray *inputArray)
     rowHL->SetSpacing(10);
 
     GameObject *rowButtonsVLContainer = GameObjectFactory::CreateUIGameObject();
-    UIVerticalLayout *rowButtonsVL =
-        rowButtonsVLContainer->AddComponent<UIVerticalLayout>();
+    rowButtonsVLContainer->AddComponent<UIVerticalLayout>();
 
     GameObject *rowButtonsContainer = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *rowButtonsHL =

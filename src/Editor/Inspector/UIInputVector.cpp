@@ -89,6 +89,14 @@ void UIInputVector::Set(int i, float v)
     m_inputNumbers[i]->SetValue(v);
 }
 
+void UIInputVector::SetStep(const Vector4 &step)
+{
+    for (int i = 0; i < 4; ++i)
+    {
+        GetInputNumbers()[i]->SetStep(step[i]);
+    }
+}
+
 void UIInputVector::SetMinValue(const Vector4 &minValue)
 {
     for (int i = 0; i < 4; ++i)
@@ -128,6 +136,16 @@ Vector3 UIInputVector::GetVector3() const
 Vector4 UIInputVector::GetVector4() const
 {
     return Vector4(Get(0), Get(1), Get(2), Get(3));
+}
+
+Vector4 UIInputVector::GetStep() const
+{
+    Vector4 step;
+    for (uint i = 0; i < 4; ++i)
+    {
+        step[i] = m_inputNumbers[i]->GetStep();
+    }
+    return step;
 }
 
 int UIInputVector::GetSize() const

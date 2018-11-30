@@ -40,7 +40,7 @@ EditorMeshFactoryUITabScene::EditorMeshFactoryUITabScene()
     p_scene->SetCamera(p_sceneCamera);
 
     GameObject *lightGo = GameObjectFactory::CreateGameObject();
-    DirectionalLight *dirLight = lightGo->AddComponent<DirectionalLight>();
+    lightGo->AddComponent<DirectionalLight>();
     lightGo->GetTransform()->LookInDirection(Vector3::Down());
     lightGo->SetParent(p_scene);
 

@@ -41,6 +41,7 @@ public:
     void Set(const Vector3 &v);
     void Set(const Vector4 &v);
     void Set(int i, float v);
+    void SetStep(const Vector4 &step);
     void SetMinValue(const Vector4 &minValue);
     void SetMaxValue(const Vector4 &maxValue);
     void SetMinMaxValues(const Vector4 &minValue, const Vector4 &maxValue);
@@ -49,6 +50,7 @@ public:
     Vector2 GetVector2() const;
     Vector3 GetVector3() const;
     Vector4 GetVector4() const;
+    Vector4 GetStep() const;
 
     int GetSize() const;
 
