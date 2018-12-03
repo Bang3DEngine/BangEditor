@@ -473,7 +473,6 @@ void ComponentsGizmos::RenderNavigationMeshGizmo(NavigationMesh *navigationMesh,
         gb->PushDepthStencilTexture();
         gb->SetSceneDepthStencil();
 
-        GameObject *go = navigationMesh->GetGameObject();
         Vector2 gridSize = navigationMesh->GetGridSize();
         Vector3 gridCenter = navigationMesh->GetGridCenter();
         Vector2 cellSize = navigationMesh->GetCellSize();
@@ -483,7 +482,7 @@ void ComponentsGizmos::RenderNavigationMeshGizmo(NavigationMesh *navigationMesh,
         params.color = Color::Green();
         params.thickness = 2.0f;
 
-        for (uint i = 0; i < navigationMesh->GetDivisions() + 1; ++i)
+        for (uint i = 0; i < navigationMesh->GetNumCells() + 1; ++i)
         {
             RenderFactory::RenderLine(
                 gridLowerLeft + Vector3(i, 0, 0) * cellSize.x0y(),
@@ -498,18 +497,18 @@ void ComponentsGizmos::RenderNavigationMeshGizmo(NavigationMesh *navigationMesh,
         }
 
         params.color = Color::Red().WithAlpha(0.5f);
-        for (uint i = 0; i < navigationMesh->GetDivisions(); ++i)
+        for (uint i = 0; i < navigationMesh->GetNumCells(); ++i)
         {
-            for (uint j = 0; j < navigationMesh->GetDivisions(); ++j)
+            for (uint j = 0; j < navigationMesh->GetNumCells(); ++j)
             {
-                if (navigationMesh->IsCellColliding(i, j))
+                if (navigationMesh->IsCellColliding(j, i))
                 {
                     constexpr float boxHeight = 0.05f;
                     AABox cellBox;
-                    cellBox.SetMin(navigationMesh->GetCellCenter(i, j) -
+                    cellBox.SetMin(navigationMesh->GetCellCenter(j, i) -
                                    navigationMesh->GetCellSize().x0y() * 0.5f -
                                    Vector3::Up() * boxHeight);
-                    cellBox.SetMax(navigationMesh->GetCellCenter(i, j) +
+                    cellBox.SetMax(navigationMesh->GetCellCenter(j, i) +
                                    navigationMesh->GetCellSize().x0y() * 0.5f +
                                    Vector3::Up() * boxHeight);
                     RenderFactory::RenderBox(cellBox, params);
