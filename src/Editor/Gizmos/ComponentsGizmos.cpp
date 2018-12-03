@@ -8,6 +8,7 @@
 #include "Bang/CapsuleCollider.h"
 #include "Bang/Color.h"
 #include "Bang/Component.h"
+#include "Bang/Debug.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
@@ -15,6 +16,7 @@
 #include "Bang/GameObject.tcc"
 #include "Bang/HideFlags.h"
 #include "Bang/Math.h"
+#include "Bang/NavigationMesh.h"
 #include "Bang/ParticleSystem.h"
 #include "Bang/PointLight.h"
 #include "Bang/Quaternion.h"
@@ -150,6 +152,10 @@ void ComponentsGizmos::RenderComponentGizmos(Component *comp,
     else if (ReflectionProbe *rp = DCAST<ReflectionProbe *>(comp))
     {
         RenderReflectionProbeGizmo(rp, isBeingSelected);
+    }
+    else if (NavigationMesh *nv = DCAST<NavigationMesh *>(comp))
+    {
+        RenderNavigationMeshGizmo(nv, isBeingSelected);
     }
     else if (ParticleSystem *ps = DCAST<ParticleSystem *>(comp))
     {
@@ -453,6 +459,63 @@ void ComponentsGizmos::RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
         params.position = Vector3::Zero();
         params.color = params.color.WithAlpha(1.0f);
         RenderFactory::RenderWireframeBox(reflProbeBox, params);
+
+        gb->PopDepthStencilTexture();
+    }
+}
+
+void ComponentsGizmos::RenderNavigationMeshGizmo(NavigationMesh *navigationMesh,
+                                                 bool isBeingSelected)
+{
+    if (isBeingSelected)
+    {
+        GBuffer *gb = GEngine::GetActiveGBuffer();
+        gb->PushDepthStencilTexture();
+        gb->SetSceneDepthStencil();
+
+        GameObject *go = navigationMesh->GetGameObject();
+        Vector2 gridSize = navigationMesh->GetGridSize();
+        Vector3 gridCenter = navigationMesh->GetGridCenter();
+        Vector2 cellSize = navigationMesh->GetCellSize();
+        Vector3 gridLowerLeft = gridCenter - (gridSize.x0y() * 0.5f);
+
+        RenderFactory::Parameters params;
+        params.color = Color::Green();
+        params.thickness = 2.0f;
+
+        for (uint i = 0; i < navigationMesh->GetDivisions() + 1; ++i)
+        {
+            RenderFactory::RenderLine(
+                gridLowerLeft + Vector3(i, 0, 0) * cellSize.x0y(),
+                gridLowerLeft + Vector3(i, 0, 0) * cellSize.x0y() +
+                    navigationMesh->GetGridSize().x0y() * Vector3(0, 0, 1),
+                params);
+            RenderFactory::RenderLine(
+                gridLowerLeft + Vector3(0, 0, i) * cellSize.x0y(),
+                gridLowerLeft + Vector3(0, 0, i) * cellSize.x0y() +
+                    navigationMesh->GetGridSize().x0y() * Vector3(1, 0, 0),
+                params);
+        }
+
+        params.color = Color::Red().WithAlpha(0.5f);
+        for (uint i = 0; i < navigationMesh->GetDivisions(); ++i)
+        {
+            for (uint j = 0; j < navigationMesh->GetDivisions(); ++j)
+            {
+                if (navigationMesh->IsCellColliding(i, j))
+                {
+                    constexpr float boxHeight = 0.05f;
+                    AABox cellBox;
+                    cellBox.SetMin(navigationMesh->GetCellCenter(i, j) -
+                                   navigationMesh->GetCellSize().x0y() * 0.5f -
+                                   Vector3::Up() * boxHeight);
+                    cellBox.SetMax(navigationMesh->GetCellCenter(i, j) +
+                                   navigationMesh->GetCellSize().x0y() * 0.5f +
+                                   Vector3::Up() * boxHeight);
+                    RenderFactory::RenderBox(cellBox, params);
+                }
+            }
+        }
 
         gb->PopDepthStencilTexture();
     }

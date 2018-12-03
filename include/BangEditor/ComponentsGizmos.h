@@ -16,6 +16,7 @@ class Camera;
 class CapsuleCollider;
 class Component;
 class DirectionalLight;
+class NavigationMesh;
 class ParticleSystem;
 class PointLight;
 class ReflectionProbe;
@@ -52,6 +53,8 @@ private:
                                      bool isBeingSelected);
     void RenderReflectionProbeGizmo(ReflectionProbe *reflProbe,
                                     bool isBeingSelected);
+    void RenderNavigationMeshGizmo(NavigationMesh *navigationMesh,
+                                   bool isBeingSelected);
     void RenderParticleSystemGizmo(ParticleSystem *particleSystem,
                                    bool isBeingSelected);
     void RenderRopeGizmo(Rope *rope, bool isBeingSelected);

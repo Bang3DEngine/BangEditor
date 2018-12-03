@@ -26,6 +26,7 @@
 #include "Bang/MeshCollider.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/MetaNode.h"
+#include "Bang/NavigationMesh.h"
 #include "Bang/ParticleSystem.h"
 #include "Bang/Path.h"
 #include "Bang/PhysicsMaterial.h"
@@ -318,6 +319,11 @@ void MenuBar::CreateGameObjectCreateMenuInto(MenuItem *rootItem)
     MenuItem *createUICanvasGO = uiItemGO->AddItem("Canvas");
     MenuItem *createUITextGO = uiItemGO->AddItem("Text");
     MenuItem *createUIImageGO = uiItemGO->AddItem("Image");
+    MenuItem *miscItemGO = rootItem->AddItem("Misc");
+    MenuItem *createReflectionProbeItemGO =
+        miscItemGO->AddItem("Reflection Probe");
+    MenuItem *createNavigationMeshItemGO =
+        miscItemGO->AddItem("Navigation Mesh");
     createEmpty->SetSelectedCallback(MenuBar::OnCreateEmpty);
     createCone->SetSelectedCallback(MenuBar::OnCreateCone);
     createCube->SetSelectedCallback(MenuBar::OnCreateCube);
@@ -335,6 +341,10 @@ void MenuBar::CreateGameObjectCreateMenuInto(MenuItem *rootItem)
     createUICanvasGO->SetSelectedCallback(MenuBar::OnCreateUICanvasGO);
     createUITextGO->SetSelectedCallback(MenuBar::OnCreateUITextGO);
     createUIImageGO->SetSelectedCallback(MenuBar::OnCreateUIImageGO);
+    createReflectionProbeItemGO->SetSelectedCallback(
+        MenuBar::OnCreateReflectionProbeGO);
+    createNavigationMeshItemGO->SetSelectedCallback(
+        MenuBar::OnCreateNavigationMeshGO);
 }
 
 void MenuBar::CreateGameObjectMiscMenuInto(
@@ -422,6 +432,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addUIVerticalLayout = addUI->AddItem("VerticalLayout");
     MenuItem *addMisc = rootItem->AddItem("Misc");
     MenuItem *addReflectionProbe = addMisc->AddItem("ReflectionProbe");
+    MenuItem *addNavigationMesh = addMisc->AddItem("NavigationMesh");
     addBoxCollider->SetSelectedCallback(MenuBar::OnAddBoxCollider);
     addCapsuleCollider->SetSelectedCallback(MenuBar::OnAddCapsuleCollider);
     addSphereCollider->SetSelectedCallback(MenuBar::OnAddSphereCollider);
@@ -445,6 +456,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     addWaterRenderer->SetSelectedCallback(MenuBar::OnAddWaterRenderer);
     addParticleSystem->SetSelectedCallback(MenuBar::OnAddParticleSystem);
     addReflectionProbe->SetSelectedCallback(MenuBar::OnAddReflectionProbe);
+    addNavigationMesh->SetSelectedCallback(MenuBar::OnAddNavigationMesh);
     addTransform->SetSelectedCallback(MenuBar::OnAddTransform);
     addRigidBody->SetSelectedCallback(MenuBar::OnAddRigidBody);
     addRectTransform->SetSelectedCallback(MenuBar::OnAddRectTransform);
@@ -696,7 +708,7 @@ void MenuBar::OnAddSphereCollider(MenuItem *)
     OnAddComponent<SphereCollider>();
 }
 
-void MenuBar::OnAddMeshCollider(MenuItem *item)
+void MenuBar::OnAddMeshCollider(MenuItem *)
 {
     MeshCollider *meshCollider = OnAddComponent<MeshCollider>();
     if (MeshRenderer *meshRenderer =
@@ -726,7 +738,7 @@ void MenuBar::OnAddMeshRenderer(MenuItem *)
     OnAddComponent<MeshRenderer>();
 }
 
-void MenuBar::OnAddVolumeRenderer(MenuItem *item)
+void MenuBar::OnAddVolumeRenderer(MenuItem *)
 {
     OnAddComponent<VolumeRenderer>();
 }
@@ -741,7 +753,7 @@ void MenuBar::OnAddWaterRenderer(MenuItem *)
     OnAddComponent<WaterRenderer>();
 }
 
-void MenuBar::OnAddParticleSystem(MenuItem *item)
+void MenuBar::OnAddParticleSystem(MenuItem *)
 {
     OnAddComponent<ParticleSystem>();
 }
@@ -749,6 +761,11 @@ void MenuBar::OnAddParticleSystem(MenuItem *item)
 void MenuBar::OnAddReflectionProbe(MenuItem *)
 {
     OnAddComponent<ReflectionProbe>();
+}
+
+void MenuBar::OnAddNavigationMesh(MenuItem *)
+{
+    OnAddComponent<NavigationMesh>();
 }
 
 void MenuBar::OnAddTransform(MenuItem *)
@@ -977,6 +994,22 @@ void MenuBar::OnCreateUITextGO(MenuItem *)
     UITextRenderer *text = uiGo->AddComponent<UITextRenderer>();
     text->SetContent("UIText");
     MenuBar::OnEndCreateUIGameObjectFromMenuBar(uiGo);
+}
+
+void MenuBar::OnCreateReflectionProbeGO(MenuItem *)
+{
+    GameObject *go = GameObjectFactory::CreateGameObject();
+    go->SetName("ReflectionProbe");
+    go->AddComponent<ReflectionProbe>();
+    MenuBar::OnEndCreateGameObjectFromMenuBar(go);
+}
+
+void MenuBar::OnCreateNavigationMeshGO(MenuItem *)
+{
+    GameObject *go = GameObjectFactory::CreateGameObject();
+    go->SetName("NavigationMesh");
+    go->AddComponent<NavigationMesh>();
+    MenuBar::OnEndCreateGameObjectFromMenuBar(go);
 }
 
 void MenuBar::OnAlignGameObjectWithView(MenuItem *)

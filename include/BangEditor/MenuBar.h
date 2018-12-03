@@ -112,6 +112,7 @@ private:
     static void OnAddWaterRenderer(MenuItem *item);
     static void OnAddParticleSystem(MenuItem *item);
     static void OnAddReflectionProbe(MenuItem *item);
+    static void OnAddNavigationMesh(MenuItem *item);
     static void OnAddTransform(MenuItem *item);
     static void OnAddRectTransform(MenuItem *item);
     static void OnAddPostProcessEffect(MenuItem *item);
@@ -153,6 +154,8 @@ private:
     static void OnCreateUIEmptyGO(MenuItem *item);
     static void OnCreateUIImageGO(MenuItem *item);
     static void OnCreateUITextGO(MenuItem *item);
+    static void OnCreateReflectionProbeGO(MenuItem *item);
+    static void OnCreateNavigationMeshGO(MenuItem *item);
     static void OnAlignGameObjectWithView(MenuItem *item);
     static void OnAlignViewWithGameObject(MenuItem *item);
     static void OnEndCreateGameObjectFromMenuBar(GameObject *primitive);

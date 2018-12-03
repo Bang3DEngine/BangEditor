@@ -3,6 +3,7 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/MetaFilesManager.h"
 #include "Bang/Serializable.h"
+#include "Bang/UIButton.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIComboBox.h"
 #include "Bang/UIInputNumber.h"
@@ -76,13 +77,13 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
         // Add widgets to structures
         for (const ReflectVariable &reflVar : reflectStruct.GetVariables())
         {
-            GameObject *widgetToAdd = nullptr;
-            String widgetName = reflVar.GetName();
-
             if (!reflVar.GetHints().GetIsShown())
             {
                 continue;
             }
+
+            GameObject *widgetToAdd = nullptr;
+            String widgetName = reflVar.GetName();
 
             if (reflVar.GetVariant().GetType() == Variant::Type::FLOAT ||
                 reflVar.GetVariant().GetType() == Variant::Type::DOUBLE ||
@@ -154,11 +155,25 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
             }
             else if (reflVar.GetVariant().GetType() == Variant::Type::BOOL)
             {
-                UICheckBox *checkBox = GameObjectFactory::CreateUICheckBox();
-                checkBox->SetChecked(reflVar.GetInitValue().GetBool());
-                checkBox->EventEmitter<IEventsValueChanged>::RegisterListener(
-                    inspectorWidget);
-                widgetToAdd = checkBox->GetGameObject();
+                if (reflVar.GetHints().GetIsButton())
+                {
+                    UIButton *button =
+                        GameObjectFactory::CreateUIButton(reflVar.GetName());
+                    button->AddClickedCallback([reflVar]() {
+                        reflVar.GetSetter()(Variant::From(true));
+                    });
+                    widgetToAdd = button->GetGameObject();
+                }
+                else
+                {
+                    UICheckBox *checkBox =
+                        GameObjectFactory::CreateUICheckBox();
+                    checkBox->SetChecked(reflVar.GetInitValue().GetBool());
+                    checkBox
+                        ->EventEmitter<IEventsValueChanged>::RegisterListener(
+                            inspectorWidget);
+                    widgetToAdd = checkBox->GetGameObject();
+                }
             }
             else if (reflVar.GetVariant().GetType() == Variant::Type::GUID)
             {
@@ -236,14 +251,23 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
         for (GameObject *widget : GetWidgets())
         {
             String name = GetWidgetToReflectedVar().Get(widget).GetName();
-            inspectorWidget->AddWidget(name, widget);
+            const bool needsLabel = (!widget->GetComponent<UIButton>());
+            if (needsLabel)
+            {
+                inspectorWidget->AddWidget(name, widget);
+            }
+            else
+            {
+                inspectorWidget->AddWidget(widget);
+            }
 
             UILabel *label = inspectorWidget->GetWidgetToLabel().Get(widget);
-            label->GetText()->CalculateLayout(Axis::HORIZONTAL);
-            int labelWidth = label->GetText()->GetPreferredSize().x + 10;
-            totalLabelsWidth = Math::Max(labelWidth, totalLabelsWidth);
-
-            ReflectVariable reflVar = m_reflectWidgetToReflectVar.Get(widget);
+            if (label)
+            {
+                label->GetText()->CalculateLayout(Axis::HORIZONTAL);
+                int labelWidth = label->GetText()->GetPreferredSize().x + 10;
+                totalLabelsWidth = Math::Max(labelWidth, totalLabelsWidth);
+            }
         }
         SetLabelsWidth(totalLabelsWidth);
 
