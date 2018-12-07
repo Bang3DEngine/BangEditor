@@ -168,6 +168,11 @@ void TranslateGizmoAxis::SetAxis(Axis3DExt axis)
                                                     (1.0f + baseScale) * 0.5f);
 }
 
+GameObject *TranslateGizmoAxis::GetSelectionGameObject() const
+{
+    return p_selectionGo;
+}
+
 void TranslateGizmoAxis::SetColor(const Color &color)
 {
     p_lineRenderer->GetMaterial()->SetAlbedoColor(color);

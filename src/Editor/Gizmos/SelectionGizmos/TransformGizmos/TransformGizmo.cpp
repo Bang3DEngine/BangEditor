@@ -16,6 +16,7 @@
 #include "BangEditor/RectTransformSelectionGizmo.h"
 #include "BangEditor/RotateGizmo.h"
 #include "BangEditor/ScaleGizmo.h"
+#include "BangEditor/Selection.h"
 #include "BangEditor/TranslateGizmo.h"
 #include "BangEditor/UISceneToolbar.h"
 #include "BangEditor/UndoRedoManager.h"
@@ -141,17 +142,23 @@ void TransformGizmo::OnEndRender(Scene *)
 
 void TransformGizmo::OnGrabBegin()
 {
-    m_transformUndoMetaBefore =
-        GetReferencedGameObject()->GetTransform()->GetMeta();
+    if (GetReferencedGameObject())
+    {
+        m_transformUndoMetaBefore =
+            GetReferencedGameObject()->GetTransform()->GetMeta();
+    }
 }
 
 void TransformGizmo::OnGrabEnd()
 {
-    Transform *transform = GetReferencedGameObject()->GetTransform();
-    MetaNode newUndoMeta = transform->GetMeta();
+    if (GetReferencedGameObject())
+    {
+        Transform *transform = GetReferencedGameObject()->GetTransform();
+        MetaNode newUndoMeta = transform->GetMeta();
 
-    UndoRedoManager::PushAction(new UndoRedoSerializableChange(
-        transform, m_transformUndoMetaBefore, newUndoMeta));
+        UndoRedoManager::PushAction(new UndoRedoSerializableChange(
+            transform, m_transformUndoMetaBefore, newUndoMeta));
+    }
 }
 
 void TransformGizmo::SetReferencedGameObject(GameObject *referencedGameObject)

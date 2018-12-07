@@ -130,12 +130,12 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
             edCam->SetRenderSize(renderSize);
             edCamGo->GetSelectionFramebuffer()->Resize(renderSize);
 
-            edCam->Bind();
+            // edCam->Bind();
 
-            sfb->PrepareNewFrameForRender(openScene);
-            sfb->RenderForSelectionBuffer(openScene);
+            // sfb->PrepareNewFrameForRender(openScene);
+            // sfb->RenderForSelectionBuffer(openScene);
 
-            edCam->UnBind();
+            // edCam->UnBind();
 
             ge->PopActiveRenderingCamera();
             sgm->OnEndRender(openScene);

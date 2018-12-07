@@ -34,7 +34,8 @@ public:
     virtual ~SelectionGizmo() override = default;
 
     // GameObject
-    void Update() override;
+    virtual void Update() override;
+    virtual void Render(RenderPass rp, bool renderChildren) override;
 
     virtual void SetReferencedGameObject(GameObject *referencedGameObject);
     GameObject *GetReferencedGameObject() const;
@@ -54,6 +55,9 @@ public:
 
     // IEventsDestroy
     virtual void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
+
+protected:
+    virtual GameObject *GetSelectionGameObject() const;
 
 private:
     GameObject *p_referencedGameObject = nullptr;

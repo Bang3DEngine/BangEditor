@@ -44,6 +44,9 @@ private:
     MeshRenderer *p_meshRenderer = nullptr;
     MeshRenderer *p_selectionRenderer = nullptr;
 
+    // SelectionGizmo
+    virtual GameObject *GetSelectionGameObject() const override;
+
     void SetColor(const Color &color) override;
 
     virtual ~TranslateGizmoAxis() override;

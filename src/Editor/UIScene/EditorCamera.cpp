@@ -69,6 +69,7 @@ EditorCamera::EditorCamera()
     p_cam->SetZFar(EditorCamera::InitialZFar);
     p_cam->SetFovDegrees(EditorCamera::InitialFOVDegrees);
 
+    p_selection = new Selection();
     m_selectionFramebuffer = new SelectionFramebuffer(1, 1);
 
     SceneManager::GetActive()
@@ -132,6 +133,12 @@ void EditorCamera::Update()
     {
         Input::SetMouseWrapping(false);
     }
+}
+
+void EditorCamera::Render(RenderPass rp, bool renderChildren)
+{
+    GameObject::Render(rp, renderChildren);
+    p_selection->OnNewFrame();
 }
 
 void EditorCamera::AdjustSpeeds()
@@ -377,6 +384,11 @@ void EditorCamera::RequestUnBlockBy(GameObject *go)
 void EditorCamera::SetZoomSpeedMultiplier(float zoomSpeedMultiplier)
 {
     m_zoomSpeedMultiplier = zoomSpeedMultiplier;
+}
+
+Selection *EditorCamera::GetSelection() const
+{
+    return p_selection;
 }
 
 bool EditorCamera::IsBlocked() const

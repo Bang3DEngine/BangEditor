@@ -78,6 +78,7 @@ void ScaleGizmoAxis::SetReferencedGameObject(GameObject *referencedGameObject)
 void ScaleGizmoAxis::Update()
 {
     TransformGizmoAxis::Update();
+
     GameObject *refGo = GetReferencedGameObject();
     if (!refGo || !refGo->GetTransform())
     {
@@ -216,6 +217,11 @@ void ScaleGizmoAxis::UpdatePoints(float localAxisLength)
                                                  Vector3::Abs(axisFwd));
     p_selectionGo->GetTransform()->SetLocalPosition(axisFwd *
                                                     (1.0f + baseScale) * 0.5f);
+}
+
+GameObject *ScaleGizmoAxis::GetSelectionGameObject() const
+{
+    return p_selectionGo;
 }
 
 bool ScaleGizmoAxis::ApplyAlignmentAlpha() const

@@ -54,6 +54,9 @@ private:
 
     void UpdatePoints(float localAxisLength);
 
+    // SelectionGizmo
+    virtual GameObject *GetSelectionGameObject() const override;
+
     // TransformGizmoAxis
     bool ApplyAlignmentAlpha() const override;
     void SetColor(const Color &color) override;

@@ -34,8 +34,9 @@ void SelectionGizmo::Update()
     GameObject *overedGameObject = Selection::GetOveredGameObject();
     if (overedGameObject)
     {
-        isMouseOver = (overedGameObject == this);
-        isMouseOver = isMouseOver || (overedGameObject->IsChildOf(this, true));
+        isMouseOver =
+            (overedGameObject == GetSelectionGameObject()) ||
+            (overedGameObject->IsChildOf(GetSelectionGameObject(), true));
     }
 
     bool prevGrab = IsBeingGrabbed();
@@ -65,6 +66,13 @@ void SelectionGizmo::Update()
             OnGrabEnd();
         }
     }
+}
+
+void SelectionGizmo::Render(RenderPass rp, bool renderChildren)
+{
+    GameObject::Render(rp, renderChildren);
+
+    Selection::RegisterExtraGameObjectForNextFrame(GetSelectionGameObject());
 }
 
 void SelectionGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
@@ -139,6 +147,11 @@ void SelectionGizmo::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 
     ASSERT(!GetReferencedGameObject() || object == GetReferencedGameObject());
     SetReferencedGameObject(nullptr);
+}
+
+GameObject *SelectionGizmo::GetSelectionGameObject() const
+{
+    return GetReferencedGameObject();
 }
 
 void SelectionGizmo::OnDisabled(Object *object)

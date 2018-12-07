@@ -107,6 +107,7 @@ Vector3 GetAxisedSpherePointFromMousePosNDC(const Camera *cam,
 void RotateGizmoAxis::Update()
 {
     TransformGizmoAxis::Update();
+
     if (!GetReferencedGameObject() ||
         !GetReferencedGameObject()->GetTransform())
     {
@@ -200,7 +201,7 @@ void RotateGizmoAxis::Update()
 
 void RotateGizmoAxis::Render(RenderPass renderPass, bool renderChildren)
 {
-    p_selectionGo->SetEnabled(Selection::IsBeingRendered());
+    // p_selectionGo->SetEnabled(Selection::IsBeingRendered());
 
     UpdateCirclePoints();
 
@@ -218,6 +219,11 @@ Quaternion RotateGizmoAxis::GetQuaternionAxised(const Quaternion &q,
     qAngleAxis[other.first] = qAngleAxis[other.second] = 0.0f;
     return Quaternion::AngleAxis(qAngleAxis.Length(),
                                  qAngleAxis.NormalizedSafe());
+}
+
+GameObject *RotateGizmoAxis::GetSelectionGameObject() const
+{
+    return p_selectionGo;
 }
 
 bool RotateGizmoAxis::ApplyAlignmentAlpha() const

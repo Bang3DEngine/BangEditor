@@ -19,6 +19,7 @@
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/IEventsScenePlayer.h"
 #include "BangEditor/PlayState.h"
+#include "BangEditor/Selection.h"
 
 namespace Bang
 {
@@ -47,6 +48,7 @@ public:
     virtual ~EditorCamera() override;
 
     // GameObject
+    void Render(RenderPass rp, bool renderChildren) override;
     void Update() override;
 
     void FocusScene(Scene *scene);
@@ -59,6 +61,7 @@ public:
     void RequestUnBlockBy(GameObject *go);
     void SetZoomSpeedMultiplier(float zoomSpeedMultiplier);
 
+    Selection *GetSelection() const;
     SelectionFramebuffer *GetSelectionFramebuffer() const;
     Camera *GetCamera() const;
     bool IsBlocked() const;
@@ -72,6 +75,7 @@ private:
 
     Camera *p_cam = nullptr;
     Transform *p_camt = nullptr;
+    Selection *p_selection = nullptr;
     GameObject *p_camContainer = nullptr;
     SelectionFramebuffer *m_selectionFramebuffer = nullptr;
     Set<GameObject *> m_blockRequests;
