@@ -14,8 +14,13 @@
 #include "Bang/GEngine.h"
 #include "Bang/GL.h"
 #include "Bang/GameObject.tcc"
+#include "Bang/GameObjectFactory.h"
 #include "Bang/HideFlags.h"
+#include "Bang/Material.h"
 #include "Bang/Math.h"
+#include "Bang/Mesh.h"
+#include "Bang/MeshFactory.h"
+#include "Bang/MeshRenderer.h"
 #include "Bang/NavigationMesh.h"
 #include "Bang/ParticleSystem.h"
 #include "Bang/PointLight.h"
@@ -28,12 +33,14 @@
 #include "Bang/Transform.h"
 #include "Bang/Vector3.h"
 #include "BangEditor/Editor.h"
+#include "BangEditor/EditorCamera.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/Selection.h"
 #include "BangEditor/SelectionFramebuffer.h"
+#include "BangEditor/SelectionProxy.h"
 
 using namespace Bang;
 using namespace BangEditor;
@@ -42,6 +49,7 @@ ComponentsGizmos::ComponentsGizmos()
 {
     SetName("ComponentsGizmos");
 
+    AddComponent<Transform>();
     AddComponent<HideInHierarchy>();
     AddComponent<NotSelectableInEditor>();
     GetHideFlags().SetOn(HideFlag::DONT_SERIALIZE);
@@ -58,6 +66,12 @@ void ComponentsGizmos::Render(RenderPass rp, bool renderChildren)
 
     if (rp == RenderPass::OVERLAY)
     {
+        for (GameObject *selPlane : p_selectionPlanes)
+        {
+            selPlane->SetEnabled(false);
+        }
+        m_usedSelectionPlanesInThisFrame = 0;
+
         if (GameObject *selectedGameObject = Editor::GetSelectedGameObject())
         {
             for (Component *comp : selectedGameObject->GetComponents())
@@ -285,6 +299,7 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam, bool isBeingSelected)
         RenderFactory::Parameters params;
         params.position = camTransform->GetPosition();
         params.scale = Vector3(0.1f);
+        AddSelectionPlaneFor(cam->GetGameObject(), params.scale);
         RenderFactory::RenderIcon(
             EditorTextureFactory::GetComponentIcon(cam), true, params);
 
@@ -635,4 +650,38 @@ void ComponentsGizmos::RenderAudioSourceGizmo(AudioSource *audioSource,
 
         gb->PopDepthStencilTexture();
     }
+}
+
+void ComponentsGizmos::AddSelectionPlaneFor(GameObject *go,
+                                            const Vector3 &scale)
+{
+    while (p_selectionPlanes.Size() <= m_usedSelectionPlanesInThisFrame)
+    {
+        GameObject *selPlane = GameObjectFactory::CreateGameObject();
+
+        MeshRenderer *selPlaneRend = selPlane->AddComponent<MeshRenderer>();
+        selPlaneRend->GetMaterial()->SetCullFace(GL::CullFaceExt::NONE);
+        selPlaneRend->GetMaterial()->SetRenderPass(RenderPass::OVERLAY);
+        selPlaneRend->SetMesh(MeshFactory::GetPlane().Get());
+
+        selPlane->AddComponent<SelectionProxy>();
+
+        selPlane->SetParent(this);
+        p_selectionPlanes.PushBack(selPlane);
+    }
+
+    GameObject *selPlane = p_selectionPlanes[m_usedSelectionPlanesInThisFrame];
+    const Vector3 pos = go->GetTransform()->GetPosition();
+    selPlane->GetTransform()->SetPosition(pos);
+    selPlane->GetComponent<SelectionProxy>()->SetTargetGameObject(go);
+
+    Quaternion bbRotation;
+    Vector3 bbScale;
+    RenderFactory::GetBillboardTransform(pos, &bbRotation, &bbScale);
+    selPlane->GetTransform()->SetRotation(bbRotation);
+    selPlane->GetTransform()->SetScale(2.0f * scale * bbScale);
+
+    selPlane->SetEnabled(true);
+
+    ++m_usedSelectionPlanesInThisFrame;
 }

@@ -39,6 +39,9 @@ public:
     void Render(RenderPass rp, bool renderChildren) override;
 
 private:
+    Array<GameObject *> p_selectionPlanes;
+    uint m_usedSelectionPlanesInThisFrame = 0;
+
     float GetCameraDistScale(const Vector3 &position) const;
 
     void RenderComponentGizmosWhenNotSelected(GameObject *go);
@@ -59,6 +62,9 @@ private:
                                    bool isBeingSelected);
     void RenderRopeGizmo(Rope *rope, bool isBeingSelected);
     void RenderAudioSourceGizmo(AudioSource *audioSource, bool isBeingSelected);
+
+    void AddSelectionPlaneFor(GameObject *go,
+                              const Vector3 &scale = Vector3::One());
 };
 }
 

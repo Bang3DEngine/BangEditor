@@ -16,6 +16,7 @@
 #include "BangEditor/GizmosManager.h"
 #include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/SelectionFramebuffer.h"
+#include "BangEditor/SelectionProxy.h"
 #include "BangEditor/UISceneEditContainer.h"
 
 namespace Bang
@@ -88,6 +89,15 @@ GameObject *Selection::GetOveredGameObject(const Vector2i &vpPoint)
         }
     }
 
+    if (intersectedGo)
+    {
+        if (SelectionProxy *selectionProxy =
+                intersectedGo->GetComponent<SelectionProxy>())
+        {
+            intersectedGo = selectionProxy->GetTargetGameObject();
+        }
+    }
+
     return intersectedGo;
 }
 
@@ -121,11 +131,6 @@ GameObject *Selection::GetOveredGameObject(
                 go->GetComponentsInDescendantsAndThis<MeshRenderer>();
             for (MeshRenderer *mr : mrs)
             {
-                if (mr->GetGameObject()->GetName() ==
-                    "RotateGizmoAxisSelection")
-                {
-                    int a = 2;
-                }
                 if (!mr->GetGameObject()->IsEnabledRecursively() ||
                     mr->GetGameObject()->HasComponent<NotSelectableInEditor>())
                 {
