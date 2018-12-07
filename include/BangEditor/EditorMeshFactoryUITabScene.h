@@ -10,7 +10,11 @@ using namespace Bang;
 namespace Bang
 {
 class GBuffer;
+class UICanvas;
+class Model;
+class UIFocusable;
 class MeshRenderer;
+class UITextRenderer;
 class UIImageRenderer;
 }
 namespace BangEditor
@@ -25,19 +29,25 @@ public:
     void Update() override;
 
     void ResetCamera();
+    Mesh *GetCurrentMesh() const;
+    Model *GetCurrentModel() const;
 
 private:
+    UIFocusable *p_focusable = nullptr;
     UIImageRenderer *p_sceneImg = nullptr;
+    UITextRenderer *p_centralText = nullptr;
 
     Scene *p_scene = nullptr;
-    RH<Mesh> p_lastSelectedMesh;
-    MeshRenderer *p_meshContainerRenderer = nullptr;
+    RH<Mesh> p_currentMesh;
+    RH<Model> p_currentModel;
+    GameObject *p_modelContainer = nullptr;
 
     Camera *p_sceneCamera = nullptr;
-    float m_currentCameraZoom = 1.0f;
+    float m_currentCameraZoom = 0.0f;
     Vector2 m_currentCameraRotAngles = Vector2::Zero();
 
     RH<Mesh> GetExplorerSelectedMesh() const;
+    RH<Model> GetExplorerSelectedModel() const;
 };
 }
 

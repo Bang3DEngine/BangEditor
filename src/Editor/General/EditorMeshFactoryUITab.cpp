@@ -21,7 +21,7 @@ EditorMeshFactoryUITab::EditorMeshFactoryUITab()
 
     GameObject *toolbar = GameObjectFactory::CreateUIGameObject();
     UIHorizontalLayout *toolbarHL = toolbar->AddComponent<UIHorizontalLayout>();
-    toolbarHL->SetPaddings(5, 10, 5, 10);
+    toolbarHL->SetPaddings(5, 5, 5, 5);
 
     p_centerSceneButton = GameObjectFactory::CreateUIButton(
         "", EditorTextureFactory::GetEyeIcon());
@@ -50,19 +50,21 @@ EditorMeshFactoryUITab::EditorMeshFactoryUITab()
 
         UIVerticalLayout *inspVL = p_sidebar->AddComponent<UIVerticalLayout>();
         inspVL->SetPaddingLeft(10);
-
-        GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5)
-            ->SetParent(p_sidebar);
     }
 
     toolbar->SetParent(this);
+    GameObjectFactory::CreateUIHSeparator(LayoutSizeType::MIN, 10)
+        ->SetParent(this);
+
     botHLGo->SetParent(this);
 
     p_meshFactoryUITabScene = new EditorMeshFactoryUITabScene();
     p_meshFactoryUITabScene->SetParent(botHLGo);
 
-    GameObjectFactory::CreateUIVSeparator()->SetParent(botHLGo);
+    // GameObjectFactory::CreateUIVSeparator()->SetParent(botHLGo);
     p_sidebar->SetParent(botHLGo);
+    GameObjectFactory::CreateUIHSeparator(LayoutSizeType::MIN, 20)
+        ->SetParent(this);
 }
 
 EditorMeshFactoryUITab::~EditorMeshFactoryUITab()
