@@ -14,6 +14,7 @@
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/GizmosManager.h"
+#include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/UISceneEditContainer.h"
 
@@ -59,21 +60,31 @@ GameObject *Selection::GetOveredGameObject(const Vector2i &vpPoint)
     GameObject *intersectedGo = nullptr;
     if (Selection *sel = Selection::GetInstance())
     {
-        if (!sel->m_selectionGosGatheredForThisFrame)
+        auto it = sel->p_cache.Find(vpPoint);
+        if (it != sel->p_cache.End())
         {
-            GizmosManager *gm = GizmosManager::GetInstance();
-            sel->p_extraGameObjects.PushBack(gm->GetGameObjectsForSelection());
-            sel->m_selectionGosGatheredForThisFrame = true;
+            intersectedGo = it->second;
         }
-
-        // intersectedGo = GetOveredGameObject(vpPoint,
-        // sel->p_extraGameObjects);
-        if (!intersectedGo)
+        else
         {
-            if (Scene *openScene = EditorSceneManager::GetOpenScene())
+            if (!sel->m_selectionGosGatheredForThisFrame)
             {
-                intersectedGo = GetOveredGameObject(vpPoint, {openScene});
+                GizmosManager *gm = GizmosManager::GetInstance();
+                sel->p_extraGameObjects.PushBack(
+                    gm->GetGameObjectsForSelection());
+                sel->m_selectionGosGatheredForThisFrame = true;
             }
+
+            intersectedGo =
+                GetOveredGameObject(vpPoint, sel->p_extraGameObjects);
+            if (!intersectedGo)
+            {
+                if (Scene *openScene = EditorSceneManager::GetOpenScene())
+                {
+                    intersectedGo = GetOveredGameObject(vpPoint, {openScene});
+                }
+            }
+            sel->p_cache.Add(vpPoint, intersectedGo);
         }
     }
 
@@ -91,12 +102,7 @@ GameObject *Selection::GetOveredGameObject(
     }
 
     GameObject *intersectedGo = nullptr;
-    auto it = sel->p_cache.Find(vpPoint);
-    if (it != sel->p_cache.End())
-    {
-        intersectedGo = it->second;
-    }
-    else if (EditorCamera *edCam = EditorCamera::GetInstance())
+    if (EditorCamera *edCam = EditorCamera::GetInstance())
     {
         Camera *cam = edCam->GetCamera();
         const Vector2 mouseNDC =
@@ -115,7 +121,13 @@ GameObject *Selection::GetOveredGameObject(
                 go->GetComponentsInDescendantsAndThis<MeshRenderer>();
             for (MeshRenderer *mr : mrs)
             {
-                if (!mr->GetGameObject()->IsEnabledRecursively())
+                if (mr->GetGameObject()->GetName() ==
+                    "RotateGizmoAxisSelection")
+                {
+                    int a = 2;
+                }
+                if (!mr->GetGameObject()->IsEnabledRecursively() ||
+                    mr->GetGameObject()->HasComponent<NotSelectableInEditor>())
                 {
                     continue;
                 }
@@ -181,7 +193,6 @@ GameObject *Selection::GetOveredGameObject(
                 }
             }
         }
-        sel->p_cache.Add(vpPoint, intersectedGo);
     }
 
     return intersectedGo;

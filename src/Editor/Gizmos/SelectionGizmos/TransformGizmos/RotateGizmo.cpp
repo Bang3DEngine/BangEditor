@@ -20,6 +20,7 @@
 #include "Bang/ResourceHandle.h"
 #include "Bang/Transform.h"
 #include "Bang/Vector3.h"
+#include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/RotateGizmoAxis.h"
 
 using namespace Bang;
@@ -31,6 +32,7 @@ RotateGizmo::RotateGizmo()
 
     p_sphereGo = GameObjectFactory::CreateGameObject();
     p_sphereGo->SetName("Sphere");
+    p_sphereGo->AddComponent<NotSelectableInEditor>();
 
     p_sphereRenderer = p_sphereGo->AddComponent<MeshRenderer>();
     p_sphereRenderer->SetMaterial(
@@ -42,6 +44,7 @@ RotateGizmo::RotateGizmo()
 
     p_sphereBoundsGo = GameObjectFactory::CreateGameObject();
     p_sphereBoundsGo->SetName("SphereBounds");
+    p_sphereBoundsGo->AddComponent<NotSelectableInEditor>();
 
     p_sphereBoundsRenderer = p_sphereBoundsGo->AddComponent<LineRenderer>();
     p_sphereBoundsRenderer->SetMaterial(

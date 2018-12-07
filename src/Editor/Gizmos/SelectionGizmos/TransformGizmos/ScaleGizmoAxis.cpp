@@ -19,6 +19,7 @@
 #include "Bang/ResourceHandle.h"
 #include "Bang/Transform.h"
 #include "Bang/Vector3.h"
+#include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/Selection.h"
 
 namespace Bang
@@ -181,7 +182,7 @@ void ScaleGizmoAxis::Update()
 
 void ScaleGizmoAxis::Render(RenderPass renderPass, bool renderChildren)
 {
-    p_selectionGo->SetEnabled(Selection::IsBeingRendered());
+    p_selectionGo->SetVisible(Selection::IsBeingRendered());
 
     TransformGizmoAxis::Render(renderPass, renderChildren);
 }
@@ -208,10 +209,10 @@ void ScaleGizmoAxis::UpdatePoints(float localAxisLength)
     p_lineRenderer->SetPoints({Vector3::Zero(), axisFwd});
     p_arrowCap->GetTransform()->SetLocalPosition(axisFwd);
 
-    float baseScale = 0.2f;
+    float baseScale = 0.35f;
     if (GetAxis() == Axis3DExt::XYZ)
     {
-        baseScale += 0.4f;
+        baseScale += 0.2f;
     }
     p_selectionGo->GetTransform()->SetLocalScale(Vector3(baseScale) +
                                                  Vector3::Abs(axisFwd));

@@ -31,15 +31,6 @@ public:
     static Bang::GameObject *GetOveredGameObject();
     static SelectionFramebuffer *GetSelectionFramebuffer();
     static Bang::GameObject *GetOveredGameObject(const Bang::Vector2i &vpPoint);
-    static Bang::GameObject *GetOveredGameObject(
-        const Bang::Vector2i &vpPoint,
-        const Bang::Array<Bang::GameObject *> &gameObjects);
-    static bool IsOvered(Bang::GameObject *go);
-    static bool IsOvered(const Bang::Vector2i &vpPoint, Bang::GameObject *go);
-    static void IsOvered(const Bang::Ray &ray,
-                         Bang::GameObject *go,
-                         bool *outIntersected,
-                         float *outDist = nullptr);
 
 private:
     bool m_selectionGosGatheredForThisFrame = false;
@@ -48,7 +39,11 @@ private:
 
     Selection() = default;
 
+    static Bang::GameObject *GetOveredGameObject(
+        const Bang::Vector2i &vpPoint,
+        const Bang::Array<Bang::GameObject *> &gameObjects);
     static Bang::Ray GetCamRay(const Bang::Vector2i &vpPoint);
+
     void OnNewFrame();
 
     static Selection *GetInstance();

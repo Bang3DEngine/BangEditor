@@ -20,6 +20,7 @@
 #include "Bang/ResourceHandle.h"
 #include "Bang/Transform.h"
 #include "Bang/Vector3.h"
+#include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/Selection.h"
 
 namespace Bang
@@ -54,6 +55,7 @@ TranslateGizmoAxis::TranslateGizmoAxis()
     p_meshRenderer->SetCastsShadows(false);
     p_meshRenderer->SetReceivesShadows(false);
     p_arrowCap->GetTransform()->SetLocalScale(Vector3(0.5f, 0.5f, 1.0f));
+    p_arrowCap->AddComponent<NotSelectableInEditor>();
 
     p_selectionGo = GameObjectFactory::CreateGameObject(true);
     p_selectionGo->SetName("AxisSelection");
@@ -145,7 +147,7 @@ void TranslateGizmoAxis::Update()
 
 void TranslateGizmoAxis::Render(RenderPass renderPass, bool renderChildren)
 {
-    p_selectionGo->SetEnabled(Selection::IsBeingRendered());
+    p_selectionGo->SetVisible(Selection::IsBeingRendered());
     TransformGizmoAxis::Render(renderPass, renderChildren);
 }
 

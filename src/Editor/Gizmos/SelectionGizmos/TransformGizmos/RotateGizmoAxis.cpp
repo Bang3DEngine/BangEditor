@@ -28,6 +28,7 @@
 #include "Bang/Transform.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
+#include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/Selection.h"
 #include "BangEditor/TransformGizmo.h"
 
@@ -47,10 +48,12 @@ RotateGizmoAxis::RotateGizmoAxis()
     p_circleRenderer->SetMaterial(
         MaterialFactory::GetGizmosUnLightedOverlay().Get());
     p_circleRenderer->GetMaterial()->SetLineWidth(2.0f);
+    p_circleRenderer->GetGameObject()->AddComponent<NotSelectableInEditor>();
 
     m_selectionMesh = Resources::Create<Mesh>();
 
     p_selectionGo = GameObjectFactory::CreateGameObject(true);
+    p_selectionGo->SetName("RotateGizmoAxisSelection");
     p_selectionRenderer = p_selectionGo->AddComponent<MeshRenderer>();
     p_selectionRenderer->SetMaterial(
         MaterialFactory::GetGizmosUnLightedOverlay().Get());
@@ -201,7 +204,7 @@ void RotateGizmoAxis::Update()
 
 void RotateGizmoAxis::Render(RenderPass renderPass, bool renderChildren)
 {
-    // p_selectionGo->SetEnabled(Selection::IsBeingRendered());
+    p_selectionGo->SetVisible(Selection::IsBeingRendered());
 
     UpdateCirclePoints();
 
