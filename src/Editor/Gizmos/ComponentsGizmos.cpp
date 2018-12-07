@@ -40,7 +40,7 @@
 #include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/Selection.h"
 #include "BangEditor/SelectionFramebuffer.h"
-#include "BangEditor/SelectionProxy.h"
+#include "BangEditor/SelectionOptions.h"
 
 using namespace Bang;
 using namespace BangEditor;
@@ -299,9 +299,9 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam, bool isBeingSelected)
         RenderFactory::Parameters params;
         params.position = camTransform->GetPosition();
         params.scale = Vector3(0.1f);
-        AddSelectionPlaneFor(cam->GetGameObject(), params.scale);
-        RenderFactory::RenderIcon(
-            EditorTextureFactory::GetComponentIcon(cam), true, params);
+        Texture2D *icon = EditorTextureFactory::GetComponentIcon(cam);
+        AddSelectionPlaneFor(cam->GetGameObject(), params.scale, icon);
+        RenderFactory::RenderIcon(icon, true, params);
 
         // RH<Mesh> cameraMesh = MeshFactory::GetCamera();
         // Transform *camTransform = cam->GetGameObject()->GetTransform();
@@ -369,8 +369,9 @@ void ComponentsGizmos::RenderPointLightGizmo(PointLight *pointLight,
     if (!isBeingSelected)
     {
         params.scale = Vector3(0.1f);
-        RenderFactory::RenderIcon(
-            EditorTextureFactory::GetComponentIcon(pointLight), true, params);
+        Texture2D *icon = EditorTextureFactory::GetComponentIcon(pointLight);
+        AddSelectionPlaneFor(pointLight->GetGameObject(), params.scale, icon);
+        RenderFactory::RenderIcon(icon, true, params);
     }
     else
     {
@@ -398,8 +399,9 @@ void ComponentsGizmos::RenderDirectionalLightGizmo(DirectionalLight *dirLight,
         params.position =
             dirLight->GetGameObject()->GetTransform()->GetPosition();
         params.scale = Vector3(0.1f);
-        RenderFactory::RenderIcon(
-            EditorTextureFactory::GetComponentIcon(dirLight), true, params);
+        Texture2D *icon = EditorTextureFactory::GetComponentIcon(dirLight);
+        AddSelectionPlaneFor(dirLight->GetGameObject(), params.scale, icon);
+        RenderFactory::RenderIcon(icon, true, params);
     }
     else
     {
@@ -548,10 +550,11 @@ void ComponentsGizmos::RenderParticleSystemGizmo(ParticleSystem *particleSystem,
 
     if (!isBeingSelected)
     {
-        RenderFactory::RenderIcon(
-            EditorTextureFactory::GetComponentIcon(particleSystem),
-            true,
-            params);
+        Texture2D *icon =
+            EditorTextureFactory::GetComponentIcon(particleSystem);
+        AddSelectionPlaneFor(
+            particleSystem->GetGameObject(), params.scale, icon);
+        RenderFactory::RenderIcon(icon, true, params);
     }
     else
     {
@@ -618,8 +621,9 @@ void ComponentsGizmos::RenderRopeGizmo(Rope *rope, bool isBeingSelected)
 
     if (!isBeingSelected)
     {
-        RenderFactory::RenderIcon(
-            EditorTextureFactory::GetComponentIcon(rope), true, params);
+        Texture2D *icon = EditorTextureFactory::GetComponentIcon(rope);
+        AddSelectionPlaneFor(rope->GetGameObject(), params.scale, icon);
+        RenderFactory::RenderIcon(icon, true, params);
     }
 }
 
@@ -635,8 +639,9 @@ void ComponentsGizmos::RenderAudioSourceGizmo(AudioSource *audioSource,
     if (!isBeingSelected)
     {
         params.scale = Vector3(0.1f);
-        RenderFactory::RenderIcon(
-            EditorTextureFactory::GetComponentIcon(audioSource), true, params);
+        Texture2D *icon = EditorTextureFactory::GetComponentIcon(audioSource);
+        AddSelectionPlaneFor(audioSource->GetGameObject(), params.scale, icon);
+        RenderFactory::RenderIcon(icon, true, params);
     }
     else
     {
@@ -653,7 +658,8 @@ void ComponentsGizmos::RenderAudioSourceGizmo(AudioSource *audioSource,
 }
 
 void ComponentsGizmos::AddSelectionPlaneFor(GameObject *go,
-                                            const Vector3 &scale)
+                                            const Vector3 &scale,
+                                            Texture2D *filterTexture)
 {
     while (p_selectionPlanes.Size() <= m_usedSelectionPlanesInThisFrame)
     {
@@ -663,8 +669,9 @@ void ComponentsGizmos::AddSelectionPlaneFor(GameObject *go,
         selPlaneRend->GetMaterial()->SetCullFace(GL::CullFaceExt::NONE);
         selPlaneRend->GetMaterial()->SetRenderPass(RenderPass::OVERLAY);
         selPlaneRend->SetMesh(MeshFactory::GetPlane().Get());
+        selPlane->SetVisible(false);
 
-        selPlane->AddComponent<SelectionProxy>();
+        selPlane->AddComponent<SelectionOptions>();
 
         selPlane->SetParent(this);
         p_selectionPlanes.PushBack(selPlane);
@@ -673,7 +680,12 @@ void ComponentsGizmos::AddSelectionPlaneFor(GameObject *go,
     GameObject *selPlane = p_selectionPlanes[m_usedSelectionPlanesInThisFrame];
     const Vector3 pos = go->GetTransform()->GetPosition();
     selPlane->GetTransform()->SetPosition(pos);
-    selPlane->GetComponent<SelectionProxy>()->SetTargetGameObject(go);
+    if (SelectionOptions *selectionOptions =
+            selPlane->GetComponent<SelectionOptions>())
+    {
+        selectionOptions->SetFilterTexture(filterTexture);
+        selectionOptions->SetTargetGameObject(go);
+    }
 
     Quaternion bbRotation;
     Vector3 bbScale;

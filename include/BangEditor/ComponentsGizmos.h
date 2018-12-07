@@ -18,6 +18,7 @@ class Component;
 class DirectionalLight;
 class NavigationMesh;
 class ParticleSystem;
+class Texture2D;
 class PointLight;
 class ReflectionProbe;
 class Rope;
@@ -64,7 +65,8 @@ private:
     void RenderAudioSourceGizmo(AudioSource *audioSource, bool isBeingSelected);
 
     void AddSelectionPlaneFor(GameObject *go,
-                              const Vector3 &scale = Vector3::One());
+                              const Vector3 &scale = Vector3::One(),
+                              Texture2D *filterTexture = nullptr);
 };
 }
 

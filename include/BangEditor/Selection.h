@@ -13,6 +13,8 @@ namespace Bang
 {
 class Ray;
 class Camera;
+class Mesh;
+class Material;
 class GameObject;
 class MeshRenderer;
 class Scene;
@@ -39,6 +41,9 @@ private:
 
     Selection() = default;
 
+    static bool IsFilteredByTexture(Bang::MeshRenderer *mr,
+                                    const Bang::Vector3 &point,
+                                    uint triId);
     static Bang::GameObject *GetOveredGameObject(
         const Bang::Vector2i &vpPoint,
         const Bang::Array<Bang::GameObject *> &gameObjects);

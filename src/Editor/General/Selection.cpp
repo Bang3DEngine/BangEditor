@@ -9,6 +9,7 @@
 #include "Bang/Plane.h"
 #include "Bang/Ray.h"
 #include "Bang/Scene.h"
+#include "Bang/Texture2D.h"
 #include "Bang/Transform.h"
 #include "Bang/Triangle.h"
 #include "BangEditor/EditorCamera.h"
@@ -16,7 +17,7 @@
 #include "BangEditor/GizmosManager.h"
 #include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/SelectionFramebuffer.h"
-#include "BangEditor/SelectionProxy.h"
+#include "BangEditor/SelectionOptions.h"
 #include "BangEditor/UISceneEditContainer.h"
 
 namespace Bang
@@ -91,14 +92,60 @@ GameObject *Selection::GetOveredGameObject(const Vector2i &vpPoint)
 
     if (intersectedGo)
     {
-        if (SelectionProxy *selectionProxy =
-                intersectedGo->GetComponent<SelectionProxy>())
+        if (SelectionOptions *selectionOptions =
+                intersectedGo->GetComponent<SelectionOptions>())
         {
-            intersectedGo = selectionProxy->GetTargetGameObject();
+            intersectedGo = selectionOptions->GetTargetGameObject();
         }
     }
 
     return intersectedGo;
+}
+
+bool Selection::IsFilteredByTexture(MeshRenderer *mr,
+                                    const Vector3 &point,
+                                    uint triId)
+{
+    SelectionOptions *selectionOptions =
+        mr->GetGameObject()->GetComponent<SelectionOptions>();
+    if (selectionOptions && mr->GetActiveMaterial())
+    {
+        Mesh *mesh = mr->GetActiveMesh();
+        Texture2D *tex = selectionOptions->GetFilterTexture();
+        if (!tex)
+        {
+            return false;
+        }
+
+        Triangle tri = mesh->GetTriangle(triId);
+
+        uint triV0Id = mesh->GetTrianglesVertexIds()[triId * 3 + 0];
+        uint triV1Id = mesh->GetTrianglesVertexIds()[triId * 3 + 1];
+        uint triV2Id = mesh->GetTrianglesVertexIds()[triId * 3 + 2];
+        const Array<Vector2> &uvs = mesh->GetUvsPool();
+        Vector2 uvs0 = triV0Id < uvs.Size() ? uvs[triV0Id] : Vector2::Zero();
+        Vector2 uvs1 = triV1Id < uvs.Size() ? uvs[triV1Id] : Vector2::Zero();
+        Vector2 uvs2 = triV2Id < uvs.Size() ? uvs[triV2Id] : Vector2::Zero();
+
+        Vector3 barycentricCoords = tri.GetBarycentricCoordinates(point);
+        Vector2 pointUvs = (uvs0 * barycentricCoords[0]) +
+                           (uvs1 * barycentricCoords[1]) +
+                           (uvs2 * barycentricCoords[2]);
+        pointUvs.y = (1.0f - pointUvs.y);
+        Vector2i pixelCoords(Vector2(tex->GetImage().GetSize()) * pointUvs);
+
+        if (tex && pixelCoords >= Vector2i::Zero() &&
+            pixelCoords < tex->GetImage().GetSize())
+        {
+            Color pixelColor =
+                tex->GetImage().GetPixel(pixelCoords.x, pixelCoords.y);
+            if (pixelColor.a <= tex->GetAlphaCutoff())
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 GameObject *Selection::GetOveredGameObject(
@@ -141,6 +188,8 @@ GameObject *Selection::GetOveredGameObject(
                 if (Mesh *mesh = mr->GetActiveMesh())
                 {
                     Transform *mrTR = mr->GetGameObject()->GetTransform();
+                    SelectionOptions *selectionOptions =
+                        mr->GetGameObject()->GetComponent<SelectionOptions>();
 
                     bool intersected = false;
                     float dist = Math::Infinity<float>();
@@ -151,11 +200,11 @@ GameObject *Selection::GetOveredGameObject(
                         &dist);
                     if (intersected && dist < minIntersectionDist)
                     {
-                        float minLocalMRDist = Math::Infinity<float>();
                         const Matrix4 &localToWorldInv =
                             mrTR->GetLocalToWorldMatrixInv();
                         const Ray localRay = localToWorldInv * camRay;
 
+                        float minLocalMRDist = Math::Infinity<float>();
                         for (Mesh::TriangleId triId = 0;
                              triId < mesh->GetNumTriangles();
                              ++triId)
@@ -171,8 +220,24 @@ GameObject *Selection::GetOveredGameObject(
 
                                 if (intersected && dist < minLocalMRDist)
                                 {
-                                    minLocalMRDist = dist;
-                                    intersectedATri = true;
+                                    GameObject *targetGo = intersectedGo;
+                                    bool filteredByTexture = false;
+                                    if (selectionOptions)
+                                    {
+                                        Vector3 localMRPoint =
+                                            localRay.GetPoint(dist);
+                                        filteredByTexture = IsFilteredByTexture(
+                                            mr, localMRPoint, triId);
+                                        targetGo = selectionOptions
+                                                       ->GetTargetGameObject();
+                                    }
+
+                                    if (!filteredByTexture)
+                                    {
+                                        intersectedGo = targetGo;
+                                        minLocalMRDist = dist;
+                                        intersectedATri = true;
+                                    }
                                 }
                             }
                         }
