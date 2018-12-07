@@ -42,6 +42,8 @@ public:
     void OnBeginRender(Scene *scene);
     void OnEndRender(Scene *scene);
 
+    Array<GameObject *> GetGameObjectsForSelection() const;
+
     TransformGizmo *GetTransformGizmo() const;
     ComponentsGizmos *GetComponentsGizmos() const;
     GameObjectSelectionGizmo *GetGameObjectSelectionGizmo() const;

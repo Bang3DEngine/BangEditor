@@ -5,6 +5,7 @@
 #include "Bang/Bang.h"
 #include "Bang/BangDefines.h"
 #include "Bang/Map.h"
+#include "Bang/UMap.h"
 #include "Bang/Vector2.h"
 #include "BangEditor/BangEditor.h"
 
@@ -41,7 +42,8 @@ public:
                          float *outDist = nullptr);
 
 private:
-    Bang::Map<std::pair<Bang::Vector2i, Bang::MeshRenderer *>, float> p_cache;
+    bool m_selectionGosGatheredForThisFrame = false;
+    Bang::Map<Bang::Vector2i, Bang::GameObject *> p_cache;
     Bang::Array<Bang::GameObject *> p_extraGameObjects;
 
     Selection() = default;

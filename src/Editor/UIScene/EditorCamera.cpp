@@ -87,6 +87,7 @@ void EditorCamera::Update()
 {
     GameObject::Update();
 
+    p_selection->OnNewFrame();
     AdjustSpeeds();
 
     bool unwrapMouse = true;
@@ -138,7 +139,6 @@ void EditorCamera::Update()
 void EditorCamera::Render(RenderPass rp, bool renderChildren)
 {
     GameObject::Render(rp, renderChildren);
-    p_selection->OnNewFrame();
 }
 
 void EditorCamera::AdjustSpeeds()

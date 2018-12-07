@@ -6,11 +6,14 @@
 #include "Bang/Geometry.h"
 #include "Bang/Mesh.h"
 #include "Bang/MeshRenderer.h"
+#include "Bang/Plane.h"
 #include "Bang/Ray.h"
 #include "Bang/Scene.h"
 #include "Bang/Transform.h"
+#include "Bang/Triangle.h"
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/GizmosManager.h"
 #include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/UISceneEditContainer.h"
 
@@ -53,17 +56,19 @@ SelectionFramebuffer *Selection::GetSelectionFramebuffer()
 
 GameObject *Selection::GetOveredGameObject(const Vector2i &vpPoint)
 {
-    Selection *sel = Selection::GetInstance();
-    if (!sel)
-    {
-        return nullptr;
-    }
-
     GameObject *intersectedGo = nullptr;
+    if (Selection *sel = Selection::GetInstance())
     {
+        if (!sel->m_selectionGosGatheredForThisFrame)
+        {
+            GizmosManager *gm = GizmosManager::GetInstance();
+            sel->p_extraGameObjects.PushBack(gm->GetGameObjectsForSelection());
+            sel->m_selectionGosGatheredForThisFrame = true;
+        }
+
         // intersectedGo = GetOveredGameObject(vpPoint,
         // sel->p_extraGameObjects);
-        // if (!intersectedGo)
+        if (!intersectedGo)
         {
             if (Scene *openScene = EditorSceneManager::GetOpenScene())
             {
@@ -86,7 +91,12 @@ GameObject *Selection::GetOveredGameObject(
     }
 
     GameObject *intersectedGo = nullptr;
-    if (EditorCamera *edCam = EditorCamera::GetInstance())
+    auto it = sel->p_cache.Find(vpPoint);
+    if (it != sel->p_cache.End())
+    {
+        intersectedGo = it->second;
+    }
+    else if (EditorCamera *edCam = EditorCamera::GetInstance())
     {
         Camera *cam = edCam->GetCamera();
         const Vector2 mouseNDC =
@@ -96,7 +106,7 @@ GameObject *Selection::GetOveredGameObject(
         float minIntersectionDist = Math::Infinity<float>();
         for (GameObject *go : gameObjects)
         {
-            if (!go)  // || !go->IsEnabledRecursively())
+            if (!go)
             {
                 continue;
             }
@@ -110,65 +120,76 @@ GameObject *Selection::GetOveredGameObject(
                     continue;
                 }
 
-                bool intersected = false;
-                float minDistForRend = Math::Infinity<float>();
-                auto it = sel->p_cache.Find(std::make_pair(vpPoint, mr));
-                if (false && it != sel->p_cache.End())
+                bool intersectedATri = false;
+                if (Mesh *mesh = mr->GetActiveMesh())
                 {
-                    minDistForRend = it->second;
-                    intersected = (minDistForRend != Math::Infinity<float>());
-                }
-                else
-                {
-                    if (Mesh *mesh = mr->GetActiveMesh())
+                    Transform *mrTR = mr->GetGameObject()->GetTransform();
+
+                    bool intersected = false;
+                    float dist = Math::Infinity<float>();
+                    Geometry::IntersectRayAABox(
+                        camRay,
+                        mr->GetGameObject()->GetAABBoxWorld(),
+                        &intersected,
+                        &dist);
+                    if (intersected && dist < minIntersectionDist)
                     {
-                        float dist = Math::Infinity<float>();
-                        Geometry::IntersectRayAABox(
-                            camRay,
-                            mr->GetGameObject()->GetAABBoxWorld(),
-                            &intersected,
-                            &dist);
-                        if (intersected)
+                        float minLocalMRDist = Math::Infinity<float>();
+                        const Matrix4 &localToWorldInv =
+                            mrTR->GetLocalToWorldMatrixInv();
+                        const Ray localRay = localToWorldInv * camRay;
+
+                        for (Mesh::TriangleId triId = 0;
+                             triId < mesh->GetNumTriangles();
+                             ++triId)
                         {
-                            const Matrix4 localToWorld =
-                                mr->GetGameObject()
-                                    ->GetTransform()
-                                    ->GetLocalToWorldMatrix();
-                            for (Mesh::TriangleId triId = 0;
-                                 triId < mesh->GetNumTriangles();
-                                 ++triId)
+                            const Triangle tri = mesh->GetTriangle(triId);
+
+                            Geometry::IntersectRayPlane(
+                                localRay, tri.GetPlane(), &intersected, &dist);
+                            if (intersected && dist < minLocalMRDist)
                             {
-                                Triangle tri = mesh->GetTriangle(triId);
-                                tri = localToWorld * tri;
-
                                 Geometry::IntersectRayTriangle(
-                                    camRay, tri, &intersected, &dist);
+                                    localRay, tri, &intersected, &dist);
 
-                                if (intersected && dist < minDistForRend)
+                                if (intersected && dist < minLocalMRDist)
                                 {
-                                    minDistForRend = dist;
-                                    intersectedGo = mr->GetGameObject();
+                                    minLocalMRDist = dist;
+                                    intersectedATri = true;
                                 }
+                            }
+                        }
+
+                        if (intersectedATri)
+                        {
+                            const Matrix4 &localToWorld =
+                                mrTR->GetLocalToWorldMatrix();
+                            const Vector3 minLocalMRPoint =
+                                localRay.GetPoint(minLocalMRDist);
+                            const Vector3 minWorldMRPoint =
+                                localToWorld.TransformedPoint(minLocalMRPoint);
+                            const float minWorldMRDist = Vector3::Distance(
+                                minWorldMRPoint, camRay.GetOrigin());
+
+                            if (minWorldMRDist < minIntersectionDist)
+                            {
+                                minIntersectionDist = minWorldMRDist;
+                                intersectedGo = mr->GetGameObject();
                             }
                         }
                     }
                 }
-
-                if (intersected && minDistForRend < minIntersectionDist)
-                {
-                    minIntersectionDist = minDistForRend;
-                    intersectedGo = mr->GetGameObject();
-                }
-
-                sel->p_cache.Add(std::make_pair(vpPoint, mr), minDistForRend);
             }
         }
+        sel->p_cache.Add(vpPoint, intersectedGo);
     }
+
     return intersectedGo;
 }
 
 void Selection::OnNewFrame()
 {
+    m_selectionGosGatheredForThisFrame = false;
     p_extraGameObjects.Clear();
     p_cache.Clear();
 }
