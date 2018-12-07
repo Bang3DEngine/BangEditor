@@ -32,7 +32,6 @@
 #include "BangEditor/IEventsScenePlayer.h"
 #include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/ScenePlayer.h"
-#include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/UISceneEditContainer.h"
 
 namespace Bang
@@ -70,7 +69,6 @@ EditorCamera::EditorCamera()
     p_cam->SetFovDegrees(EditorCamera::InitialFOVDegrees);
 
     p_selection = new Selection();
-    m_selectionFramebuffer = new SelectionFramebuffer(1, 1);
 
     SceneManager::GetActive()
         ->EventEmitter<IEventsSceneManager>::RegisterListener(this);
@@ -80,7 +78,6 @@ EditorCamera::EditorCamera()
 
 EditorCamera::~EditorCamera()
 {
-    delete m_selectionFramebuffer;
 }
 
 void EditorCamera::Update()
@@ -395,12 +392,6 @@ bool EditorCamera::IsBlocked() const
 {
     return !m_blockRequests.IsEmpty();
 }
-
-SelectionFramebuffer *EditorCamera::GetSelectionFramebuffer() const
-{
-    return m_selectionFramebuffer;
-}
-
 Camera *EditorCamera::GetCamera() const
 {
     return p_camContainer->GetComponent<Camera>();

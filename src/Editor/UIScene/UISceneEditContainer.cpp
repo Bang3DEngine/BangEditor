@@ -52,7 +52,6 @@
 #include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/Selection.h"
-#include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
@@ -107,14 +106,13 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
         m_needToRenderPreviewImg = false;
     }
 
-    if (rp == RenderPass::CANVAS && NeedsToRenderSelectionFramebuffer())
+    if (rp == RenderPass::CANVAS)
     {
         EditorCamera *edCamGo = EditorCamera::GetInstance();
         Camera *edCam = edCamGo->GetCamera();
-        SelectionFramebuffer *sfb = GetSelectionFramebuffer();
         Scene *openScene = EditorSceneManager::GetOpenScene();
         GEngine *ge = GEngine::GetInstance();
-        if (sfb && ge && edCamGo && openScene)
+        if (ge && edCamGo && openScene)
         {
             GEngine *ge = GEngine::GetInstance();
             ge->PushActiveRenderingCamera();
@@ -128,14 +126,6 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
             AARecti imgRect(sceneImgRT->GetViewportAARect());
             Vector2i renderSize = imgRect.GetSize();
             edCam->SetRenderSize(renderSize);
-            edCamGo->GetSelectionFramebuffer()->Resize(renderSize);
-
-            // edCam->Bind();
-
-            // sfb->PrepareNewFrameForRender(openScene);
-            // sfb->RenderForSelectionBuffer(openScene);
-
-            // edCam->UnBind();
 
             ge->PopActiveRenderingCamera();
             sgm->OnEndRender(openScene);
@@ -251,18 +241,6 @@ void UISceneEditContainer::OnRenderContainedSceneFinished()
         ->OnEndRender(EditorSceneManager::GetActive()->GetOpenScene());
 
     m_needToRenderPreviewImg = true;
-}
-
-SelectionFramebuffer *UISceneEditContainer::GetSelectionFramebuffer() const
-{
-    EditorCamera *edCam = EditorCamera::GetInstance();
-    return (edCam ? edCam->GetSelectionFramebuffer() : nullptr);
-}
-
-bool UISceneEditContainer::NeedsToRenderSelectionFramebuffer() const
-{
-    return (IsVisibleRecursively() &&
-            GetSceneImage()->GetRectTransform()->IsMouseOver(false));
 }
 
 GameObject *UISceneEditContainer::GetCurrentOveredGameObject() const
@@ -398,7 +376,6 @@ void UISceneEditContainer::OnDragStarted(EventEmitter<IEventsDragDrop> *dd_)
             {
                 Camera *edCam = EditorCamera::GetInstance()->GetCamera();
                 edCam->RemoveRenderPass(RenderPass::OVERLAY);
-                GetSelectionFramebuffer()->SetDrawOverlay(false);
             }
         }
     }
@@ -447,7 +424,6 @@ void UISceneEditContainer::OnDrop(EventEmitter<IEventsDragDrop> *dd_)
 
     Camera *edCam = EditorCamera::GetInstance()->GetCamera();
     edCam->AddRenderPass(RenderPass::OVERLAY);
-    GetSelectionFramebuffer()->SetDrawOverlay(true);
 }
 
 void UISceneEditContainer::OnDestroyed(EventEmitter<IEventsDestroy> *object)

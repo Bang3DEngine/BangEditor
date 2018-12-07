@@ -22,16 +22,10 @@ class Scene;
 
 namespace BangEditor
 {
-class SelectionFramebuffer;
-
 class Selection
 {
 public:
-    static void RegisterExtraGameObjectForNextFrame(Bang::GameObject *go);
-
-    static bool IsBeingRendered();
     static Bang::GameObject *GetOveredGameObject();
-    static SelectionFramebuffer *GetSelectionFramebuffer();
     static Bang::GameObject *GetOveredGameObject(const Bang::Vector2i &vpPoint);
 
 private:

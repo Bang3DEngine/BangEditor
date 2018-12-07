@@ -17,7 +17,6 @@
 #include "Bang/UILayoutElement.h"
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/EditorPaths.h"
-#include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/UISceneDebugStats.h"
 
 using namespace BangEditor;
@@ -73,7 +72,6 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
     switch (GetRenderMode())
     {
         case UISceneImage::RenderMode::DEPTH:
-        case UISceneImage::RenderMode::SELECTION:
         case UISceneImage::RenderMode::WORLD_POSITION:
         {
             switch (GetRenderMode())
@@ -85,19 +83,6 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
                     {
                         Texture2D *depthTex = gb->GetSceneDepthStencilTexture();
                         sp->SetTexture2D("B_SceneDepthStencilTex", depthTex);
-                    }
-                }
-                break;
-
-                case UISceneImage::RenderMode::SELECTION:
-                {
-                    EditorCamera *edCam = EditorCamera::GetInstance();
-                    SelectionFramebuffer *sfb =
-                        edCam->GetSelectionFramebuffer();
-                    if (sfb)
-                    {
-                        Texture2D *selectionTex = sfb->GetColorTexture().Get();
-                        sp->SetTexture2D("B_SelectionTex", selectionTex);
                     }
                 }
                 break;

@@ -135,8 +135,6 @@ UISceneToolbar::UISceneToolbar()
         SCAST<int>(UISceneImage::RenderMode::RECEIVES_SHADOWS));
     p_renderModeInput->AddItem("Depth",
                                SCAST<int>(UISceneImage::RenderMode::DEPTH));
-    p_renderModeInput->AddItem("Selection",
-                               SCAST<int>(UISceneImage::RenderMode::SELECTION));
     p_renderModeInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 

@@ -50,7 +50,6 @@ using namespace Bang;
 namespace BangEditor
 {
 class IEventsScenePlayer;
-class SelectionFramebuffer;
 
 class UISceneEditContainer
     : public UISceneContainer,
@@ -88,9 +87,6 @@ private:
     bool NeedsToRenderContainedScene(Scene *scene) override;
     void OnRenderContainedSceneBegin() override;
     void OnRenderContainedSceneFinished() override;
-
-    SelectionFramebuffer *GetSelectionFramebuffer() const;
-    bool NeedsToRenderSelectionFramebuffer() const;
 
     // Material drag related
     GameObject *GetCurrentOveredGameObject() const;

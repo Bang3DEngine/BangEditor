@@ -16,7 +16,6 @@
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/GizmosManager.h"
 #include "BangEditor/NotSelectableInEditor.h"
-#include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/SelectionOptions.h"
 #include "BangEditor/UISceneEditContainer.h"
 
@@ -28,33 +27,11 @@ class GameObject;
 using namespace Bang;
 using namespace BangEditor;
 
-void Selection::RegisterExtraGameObjectForNextFrame(GameObject *go)
-{
-    if (Selection *sel = Selection::GetInstance())
-    {
-        sel->p_extraGameObjects.PushBack(go);
-    }
-}
-
-bool Selection::IsBeingRendered()
-{
-    EditorCamera *edCam = EditorCamera::GetInstance();
-    SelectionFramebuffer *sfb =
-        (edCam ? edCam->GetSelectionFramebuffer() : nullptr);
-    return sfb ? GL::IsBound(sfb) : false;
-}
-
 GameObject *Selection::GetOveredGameObject()
 {
     const Vector2i &vpPoint =
         UISceneEditContainer::GetMousePositionInOpenScene();
     return GetOveredGameObject(vpPoint);
-}
-
-SelectionFramebuffer *Selection::GetSelectionFramebuffer()
-{
-    EditorCamera *edCam = EditorCamera::GetInstance();
-    return edCam ? edCam->GetSelectionFramebuffer() : nullptr;
 }
 
 GameObject *Selection::GetOveredGameObject(const Vector2i &vpPoint)
@@ -72,19 +49,32 @@ GameObject *Selection::GetOveredGameObject(const Vector2i &vpPoint)
             if (!sel->m_selectionGosGatheredForThisFrame)
             {
                 GizmosManager *gm = GizmosManager::GetInstance();
-                sel->p_extraGameObjects.PushBack(
-                    gm->GetGameObjectsForSelection());
-                sel->m_selectionGosGatheredForThisFrame = true;
-            }
-
-            intersectedGo =
-                GetOveredGameObject(vpPoint, sel->p_extraGameObjects);
-            if (!intersectedGo)
-            {
-                if (Scene *openScene = EditorSceneManager::GetOpenScene())
+                uint priority = 0;
+                while (true)
                 {
-                    intersectedGo = GetOveredGameObject(vpPoint, {openScene});
+                    Array<GameObject *> gizmosGos =
+                        gm->GetGameObjectsForSelection(priority);
+                    if (gizmosGos.Size() >= 1)
+                    {
+                        intersectedGo = GetOveredGameObject(vpPoint, gizmosGos);
+                        if (intersectedGo)
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if (Scene *openScene =
+                                EditorSceneManager::GetOpenScene())
+                        {
+                            intersectedGo =
+                                GetOveredGameObject(vpPoint, {openScene});
+                        }
+                        break;
+                    }
+                    ++priority;
                 }
+                sel->m_selectionGosGatheredForThisFrame = true;
             }
             sel->p_cache.Add(vpPoint, intersectedGo);
         }

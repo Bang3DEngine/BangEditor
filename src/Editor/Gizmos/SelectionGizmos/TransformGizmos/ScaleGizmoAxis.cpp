@@ -54,6 +54,7 @@ ScaleGizmoAxis::ScaleGizmoAxis()
 
     p_selectionGo = GameObjectFactory::CreateGameObject(true);
     p_selectionGo->SetName("AxisSelection");
+    p_selectionGo->SetVisible(false);
 
     p_selectionRenderer = p_selectionGo->AddComponent<MeshRenderer>();
     p_selectionRenderer->SetMaterial(
@@ -182,8 +183,6 @@ void ScaleGizmoAxis::Update()
 
 void ScaleGizmoAxis::Render(RenderPass renderPass, bool renderChildren)
 {
-    p_selectionGo->SetVisible(Selection::IsBeingRendered());
-
     TransformGizmoAxis::Render(renderPass, renderChildren);
 }
 

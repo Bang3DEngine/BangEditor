@@ -42,7 +42,7 @@ public:
     void OnBeginRender(Scene *scene);
     void OnEndRender(Scene *scene);
 
-    Array<GameObject *> GetGameObjectsForSelection() const;
+    Array<GameObject *> GetGameObjectsForSelection(uint priority) const;
 
     TransformGizmo *GetTransformGizmo() const;
     ComponentsGizmos *GetComponentsGizmos() const;

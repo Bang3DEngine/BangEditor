@@ -35,7 +35,6 @@ using namespace Bang;
 namespace BangEditor
 {
 class IEventsScenePlayer;
-class SelectionFramebuffer;
 
 class EditorCamera : public GameObject,
                      public EventListener<IEventsScenePlayer>,
@@ -62,7 +61,6 @@ public:
     void SetZoomSpeedMultiplier(float zoomSpeedMultiplier);
 
     Selection *GetSelection() const;
-    SelectionFramebuffer *GetSelectionFramebuffer() const;
     Camera *GetCamera() const;
     bool IsBlocked() const;
 
@@ -77,7 +75,6 @@ private:
     Transform *p_camt = nullptr;
     Selection *p_selection = nullptr;
     GameObject *p_camContainer = nullptr;
-    SelectionFramebuffer *m_selectionFramebuffer = nullptr;
     Set<GameObject *> m_blockRequests;
 
     Vector3 m_targetPosition = Vector3::Zero();

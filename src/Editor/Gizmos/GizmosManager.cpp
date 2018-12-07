@@ -63,11 +63,15 @@ void GizmosManager::OnEndRender(Scene *)
     GetGameObjectSelectionGizmo()->SetParent(nullptr);
 }
 
-Array<GameObject *> GizmosManager::GetGameObjectsForSelection() const
+Array<GameObject *> GizmosManager::GetGameObjectsForSelection(
+    uint priority) const
 {
-    return {GetTransformGizmo(),
-            GetComponentsGizmos(),
-            GetGameObjectSelectionGizmo()};
+    switch (priority)
+    {
+        case 0: return {GetTransformGizmo()};
+        case 1: return {GetComponentsGizmos()};
+    }
+    return {};
 }
 
 GizmosManager *GizmosManager::GetInstance()

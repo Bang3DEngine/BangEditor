@@ -68,13 +68,6 @@ void SelectionGizmo::Update()
     }
 }
 
-void SelectionGizmo::Render(RenderPass rp, bool renderChildren)
-{
-    GameObject::Render(rp, renderChildren);
-
-    Selection::RegisterExtraGameObjectForNextFrame(GetSelectionGameObject());
-}
-
 void SelectionGizmo::SetReferencedGameObject(GameObject *referencedGameObject)
 {
     if (GetReferencedGameObject() != referencedGameObject)

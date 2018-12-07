@@ -54,6 +54,7 @@ RotateGizmoAxis::RotateGizmoAxis()
 
     p_selectionGo = GameObjectFactory::CreateGameObject(true);
     p_selectionGo->SetName("RotateGizmoAxisSelection");
+    p_selectionGo->SetVisible(false);
     p_selectionRenderer = p_selectionGo->AddComponent<MeshRenderer>();
     p_selectionRenderer->SetMaterial(
         MaterialFactory::GetGizmosUnLightedOverlay().Get());
@@ -204,10 +205,7 @@ void RotateGizmoAxis::Update()
 
 void RotateGizmoAxis::Render(RenderPass renderPass, bool renderChildren)
 {
-    p_selectionGo->SetVisible(Selection::IsBeingRendered());
-
     UpdateCirclePoints();
-
     TransformGizmoAxis::Render(renderPass, renderChildren);
 }
 

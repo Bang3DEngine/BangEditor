@@ -35,6 +35,7 @@ RectTransformAnchorSelectionGizmo::RectTransformAnchorSelectionGizmo()
     p_selectionGO = GameObjectFactory::CreateUIGameObjectNamed("SelectionGO");
     p_selectionRenderer = p_selectionGO->AddComponent<UIImageRenderer>();
     p_selectionRenderer->GetMaterial()->SetRenderPass(RenderPass::OVERLAY);
+    p_selectionRenderer->SetVisible(false);
 
     p_anchorGO->SetParent(this);
     p_selectionGO->SetParent(this);
@@ -122,8 +123,6 @@ void RectTransformAnchorSelectionGizmo::Render(RenderPass renderPass,
                                                bool renderChildren)
 {
     UpdateBasedOnAnchorSide();
-
-    p_selectionRenderer->SetEnabled(Selection::IsBeingRendered());
 
     SelectionGizmo::Render(renderPass, renderChildren);
 

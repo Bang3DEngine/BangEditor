@@ -39,7 +39,6 @@
 #include "BangEditor/HideInHierarchy.h"
 #include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/Selection.h"
-#include "BangEditor/SelectionFramebuffer.h"
 #include "BangEditor/SelectionOptions.h"
 
 using namespace Bang;
@@ -78,10 +77,7 @@ void ComponentsGizmos::Render(RenderPass rp, bool renderChildren)
             {
                 if (comp && comp->IsActiveRecursively())
                 {
-                    if (!Selection::IsBeingRendered())
-                    {
-                        RenderComponentGizmos(comp, true);
-                    }
+                    RenderComponentGizmos(comp, true);
                 }
             }
         }
@@ -132,13 +128,6 @@ void ComponentsGizmos::RenderComponentGizmosWhenNotSelected(GameObject *go)
 void ComponentsGizmos::RenderComponentGizmos(Component *comp,
                                              bool isBeingSelected)
 {
-    SelectionFramebuffer *sfb = Selection::GetSelectionFramebuffer();
-
-    if (!isBeingSelected && Selection::IsBeingRendered())
-    {
-        sfb->SetNextRenderSelectable(comp->GetGameObject());
-    }
-
     if (Camera *cam = DCAST<Camera *>(comp))
     {
         RenderCameraGizmo(cam, isBeingSelected);
@@ -182,11 +171,6 @@ void ComponentsGizmos::RenderComponentGizmos(Component *comp,
     else if (AudioSource *as = DCAST<AudioSource *>(comp))
     {
         RenderAudioSourceGizmo(as, isBeingSelected);
-    }
-
-    if (!isBeingSelected && Selection::IsBeingRendered())
-    {
-        sfb->SetNextRenderSelectable(nullptr);
     }
 }
 

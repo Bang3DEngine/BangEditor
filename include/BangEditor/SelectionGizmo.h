@@ -35,7 +35,6 @@ public:
 
     // GameObject
     virtual void Update() override;
-    virtual void Render(RenderPass rp, bool renderChildren) override;
 
     virtual void SetReferencedGameObject(GameObject *referencedGameObject);
     GameObject *GetReferencedGameObject() const;

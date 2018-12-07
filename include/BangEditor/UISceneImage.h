@@ -36,7 +36,6 @@ public:
         METALNESS,
         RECEIVES_LIGHT,
         RECEIVES_SHADOWS,
-        SELECTION,
         WORLD_POSITION
     };
 

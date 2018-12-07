@@ -1,7 +1,6 @@
 #include "UI.frag"
 
 uniform int B_SceneRenderMode;
-uniform sampler2D B_SelectionTex;
 uniform sampler2D B_SceneDepthStencilTex;
 
 const int COLOR            = 0;
@@ -12,8 +11,7 @@ const int ROUGHNESS        = 4;
 const int METALNESS        = 5;
 const int RECEIVES_LIGHT   = 6;
 const int RECEIVES_SHADOWS = 7;
-const int SELECTION        = 8;
-const int WORLD_POSITION   = 9;
+const int WORLD_POSITION   = 8;
 
 void main()
 {
@@ -32,7 +30,6 @@ void main()
         case METALNESS:        color = vec3( B_SampleMetalness(uv) );       break;
         case RECEIVES_LIGHT:   color = vec3( B_SampleReceivesLight(uv) );   break;
         case RECEIVES_SHADOWS: color = vec3( B_SampleReceivesShadows(uv) ); break;
-        case SELECTION:        color = texture(B_SelectionTex, uv).rgb;     break;
 
         case DEPTH: color = vec3( texture(B_SceneDepthStencilTex, uv).r );  break;
     }

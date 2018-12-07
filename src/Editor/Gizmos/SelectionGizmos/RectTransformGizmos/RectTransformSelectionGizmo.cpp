@@ -51,6 +51,7 @@ RectTransformSelectionGizmo::RectTransformSelectionGizmo()
 
     p_selectionGo = GameObjectFactory::CreateUIGameObject(true);
     p_selectionGo->SetName("RectSelection");
+    p_selectionGo->SetVisible(false);
 
     p_selectionGo->SetParent(this);
     p_leftBotCorner->SetParent(this);
@@ -83,8 +84,6 @@ void RectTransformSelectionGizmo::Update()
 void RectTransformSelectionGizmo::Render(RenderPass renderPass,
                                          bool renderChildren)
 {
-    p_selectionGo->SetEnabled(Selection::IsBeingRendered());
-
     if (renderPass == RenderPass::OVERLAY)
     {
         GameObject *refGo = GetReferencedGameObject();

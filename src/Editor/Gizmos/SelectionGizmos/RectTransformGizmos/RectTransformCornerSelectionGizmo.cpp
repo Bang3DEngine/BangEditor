@@ -36,6 +36,7 @@ RectTransformCornerSelectionGizmo::RectTransformCornerSelectionGizmo()
     p_selectionGO = GameObjectFactory::CreateUIGameObjectNamed("SelectionGO");
     p_selectionRenderer = p_selectionGO->AddComponent<UIImageRenderer>();
     p_selectionRenderer->GetMaterial()->SetRenderPass(RenderPass::OVERLAY);
+    p_selectionRenderer->SetVisible(false);
 
     p_cornerGO->SetParent(this);
     p_selectionGO->SetParent(this);
@@ -126,8 +127,6 @@ void RectTransformCornerSelectionGizmo::Render(RenderPass renderPass,
                                                bool renderChildren)
 {
     UpdateBasedOnCornerSide();
-
-    p_selectionRenderer->SetEnabled(Selection::IsBeingRendered());
 
     Color color;
     switch (GetSelectionState())
