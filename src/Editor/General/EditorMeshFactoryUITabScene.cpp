@@ -6,9 +6,12 @@
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
 #include "Bang/GameObjectFactory.h"
+#include "Bang/Geometry.h"
+#include "Bang/Math.h"
 #include "Bang/Mesh.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/Model.h"
+#include "Bang/Plane.h"
 #include "Bang/RectTransform.h"
 #include "Bang/Resources.h"
 #include "Bang/Scene.h"
@@ -80,35 +83,75 @@ void EditorMeshFactoryUITabScene::Update()
 
     if (RH<Mesh> selectedMesh = GetExplorerSelectedMesh())
     {
-        p_currentMesh.Set(selectedMesh.Get());
-        p_currentModel.Set(nullptr);
-        if (p_modelContainer)
+        if (selectedMesh.Get() != GetCurrentMesh())
         {
-            GameObject::Destroy(p_modelContainer);
-        }
+            p_currentMesh.Set(selectedMesh.Get());
+            p_currentModel.Set(nullptr);
+            if (p_modelContainer)
+            {
+                GameObject::Destroy(p_modelContainer);
+            }
 
-        p_modelContainer = GameObjectFactory::CreateGameObject();
-        MeshRenderer *mr = p_modelContainer->AddComponent<MeshRenderer>();
-        mr->SetMesh(p_currentMesh.Get());
+            p_modelContainer = GameObjectFactory::CreateGameObject();
+            MeshRenderer *mr = p_modelContainer->AddComponent<MeshRenderer>();
+            mr->SetMesh(p_currentMesh.Get());
+        }
     }
     else if (RH<Model> selectedModel = GetExplorerSelectedModel())
     {
-        p_currentMesh.Set(nullptr);
-        p_currentModel.Set(selectedModel.Get());
-        if (p_modelContainer)
+        if (selectedModel.Get() != GetCurrentModel())
         {
-            GameObject::Destroy(p_modelContainer);
-        }
+            p_currentMesh.Set(nullptr);
+            p_currentModel.Set(selectedModel.Get());
+            if (p_modelContainer)
+            {
+                GameObject::Destroy(p_modelContainer);
+            }
 
-        p_modelContainer = selectedModel.Get()->CreateGameObjectFromModel();
+            p_modelContainer = selectedModel.Get()->CreateGameObjectFromModel();
+            ResetCamera();
+        }
     }
 
     p_centralText->GetGameObject()->SetEnabled(p_modelContainer == nullptr);
 
-    if (p_focusable->IsBeingPressed())
+    Transform *camTR = p_sceneCamera->GetGameObject()->GetTransform();
+    if (p_focusable->HasFocus())
     {
-        Vector2 mouseCurrentAxisMovement = Input::GetMouseAxis();
-        m_currentCameraRotAngles += mouseCurrentAxisMovement * 360.0f;
+        if (!m_displacingModel && Input::GetMouseButton(MouseButton::LEFT))
+        {
+            Vector2 mouseCurrentAxisMovement = Input::GetMouseAxis();
+            m_currentCameraRotAngles += mouseCurrentAxisMovement * 360.0f;
+        }
+        else if (Input::GetMouseButtonDown(MouseButton::RIGHT))
+        {
+            Vector3 displacementPoint = GetMousePointOverModel();
+            if (displacementPoint == Vector3::Infinity())
+            {
+                displacementPoint = Vector3::Zero();
+            }
+
+            m_displacementPlane = Plane(displacementPoint, camTR->GetBack());
+            m_displacingModel = true;
+            m_lastModelDisplacementPoint = GetDisplacementPoint();
+        }
+
+        if (Input::GetMouseButtonUp(MouseButton::RIGHT))
+        {
+            m_displacingModel = false;
+        }
+
+        if (m_displacingModel)
+        {
+            Vector3 currentDisplacementPoint = GetDisplacementPoint();
+            Vector3 displacement =
+                (currentDisplacementPoint - m_lastModelDisplacementPoint);
+            Debug_DPeek(currentDisplacementPoint);
+            Debug_DPeek(m_lastModelDisplacementPoint);
+            Debug_DPeek(displacement);
+            Debug_DLog("---------------");
+            m_cameraOrbitPointOffset -= displacement;
+        }
     }
 
     m_currentCameraZoom +=
@@ -121,7 +164,6 @@ void EditorMeshFactoryUITabScene::Update()
     {
         p_modelContainer->SetParent(p_scene);
 
-        Transform *camTR = p_sceneCamera->GetGameObject()->GetTransform();
         Sphere goSphere = p_modelContainer->GetBoundingSphere();
         float halfFov = Math::DegToRad(p_sceneCamera->GetFovDegrees() / 2.0f);
         float camDist = goSphere.GetRadius() / Math::Tan(halfFov) * 1.1f;
@@ -133,10 +175,14 @@ void EditorMeshFactoryUITabScene::Update()
                                    Vector3::Right()) *
              Vector3(0, 0, 1))
                 .Normalized();
-        camTR->SetPosition(goSphere.GetCenter() + camDir * camDist);
-        camTR->LookAt(goSphere.GetCenter());
+        Vector3 orbitPoint = goSphere.GetCenter() + m_cameraOrbitPointOffset;
+        camTR->SetPosition(orbitPoint + camDir * camDist);
+        camTR->LookAt(orbitPoint);
+
         p_sceneCamera->SetZNear(0.01f);
         p_sceneCamera->SetZFar((camDist + goSphere.GetRadius() * 2.0f) * 1.2f);
+
+        m_lastModelDisplacementPoint = GetDisplacementPoint();
     }
 
     // Render camera
@@ -172,6 +218,7 @@ void EditorMeshFactoryUITabScene::ResetCamera()
 {
     m_currentCameraZoom = 1.4f;
     m_currentCameraRotAngles = Vector2(45.0f, -45.0f);
+    m_cameraOrbitPointOffset = Vector3::Zero();
 }
 
 Mesh *EditorMeshFactoryUITabScene::GetCurrentMesh() const
@@ -182,6 +229,64 @@ Mesh *EditorMeshFactoryUITabScene::GetCurrentMesh() const
 Model *EditorMeshFactoryUITabScene::GetCurrentModel() const
 {
     return p_currentModel.Get();
+}
+
+Ray EditorMeshFactoryUITabScene::GetMouseRay() const
+{
+    const Vector2 mouseNDC = GetMouseNDC();
+    const Ray camRay = p_sceneCamera->FromViewportPointNDCToRay(mouseNDC);
+    return camRay;
+}
+
+Vector2 EditorMeshFactoryUITabScene::GetMouseNDC() const
+{
+    const Vector2 mouseNDC =
+        p_sceneImg->GetGameObject()
+            ->GetRectTransform()
+            ->FromViewportPointToLocalPointNDC(Input::GetMousePosition());
+    return mouseNDC;
+}
+
+Vector3 EditorMeshFactoryUITabScene::GetDisplacementPoint() const
+{
+    Ray ray = GetMouseRay();
+    bool intersected;
+    float distance;
+    Geometry::IntersectRayPlane(
+        ray, m_displacementPlane, &intersected, &distance);
+    if (intersected)
+    {
+        Vector3 displacementPoint = ray.GetPoint(distance);
+        return displacementPoint;
+    }
+    return Vector3::Zero();
+}
+
+Vector3 EditorMeshFactoryUITabScene::GetMousePointOverModel() const
+{
+    const Ray camRay = GetMouseRay();
+    Vector3 minPoint = Vector3::Infinity();
+    const Array<MeshRenderer *> mrs = GetMeshRenderers();
+    for (MeshRenderer *mr : mrs)
+    {
+        bool intersectedLocal;
+        Vector3 intersectionPoint;
+        mr->IntersectRay(camRay, &intersectedLocal, &intersectionPoint);
+        if (intersectedLocal)
+        {
+            if (Vector3::Distance(camRay.GetOrigin(), intersectionPoint) <
+                Vector3::Distance(camRay.GetOrigin(), minPoint))
+            {
+                minPoint = intersectionPoint;
+            }
+        }
+    }
+    return minPoint;
+}
+
+Array<MeshRenderer *> EditorMeshFactoryUITabScene::GetMeshRenderers() const
+{
+    return p_modelContainer->GetComponentsInDescendantsAndThis<MeshRenderer>();
 }
 
 RH<Mesh> EditorMeshFactoryUITabScene::GetExplorerSelectedMesh() const

@@ -92,52 +92,6 @@ GameObject *Selection::GetOveredGameObject(const Vector2i &vpPoint)
     return intersectedGo;
 }
 
-bool Selection::IsFilteredByTexture(MeshRenderer *mr,
-                                    const Vector3 &point,
-                                    uint triId)
-{
-    SelectionOptions *selectionOptions =
-        mr->GetGameObject()->GetComponent<SelectionOptions>();
-    if (selectionOptions && mr->GetActiveMaterial())
-    {
-        Mesh *mesh = mr->GetActiveMesh();
-        Texture2D *tex = selectionOptions->GetFilterTexture();
-        if (!tex)
-        {
-            return false;
-        }
-
-        Triangle tri = mesh->GetTriangle(triId);
-
-        uint triV0Id = mesh->GetTrianglesVertexIds()[triId * 3 + 0];
-        uint triV1Id = mesh->GetTrianglesVertexIds()[triId * 3 + 1];
-        uint triV2Id = mesh->GetTrianglesVertexIds()[triId * 3 + 2];
-        const Array<Vector2> &uvs = mesh->GetUvsPool();
-        Vector2 uvs0 = triV0Id < uvs.Size() ? uvs[triV0Id] : Vector2::Zero();
-        Vector2 uvs1 = triV1Id < uvs.Size() ? uvs[triV1Id] : Vector2::Zero();
-        Vector2 uvs2 = triV2Id < uvs.Size() ? uvs[triV2Id] : Vector2::Zero();
-
-        Vector3 barycentricCoords = tri.GetBarycentricCoordinates(point);
-        Vector2 pointUvs = (uvs0 * barycentricCoords[0]) +
-                           (uvs1 * barycentricCoords[1]) +
-                           (uvs2 * barycentricCoords[2]);
-        pointUvs.y = (1.0f - pointUvs.y);
-        Vector2i pixelCoords(Vector2(tex->GetImage().GetSize()) * pointUvs);
-
-        if (tex && pixelCoords >= Vector2i::Zero() &&
-            pixelCoords < tex->GetImage().GetSize())
-        {
-            Color pixelColor =
-                tex->GetImage().GetPixel(pixelCoords.x, pixelCoords.y);
-            if (pixelColor.a <= tex->GetAlphaCutoff())
-            {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
 GameObject *Selection::GetOveredGameObject(
     const Vector2i &vpPoint,
     const Array<GameObject *> &gameObjects)
@@ -174,81 +128,32 @@ GameObject *Selection::GetOveredGameObject(
                     continue;
                 }
 
-                bool intersectedATri = false;
-                if (Mesh *mesh = mr->GetActiveMesh())
+                SelectionOptions *selectionOptions =
+                    mr->GetGameObject()->GetComponent<SelectionOptions>();
+                Texture2D *filterTex =
+                    selectionOptions ? selectionOptions->GetFilterTexture()
+                                     : nullptr;
+
+                bool intersected;
+                Vector3 intersectionPoint;
+                mr->IntersectRay(camRay,
+                                 filterTex,
+                                 &intersected,
+                                 &intersectionPoint,
+                                 nullptr);
+
+                float dist =
+                    Vector3::Distance(intersectionPoint, camRay.GetOrigin());
+                if (intersected && dist < minIntersectionDist)
                 {
-                    Transform *mrTR = mr->GetGameObject()->GetTransform();
-                    SelectionOptions *selectionOptions =
-                        mr->GetGameObject()->GetComponent<SelectionOptions>();
-
-                    bool intersected = false;
-                    float dist = Math::Infinity<float>();
-                    Geometry::IntersectRayAABox(
-                        camRay,
-                        mr->GetGameObject()->GetAABBoxWorld(),
-                        &intersected,
-                        &dist);
-                    if (intersected && dist < minIntersectionDist)
+                    minIntersectionDist = dist;
+                    if (selectionOptions)
                     {
-                        const Matrix4 &localToWorldInv =
-                            mrTR->GetLocalToWorldMatrixInv();
-                        const Ray localRay = localToWorldInv * camRay;
-
-                        float minLocalMRDist = Math::Infinity<float>();
-                        for (Mesh::TriangleId triId = 0;
-                             triId < mesh->GetNumTriangles();
-                             ++triId)
-                        {
-                            const Triangle tri = mesh->GetTriangle(triId);
-
-                            Geometry::IntersectRayPlane(
-                                localRay, tri.GetPlane(), &intersected, &dist);
-                            if (intersected && dist < minLocalMRDist)
-                            {
-                                Geometry::IntersectRayTriangle(
-                                    localRay, tri, &intersected, &dist);
-
-                                if (intersected && dist < minLocalMRDist)
-                                {
-                                    GameObject *targetGo = intersectedGo;
-                                    bool filteredByTexture = false;
-                                    if (selectionOptions)
-                                    {
-                                        Vector3 localMRPoint =
-                                            localRay.GetPoint(dist);
-                                        filteredByTexture = IsFilteredByTexture(
-                                            mr, localMRPoint, triId);
-                                        targetGo = selectionOptions
-                                                       ->GetTargetGameObject();
-                                    }
-
-                                    if (!filteredByTexture)
-                                    {
-                                        intersectedGo = targetGo;
-                                        minLocalMRDist = dist;
-                                        intersectedATri = true;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (intersectedATri)
-                        {
-                            const Matrix4 &localToWorld =
-                                mrTR->GetLocalToWorldMatrix();
-                            const Vector3 minLocalMRPoint =
-                                localRay.GetPoint(minLocalMRDist);
-                            const Vector3 minWorldMRPoint =
-                                localToWorld.TransformedPoint(minLocalMRPoint);
-                            const float minWorldMRDist = Vector3::Distance(
-                                minWorldMRPoint, camRay.GetOrigin());
-
-                            if (minWorldMRDist < minIntersectionDist)
-                            {
-                                minIntersectionDist = minWorldMRDist;
-                                intersectedGo = mr->GetGameObject();
-                            }
-                        }
+                        intersectedGo = selectionOptions->GetTargetGameObject();
+                    }
+                    else
+                    {
+                        intersectedGo = mr->GetGameObject();
                     }
                 }
             }

@@ -3,6 +3,7 @@
 
 #include "Bang/Bang.h"
 #include "Bang/GameObject.h"
+#include "Bang/Plane.h"
 #include "Bang/ResourceHandle.h"
 #include "BangEditor/BangEditor.h"
 
@@ -12,6 +13,7 @@ namespace Bang
 class GBuffer;
 class UICanvas;
 class Model;
+class Ray;
 class UIFocusable;
 class MeshRenderer;
 class UITextRenderer;
@@ -42,10 +44,20 @@ private:
     RH<Model> p_currentModel;
     GameObject *p_modelContainer = nullptr;
 
+    bool m_displacingModel = false;
+    Plane m_displacementPlane;
+    Vector3 m_lastModelDisplacementPoint;
+
     Camera *p_sceneCamera = nullptr;
     float m_currentCameraZoom = 0.0f;
+    Vector3 m_cameraOrbitPointOffset = Vector3::Zero();
     Vector2 m_currentCameraRotAngles = Vector2::Zero();
 
+    Ray GetMouseRay() const;
+    Vector2 GetMouseNDC() const;
+    Vector3 GetDisplacementPoint() const;
+    Vector3 GetMousePointOverModel() const;
+    Array<MeshRenderer *> GetMeshRenderers() const;
     RH<Mesh> GetExplorerSelectedMesh() const;
     RH<Model> GetExplorerSelectedModel() const;
 };
