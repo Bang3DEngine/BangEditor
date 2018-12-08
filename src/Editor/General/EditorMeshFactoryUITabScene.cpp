@@ -1,5 +1,6 @@
 #include "BangEditor/EditorMeshFactoryUITabScene.h"
 
+#include "Bang/BoxCollider.h"
 #include "Bang/Camera.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/Extensions.h"
@@ -9,12 +10,18 @@
 #include "Bang/Geometry.h"
 #include "Bang/Math.h"
 #include "Bang/Mesh.h"
+#include "Bang/MeshCollider.h"
+#include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/Model.h"
+#include "Bang/Physics.h"
 #include "Bang/Plane.h"
+#include "Bang/Random.h"
 #include "Bang/RectTransform.h"
 #include "Bang/Resources.h"
+#include "Bang/RigidBody.h"
 #include "Bang/Scene.h"
+#include "Bang/SphereCollider.h"
 #include "Bang/UICanvas.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/UIHorizontalLayout.h"
@@ -81,6 +88,7 @@ void EditorMeshFactoryUITabScene::Update()
 {
     GameObject::Update();
 
+    bool justChangedModel = false;
     if (RH<Mesh> selectedMesh = GetExplorerSelectedMesh())
     {
         if (selectedMesh.Get() != GetCurrentMesh())
@@ -95,6 +103,7 @@ void EditorMeshFactoryUITabScene::Update()
             p_modelContainer = GameObjectFactory::CreateGameObject();
             MeshRenderer *mr = p_modelContainer->AddComponent<MeshRenderer>();
             mr->SetMesh(p_currentMesh.Get());
+            justChangedModel = true;
         }
     }
     else if (RH<Model> selectedModel = GetExplorerSelectedModel())
@@ -109,8 +118,14 @@ void EditorMeshFactoryUITabScene::Update()
             }
 
             p_modelContainer = selectedModel.Get()->CreateGameObjectFromModel();
-            ResetCamera();
+            justChangedModel = true;
         }
+    }
+
+    if (justChangedModel)
+    {
+        p_modelContainer->SetParent(p_scene);
+        ResetCamera();
     }
 
     p_centralText->GetGameObject()->SetEnabled(p_modelContainer == nullptr);
@@ -122,6 +137,9 @@ void EditorMeshFactoryUITabScene::Update()
         {
             Vector2 mouseCurrentAxisMovement = Input::GetMouseAxis();
             m_currentCameraRotAngles += mouseCurrentAxisMovement * 360.0f;
+
+            m_currentCameraRotAngles.y =
+                Math::Clamp(m_currentCameraRotAngles.y, -80.0f, 80.0f);
         }
         else if (Input::GetMouseButtonDown(MouseButton::RIGHT))
         {
@@ -146,23 +164,27 @@ void EditorMeshFactoryUITabScene::Update()
             Vector3 currentDisplacementPoint = GetDisplacementPoint();
             Vector3 displacement =
                 (currentDisplacementPoint - m_lastModelDisplacementPoint);
-            Debug_DPeek(currentDisplacementPoint);
-            Debug_DPeek(m_lastModelDisplacementPoint);
-            Debug_DPeek(displacement);
-            Debug_DLog("---------------");
             m_cameraOrbitPointOffset -= displacement;
         }
+
+        m_currentCameraZoom +=
+            (-Input::GetMouseWheel().y * 0.1f) * m_currentCameraZoom;
     }
 
-    m_currentCameraZoom +=
-        (-Input::GetMouseWheel().y * 0.1f) * m_currentCameraZoom;
-
-    m_currentCameraRotAngles.y =
-        Math::Clamp(m_currentCameraRotAngles.y, -80.0f, 80.0f);
-
-    if (p_modelContainer)
+    if (p_modelContainer && IsVisibleRecursively())
     {
-        p_modelContainer->SetParent(p_scene);
+        if (!p_modelContainer->GetComponentInDescendantsAndThis<MeshCollider>())
+        {
+            RigidBody *rb = p_modelContainer->AddComponent<RigidBody>();
+            rb->SetIsKinematic(true);
+            Array<MeshRenderer *> mrs = GetMeshRenderers();
+            for (MeshRenderer *mr : mrs)
+            {
+                MeshCollider *meshCollider =
+                    p_modelContainer->AddComponent<MeshCollider>();
+                meshCollider->SetMesh(mr->GetActiveMesh());
+            }
+        }
 
         Sphere goSphere = p_modelContainer->GetBoundingSphere();
         float halfFov = Math::DegToRad(p_sceneCamera->GetFovDegrees() / 2.0f);
@@ -183,6 +205,30 @@ void EditorMeshFactoryUITabScene::Update()
         p_sceneCamera->SetZFar((camDist + goSphere.GetRadius() * 2.0f) * 1.2f);
 
         m_lastModelDisplacementPoint = GetDisplacementPoint();
+    }
+
+    if (p_modelContainer)
+    {
+        if (Input::GetKeyDown(Key::C))
+        {
+            DoCollisionSimulation();
+            GameObject *sphere = GameObjectFactory::CreateSphereGameObject();
+
+            RigidBody *rb = sphere->AddComponent<RigidBody>();
+            BANG_UNUSED(rb);
+
+            sphere->SetParent(p_scene);
+
+            AABox goAABox = p_modelContainer->GetAABBoxWorld();
+            float radius = p_modelContainer->GetBoundingSphere().GetRadius();
+            sphere->GetTransform()->SetScale(radius * 0.2f);
+            sphere->GetTransform()->SetPosition(
+                (radius * 0.5f + goAABox.GetSize().y) * Vector3::Up());
+            sphere->GetTransform()->Translate(Random::GetInsideUnitSphere() *
+                                              goAABox.GetSize());
+        }
+
+        SceneManager::OnNewFrame(p_scene);
     }
 
     // Render camera
@@ -229,6 +275,14 @@ Mesh *EditorMeshFactoryUITabScene::GetCurrentMesh() const
 Model *EditorMeshFactoryUITabScene::GetCurrentModel() const
 {
     return p_currentModel.Get();
+}
+
+void EditorMeshFactoryUITabScene::DoCollisionSimulation()
+{
+    if (!p_modelContainer)
+    {
+        return;
+    }
 }
 
 Ray EditorMeshFactoryUITabScene::GetMouseRay() const

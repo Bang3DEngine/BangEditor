@@ -53,6 +53,8 @@ private:
     Vector3 m_cameraOrbitPointOffset = Vector3::Zero();
     Vector2 m_currentCameraRotAngles = Vector2::Zero();
 
+    void DoCollisionSimulation();
+
     Ray GetMouseRay() const;
     Vector2 GetMouseNDC() const;
     Vector3 GetDisplacementPoint() const;
