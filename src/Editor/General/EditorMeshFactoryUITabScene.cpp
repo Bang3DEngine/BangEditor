@@ -2,6 +2,7 @@
 
 #include "Bang/BoxCollider.h"
 #include "Bang/Camera.h"
+#include "Bang/DebugRenderer.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/Extensions.h"
 #include "Bang/GBuffer.h"
@@ -124,6 +125,7 @@ void EditorMeshFactoryUITabScene::Update()
 
     if (justChangedModel)
     {
+        m_cameraOrbitPoint = p_modelContainer->GetBoundingSphere().GetCenter();
         p_modelContainer->SetParent(p_scene);
         ResetCamera();
     }
@@ -143,28 +145,11 @@ void EditorMeshFactoryUITabScene::Update()
         }
         else if (Input::GetMouseButtonDown(MouseButton::RIGHT))
         {
-            Vector3 displacementPoint = GetMousePointOverModel();
-            if (displacementPoint == Vector3::Infinity())
+            Vector3 orbitPoint = GetMousePointOverModel();
+            if (orbitPoint != Vector3::Infinity())
             {
-                displacementPoint = Vector3::Zero();
+                m_cameraOrbitPoint = orbitPoint;
             }
-
-            m_displacementPlane = Plane(displacementPoint, camTR->GetBack());
-            m_displacingModel = true;
-            m_lastModelDisplacementPoint = GetDisplacementPoint();
-        }
-
-        if (Input::GetMouseButtonUp(MouseButton::RIGHT))
-        {
-            m_displacingModel = false;
-        }
-
-        if (m_displacingModel)
-        {
-            Vector3 currentDisplacementPoint = GetDisplacementPoint();
-            Vector3 displacement =
-                (currentDisplacementPoint - m_lastModelDisplacementPoint);
-            m_cameraOrbitPointOffset -= displacement;
         }
 
         m_currentCameraZoom +=
@@ -182,6 +167,7 @@ void EditorMeshFactoryUITabScene::Update()
             {
                 MeshCollider *meshCollider =
                     p_modelContainer->AddComponent<MeshCollider>();
+                meshCollider->SetStatic(true);
                 meshCollider->SetMesh(mr->GetActiveMesh());
             }
         }
@@ -197,7 +183,7 @@ void EditorMeshFactoryUITabScene::Update()
                                    Vector3::Right()) *
              Vector3(0, 0, 1))
                 .Normalized();
-        Vector3 orbitPoint = goSphere.GetCenter() + m_cameraOrbitPointOffset;
+        Vector3 orbitPoint = m_cameraOrbitPoint;
         camTR->SetPosition(orbitPoint + camDir * camDist);
         camTR->LookAt(orbitPoint);
 
@@ -212,23 +198,33 @@ void EditorMeshFactoryUITabScene::Update()
         if (Input::GetKeyDown(Key::C))
         {
             DoCollisionSimulation();
-            GameObject *sphere = GameObjectFactory::CreateSphereGameObject();
+            GameObject *cube = GameObjectFactory::CreateCubeGameObject();
 
-            RigidBody *rb = sphere->AddComponent<RigidBody>();
-            BANG_UNUSED(rb);
+            RigidBody *rb = cube->AddComponent<RigidBody>();
 
-            sphere->SetParent(p_scene);
+            cube->SetParent(p_scene);
 
             AABox goAABox = p_modelContainer->GetAABBoxWorld();
             float radius = p_modelContainer->GetBoundingSphere().GetRadius();
-            sphere->GetTransform()->SetScale(radius * 0.2f);
-            sphere->GetTransform()->SetPosition(
+            cube->GetTransform()->SetScale(radius * 0.2f);
+            cube->GetTransform()->SetPosition(
                 (radius * 0.5f + goAABox.GetSize().y) * Vector3::Up());
-            sphere->GetTransform()->Translate(Random::GetInsideUnitSphere() *
-                                              goAABox.GetSize());
+            // sphere->GetTransform()->Translate(Random::GetInsideUnitSphere() *
+            //                                   goAABox.GetSize());
         }
 
-        SceneManager::OnNewFrame(p_scene);
+        Physics *ph = Physics::GetInstance();
+        {
+            Time prevPhysicsStepTime = ph->GetStepSleepTime();
+            uint prevPhysicsMaxSubSteps = ph->GetMaxSubSteps();
+            {
+                ph->SetMaxSubSteps(1);
+                ph->SetStepSleepTime(Time::Seconds(0.5f));
+                SceneManager::OnNewFrame(p_scene);
+            }
+            ph->SetMaxSubSteps(prevPhysicsMaxSubSteps);
+            ph->SetStepSleepTime(prevPhysicsStepTime);
+        }
     }
 
     // Render camera
@@ -264,7 +260,7 @@ void EditorMeshFactoryUITabScene::ResetCamera()
 {
     m_currentCameraZoom = 1.4f;
     m_currentCameraRotAngles = Vector2(45.0f, -45.0f);
-    m_cameraOrbitPointOffset = Vector3::Zero();
+    m_cameraOrbitPoint = Vector3::Zero();
 }
 
 Mesh *EditorMeshFactoryUITabScene::GetCurrentMesh() const

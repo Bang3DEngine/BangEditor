@@ -50,7 +50,7 @@ private:
 
     Camera *p_sceneCamera = nullptr;
     float m_currentCameraZoom = 0.0f;
-    Vector3 m_cameraOrbitPointOffset = Vector3::Zero();
+    Vector3 m_cameraOrbitPoint = Vector3::Zero();
     Vector2 m_currentCameraRotAngles = Vector2::Zero();
 
     void DoCollisionSimulation();
