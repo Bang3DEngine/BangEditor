@@ -45,7 +45,8 @@ ExplorerItem *ExplorerItemFactory::CreateExplorerItem(const Path &path)
 
 Array<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
     const Path &path,
-    bool addBackItem)
+    bool addBackItem,
+    bool recursive)
 {
     Array<ExplorerItem *> expItems;
 
@@ -68,6 +69,12 @@ Array<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
             ExplorerItem *childExpItem =
                 ExplorerItemFactory::CreateExplorerItem(subPath);
             expItems.PushBack(childExpItem);
+
+            if (recursive)
+            {
+                expItems.PushBack(CreateAndGetSubPathsExplorerItems(
+                    subPath, false, recursive));
+            }
         }
     }
     else if (path.IsFile())

@@ -42,6 +42,7 @@
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/ExplorerItemFactory.h"
+#include "BangEditor/NavigatorItem.h"
 #include "BangEditor/UITabContainer.h"
 
 using namespace Bang;
@@ -101,18 +102,10 @@ void EditorDialog::GetColor(const String &title,
     Dialog::EndDialogCreation(scene);
 }
 
-Scene *EditorDialog::CreateSearchSceneInto(Scene *scene)
-{
-    return nullptr;
-}
-
-Scene *EditorDialog::CreateGetObjectSceneInto(Scene *scene)
-{
-    return nullptr;
-}
-
-Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
-                                             const Array<String> &extensions)
+void EditorDialog::CreateSearchSceneInto(
+    Scene *scene,
+    const Array<String> &tabNames,
+    const Array<Array<NavigatorItem *>> &tabNavItems)
 {
     GameObjectFactory::CreateUISceneInto(scene);
 
@@ -122,8 +115,17 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
     vl->SetPaddings(5);
     vl->SetSpacing(10);
 
-    auto CreateAssetContainerGameObject =
-        [scene, &extensions](const Array<Path> &assetPaths) -> GameObject * {
+    // Create tabs and their content
+    UITabContainer *tabContainer = new UITabContainer();
+    UILayoutElement *tabContainerLE =
+        tabContainer->AddComponent<UILayoutElement>();
+    tabContainerLE->SetFlexibleSize(Vector2::One());
+
+    for (uint i = 0; i < tabNames.Size(); ++i)
+    {
+        const String &tabName = tabNames[i];
+        const Array<NavigatorItem *> &navItems = tabNavItems[i];
+
         UIScrollPanel *gridScrollPanel =
             GameObjectFactory::CreateUIScrollPanel();
         gridScrollPanel->GetScrollArea()->GetBackground()->SetTint(
@@ -156,96 +158,14 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
         gridScrollPanel->SetVerticalScrollBarSide(HorizontalSide::RIGHT);
         gridScrollPanel->SetHorizontalScrollEnabled(false);
 
-        auto CreateExpItemFromPath = [gridLayoutGo,
-                                      extensions](const Path &assetPath) {
-            Array<ExplorerItem *> expItems =
-                ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
-                    assetPath, false);
-
-            ExplorerItem *assetExpItem = new ExplorerItem();
-            assetExpItem->SetPath(assetPath);
-            expItems.PushFront(assetExpItem);
-
-            for (ExplorerItem *expItem : expItems)
-            {
-                Path path = expItem->GetPath();
-                if (path.IsEmpty() || path.HasExtension(extensions))
-                {
-                    expItem->GetLabel()->GetText()->SetTextColor(
-                        Color::Black());
-
-                    if (path.IsEmpty())
-                    {
-                        expItem->GetLabel()->GetText()->SetContent("None");
-                    }
-
-                    expItem->GetFocusable()->AddEventCallback(
-                        [expItem, gridLayoutGo](UIFocusable *,
-                                                const UIEvent &event) {
-                            if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
-                            {
-                                // Save path, and select only the clicked one
-                                EditorDialog::s_assetPathResult =
-                                    expItem->GetPath();
-                                for (GameObject *expItemGo :
-                                     gridLayoutGo->GetChildren())
-                                {
-                                    ExplorerItem *expItem =
-                                        DCAST<ExplorerItem *>(expItemGo);
-                                    if (expItem)
-                                    {
-                                        expItem->SetSelected(false);
-                                    }
-                                }
-                                expItem->SetSelected(true);
-                                return UIEventResult::INTERCEPT;
-                            }
-                            else if (event.type ==
-                                     UIEvent::Type::MOUSE_CLICK_DOUBLE)
-                            {
-                                // Directly select
-                                EditorDialog::s_accepted = true;
-                                Dialog::EndCurrentDialog();
-                                return UIEventResult::INTERCEPT;
-                            }
-                            return UIEventResult::IGNORE;
-                        });
-
-                    expItem->SetParent(gridLayoutGo);
-                }
-            }
-        };
-
         // Add paths to grid layout
-        for (const Path &assetPath : assetPaths)
+        for (NavigatorItem *navItem : navItems)
         {
-            CreateExpItemFromPath(assetPath);
+            navItem->SetParent(gridLayoutGo);
         }
 
-        return gridScrollPanel->GetGameObject();
-    };
-
-    // Add tabs
-    UITabContainer *tabContainer = new UITabContainer();
-
-    Array<Path> engineAssetPaths =
-        Paths::GetEngineAssetsDir().GetFiles(FindFlag::RECURSIVE);
-    engineAssetPaths.PushFront(Path::Empty());
-    GameObject *engineAssetsGo =
-        CreateAssetContainerGameObject(engineAssetPaths);
-
-    Array<Path> projectAssetPaths =
-        Paths::GetProjectAssetsDir().GetFiles(FindFlag::RECURSIVE);
-    projectAssetPaths.PushFront(Path::Empty());
-    GameObject *projectAssetsGo =
-        CreateAssetContainerGameObject(projectAssetPaths);
-
-    UILayoutElement *tabContainerLE =
-        tabContainer->AddComponent<UILayoutElement>();
-    tabContainerLE->SetFlexibleSize(Vector2::One());
-
-    tabContainer->AddTab("Project", projectAssetsGo);
-    tabContainer->AddTab("Engine", engineAssetsGo);
+        tabContainer->AddTab(tabName, gridScrollPanelGo);
+    }
     tabContainer->SetParent(scene);
 
     // Buttons below
@@ -272,11 +192,90 @@ Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,
     cancelButton->GetGameObject()->SetParent(buttonsGo);
     openButton->GetGameObject()->SetParent(buttonsGo);
     buttonsGo->SetParent(scene);
-
-    return scene;
 }
 
-Scene *EditorDialog::CreateGetColorSceneInto(
+void EditorDialog::CreateGetObjectSceneInto(Scene *scene)
+{
+}
+
+void EditorDialog::CreateGetAssetSceneInto(Scene *scene,
+                                           const Array<String> &extensions)
+{
+    Map<String, Array<NavigatorItem *>> tabsContent;
+
+    Array<String> tabsNames = {"Project", "Engine"};
+    Array<Path> tabsBasePaths = {Paths::GetProjectAssetsDir(),
+                                 Paths::GetEngineAssetsDir()};
+
+    Array<Array<NavigatorItem *>> tabsNavItems;
+    for (uint i = 0; i < tabsNames.Size(); ++i)
+    {
+        const Path &basePath = tabsBasePaths[i];
+        Array<ExplorerItem *> expItems =
+            ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
+                basePath, false, true);
+
+        // ExplorerItem *assetExpItem = new ExplorerItem();
+        // assetExpItem->SetPath(assetPath);
+        // expItems.PushFront(assetExpItem);
+
+        Array<NavigatorItem *> navItems;
+        for (ExplorerItem *expItem : expItems)
+        {
+            Path path = expItem->GetPath();
+            if (path.IsEmpty() || path.HasExtension(extensions))
+            {
+                expItem->GetLabel()->GetText()->SetTextColor(Color::Black());
+
+                if (path.IsEmpty())
+                {
+                    expItem->GetLabel()->GetText()->SetContent("None");
+                }
+
+                navItems.PushBack(expItem);
+            }
+            else
+            {
+                GameObject::Destroy(expItem);
+            }
+        }
+
+        for (NavigatorItem *navItem : navItems)
+        {
+            ExplorerItem *expItem = SCAST<ExplorerItem *>(navItem);
+            navItem->GetFocusable()->AddEventCallback(
+                [expItem, navItems](UIFocusable *, const UIEvent &event) {
+                    if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
+                    {
+                        // Save path, and select only the clicked one
+                        EditorDialog::s_assetPathResult = expItem->GetPath();
+                        for (NavigatorItem *navItem : navItems)
+                        {
+                            if (navItem)
+                            {
+                                navItem->SetSelected(false);
+                            }
+                        }
+                        expItem->SetSelected(true);
+                        return UIEventResult::INTERCEPT;
+                    }
+                    else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
+                    {
+                        // Directly select
+                        EditorDialog::s_accepted = true;
+                        Dialog::EndCurrentDialog();
+                        return UIEventResult::INTERCEPT;
+                    }
+                    return UIEventResult::IGNORE;
+                });
+        }
+        tabsNavItems.PushBack(navItems);
+    }
+
+    CreateSearchSceneInto(scene, tabsNames, tabsNavItems);
+}
+
+void EditorDialog::CreateGetColorSceneInto(
     Scene *scene,
     const Color &initialColor,
     ColorPickerReporter *colorPickerReporter)
@@ -577,8 +576,6 @@ Scene *EditorDialog::CreateGetColorSceneInto(
     sliderA->EventEmitter<IEventsValueChanged>::RegisterListener(controller);
     controller->OnValueChanged(controller->p_sliderRGB_R);  // Update controls
     controller->SetParent(scene);
-
-    return scene;
 }
 
 void ColorPickerReporter::SetPickedColor(const Color &color)

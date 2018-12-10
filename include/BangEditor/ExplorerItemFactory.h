@@ -22,7 +22,8 @@ public:
     static ExplorerItem *CreateExplorerItem(const Path &path);
     static Array<ExplorerItem *> CreateAndGetSubPathsExplorerItems(
         const Path &path,
-        bool addBackItem);
+        bool addBackItem,
+        bool recursive = false);
     static bool CanHaveSubpaths(const Path &path);
 
 private:

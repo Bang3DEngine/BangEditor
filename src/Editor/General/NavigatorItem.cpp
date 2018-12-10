@@ -93,12 +93,10 @@ UIEventResult NavigatorItem::OnUIEvent(UIFocusable *focusable,
             SetSelected(true);
             OnFocusTaken(focusable, event);
             return UIEventResult::INTERCEPT;
-            break;
 
         case UIEvent::Type::FOCUS_LOST:
             SetSelected(false);
             return UIEventResult::INTERCEPT;
-            break;
 
         case UIEvent::Type::MOUSE_ENTER:
             if (!IsSelected() && p_bg)
@@ -106,7 +104,6 @@ UIEventResult NavigatorItem::OnUIEvent(UIFocusable *focusable,
                 p_bg->SetTint(UITheme::GetOverColor());
             }
             return UIEventResult::INTERCEPT;
-            break;
 
         case UIEvent::Type::MOUSE_EXIT:
             if (!IsSelected() && p_bg)
@@ -114,7 +111,6 @@ UIEventResult NavigatorItem::OnUIEvent(UIFocusable *focusable,
                 p_bg->SetTint(Color::Zero());
             }
             return UIEventResult::INTERCEPT;
-            break;
 
         default: break;
     }

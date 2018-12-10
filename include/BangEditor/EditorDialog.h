@@ -26,6 +26,7 @@ class Scene;
 using namespace Bang;
 namespace BangEditor
 {
+class NavigatorItem;
 class ColorPickerReporter;
 
 class EditorDialog
@@ -52,11 +53,14 @@ private:
     static Path s_assetPathResult;
     static Object *s_objectResult;
 
-    static Scene *CreateSearchSceneInto(Scene *scene);
-    static Scene *CreateGetObjectSceneInto(Scene *scene);
-    static Scene *CreateGetAssetSceneInto(Scene *scene,
-                                          const Array<String> &extensions);
-    static Scene *CreateGetColorSceneInto(
+    static void CreateSearchSceneInto(
+        Scene *scene,
+        const Array<String> &tabNames,
+        const Array<Array<NavigatorItem *>> &tabNavItems);
+    static void CreateGetObjectSceneInto(Scene *scene);
+    static void CreateGetAssetSceneInto(Scene *scene,
+                                        const Array<String> &extensions);
+    static void CreateGetColorSceneInto(
         Scene *scene,
         const Color &initialColor,
         ColorPickerReporter *colorPickerReporter);

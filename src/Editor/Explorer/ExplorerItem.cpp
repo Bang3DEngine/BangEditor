@@ -70,7 +70,6 @@ UIEventResult ExplorerItem::OnUIEvent(UIFocusable *focusable,
         case UIEvent::Type::FOCUS_TAKEN:
             SetSelected(true);
             return UIEventResult::INTERCEPT;
-            break;
 
         case UIEvent::Type::MOUSE_CLICK_FULL:
             if (Explorer *exp = Explorer::GetInstance())
@@ -85,20 +84,13 @@ UIEventResult ExplorerItem::OnUIEvent(UIFocusable *focusable,
             {
                 switch (event.key.key)
                 {
-                    case Key::D:
-                        Duplicate();
-                        return UIEventResult::INTERCEPT;
-                        break;
+                    case Key::D: Duplicate(); return UIEventResult::INTERCEPT;
 
                     case Key::C:
                         EditorClipboard::CopyPath(GetPath());
                         return UIEventResult::INTERCEPT;
-                        break;
 
-                    case Key::V:
-                        Paste();
-                        return UIEventResult::INTERCEPT;
-                        break;
+                    case Key::V: Paste(); return UIEventResult::INTERCEPT;
 
                     default: break;
                 }
@@ -107,15 +99,9 @@ UIEventResult ExplorerItem::OnUIEvent(UIFocusable *focusable,
             {
                 switch (event.key.key)
                 {
-                    case Key::F2:
-                        Rename();
-                        return UIEventResult::INTERCEPT;
-                        break;
+                    case Key::F2: Rename(); return UIEventResult::INTERCEPT;
 
-                    case Key::DELETE:
-                        Remove();
-                        return UIEventResult::INTERCEPT;
-                        break;
+                    case Key::DELETE: Remove(); return UIEventResult::INTERCEPT;
 
                     default: break;
                 }
