@@ -12,6 +12,7 @@
 #include "BangEditor/InspectorWidget.h"
 #include "BangEditor/UIInputColor.h"
 #include "BangEditor/UIInputFileWithPreview.h"
+#include "BangEditor/UIInputObject.h"
 #include "BangEditor/UIInputVector.h"
 
 using namespace Bang;
@@ -185,6 +186,12 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                 inputFile->EventEmitter<IEventsValueChanged>::RegisterListener(
                     inspectorWidget);
                 widgetToAdd = inputFile;
+            }
+            else if (reflVar.GetVariant().GetType() ==
+                     Variant::Type::OBJECT_PTR)
+            {
+                UIInputObject *inputObject = new UIInputObject();
+                widgetToAdd = inputObject;
             }
             else if (reflVar.GetVariant().GetType() == Variant::Type::PATH)
             {
@@ -361,6 +368,12 @@ String GetStringValueFromWidget(GameObject *widget)
     else if (UIComboBox *comboBox = widget->GetComponent<UIComboBox>())
     {
         value = String::ToString(comboBox->GetSelectedValue());
+    }
+    else if (UIInputObject *inputObject = DCAST<UIInputObject *>(widget))
+    {
+        value = String::ToString(inputObject->GetObject()
+                                     ? inputObject->GetObject()->GetGUID()
+                                     : GUID::Empty());
     }
     else if (UIInputColor *inputColor = DCAST<UIInputColor *>(widget))
     {

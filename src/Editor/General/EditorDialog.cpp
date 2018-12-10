@@ -49,6 +49,7 @@ using namespace BangEditor;
 
 bool EditorDialog::s_accepted = false;
 Path EditorDialog::s_assetPathResult = Path::Empty();
+Object *EditorDialog::s_objectResult = nullptr;
 
 EditorDialog::EditorDialog()
 {
@@ -56,6 +57,14 @@ EditorDialog::EditorDialog()
 
 EditorDialog::~EditorDialog()
 {
+}
+
+void EditorDialog::GetObject(const String &title,
+                             Object *resultObject,
+                             bool *accepted)
+{
+    ASSERT(resultObject);
+    ASSERT(accepted);
 }
 
 void EditorDialog::GetAsset(const String &title,
@@ -90,6 +99,16 @@ void EditorDialog::GetColor(const String &title,
     EditorDialog::CreateGetColorSceneInto(
         scene, initialColor, colorPickerReporter);
     Dialog::EndDialogCreation(scene);
+}
+
+Scene *EditorDialog::CreateSearchSceneInto(Scene *scene)
+{
+    return nullptr;
+}
+
+Scene *EditorDialog::CreateGetObjectSceneInto(Scene *scene)
+{
+    return nullptr;
 }
 
 Scene *EditorDialog::CreateGetAssetSceneInto(Scene *scene,

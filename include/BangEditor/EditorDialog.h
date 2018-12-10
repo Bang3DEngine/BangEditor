@@ -34,6 +34,10 @@ public:
     EditorDialog();
     virtual ~EditorDialog();
 
+    static void GetObject(const String &title,
+                          Object *resultObject,
+                          bool *accepted);
+
     static void GetAsset(const String &title,
                          const Array<String> &extensions,
                          Path *resultPath,
@@ -46,7 +50,10 @@ public:
 private:
     static bool s_accepted;
     static Path s_assetPathResult;
+    static Object *s_objectResult;
 
+    static Scene *CreateSearchSceneInto(Scene *scene);
+    static Scene *CreateGetObjectSceneInto(Scene *scene);
     static Scene *CreateGetAssetSceneInto(Scene *scene,
                                           const Array<String> &extensions);
     static Scene *CreateGetColorSceneInto(

@@ -5,7 +5,7 @@
 #include "Bang/BangDefines.h"
 #include "Bang/GameObject.h"
 #include "Bang/String.h"
-#include "BangEditor/BangEditor.h"
+#include "BangEditor/UIInputFileOrObject.h"
 
 namespace Bang
 {
@@ -16,21 +16,28 @@ class UIInputText;
 using namespace Bang;
 namespace BangEditor
 {
-class UIInputObject : public GameObject
+class UIInputObject : public UIInputFileOrObject
 {
     GAMEOBJECT_EDITOR(UIInputObject);
 
 public:
+    UIInputObject();
+
     void SetObject(Object *object);
 
     Object *GetObject() const;
 
 protected:
-    UIInputObject();
     virtual ~UIInputObject() override;
 
+    // UIInputFileOrObject
+    bool AcceptsDrag(
+        EventEmitter<IEventsDragDrop> *dragDroppable) const override;
+    void OnDropped(EventEmitter<IEventsDragDrop> *dragDroppable) override;
+    void OnSearchButtonClicked() override;
+    void OnOpenButtonClicked() override;
+
 private:
-    UIInputText *p_objectInputText = nullptr;
     Object *p_object = nullptr;
 };
 
