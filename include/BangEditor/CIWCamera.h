@@ -23,7 +23,7 @@ using namespace Bang;
 namespace BangEditor
 {
 class UIInputColor;
-class UIInputFileWithPreview;
+class UIInputFile;
 
 class CIWCamera : public ComponentInspectorWidget
 {
@@ -56,7 +56,7 @@ private:
     UIComboBox *p_clearModeInput = nullptr;
     UICheckBox *p_isActiveCamera = nullptr;
     UIInputColor *p_clearColorInput = nullptr;
-    UIInputFileWithPreview *p_textureCubeMapInput = nullptr;
+    UIInputFile *p_textureCubeMapInput = nullptr;
 };
 }
 

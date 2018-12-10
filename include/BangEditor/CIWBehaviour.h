@@ -19,7 +19,7 @@
 namespace Bang
 {
 class Behaviour;
-class UIInputFileWithPreview;
+class UIInputFile;
 class ReflectStruct;
 class GameObject;
 class IEventsValueChanged;
@@ -32,7 +32,7 @@ class EventListener;
 using namespace Bang;
 namespace BangEditor
 {
-class UIInputFileWithPreview;
+class UIInputFile;
 
 class CIWBehaviour : public ComponentInspectorWidget
 {

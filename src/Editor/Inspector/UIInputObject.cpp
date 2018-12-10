@@ -27,14 +27,19 @@ UIInputObject::~UIInputObject()
 {
 }
 
+bool UIInputObject::CanDoZoom() const
+{
+    return (GetObject() != nullptr);
+}
+
 void UIInputObject::SetObject(Object *object)
 {
     p_object = object;
 }
 
-void UIInputObject::SetAcceptedClassIdBegin(ClassIdType classId)
+void UIInputObject::SetAcceptedClassIdBegin(ClassIdType classIdBegin)
 {
-    m_acceptedClassIdBegin = classId;
+    m_acceptedClassIdBegin = classIdBegin;
 }
 
 void UIInputObject::SetAcceptedClassIdEnd(ClassIdType classIdEnd)

@@ -17,7 +17,6 @@
 #include "BangEditor/RIWResource.tcc"
 #include "BangEditor/ResourceInspectorWidget.h"
 #include "BangEditor/UIInputFile.h"
-#include "BangEditor/UIInputTexture.h"
 #include "BangEditor/UITextureCubeMapPreviewer.h"
 
 namespace Bang
@@ -43,37 +42,37 @@ void RIWTextureCubeMap::Init()
     SetTitle("Texture Cube Map");
     SetName("RIWTextureCubeMap");
 
-    p_topTextureInput = new UIInputTexture();
+    p_topTextureInput = new UIInputFile();
     p_topTextureInput->SetExtensions(Extensions::GetImageExtensions());
     p_topTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
     AddWidget("Top texture", p_topTextureInput);
 
-    p_botTextureInput = new UIInputTexture();
+    p_botTextureInput = new UIInputFile();
     p_botTextureInput->SetExtensions(Extensions::GetImageExtensions());
     p_botTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
     AddWidget("Bot texture", p_botTextureInput);
 
-    p_leftTextureInput = new UIInputTexture();
+    p_leftTextureInput = new UIInputFile();
     p_leftTextureInput->SetExtensions(Extensions::GetImageExtensions());
     p_leftTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
     AddWidget("Left texture", p_leftTextureInput);
 
-    p_rightTextureInput = new UIInputTexture();
+    p_rightTextureInput = new UIInputFile();
     p_rightTextureInput->SetExtensions(Extensions::GetImageExtensions());
     p_rightTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
     AddWidget("Right texture", p_rightTextureInput);
 
-    p_frontTextureInput = new UIInputTexture();
+    p_frontTextureInput = new UIInputFile();
     p_frontTextureInput->SetExtensions(Extensions::GetImageExtensions());
     p_frontTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
     AddWidget("Front texture", p_frontTextureInput);
 
-    p_backTextureInput = new UIInputTexture();
+    p_backTextureInput = new UIInputFile();
     p_backTextureInput->SetExtensions(Extensions::GetImageExtensions());
     p_backTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
@@ -175,10 +174,11 @@ void RIWTextureCubeMap::UpdateInputsFromResource()
 
 Texture2D *RIWTextureCubeMap::GetIconTexture() const
 {
-    return GetTextureCubeMap() ? GetTextureCubeMap()
-                                     ->GetSideTexture(GL::CubeMapDir::FRONT)
-                                     .Get()
-                               : nullptr;
+    return GetTextureCubeMap()
+               ? GetTextureCubeMap()
+                     ->GetSideTexture(GL::CubeMapDir::FRONT)
+                     .Get()
+               : nullptr;
 }
 
 void RIWTextureCubeMap::OnValueChangedRIWResource(
@@ -186,9 +186,8 @@ void RIWTextureCubeMap::OnValueChangedRIWResource(
 {
     if (ee != p_textureCMPreviewer)
     {
-        auto Refresh = [this](UIInputFile *inputFile,
-                              TextureCubeMap *tcm,
-                              GL::CubeMapDir cmdir) {
+        auto Refresh = [this](
+            UIInputFile *inputFile, TextureCubeMap *tcm, GL::CubeMapDir cmdir) {
             if (inputFile->GetPath().IsFile())
             {
                 Image img;

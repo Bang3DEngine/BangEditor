@@ -14,7 +14,7 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/UITheme.h"
 #include "Bang/UIVerticalLayout.h"
-#include "BangEditor/UIInputFileWithPreview.h"
+#include "BangEditor/UIInputFile.h"
 
 using namespace Bang;
 using namespace BangEditor;
@@ -118,7 +118,7 @@ ASMLayerInput::ASMLayerInput()
         labelLE->SetFlexibleSize(Vector2(0, 1));
         labelLE->SetLayoutPriority(2);
 
-        p_layerMaskInput = new UIInputFileWithPreview();
+        p_layerMaskInput = new UIInputFile();
         p_layerMaskInput->SetExtensions(
             {Extensions::GetAnimatorLayerMaskExtension()});
         p_layerMaskInput->SetZoomable(false);

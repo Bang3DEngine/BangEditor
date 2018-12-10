@@ -28,11 +28,14 @@ public:
 
     Path GetPath() const;
     const Array<String> &GetExtensions() const;
+    bool HasExistingPath() const;
+    RH<Texture2D> GetPreviewTextureFromPath(const Path &path);
 
 protected:
     virtual ~UIInputFile() override;
 
     // UIInputFileOrObject
+    bool CanDoZoom() const override;
     bool AcceptsDrag(
         EventEmitter<IEventsDragDrop> *dragDroppable) const override;
     void OnDropped(EventEmitter<IEventsDragDrop> *dragDroppable) override;

@@ -8,6 +8,7 @@
 #include "Bang/Paths.h"
 #include "Bang/Resources.h"
 #include "Bang/Stretch.h"
+#include "Bang/Texture2D.h"
 #include "Bang/TextureFactory.h"
 #include "Bang/UIButton.h"
 #include "Bang/UICanvas.h"
@@ -40,6 +41,21 @@ UIInputFile::UIInputFile()
 
 UIInputFile::~UIInputFile()
 {
+}
+
+bool UIInputFile::CanDoZoom() const
+{
+    return HasExistingPath();
+}
+
+bool UIInputFile::HasExistingPath() const
+{
+    return (GetPath().IsFile() || Resources::IsEmbeddedResource(GetPath()));
+}
+
+RH<Texture2D> UIInputFile::GetPreviewTextureFromPath(const Path &path)
+{
+    return RH<Texture2D>(EditorTextureFactory::GetIconForPath(path));
 }
 
 bool UIInputFile::AcceptsDrag(EventEmitter<IEventsDragDrop> *dd_) const
@@ -114,6 +130,13 @@ void UIInputFile::SetPath(const Path &path)
         EventEmitter<IEventsValueChanged>::PropagateToListeners(
             &IEventsValueChanged::OnValueChanged, this);
     }
+
+    RH<Texture2D> previewTex;
+    if (HasExistingPath())
+    {
+        previewTex = GetPreviewTextureFromPath(path);
+    }
+    SetPreviewIcon(previewTex.Get());
 }
 
 void UIInputFile::SetExtensions(const Array<String> &extensions)

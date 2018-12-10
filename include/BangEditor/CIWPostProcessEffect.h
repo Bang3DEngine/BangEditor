@@ -20,7 +20,7 @@ class EventEmitter;
 using namespace Bang;
 namespace BangEditor
 {
-class UIInputFileWithPreview;
+class UIInputFile;
 
 class CIWPostProcessEffect : public ComponentInspectorWidget
 {
@@ -36,7 +36,7 @@ public:
 private:
     UIInputNumber *p_priorityInput = nullptr;
     UIComboBox *p_typeComboBox = nullptr;
-    UIInputFileWithPreview *p_fragmentShaderInput = nullptr;
+    UIInputFile *p_fragmentShaderInput = nullptr;
 
     PostProcessEffect *GetPostProcessEffect() const;
 

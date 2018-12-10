@@ -35,6 +35,7 @@ protected:
     virtual ~UIInputObject() override;
 
     // UIInputFileOrObject
+    bool CanDoZoom() const override;
     bool AcceptsDrag(
         EventEmitter<IEventsDragDrop> *dragDroppable) const override;
     void OnDropped(EventEmitter<IEventsDragDrop> *dragDroppable) override;

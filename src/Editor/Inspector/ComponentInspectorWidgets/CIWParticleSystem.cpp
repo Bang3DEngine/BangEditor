@@ -27,8 +27,7 @@
 #include "Bang/UISlider.h"
 #include "BangEditor/UIInputColor.h"
 #include "BangEditor/UIInputComplexRandom.h"
-#include "BangEditor/UIInputFileWithPreview.h"
-#include "BangEditor/UIInputTexture.h"
+#include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputVector.h"
 
 namespace Bang
@@ -46,7 +45,7 @@ void CIWParticleSystem::InitInnerWidgets()
     SetName("CIWParticleSystem");
     SetTitle("Particle System");
 
-    p_meshInputFile = new UIInputFileWithPreview();
+    p_meshInputFile = new UIInputFile();
     p_meshInputFile->SetExtensions({Extensions::GetMeshExtension()});
     p_meshInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
@@ -65,7 +64,7 @@ void CIWParticleSystem::InitInnerWidgets()
     p_billboardInput = GameObjectFactory::CreateUICheckBox();
     p_billboardInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_textureInput = new UIInputTexture();
+    p_textureInput = new UIInputFile();
     p_textureInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_sheetSizeInput = new UIInputVector();
@@ -206,7 +205,10 @@ void CIWParticleSystem::UpdateFromReference()
     p_billboardInput->SetChecked(GetParticleSystem()->GetBillboard());
     p_computeCollisionsInput->SetChecked(
         GetParticleSystem()->GetComputeCollisions());
-    p_textureInput->SetResource(GetParticleSystem()->GetTexture());
+    p_textureInput->SetPath(
+        GetParticleSystem()->GetTexture()
+            ? GetParticleSystem()->GetTexture()->GetResourceFilepath()
+            : Path::Empty());
 
     if (!p_sheetSizeInput->HasFocus())
     {

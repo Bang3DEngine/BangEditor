@@ -24,7 +24,7 @@ using namespace Bang;
 namespace BangEditor
 {
 class UIInputColor;
-class UIInputFileWithPreview;
+class UIInputFile;
 class UIInputVector;
 class UITextureCubeMapPreviewer;
 
@@ -52,7 +52,7 @@ private:
     UIInputNumber *p_zFarInput = nullptr;
     UIComboBox *p_clearModeInput = nullptr;
     UIInputColor *p_clearColorInput = nullptr;
-    UIInputFileWithPreview *p_textureCubeMapInput = nullptr;
+    UIInputFile *p_textureCubeMapInput = nullptr;
 
     UITextureCubeMapPreviewer *p_previewCMRenderer = nullptr;
 

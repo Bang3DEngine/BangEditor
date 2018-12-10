@@ -25,7 +25,7 @@ public:
 protected:
     UIComboBox *p_variableNameInput = nullptr;
     UIInputNumber *p_secondAnimationSpeedInput = nullptr;
-    UIInputFileWithPreview *p_nodeSecondAnimationInput = nullptr;
+    UIInputFile *p_nodeSecondAnimationInput = nullptr;
 
     // InspectorWidget
     virtual void UpdateFromReference() override;

@@ -14,7 +14,7 @@
 #include "Bang/Texture2D.h"
 #include "Bang/UIImageRenderer.h"
 #include "BangEditor/UIInputColor.h"
-#include "BangEditor/UIInputTexture.h"
+#include "BangEditor/UIInputFile.h"
 
 namespace Bang
 {
@@ -41,7 +41,7 @@ void CIWUIImageRenderer::InitInnerWidgets()
 
     p_tintInput = new UIInputColor();
 
-    p_imageInput = new UIInputTexture();
+    p_imageInput = new UIInputFile();
     p_imageInput->SetExtensions(Extensions::GetImageExtensions());
 
     p_tintInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);

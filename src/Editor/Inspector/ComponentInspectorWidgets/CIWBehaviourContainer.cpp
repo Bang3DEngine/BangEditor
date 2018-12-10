@@ -26,7 +26,7 @@
 #include "Bang/UITextRenderer.h"
 #include "BangEditor/CIWBehaviour.h"
 #include "BangEditor/EditorFileTracker.h"
-#include "BangEditor/UIInputFileWithPreview.h"
+#include "BangEditor/UIInputFile.h"
 
 namespace Bang
 {
@@ -51,7 +51,7 @@ void CIWBehaviourContainer::InitInnerWidgets()
     SetName("CIWBehaviourContainer");
     SetTitle("Behaviour");
 
-    p_sourceInputFile = new UIInputFileWithPreview();
+    p_sourceInputFile = new UIInputFile();
     p_sourceInputFile->SetExtensions(Extensions::GetSourceFileExtensions());
     p_sourceInputFile->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);

@@ -19,7 +19,7 @@
 #include "Bang/Resources.h"
 #include "Bang/Resources.tcc"
 #include "Bang/UICheckBox.h"
-#include "BangEditor/UIInputFileWithPreview.h"
+#include "BangEditor/UIInputFile.h"
 
 namespace Bang
 {
@@ -44,7 +44,8 @@ void CIWAnimator::InitInnerWidgets()
     SetName("CIWAnimator");
     SetTitle("Animator");
 
-    p_animatorSMInput = new UIInputFileWithPreview();
+    p_animatorSMInput = new UIInputFile();
+    p_animatorSMInput->SetShowPreview(true);
     p_animatorSMInput->SetExtensions(
         {Extensions::GetAnimatorStateMachineExtension()});
     p_animatorSMInput->SetZoomable(false);
@@ -63,9 +64,9 @@ void CIWAnimator::InitInnerWidgets()
     SetLabelsWidth(90);
 }
 
-UIInputFileWithPreview *CIWAnimator::CreateAnimationEntry()
+UIInputFile *CIWAnimator::CreateAnimationEntry()
 {
-    UIInputFileWithPreview *entry = new UIInputFileWithPreview();
+    UIInputFile *entry = new UIInputFile();
     entry->SetExtensions({Extensions::GetAnimationExtension()});
     entry->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     entry->SetZoomable(false);

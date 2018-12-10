@@ -14,7 +14,6 @@ namespace Bang
 class BehaviourContainer;
 class ReflectStruct;
 class IEventsValueChanged;
-class UIInputFileWithPreview;
 template <class>
 class EventEmitter;
 class UIButton;
@@ -23,7 +22,7 @@ class UIButton;
 using namespace Bang;
 namespace BangEditor
 {
-class UIInputFileWithPreview;
+class UIInputFile;
 
 class CIWBehaviourContainer : public ComponentInspectorWidget
 {
@@ -37,7 +36,7 @@ public:
     BehaviourContainer *GetBehaviourContainer() const;
 
 private:
-    UIInputFileWithPreview *p_sourceInputFile = nullptr;
+    UIInputFile *p_sourceInputFile = nullptr;
     UIButton *p_resetValuesButton = nullptr;
 
     CIWBehaviourContainer();

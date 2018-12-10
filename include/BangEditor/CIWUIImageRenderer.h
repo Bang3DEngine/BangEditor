@@ -19,7 +19,7 @@ using namespace Bang;
 namespace BangEditor
 {
 class UIInputColor;
-class UIInputTexture;
+class UIInputFile;
 
 class CIWUIImageRenderer : public ComponentInspectorWidget
 {
@@ -40,7 +40,7 @@ protected:
 
 private:
     UIInputColor *p_tintInput = nullptr;
-    UIInputTexture *p_imageInput = nullptr;
+    UIInputFile *p_imageInput = nullptr;
 
     virtual ~CIWUIImageRenderer() override;
 };

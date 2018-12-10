@@ -23,7 +23,7 @@ using namespace Bang;
 namespace BangEditor
 {
 class ASMLayerInput;
-class UIInputFileWithPreview;
+class UIInputFile;
 
 class IEventsASMLayerInput
 {
@@ -61,7 +61,7 @@ private:
     UILabel *p_layerTopNameLabel = nullptr;
     UICheckBox *p_layerEnabledInput = nullptr;
     UIInputText *p_layerNameInput = nullptr;
-    UIInputFileWithPreview *p_layerMaskInput = nullptr;
+    UIInputFile *p_layerMaskInput = nullptr;
 
     // IEventsFocus
     UIEventResult OnUIEvent(UIFocusable *focusable,

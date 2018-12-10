@@ -19,7 +19,7 @@
 #include "Bang/Shader.h"
 #include "Bang/UIComboBox.h"
 #include "Bang/UIInputNumber.h"
-#include "BangEditor/UIInputFileWithPreview.h"
+#include "BangEditor/UIInputFile.h"
 
 namespace Bang
 {
@@ -40,7 +40,7 @@ void CIWPostProcessEffect::InitInnerWidgets()
     p_priorityInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
     p_priorityInput->SetDecimalPlaces(0);
 
-    p_fragmentShaderInput = new UIInputFileWithPreview();
+    p_fragmentShaderInput = new UIInputFile();
     p_fragmentShaderInput->SetExtensions(
         Extensions::GetFragmentShaderExtensions());
     p_fragmentShaderInput->EventEmitter<IEventsValueChanged>::RegisterListener(

@@ -20,7 +20,6 @@ using namespace Bang;
 namespace BangEditor
 {
 class UIInputFile;
-class UIInputFileWithPreview;
 
 class CIWAnimator : public ComponentInspectorWidget
 {
@@ -37,11 +36,11 @@ public:
 
 private:
     UICheckBox *p_playOnStartInput = nullptr;
-    UIInputFileWithPreview *p_animatorSMInput = nullptr;
+    UIInputFile *p_animatorSMInput = nullptr;
 
     virtual ~CIWAnimator() override;
 
-    UIInputFileWithPreview *CreateAnimationEntry();
+    UIInputFile *CreateAnimationEntry();
 
     // ComponentInspectorWidget
     virtual void OnValueChangedCIW(

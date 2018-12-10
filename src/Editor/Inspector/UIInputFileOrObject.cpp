@@ -6,6 +6,7 @@
 #include "Bang/IEventsDragDrop.h"
 #include "Bang/IEventsValueChanged.h"
 #include "Bang/Paths.h"
+#include "Bang/RectTransform.h"
 #include "Bang/Resources.h"
 #include "Bang/Stretch.h"
 #include "Bang/TextureFactory.h"
@@ -17,6 +18,7 @@
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UILayoutElement.h"
+#include "Bang/UILayoutIgnorer.h"
 #include "Bang/UITextRenderer.h"
 #include "BangEditor/EditorDialog.h"
 #include "BangEditor/EditorTextureFactory.h"
@@ -35,6 +37,26 @@ UIInputFileOrObject::UIInputFileOrObject()
     UIHorizontalLayout *hl = AddComponent<UIHorizontalLayout>();
     hl->SetChildrenVerticalStretch(Stretch::FULL);
     hl->SetSpacing(5);
+
+    GameObject *previewImgGo = GameObjectFactory::CreateUIGameObject();
+    p_previewIcon = previewImgGo->AddComponent<UIImageRenderer>();
+
+    UILayoutElement *previewImgGoLE =
+        previewImgGo->AddComponent<UILayoutElement>();
+    previewImgGoLE->SetMinWidth(20);
+
+    GameObject *bigPreviewImgGo = GameObjectFactory::CreateUIGameObject();
+    bigPreviewImgGo->AddComponent<UILayoutIgnorer>();
+    p_bigPreviewIcon = bigPreviewImgGo->AddComponent<UIImageRenderer>();
+    bigPreviewImgGo->GetRectTransform()->SetAnchors(Vector2(-1, 1));
+    bigPreviewImgGo->GetRectTransform()->SetMarginRight(-128);
+    bigPreviewImgGo->GetRectTransform()->SetMarginBot(-128);
+    bigPreviewImgGo->GetRectTransform()->TranslateLocal(Vector3(0, 0, -0.1f));
+
+    UIFocusable *previewFocusable = previewImgGo->AddComponent<UIFocusable>();
+    previewFocusable->SetConsiderForTabbing(false);
+    previewFocusable->EventEmitter<IEventsFocus>::RegisterListener(this);
+    bigPreviewImgGo->SetVisible(false);
 
     p_inputText = GameObjectFactory::CreateUIInputText();
     p_inputText->SetBlocked(true);
@@ -59,10 +81,17 @@ UIInputFileOrObject::UIInputFileOrObject()
     p_inputText->GetGameObject()->SetParent(this);
     p_searchButton->GetGameObject()->SetParent(this);
     p_openButton->GetGameObject()->SetParent(this);
+    bigPreviewImgGo->SetParent(this);
+    previewImgGo->SetParent(this, 0);
 }
 
 UIInputFileOrObject::~UIInputFileOrObject()
 {
+}
+
+void UIInputFileOrObject::SetZoomable(bool zoomable)
+{
+    m_zoomable = zoomable;
 }
 
 UIInputText *UIInputFileOrObject::GetInputText() const
@@ -78,6 +107,30 @@ UIButton *UIInputFileOrObject::GetSearchButton() const
 UIButton *UIInputFileOrObject::GetOpenButton() const
 {
     return p_openButton;
+}
+
+bool UIInputFileOrObject::GetShowPreview() const
+{
+    return m_showPreview;
+}
+
+UIEventResult UIInputFileOrObject::OnUIEvent(UIFocusable *,
+                                             const UIEvent &event)
+{
+    if (event.type == UIEvent::Type::MOUSE_ENTER)
+    {
+        if (CanDoZoom())
+        {
+            GetBigPreviewIcon()->GetGameObject()->SetVisible(true);
+        }
+        return UIEventResult::INTERCEPT;
+    }
+    else if (event.type == UIEvent::Type::MOUSE_EXIT)
+    {
+        GetBigPreviewIcon()->GetGameObject()->SetVisible(false);
+        return UIEventResult::INTERCEPT;
+    }
+    return UIEventResult::IGNORE;
 }
 
 void UIInputFileOrObject::OnDragStarted(EventEmitter<IEventsDragDrop> *dd_)
@@ -123,6 +176,27 @@ void UIInputFileOrObject::OnDrop(EventEmitter<IEventsDragDrop> *dd_)
     GetInputText()->GetText()->SetTextColor(Color::Black());
 }
 
+void UIInputFileOrObject::SetPreviewIcon(Texture2D *icon)
+{
+    GetBigPreviewIcon()->SetImageTexture(icon);
+    GetPreviewIcon()->SetImageTexture(icon);
+}
+
+void UIInputFileOrObject::SetShowPreview(bool showPreview)
+{
+    m_showPreview = showPreview;
+}
+
+UIImageRenderer *UIInputFileOrObject::GetPreviewIcon() const
+{
+    return p_previewIcon;
+}
+
+UIImageRenderer *UIInputFileOrObject::GetBigPreviewIcon() const
+{
+    return p_bigPreviewIcon;
+}
+
 bool UIInputFileOrObject::AcceptsDrag(
     EventEmitter<IEventsDragDrop> *dragDroppable) const
 {
@@ -142,4 +216,9 @@ void UIInputFileOrObject::OnSearchButtonClicked()
 
 void UIInputFileOrObject::OnOpenButtonClicked()
 {
+}
+
+bool UIInputFileOrObject::CanDoZoom() const
+{
+    return m_zoomable;
 }

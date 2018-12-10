@@ -26,7 +26,7 @@ using namespace Bang;
 namespace BangEditor
 {
 class AESNode;
-class UIInputFileWithPreview;
+class UIInputFile;
 
 class GIWAESNode : public InspectorWidget
 {
@@ -43,7 +43,7 @@ protected:
     AESNode *p_aesNode = nullptr;
     UIInputText *p_nameInput = nullptr;
     UIInputNumber *p_speedInputNumber = nullptr;
-    UIInputFileWithPreview *p_nodeAnimationInput = nullptr;
+    UIInputFile *p_nodeAnimationInput = nullptr;
 
     AESNode *GetAESNode() const;
 

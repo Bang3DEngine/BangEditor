@@ -22,7 +22,7 @@ using namespace Bang;
 namespace BangEditor
 {
 class UIInputColor;
-class UIInputFileWithPreview;
+class UIInputFile;
 
 class CIWUITextRenderer : public ComponentInspectorWidget
 {
@@ -47,7 +47,7 @@ private:
     UIInputColor *p_colorInput = nullptr;
     UIComboBox *p_horizontalAlignmentInput = nullptr;
     UIComboBox *p_verticalAlignmentInput = nullptr;
-    UIInputFileWithPreview *p_fontFileInput = nullptr;
+    UIInputFile *p_fontFileInput = nullptr;
 
     virtual ~CIWUITextRenderer() = default;
 };

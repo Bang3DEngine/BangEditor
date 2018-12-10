@@ -33,8 +33,8 @@ namespace BangEditor
 {
 class PreviewViewer;
 class UIInputColor;
-class UIInputFileWithPreview;
-class UIInputTexture;
+class UIInputFile;
+class UIInputFile;
 class UIInputVector;
 
 class RIWMaterial : public RIWResource<Material>
@@ -47,12 +47,12 @@ public:
 
 private:
     UIInputColor *p_albedoColorInput = nullptr;
-    UIInputTexture *p_albedoTextureInput = nullptr;
+    UIInputFile *p_albedoTextureInput = nullptr;
     UIInputVector *p_albedoUvMultiplyInput = nullptr;
     UIInputVector *p_albedoUvOffsetInput = nullptr;
-    UIInputTexture *p_roughnessTextureInput = nullptr;
-    UIInputTexture *p_metalnessTextureInput = nullptr;
-    UIInputTexture *p_normalMapTextureInput = nullptr;
+    UIInputFile *p_roughnessTextureInput = nullptr;
+    UIInputFile *p_metalnessTextureInput = nullptr;
+    UIInputFile *p_normalMapTextureInput = nullptr;
     UIInputVector *p_normalMapUvMultiplyInput = nullptr;
     UIInputVector *p_normalMapUvOffsetInput = nullptr;
     UIInputNumber *p_normalMapMultiplyFactorInput = nullptr;
@@ -64,8 +64,8 @@ private:
     UICheckBox *p_renderWireframe = nullptr;
     UIComboBox *p_renderPassInput = nullptr;
     UIComboBox *p_neededUniformsInput = nullptr;
-    UIInputFileWithPreview *p_vertexShaderInput = nullptr;
-    UIInputFileWithPreview *p_fragmentShaderInput = nullptr;
+    UIInputFile *p_vertexShaderInput = nullptr;
+    UIInputFile *p_fragmentShaderInput = nullptr;
     PreviewViewer *p_materialPreviewViewer = nullptr;
 
     RIWMaterial();

@@ -24,7 +24,7 @@
 #include "Bang/UISlider.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/UIInputColor.h"
-#include "BangEditor/UIInputFileWithPreview.h"
+#include "BangEditor/UIInputFile.h"
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/UndoRedoObjectProperty.h"
 #include "BangEditor/UndoRedoObjectProperty.tcc"
@@ -88,7 +88,7 @@ void CIWCamera::InitInnerWidgets()
         this);
     AddWidget("Clear Color", p_clearColorInput);
 
-    p_textureCubeMapInput = new UIInputFileWithPreview();
+    p_textureCubeMapInput = new UIInputFile();
     p_textureCubeMapInput->SetExtensions(
         {Extensions::GetTextureCubeMapExtension()});
     p_textureCubeMapInput->EventEmitter<IEventsValueChanged>::RegisterListener(

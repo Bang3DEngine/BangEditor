@@ -23,7 +23,7 @@
 #include "Bang/UIInputText.h"
 #include "Bang/UITextRenderer.h"
 #include "BangEditor/UIInputColor.h"
-#include "BangEditor/UIInputFileWithPreview.h"
+#include "BangEditor/UIInputFile.h"
 
 namespace Bang
 {
@@ -58,7 +58,7 @@ void CIWUITextRenderer::InitInnerWidgets()
     p_verticalAlignmentInput->AddItem("Center", int(VerticalAlignment::CENTER));
     p_verticalAlignmentInput->AddItem("Bot", int(VerticalAlignment::BOT));
 
-    p_fontFileInput = new UIInputFileWithPreview();
+    p_fontFileInput = new UIInputFile();
     p_fontFileInput->SetExtensions(Extensions::GetTTFExtensions());
     p_fontFileInput->SetZoomable(false);
 

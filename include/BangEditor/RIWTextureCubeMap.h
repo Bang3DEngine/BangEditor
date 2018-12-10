@@ -28,7 +28,7 @@ class EventEmitter;
 using namespace Bang;
 namespace BangEditor
 {
-class UIInputTexture;
+class UIInputFile;
 class UITextureCubeMapPreviewer;
 
 class RIWTextureCubeMap : public RIWResource<TextureCubeMap>
@@ -42,12 +42,12 @@ public:
     void Init() override;
 
 private:
-    UIInputTexture *p_topTextureInput = nullptr;
-    UIInputTexture *p_botTextureInput = nullptr;
-    UIInputTexture *p_rightTextureInput = nullptr;
-    UIInputTexture *p_leftTextureInput = nullptr;
-    UIInputTexture *p_frontTextureInput = nullptr;
-    UIInputTexture *p_backTextureInput = nullptr;
+    UIInputFile *p_topTextureInput = nullptr;
+    UIInputFile *p_botTextureInput = nullptr;
+    UIInputFile *p_rightTextureInput = nullptr;
+    UIInputFile *p_leftTextureInput = nullptr;
+    UIInputFile *p_frontTextureInput = nullptr;
+    UIInputFile *p_backTextureInput = nullptr;
     UITextureCubeMapPreviewer *p_textureCMPreviewer = nullptr;
     UILabel *p_warningLabel = nullptr;
 

@@ -11,7 +11,7 @@
 #include "Bang/UISlider.h"
 #include "BangEditor/InspectorWidget.h"
 #include "BangEditor/UIInputColor.h"
-#include "BangEditor/UIInputFileWithPreview.h"
+#include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputObject.h"
 #include "BangEditor/UIInputVector.h"
 
@@ -178,8 +178,8 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
             }
             else if (reflVar.GetVariant().GetType() == Variant::Type::GUID)
             {
-                UIInputFileWithPreview *inputFile =
-                    new UIInputFileWithPreview();
+                UIInputFile *inputFile =
+                    new UIInputFile();
                 inputFile->SetPath(Path::Empty());
                 inputFile->SetZoomable(reflVar.GetHints().GetZoomablePreview());
                 inputFile->SetExtensions(reflVar.GetHints().GetExtensions());
@@ -302,8 +302,8 @@ void SerializableInspectorWidget::UpdateWidgetsContentFromMeta(
             {
                 inputVec->Set(metaAttr.Get<Vector4>());
             }
-            else if (UIInputFileWithPreview *inputFile =
-                         DCAST<UIInputFileWithPreview *>(widget))
+            else if (UIInputFile *inputFile =
+                         DCAST<UIInputFile *>(widget))
             {
                 GUID guid = metaAttr.Get<GUID>();
                 Path inputFilePath = MetaFilesManager::GetFilepath(guid);
@@ -359,8 +359,8 @@ String GetStringValueFromWidget(GameObject *widget)
             default: value = String::ToString(inputVec->GetVector4()); break;
         }
     }
-    else if (UIInputFileWithPreview *inputFile =
-                 DCAST<UIInputFileWithPreview *>(widget))
+    else if (UIInputFile *inputFile =
+                 DCAST<UIInputFile *>(widget))
     {
         GUID guid = MetaFilesManager::GetGUID(inputFile->GetPath());
         value = String::ToString(guid);

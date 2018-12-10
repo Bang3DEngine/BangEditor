@@ -23,8 +23,7 @@ namespace BangEditor
 {
 class UIInputColor;
 class UIInputComplexRandom;
-class UIInputFileWithPreview;
-class UIInputTexture;
+class UIInputFile;
 class UIInputVector;
 
 class CIWParticleSystem : public ComponentInspectorWidget
@@ -39,13 +38,13 @@ public:
     virtual void UpdateFromReference() override;
 
 protected:
-    UIInputFileWithPreview *p_meshInputFile = nullptr;
+    UIInputFile *p_meshInputFile = nullptr;
 
     UIInputComplexRandom *p_lifeTimeInput = nullptr;
     UIInputComplexRandom *p_startTimeInput = nullptr;
     UIInputComplexRandom *p_startSizeInput = nullptr;
     UICheckBox *p_billboardInput = nullptr;
-    UIInputTexture *p_textureInput = nullptr;
+    UIInputFile *p_textureInput = nullptr;
     UIInputVector *p_sheetSizeInput = nullptr;
     UISlider *p_bouncinessInput = nullptr;
     UIInputNumber *p_animationSpeedInput = nullptr;

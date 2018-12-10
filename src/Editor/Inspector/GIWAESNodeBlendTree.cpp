@@ -9,7 +9,7 @@
 #include "Bang/UIInputNumber.h"
 #include "Bang/UIInputText.h"
 #include "BangEditor/AESNode.h"
-#include "BangEditor/UIInputFileWithPreview.h"
+#include "BangEditor/UIInputFile.h"
 
 using namespace Bang;
 using namespace BangEditor;
@@ -29,7 +29,7 @@ void GIWAESNodeBlendTree::InitInnerWidgets()
     SetTitle("Animation State Blend Tree Node");
     SetName("GIWAESNodeBlendTree");
 
-    p_nodeSecondAnimationInput = new UIInputFileWithPreview();
+    p_nodeSecondAnimationInput = new UIInputFile();
     p_nodeSecondAnimationInput->SetExtensions(
         {Extensions::GetAnimationExtension()});
     p_nodeSecondAnimationInput

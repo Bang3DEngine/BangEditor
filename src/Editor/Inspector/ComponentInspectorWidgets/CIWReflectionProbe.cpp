@@ -23,7 +23,7 @@
 #include "Bang/UIComboBox.h"
 #include "Bang/UIInputNumber.h"
 #include "BangEditor/UIInputColor.h"
-#include "BangEditor/UIInputFileWithPreview.h"
+#include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputVector.h"
 #include "BangEditor/UITextureCubeMapPreviewer.h"
 
@@ -92,7 +92,7 @@ void CIWReflectionProbe::InitInnerWidgets()
     p_clearColorInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 
-    p_textureCubeMapInput = new UIInputFileWithPreview();
+    p_textureCubeMapInput = new UIInputFile();
     p_textureCubeMapInput->SetExtensions(
         {Extensions::GetTextureCubeMapExtension()});
     p_textureCubeMapInput->EventEmitter<IEventsValueChanged>::RegisterListener(

@@ -26,8 +26,7 @@
 #include "BangEditor/PreviewViewer.h"
 #include "BangEditor/RIWResource.tcc"
 #include "BangEditor/UIInputColor.h"
-#include "BangEditor/UIInputFileWithPreview.h"
-#include "BangEditor/UIInputTexture.h"
+#include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputVector.h"
 
 namespace Bang
@@ -58,7 +57,7 @@ void RIWMaterial::Init()
     SetName("RIWMaterial");
     SetTitle("Material");
 
-    p_albedoTextureInput = new UIInputTexture();
+    p_albedoTextureInput = new UIInputFile();
     p_albedoTextureInput->SetExtensions(Extensions::GetImageExtensions());
     p_albedoTextureInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
@@ -73,17 +72,17 @@ void RIWMaterial::Init()
     p_albedoUvOffsetInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 
-    p_roughnessTextureInput = new UIInputTexture();
+    p_roughnessTextureInput = new UIInputFile();
     p_roughnessTextureInput->SetExtensions(Extensions::GetImageExtensions());
     p_roughnessTextureInput
         ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_metalnessTextureInput = new UIInputTexture();
+    p_metalnessTextureInput = new UIInputFile();
     p_metalnessTextureInput->SetExtensions(Extensions::GetImageExtensions());
     p_metalnessTextureInput
         ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
-    p_normalMapTextureInput = new UIInputTexture();
+    p_normalMapTextureInput = new UIInputFile();
     p_normalMapTextureInput->SetExtensions(Extensions::GetImageExtensions());
     p_normalMapTextureInput
         ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
@@ -155,13 +154,13 @@ void RIWMaterial::Init()
     p_neededUniformsInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
 
-    p_vertexShaderInput = new UIInputFileWithPreview();
+    p_vertexShaderInput = new UIInputFile();
     p_vertexShaderInput->SetExtensions(Extensions::GetVertexShaderExtensions());
     p_vertexShaderInput->EventEmitter<IEventsValueChanged>::RegisterListener(
         this);
     p_vertexShaderInput->SetZoomable(false);
 
-    p_fragmentShaderInput = new UIInputFileWithPreview();
+    p_fragmentShaderInput = new UIInputFile();
     p_fragmentShaderInput->SetExtensions(
         Extensions::GetFragmentShaderExtensions());
     p_fragmentShaderInput->EventEmitter<IEventsValueChanged>::RegisterListener(

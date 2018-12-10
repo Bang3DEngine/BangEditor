@@ -22,7 +22,6 @@
 #include "Bang/UIInputNumber.h"
 #include "Bang/UISlider.h"
 #include "Bang/UITextRenderer.h"
-#include "BangEditor/UIInputFileWithPreview.h"
 
 namespace Bang
 {

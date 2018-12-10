@@ -22,7 +22,7 @@ class EventEmitter;
 using namespace Bang;
 namespace BangEditor
 {
-class UIInputFileWithPreview;
+class UIInputFile;
 
 class CIWAudioSource : public ComponentInspectorWidget
 {
