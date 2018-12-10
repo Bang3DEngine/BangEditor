@@ -40,9 +40,11 @@
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/Vector2.h"
 #include "BangEditor/EditorPaths.h"
+#include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/ExplorerItemFactory.h"
 #include "BangEditor/NavigatorItem.h"
+#include "BangEditor/ObjectItem.h"
 #include "BangEditor/UITabContainer.h"
 
 using namespace Bang;
@@ -61,11 +63,23 @@ EditorDialog::~EditorDialog()
 }
 
 void EditorDialog::GetObject(const String &title,
-                             Object *resultObject,
+                             Object **resultObject,
                              bool *accepted)
 {
     ASSERT(resultObject);
     ASSERT(accepted);
+
+    Scene *openScene = EditorSceneManager::GetActive()->GetOpenScene();
+    EditorDialog::s_accepted = false;
+    EditorDialog::s_assetPathResult = Path::Empty();
+
+    Dialog::BeginDialogCreation(title, 500, 400, true, true);
+    Scene *scene = GameObjectFactory::CreateScene(false);
+    EditorDialog::CreateGetObjectSceneInto(scene, openScene);
+    Dialog::EndDialogCreation(scene);
+
+    *resultObject = EditorDialog::s_objectResult;
+    *accepted = EditorDialog::s_accepted;
 }
 
 void EditorDialog::GetAsset(const String &title,
@@ -194,8 +208,74 @@ void EditorDialog::CreateSearchSceneInto(
     buttonsGo->SetParent(scene);
 }
 
-void EditorDialog::CreateGetObjectSceneInto(Scene *scene)
+void EditorDialog::CreateGetObjectSceneInto(Scene *scene, GameObject *baseGO)
 {
+    Map<String, Array<NavigatorItem *>> tabsContent;
+
+    Array<GameObject *> tabsBaseGameObjects = {baseGO};
+
+    Array<String> tabsNames;
+    Array<Array<NavigatorItem *>> tabsNavItems;
+    for (uint i = 0; i < tabsBaseGameObjects.Size(); ++i)
+    {
+        const GameObject *baseGameObject = tabsBaseGameObjects[i];
+        const String tabName = baseGameObject->GetName();
+
+        Array<NavigatorItem *> navItems;
+        {
+            Array<Object *> objects;
+            {
+                Array<GameObject *> children =
+                    baseGameObject->GetChildrenRecursively();
+
+                for (GameObject *child : children)
+                {
+                    Array<Component *> comps = child->GetComponents();
+                    objects.PushBack(comps);
+                }
+                for (Object *object : objects)
+                {
+                    ObjectItem *objectItem = new ObjectItem();
+                    objectItem->SetObject(object);
+                    navItems.PushBack(objectItem);
+                }
+            }
+        }
+
+        for (NavigatorItem *navItem : navItems)
+        {
+            ObjectItem *objItem = SCAST<ObjectItem *>(navItem);
+            navItem->GetFocusable()->AddEventCallback(
+                [objItem, navItems](UIFocusable *, const UIEvent &event) {
+                    if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
+                    {
+                        EditorDialog::s_objectResult = objItem->GetObject();
+                        for (NavigatorItem *navItem : navItems)
+                        {
+                            if (navItem)
+                            {
+                                navItem->SetSelected(false);
+                            }
+                        }
+                        objItem->SetSelected(true);
+                        return UIEventResult::INTERCEPT;
+                    }
+                    else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
+                    {
+                        // Directly select
+                        EditorDialog::s_accepted = true;
+                        Dialog::EndCurrentDialog();
+                        return UIEventResult::INTERCEPT;
+                    }
+                    return UIEventResult::IGNORE;
+                });
+        }
+
+        tabsNames.PushBack(tabName);
+        tabsNavItems.PushBack(navItems);
+    }
+
+    CreateSearchSceneInto(scene, tabsNames, tabsNavItems);
 }
 
 void EditorDialog::CreateGetAssetSceneInto(Scene *scene,
@@ -505,7 +585,8 @@ void EditorDialog::CreateGetColorSceneInto(
                                          p_sliderRGB_G->GetValue(),
                                          p_sliderRGB_B->GetValue());
 
-                // Correct for undeterminate hsv configs, keeping the previous
+                // Correct for undeterminate hsv configs, keeping the
+                // previous
                 // known values
                 Color prevColorHSV = m_pickedColorHSV;
                 m_pickedColorHSV = m_pickedColorRGB.ToHSV();

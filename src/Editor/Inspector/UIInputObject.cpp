@@ -65,7 +65,7 @@ void UIInputObject::OnSearchButtonClicked()
 {
     Object *openObject = nullptr;
     bool accepted;
-    EditorDialog::GetObject("Get Object...", openObject, &accepted);
+    EditorDialog::GetObject("Get Object...", &openObject, &accepted);
     if (accepted)
     {
         SetObject(openObject);

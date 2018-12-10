@@ -36,7 +36,7 @@ public:
     virtual ~EditorDialog();
 
     static void GetObject(const String &title,
-                          Object *resultObject,
+                          Object **resultObject,
                           bool *accepted);
 
     static void GetAsset(const String &title,
@@ -57,7 +57,8 @@ private:
         Scene *scene,
         const Array<String> &tabNames,
         const Array<Array<NavigatorItem *>> &tabNavItems);
-    static void CreateGetObjectSceneInto(Scene *scene);
+    static void CreateGetObjectSceneInto(Scene *scene,
+                                         GameObject *baseGameObject);
     static void CreateGetAssetSceneInto(Scene *scene,
                                         const Array<String> &extensions);
     static void CreateGetColorSceneInto(
