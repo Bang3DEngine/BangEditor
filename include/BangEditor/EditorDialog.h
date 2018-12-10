@@ -56,7 +56,8 @@ private:
     static void CreateSearchSceneInto(
         Scene *scene,
         const Array<String> &tabNames,
-        const Array<Array<NavigatorItem *>> &tabNavItems);
+        const Array<Array<NavigatorItem *>> &tabNavItems,
+        std::function<void(NavigatorItem *)> OnNavigatorItemSelected);
     static void CreateGetObjectSceneInto(Scene *scene,
                                          GameObject *baseGameObject);
     static void CreateGetAssetSceneInto(Scene *scene,
