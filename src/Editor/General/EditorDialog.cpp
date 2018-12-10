@@ -298,6 +298,7 @@ void EditorDialog::CreateGetObjectSceneInto(Scene *scene,
 
                 for (Object *object : objects)
                 {
+                    ClassIdType objectClassId = object->GetClassId();
                     if (IsSubClass(
                             acceptedClassIdBegin, acceptedClassIdEnd, object))
                     {
