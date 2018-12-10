@@ -120,20 +120,10 @@ void ExplorerItem::SetPath(const Path &path)
         m_path = path;
 
         Texture2D *iconTex = EditorTextureFactory::GetIconForPath(GetPath());
-        bool invertY = EditorTextureFactory::IsIconAnImage(GetPath());
-        GetIcon()->SetImageTexture(iconTex);
-        GetIcon()->SetMode(invertY ? UIImageRenderer::Mode::TEXTURE_INV_UVY
-                                   : UIImageRenderer::Mode::TEXTURE);
-        GetIcon()->SetTint(EditorTextureFactory::GetPathIconTint(GetPath()));
-
-        if (iconTex)
-        {
-            GetAspectRatioFitter()->SetAspectRatio(iconTex->GetSize());
-        }
-        else
-        {
-            GetAspectRatioFitter()->SetAspectRatio(1.0f);
-        }
+        GetIcon()->SetMode(EditorTextureFactory::IsIconAnImage(GetPath())
+                               ? UIImageRenderer::Mode::TEXTURE_INV_UVY
+                               : UIImageRenderer::Mode::TEXTURE);
+        SetIcon(iconTex, EditorTextureFactory::GetPathIconTint(GetPath()));
 
         SetPathString(GetPath().GetNameExt());
     }

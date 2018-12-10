@@ -47,6 +47,7 @@ public:
     NavigatorItem();
 
     void SetSelected(bool selected);
+    void SetIcon(Texture2D *icon, const Color &iconTint = Color::White());
 
     bool IsSelected() const;
     UILabel *GetLabel() const;

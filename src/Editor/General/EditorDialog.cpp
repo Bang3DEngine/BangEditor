@@ -226,7 +226,6 @@ void EditorDialog::CreateSearchSceneInto(
                     }
                     else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
                     {
-                        // Directly select
                         EditorDialog::s_accepted = true;
                         Dialog::EndCurrentDialog();
                         return UIEventResult::INTERCEPT;

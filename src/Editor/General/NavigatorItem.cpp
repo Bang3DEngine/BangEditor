@@ -133,6 +133,21 @@ void NavigatorItem::SetSelected(bool selected)
     }
 }
 
+void NavigatorItem::SetIcon(Texture2D *icon, const Color &iconTint)
+{
+    if (icon)
+    {
+        GetAspectRatioFitter()->SetAspectRatio(icon->GetSize());
+    }
+    else
+    {
+        GetAspectRatioFitter()->SetAspectRatio(1.0f);
+    }
+
+    GetIcon()->SetTint(iconTint);
+    GetIcon()->SetImageTexture(icon);
+}
+
 bool NavigatorItem::IsSelected() const
 {
     return m_selected;
