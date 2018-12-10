@@ -1,8 +1,6 @@
 #ifndef EXPLORERITEM_H
 #define EXPLORERITEM_H
 
-#include <vector>
-
 #include "Bang/Array.tcc"
 #include "Bang/Bang.h"
 #include "Bang/BangDefines.h"
@@ -22,8 +20,8 @@
 #include "Bang/UIFocusable.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILabel.h"
-#include "BangEditor/BangEditor.h"
 #include "BangEditor/IEventsExplorerItem.h"
+#include "BangEditor/NavigatorItem.h"
 #include "BangEditor/UIContextMenu.h"
 
 namespace Bang
@@ -43,8 +41,7 @@ namespace BangEditor
 class IEventsExplorerItem;
 class MenuItem;
 
-class ExplorerItem : public GameObject,
-                     public EventListener<IEventsFocus>,
+class ExplorerItem : public NavigatorItem,
                      public EventListener<IEventsDragDrop>,
                      public EventEmitter<IEventsExplorerItem>
 {
@@ -54,13 +51,9 @@ public:
     ExplorerItem();
 
     void SetPath(const Path &path);
-    void SetSelected(bool selected);
     void SetPathString(const String &string);
 
-    bool IsSelected() const;
-    UILabel *GetLabel() const;
     const Path &GetPath() const;
-    UIFocusable *GetFocusable() const;
     const String &GetPathString() const;
 
     void Rename();
@@ -78,17 +71,13 @@ protected:
     virtual ~ExplorerItem() override;
 
 private:
-    bool m_selected = false;
     Path m_path = Path::Empty();
     String m_pathString = "";
 
-    DPtr<UILabel> p_label;
-    DPtr<UIImageRenderer> p_bg;
-    DPtr<UIImageRenderer> p_icon;
-    DPtr<UIFocusable> p_focusable;
     DPtr<UIContextMenu> p_contextMenu;
     DPtr<UIDragDroppable> p_dragDroppable;
-    DPtr<UIAspectRatioFitter> p_aspectRatioFitter;
+
+    void OnFocusTaken(UIFocusable *focusable, const UIEvent &event) override;
 
     // IEventsFocus
     virtual UIEventResult OnUIEvent(UIFocusable *focusable,

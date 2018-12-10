@@ -33,85 +33,42 @@ ExplorerItem::ExplorerItem()
 {
     GameObjectFactory::CreateUIGameObjectInto(this);
 
-    UILayoutElement *le = AddComponent<UILayoutElement>();
-    le->SetPreferredSize(Vector2i(100));
-
-    constexpr int textPixels = 30;
-    constexpr int spacing = 5;
-
-    GameObject *bgGo = GameObjectFactory::CreateUIGameObject();
-    p_bg = bgGo->AddComponent<UIImageRenderer>();
-
-    GameObject *iconContainerGo = GameObjectFactory::CreateUIGameObject();
-    RectTransform *iconContainerRT = iconContainerGo->GetRectTransform();
-    iconContainerRT->SetMarginBot(textPixels + spacing);
-
-    GameObject *iconGo = GameObjectFactory::CreateUIGameObject();
-    RectTransform *iconRT = iconGo->GetRectTransform();
-    iconRT->SetAnchors(Vector2::Zero());
-    iconRT->SetPivotPosition(Vector2::Zero());
-    p_icon = iconGo->AddComponent<UIImageRenderer>();
-    p_icon->SetTint(Color::Zero());
-
-    p_aspectRatioFitter = iconGo->AddComponent<UIAspectRatioFitter>();
-    p_aspectRatioFitter->SetAspectRatioMode(AspectRatioMode::KEEP);
-
-    p_label = GameObjectFactory::CreateUILabel();
-    GameObject *labelGo = p_label->GetGameObject();
-    RectTransform *labelRT = labelGo->GetRectTransform();
-    labelRT->SetAnchorX(Vector2(-1, 1));
-    labelRT->SetAnchorY(Vector2(-1, -1));
-    labelRT->SetMarginTop(-textPixels);
-    p_label->GetText()->SetTextSize(11);
-    p_label->GetText()->SetContent("");
-    p_label->GetText()->SetWrapping(true);
-    p_label->GetFocusable()->SetEnabled(false);
-    p_label->GetText()->SetVerticalAlign(VerticalAlignment::TOP);
-    p_label->GetText()->SetHorizontalAlign(HorizontalAlignment::CENTER);
-    p_label->SetSelectable(false);
-
-    p_focusable = AddComponent<UIFocusable>();
-    p_focusable->SetConsiderForTabbing(true);
-    GetFocusable()->EventEmitter<IEventsFocus>::RegisterListener(this);
-
     p_contextMenu = AddComponent<UIContextMenu>();
     p_contextMenu->SetCreateContextMenuCallback(
         [this](MenuItem *menuRootItem) { OnCreateContextMenu(menuRootItem); });
-    p_contextMenu->SetFocusable(p_focusable);
+    p_contextMenu->SetFocusable(GetFocusable());
 
     p_dragDroppable = AddComponent<UIDragDroppable>();
-    p_dragDroppable->SetFocusable(p_focusable);
-
-    bgGo->SetParent(this);
-    labelGo->SetParent(this);
-    iconContainerGo->SetParent(this);
-    iconGo->SetParent(iconContainerGo);
-
-    SetSelected(false);
+    p_dragDroppable->SetFocusable(GetFocusable());
 }
 
 ExplorerItem::~ExplorerItem()
 {
 }
 
-UIEventResult ExplorerItem::OnUIEvent(UIFocusable *, const UIEvent &event)
+void ExplorerItem::OnFocusTaken(UIFocusable *, const UIEvent &event)
 {
+    if (event.focus.type == FocusType::AUTO_TAB)
+    {
+        if (Explorer *exp = Explorer::GetInstance())
+        {
+            exp->SelectPath(GetPath());
+        }
+    }
+}
+
+UIEventResult ExplorerItem::OnUIEvent(UIFocusable *focusable,
+                                      const UIEvent &event)
+{
+    if (NavigatorItem::OnUIEvent(focusable, event) == UIEventResult::INTERCEPT)
+    {
+        return UIEventResult::INTERCEPT;
+    }
+
     switch (event.type)
     {
         case UIEvent::Type::FOCUS_TAKEN:
             SetSelected(true);
-            if (event.focus.type == FocusType::AUTO_TAB)
-            {
-                if (Explorer *exp = Explorer::GetInstance())
-                {
-                    exp->SelectPath(GetPath());
-                }
-            }
-            return UIEventResult::INTERCEPT;
-            break;
-
-        case UIEvent::Type::FOCUS_LOST:
-            SetSelected(false);
             return UIEventResult::INTERCEPT;
             break;
 
@@ -165,22 +122,6 @@ UIEventResult ExplorerItem::OnUIEvent(UIFocusable *, const UIEvent &event)
             }
             break;
 
-        case UIEvent::Type::MOUSE_ENTER:
-            if (!IsSelected() && p_bg)
-            {
-                p_bg->SetTint(UITheme::GetOverColor());
-            }
-            return UIEventResult::INTERCEPT;
-            break;
-
-        case UIEvent::Type::MOUSE_EXIT:
-            if (!IsSelected() && p_bg)
-            {
-                p_bg->SetTint(Color::Zero());
-            }
-            return UIEventResult::INTERCEPT;
-            break;
-
         default: break;
     }
     return UIEventResult::IGNORE;
@@ -194,54 +135,28 @@ void ExplorerItem::SetPath(const Path &path)
 
         Texture2D *iconTex = EditorTextureFactory::GetIconForPath(GetPath());
         bool invertY = EditorTextureFactory::IsIconAnImage(GetPath());
-        p_icon->SetImageTexture(iconTex);
-        p_icon->SetMode(invertY ? UIImageRenderer::Mode::TEXTURE_INV_UVY
-                                : UIImageRenderer::Mode::TEXTURE);
-        p_icon->SetTint(EditorTextureFactory::GetPathIconTint(GetPath()));
+        GetIcon()->SetImageTexture(iconTex);
+        GetIcon()->SetMode(invertY ? UIImageRenderer::Mode::TEXTURE_INV_UVY
+                                   : UIImageRenderer::Mode::TEXTURE);
+        GetIcon()->SetTint(EditorTextureFactory::GetPathIconTint(GetPath()));
 
         if (iconTex)
         {
-            p_aspectRatioFitter->SetAspectRatio(iconTex->GetSize());
+            GetAspectRatioFitter()->SetAspectRatio(iconTex->GetSize());
         }
         else
         {
-            p_aspectRatioFitter->SetAspectRatio(1.0f);
+            GetAspectRatioFitter()->SetAspectRatio(1.0f);
         }
 
         SetPathString(GetPath().GetNameExt());
     }
 }
 
-void ExplorerItem::SetSelected(bool selected)
-{
-    m_selected = selected;
-
-    if (p_bg)
-    {
-        p_bg->SetTint(IsSelected() ? UITheme::GetSelectedColor()
-                                   : Color::Zero());
-    }
-}
-
 void ExplorerItem::SetPathString(const String &string)
 {
     m_pathString = string;
-    p_label->GetText()->SetContent(GetPathString());
-}
-
-bool ExplorerItem::IsSelected() const
-{
-    return m_selected;
-}
-
-UILabel *ExplorerItem::GetLabel() const
-{
-    return p_label;
-}
-
-UIFocusable *ExplorerItem::GetFocusable() const
-{
-    return p_focusable;
+    GetLabel()->GetText()->SetContent(GetPathString());
 }
 
 const String &ExplorerItem::GetPathString() const
