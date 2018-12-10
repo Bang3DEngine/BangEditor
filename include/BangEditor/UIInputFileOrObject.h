@@ -45,7 +45,7 @@ public:
     virtual ~UIInputFileOrObject() override;
 
     void SetZoomable(bool zoomable);
-    void SetPreviewIcon(Texture2D *icon);
+    void SetPreviewIcon(Texture2D *icon, const Color &tint = Color::White());
     void SetShowPreview(bool showPreview);
 
     UIImageRenderer *GetPreviewIcon() const;

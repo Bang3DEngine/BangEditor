@@ -198,7 +198,6 @@ void EditorDialog::CreateSearchSceneInto(
                     }
                     else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
                     {
-                        // Directly select
                         EditorDialog::s_accepted = true;
                         Dialog::EndCurrentDialog();
                         return UIEventResult::INTERCEPT;
@@ -207,34 +206,6 @@ void EditorDialog::CreateSearchSceneInto(
                 });
 
             navItem->SetParent(gridLayoutGo);
-        }
-
-        for (NavigatorItem *navItem : navItems)
-        {
-            ObjectItem *objItem = SCAST<ObjectItem *>(navItem);
-            navItem->GetFocusable()->AddEventCallback(
-                [objItem, navItems](UIFocusable *, const UIEvent &event) {
-                    if (event.type == UIEvent::Type::MOUSE_CLICK_DOWN)
-                    {
-                        EditorDialog::s_objectResult = objItem->GetObject();
-                        for (NavigatorItem *navItem : navItems)
-                        {
-                            if (navItem)
-                            {
-                                navItem->SetSelected(false);
-                            }
-                        }
-                        objItem->SetSelected(true);
-                        return UIEventResult::INTERCEPT;
-                    }
-                    else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
-                    {
-                        EditorDialog::s_accepted = true;
-                        Dialog::EndCurrentDialog();
-                        return UIEventResult::INTERCEPT;
-                    }
-                    return UIEventResult::IGNORE;
-                });
         }
 
         tabContainer->AddTab(tabName, gridScrollPanelGo);
@@ -287,6 +258,8 @@ void EditorDialog::CreateGetObjectSceneInto(Scene *scene,
         {
             Array<Object *> objects;
             {
+                objects.PushBack(nullptr);
+
                 Array<GameObject *> children =
                     baseGameObject->GetChildrenRecursively();
 
@@ -295,17 +268,17 @@ void EditorDialog::CreateGetObjectSceneInto(Scene *scene,
                     Array<Component *> comps = child->GetComponents();
                     objects.PushBack(comps);
                 }
+            }
 
-                for (Object *object : objects)
+            for (Object *object : objects)
+            {
+                if (!object ||
+                    IsSubClass(
+                        acceptedClassIdBegin, acceptedClassIdEnd, object))
                 {
-                    ClassIdType objectClassId = object->GetClassId();
-                    if (IsSubClass(
-                            acceptedClassIdBegin, acceptedClassIdEnd, object))
-                    {
-                        ObjectItem *objectItem = new ObjectItem();
-                        objectItem->SetObject(object);
-                        navItems.PushBack(objectItem);
-                    }
+                    ObjectItem *objectItem = new ObjectItem();
+                    objectItem->SetObject(object);
+                    navItems.PushBack(objectItem);
                 }
             }
         }

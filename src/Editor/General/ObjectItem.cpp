@@ -1,6 +1,8 @@
 #include "BangEditor/ObjectItem.h"
 
+#include "Bang/Scene.h"
 #include "Bang/Texture2D.h"
+#include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorTextureFactory.h"
 
 using namespace Bang;
@@ -8,6 +10,7 @@ using namespace BangEditor;
 
 ObjectItem::ObjectItem()
 {
+    GetLabel()->GetText()->SetContent("None");
 }
 
 ObjectItem::~ObjectItem()
@@ -18,7 +21,7 @@ void ObjectItem::SetObject(Object *object)
 {
     if (object != GetObject())
     {
-        p_objectPtr = object;
+        p_object = object;
 
         String labelText = "None";
         Texture2D *iconTex = nullptr;
@@ -41,12 +44,11 @@ void ObjectItem::SetObject(Object *object)
             }
         }
         SetIcon(iconTex, iconTint);
-
         GetLabel()->GetText()->SetContent(labelText);
     }
 }
 
 Object *ObjectItem::GetObject() const
 {
-    return p_objectPtr.Get();
+    return p_object;
 }

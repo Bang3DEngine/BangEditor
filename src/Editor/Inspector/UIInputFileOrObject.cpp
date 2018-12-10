@@ -83,6 +83,8 @@ UIInputFileOrObject::UIInputFileOrObject()
     p_openButton->GetGameObject()->SetParent(this);
     bigPreviewImgGo->SetParent(this);
     previewImgGo->SetParent(this, 0);
+
+    GetInputText()->GetText()->SetContent("None");
 }
 
 UIInputFileOrObject::~UIInputFileOrObject()
@@ -176,10 +178,12 @@ void UIInputFileOrObject::OnDrop(EventEmitter<IEventsDragDrop> *dd_)
     GetInputText()->GetText()->SetTextColor(Color::Black());
 }
 
-void UIInputFileOrObject::SetPreviewIcon(Texture2D *icon)
+void UIInputFileOrObject::SetPreviewIcon(Texture2D *icon, const Color &tint)
 {
     GetBigPreviewIcon()->SetImageTexture(icon);
     GetPreviewIcon()->SetImageTexture(icon);
+    GetBigPreviewIcon()->SetTint(tint);
+    GetPreviewIcon()->SetTint(tint);
 }
 
 void UIInputFileOrObject::SetShowPreview(bool showPreview)

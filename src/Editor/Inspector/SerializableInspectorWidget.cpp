@@ -9,6 +9,8 @@
 #include "Bang/UIInputNumber.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UISlider.h"
+#include "BangEditor/EditorSceneManager.h"
+#include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/InspectorWidget.h"
 #include "BangEditor/UIInputColor.h"
 #include "BangEditor/UIInputFile.h"
@@ -178,8 +180,8 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
             }
             else if (reflVar.GetVariant().GetType() == Variant::Type::GUID)
             {
-                UIInputFile *inputFile =
-                    new UIInputFile();
+                UIInputFile *inputFile = new UIInputFile();
+                inputFile->SetShowPreview(true);
                 inputFile->SetPath(Path::Empty());
                 inputFile->SetZoomable(reflVar.GetHints().GetZoomablePreview());
                 inputFile->SetExtensions(reflVar.GetHints().GetExtensions());
@@ -195,11 +197,21 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                     reflVar.GetHints().GetObjectPtrClassIdBegin());
                 inputObject->SetAcceptedClassIdEnd(
                     reflVar.GetHints().GetObjectPtrClassIdEnd());
+                inputObject
+                    ->EventEmitter<IEventsValueChanged>::RegisterListener(
+                        inspectorWidget);
+                String objClass = reflVar.GetTypeString().Replace("*", "");
+
+                inputObject->SetPreviewIcon(
+                    EditorTextureFactory::GetComponentIcon(objClass),
+                    EditorTextureFactory::GetComponentIconTint(objClass));
+
                 widgetToAdd = inputObject;
             }
             else if (reflVar.GetVariant().GetType() == Variant::Type::PATH)
             {
                 UIInputFile *inputFile = new UIInputFile();
+                inputFile->SetShowPreview(false);
                 inputFile->SetPath(Path::Empty());
                 inputFile->SetExtensions(reflVar.GetHints().GetExtensions());
                 inputFile->EventEmitter<IEventsValueChanged>::RegisterListener(
@@ -302,17 +314,29 @@ void SerializableInspectorWidget::UpdateWidgetsContentFromMeta(
             {
                 inputVec->Set(metaAttr.Get<Vector4>());
             }
-            else if (UIInputFile *inputFile =
-                         DCAST<UIInputFile *>(widget))
-            {
-                GUID guid = metaAttr.Get<GUID>();
-                Path inputFilePath = MetaFilesManager::GetFilepath(guid);
-                inputFile->SetPath(inputFilePath);
-            }
             else if (UIInputFile *inputFile = DCAST<UIInputFile *>(widget))
             {
-                Path inputFilePath = metaAttr.Get<Path>();
-                inputFile->SetPath(inputFilePath);
+                if (inputFile->GetShowPreview())
+                {
+                    GUID guid = metaAttr.Get<GUID>();
+                    Path inputFilePath = MetaFilesManager::GetFilepath(guid);
+                    inputFile->SetPath(inputFilePath);
+                }
+                else
+                {
+                    Path inputFilePath = metaAttr.Get<Path>();
+                    inputFile->SetPath(inputFilePath);
+                }
+            }
+            else if (UIInputObject *inputObject =
+                         DCAST<UIInputObject *>(widget))
+            {
+                String str = metaAttr.GetStringValue();
+                str = str.Replace("OP ", "");
+                std::istringstream iss(str);
+                GUID guid;
+                iss >> guid;
+                inputObject->SetGUID(guid);
             }
             else if (UIInputColor *inputColor = DCAST<UIInputColor *>(widget))
             {
@@ -359,15 +383,17 @@ String GetStringValueFromWidget(GameObject *widget)
             default: value = String::ToString(inputVec->GetVector4()); break;
         }
     }
-    else if (UIInputFile *inputFile =
-                 DCAST<UIInputFile *>(widget))
-    {
-        GUID guid = MetaFilesManager::GetGUID(inputFile->GetPath());
-        value = String::ToString(guid);
-    }
     else if (UIInputFile *inputFile = DCAST<UIInputFile *>(widget))
     {
-        value = inputFile->GetPath().GetAbsolute();
+        if (inputFile->GetShowPreview())
+        {
+            GUID guid = MetaFilesManager::GetGUID(inputFile->GetPath());
+            value = String::ToString(guid);
+        }
+        else
+        {
+            value = inputFile->GetPath().GetAbsolute();
+        }
     }
     else if (UIComboBox *comboBox = widget->GetComponent<UIComboBox>())
     {
@@ -375,9 +401,7 @@ String GetStringValueFromWidget(GameObject *widget)
     }
     else if (UIInputObject *inputObject = DCAST<UIInputObject *>(widget))
     {
-        value = String::ToString(inputObject->GetObject()
-                                     ? inputObject->GetObject()->GetGUID()
-                                     : GUID::Empty());
+        value = String::ToString(inputObject->GetObjectPtr());
     }
     else if (UIInputColor *inputColor = DCAST<UIInputColor *>(widget))
     {

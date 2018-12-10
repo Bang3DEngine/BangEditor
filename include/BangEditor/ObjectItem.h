@@ -18,7 +18,7 @@ public:
     Object *GetObject() const;
 
 private:
-    ObjectPtr p_objectPtr;
+    Object *p_object = nullptr;
 };
 }
 

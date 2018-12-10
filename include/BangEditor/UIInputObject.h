@@ -4,6 +4,7 @@
 #include "Bang/Bang.h"
 #include "Bang/BangDefines.h"
 #include "Bang/GameObject.h"
+#include "Bang/ObjectPtr.h"
 #include "Bang/String.h"
 #include "BangEditor/UIInputFileOrObject.h"
 
@@ -26,10 +27,13 @@ public:
     void SetAcceptedClassIdBegin(ClassIdType classIdBegin);
     void SetAcceptedClassIdEnd(ClassIdType classIdEnd);
     void SetObject(Object *object);
+    void SetGUID(const GUID &guid);
 
     ClassIdType GetAcceptedClassIdBegin() const;
     ClassIdType GetAcceptedClassIdEnd() const;
     Object *GetObject() const;
+    const ObjectPtr &GetObjectPtr() const;
+    GUID GetGUID() const;
 
 protected:
     virtual ~UIInputObject() override;
@@ -45,13 +49,7 @@ protected:
 private:
     ClassIdType m_acceptedClassIdBegin = -1u;
     ClassIdType m_acceptedClassIdEnd = -1u;
-    Object *p_object = nullptr;
-};
-
-template <class T>
-class UIInputObjectT : public UIInputObject
-{
+    ObjectPtr m_objectPtr;
 };
 }
-
 #endif  // UIINPUTOBJECT_H
