@@ -36,6 +36,8 @@ public:
     virtual ~EditorDialog();
 
     static void GetObject(const String &title,
+                          ClassIdType acceptedClassId,
+                          ClassIdType acceptedClassIdEnd,
                           Object **resultObject,
                           bool *accepted);
 
@@ -59,6 +61,8 @@ private:
         const Array<Array<NavigatorItem *>> &tabNavItems,
         std::function<void(NavigatorItem *)> OnNavigatorItemSelected);
     static void CreateGetObjectSceneInto(Scene *scene,
+                                         ClassIdType acceptedClassIdBegin,
+                                         ClassIdType acceptedClassIdEnd,
                                          GameObject *baseGameObject);
     static void CreateGetAssetSceneInto(Scene *scene,
                                         const Array<String> &extensions);

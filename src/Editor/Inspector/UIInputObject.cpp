@@ -32,6 +32,26 @@ void UIInputObject::SetObject(Object *object)
     p_object = object;
 }
 
+void UIInputObject::SetAcceptedClassIdBegin(ClassIdType classId)
+{
+    m_acceptedClassIdBegin = classId;
+}
+
+void UIInputObject::SetAcceptedClassIdEnd(ClassIdType classIdEnd)
+{
+    m_acceptedClassIdEnd = classIdEnd;
+}
+
+ClassIdType UIInputObject::GetAcceptedClassIdBegin() const
+{
+    return m_acceptedClassIdBegin;
+}
+
+ClassIdType UIInputObject::GetAcceptedClassIdEnd() const
+{
+    return m_acceptedClassIdEnd;
+}
+
 Object *UIInputObject::GetObject() const
 {
     return p_object;
@@ -65,7 +85,11 @@ void UIInputObject::OnSearchButtonClicked()
 {
     Object *openObject = nullptr;
     bool accepted;
-    EditorDialog::GetObject("Get Object...", &openObject, &accepted);
+    EditorDialog::GetObject("Get Object...",
+                            GetAcceptedClassIdBegin(),
+                            GetAcceptedClassIdEnd(),
+                            &openObject,
+                            &accepted);
     if (accepted)
     {
         SetObject(openObject);

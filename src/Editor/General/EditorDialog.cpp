@@ -63,6 +63,8 @@ EditorDialog::~EditorDialog()
 }
 
 void EditorDialog::GetObject(const String &title,
+                             ClassIdType acceptedClassIdBegin,
+                             ClassIdType acceptedClassIdEnd,
                              Object **resultObject,
                              bool *accepted)
 {
@@ -75,7 +77,8 @@ void EditorDialog::GetObject(const String &title,
 
     Dialog::BeginDialogCreation(title, 500, 400, true, true);
     Scene *scene = GameObjectFactory::CreateScene(false);
-    EditorDialog::CreateGetObjectSceneInto(scene, openScene);
+    EditorDialog::CreateGetObjectSceneInto(
+        scene, acceptedClassIdBegin, acceptedClassIdEnd, openScene);
     Dialog::EndDialogCreation(scene);
 
     *resultObject = EditorDialog::s_objectResult;
@@ -264,7 +267,10 @@ void EditorDialog::CreateSearchSceneInto(
     buttonsGo->SetParent(scene);
 }
 
-void EditorDialog::CreateGetObjectSceneInto(Scene *scene, GameObject *baseGO)
+void EditorDialog::CreateGetObjectSceneInto(Scene *scene,
+                                            ClassIdType acceptedClassIdBegin,
+                                            ClassIdType acceptedClassIdEnd,
+                                            GameObject *baseGO)
 {
     Map<String, Array<NavigatorItem *>> tabsContent;
 
@@ -289,11 +295,16 @@ void EditorDialog::CreateGetObjectSceneInto(Scene *scene, GameObject *baseGO)
                     Array<Component *> comps = child->GetComponents();
                     objects.PushBack(comps);
                 }
+
                 for (Object *object : objects)
                 {
-                    ObjectItem *objectItem = new ObjectItem();
-                    objectItem->SetObject(object);
-                    navItems.PushBack(objectItem);
+                    if (IsSubClass(
+                            acceptedClassIdBegin, acceptedClassIdEnd, object))
+                    {
+                        ObjectItem *objectItem = new ObjectItem();
+                        objectItem->SetObject(object);
+                        navItems.PushBack(objectItem);
+                    }
                 }
             }
         }

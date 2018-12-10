@@ -191,6 +191,10 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                      Variant::Type::OBJECT_PTR)
             {
                 UIInputObject *inputObject = new UIInputObject();
+                inputObject->SetAcceptedClassIdBegin(
+                    reflVar.GetHints().GetObjectPtrClassIdBegin());
+                inputObject->SetAcceptedClassIdEnd(
+                    reflVar.GetHints().GetObjectPtrClassIdEnd());
                 widgetToAdd = inputObject;
             }
             else if (reflVar.GetVariant().GetType() == Variant::Type::PATH)

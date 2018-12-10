@@ -23,8 +23,12 @@ class UIInputObject : public UIInputFileOrObject
 public:
     UIInputObject();
 
+    void SetAcceptedClassIdBegin(ClassIdType classIdBegin);
+    void SetAcceptedClassIdEnd(ClassIdType classIdEnd);
     void SetObject(Object *object);
 
+    ClassIdType GetAcceptedClassIdBegin() const;
+    ClassIdType GetAcceptedClassIdEnd() const;
     Object *GetObject() const;
 
 protected:
@@ -38,6 +42,8 @@ protected:
     void OnOpenButtonClicked() override;
 
 private:
+    ClassIdType m_acceptedClassIdBegin = -1u;
+    ClassIdType m_acceptedClassIdEnd = -1u;
     Object *p_object = nullptr;
 };
 

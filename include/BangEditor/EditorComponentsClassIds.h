@@ -1,7 +1,7 @@
 #ifndef EDITORCOMPONENTSCLASSIDS_H
 #define EDITORCOMPONENTSCLASSIDS_H
 
-#include "Bang/ComponentClassIds.h"
+#include "Bang/ObjectClassIds.h"
 
 #include "BangEditor/BangEditor.h"
 
