@@ -75,7 +75,7 @@ void UIInputObject::SetObject(Object *object_)
 
 void UIInputObject::SetGUID(const GUID &guid)
 {
-    Scene *sceneToLookObjectIn = GetSceneToLookObjectIn();
+    Scene *sceneToLookObjectIn = SceneManager::GetObjectPtrLookupScene();
     Object *object = sceneToLookObjectIn
                          ? sceneToLookObjectIn->FindObjectInDescendants(guid)
                          : nullptr;
@@ -108,8 +108,7 @@ ClassIdType UIInputObject::GetAcceptedClassIdEnd() const
 
 Object *UIInputObject::GetObject() const
 {
-    Scene *openScene = GetSceneToLookObjectIn();
-    return m_objectPtr.GetObjectIn(openScene);
+    return m_objectPtr.GetObjectIn(SceneManager::GetObjectPtrLookupScene());
 }
 
 const ObjectPtr &UIInputObject::GetObjectPtr() const
@@ -184,21 +183,6 @@ void UIInputObject::OnOpenButtonClicked()
     {
         Hierarchy::GetInstance()->OnGameObjectSelected(objGo);
     }
-}
-
-Scene *UIInputObject::GetSceneToLookObjectIn() const
-{
-    Scene *sceneToLookObjectIn = nullptr;
-    if (Editor::IsEditingScene())
-    {
-        sceneToLookObjectIn = EditorSceneManager::GetOpenScene();
-    }
-    else
-    {
-        ScenePlayer *sp = ScenePlayer::GetInstance();
-        sceneToLookObjectIn = sp->GetPlayOpenScene();
-    }
-    return sceneToLookObjectIn;
 }
 
 GameObject *UIInputObject::GetGameObjectOf(Object *object) const

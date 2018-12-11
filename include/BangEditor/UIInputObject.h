@@ -46,7 +46,6 @@ protected:
     void OnSearchButtonClicked() override;
     void OnOpenButtonClicked() override;
 
-    Scene *GetSceneToLookObjectIn() const;
     GameObject *GetGameObjectOf(Object *object) const;
     Object *GetAcceptedObjectIn(GameObject *go) const;
     Object *GetObjectInDragDroppable(

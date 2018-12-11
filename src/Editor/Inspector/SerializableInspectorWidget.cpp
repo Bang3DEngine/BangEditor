@@ -199,11 +199,12 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                 inputObject
                     ->EventEmitter<IEventsValueChanged>::RegisterListener(
                         inspectorWidget);
-                String objClass = reflVar.GetTypeString().Replace("*", "");
+                String objClassStr =
+                    reflVar.GetHints().GetObjectPtrClass().Replace("*", "");
 
                 inputObject->SetPreviewIcon(
-                    EditorTextureFactory::GetComponentIcon(objClass),
-                    EditorTextureFactory::GetComponentIconTint(objClass));
+                    EditorTextureFactory::GetComponentIcon(objClassStr),
+                    EditorTextureFactory::GetComponentIconTint(objClassStr));
 
                 widgetToAdd = inputObject;
             }
