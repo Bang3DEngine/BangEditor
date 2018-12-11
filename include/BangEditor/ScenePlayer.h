@@ -39,6 +39,8 @@ public:
     static void SetPlayState(PlayState playState);
     static PlayState GetPlayState();
 
+    Scene *GetEditOpenScene() const;
+    Scene *GetPlayOpenScene() const;
     static ScenePlayer *GetInstance();
 
 private:

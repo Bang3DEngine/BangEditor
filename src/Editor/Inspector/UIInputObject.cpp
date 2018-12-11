@@ -12,10 +12,14 @@
 #include "Bang/UIInputText.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/UITextRenderer.h"
+#include "BangEditor/Editor.h"
 #include "BangEditor/EditorDialog.h"
+#include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorTextureFactory.h"
+#include "BangEditor/Hierarchy.h"
 #include "BangEditor/HierarchyItem.h"
+#include "BangEditor/ScenePlayer.h"
 
 using namespace Bang;
 using namespace BangEditor;
@@ -23,8 +27,7 @@ using namespace BangEditor;
 UIInputObject::UIInputObject()
 {
     SetName("UIInputObject");
-
-    GetOpenButton()->GetGameObject()->SetEnabled(false);
+    SetZoomable(false);
 }
 
 UIInputObject::~UIInputObject()
@@ -36,8 +39,16 @@ bool UIInputObject::CanDoZoom() const
     return (GetObject() != nullptr);
 }
 
-void UIInputObject::SetObject(Object *object)
+void UIInputObject::SetObject(Object *object_)
 {
+    Object *object = object_;
+    if (object_ &&
+        !IsSubClass(
+            GetAcceptedClassIdBegin(), GetAcceptedClassIdEnd(), object_))
+    {
+        object = GetAcceptedObjectIn(GetGameObjectOf(object_));
+    }
+
     if (object != GetObject())
     {
         m_objectPtr.SetObject(object);
@@ -64,21 +75,25 @@ void UIInputObject::SetObject(Object *object)
 
 void UIInputObject::SetGUID(const GUID &guid)
 {
-    if (Scene *openScene = EditorSceneManager::GetOpenScene())
+    Scene *sceneToLookObjectIn = GetSceneToLookObjectIn();
+    Object *object = sceneToLookObjectIn
+                         ? sceneToLookObjectIn->FindObjectInDescendants(guid)
+                         : nullptr;
+    SetObject(object);
+}
+
+void UIInputObject::SetAcceptedClassIdBeginAndEnd(ClassIdType classIdBegin,
+                                                  ClassIdType classIdEnd)
+{
+    if (classIdBegin != GetAcceptedClassIdBegin() ||
+        classIdEnd != GetAcceptedClassIdEnd())
     {
-        Object *object = openScene->FindObjectInDescendants(guid);
-        SetObject(object);
+        m_acceptedClassIdBegin = classIdBegin;
+        m_acceptedClassIdEnd = classIdEnd;
+
+        GameObject *currentGo = GetGameObjectOf(GetObject());
+        SetObject(GetAcceptedObjectIn(currentGo));
     }
-}
-
-void UIInputObject::SetAcceptedClassIdBegin(ClassIdType classIdBegin)
-{
-    m_acceptedClassIdBegin = classIdBegin;
-}
-
-void UIInputObject::SetAcceptedClassIdEnd(ClassIdType classIdEnd)
-{
-    m_acceptedClassIdEnd = classIdEnd;
 }
 
 ClassIdType UIInputObject::GetAcceptedClassIdBegin() const
@@ -93,7 +108,7 @@ ClassIdType UIInputObject::GetAcceptedClassIdEnd() const
 
 Object *UIInputObject::GetObject() const
 {
-    Scene *openScene = EditorSceneManager::GetOpenScene();
+    Scene *openScene = GetSceneToLookObjectIn();
     return m_objectPtr.GetObjectIn(openScene);
 }
 
@@ -107,27 +122,44 @@ GUID UIInputObject::GetGUID() const
     return GetObject() ? GetObject()->GetGUID() : GUID::Empty();
 }
 
-bool UIInputObject::AcceptsDrag(EventEmitter<IEventsDragDrop> *dd_) const
+Object *UIInputObject::GetAcceptedObjectIn(GameObject *go) const
 {
-    if (UIDragDroppable *dragDroppable = DCAST<UIDragDroppable *>(dd_))
+    Object *object = nullptr;
+    if (go)
     {
-        if (HierarchyItem *hierarchyItem =
-                DCAST<HierarchyItem *>(dragDroppable->GetGameObject()))
-        {
-            return true;
-        }
+        object = go->FindObjectInDescendants(GetAcceptedClassIdBegin(),
+                                             GetAcceptedClassIdEnd());
     }
-    return false;
+    return object;
 }
 
-void UIInputObject::OnDropped(EventEmitter<IEventsDragDrop> *dd_)
+Object *UIInputObject::GetObjectInDragDroppable(
+    EventEmitter<IEventsDragDrop> *dd) const
 {
-    if (UIDragDroppable *dragDroppable = DCAST<UIDragDroppable *>(dd_))
+    if (UIDragDroppable *dragDroppable = DCAST<UIDragDroppable *>(dd))
     {
         if (HierarchyItem *hierarchyItem =
-                DCAST<HierarchyItem *>(dragDroppable->GetGameObject()))
+                dragDroppable->GetGameObject()
+                    ->FindObjectInDescendants<HierarchyItem>())
         {
+            GameObject *itemGo = hierarchyItem->GetReferencedGameObject();
+            Object *object = GetAcceptedObjectIn(itemGo);
+            return object;
         }
+    }
+    return nullptr;
+}
+
+bool UIInputObject::AcceptsDrag(EventEmitter<IEventsDragDrop> *dd) const
+{
+    return (GetObjectInDragDroppable(dd) != nullptr);
+}
+
+void UIInputObject::OnDropped(EventEmitter<IEventsDragDrop> *dd)
+{
+    if (Object *draggedObject = GetObjectInDragDroppable(dd))
+    {
+        SetObject(draggedObject);
     }
 }
 
@@ -148,5 +180,40 @@ void UIInputObject::OnSearchButtonClicked()
 
 void UIInputObject::OnOpenButtonClicked()
 {
-    // Empty
+    if (GameObject *objGo = GetGameObjectOf(GetObject()))
+    {
+        Hierarchy::GetInstance()->OnGameObjectSelected(objGo);
+    }
+}
+
+Scene *UIInputObject::GetSceneToLookObjectIn() const
+{
+    Scene *sceneToLookObjectIn = nullptr;
+    if (Editor::IsEditingScene())
+    {
+        sceneToLookObjectIn = EditorSceneManager::GetOpenScene();
+    }
+    else
+    {
+        ScenePlayer *sp = ScenePlayer::GetInstance();
+        sceneToLookObjectIn = sp->GetPlayOpenScene();
+    }
+    return sceneToLookObjectIn;
+}
+
+GameObject *UIInputObject::GetGameObjectOf(Object *object) const
+{
+    GameObject *currentGo = nullptr;
+    if (object)
+    {
+        currentGo = DCAST<GameObject *>(object);
+        if (!currentGo)
+        {
+            if (Component *comp = DCAST<Component *>(object))
+            {
+                currentGo = comp->GetGameObject();
+            }
+        }
+    }
+    return currentGo;
 }

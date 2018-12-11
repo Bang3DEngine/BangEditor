@@ -42,6 +42,7 @@ protected:
 
     Scene *GetOpenScene_() const;
     EditorScene *GetEditorScene_() const;
+    Scene *GetObjectPtrLookupScene_() const override;
 
     static void SetActiveScene(Scene *activeScene);
 

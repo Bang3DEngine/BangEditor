@@ -7,6 +7,7 @@
 #include "Bang/Scene.h"
 #include "BangEditor/EditorBehaviourManager.h"
 #include "BangEditor/EditorScene.h"
+#include "BangEditor/ScenePlayer.h"
 
 namespace Bang
 {
@@ -61,6 +62,18 @@ Scene *EditorSceneManager::GetOpenScene_() const
 EditorScene *EditorSceneManager::GetEditorScene_() const
 {
     return p_editorScene;
+}
+
+Scene *EditorSceneManager::GetObjectPtrLookupScene_() const
+{
+    if (Editor::IsEditingScene())
+    {
+        return GetOpenScene();
+    }
+    else
+    {
+        return ScenePlayer::GetInstance()->GetPlayOpenScene();
+    }
 }
 
 void EditorSceneManager::SetActiveScene(Scene *activeScene)

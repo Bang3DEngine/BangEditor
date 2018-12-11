@@ -193,9 +193,8 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                      Variant::Type::OBJECT_PTR)
             {
                 UIInputObject *inputObject = new UIInputObject();
-                inputObject->SetAcceptedClassIdBegin(
-                    reflVar.GetHints().GetObjectPtrClassIdBegin());
-                inputObject->SetAcceptedClassIdEnd(
+                inputObject->SetAcceptedClassIdBeginAndEnd(
+                    reflVar.GetHints().GetObjectPtrClassIdBegin(),
                     reflVar.GetHints().GetObjectPtrClassIdEnd());
                 inputObject
                     ->EventEmitter<IEventsValueChanged>::RegisterListener(

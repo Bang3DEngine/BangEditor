@@ -241,8 +241,13 @@ void HierarchyItem::OnSelectionCallback(UIList::Action action)
             UICanvas::GetActive(this)->SetFocus(GetTreeItemFocusable());
             break;
 
+        case UIList::Action::PRESSED:
+            selectGameObject = false;
+            UICanvas::GetActive(this)->SetFocus(GetTreeItemFocusable());
+            break;
+
         case UIList::Action::MOUSE_RIGHT_DOWN:
-            selectGameObject = true;
+            selectGameObject = false;
             p_contextMenu->ShowMenu();
             break;
 
@@ -271,6 +276,8 @@ UIEventResult HierarchyItem::OnUIEvent(UIFocusable *, const UIEvent &event)
 {
     switch (event.type)
     {
+        case UIEvent::Type::MOUSE_CLICK_FULL: break;
+
         case UIEvent::Type::KEY_DOWN:
             if (event.key.modifiers.IsOn(KeyModifier::LCTRL))
             {

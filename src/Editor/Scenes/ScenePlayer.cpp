@@ -95,6 +95,16 @@ PlayState ScenePlayer::GetPlayState()
     return sp ? sp->m_currentPlayState : Undef<PlayState>();
 }
 
+Scene *ScenePlayer::GetEditOpenScene() const
+{
+    return p_editOpenScene;
+}
+
+Scene *ScenePlayer::GetPlayOpenScene() const
+{
+    return p_playOpenScene;
+}
+
 void ScenePlayer::PlayScene()
 {
     if (ScenePlayer::GetPlayState() != PlayState::PLAYING)

@@ -24,8 +24,8 @@ class UIInputObject : public UIInputFileOrObject
 public:
     UIInputObject();
 
-    void SetAcceptedClassIdBegin(ClassIdType classIdBegin);
-    void SetAcceptedClassIdEnd(ClassIdType classIdEnd);
+    void SetAcceptedClassIdBeginAndEnd(ClassIdType classIdBegin,
+                                       ClassIdType classIdEnd);
     void SetObject(Object *object);
     void SetGUID(const GUID &guid);
 
@@ -45,6 +45,12 @@ protected:
     void OnDropped(EventEmitter<IEventsDragDrop> *dragDroppable) override;
     void OnSearchButtonClicked() override;
     void OnOpenButtonClicked() override;
+
+    Scene *GetSceneToLookObjectIn() const;
+    GameObject *GetGameObjectOf(Object *object) const;
+    Object *GetAcceptedObjectIn(GameObject *go) const;
+    Object *GetObjectInDragDroppable(
+        EventEmitter<IEventsDragDrop> *dragDroppable) const;
 
 private:
     ClassIdType m_acceptedClassIdBegin = -1u;
