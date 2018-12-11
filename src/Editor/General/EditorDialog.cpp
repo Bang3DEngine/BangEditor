@@ -262,6 +262,7 @@ void EditorDialog::CreateGetObjectSceneInto(Scene *scene,
 
                 Array<GameObject *> children =
                     baseGameObject->GetChildrenRecursively();
+                objects.PushBack(children);
 
                 for (GameObject *child : children)
                 {
