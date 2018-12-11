@@ -45,7 +45,7 @@ def qdump__Bang__Vector2G(d, v):
     xStr = "{:.2f}".format( float( str( v["x"].value() ) ) )
     yStr = "{:.2f}".format( float( str( v["y"].value() ) ) )
 
-    vStr = "Vec3 (" + xStr + ", " + yStr + ")"
+    vStr = "Vec2 (" + xStr + ", " + yStr + ")"
     d.putValue(vStr)
 
     d.putNumChild(2)

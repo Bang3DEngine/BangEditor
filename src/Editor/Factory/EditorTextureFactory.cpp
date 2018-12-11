@@ -365,6 +365,10 @@ Color EditorTextureFactory::GetComponentIconTint(const String &componentName)
     {
         return Color::White().WithValue(0.2f);
     }
+    else if (componentName == "RectTransform")
+    {
+        return Color::White().WithValue(0.2f);
+    }
     else if (componentName == "SkinnedMeshRenderer")
     {
         return Color::White().WithValue(0.2f);

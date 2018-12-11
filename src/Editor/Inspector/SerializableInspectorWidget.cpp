@@ -87,11 +87,11 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
 
             GameObject *widgetToAdd = nullptr;
             String widgetName = reflVar.GetName();
-
-            if (reflVar.GetVariant().GetType() == Variant::Type::FLOAT ||
-                reflVar.GetVariant().GetType() == Variant::Type::DOUBLE ||
-                reflVar.GetVariant().GetType() == Variant::Type::INT ||
-                reflVar.GetVariant().GetType() == Variant::Type::UINT)
+            Variant::Type variantType = reflVar.GetVariant().GetType();
+            if (variantType == Variant::Type::FLOAT ||
+                variantType == Variant::Type::DOUBLE ||
+                variantType == Variant::Type::INT ||
+                variantType == Variant::Type::UINT)
             {
                 if (reflVar.GetHints().GetIsEnum())
                 {
@@ -149,14 +149,14 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
 
                     inputNumber->SetStep(reflVar.GetHints().GetStepValue());
 
-                    if (reflVar.GetVariant().GetType() == Variant::Type::INT ||
-                        reflVar.GetVariant().GetType() == Variant::Type::UINT)
+                    if (variantType == Variant::Type::INT ||
+                        variantType == Variant::Type::UINT)
                     {
                         inputNumber->SetDecimalPlaces(0);
                     }
                 }
             }
-            else if (reflVar.GetVariant().GetType() == Variant::Type::BOOL)
+            else if (variantType == Variant::Type::BOOL)
             {
                 if (reflVar.GetHints().GetIsButton())
                 {
@@ -178,7 +178,7 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                     widgetToAdd = checkBox->GetGameObject();
                 }
             }
-            else if (reflVar.GetVariant().GetType() == Variant::Type::GUID)
+            else if (variantType == Variant::Type::GUID)
             {
                 UIInputFile *inputFile = new UIInputFile();
                 inputFile->SetShowPreview(true);
@@ -189,8 +189,7 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                     inspectorWidget);
                 widgetToAdd = inputFile;
             }
-            else if (reflVar.GetVariant().GetType() ==
-                     Variant::Type::OBJECT_PTR)
+            else if (variantType == Variant::Type::OBJECT_PTR)
             {
                 UIInputObject *inputObject = new UIInputObject();
                 inputObject->SetAcceptedClassIdBeginAndEnd(
@@ -208,7 +207,7 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
 
                 widgetToAdd = inputObject;
             }
-            else if (reflVar.GetVariant().GetType() == Variant::Type::PATH)
+            else if (variantType == Variant::Type::PATH)
             {
                 UIInputFile *inputFile = new UIInputFile();
                 inputFile->SetShowPreview(false);
@@ -218,7 +217,7 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                     inspectorWidget);
                 widgetToAdd = inputFile;
             }
-            else if (reflVar.GetVariant().GetType() == Variant::Type::STRING)
+            else if (variantType == Variant::Type::STRING)
             {
                 UIInputText *inputText = GameObjectFactory::CreateUIInputText();
                 inputText->GetText()->SetContent(
@@ -227,33 +226,46 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                     inspectorWidget);
                 widgetToAdd = inputText->GetGameObject();
             }
-            else if (reflVar.GetVariant().GetType() == Variant::Type::VECTOR2 ||
-                     reflVar.GetVariant().GetType() == Variant::Type::VECTOR3 ||
-                     reflVar.GetVariant().GetType() == Variant::Type::VECTOR4 ||
-                     reflVar.GetVariant().GetType() ==
-                         Variant::Type::QUATERNION)
+            else if (variantType == Variant::Type::VECTOR2 ||
+                     variantType == Variant::Type::VECTOR3 ||
+                     variantType == Variant::Type::VECTOR4 ||
+                     variantType == Variant::Type::VECTOR2i ||
+                     variantType == Variant::Type::VECTOR3i ||
+                     variantType == Variant::Type::VECTOR4i ||
+                     variantType == Variant::Type::QUATERNION)
             {
+                const bool isInt = (variantType == Variant::Type::VECTOR2i ||
+                                    variantType == Variant::Type::VECTOR3i ||
+                                    variantType == Variant::Type::VECTOR4i);
                 int numComps = 4;
-                if (reflVar.GetVariant().GetType() == Variant::Type::VECTOR2)
+                if (variantType == Variant::Type::VECTOR2 ||
+                    variantType == Variant::Type::VECTOR2i)
                 {
                     numComps = 2;
                 }
-                else if (reflVar.GetVariant().GetType() ==
-                         Variant::Type::VECTOR3)
+                else if (variantType == Variant::Type::VECTOR3 ||
+                         variantType == Variant::Type::VECTOR3i)
                 {
                     numComps = 3;
                 }
+
                 UIInputVector *inputVec = new UIInputVector();
                 inputVec->SetSize(numComps);
-                inputVec->Set(reflVar.GetInitValue().GetVector4());
+                inputVec->Set(
+                    isInt ? Vector4(reflVar.GetInitValue().GetVector4i())
+                          : reflVar.GetInitValue().GetVector4());
                 inputVec->SetStep(Vector4(reflVar.GetHints().GetStepValue()));
                 inputVec->SetMinValue(reflVar.GetHints().GetMinValue());
                 inputVec->SetMaxValue(reflVar.GetHints().GetMaxValue());
+                for (UIInputNumber *inputNum : inputVec->GetInputNumbers())
+                {
+                    inputNum->SetDecimalPlaces(isInt ? 0 : 3);
+                }
                 inputVec->EventEmitter<IEventsValueChanged>::RegisterListener(
                     inspectorWidget);
                 widgetToAdd = inputVec;
             }
-            else if (reflVar.GetVariant().GetType() == Variant::Type::COLOR)
+            else if (variantType == Variant::Type::COLOR)
             {
                 UIInputColor *inputColor = new UIInputColor();
                 inputColor->SetColor(reflVar.GetInitValue().GetColor());
@@ -284,8 +296,8 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                 inspectorWidget->AddWidget(widget);
             }
 
-            UILabel *label = inspectorWidget->GetWidgetToLabel().Get(widget);
-            if (label)
+            if (UILabel *label =
+                    inspectorWidget->GetWidgetToLabel().Get(widget))
             {
                 label->GetText()->CalculateLayout(Axis::HORIZONTAL);
                 int labelWidth = label->GetText()->GetPreferredSize().x + 10;
@@ -377,9 +389,7 @@ String GetStringValueFromWidget(GameObject *widget)
         switch (inputVec->GetSize())
         {
             case 2: value = String::ToString(inputVec->GetVector2()); break;
-
             case 3: value = String::ToString(inputVec->GetVector3()); break;
-
             default: value = String::ToString(inputVec->GetVector4()); break;
         }
     }
