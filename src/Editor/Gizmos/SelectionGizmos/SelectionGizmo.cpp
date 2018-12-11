@@ -34,9 +34,8 @@ void SelectionGizmo::Update()
     GameObject *overedGameObject = Selection::GetOveredGameObject();
     if (overedGameObject)
     {
-        isMouseOver =
-            (overedGameObject == GetSelectionGameObject()) ||
-            (overedGameObject->IsChildOf(GetSelectionGameObject(), true));
+        isMouseOver = (overedGameObject == this ||
+                       overedGameObject->IsChildOf(this, true));
     }
 
     bool prevGrab = IsBeingGrabbed();
