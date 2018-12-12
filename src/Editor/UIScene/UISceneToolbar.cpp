@@ -200,9 +200,11 @@ bool UISceneToolbar::IsShowDebugStatsChecked() const
 void UISceneToolbar::DisableTransformAndCameraControls()
 {
     p_transformModeCamSeparator->SetVisible(false);
+    p_transformWorldLocalSeparator->SetVisible(false);
     p_translateButton->GetGameObject()->SetVisible(false);
     p_rotateButton->GetGameObject()->SetVisible(false);
     p_scaleButton->GetGameObject()->SetVisible(false);
+    p_globalLocalButton->GetGameObject()->SetVisible(false);
     p_rectTransformButton->GetGameObject()->SetVisible(false);
     p_resetCamViewButton->GetGameObject()->SetVisible(false);
 }

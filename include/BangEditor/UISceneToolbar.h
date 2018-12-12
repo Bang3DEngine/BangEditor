@@ -58,7 +58,6 @@ private:
     UIToolButton *p_rectTransformButton = nullptr;
     UIToolButton *p_globalLocalButton = nullptr;
     GameObject *p_transformWorldLocalSeparator = nullptr;
-    GameObject *p_transformWorldLocalSpacer = nullptr;
     GameObject *p_transformModeCamSeparator = nullptr;
     GameObject *p_transformModeCamSpacer = nullptr;
     UIToolButton *p_resetCamViewButton = nullptr;
