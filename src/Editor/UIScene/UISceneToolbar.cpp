@@ -242,6 +242,10 @@ void UISceneToolbar::UpdateToolButtons()
         p_stopButton->SetBlocked(playState == PlayState::EDITING);
     }
 
+    p_globalLocalButton->SetBlocked(
+        !(GetTransformGizmoMode() == TransformGizmoMode::TRANSLATE ||
+          GetTransformGizmoMode() == TransformGizmoMode::ROTATE));
+
     // Transform coord space button
     {
         if (Input::GetKeyDown(Key::G) &&

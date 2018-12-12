@@ -79,6 +79,7 @@ void TransformGizmo::Update()
     TransformGizmoMode transformGizmoMode = toolbar->GetTransformGizmoMode();
     bool local = (toolbar->GetTransformGizmoCoordSpace() ==
                   TransformGizmoCoordSpace::LOCAL);
+    bool localRot = local || (transformGizmoMode == TransformGizmoMode::SCALE);
     switch (transformGizmoMode)
     {
         case TransformGizmoMode::RECT:
@@ -90,10 +91,10 @@ void TransformGizmo::Update()
         default:
             GetTransform()->SetLocalPosition(
                 refGo->GetTransform()->GetPosition());
-            GetTransform()->SetLocalScale(GetScaleFactor());
             GetTransform()->SetLocalRotation(
-                local ? refGo->GetTransform()->GetRotation()
-                      : Quaternion::Identity());
+                localRot ? refGo->GetTransform()->GetRotation()
+                         : Quaternion::Identity());
+            GetTransform()->SetLocalScale(GetScaleFactor());
     }
 
     GameObject *gizmoToEnable = nullptr;

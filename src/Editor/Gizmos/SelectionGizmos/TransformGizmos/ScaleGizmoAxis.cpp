@@ -19,6 +19,7 @@
 #include "Bang/ResourceHandle.h"
 #include "Bang/Transform.h"
 #include "Bang/Vector3.h"
+#include "BangEditor/EditorCamera.h"
 #include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/Selection.h"
 
@@ -88,9 +89,7 @@ void ScaleGizmoAxis::Update()
         return;
     }
 
-    const Vector3 axis =
-        IsLocal() ? GetAxisVectorWorld() : GetAxisVectorLocal();
-
+    const Vector3 axis = GetAxisVectorWorld();
     if (IsBeingGrabbed())
     {
         Camera *cam = GetEditorCamera();
@@ -136,37 +135,39 @@ void ScaleGizmoAxis::Update()
         {
             if (intersected)
             {
-                Vector3 centerToMousePointV = (intersection - refGoCenter);
                 Vector3 centerToMousePointProjV =
-                    centerToMousePointV.ProjectedOnVector(axis);
-
-                Vector3 centerToMousePointProjLocalV = centerToMousePointProjV;
-                if (IsLocal())
-                {
-                    centerToMousePointProjLocalV =
-                        refGoT->FromWorldToLocalDirection(
-                            centerToMousePointProjV);
-                }
+                    (intersection - refGoCenter).ProjectedOnVector(axis);
 
                 if (GrabHasJustChanged())
                 {
-                    m_startGrabCenterToMousePointProjLocalV =
-                        centerToMousePointProjLocalV;
+                    m_startArrowCapProjPos = (p_arrowCap->GetTransform()
+                                                  ->GetPosition()
+                                                  .ProjectedOnVector(axis));
+                    m_startGrabOffsetFromArrowCapPos =
+                        (m_startArrowCapProjPos -
+                         refGoCenter.ProjectedOnVector(axis)) -
+                        centerToMousePointProjV;
                 }
 
-                Vector3 displacementLocalV =
-                    centerToMousePointProjLocalV -
-                    m_startGrabCenterToMousePointProjLocalV;
-                displacementLocalV *= Vector3(1, 1, -1);
-                Vector3 scaleAdd = Vector3::Abs(GetAxisVectorLocal()) *
-                                   displacementLocalV * 0.5f;
-                if (!IsLocal())
-                {
-                    scaleAdd = refGoT->FromWorldToLocalDirection(scaleAdd);
-                    scaleAdd.z *= -1;
-                }
+                centerToMousePointProjV += m_startGrabOffsetFromArrowCapPos;
 
-                Vector3 newScale = m_startGrabLocalScale + scaleAdd;
+                Vector3 centerToMousePointProjLocalV =
+                    refGoT->FromWorldToLocalDirection(centerToMousePointProjV);
+
+                float startAxisProjLength =
+                    (m_startArrowCapProjPos -
+                     refGoCenter.ProjectedOnVector(axis))
+                        .Length();
+
+                Vector3 normCenterToMousePointProjLocalV =
+                    (centerToMousePointProjLocalV / startAxisProjLength);
+                normCenterToMousePointProjLocalV.z *= -1.0f;
+                Vector3 scaleDelta = Vector3::Abs(GetAxisVectorLocal()) *
+                                     normCenterToMousePointProjLocalV;
+                scaleDelta +=
+                    Vector3(1) - GetAxisVectorLocal() * Vector3(1, 1, -1);
+
+                Vector3 newScale = m_startGrabLocalScale * scaleDelta;
                 refGoT->SetLocalScale(newScale);
 
                 // Update gizmo length
@@ -181,7 +182,18 @@ void ScaleGizmoAxis::Update()
         else  // XYZ
         {
             Vector3 diff = (intersection - refGoCenter);
-            float scaling = (diff.x + diff.y);
+
+            EditorCamera *edCam = EditorCamera::GetInstance();
+            Vector3 diffProj =
+                edCam->GetCamera()->FromWorldPointToViewportPointNDC(diff);
+
+            if (GrabHasJustChanged())
+            {
+                m_startGrabOffsetFromArrowCapPos = diffProj;
+            }
+            diffProj -= m_startGrabOffsetFromArrowCapPos;
+
+            float scaling = (diffProj.x + diffProj.y);
             scaling += 1.0f;
 
             refGoT->SetLocalScale(m_startGrabLocalScale * scaling);

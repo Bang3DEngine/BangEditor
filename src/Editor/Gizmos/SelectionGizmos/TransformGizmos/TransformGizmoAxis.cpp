@@ -66,6 +66,7 @@ void TransformGizmoAxis::SetAxis(Axis3DExt axis)
         SetColor(SelectionState::IDLE);
     }
 }
+
 Axis3DExt TransformGizmoAxis::GetAxis() const
 {
     return m_axis;
