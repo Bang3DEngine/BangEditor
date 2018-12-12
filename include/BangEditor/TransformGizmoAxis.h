@@ -24,6 +24,7 @@ public:
     // GameObject
     void Update() override;
 
+    bool IsLocal() const;
     virtual void SetAxis(Axis3DExt axis);
     virtual void SetColor(const Color &color) = 0;
 

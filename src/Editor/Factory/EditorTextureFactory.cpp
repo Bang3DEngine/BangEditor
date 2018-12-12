@@ -100,6 +100,11 @@ Texture2D *EditorTextureFactory::GetStarsIcon()
     return EditorTextureFactory::GetTexture2D("Stars.png");
 }
 
+Texture2D *EditorTextureFactory::GetWorldIcon()
+{
+    return EditorTextureFactory::GetTexture2D("World.png");
+}
+
 Texture2D *EditorTextureFactory::GetCameraIcon()
 {
     return EditorTextureFactory::GetTexture2D("Camera.png");

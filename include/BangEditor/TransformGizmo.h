@@ -23,6 +23,12 @@ class RotateGizmo;
 class ScaleGizmo;
 class TranslateGizmo;
 
+enum class TransformGizmoCoordSpace
+{
+    LOCAL,
+    GLOBAL
+};
+
 enum class TransformGizmoMode
 {
     NONE,

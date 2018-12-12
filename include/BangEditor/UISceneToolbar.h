@@ -43,6 +43,7 @@ public:
     void SetTransformGizmoMode(TransformGizmoMode transformMode);
 
     TransformGizmoMode GetTransformGizmoMode() const;
+    TransformGizmoCoordSpace GetTransformGizmoCoordSpace() const;
 
     bool IsShowDebugStatsChecked() const;
     void DisableTransformAndCameraControls();
@@ -55,8 +56,11 @@ private:
     UIToolButton *p_rotateButton = nullptr;
     UIToolButton *p_scaleButton = nullptr;
     UIToolButton *p_rectTransformButton = nullptr;
-    GameObject *p_transformCamSeparator = nullptr;
-    GameObject *p_transformCamSpacer = nullptr;
+    UIToolButton *p_globalLocalButton = nullptr;
+    GameObject *p_transformWorldLocalSeparator = nullptr;
+    GameObject *p_transformWorldLocalSpacer = nullptr;
+    GameObject *p_transformModeCamSeparator = nullptr;
+    GameObject *p_transformModeCamSpacer = nullptr;
     UIToolButton *p_resetCamViewButton = nullptr;
 
     UIToolButton *p_playButton = nullptr;

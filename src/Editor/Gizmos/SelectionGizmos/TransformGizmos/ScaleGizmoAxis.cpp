@@ -77,6 +77,7 @@ void ScaleGizmoAxis::SetReferencedGameObject(GameObject *referencedGameObject)
     UpdatePoints(1.0f);
 }
 
+#include "Bang/Debug.h"
 void ScaleGizmoAxis::Update()
 {
     TransformGizmoAxis::Update();
@@ -86,6 +87,9 @@ void ScaleGizmoAxis::Update()
     {
         return;
     }
+
+    const Vector3 axis =
+        IsLocal() ? GetAxisVectorWorld() : GetAxisVectorLocal();
 
     if (IsBeingGrabbed())
     {
@@ -106,10 +110,9 @@ void ScaleGizmoAxis::Update()
         {
             // Find the plane parallel to the axes, and which faces the
             // camera the most.
-            plane.SetNormal(Vector3::Cross(GetAxisVectorWorld(),
-                                           Vector3::Cross(camT->GetForward(),
-                                                          GetAxisVectorWorld()))
-                                .Normalized());
+            plane.SetNormal(
+                Vector3::Cross(axis, Vector3::Cross(camT->GetForward(), axis))
+                    .Normalized());
         }
         else
         {
@@ -135,10 +138,15 @@ void ScaleGizmoAxis::Update()
             {
                 Vector3 centerToMousePointV = (intersection - refGoCenter);
                 Vector3 centerToMousePointProjV =
-                    centerToMousePointV.ProjectedOnVector(GetAxisVectorWorld());
+                    centerToMousePointV.ProjectedOnVector(axis);
 
-                Vector3 centerToMousePointProjLocalV =
-                    refGoT->FromWorldToLocalDirection(centerToMousePointProjV);
+                Vector3 centerToMousePointProjLocalV = centerToMousePointProjV;
+                if (IsLocal())
+                {
+                    centerToMousePointProjLocalV =
+                        refGoT->FromWorldToLocalDirection(
+                            centerToMousePointProjV);
+                }
 
                 if (GrabHasJustChanged())
                 {
@@ -150,11 +158,15 @@ void ScaleGizmoAxis::Update()
                     centerToMousePointProjLocalV -
                     m_startGrabCenterToMousePointProjLocalV;
                 displacementLocalV *= Vector3(1, 1, -1);
-                Vector3 scaleFactor = Vector3::Abs(GetAxisVectorLocal()) *
-                                      displacementLocalV * 0.5f;
-                scaleFactor += 1.0f;
+                Vector3 scaleAdd = Vector3::Abs(GetAxisVectorLocal()) *
+                                   displacementLocalV * 0.5f;
+                if (!IsLocal())
+                {
+                    scaleAdd = refGoT->FromWorldToLocalDirection(scaleAdd);
+                    scaleAdd.z *= -1;
+                }
 
-                Vector3 newScale = m_startGrabLocalScale * scaleFactor;
+                Vector3 newScale = m_startGrabLocalScale + scaleAdd;
                 refGoT->SetLocalScale(newScale);
 
                 // Update gizmo length

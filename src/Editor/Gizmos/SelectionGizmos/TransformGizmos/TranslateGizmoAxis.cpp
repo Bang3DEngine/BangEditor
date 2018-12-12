@@ -88,6 +88,8 @@ void TranslateGizmoAxis::Update()
 
     if (IsBeingGrabbed())
     {
+        Vector3 axis = IsLocal() ? GetAxisVectorWorld() : GetAxisVectorLocal();
+
         // Move along axis.
         // First. Find the plane parallel to the axes, and which faces the
         // camera the most.
@@ -97,10 +99,9 @@ void TranslateGizmoAxis::Update()
             GetReferencedGameObject()->GetTransform()->GetPosition();
 
         Plane plane;
-        plane.SetNormal(Vector3::Cross(GetAxisVectorWorld(),
-                                       Vector3::Cross(camT->GetForward(),
-                                                      GetAxisVectorWorld()))
-                            .Normalized());
+        plane.SetNormal(
+            Vector3::Cross(axis, Vector3::Cross(camT->GetForward(), axis))
+                .Normalized());
         plane.SetPoint(refGoCenter);
 
         // Then cast a ray through the mouse position, and see where it
@@ -121,7 +122,7 @@ void TranslateGizmoAxis::Update()
             Transform *refGoT = refGo->GetTransform();
 
             Vector3 mousePoint = (intersection - refGoCenter);
-            mousePoint = mousePoint.ProjectedOnVector(GetAxisVectorWorld());
+            mousePoint = mousePoint.ProjectedOnVector(axis);
 
             if (GrabHasJustChanged())
             {

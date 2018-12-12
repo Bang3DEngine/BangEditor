@@ -93,17 +93,24 @@ UISceneToolbar::UISceneToolbar()
         SetTransformGizmoMode(TransformGizmoMode::RECT);
     });
 
-    p_transformCamSeparator =
+    p_transformWorldLocalSeparator =
         GameObjectFactory::CreateUIVSeparator(LayoutSizeType::PREFERRED, 10);
-    p_transformCamSeparator->SetParent(this);
+    p_transformWorldLocalSeparator->SetParent(this);
+
+    AddToolbarButton(
+        &p_globalLocalButton, EditorTextureFactory::GetWorldIcon(), []() {});
+
+    p_transformModeCamSeparator =
+        GameObjectFactory::CreateUIVSeparator(LayoutSizeType::PREFERRED, 10);
+    p_transformModeCamSeparator->SetParent(this);
 
     AddToolbarButton(&p_resetCamViewButton, eyeIcon, [&]() {
         p_resetCamViewButton->SetOn(false);
         ResetCameraView();
     });
 
-    p_transformCamSpacer = GameObjectFactory::CreateUIHSpacer();
-    p_transformCamSpacer->SetParent(this);
+    p_transformModeCamSpacer = GameObjectFactory::CreateUIHSpacer();
+    p_transformModeCamSpacer->SetParent(this);
 
     AddToolbarButton(
         &p_playButton, rightArrowIcon, [&]() { ScenePlayer::PlayScene(); });
@@ -179,6 +186,12 @@ TransformGizmoMode UISceneToolbar::GetTransformGizmoMode() const
     return m_transformGizmoMode;
 }
 
+TransformGizmoCoordSpace UISceneToolbar::GetTransformGizmoCoordSpace() const
+{
+    return p_globalLocalButton->GetOn() ? TransformGizmoCoordSpace::GLOBAL
+                                        : TransformGizmoCoordSpace::LOCAL;
+}
+
 bool UISceneToolbar::IsShowDebugStatsChecked() const
 {
     return p_showDebugStatsCheckbox->IsChecked();
@@ -186,7 +199,7 @@ bool UISceneToolbar::IsShowDebugStatsChecked() const
 
 void UISceneToolbar::DisableTransformAndCameraControls()
 {
-    p_transformCamSeparator->SetVisible(false);
+    p_transformModeCamSeparator->SetVisible(false);
     p_translateButton->GetGameObject()->SetVisible(false);
     p_rotateButton->GetGameObject()->SetVisible(false);
     p_scaleButton->GetGameObject()->SetVisible(false);
@@ -227,6 +240,15 @@ void UISceneToolbar::UpdateToolButtons()
         p_pauseButton->SetBlocked(playState == PlayState::EDITING ||
                                   playState == PlayState::PAUSED);
         p_stopButton->SetBlocked(playState == PlayState::EDITING);
+    }
+
+    // Transform coord space button
+    {
+        if (Input::GetKeyDown(Key::G) &&
+            !Input::GetMouseButton(MouseButton::LEFT))
+        {
+            p_globalLocalButton->SetOn(!p_globalLocalButton->GetOn());
+        }
     }
 
     // Transform mode buttons

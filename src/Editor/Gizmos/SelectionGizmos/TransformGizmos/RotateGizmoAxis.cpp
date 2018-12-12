@@ -133,12 +133,15 @@ void RotateGizmoAxis::Update()
         rotationSphere.SetCenter(refGoT->GetPosition());
         rotationSphere.SetRadius(tg->GetScaleFactor() * 1.0f);
 
+        const Vector3 axis =
+            IsLocal() ? GetAxisVectorWorld() : GetAxisVectorLocal();
+
         if (GrabHasJustChanged())
         {
             m_startingGrabMousePosNDC = Input::GetMousePositionNDC();
             m_startingGrabAxisedSpherePoint =
                 GetAxisedSpherePointFromMousePosNDC(
-                    cam, mousePos, GetAxisVectorWorld(), rotationSphere);
+                    cam, mousePos, axis, rotationSphere);
         }
         else
         {
@@ -149,10 +152,8 @@ void RotateGizmoAxis::Update()
             Vector2 displacedMousePositionNDC =
                 m_startingGrabMousePosNDC + mouseAxis;
             Vector3 displacedMouseAxisedSpherePoint =
-                GetAxisedSpherePointFromMousePosNDC(cam,
-                                                    displacedMousePositionNDC,
-                                                    GetAxisVectorWorld(),
-                                                    rotationSphere);
+                GetAxisedSpherePointFromMousePosNDC(
+                    cam, displacedMousePositionNDC, axis, rotationSphere);
 
             // Now that we have the two points (starting and new displaced), get
             // the 2 vectors from the center outwards, and just apply the
@@ -197,7 +198,14 @@ void RotateGizmoAxis::Update()
 
                 // Finally, apply the rotation
                 deltaLocalRot = GetQuaternionAxised(deltaLocalRot, GetAxis());
-                refGoT->RotateLocal(deltaLocalRot);
+                if (IsLocal())
+                {
+                    refGoT->RotateLocal(deltaLocalRot);
+                }
+                else
+                {
+                    refGoT->Rotate(deltaLocalRot);
+                }
             }
         }
     }

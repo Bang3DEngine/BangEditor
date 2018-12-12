@@ -77,7 +77,8 @@ void TransformGizmo::Update()
 
     UISceneToolbar *toolbar = UISceneToolbar::GetActive();
     TransformGizmoMode transformGizmoMode = toolbar->GetTransformGizmoMode();
-
+    bool local = (toolbar->GetTransformGizmoCoordSpace() ==
+                  TransformGizmoCoordSpace::LOCAL);
     switch (transformGizmoMode)
     {
         case TransformGizmoMode::RECT:
@@ -87,9 +88,12 @@ void TransformGizmo::Update()
             break;
 
         default:
-            GetTransform()->SetPosition(refGo->GetTransform()->GetPosition());
-            GetTransform()->SetRotation(refGo->GetTransform()->GetRotation());
-            GetTransform()->SetScale(GetScaleFactor());
+            GetTransform()->SetLocalPosition(
+                refGo->GetTransform()->GetPosition());
+            GetTransform()->SetLocalScale(GetScaleFactor());
+            GetTransform()->SetLocalRotation(
+                local ? refGo->GetTransform()->GetRotation()
+                      : Quaternion::Identity());
     }
 
     GameObject *gizmoToEnable = nullptr;

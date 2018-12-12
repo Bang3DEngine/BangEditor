@@ -8,6 +8,7 @@
 #include "Bang/Transform.h"
 #include "Bang/Vector3.h"
 #include "BangEditor/EditorCamera.h"
+#include "BangEditor/UISceneToolbar.h"
 
 namespace Bang
 {
@@ -47,6 +48,14 @@ void TransformGizmoAxis::Update()
             edCam->RequestUnBlockBy(this);
         }
     }
+}
+
+bool TransformGizmoAxis::IsLocal() const
+{
+    UISceneToolbar *toolbar = UISceneToolbar::GetActive();
+    bool local = (toolbar->GetTransformGizmoCoordSpace() ==
+                  TransformGizmoCoordSpace::LOCAL);
+    return local;
 }
 
 void TransformGizmoAxis::SetAxis(Axis3DExt axis)
@@ -92,8 +101,9 @@ void TransformGizmoAxis::SetColor(SelectionState state)
                     (refGoPos - edCamPos).NormalizedSafe();
                 if (edCamToRefGoDir.Length() > 0)
                 {
-                    dot = Math::Abs(
-                        Vector3::Dot(GetAxisVectorWorld(), edCamToRefGoDir));
+                    dot = Math::Abs(Vector3::Dot(
+                        IsLocal() ? GetAxisVectorWorld() : GetAxisVectorLocal(),
+                        edCamToRefGoDir));
                 }
             }
         }
