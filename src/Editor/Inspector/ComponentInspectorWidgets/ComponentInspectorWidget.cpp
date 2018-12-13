@@ -188,7 +188,7 @@ void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
     paste->SetSelectedCallback([this](MenuItem *) {
         MetaNode undoMetaBefore = GetComponent()->GetGameObject()->GetMeta();
         Component *copiedComp = EditorClipboard::GetCopiedComponent();
-        Component *newComponent = copiedComp->Clone();
+        Component *newComponent = copiedComp->Clone(false);
         GetInspectedGameObject()->AddComponent(newComponent);
         PushCurrentStateToUndoRedoIfAnyChangeForGameObject(undoMetaBefore);
     });
@@ -198,7 +198,7 @@ void ComponentInspectorWidget::OnCreateContextMenu(MenuItem *menuRootItem)
     pasteValues->SetSelectedCallback([this](MenuItem *) {
         MetaNode undoMetaBefore = GetComponent()->GetMeta();
         Component *copiedComp = EditorClipboard::GetCopiedComponent();
-        copiedComp->CloneInto(GetComponent());
+        copiedComp->CloneInto(GetComponent(), false);
         PushCurrentStateToUndoRedo(undoMetaBefore);
     });
     pasteValues->SetOverAndActionEnabled(

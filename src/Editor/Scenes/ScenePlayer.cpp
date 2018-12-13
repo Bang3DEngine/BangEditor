@@ -127,7 +127,7 @@ void ScenePlayer::PlayScene()
 
                     // Create new scene cloning the open scene into it
                     sp->p_playOpenScene = GameObjectFactory::CreateScene(false);
-                    openScene->CloneInto(sp->p_playOpenScene);
+                    openScene->CloneInto(sp->p_playOpenScene, true);
 
                     // Close the open scene
                     SceneManager::LoadSceneInstantly(nullptr, false);

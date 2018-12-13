@@ -321,7 +321,7 @@ void Inspector::OnCreateContextMenu(MenuItem *menuRootItem)
             MetaNode undoMetaBefore = currentGameObject->GetMeta();
 
             Component *copiedComp = EditorClipboard::GetCopiedComponent();
-            Component *newComponent = copiedComp->Clone();
+            Component *newComponent = copiedComp->Clone(false);
             GetCurrentGameObject()->AddComponent(newComponent);
 
             MetaNode currentMeta = currentGameObject->GetMeta();

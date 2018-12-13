@@ -75,7 +75,7 @@ UISceneToolbar::UISceneToolbar()
     auto AddTransformButton = [&](UIToolButton **buttonPtr,
                                   Texture2D *icon,
                                   std::function<void()> callbackFunc) {
-        AddToolbarButton(buttonPtr, icon, [this, buttonPtr, callbackFunc]() {
+        AddToolbarButton(buttonPtr, icon, [buttonPtr, callbackFunc]() {
             (*buttonPtr)->SetOn(true);
             callbackFunc();
         });

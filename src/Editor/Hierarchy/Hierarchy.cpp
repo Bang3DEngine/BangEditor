@@ -235,7 +235,7 @@ void Hierarchy::OnPaste(HierarchyItem *item)
                 : (pastingOverGo->GetChildren().IndexOf(pastingOverGo + 1));
 
         GameObject *original = EditorClipboard::GetCopiedGameObject();
-        GameObject *clone = original->Clone();
+        GameObject *clone = original->Clone(false);
         clone->SetName(GameObjectFactory::GetGameObjectDuplicateName(original));
 
         clone->SetParent(pastingOverGo, pastingOverIndex, true);

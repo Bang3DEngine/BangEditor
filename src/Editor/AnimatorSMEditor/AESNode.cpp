@@ -303,7 +303,7 @@ void AESNode::Duplicate()
     AnimatorStateMachineNode *nodeToCloneFrom = GetSMNode();
     ASSERT(nodeToCloneFrom);
 
-    nodeToCloneFrom->CloneInto(newNode);
+    nodeToCloneFrom->CloneInto(newNode, false);
     float localPosZ = newAESNode->GetRectTransform()->GetLocalPosition().z;
     newAESNode->GetRectTransform()->SetLocalPosition(
         Vector3(GetAESScene()->GetMousePositionInSceneSpace(), localPosZ));

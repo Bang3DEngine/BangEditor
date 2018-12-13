@@ -13,7 +13,7 @@ void EditorClipboard::CopyComponent(Component *component)
 {
     EditorClipboard::ClearCopiedComponent();
     EditorClipboard *ec = EditorClipboard::GetInstance();
-    ec->m_copiedComponent = component->Clone();
+    ec->m_copiedComponent = component->Clone(false);
 }
 
 Component *EditorClipboard::GetCopiedComponent()
@@ -42,7 +42,7 @@ void EditorClipboard::CopyGameObject(GameObject *gameObject)
 {
     EditorClipboard::ClearCopiedGameObject();
     EditorClipboard *ec = EditorClipboard::GetInstance();
-    ec->m_copiedGameObject = gameObject->Clone();
+    ec->m_copiedGameObject = gameObject->Clone(false);
 }
 
 GameObject *EditorClipboard::GetCopiedGameObject()

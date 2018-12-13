@@ -42,7 +42,7 @@ UITextureCubeMapPreviewer::UITextureCubeMapPreviewer()
     p_previewImageRenderer->SetMode(UIImageRenderer::Mode::TEXTURE_INV_UVY);
 
     Material *previewImageRendererMaterial =
-        MaterialFactory::GetUIImage().Get()->Clone();
+        MaterialFactory::GetUIImage().Get()->Clone(false);
     p_previewImageRendererMaterial.Set(previewImageRendererMaterial);
     previewImageRendererMaterial->SetShaderProgram(ShaderProgramFactory::Get(
         ShaderProgramFactory::GetEngineShadersDir().Append("UI.vert"),
