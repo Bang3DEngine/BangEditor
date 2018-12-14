@@ -45,7 +45,7 @@ EditorMeshFactoryUITabScene::EditorMeshFactoryUITabScene()
     GameObject *dirLightGo = GameObjectFactory::CreateGameObject();
     DirectionalLight *dirLight = dirLightGo->AddComponent<DirectionalLight>();
     dirLight->SetIntensity(5.0f);
-    dirLight->SetShadowType(Light::ShadowType::NONE);
+    dirLight->SetCastShadows(false);
     dirLightGo->GetTransform()->SetPosition(Vector3(10, 10, 10));
     dirLightGo->GetTransform()->LookAt(Vector3::Zero());
     dirLightGo->SetParent(p_scene);

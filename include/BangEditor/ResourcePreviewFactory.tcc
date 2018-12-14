@@ -70,7 +70,7 @@ void ResourcePreviewFactory<T>::CreatePreviewScene()
 
     GameObject *dLightGo = GameObjectFactory::CreateGameObject();
     DirectionalLight *dLight = dLightGo->AddComponent<DirectionalLight>();
-    dLight->SetShadowType(Light::ShadowType::NONE);
+    dLight->SetCastShadows(false);
     dLightGo->SetParent(scene);
 
     GameObject *previewGameObjectContainer =
