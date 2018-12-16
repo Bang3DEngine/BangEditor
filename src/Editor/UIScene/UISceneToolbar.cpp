@@ -104,6 +104,14 @@ UISceneToolbar::UISceneToolbar()
         GameObjectFactory::CreateUIVSeparator(LayoutSizeType::PREFERRED, 10);
     p_transformModeCamSeparator->SetParent(this);
 
+    AddToolbarButton(
+        &p_seePostProcessButton, EditorTextureFactory::GetStarsIcon(), []() {});
+    p_seePostProcessButton->SetOn(true);
+
+    p_postProcessSeparator =
+        GameObjectFactory::CreateUIVSeparator(LayoutSizeType::PREFERRED, 10);
+    p_postProcessSeparator->SetParent(this);
+
     AddToolbarButton(&p_resetCamViewButton, eyeIcon, [&]() {
         p_resetCamViewButton->SetOn(false);
         ResetCameraView();
@@ -127,6 +135,8 @@ UISceneToolbar::UISceneToolbar()
                                SCAST<int>(UISceneImage::RenderMode::COLOR));
     p_renderModeInput->AddItem("Albedo",
                                SCAST<int>(UISceneImage::RenderMode::ALBEDO));
+    p_renderModeInput->AddItem("Light",
+                               SCAST<int>(UISceneImage::RenderMode::LIGHT));
     p_renderModeInput->AddItem("Normal",
                                SCAST<int>(UISceneImage::RenderMode::NORMAL));
     p_renderModeInput->AddItem(
@@ -173,6 +183,11 @@ void UISceneToolbar::Update()
     UpdateToolButtons();
 }
 
+void UISceneToolbar::SetIsEditToolbar(bool isEditToolbar)
+{
+    m_isEditToolbar = isEditToolbar;
+}
+
 void UISceneToolbar::SetTransformGizmoMode(TransformGizmoMode transformMode)
 {
     if (transformMode != GetTransformGizmoMode())
@@ -206,6 +221,8 @@ void UISceneToolbar::DisableTransformAndCameraControls()
     p_scaleButton->GetGameObject()->SetVisible(false);
     p_globalLocalButton->GetGameObject()->SetVisible(false);
     p_rectTransformButton->GetGameObject()->SetVisible(false);
+    p_seePostProcessButton->GetGameObject()->SetVisible(false);
+    p_postProcessSeparator->SetVisible(false);
     p_resetCamViewButton->GetGameObject()->SetVisible(false);
 }
 
@@ -255,6 +272,13 @@ void UISceneToolbar::UpdateToolButtons()
         {
             p_globalLocalButton->SetOn(!p_globalLocalButton->GetOn());
         }
+    }
+
+    // PostProcess button
+    if (m_isEditToolbar)
+    {
+        EditorCamera::GetInstance()->SetSeeActiveCameraPostProcessEffects(
+            p_seePostProcessButton->GetOn());
     }
 
     // Transform mode buttons

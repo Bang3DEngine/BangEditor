@@ -31,6 +31,7 @@ public:
         COLOR = 0,
         NORMAL,
         ALBEDO,
+        LIGHT,
         DEPTH,
         ROUGHNESS,
         METALNESS,

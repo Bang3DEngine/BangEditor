@@ -53,6 +53,7 @@
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/Selection.h"
 #include "BangEditor/UISceneImage.h"
+#include "BangEditor/UISceneToolbar.h"
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
 
@@ -80,6 +81,8 @@ UISceneEditContainer::UISceneEditContainer()
     cameraPreviewGo->AddComponent<UILayoutIgnorer>();
     cameraPreviewGo->SetParent(GetSceneImage());
 
+    p_sceneToolbar->SetIsEditToolbar(true);
+
     ScenePlayer::GetInstance()
         ->EventEmitter<IEventsScenePlayer>::RegisterListener(this);
     SceneManager::GetActive()
@@ -104,34 +107,6 @@ void UISceneEditContainer::Render(RenderPass rp, bool renderChildren)
     {
         RenderCameraPreviewIfSelected();
         m_needToRenderPreviewImg = false;
-    }
-
-    if (rp == RenderPass::CANVAS)
-    {
-        EditorCamera *edCamGo = EditorCamera::GetInstance();
-        Camera *edCam = edCamGo->GetCamera();
-        Scene *openScene = EditorSceneManager::GetOpenScene();
-        GEngine *ge = GEngine::GetInstance();
-        if (ge && edCamGo && openScene)
-        {
-            GEngine *ge = GEngine::GetInstance();
-            ge->PushActiveRenderingCamera();
-
-            GizmosManager *sgm = GizmosManager::GetInstance();
-            sgm->OnBeginRender(openScene);
-            ge->PushActiveRenderingCamera();
-            ge->SetActiveRenderingCamera(edCam);
-
-            RectTransform *sceneImgRT = GetSceneImage()->GetRectTransform();
-            AARecti imgRect(sceneImgRT->GetViewportAARect());
-            Vector2i renderSize = imgRect.GetSize();
-            edCam->SetRenderSize(renderSize);
-
-            ge->PopActiveRenderingCamera();
-            sgm->OnEndRender(openScene);
-
-            ge->PopActiveRenderingCamera();
-        }
     }
 
     UISceneContainer::Render(rp, renderChildren);

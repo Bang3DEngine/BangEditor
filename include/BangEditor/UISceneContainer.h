@@ -61,6 +61,8 @@ public:
     UISceneToolbarDown *GetSceneToolbarDown() const;
 
 protected:
+    UISceneToolbar *p_sceneToolbar = nullptr;
+
     // IEventsDestroy
     void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
 
@@ -75,7 +77,6 @@ private:
     Scene *p_containedScene = nullptr;
 
     UISceneToolbarDown *p_sceneToolbarDown = nullptr;
-    UISceneToolbar *p_sceneToolbar = nullptr;
     UISceneImage *p_sceneImage = nullptr;
 
     GameObject *p_noCameraOverlay = nullptr;

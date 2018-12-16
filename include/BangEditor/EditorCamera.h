@@ -51,6 +51,7 @@ public:
     void Update() override;
 
     void FocusScene(Scene *scene);
+    void SetSeeActiveCameraPostProcessEffects(bool seePostProcess);
     void SetPositionDirectly(const Vector3 &position);
     void SetRotationDirectly(const Quaternion &rotation);
     void AlignViewWithGameObject(GameObject *selected);
@@ -76,6 +77,8 @@ private:
     Selection *p_selection = nullptr;
     GameObject *p_camContainer = nullptr;
     Set<GameObject *> m_blockRequests;
+
+    bool m_seeActiveCameraPostProcessEffects = true;
 
     Vector3 m_targetPosition = Vector3::Zero();
     Quaternion m_targetRotation = Quaternion::Identity();

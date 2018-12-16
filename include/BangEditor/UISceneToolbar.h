@@ -40,6 +40,7 @@ public:
     virtual ~UISceneToolbar() override;
 
     void Update() override;
+    void SetIsEditToolbar(bool isEditToolbar);
     void SetTransformGizmoMode(TransformGizmoMode transformMode);
 
     TransformGizmoMode GetTransformGizmoMode() const;
@@ -57,8 +58,11 @@ private:
     UIToolButton *p_scaleButton = nullptr;
     UIToolButton *p_rectTransformButton = nullptr;
     UIToolButton *p_globalLocalButton = nullptr;
+    UIToolButton *p_seePostProcessButton = nullptr;
+
     GameObject *p_transformWorldLocalSeparator = nullptr;
     GameObject *p_transformModeCamSeparator = nullptr;
+    GameObject *p_postProcessSeparator = nullptr;
     GameObject *p_transformModeCamSpacer = nullptr;
     UIToolButton *p_resetCamViewButton = nullptr;
 
@@ -67,6 +71,7 @@ private:
     UIToolButton *p_stepButton = nullptr;
     UIToolButton *p_stopButton = nullptr;
 
+    bool m_isEditToolbar = false;
     TransformGizmoMode m_transformGizmoMode = TransformGizmoMode::TRANSLATE;
 
     UIComboBox *p_renderModeInput = nullptr;

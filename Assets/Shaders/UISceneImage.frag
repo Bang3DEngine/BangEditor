@@ -6,12 +6,13 @@ uniform sampler2D B_SceneDepthStencilTex;
 const int COLOR            = 0;
 const int NORMAL           = 1;
 const int ALBEDO           = 2;
-const int DEPTH            = 3;
-const int ROUGHNESS        = 4;
-const int METALNESS        = 5;
-const int RECEIVES_LIGHT   = 6;
-const int RECEIVES_SHADOWS = 7;
-const int WORLD_POSITION   = 8;
+const int LIGHT            = 3;
+const int DEPTH            = 4;
+const int ROUGHNESS        = 5;
+const int METALNESS        = 6;
+const int RECEIVES_LIGHT   = 7;
+const int RECEIVES_SHADOWS = 8;
+const int WORLD_POSITION   = 9;
 
 void main()
 {
@@ -22,6 +23,7 @@ void main()
         case COLOR:            color = B_SampleColor(uv).rgb;               break;
         case NORMAL:           color = B_SampleNormal(uv).rgb;              break;
         case ALBEDO:           color = B_SampleAlbedoColor(uv).rgb;         break;
+        case LIGHT:            color = B_SampleLight(uv).rgb;               break;
         case WORLD_POSITION:
             color = B_ComputeWorldPosition(texture(B_SceneDepthStencilTex, uv).r,
                                            uv);

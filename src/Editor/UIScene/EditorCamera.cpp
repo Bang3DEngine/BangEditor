@@ -15,6 +15,7 @@
 #include "Bang/Key.h"
 #include "Bang/Math.h"
 #include "Bang/MouseButton.h"
+#include "Bang/PostProcessEffect.h"
 #include "Bang/Quaternion.h"
 #include "Bang/RenderPass.h"
 #include "Bang/Scene.h"
@@ -125,6 +126,19 @@ void EditorCamera::Update()
     {
         GetCamera()->SetClearMode(CameraClearMode::COLOR);
         GetCamera()->SetClearColor(Color::White().WithValue(0.3f));
+    }
+
+    if (m_seeActiveCameraPostProcessEffects)
+    {
+        GetCamera()->AddRenderPass(RenderPass::SCENE_POSTPROCESS);
+        GetCamera()->AddRenderPass(RenderPass::CANVAS_POSTPROCESS);
+        GetCamera()->AddRenderPass(RenderPass::OVERLAY_POSTPROCESS);
+    }
+    else
+    {
+        GetCamera()->RemoveRenderPass(RenderPass::SCENE_POSTPROCESS);
+        GetCamera()->RemoveRenderPass(RenderPass::CANVAS_POSTPROCESS);
+        GetCamera()->RemoveRenderPass(RenderPass::OVERLAY_POSTPROCESS);
     }
 
     if (unwrapMouse)
@@ -284,6 +298,11 @@ void EditorCamera::FocusScene(Scene *scene)
         m_targetRotation =
             Quaternion::LookDirection(sceneCenter - m_targetPosition);
     }
+}
+
+void EditorCamera::SetSeeActiveCameraPostProcessEffects(bool seePostProcess)
+{
+    m_seeActiveCameraPostProcessEffects = seePostProcess;
 }
 
 void EditorCamera::SetPositionDirectly(const Vector3 &position)
