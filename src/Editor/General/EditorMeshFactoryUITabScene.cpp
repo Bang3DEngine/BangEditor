@@ -245,7 +245,7 @@ void EditorMeshFactoryUITabScene::Update()
     {
         p_sceneImg->SetTint(Color::White());
         p_sceneImg->SetImageTexture(
-            p_sceneCamera->GetGBuffer()->GetLastDrawnColorTexture());
+            p_sceneCamera->GetGBuffer()->GetDrawColorTexture());
     }
     else
     {

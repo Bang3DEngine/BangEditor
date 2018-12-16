@@ -32,6 +32,7 @@
 #include "Bang/PhysicsMaterial.h"
 #include "Bang/PointLight.h"
 #include "Bang/PostProcessEffect.h"
+#include "Bang/PostProcessEffectBloom.h"
 #include "Bang/PostProcessEffectSSAO.h"
 #include "Bang/RectTransform.h"
 #include "Bang/ReflectionProbe.h"
@@ -411,6 +412,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addPostProcessEffect =
         addPostProcessEffects->AddItem("PostProcessEffect");
     MenuItem *addSSAO = addPostProcessEffects->AddItem("SSAO");
+    MenuItem *addBloom = addPostProcessEffects->AddItem("Bloom");
     MenuItem *addUI = rootItem->AddItem("UI");
     MenuItem *addUIAutoFocuser = addUI->AddItem("Auto Focuser");
     MenuItem *addUIButton = addUI->AddItem("Button");
@@ -462,6 +464,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     addRectTransform->SetSelectedCallback(MenuBar::OnAddRectTransform);
     addPostProcessEffect->SetSelectedCallback(MenuBar::OnAddPostProcessEffect);
     addSSAO->SetSelectedCallback(MenuBar::OnAddSSAO);
+    addBloom->SetSelectedCallback(MenuBar::OnAddBloom);
     addUICanvas->SetSelectedCallback(MenuBar::OnAddUICanvas);
     addUIImageRenderer->SetSelectedCallback(MenuBar::OnAddUIImageRenderer);
     addUITextRenderer->SetSelectedCallback(MenuBar::OnAddUITextRenderer);
@@ -886,6 +889,11 @@ void MenuBar::OnAddCloth(MenuItem *)
 void MenuBar::OnAddSSAO(MenuItem *)
 {
     OnAddComponent<PostProcessEffectSSAO>();
+}
+
+void MenuBar::OnAddBloom(MenuItem *)
+{
+    OnAddComponent<PostProcessEffectBloom>();
 }
 
 void MenuBar::OnAddRigidBody(MenuItem *)

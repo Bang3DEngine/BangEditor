@@ -199,7 +199,7 @@ void UISceneEditContainer::RenderCameraPreviewIfSelected()
             GEngine::GetInstance()->Render(openScene, selectedCamera);
             selectedCamera->SetReplacementGBuffer(nullptr);
 
-            Texture2D *camColorTexture = gbuffer->GetLastDrawnColorTexture();
+            Texture2D *camColorTexture = gbuffer->GetDrawColorTexture();
             camColorTexture->SetWrapMode(GL::WrapMode::REPEAT);
             p_cameraPreviewImg->SetImageTexture(camColorTexture);
 

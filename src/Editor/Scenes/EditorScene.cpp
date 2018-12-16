@@ -140,6 +140,7 @@ void EditorScene::Init()
     cam->RemoveRenderPass(RenderPass::CANVAS_POSTPROCESS);
     cam->RemoveRenderPass(RenderPass::OVERLAY);
     cam->RemoveRenderPass(RenderPass::OVERLAY_POSTPROCESS);
+    cam->SetHDR(false);
 
 #ifdef DEBUG
     cam->AddRenderPass(RenderPass::OVERLAY);

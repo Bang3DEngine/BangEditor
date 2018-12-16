@@ -101,6 +101,8 @@ void UISceneImage::Render(RenderPass renderPass, bool renderChildren)
 
         sp->Bind();
         gb->BindAttachmentsForReading(sp);
+        sp->SetTexture2D(GBuffer::GetColorsTexName(),
+                         gb->GetDrawColorTexture());
 
         GL::Pop(GL::BindTarget::SHADER_PROGRAM);
     }
