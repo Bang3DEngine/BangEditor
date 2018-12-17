@@ -152,6 +152,7 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                     }
 
                     inputNumber->SetStep(reflVar.GetHints().GetStepValue());
+                    inputNumber->SetBlocked(reflVar.GetHints().GetIsBlocked());
 
                     if (variantType == Variant::Type::INT ||
                         variantType == Variant::Type::UINT)
@@ -169,6 +170,7 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                     button->AddClickedCallback([reflVar]() {
                         reflVar.GetSetter()(Variant::From(true));
                     });
+                    button->SetBlocked(reflVar.GetHints().GetIsBlocked());
                     widgetToAdd = button->GetGameObject();
                 }
                 else
@@ -219,6 +221,8 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                 inputFile->SetExtensions(reflVar.GetHints().GetExtensions());
                 inputFile->EventEmitter<IEventsValueChanged>::RegisterListener(
                     inspectorWidget);
+                inputFile->GetInputText()->SetBlocked(
+                    reflVar.GetHints().GetIsBlocked());
                 widgetToAdd = inputFile;
             }
             else if (variantType == Variant::Type::STRING)
@@ -228,6 +232,7 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                     reflVar.GetInitValue().GetString());
                 inputText->EventEmitter<IEventsValueChanged>::RegisterListener(
                     inspectorWidget);
+                inputText->SetBlocked(reflVar.GetHints().GetIsBlocked());
                 widgetToAdd = inputText->GetGameObject();
             }
             else if (variantType == Variant::Type::VECTOR2 ||
@@ -254,6 +259,7 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                 }
 
                 UIInputVector *inputVec = new UIInputVector();
+                inputVec->SetBlocked(reflVar.GetHints().GetIsBlocked());
                 inputVec->SetSize(numComps);
                 inputVec->Set(
                     isInt ? Vector4(reflVar.GetInitValue().GetVector4i())

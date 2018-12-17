@@ -7,6 +7,7 @@
 #include "Bang/IEventsValueChanged.h"
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIInputNumber.h"
+#include "Bang/UIInputText.h"
 #include "Bang/UILayoutElement.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
@@ -87,6 +88,14 @@ void UIInputVector::Set(const Vector4 &v)
 void UIInputVector::Set(int i, float v)
 {
     m_inputNumbers[i]->SetValue(v);
+}
+
+void UIInputVector::SetBlocked(bool blocked)
+{
+    for (int i = 0; i < 4; ++i)
+    {
+        m_inputNumbers[i]->SetBlocked(blocked);
+    }
 }
 
 void UIInputVector::SetStep(const Vector4 &step)

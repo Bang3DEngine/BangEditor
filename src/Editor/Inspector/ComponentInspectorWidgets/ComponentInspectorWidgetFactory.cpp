@@ -7,7 +7,6 @@
 #include "Bang/Serializable.h"
 #include "Bang/String.h"
 #include "BangEditor/CIWAnimator.h"
-#include "BangEditor/CIWAudioSource.h"
 #include "BangEditor/CIWBehaviour.h"
 #include "BangEditor/CIWBehaviourContainer.h"
 #include "BangEditor/CIWCamera.h"
@@ -58,10 +57,6 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     else if (cName == "Camera")
     {
         ciw = new CIWCamera();
-    }
-    else if (cName == "AudioSource")
-    {
-        ciw = new CIWAudioSource();
     }
     else if (cName == "Animator")
     {

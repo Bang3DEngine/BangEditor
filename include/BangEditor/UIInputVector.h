@@ -41,6 +41,7 @@ public:
     void Set(const Vector3 &v);
     void Set(const Vector4 &v);
     void Set(int i, float v);
+    void SetBlocked(bool blocked);
     void SetStep(const Vector4 &step);
     void SetMinValue(const Vector4 &minValue);
     void SetMaxValue(const Vector4 &maxValue);

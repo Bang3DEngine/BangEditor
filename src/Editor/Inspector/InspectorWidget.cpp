@@ -174,6 +174,7 @@ void InspectorWidget::AddWidgetInternal(const String &labelContent,
     {
         UILayoutElement *widgetContLE =
             widgetContainer->AddComponent<UILayoutElement>();
+        widgetContLE->SetMinHeight(16);
         widgetContLE->SetPreferredHeight(height);
         widgetContLE->SetFlexibleSize(Vector2::One());
         widgetContLE->SetLayoutPriority(1);
