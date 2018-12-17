@@ -10,8 +10,9 @@ in mat3 B_TBN;
 
 layout(location = 0) out vec4 B_GIn_Color;
 layout(location = 1) out vec4 B_GIn_Albedo;
-layout(location = 2) out vec4 B_GIn_Normal;
-layout(location = 3) out vec4 B_GIn_Misc;
+layout(location = 2) out vec4 B_GIn_Light;
+layout(location = 3) out vec4 B_GIn_Normal;
+layout(location = 4) out vec4 B_GIn_Misc;
 
 void main()
 {

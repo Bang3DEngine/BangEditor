@@ -82,6 +82,8 @@ void CIWPostProcessEffectSSAO::InitInnerWidgets()
 
 void CIWPostProcessEffectSSAO::UpdateFromReference()
 {
+    ComponentInspectorWidget::UpdateFromReference();
+
     PostProcessEffectSSAO *ppe = GetPostProcessEffectSSAO();
 
     p_intensityInput->SetValue(SCAST<float>(ppe->GetSSAOIntensity()));
