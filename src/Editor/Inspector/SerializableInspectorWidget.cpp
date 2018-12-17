@@ -93,10 +93,14 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                 variantType == Variant::Type::INT ||
                 variantType == Variant::Type::UINT)
             {
-                if (reflVar.GetHints().GetIsEnum())
+                if (reflVar.GetHints().GetIsEnum() ||
+                    reflVar.GetHints().GetIsEnumFlags())
                 {
                     UIComboBox *enumInput =
                         GameObjectFactory::CreateUIComboBox();
+                    enumInput->SetMultiCheck(
+                        reflVar.GetHints().GetIsEnumFlags());
+
                     const auto &enumFields =
                         reflectStruct.GetEnumFields(reflVar.GetName());
                     if (enumFields.Size() >= 1)

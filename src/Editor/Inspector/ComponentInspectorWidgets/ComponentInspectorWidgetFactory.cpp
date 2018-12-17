@@ -12,11 +12,6 @@
 #include "BangEditor/CIWBehaviourContainer.h"
 #include "BangEditor/CIWCamera.h"
 #include "BangEditor/CIWParticleSystem.h"
-#include "BangEditor/CIWPostProcessEffect.h"
-#include "BangEditor/CIWPostProcessEffectSSAO.h"
-#include "BangEditor/CIWRectTransform.h"
-#include "BangEditor/CIWReflectionProbe.h"
-#include "BangEditor/CIWRigidBody.h"
 #include "BangEditor/CIWTransform.h"
 #include "BangEditor/CIWUIImageRenderer.h"
 #include "BangEditor/CIWUITextRenderer.h"
@@ -44,10 +39,6 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     {
         ciw = new CIWTransform();
     }
-    else if (cName == "RectTransform")
-    {
-        ciw = new CIWRectTransform();
-    }
     else if (cName == "UITextRenderer")
     {
         ciw = new CIWUITextRenderer();
@@ -55,10 +46,6 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     else if (cName == "UIImageRenderer")
     {
         ciw = new CIWUIImageRenderer();
-    }
-    else if (cName == "RigidBody")
-    {
-        ciw = new CIWRigidBody();
     }
     else if (cName == "ParticleSystem")
     {
@@ -79,18 +66,6 @@ ComponentInspectorWidget *ComponentInspectorWidgetFactory::Create(
     else if (cName == "Animator")
     {
         ciw = new CIWAnimator();
-    }
-    else if (cName == "ReflectionProbe")
-    {
-        ciw = new CIWReflectionProbe();
-    }
-    else if (cName == "PostProcessEffect")
-    {
-        ciw = new CIWPostProcessEffect();
-    }
-    else if (cName == "PostProcessEffectSSAO")
-    {
-        ciw = new CIWPostProcessEffectSSAO();
     }
     else
     {
