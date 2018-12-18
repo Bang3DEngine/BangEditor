@@ -120,6 +120,8 @@ private:
     static void OnAddCloth(MenuItem *item);
     static void OnAddSSAO(MenuItem *item);
     static void OnAddBloom(MenuItem *item);
+    static void OnAddFXAA(MenuItem *item);
+    static void OnAddToneMapping(MenuItem *item);
     static void OnAddDepthOfField(MenuItem *item);
     static void OnAddRigidBody(MenuItem *item);
     static void OnAddUIAutoFocuser(MenuItem *item);

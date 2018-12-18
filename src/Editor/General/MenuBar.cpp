@@ -34,7 +34,9 @@
 #include "Bang/PostProcessEffect.h"
 #include "Bang/PostProcessEffectBloom.h"
 #include "Bang/PostProcessEffectDOF.h"
+#include "Bang/PostProcessEffectFXAA.h"
 #include "Bang/PostProcessEffectSSAO.h"
+#include "Bang/PostProcessEffectToneMapping.h"
 #include "Bang/RectTransform.h"
 #include "Bang/ReflectionProbe.h"
 #include "Bang/ResourceHandle.h"
@@ -414,6 +416,8 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
         addPostProcessEffects->AddItem("PostProcessEffect");
     MenuItem *addSSAO = addPostProcessEffects->AddItem("SSAO");
     MenuItem *addBloom = addPostProcessEffects->AddItem("Bloom");
+    MenuItem *addFXAA = addPostProcessEffects->AddItem("FXAA");
+    MenuItem *addToneMapping = addPostProcessEffects->AddItem("ToneMapping");
     MenuItem *addDOF = addPostProcessEffects->AddItem("Depth of Field");
     MenuItem *addUI = rootItem->AddItem("UI");
     MenuItem *addUIAutoFocuser = addUI->AddItem("Auto Focuser");
@@ -467,6 +471,8 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     addPostProcessEffect->SetSelectedCallback(MenuBar::OnAddPostProcessEffect);
     addSSAO->SetSelectedCallback(MenuBar::OnAddSSAO);
     addBloom->SetSelectedCallback(MenuBar::OnAddBloom);
+    addFXAA->SetSelectedCallback(MenuBar::OnAddFXAA);
+    addToneMapping->SetSelectedCallback(MenuBar::OnAddToneMapping);
     addDOF->SetSelectedCallback(MenuBar::OnAddDepthOfField);
     addUICanvas->SetSelectedCallback(MenuBar::OnAddUICanvas);
     addUIImageRenderer->SetSelectedCallback(MenuBar::OnAddUIImageRenderer);
@@ -897,6 +903,16 @@ void MenuBar::OnAddSSAO(MenuItem *)
 void MenuBar::OnAddBloom(MenuItem *)
 {
     OnAddComponent<PostProcessEffectBloom>();
+}
+
+void MenuBar::OnAddFXAA(MenuItem *)
+{
+    OnAddComponent<PostProcessEffectFXAA>();
+}
+
+void MenuBar::OnAddToneMapping(MenuItem *)
+{
+    OnAddComponent<PostProcessEffectToneMapping>();
 }
 
 void MenuBar::OnAddDepthOfField(MenuItem *)

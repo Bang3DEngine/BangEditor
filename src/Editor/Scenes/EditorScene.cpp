@@ -235,6 +235,11 @@ void EditorScene::Update()
         sceneEditTabStation->GetTabContainer()->SetTabTitle(
             p_sceneEditContainer, sceneTabName);
     }
+
+    if (Editor::IsEditingScene())
+    {
+        Thread::SleepCurrentThread(1.0f / 60.0f);
+    }
 }
 
 void EditorScene::OnResize(int newWidth, int newHeight)

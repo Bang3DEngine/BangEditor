@@ -130,9 +130,9 @@ GameObject *Selection::GetOveredGameObject(
 
                 SelectionOptions *selectionOptions =
                     mr->GetGameObject()->GetComponent<SelectionOptions>();
-                Texture2D *filterTex =
-                    selectionOptions ? selectionOptions->GetFilterTexture()
-                                     : nullptr;
+                Texture2D *filterTex = nullptr;
+                // selectionOptions ? selectionOptions->GetFilterTexture()
+                //                  : nullptr;
 
                 bool intersected;
                 Vector3 intersectionPoint;
