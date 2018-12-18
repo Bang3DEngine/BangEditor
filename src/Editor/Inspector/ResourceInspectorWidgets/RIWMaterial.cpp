@@ -127,6 +127,8 @@ void RIWMaterial::Init()
     p_renderPassInput->AddItem("Overlay", SCAST<int>(RenderPass::OVERLAY));
     p_renderPassInput->AddItem("ScenePostProcess",
                                SCAST<int>(RenderPass::SCENE_POSTPROCESS));
+    p_renderPassInput->AddItem("ScenePostProcess2",
+                               SCAST<int>(RenderPass::SCENE_POSTPROCESS_2));
     p_renderPassInput->AddItem("CanvasPostProcess",
                                SCAST<int>(RenderPass::CANVAS_POSTPROCESS));
     p_renderPassInput->AddItem("OverlayPostProcess",

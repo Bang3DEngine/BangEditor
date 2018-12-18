@@ -131,12 +131,14 @@ void EditorCamera::Update()
     if (m_seeActiveCameraPostProcessEffects)
     {
         GetCamera()->AddRenderPass(RenderPass::SCENE_POSTPROCESS);
+        GetCamera()->AddRenderPass(RenderPass::SCENE_POSTPROCESS_2);
         GetCamera()->AddRenderPass(RenderPass::CANVAS_POSTPROCESS);
         GetCamera()->AddRenderPass(RenderPass::OVERLAY_POSTPROCESS);
     }
     else
     {
         GetCamera()->RemoveRenderPass(RenderPass::SCENE_POSTPROCESS);
+        GetCamera()->RemoveRenderPass(RenderPass::SCENE_POSTPROCESS_2);
         GetCamera()->RemoveRenderPass(RenderPass::CANVAS_POSTPROCESS);
         GetCamera()->RemoveRenderPass(RenderPass::OVERLAY_POSTPROCESS);
     }
