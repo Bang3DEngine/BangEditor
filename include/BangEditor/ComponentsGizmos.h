@@ -15,6 +15,7 @@ class BoxCollider;
 class Camera;
 class CapsuleCollider;
 class Component;
+class DecalRenderer;
 class DirectionalLight;
 class NavigationMesh;
 class ParticleSystem;
@@ -52,6 +53,7 @@ private:
     void RenderCapsuleColliderGizmo(CapsuleCollider *cc, bool isBeingSelected);
     void RenderSphereColliderGizmo(SphereCollider *sc, bool isBeingSelected);
     void RenderCameraGizmo(Camera *cam, bool isBeingSelected);
+    void RenderDecalRendererGizmo(DecalRenderer *dr, bool isBeingSelected);
     void RenderPointLightGizmo(PointLight *pointLight, bool isBeingSelected);
     void RenderDirectionalLightGizmo(DirectionalLight *dirLight,
                                      bool isBeingSelected);

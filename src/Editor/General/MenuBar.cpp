@@ -14,6 +14,7 @@
 #include "Bang/CapsuleCollider.h"
 #include "Bang/Cloth.h"
 #include "Bang/Color.h"
+#include "Bang/DecalRenderer.h"
 #include "Bang/Dialog.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/Extensions.h"
@@ -312,8 +313,11 @@ void MenuBar::CreateGameObjectCreateMenuInto(MenuItem *rootItem)
     MenuItem *createPlane = primitiveGameObjectItem->AddItem("Plane");
     MenuItem *createCam = rootItem->AddItem("Camera");
     MenuItem *createRendering = rootItem->AddItem("Rendering");
+    MenuItem *createDecal = createRendering->AddItem("Decal");
     MenuItem *createParticleSystemGO =
         createRendering->AddItem("Particle System");
+    MenuItem *createReflectionProbeItemGO =
+        createRendering->AddItem("Reflection Probe");
     MenuItem *lightsGOItem = rootItem->AddItem("Lights");
     MenuItem *createDirectionalLightGO =
         lightsGOItem->AddItem("Directional Light");
@@ -324,8 +328,6 @@ void MenuBar::CreateGameObjectCreateMenuInto(MenuItem *rootItem)
     MenuItem *createUITextGO = uiItemGO->AddItem("Text");
     MenuItem *createUIImageGO = uiItemGO->AddItem("Image");
     MenuItem *miscItemGO = rootItem->AddItem("Misc");
-    MenuItem *createReflectionProbeItemGO =
-        miscItemGO->AddItem("Reflection Probe");
     MenuItem *createNavigationMeshItemGO =
         miscItemGO->AddItem("Navigation Mesh");
     createEmpty->SetSelectedCallback(MenuBar::OnCreateEmpty);
@@ -340,6 +342,7 @@ void MenuBar::CreateGameObjectCreateMenuInto(MenuItem *rootItem)
         MenuBar::OnCreateParticleSystemGO);
     createDirectionalLightGO->SetSelectedCallback(
         MenuBar::OnCreateDirectionalLightGO);
+    createDecal->SetSelectedCallback(MenuBar::OnCreateDecalGO);
     createPointLightGO->SetSelectedCallback(MenuBar::OnCreatePointLightGO);
     createUIEmptyGO->SetSelectedCallback(MenuBar::OnCreateUIEmptyGO);
     createUICanvasGO->SetSelectedCallback(MenuBar::OnCreateUICanvasGO);
@@ -394,6 +397,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     MenuItem *addRenderer = rootItem->AddItem("Renderer");
     MenuItem *addLineRenderer = addRenderer->AddItem("LineRenderer");
     MenuItem *addMeshRenderer = addRenderer->AddItem("MeshRenderer");
+    MenuItem *addDecalRenderer = addRenderer->AddItem("DecalRenderer");
     MenuItem *addSkinnedMeshRenderer =
         addRenderer->AddItem("SkinnedMeshRenderer");
     MenuItem *addVolumeRenderer = addRenderer->AddItem("VolumeRenderer");
@@ -458,6 +462,7 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
     addDirectionalLight->SetSelectedCallback(MenuBar::OnAddDirectionalLight);
     addLineRenderer->SetSelectedCallback(MenuBar::OnAddLineRenderer);
     addMeshRenderer->SetSelectedCallback(MenuBar::OnAddMeshRenderer);
+    addDecalRenderer->SetSelectedCallback(MenuBar::OnAddDecalRenderer);
     addVolumeRenderer->SetSelectedCallback(MenuBar::OnAddVolumeRenderer);
     addSkinnedMeshRenderer->SetSelectedCallback(
         MenuBar::OnAddSkinnedMeshRenderer);
@@ -750,6 +755,11 @@ void MenuBar::OnAddMeshRenderer(MenuItem *)
     OnAddComponent<MeshRenderer>();
 }
 
+void MenuBar::OnAddDecalRenderer(MenuItem *)
+{
+    OnAddComponent<DecalRenderer>();
+}
+
 void MenuBar::OnAddVolumeRenderer(MenuItem *)
 {
     OnAddComponent<VolumeRenderer>();
@@ -971,12 +981,20 @@ void MenuBar::OnCreateCamera(MenuItem *)
     MenuBar::OnEndCreateGameObjectFromMenuBar(camGameObject);
 }
 
-void MenuBar::OnCreateParticleSystemGO(MenuItem *item)
+void MenuBar::OnCreateParticleSystemGO(MenuItem *)
 {
     GameObject *psGameObject = GameObjectFactory::CreateGameObject();
     psGameObject->SetName("ParticleSystem");
     psGameObject->AddComponent<ParticleSystem>();
     MenuBar::OnEndCreateGameObjectFromMenuBar(psGameObject);
+}
+
+void MenuBar::OnCreateDecalGO(MenuItem *)
+{
+    GameObject *decalGameObject = GameObjectFactory::CreateGameObject();
+    decalGameObject->SetName("Decal");
+    decalGameObject->AddComponent<DecalRenderer>();
+    MenuBar::OnEndCreateGameObjectFromMenuBar(decalGameObject);
 }
 
 void MenuBar::OnCreateDirectionalLightGO(MenuItem *)

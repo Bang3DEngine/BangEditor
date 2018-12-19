@@ -212,6 +212,16 @@ Texture2D *EditorTextureFactory::GetLetterIcon()
     return EditorTextureFactory::GetTexture2D("Letter.png");
 }
 
+Texture2D *EditorTextureFactory::GetImageIcon()
+{
+    return EditorTextureFactory::GetTexture2D("Image.png");
+}
+
+Texture2D *EditorTextureFactory::GetSplashIcon()
+{
+    return EditorTextureFactory::GetTexture2D("Splash.png");
+}
+
 Texture2D *EditorTextureFactory::GetPillIcon()
 {
     return EditorTextureFactory::GetTexture2D("Pill.png");
@@ -324,6 +334,15 @@ Texture2D *EditorTextureFactory::GetComponentIcon(const String &componentName)
     {
         return EditorTextureFactory::GetBracketsIcon();
     }
+    else if (componentName == "DecalRenderer")
+    {
+        return EditorTextureFactory::GetSplashIcon();
+    }
+    else if (componentName == "UIImageRenderer" ||
+             componentName.BeginsWith("PostProcessEffect"))
+    {
+        return EditorTextureFactory::GetImageIcon();
+    }
     else if (componentName == "MeshRenderer")
     {
         return EditorTextureFactory::GetCubeIcon();
@@ -375,6 +394,15 @@ Color EditorTextureFactory::GetComponentIconTint(const String &componentName)
         return Color::White().WithValue(0.2f);
     }
     else if (componentName == "SkinnedMeshRenderer")
+    {
+        return Color::White().WithValue(0.2f);
+    }
+    else if (componentName == "DecalRenderer")
+    {
+        return Color::White().WithValue(0.2f);
+    }
+    else if (componentName == "UIImageRenderer" ||
+             componentName.BeginsWith("PostProcessEffect"))
     {
         return Color::White().WithValue(0.2f);
     }

@@ -107,6 +107,7 @@ private:
     static void OnAddDirectionalLight(MenuItem *item);
     static void OnAddLineRenderer(MenuItem *item);
     static void OnAddMeshRenderer(MenuItem *item);
+    static void OnAddDecalRenderer(MenuItem *item);
     static void OnAddVolumeRenderer(MenuItem *item);
     static void OnAddSkinnedMeshRenderer(MenuItem *item);
     static void OnAddWaterRenderer(MenuItem *item);
@@ -152,6 +153,7 @@ private:
     static void OnCreateSphere(MenuItem *item);
     static void OnCreateCamera(MenuItem *item);
     static void OnCreateParticleSystemGO(MenuItem *item);
+    static void OnCreateDecalGO(MenuItem *item);
     static void OnCreateDirectionalLightGO(MenuItem *item);
     static void OnCreatePointLightGO(MenuItem *item);
     static UICanvas *OnCreateUICanvasGO(MenuItem *item);

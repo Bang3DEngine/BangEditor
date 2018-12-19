@@ -9,6 +9,7 @@
 #include "Bang/Color.h"
 #include "Bang/Component.h"
 #include "Bang/Debug.h"
+#include "Bang/DecalRenderer.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
@@ -131,6 +132,10 @@ void ComponentsGizmos::RenderComponentGizmos(Component *comp,
     if (Camera *cam = DCAST<Camera *>(comp))
     {
         RenderCameraGizmo(cam, isBeingSelected);
+    }
+    else if (DecalRenderer *decalRend = DCAST<DecalRenderer *>(comp))
+    {
+        RenderDecalRendererGizmo(decalRend, isBeingSelected);
     }
     else if (PointLight *pl = DCAST<PointLight *>(comp))
     {
@@ -336,6 +341,47 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam, bool isBeingSelected)
             params.rotation = camTransform->GetRotation();
             RenderFactory::RenderWireframeBox(orthoBox, params);
         }
+
+        gb->PopDepthStencilTexture();
+    }
+}
+
+void ComponentsGizmos::RenderDecalRendererGizmo(DecalRenderer *dr,
+                                                bool isBeingSelected)
+{
+    Transform *tr = dr->GetGameObject()->GetTransform();
+
+    Vector3 boxCenter = tr->GetPosition();
+
+    RenderFactory::Parameters params;
+    params.position = boxCenter;
+
+    if (!isBeingSelected)
+    {
+        RenderFactory::Parameters paramsCpy = params;
+        paramsCpy.scale = Vector3(0.1f);
+        Texture2D *icon = EditorTextureFactory::GetComponentIcon(dr);
+        AddSelectionPlaneFor(dr->GetGameObject(), paramsCpy.scale, icon);
+        RenderFactory::RenderIcon(icon, true, paramsCpy);
+    }
+    else
+    {
+        params.color = Color::Green();
+
+        GBuffer *gb = GEngine::GetActiveGBuffer();
+        gb->PushDepthStencilTexture();
+        gb->SetSceneDepthStencil();
+
+        Vector3 boxSize = dr->GetBoxSize();
+        params.rotation = tr->GetRotation();
+
+        AABox box = AABox(boxSize * -0.5f, boxSize * 0.5f);
+        RenderFactory::RenderWireframeBox(box, params);
+
+        params.color = params.color.WithAlpha(0.1f);
+        box.SetMin(box.GetMin() + params.position);
+        box.SetMax(box.GetMax() + params.position);
+        RenderFactory::RenderBox(box, params);
 
         gb->PopDepthStencilTexture();
     }

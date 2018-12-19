@@ -49,6 +49,8 @@ public:
     static Texture2D *GetWhiteSphereIcon();
     static Texture2D *GetFolderIcon();
     static Texture2D *GetLetterIcon();
+    static Texture2D *GetImageIcon();
+    static Texture2D *GetSplashIcon();
     static Texture2D *GetPillIcon();
     static Texture2D *GetCubeIcon();
     static Texture2D *GetBracketsIcon();
