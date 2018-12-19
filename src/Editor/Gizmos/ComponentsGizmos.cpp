@@ -365,7 +365,7 @@ void ComponentsGizmos::RenderPointLightGizmo(PointLight *pointLight,
 
         params.thickness = 2.0f;
         RenderFactory::RenderWireframeSphere(
-            pointLight->GetRange(), true, params, 1, 2, 32);
+            pointLight->GetRange(), true, params, 1, 1, 32);
 
         gb->PopDepthStencilTexture();
     }
