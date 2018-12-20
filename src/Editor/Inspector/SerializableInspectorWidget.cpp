@@ -64,20 +64,11 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
 {
     if (!reflectStruct.EqualsWithoutValue(m_previousReflectStruct))
     {
-        // Clear old reflect widgets (if any)
-        for (GameObject *widget : GetWidgets())
-        {
-            inspectorWidget->RemoveWidget(widget);
-        }
-
-        // Clear structures
-        m_reflectWidgets.Clear();
-        m_reflectWidgetToReflectVar.Clear();
-        m_varNameToReflectWidget.Clear();
-
         int totalLabelsWidth = GetLabelsWidth();
 
         // Add widgets to structures
+        Array<String> widgetNamesToAdd;
+        Array<GameObject *> widgetsToAdd;
         for (const ReflectVariable &reflVar : reflectStruct.GetVariables())
         {
             if (!reflVar.GetHints().GetIsShown())
@@ -85,9 +76,30 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                 continue;
             }
 
-            GameObject *widgetToAdd = nullptr;
-            String widgetName = reflVar.GetName();
-            Variant::Type variantType = reflVar.GetVariant().GetType();
+            bool needsToRecreateVar = true;
+            GameObject *prevWidget = nullptr;
+            const String varName = reflVar.GetName();
+            if (m_varNameToReflectWidget.ContainsKey(varName))
+            {
+                prevWidget = m_varNameToReflectWidget.Get(varName);
+                ASSERT(m_reflectWidgetToReflectVar.ContainsKey(prevWidget));
+
+                const ReflectVariable &previousReflVar =
+                    m_reflectWidgetToReflectVar.Get(prevWidget);
+                needsToRecreateVar =
+                    NeedsToRecreateWidget(previousReflVar, reflVar);
+
+                const bool destroyWidget = needsToRecreateVar;
+                m_reflectWidgets.Remove(prevWidget);
+                m_reflectWidgetToReflectVar.Remove(prevWidget);
+                m_varNameToReflectWidget.Remove(varName);
+                inspectorWidget->RemoveWidget(prevWidget, destroyWidget);
+            }
+
+            ASSERT(needsToRecreateVar == (prevWidget == nullptr));
+
+            GameObject *widget = nullptr;
+            const Variant::Type variantType = reflVar.GetVariant().GetType();
             if (variantType == Variant::Type::FLOAT ||
                 variantType == Variant::Type::DOUBLE ||
                 variantType == Variant::Type::INT ||
@@ -97,7 +109,11 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                     reflVar.GetHints().GetIsEnumFlags())
                 {
                     UIComboBox *enumInput =
-                        GameObjectFactory::CreateUIComboBox();
+                        (needsToRecreateVar
+                             ? GameObjectFactory::CreateUIComboBox()
+                             : prevWidget->GetComponent<UIComboBox>());
+                    ASSERT(enumInput);
+
                     enumInput->SetMultiCheck(
                         reflVar.GetHints().GetIsEnumFlags());
 
@@ -116,14 +132,18 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                         enumInput->EventEmitter<IEventsValueChanged>::
                             RegisterListener(inspectorWidget);
                     }
-                    widgetToAdd = enumInput->GetGameObject();
+                    widget = enumInput->GetGameObject();
                 }
                 else
                 {
                     UIInputNumber *inputNumber = nullptr;
                     if (reflVar.GetHints().GetIsSlider())
                     {
-                        UISlider *slider = GameObjectFactory::CreateUISlider();
+                        UISlider *slider =
+                            (needsToRecreateVar
+                                 ? GameObjectFactory::CreateUISlider()
+                                 : prevWidget->GetComponent<UISlider>());
+                        ASSERT(slider);
 
                         slider->SetMinMaxValues(
                             reflVar.GetHints().GetMinValue().x,
@@ -134,11 +154,15 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
 
                         slider->EventEmitter<IEventsValueChanged>::
                             RegisterListener(inspectorWidget);
-                        widgetToAdd = slider->GetGameObject();
+                        widget = slider->GetGameObject();
                     }
                     else
                     {
-                        inputNumber = GameObjectFactory::CreateUIInputNumber();
+                        inputNumber =
+                            (needsToRecreateVar
+                                 ? GameObjectFactory::CreateUIInputNumber()
+                                 : prevWidget->GetComponent<UIInputNumber>());
+                        ASSERT(inputNumber);
 
                         inputNumber->SetMinMaxValues(
                             reflVar.GetHints().GetMinValue().x,
@@ -148,7 +172,7 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
 
                         inputNumber->EventEmitter<IEventsValueChanged>::
                             RegisterListener(inspectorWidget);
-                        widgetToAdd = inputNumber->GetGameObject();
+                        widget = inputNumber->GetGameObject();
                     }
 
                     inputNumber->SetStep(reflVar.GetHints().GetStepValue());
@@ -166,12 +190,16 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                 if (reflVar.GetHints().GetIsButton())
                 {
                     UIButton *button =
-                        GameObjectFactory::CreateUIButton(reflVar.GetName());
+                        (needsToRecreateVar
+                             ? GameObjectFactory::CreateUIButton()
+                             : prevWidget->GetComponent<UIButton>());
+                    ASSERT(button);
+
                     button->AddClickedCallback([reflVar]() {
                         reflVar.GetSetter()(Variant::From(true));
                     });
                     button->SetBlocked(reflVar.GetHints().GetIsBlocked());
-                    widgetToAdd = button->GetGameObject();
+                    widget = button->GetGameObject();
                 }
                 else
                 {
@@ -181,23 +209,32 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                     checkBox
                         ->EventEmitter<IEventsValueChanged>::RegisterListener(
                             inspectorWidget);
-                    widgetToAdd = checkBox->GetGameObject();
+                    widget = checkBox->GetGameObject();
                 }
             }
             else if (variantType == Variant::Type::GUID)
             {
-                UIInputFile *inputFile = new UIInputFile();
+                UIInputFile *inputFile =
+                    (needsToRecreateVar ? new UIInputFile()
+                                        : SCAST<UIInputFile *>(prevWidget));
+                ASSERT(inputFile);
+
                 inputFile->SetShowPreview(true);
                 inputFile->SetPath(Path::Empty());
-                inputFile->SetZoomable(reflVar.GetHints().GetIsZoomablePreview());
+                inputFile->SetZoomable(
+                    reflVar.GetHints().GetIsZoomablePreview());
                 inputFile->SetExtensions(reflVar.GetHints().GetExtensions());
                 inputFile->EventEmitter<IEventsValueChanged>::RegisterListener(
                     inspectorWidget);
-                widgetToAdd = inputFile;
+                widget = inputFile;
             }
             else if (variantType == Variant::Type::OBJECT_PTR)
             {
-                UIInputObject *inputObject = new UIInputObject();
+                UIInputObject *inputObject =
+                    (needsToRecreateVar ? new UIInputObject()
+                                        : SCAST<UIInputObject *>(prevWidget));
+                ASSERT(inputObject);
+
                 inputObject->SetAcceptedClassIdBeginAndEnd(
                     reflVar.GetHints().GetObjectPtrClassIdBegin(),
                     reflVar.GetHints().GetObjectPtrClassIdEnd());
@@ -211,11 +248,15 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                     EditorTextureFactory::GetComponentIcon(objClassStr),
                     EditorTextureFactory::GetComponentIconTint(objClassStr));
 
-                widgetToAdd = inputObject;
+                widget = inputObject;
             }
             else if (variantType == Variant::Type::PATH)
             {
-                UIInputFile *inputFile = new UIInputFile();
+                UIInputFile *inputFile =
+                    (needsToRecreateVar ? new UIInputFile()
+                                        : SCAST<UIInputFile *>(prevWidget));
+                ASSERT(inputFile);
+
                 inputFile->SetShowPreview(false);
                 inputFile->SetPath(Path::Empty());
                 inputFile->SetExtensions(reflVar.GetHints().GetExtensions());
@@ -223,17 +264,22 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                     inspectorWidget);
                 inputFile->GetInputText()->SetBlocked(
                     reflVar.GetHints().GetIsBlocked());
-                widgetToAdd = inputFile;
+                widget = inputFile;
             }
             else if (variantType == Variant::Type::STRING)
             {
-                UIInputText *inputText = GameObjectFactory::CreateUIInputText();
+                UIInputText *inputText =
+                    (needsToRecreateVar
+                         ? GameObjectFactory::CreateUIInputText()
+                         : prevWidget->GetComponent<UIInputText>());
+                ASSERT(inputText);
+
                 inputText->GetText()->SetContent(
                     reflVar.GetInitValue().GetString());
                 inputText->EventEmitter<IEventsValueChanged>::RegisterListener(
                     inspectorWidget);
                 inputText->SetBlocked(reflVar.GetHints().GetIsBlocked());
-                widgetToAdd = inputText->GetGameObject();
+                widget = inputText->GetGameObject();
             }
             else if (variantType == Variant::Type::VECTOR2 ||
                      variantType == Variant::Type::VECTOR3 ||
@@ -258,7 +304,11 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                     numComps = 3;
                 }
 
-                UIInputVector *inputVec = new UIInputVector();
+                UIInputVector *inputVec =
+                    (needsToRecreateVar ? new UIInputVector()
+                                        : SCAST<UIInputVector *>(prevWidget));
+                ASSERT(inputVec);
+
                 inputVec->SetBlocked(reflVar.GetHints().GetIsBlocked());
                 inputVec->SetSize(numComps);
                 inputVec->Set(
@@ -273,29 +323,36 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                 }
                 inputVec->EventEmitter<IEventsValueChanged>::RegisterListener(
                     inspectorWidget);
-                widgetToAdd = inputVec;
+                widget = inputVec;
             }
             else if (variantType == Variant::Type::COLOR)
             {
-                UIInputColor *inputColor = new UIInputColor();
+                UIInputColor *inputColor =
+                    (needsToRecreateVar ? new UIInputColor()
+                                        : SCAST<UIInputColor *>(prevWidget));
+                ASSERT(inputColor);
+
                 inputColor->SetColor(reflVar.GetInitValue().GetColor());
                 inputColor->EventEmitter<IEventsValueChanged>::RegisterListener(
                     inspectorWidget);
-                widgetToAdd = inputColor;
+                widget = inputColor;
             }
 
-            if (widgetToAdd)
+            if (widget)
             {
-                m_varNameToReflectWidget.Add(reflVar.GetName(), widgetToAdd);
-                m_reflectWidgetToReflectVar.Add(widgetToAdd, reflVar);
-                m_reflectWidgets.PushBack(widgetToAdd);
+                widgetsToAdd.PushBack(widget);
+                widgetNamesToAdd.PushBack(varName);
+                m_varNameToReflectWidget.Add(varName, widget);
+                m_reflectWidgetToReflectVar.Add(widget, reflVar);
+                m_reflectWidgets.PushBack(widget);
             }
         }
 
         // Add reflect widgets
-        for (GameObject *widget : GetWidgets())
+        for (uint i = 0; i < widgetsToAdd.Size(); ++i)
         {
-            String name = GetWidgetToReflectedVar().Get(widget).GetName();
+            const String &name = widgetNamesToAdd[i];
+            GameObject *widget = widgetsToAdd[i];
             const bool needsLabel = (!widget->GetComponent<UIButton>());
             if (needsLabel)
             {
@@ -389,6 +446,25 @@ void SerializableInspectorWidget::UpdateWidgetsContentFromMeta(
             }
         }
     }
+}
+
+bool SerializableInspectorWidget::NeedsToRecreateWidget(
+    const ReflectVariable &previousVariable,
+    const ReflectVariable &currentVariable) const
+{
+    const ReflectVariableHints &prvh = previousVariable.GetHints();
+    const ReflectVariableHints &crvh = currentVariable.GetHints();
+
+    bool needsToRemoveWidget = false;
+    needsToRemoveWidget |= (prvh.GetIsEnum() != crvh.GetIsEnum());
+    needsToRemoveWidget |= (prvh.GetIsShown() != crvh.GetIsShown());
+    needsToRemoveWidget |= (prvh.GetIsButton() != crvh.GetIsButton());
+    needsToRemoveWidget |= (prvh.GetIsButton() != crvh.GetIsButton());
+    needsToRemoveWidget |= (prvh.GetIsSlider() != crvh.GetIsSlider());
+    needsToRemoveWidget |= (prvh.GetIsEnumFlags() != crvh.GetIsEnumFlags());
+    needsToRemoveWidget |= (previousVariable.GetVariant().GetType() !=
+                            currentVariable.GetVariant().GetType());
+    return needsToRemoveWidget;
 }
 
 String GetStringValueFromWidget(GameObject *widget)

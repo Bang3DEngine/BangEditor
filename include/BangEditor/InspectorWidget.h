@@ -41,7 +41,7 @@ public:
     void AddWidget(const String &labelContent,
                    GameObject *widget,
                    int height = DefaultWidgetHeight);
-    void RemoveWidget(GameObject *widget);
+    void RemoveWidget(GameObject *widget, bool destroy);
 
     const String &GetTitle() const;
     void SetBackgroundColor(const Color &bgColor);

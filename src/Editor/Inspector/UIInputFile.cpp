@@ -120,12 +120,12 @@ void UIInputFile::SetPath(const Path &path)
     {
         m_path = path;
 
-        bool pathGood =
+        bool pathIsGood =
             (GetPath().IsFile() || Resources::IsEmbeddedResource(path));
-        String textContent = pathGood ? GetPath().GetNameExt() : "None";
+        String textContent = pathIsGood ? GetPath().GetNameExt() : "None";
         GetInputText()->GetText()->SetContent(textContent);
 
-        GetOpenButton()->SetBlocked(!pathGood);
+        GetOpenButton()->SetBlocked(!pathIsGood);
 
         EventEmitter<IEventsValueChanged>::PropagateToListeners(
             &IEventsValueChanged::OnValueChanged, this);

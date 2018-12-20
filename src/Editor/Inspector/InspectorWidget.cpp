@@ -193,11 +193,16 @@ void InspectorWidget::AddWidgetInternal(const String &labelContent,
     p_widgets.PushBack(widget);
 }
 
-void InspectorWidget::RemoveWidget(GameObject *widget)
+void InspectorWidget::RemoveWidget(GameObject *widget, bool destroy)
 {
     GameObject *widgetContainer = widget->GetParent();
     p_widgets.Remove(widget);
     m_widgetToLabel.Remove(widget);
+
+    if (!destroy)
+    {
+        widget->SetParent(nullptr);
+    }
     GameObject::Destroy(widgetContainer);
 }
 

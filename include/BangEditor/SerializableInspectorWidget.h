@@ -39,6 +39,8 @@ public:
                                             InspectorWidget *inspectorWidget);
     void UpdateWidgetsContentFromMeta(const MetaNode &meta);
 
+    bool NeedsToRecreateWidget(const ReflectVariable &previousVariable,
+                               const ReflectVariable &currentVariable) const;
     MetaNode GetMetaFromWidget(GameObject *widget) const;
     MetaNode GetMetaFromReflectWidgets() const;
 
