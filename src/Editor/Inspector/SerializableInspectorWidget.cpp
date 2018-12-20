@@ -189,7 +189,7 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                 UIInputFile *inputFile = new UIInputFile();
                 inputFile->SetShowPreview(true);
                 inputFile->SetPath(Path::Empty());
-                inputFile->SetZoomable(reflVar.GetHints().GetZoomablePreview());
+                inputFile->SetZoomable(reflVar.GetHints().GetIsZoomablePreview());
                 inputFile->SetExtensions(reflVar.GetHints().GetExtensions());
                 inputFile->EventEmitter<IEventsValueChanged>::RegisterListener(
                     inspectorWidget);

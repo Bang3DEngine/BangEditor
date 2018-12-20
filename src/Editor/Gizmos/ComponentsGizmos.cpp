@@ -366,24 +366,69 @@ void ComponentsGizmos::RenderDecalRendererGizmo(DecalRenderer *dr,
     }
     else
     {
+        GL::Push(GL::Pushable::DEPTH_STATES);
+
         params.color = Color::Green();
 
         GBuffer *gb = GEngine::GetActiveGBuffer();
         gb->PushDepthStencilTexture();
         gb->SetSceneDepthStencil();
 
-        Vector3 boxSize = dr->GetBoxSize();
-        params.rotation = tr->GetRotation();
+        if (dr->GetIsProjective())
+        {
+            Transform *tr = dr->GetGameObject()->GetTransform();
+            params.position = Vector3::Zero();
+            RenderFactory::RenderFrustum(tr->GetForward(),
+                                         tr->GetUp(),
+                                         tr->GetPosition(),
+                                         dr->GetZNear(),
+                                         dr->GetZFar(),
+                                         dr->GetFieldOfViewDegrees(),
+                                         dr->GetAspectRatio(),
+                                         params);
+        }
+        else
+        {
+            Vector3 boxSize = dr->GetBoxSize();
+            params.rotation = tr->GetRotation();
+            params.scale = boxSize;
 
-        AABox box = AABox(boxSize * -0.5f, boxSize * 0.5f);
-        RenderFactory::RenderWireframeBox(box, params);
+            AABox boxLocal = AABox(Vector3(-0.5f), Vector3(0.5f));
+            RenderFactory::RenderWireframeBox(boxLocal, params);
 
-        params.color = params.color.WithAlpha(0.1f);
-        box.SetMin(box.GetMin() + params.position);
-        box.SetMax(box.GetMax() + params.position);
-        RenderFactory::RenderBox(box, params);
+            AABox boxLocalTrans = boxLocal;
+            params.depthMask = false;
+            params.color = params.color.WithAlpha(0.1f);
+            boxLocalTrans.SetMin(boxLocalTrans.GetMin() + params.position);
+            boxLocalTrans.SetMax(boxLocalTrans.GetMax() + params.position);
+            RenderFactory::RenderBox(boxLocalTrans, params);
+
+            Quaternion r = params.rotation;
+            Vector3 boxMinWorld = params.position - r * boxSize * 0.5f;
+            boxMinWorld -= (r * Vector3::Forward() * boxSize.z);
+
+            params.position = Vector3::Zero();
+            params.rotation = Quaternion::Identity();
+            params.color = Color::Red();
+            params.thickness = 5.0f;
+            params.scale = Vector3::One();
+
+            float markerSizeX = boxSize.x * 0.3f;
+            RenderFactory::RenderLine(
+                boxMinWorld,
+                boxMinWorld + r * (Vector3::Right() * markerSizeX),
+                params);
+
+            float markerSizeY = boxSize.y * 0.3f;
+            RenderFactory::RenderLine(
+                boxMinWorld,
+                boxMinWorld + r * (Vector3::Up() * markerSizeY),
+                params);
+        }
 
         gb->PopDepthStencilTexture();
+
+        GL::Pop(GL::Pushable::DEPTH_STATES);
     }
 }
 

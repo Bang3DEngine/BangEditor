@@ -120,15 +120,15 @@ void RIWMaterial::Init()
         this);
 
     p_renderPassInput = GameObjectFactory::CreateUIComboBox();
-    p_renderPassInput->AddItem("Scene", SCAST<int>(RenderPass::SCENE));
+    p_renderPassInput->AddItem("Scene", SCAST<int>(RenderPass::SCENE_OPAQUE));
     p_renderPassInput->AddItem("Transparent",
                                SCAST<int>(RenderPass::SCENE_TRANSPARENT));
     p_renderPassInput->AddItem("Canvas", SCAST<int>(RenderPass::CANVAS));
     p_renderPassInput->AddItem("Overlay", SCAST<int>(RenderPass::OVERLAY));
-    p_renderPassInput->AddItem("ScenePostProcess",
-                               SCAST<int>(RenderPass::SCENE_BEFORE_ADDING_LIGHTS));
-    p_renderPassInput->AddItem("ScenePostProcess2",
-                               SCAST<int>(RenderPass::SCENE_AFTER_ADDING_LIGHTS));
+    p_renderPassInput->AddItem(
+        "ScenePostProcess", SCAST<int>(RenderPass::SCENE_BEFORE_ADDING_LIGHTS));
+    p_renderPassInput->AddItem(
+        "ScenePostProcess2", SCAST<int>(RenderPass::SCENE_AFTER_ADDING_LIGHTS));
     p_renderPassInput->AddItem("CanvasPostProcess",
                                SCAST<int>(RenderPass::CANVAS_POSTPROCESS));
     p_renderPassInput->AddItem("OverlayPostProcess",

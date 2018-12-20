@@ -134,7 +134,7 @@ void EditorScene::Init()
 
     // Editor cam creation
     Camera *cam = GameObjectFactory::CreateUICameraInto(this);
-    cam->RemoveRenderPass(RenderPass::SCENE);
+    cam->RemoveRenderPass(RenderPass::SCENE_OPAQUE);
     cam->RemoveRenderPass(RenderPass::SCENE_DECALS);
     cam->RemoveRenderPass(RenderPass::SCENE_BEFORE_ADDING_LIGHTS);
     cam->RemoveRenderPass(RenderPass::SCENE_AFTER_ADDING_LIGHTS);
