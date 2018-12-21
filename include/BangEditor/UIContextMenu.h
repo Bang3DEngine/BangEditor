@@ -37,11 +37,11 @@ class UIContextMenu : public Component,
                       public EventListener<IEventsFocus>,
                       public EventListener<IEventsDestroy>
 {
-    COMPONENT(UIContextMenu)
+    COMPONENT_WITHOUT_CLASS_ID(UIContextMenu)
 
 public:
     UIContextMenu();
-    virtual ~UIContextMenu() = default;
+    virtual ~UIContextMenu() override = default;
 
     void ShowMenu();
     bool IsMenuBeingShown() const;

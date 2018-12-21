@@ -10,7 +10,7 @@ namespace BangEditor
 {
 class HideInHierarchy : public Component
 {
-    COMPONENT(HideInHierarchy)
+    COMPONENT_WITHOUT_CLASS_ID(HideInHierarchy)
 
 public:
     HideInHierarchy() = default;

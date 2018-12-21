@@ -16,7 +16,7 @@ namespace BangEditor
 {
 class SelectionOptions : public Component
 {
-    COMPONENT(SelectionOptions);
+    COMPONENT_WITHOUT_CLASS_ID(SelectionOptions);
 
 public:
     SelectionOptions();

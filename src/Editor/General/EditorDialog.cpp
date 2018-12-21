@@ -274,7 +274,7 @@ void EditorDialog::CreateGetObjectSceneInto(Scene *scene,
             for (Object *object : objects)
             {
                 if (!object ||
-                    IsSubClass(
+                    ClassDB::IsSubClass(
                         acceptedClassIdBegin, acceptedClassIdEnd, object))
                 {
                     ObjectItem *objectItem = new ObjectItem();

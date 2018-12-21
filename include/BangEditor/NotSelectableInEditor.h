@@ -10,7 +10,7 @@ namespace BangEditor
 {
 class NotSelectableInEditor : public Component
 {
-    COMPONENT(NotSelectableInEditor)
+    COMPONENT_WITHOUT_CLASS_ID(NotSelectableInEditor)
 
 private:
     NotSelectableInEditor() = default;

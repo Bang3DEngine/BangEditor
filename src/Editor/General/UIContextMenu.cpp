@@ -1,7 +1,7 @@
 #include "BangEditor/UIContextMenu.h"
 
+#include "Bang/ClassDB.h"
 #include "Bang/EventEmitter.h"
-#include "Bang/FastDynamicCast.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/IEventsDestroy.h"

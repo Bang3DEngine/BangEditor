@@ -43,7 +43,7 @@ void UIInputObject::SetObject(Object *object_)
 {
     Object *object = object_;
     if (object_ &&
-        !IsSubClass(
+        !ClassDB::IsSubClass(
             GetAcceptedClassIdBegin(), GetAcceptedClassIdEnd(), object_))
     {
         object = GetAcceptedObjectIn(GetGameObjectOf(object_));
