@@ -17,7 +17,6 @@
 #include "Bang/IEventsFocus.h"
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
-#include "BangEditor/EditorComponentsClassIds.h"
 #include "BangEditor/MenuItem.h"
 
 namespace Bang
@@ -38,7 +37,7 @@ class UIContextMenu : public Component,
                       public EventListener<IEventsFocus>,
                       public EventListener<IEventsDestroy>
 {
-    COMPONENT_WITH_FAST_DYNAMIC_CAST(UIContextMenu)
+    COMPONENT(UIContextMenu)
 
 public:
     UIContextMenu();

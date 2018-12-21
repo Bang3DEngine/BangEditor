@@ -4,20 +4,16 @@
 #include "Bang/Component.h"
 
 #include "BangEditor/BangEditor.h"
-#include "BangEditor/EditorComponentsClassIds.h"
 
 using namespace Bang;
 namespace BangEditor
 {
 class NotSelectableInEditor : public Component
 {
-    COMPONENT_WITH_FAST_DYNAMIC_CAST(NotSelectableInEditor)
+    COMPONENT(NotSelectableInEditor)
 
 private:
-    NotSelectableInEditor()
-    {
-        CONSTRUCT_CLASS_ID(NotSelectableInEditor)
-    }
+    NotSelectableInEditor() = default;
     virtual ~NotSelectableInEditor() override = default;
 };
 }

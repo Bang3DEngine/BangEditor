@@ -4,20 +4,16 @@
 #include "Bang/Component.h"
 
 #include "BangEditor/BangEditor.h"
-#include "BangEditor/EditorComponentsClassIds.h"
 
 using namespace Bang;
 namespace BangEditor
 {
 class HideInHierarchy : public Component
 {
-    COMPONENT_WITH_FAST_DYNAMIC_CAST(HideInHierarchy)
+    COMPONENT(HideInHierarchy)
 
 public:
-    HideInHierarchy()
-    {
-        CONSTRUCT_CLASS_ID(HideInHierarchy);
-    }
+    HideInHierarchy() = default;
     virtual ~HideInHierarchy() override = default;
 };
 }

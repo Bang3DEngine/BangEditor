@@ -24,7 +24,6 @@ using namespace BangEditor;
 
 UIContextMenu::UIContextMenu()
 {
-    CONSTRUCT_CLASS_ID(UIContextMenu);
 }
 
 void UIContextMenu::ShowMenu()
