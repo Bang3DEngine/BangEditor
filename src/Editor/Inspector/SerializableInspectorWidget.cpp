@@ -71,11 +71,6 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
         Array<GameObject *> widgetsToAdd;
         for (const ReflectVariable &reflVar : reflectStruct.GetVariables())
         {
-            if (!reflVar.GetHints().GetIsShown())
-            {
-                continue;
-            }
-
             bool needsToRecreateVar = true;
             GameObject *prevWidget = nullptr;
             const String varName = reflVar.GetName();
@@ -94,6 +89,11 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                 m_reflectWidgetToReflectVar.Remove(prevWidget);
                 m_varNameToReflectWidget.Remove(varName);
                 inspectorWidget->RemoveWidget(prevWidget, destroyWidget);
+            }
+
+            if (!reflVar.GetHints().GetIsShown())
+            {
+                continue;
             }
 
             ASSERT(needsToRecreateVar == (prevWidget == nullptr));
