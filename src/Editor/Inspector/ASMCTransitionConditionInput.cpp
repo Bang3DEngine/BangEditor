@@ -115,6 +115,8 @@ void ASMTransitionConditionInput::SetStateMachineTransition(
     if (transition != p_stateMachineTransition)
     {
         p_stateMachineTransition = transition;
+        GetStateMachineTransition()
+            ->EventEmitter<IEventsDestroy>::RegisterListener(this);
         UpdateFromVariable();
     }
 }
@@ -134,8 +136,9 @@ AnimatorStateMachineLayer *ASMTransitionConditionInput::GetStateMachineLayer()
 AnimatorStateMachineNode *ASMTransitionConditionInput::GetStateMachineNode()
     const
 {
-    return GetStateMachineTransition() ? p_stateMachineTransition->GetNodeFrom()
-                                       : nullptr;
+    return GetStateMachineTransition()
+               ? GetStateMachineTransition()->GetNodeFrom()
+               : nullptr;
 }
 
 AnimatorStateMachineTransition *
@@ -186,6 +189,12 @@ void ASMTransitionConditionInput::UpdateFromVariable()
 
         m_updatingFromVariable = false;
     }
+}
+
+void ASMTransitionConditionInput::OnDestroyed(EventEmitter<IEventsDestroy> *ee)
+{
+    GameObject::OnDestroyed(ee);
+    GameObject::Destroy(this);
 }
 
 void ASMTransitionConditionInput::OnValueChanged(

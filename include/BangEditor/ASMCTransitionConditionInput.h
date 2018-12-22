@@ -62,6 +62,9 @@ private:
 
     void UpdateFromVariable();
 
+    // IEventsDestroy
+    virtual void OnDestroyed(EventEmitter<IEventsDestroy> *ee) override;
+
     // IEventsValueChanged
     virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *ee) override;
 

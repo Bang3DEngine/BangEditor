@@ -338,6 +338,7 @@ void GIWAESConnectionLine::OnDestroyed(EventEmitter<IEventsDestroy> *object)
     if (object == GetSelectedSMTransition())
     {
         SetSelectedSMTransition(nullptr);
+        Inspector::GetActive()->Clear();
     }
     else
     {
