@@ -122,7 +122,17 @@ void UIInputFile::SetPath(const Path &path)
 
         bool pathIsGood =
             (GetPath().IsFile() || Resources::IsEmbeddedResource(path));
-        String textContent = pathIsGood ? GetPath().GetNameExt() : "None";
+
+        String textContent = "None";
+        if (pathIsGood)
+        {
+            textContent = GetPath().GetNameExt();
+            if (Resources::IsEmbeddedResource(GetPath()))
+            {
+                textContent.Prepend(GetPath().GetDirectory().GetNameExt() +
+                                    "/");
+            }
+        }
         GetInputText()->GetText()->SetContent(textContent);
 
         GetOpenButton()->SetBlocked(!pathIsGood);

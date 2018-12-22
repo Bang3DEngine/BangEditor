@@ -27,7 +27,7 @@ private:
     virtual ~RIWAnimatorLayerMask() override;
 
     // RIWResource
-    Array<String> GetBoneNamesFromInputs() const;
+    Array<AnimatorLayerMask::BoneEntry> GetBoneEntriesFromInputs() const;
     void UpdateInputsFromResource() override;
     Texture2D *GetIconTexture() const override;
     void OnValueChangedRIWResource(
@@ -36,15 +36,20 @@ private:
     friend class ResourceInspectorWidgetFactory;
 };
 
-class BoneNameRow : public GameObject,
-                    public EventListener<IEventsValueChanged>,
-                    public EventEmitter<IEventsValueChanged>
+class BoneEntryRow : public GameObject,
+                     public EventListener<IEventsValueChanged>,
+                     public EventEmitter<IEventsValueChanged>
 {
 public:
-    BoneNameRow();
+    BoneEntryRow();
 
     void SetBoneName(const String &boneName);
+    void SetAddAscendants(bool addAscendants);
+    void SetAddDescendants(bool addDescendants);
+
     String GetBoneName() const;
+    bool GetAddAscendants() const;
+    bool GetAddDescendants() const;
 
     // IEventsValueChanged
     void OnValueChanged(EventEmitter<IEventsValueChanged> *) override;
@@ -55,6 +60,8 @@ public:
 
 private:
     UIInputText *p_boneNameInput = nullptr;
+    UICheckBox *p_addAscendantsInput = nullptr;
+    UICheckBox *p_addDescendantsInput = nullptr;
 };
 }
 

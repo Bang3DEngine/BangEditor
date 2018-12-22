@@ -20,6 +20,7 @@
 #include "Bang/Paths.h"
 #include "Bang/RectTransform.h"
 #include "Bang/ResourceHandle.h"
+#include "Bang/Resources.h"
 #include "Bang/Scene.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/ShaderProgramFactory.h"
@@ -321,12 +322,21 @@ void EditorDialog::CreateGetAssetSceneInto(Scene *scene,
             Path path = expItem->GetPath();
             if (path.IsEmpty() || path.HasExtension(extensions))
             {
-                expItem->GetLabel()->GetText()->SetTextColor(Color::Black());
-
+                String textContent = path.GetNameExt();
                 if (path.IsEmpty())
                 {
-                    expItem->GetLabel()->GetText()->SetContent("None");
+                    textContent = "None";
                 }
+                else
+                {
+                    if (Resources::IsEmbeddedResource(path))
+                    {
+                        textContent = path.GetDirectory().GetNameExt() + "/" +
+                                      path.GetNameExt();
+                    }
+                }
+                expItem->GetLabel()->GetText()->SetContent(textContent);
+                expItem->GetLabel()->GetText()->SetTextColor(Color::Black());
 
                 navItems.PushBack(expItem);
             }

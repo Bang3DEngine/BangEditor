@@ -8,7 +8,7 @@ using namespace Bang;
 BANG_CLASS(BEHAVIOUR_NAME)
 class BEHAVIOUR_NAME : public Behaviour
 {
-    COMPONENT(BEHAVIOUR_NAME);
+    COMPONENT_WITHOUT_CLASS_ID(BEHAVIOUR_NAME);
 
 public:
     BEHAVIOUR_NAME() = default;
