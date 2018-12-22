@@ -34,9 +34,9 @@ void RIWAnimatorLayerMask::Init()
     p_boneNamesInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     AddLabel("Mask bone names");
-    // AddWidget(
-    //     GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5));
-    AddWidget(p_boneNamesInput);
+    AddWidget(
+        GameObjectFactory::CreateUIHSeparator(LayoutSizeType::PREFERRED, 5));
+    AddWidget(p_boneNamesInput, -1);
 
     SetLabelsWidth(100);
 }
