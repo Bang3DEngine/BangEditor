@@ -54,7 +54,7 @@ private:
     UIList *p_transitionsList = nullptr;
     GameObject *p_transitionsListSeparator = nullptr;
 
-    UICheckBox *p_immediateTransitionInput = nullptr;
+    UICheckBox *p_waitForAnimationToFinishInput = nullptr;
     UIInputNumber *p_transitionDurationInput = nullptr;
     UILabel *p_notificationLabel = nullptr;
     UIInputArray *p_transitionConditionsInput = nullptr;

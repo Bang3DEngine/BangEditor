@@ -374,7 +374,7 @@ void ComponentsGizmos::RenderDecalRendererGizmo(DecalRenderer *dr,
         gb->PushDepthStencilTexture();
         gb->SetSceneDepthStencil();
 
-        if (dr->GetIsProjective())
+        if (dr->GetIsPerspective())
         {
             Transform *tr = dr->GetGameObject()->GetTransform();
             params.position = Vector3::Zero();

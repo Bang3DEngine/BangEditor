@@ -126,8 +126,8 @@ void GIWAESConnectionLine::InitInnerWidgets()
         "add transition conditions");
     p_notificationLabel->GetText()->SetTextColor(Color::Red());
 
-    p_immediateTransitionInput = GameObjectFactory::CreateUICheckBox();
-    p_immediateTransitionInput
+    p_waitForAnimationToFinishInput = GameObjectFactory::CreateUICheckBox();
+    p_waitForAnimationToFinishInput
         ->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_transitionDurationInput = GameObjectFactory::CreateUIInputNumber();
@@ -137,8 +137,8 @@ void GIWAESConnectionLine::InitInnerWidgets()
 
     AddWidget(p_transitionsList->GetGameObject(), 70);
     AddWidget(p_transitionsListSeparator, 20);
-    AddWidget("Can do immediate transition",
-              p_immediateTransitionInput->GetGameObject());
+    AddWidget("Wait for animation to finish",
+              p_waitForAnimationToFinishInput->GetGameObject());
     AddWidget("Transition duration",
               p_transitionDurationInput->GetGameObject());
     AddWidget(GameObjectFactory::CreateUIHSeparator(), 20);
@@ -285,8 +285,8 @@ void GIWAESConnectionLine::UpdateFromReference()
 
     if (GetSelectedSMTransition())
     {
-        p_immediateTransitionInput->SetChecked(
-            GetSelectedSMTransition()->GetImmediateTransition());
+        p_waitForAnimationToFinishInput->SetChecked(
+            GetSelectedSMTransition()->GetWaitForAnimationToFinish());
 
         p_transitionDurationInput->SetValue(SCAST<float>(
             GetSelectedSMTransition()->GetTransitionDuration().GetSeconds()));
@@ -315,10 +315,10 @@ void GIWAESConnectionLine::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
     BANG_UNUSED(ee);
     if (GetSelectedSMTransition())
     {
-        if (ee == p_immediateTransitionInput)
+        if (ee == p_waitForAnimationToFinishInput)
         {
-            GetSelectedSMTransition()->SetImmediateTransition(
-                p_immediateTransitionInput->IsChecked());
+            GetSelectedSMTransition()->SetWaitForAnimationToFinish(
+                p_waitForAnimationToFinishInput->IsChecked());
         }
 
         if (ee == p_transitionDurationInput)
