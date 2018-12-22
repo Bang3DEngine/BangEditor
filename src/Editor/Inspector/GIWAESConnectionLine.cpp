@@ -192,9 +192,10 @@ void GIWAESConnectionLine::EnableNeededWidgets()
         SetWidgetEnabled(p_transitionsListSeparator, moreThanOneTransition);
 
         bool atLeastOneVar =
-            GetSelectedSMTransition() &&
-            (GetAESConnectionLine()->GetAnimatorSM()->GetVariables().Size() >=
-             1);
+            GetSelectedSMTransition() && (GetAESConnectionLine()
+                                              ->GetAnimatorSM()
+                                              ->GetVariableDefaults()
+                                              .Size() >= 1);
 
         SetWidgetEnabled(p_transitionConditionsInput, atLeastOneVar);
         SetWidgetEnabled(p_notificationLabel->GetGameObject(), !atLeastOneVar);

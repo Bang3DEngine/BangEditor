@@ -213,7 +213,7 @@ void AnimatorSMEditor::Update()
             Time::Seconds(0.2f))
         {
             p_layersInput->UpdateRows(GetAnimatorSM()->GetLayers());
-            p_variablesInput->UpdateRows(GetAnimatorSM()->GetVariables());
+            p_variablesInput->UpdateRows(GetAnimatorSM()->GetVariableDefaults());
             m_lastVariablesInputUpdateTime = Time::GetNow();
         }
     }
@@ -298,7 +298,7 @@ void AnimatorSMEditor::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
     if (ee == p_variablesInput)
     {
         p_variablesInput->UpdateReferences<AnimatorStateMachineVariable>(
-            GetAnimatorSM()->GetVariables());
+            GetAnimatorSM()->GetVariableDefaults());
     }
     else if (ee == p_layersInput)
     {
