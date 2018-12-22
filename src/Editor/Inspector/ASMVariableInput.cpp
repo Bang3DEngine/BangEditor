@@ -49,8 +49,12 @@ ASMVariableInput::ASMVariableInput()
     p_varNameInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     p_varTypeInput = GameObjectFactory::CreateUIComboBox();
-    p_varTypeInput->AddItem("Float", SCAST<uint>(Variant::Type::FLOAT));
-    p_varTypeInput->AddItem("Bool", SCAST<uint>(Variant::Type::BOOL));
+    p_varTypeInput->AddItem(
+        "Float", SCAST<uint>(AnimatorStateMachineVariable::Type::FLOAT));
+    p_varTypeInput->AddItem(
+        "Bool", SCAST<uint>(AnimatorStateMachineVariable::Type::BOOL));
+    p_varTypeInput->AddItem(
+        "Trigger", SCAST<uint>(AnimatorStateMachineVariable::Type::TRIGGER));
     p_varTypeInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);
 
     GameObject *varInputGo = GameObjectFactory::CreateUIGameObject();
@@ -74,7 +78,7 @@ ASMVariableInput::ASMVariableInput()
     p_floatInput->GetGameObject()->SetParent(varInputGo);
     p_boolInput->GetGameObject()->SetParent(varInputGo);
 
-    SetVarType(Variant::Type::FLOAT);
+    SetVarType(AnimatorStateMachineVariable::Type::FLOAT);
 }
 
 ASMVariableInput::~ASMVariableInput()
@@ -91,7 +95,7 @@ Animator *ASMVariableInput::GetSelectedAnimator() const
     return selectedAnimator;
 }
 
-void ASMVariableInput::SetVarType(Variant::Type type)
+void ASMVariableInput::SetVarType(AnimatorStateMachineVariable::Type type)
 {
     if (type != GetVarType())
     {
@@ -101,11 +105,12 @@ void ASMVariableInput::SetVarType(Variant::Type type)
 
         switch (GetVarType())
         {
-            case Variant::Type::BOOL:
+            case AnimatorStateMachineVariable::Type::BOOL:
+            case AnimatorStateMachineVariable::Type::TRIGGER:
                 p_boolInput->GetGameObject()->SetEnabled(true);
                 break;
 
-            case Variant::Type::FLOAT:
+            case AnimatorStateMachineVariable::Type::FLOAT:
                 p_floatInput->GetGameObject()->SetEnabled(true);
                 break;
 
@@ -115,7 +120,7 @@ void ASMVariableInput::SetVarType(Variant::Type type)
     }
 }
 
-Variant::Type ASMVariableInput::GetVarType() const
+AnimatorStateMachineVariable::Type ASMVariableInput::GetVarType() const
 {
     return m_varType;
 }
@@ -129,7 +134,8 @@ void ASMVariableInput::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
 {
     if (ee == p_varTypeInput)
     {
-        SetVarType(SCAST<Variant::Type>(p_varTypeInput->GetSelectedValue()));
+        SetVarType(SCAST<AnimatorStateMachineVariable::Type>(
+            p_varTypeInput->GetSelectedValue()));
     }
 
     EventEmitter<IEventsValueChanged>::PropagateToListeners(

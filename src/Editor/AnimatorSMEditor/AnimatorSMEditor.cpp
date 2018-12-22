@@ -213,7 +213,8 @@ void AnimatorSMEditor::Update()
             Time::Seconds(0.2f))
         {
             p_layersInput->UpdateRows(GetAnimatorSM()->GetLayers());
-            p_variablesInput->UpdateRows(GetAnimatorSM()->GetVariableDefaults());
+            p_variablesInput->UpdateRows(
+                GetAnimatorSM()->GetVariableDefaults());
             m_lastVariablesInputUpdateTime = Time::GetNow();
         }
     }

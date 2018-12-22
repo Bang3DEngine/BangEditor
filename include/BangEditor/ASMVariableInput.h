@@ -45,13 +45,13 @@ private:
     UIComboBox *p_varTypeInput = nullptr;
     UIInputNumber *p_floatInput = nullptr;
     UICheckBox *p_boolInput = nullptr;
-
-    Variant::Type m_varType = Undef<Variant::Type>();
+    AnimatorStateMachineVariable::Type m_varType =
+        Undef<AnimatorStateMachineVariable::Type>();
 
     Animator *GetSelectedAnimator() const;
-    void SetVarType(Variant::Type type);
+    void SetVarType(AnimatorStateMachineVariable::Type type);
 
-    Variant::Type GetVarType() const;
+    AnimatorStateMachineVariable::Type GetVarType() const;
 
     // GameObject
     void Update() override;

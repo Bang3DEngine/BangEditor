@@ -42,7 +42,7 @@ public:
     // GameObject
     void BeforeRender() override;
 
-    void SetVariableType(Variant::Type type);
+    void SetVariableType(AnimatorStateMachineVariable::Type type);
     void SetStateMachineTransition(AnimatorStateMachineTransition *transition);
 
     AnimatorStateMachine *GetStateMachine() const;
@@ -57,7 +57,8 @@ private:
     UIComboBox *p_varNameInput = nullptr;
     UIComboBox *p_comparatorInput = nullptr;
     UIInputNumber *p_floatInput = nullptr;
-    Variant::Type m_varType = Undef<Variant::Type>();
+    AnimatorStateMachineVariable::Type m_varType =
+        Undef<AnimatorStateMachineVariable::Type>();
 
     void UpdateFromVariable();
 

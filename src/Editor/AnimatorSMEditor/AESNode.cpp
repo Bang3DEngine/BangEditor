@@ -391,11 +391,6 @@ void AESNode::OnTransitionRemoved(
     AnimatorStateMachineNode *node,
     AnimatorStateMachineTransition *transitionToRemove)
 {
-    if (!GetAnimatorSM())
-    {
-        return;
-    }
-
     AnimatorStateMachineNode *smNode = GetSMNode();
     ASSERT(node == smNode);
 
