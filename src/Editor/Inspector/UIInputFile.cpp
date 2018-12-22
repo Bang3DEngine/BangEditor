@@ -1,12 +1,12 @@
 #include "BangEditor/UIInputFile.h"
 
+#include "Bang/Assets.h"
 #include "Bang/Color.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/IEventsDragDrop.h"
 #include "Bang/IEventsValueChanged.h"
 #include "Bang/Paths.h"
-#include "Bang/Resources.h"
 #include "Bang/Stretch.h"
 #include "Bang/Texture2D.h"
 #include "Bang/TextureFactory.h"
@@ -50,12 +50,12 @@ bool UIInputFile::CanDoZoom() const
 
 bool UIInputFile::HasExistingPath() const
 {
-    return (GetPath().IsFile() || Resources::IsEmbeddedResource(GetPath()));
+    return (GetPath().IsFile() || Assets::IsEmbeddedAsset(GetPath()));
 }
 
-RH<Texture2D> UIInputFile::GetPreviewTextureFromPath(const Path &path)
+AH<Texture2D> UIInputFile::GetPreviewTextureFromPath(const Path &path)
 {
-    return RH<Texture2D>(EditorTextureFactory::GetIconForPath(path));
+    return AH<Texture2D>(EditorTextureFactory::GetIconForPath(path));
 }
 
 bool UIInputFile::AcceptsDrag(EventEmitter<IEventsDragDrop> *dd_) const
@@ -120,14 +120,13 @@ void UIInputFile::SetPath(const Path &path)
     {
         m_path = path;
 
-        bool pathIsGood =
-            (GetPath().IsFile() || Resources::IsEmbeddedResource(path));
+        bool pathIsGood = (GetPath().IsFile() || Assets::IsEmbeddedAsset(path));
 
         String textContent = "None";
         if (pathIsGood)
         {
             textContent = GetPath().GetNameExt();
-            if (Resources::IsEmbeddedResource(GetPath()))
+            if (Assets::IsEmbeddedAsset(GetPath()))
             {
                 textContent.Prepend(GetPath().GetDirectory().GetNameExt() +
                                     "/");
@@ -141,7 +140,7 @@ void UIInputFile::SetPath(const Path &path)
             &IEventsValueChanged::OnValueChanged, this);
     }
 
-    RH<Texture2D> previewTex;
+    AH<Texture2D> previewTex;
     if (HasExistingPath())
     {
         previewTex = GetPreviewTextureFromPath(path);

@@ -19,7 +19,7 @@
 #include "Bang/Plane.h"
 #include "Bang/Random.h"
 #include "Bang/RectTransform.h"
-#include "Bang/Resources.h"
+#include "Bang/Assets.h"
 #include "Bang/RigidBody.h"
 #include "Bang/Scene.h"
 #include "Bang/SphereCollider.h"
@@ -90,7 +90,7 @@ void EditorMeshFactoryUITabScene::Update()
     GameObject::Update();
 
     bool justChangedModel = false;
-    if (RH<Mesh> selectedMesh = GetExplorerSelectedMesh())
+    if (AH<Mesh> selectedMesh = GetExplorerSelectedMesh())
     {
         if (selectedMesh.Get() != GetCurrentMesh())
         {
@@ -107,7 +107,7 @@ void EditorMeshFactoryUITabScene::Update()
             justChangedModel = true;
         }
     }
-    else if (RH<Model> selectedModel = GetExplorerSelectedModel())
+    else if (AH<Model> selectedModel = GetExplorerSelectedModel())
     {
         if (selectedModel.Get() != GetCurrentModel())
         {
@@ -339,30 +339,30 @@ Array<MeshRenderer *> EditorMeshFactoryUITabScene::GetMeshRenderers() const
     return p_modelContainer->GetComponentsInDescendantsAndThis<MeshRenderer>();
 }
 
-RH<Mesh> EditorMeshFactoryUITabScene::GetExplorerSelectedMesh() const
+AH<Mesh> EditorMeshFactoryUITabScene::GetExplorerSelectedMesh() const
 {
     if (Explorer *exp = Explorer::GetInstance())
     {
         Path selectedPath = exp->GetSelectedPath();
         if (selectedPath.HasExtension(Extensions::GetMeshExtension()))
         {
-            RH<Mesh> mesh = Resources::Load<Mesh>(selectedPath);
+            AH<Mesh> mesh = Assets::Load<Mesh>(selectedPath);
             return mesh;
         }
     }
-    return RH<Mesh>();
+    return AH<Mesh>();
 }
 
-RH<Model> EditorMeshFactoryUITabScene::GetExplorerSelectedModel() const
+AH<Model> EditorMeshFactoryUITabScene::GetExplorerSelectedModel() const
 {
     if (Explorer *exp = Explorer::GetInstance())
     {
         Path selectedPath = exp->GetSelectedPath();
         if (selectedPath.HasExtension(Extensions::GetModelExtensions()))
         {
-            RH<Model> model = Resources::Load<Model>(selectedPath);
+            AH<Model> model = Assets::Load<Model>(selectedPath);
             return model;
         }
     }
-    return RH<Model>();
+    return AH<Model>();
 }

@@ -7,7 +7,7 @@
 #include "Bang/Color.h"
 #include "Bang/Map.h"
 #include "Bang/Path.h"
-#include "Bang/ResourceHandle.h"
+#include "Bang/AssetHandle.h"
 #include "Bang/String.h"
 #include "Bang/TextureFactory.h"
 #include "BangEditor/BangEditor.h"
@@ -78,7 +78,7 @@ public:
     static Color GetComponentIconTint(const String &componentName);
 
 private:
-    Map<Path, RH<Texture2D>> m_iconCacheMap;
+    Map<Path, AH<Texture2D>> m_iconCacheMap;
 
     EditorTextureFactory() = default;
     virtual ~EditorTextureFactory() = default;
@@ -86,7 +86,7 @@ private:
     static EditorTextureFactory *GetInstance();
     static Texture2D *GetTexture2D(const String &filename);
 
-    friend class EditorResources;
+    friend class EditorAssets;
 };
 }
 

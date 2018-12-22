@@ -19,7 +19,7 @@
 #include "Bang/IEventsAnimatorStateMachineLayer.h"
 #include "Bang/IEventsAnimatorStateMachineNode.h"
 #include "Bang/IEventsFocus.h"
-#include "Bang/ResourceHandle.h"
+#include "Bang/AssetHandle.h"
 #include "Bang/String.h"
 #include "Bang/Time.h"
 #include "Bang/UIImageRenderer.h"

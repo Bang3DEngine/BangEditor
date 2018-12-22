@@ -6,7 +6,7 @@
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorDebug.h"
 #include "BangEditor/EditorPaths.h"
-#include "BangEditor/EditorResources.h"
+#include "BangEditor/EditorAssets.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorSettings.h"
@@ -16,7 +16,7 @@ namespace Bang
 class Debug;
 class Path;
 class Paths;
-class Resources;
+class Assets;
 }  // namespace Bang
 
 using namespace Bang;
@@ -38,7 +38,7 @@ void EditorApplication::Init(const Path &engineRootPath,
     GetEditorPaths()->InitEditorPath(editorRootPath);
     InitAfterPathsInit_();
     GetEditorSettings()->ExportToFile();
-    EditorResources::GetInstance()->InitAfterGLIsInited();
+    EditorAssets::GetInstance()->InitAfterGLIsInited();
 
     MetaFilesManager::CreateMissingMetaFiles(EditorPaths::GetEditorAssetsDir());
     MetaFilesManager::LoadMetaFilepathGUIDs(EditorPaths::GetEditorAssetsDir());
@@ -84,9 +84,9 @@ Settings *EditorApplication::CreateSettings() const
     return new EditorSettings();
 }
 
-Resources *EditorApplication::CreateResources() const
+Assets *EditorApplication::CreateAssets() const
 {
-    return new EditorResources();
+    return new EditorAssets();
 }
 
 Editor *EditorApplication::GetEditor() const

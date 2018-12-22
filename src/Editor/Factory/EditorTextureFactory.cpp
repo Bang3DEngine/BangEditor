@@ -8,8 +8,8 @@
 #include "Bang/Material.h"
 #include "Bang/Mesh.h"
 #include "Bang/Model.h"
-#include "Bang/Resources.h"
-#include "Bang/Resources.tcc"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/Serializable.h"
 #include "Bang/Texture2D.h"
 #include "Bang/TextureFactory.h"
@@ -32,7 +32,7 @@ Texture2D *EditorTextureFactory::GetIconForPath(const Path &path)
     {
         EditorTextureFactory *etf = EditorTextureFactory::GetInstance();
 
-        RH<Texture2D> icon;
+        AH<Texture2D> icon;
         if (path.HasExtension(Extensions::GetImageExtensions()))
         {
             if (etf->m_iconCacheMap.ContainsKey(path))
@@ -41,26 +41,26 @@ Texture2D *EditorTextureFactory::GetIconForPath(const Path &path)
             }
             else
             {
-                icon = Resources::Load<Texture2D>(path);
+                icon = Assets::Load<Texture2D>(path);
             }
         }
         else if (path.HasExtension(Extensions::GetModelExtensions()))
         {
-            RH<Model> model = Resources::Load<Model>(path);
+            AH<Model> model = Assets::Load<Model>(path);
             icon = ModelPreviewFactory::GetPreviewTextureFor(model.Get());
         }
         else if (path.HasExtension(Extensions::GetMeshExtension()))
         {
-            RH<Model> model = Resources::Load<Model>(path.GetDirectory());
+            AH<Model> model = Assets::Load<Model>(path.GetDirectory());
             if (model)
             {
-                RH<Mesh> mesh = Resources::Load<Mesh>(path);
+                AH<Mesh> mesh = Assets::Load<Mesh>(path);
                 icon = MeshPreviewFactory::GetPreviewTextureFor(mesh.Get());
             }
         }
         else if (path.HasExtension(Extensions::GetMaterialExtension()))
         {
-            RH<Material> material = Resources::Load<Material>(path);
+            AH<Material> material = Assets::Load<Material>(path);
             icon = MaterialPreviewFactory::GetPreviewTextureFor(material.Get());
         }
         else

@@ -9,7 +9,7 @@
 #include "Bang/Material.h"
 #include "Bang/Path.h"
 #include "Bang/Paths.h"
-#include "Bang/ResourceHandle.h"
+#include "Bang/AssetHandle.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/ShaderProgramFactory.h"
 #include "Bang/Texture2D.h"

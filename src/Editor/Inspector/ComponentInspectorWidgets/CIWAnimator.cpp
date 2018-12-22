@@ -15,9 +15,9 @@
 #include "Bang/IEvents.h"
 #include "Bang/LayoutSizeType.h"
 #include "Bang/Path.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/Resources.h"
-#include "Bang/Resources.tcc"
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/UICheckBox.h"
 #include "BangEditor/UIInputFile.h"
 
@@ -80,7 +80,7 @@ void CIWAnimator::UpdateFromReference()
     Animator *animator = GetAnimator();
     AnimatorStateMachine *sm = animator->GetStateMachine();
 
-    p_animatorSMInput->SetPath(sm ? sm->GetResourceFilepath() : Path::Empty());
+    p_animatorSMInput->SetPath(sm ? sm->GetAssetFilepath() : Path::Empty());
     p_playOnStartInput->SetChecked(animator->GetPlayOnStart());
 }
 
@@ -93,7 +93,7 @@ void CIWAnimator::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
     if (object == p_animatorSMInput)
     {
         animator->SetStateMachine(
-            Resources::Load<AnimatorStateMachine>(p_animatorSMInput->GetPath())
+            Assets::Load<AnimatorStateMachine>(p_animatorSMInput->GetPath())
                 .Get());
     }
 

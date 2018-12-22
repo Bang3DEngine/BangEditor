@@ -40,9 +40,9 @@
 #include "Bang/PostProcessEffectToneMapping.h"
 #include "Bang/RectTransform.h"
 #include "Bang/ReflectionProbe.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/Resources.h"
-#include "Bang/Resources.tcc"
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/RigidBody.h"
 #include "Bang/Rope.h"
 #include "Bang/Scene.h"
@@ -610,15 +610,15 @@ void AfterCreateAssetFile(const Path &createdAssetPath)
 }
 
 template <class T>
-std::pair<RH<T>, Path> OnCreateAssetFile(const String &name,
+std::pair<AH<T>, Path> OnCreateAssetFile(const String &name,
                                          const String &extension)
 {
     Path currentPath = Explorer::GetInstance()->GetCurrentPath();
     Path assetPath = currentPath.Append("New_" + name)
                          .AppendExtension(extension)
                          .GetDuplicatePath();
-    RH<T> asset = Resources::Create<T>();
-    Resources::CreateResourceMetaAndImportFile(asset.Get(), assetPath);
+    AH<T> asset = Assets::Create<T>();
+    Assets::CreateAssetMetaAndImportFile(asset.Get(), assetPath);
     AfterCreateAssetFile(assetPath);
     return std::make_pair(asset, assetPath);
 }

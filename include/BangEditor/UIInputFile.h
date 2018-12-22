@@ -29,7 +29,7 @@ public:
     Path GetPath() const;
     const Array<String> &GetExtensions() const;
     bool HasExistingPath() const;
-    RH<Texture2D> GetPreviewTextureFromPath(const Path &path);
+    AH<Texture2D> GetPreviewTextureFromPath(const Path &path);
 
 protected:
     virtual ~UIInputFile() override;

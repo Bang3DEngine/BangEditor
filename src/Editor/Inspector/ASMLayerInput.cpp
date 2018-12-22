@@ -5,7 +5,7 @@
 #include "Bang/Extensions.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/MetaFilesManager.h"
-#include "Bang/Resources.h"
+#include "Bang/Assets.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIInputText.h"
@@ -199,10 +199,10 @@ void ASMLayerInput::ImportMeta(const MetaNode &metaNode)
 
     if (metaNode.Contains("LayerMask"))
     {
-        RH<AnimatorLayerMask> layerMask =
-            Resources::Load<AnimatorLayerMask>(metaNode.Get<GUID>("LayerMask"));
+        AH<AnimatorLayerMask> layerMask =
+            Assets::Load<AnimatorLayerMask>(metaNode.Get<GUID>("LayerMask"));
         p_layerMaskInput->SetPath(layerMask.Get()
-                                      ? layerMask.Get()->GetResourceFilepath()
+                                      ? layerMask.Get()->GetAssetFilepath()
                                       : Path::Empty());
     }
 

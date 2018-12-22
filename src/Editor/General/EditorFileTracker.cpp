@@ -12,8 +12,8 @@
 #include "Bang/MetaFilesManager.h"
 #include "Bang/Path.h"
 #include "Bang/Paths.h"
-#include "Bang/Resources.h"
-#include "Bang/Resources.tcc"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/Set.h"
 #include "Bang/Set.tcc"
 #include "Bang/Shader.h"
@@ -26,7 +26,7 @@
 
 namespace Bang
 {
-class Resource;
+class Asset;
 class String;
 }  // namespace Bang
 
@@ -122,7 +122,7 @@ void EditorFileTracker::CheckForShaderModifications(const Path &modifiedPath)
         EditorPaths::GetEditorAssetsDir().Append("Shaders").Append("Include"));
 
     // Treat shaderProgram dependencies
-    Array<ShaderProgram *> shaderPrograms = Resources::GetAll<ShaderProgram>();
+    Array<ShaderProgram *> shaderPrograms = Assets::GetAll<ShaderProgram>();
     for (ShaderProgram *sp : shaderPrograms)
     {
         std::array<Shader *, 3> shaders = {{sp->GetVertexShader(),
@@ -134,14 +134,14 @@ void EditorFileTracker::CheckForShaderModifications(const Path &modifiedPath)
             {
                 Set<Path> processedPaths;
                 Array<Path> incPaths = CodePreprocessor::GetSourceIncludePaths(
-                    shader->GetResourceFilepath(), shadersIncPaths);
+                    shader->GetAssetFilepath(), shadersIncPaths);
                 for (uint i = 0; i < incPaths.Size();
                      ++i)  // const Path &incPath : incPaths)
                 {
                     const Path incPath = incPaths[i];
                     if (incPath == modifiedPath)
                     {
-                        Resources::Import(shader);
+                        Assets::Import(shader);
                         break;
                     }
                     else if (!processedPaths.Contains(incPath))
@@ -178,11 +178,11 @@ void EditorFileTracker::OnPathModified(const Path &modifiedPath)
             CheckForShaderModifications(modifiedPath);
             CheckForBehaviourModifications(modifiedPath);
 
-            // Refresh/reimport resources of the modified path
-            Resource *modifiedResource = Resources::GetCached(modifiedPath);
-            if (modifiedResource)
+            // Refresh/reimport assets of the modified path
+            Asset *modifiedAsset = Assets::GetCached(modifiedPath);
+            if (modifiedAsset)
             {
-                Resources::Import(modifiedResource);
+                Assets::Import(modifiedAsset);
             }
         }
     }

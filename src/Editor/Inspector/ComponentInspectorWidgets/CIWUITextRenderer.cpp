@@ -14,9 +14,9 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/IEvents.h"
 #include "Bang/Path.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/Resources.h"
-#include "Bang/Resources.tcc"
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/UICanvas.h"
 #include "Bang/UIComboBox.h"
 #include "Bang/UIInputNumber.h"
@@ -107,7 +107,7 @@ void CIWUITextRenderer::UpdateFromReference()
         int(GetUITextRenderer()->GetVerticalAlignment()));
 
     Font *font = GetUITextRenderer()->GetFont();
-    p_fontFileInput->SetPath(font ? font->GetResourceFilepath()
+    p_fontFileInput->SetPath(font ? font->GetAssetFilepath()
                                   : Path::Empty());
 }
 
@@ -125,7 +125,7 @@ void CIWUITextRenderer::OnValueChangedCIW(
     GetUITextRenderer()->SetTextSize(SCAST<int>(p_sizeInput->GetValue()));
     GetUITextRenderer()->SetTextColor(p_colorInput->GetColor());
     GetUITextRenderer()->SetFont(
-        Resources::Load<Font>(p_fontFileInput->GetPath()).Get());
+        Assets::Load<Font>(p_fontFileInput->GetPath()).Get());
     GetUITextRenderer()->SetHorizontalAlign(SCAST<HorizontalAlignment>(
         p_horizontalAlignmentInput->GetSelectedValue()));
     GetUITextRenderer()->SetVerticalAlign(

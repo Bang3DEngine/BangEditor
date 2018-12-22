@@ -6,8 +6,8 @@
 #include "Bang/MeshRenderer.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Transform.h"
-#include "BangEditor/EditorResources.h"
-#include "BangEditor/ResourcePreviewFactory.tcc"
+#include "BangEditor/EditorAssets.h"
+#include "BangEditor/AssetPreviewFactory.tcc"
 
 namespace Bang
 {
@@ -26,15 +26,15 @@ MaterialPreviewFactory::~MaterialPreviewFactory()
 {
 }
 
-RH<Texture2D> MaterialPreviewFactory::GetPreviewTextureFor(Material *material)
+AH<Texture2D> MaterialPreviewFactory::GetPreviewTextureFor(Material *material)
 {
     return MaterialPreviewFactory::GetPreviewTextureFor(
-        material, ResourcePreviewFactoryParameters());
+        material, AssetPreviewFactoryParameters());
 }
 
-RH<Texture2D> MaterialPreviewFactory::GetPreviewTextureFor(
+AH<Texture2D> MaterialPreviewFactory::GetPreviewTextureFor(
     Material *material,
-    const ResourcePreviewFactoryParameters &params)
+    const AssetPreviewFactoryParameters &params)
 {
     return MaterialPreviewFactory::GetActive()->GetPreviewTextureFor_(material,
                                                                       params);
@@ -42,7 +42,7 @@ RH<Texture2D> MaterialPreviewFactory::GetPreviewTextureFor(
 
 MaterialPreviewFactory *MaterialPreviewFactory::GetActive()
 {
-    return EditorResources::GetInstance()->GetMaterialPreviewFactory();
+    return EditorAssets::GetInstance()->GetMaterialPreviewFactory();
 }
 
 void MaterialPreviewFactory::OnCreateSceneFirstTime(
@@ -62,7 +62,7 @@ void MaterialPreviewFactory::OnUpdateTextureBegin(
     Camera *previewCamera,
     GameObject *previewGoContainer,
     Material *material,
-    const ResourcePreviewFactoryParameters &params)
+    const AssetPreviewFactoryParameters &params)
 {
     BANG_UNUSED_4(params, previewScene, previewCamera, previewGoContainer);
 
@@ -77,7 +77,7 @@ void MaterialPreviewFactory::OnUpdateTextureEnd(
     Camera *previewCamera,
     GameObject *previewGoContainer,
     Material *material,
-    const ResourcePreviewFactoryParameters &params)
+    const AssetPreviewFactoryParameters &params)
 {
     BANG_UNUSED_5(
         previewScene, previewCamera, previewGoContainer, material, params);

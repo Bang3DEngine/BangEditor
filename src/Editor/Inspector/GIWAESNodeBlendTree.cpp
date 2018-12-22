@@ -4,7 +4,7 @@
 #include "Bang/AnimatorStateMachineBlendTreeNode.h"
 #include "Bang/Extensions.h"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/Resources.h"
+#include "Bang/Assets.h"
 #include "Bang/UIComboBox.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UIInputText.h"
@@ -79,7 +79,7 @@ void GIWAESNodeBlendTree::UpdateFromReference()
     {
         p_nodeSecondAnimationInput->SetPath(
             smNode->GetSecondAnimation()
-                ? smNode->GetSecondAnimation()->GetResourceFilepath()
+                ? smNode->GetSecondAnimation()->GetAssetFilepath()
                 : Path::Empty());
         p_secondAnimationSpeedInput->SetValue(
             smNode->GetSecondAnimationSpeed());
@@ -97,7 +97,7 @@ void GIWAESNodeBlendTree::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
         if (ee == p_nodeSecondAnimationInput)
         {
             smNode->SetSecondAnimation(
-                Resources::Load<Animation>(
+                Assets::Load<Animation>(
                     p_nodeSecondAnimationInput->GetPath())
                     .Get());
         }

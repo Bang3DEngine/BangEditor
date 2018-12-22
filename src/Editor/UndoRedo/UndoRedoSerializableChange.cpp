@@ -1,12 +1,12 @@
 #include "BangEditor/UndoRedoSerializableChange.h"
 
+#include "Bang/Asset.h"
 #include "Bang/Component.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventListener.tcc"
 #include "Bang/GameObject.h"
 #include "Bang/IEventsDestroy.h"
 #include "Bang/Path.h"
-#include "Bang/Resource.h"
 #include "Bang/Serializable.h"
 #include "Bang/String.h"
 #include "BangEditor/Editor.h"
@@ -96,9 +96,9 @@ void UndoRedoSerializableChange::SelectSerializableOrShowInInspectorIfPossible()
     else
     {
         bool keepTrying = true;
-        if (Resource *res = DCAST<Resource *>(p_serializable))
+        if (Asset *asset = DCAST<Asset *>(p_serializable))
         {
-            Path path = res->GetResourceFilepath();
+            Path path = asset->GetAssetFilepath();
             if (path.IsFile())
             {
                 Explorer::GetInstance()->SelectPath(path, false);

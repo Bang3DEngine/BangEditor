@@ -4,7 +4,7 @@
 #include "Bang/Bang.h"
 #include "Bang/GameObject.h"
 #include "Bang/Plane.h"
-#include "Bang/ResourceHandle.h"
+#include "Bang/AssetHandle.h"
 #include "BangEditor/BangEditor.h"
 
 using namespace Bang;
@@ -40,8 +40,8 @@ private:
     UITextRenderer *p_centralText = nullptr;
 
     Scene *p_scene = nullptr;
-    RH<Mesh> p_currentMesh;
-    RH<Model> p_currentModel;
+    AH<Mesh> p_currentMesh;
+    AH<Model> p_currentModel;
     GameObject *p_modelContainer = nullptr;
 
     bool m_displacingModel = false;
@@ -60,8 +60,8 @@ private:
     Vector3 GetDisplacementPoint() const;
     Vector3 GetMousePointOverModel() const;
     Array<MeshRenderer *> GetMeshRenderers() const;
-    RH<Mesh> GetExplorerSelectedMesh() const;
-    RH<Model> GetExplorerSelectedModel() const;
+    AH<Mesh> GetExplorerSelectedMesh() const;
+    AH<Model> GetExplorerSelectedModel() const;
 };
 }
 

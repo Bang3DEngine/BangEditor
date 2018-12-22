@@ -10,12 +10,12 @@
 #include "Bang/EventListener.tcc"
 #include "Bang/GameObject.h"
 #include "Bang/IEventsValueChanged.h"
-#include "Bang/ResourceHandle.h"
+#include "Bang/AssetHandle.h"
 #include "Bang/String.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UIFocusable.h"
 #include "BangEditor/BangEditor.h"
-#include "BangEditor/ResourcePreviewFactory.h"
+#include "BangEditor/AssetPreviewFactory.h"
 
 namespace Bang
 {
@@ -48,9 +48,9 @@ public:
 
 private:
     UIFocusable *p_focusable = nullptr;
-    RH<TextureCubeMap> p_textureCubeMap;
+    AH<TextureCubeMap> p_textureCubeMap;
     Vector2 m_rotationRads = Vector2::Zero();
-    RH<Material> p_previewImageRendererMaterial;
+    AH<Material> p_previewImageRendererMaterial;
     UIImageRenderer *p_previewImageRenderer = nullptr;
     UIAspectRatioFitter *p_previewImgAspectRatioFitter = nullptr;
 };

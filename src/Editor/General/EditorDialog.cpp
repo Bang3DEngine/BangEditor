@@ -19,8 +19,8 @@
 #include "Bang/Path.h"
 #include "Bang/Paths.h"
 #include "Bang/RectTransform.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/Resources.h"
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
 #include "Bang/Scene.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/ShaderProgramFactory.h"
@@ -329,7 +329,7 @@ void EditorDialog::CreateGetAssetSceneInto(Scene *scene,
                 }
                 else
                 {
-                    if (Resources::IsEmbeddedResource(path))
+                    if (Assets::IsEmbeddedAsset(path))
                     {
                         textContent = path.GetDirectory().GetNameExt() + "/" +
                                       path.GetNameExt();
@@ -392,7 +392,7 @@ void EditorDialog::CreateGetColorSceneInto(
     colorPanelImg->GetGameObject()->SetParent(colorVLGo);
 
     Path edShadersPath = EditorPaths::GetEditorAssetsDir().Append("Shaders");
-    RH<ShaderProgram> colorPanelImgSP;
+    AH<ShaderProgram> colorPanelImgSP;
     colorPanelImgSP.Set(ShaderProgramFactory::Get(
         EPATH("Shaders").Append("UIImageRenderer.vert"),
         edShadersPath.Append("UIInputColor.frag")));
@@ -406,7 +406,7 @@ void EditorDialog::CreateGetColorSceneInto(
     hueSlider->SetMinMaxValues(0.0f, 1.0f);
     hueSlider->GetGameObject()->SetParent(colorVLGo);
 
-    RH<ShaderProgram> hueImgSP;
+    AH<ShaderProgram> hueImgSP;
     hueImgSP.Set(ShaderProgramFactory::Get(
         EPATH("Shaders/UIImageRenderer.vert"),
         edShadersPath.Append("UIInputColorOnlyHue.frag")));

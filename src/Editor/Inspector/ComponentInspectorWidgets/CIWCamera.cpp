@@ -13,9 +13,9 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/IEvents.h"
 #include "Bang/Path.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/Resources.h"
-#include "Bang/Resources.tcc"
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/Scene.h"
 #include "Bang/TextureCubeMap.h"
 #include "Bang/UICheckBox.h"
@@ -151,7 +151,7 @@ void CIWCamera::UpdateFromReference()
     TextureCubeMap *skyBoxTex = GetCamera()->GetSkyBoxTexture();
     if (skyBoxTex)
     {
-        p_textureCubeMapInput->SetPath(skyBoxTex->GetResourceFilepath());
+        p_textureCubeMapInput->SetPath(skyBoxTex->GetAssetFilepath());
     }
 
     LimitValues();
@@ -209,13 +209,13 @@ void CIWCamera::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
         SCAST<CameraClearMode>(p_clearModeInput->GetSelectedValue()));
     GetCamera()->SetClearColor(p_clearColorInput->GetColor());
 
-    RH<TextureCubeMap> tcmRH;
+    AH<TextureCubeMap> tcmAH;
     if (p_textureCubeMapInput->GetPath().IsFile())
     {
-        tcmRH =
-            Resources::Load<TextureCubeMap>(p_textureCubeMapInput->GetPath());
+        tcmAH =
+            Assets::Load<TextureCubeMap>(p_textureCubeMapInput->GetPath());
     }
-    GetCamera()->SetSkyBoxTexture(tcmRH.Get());
+    GetCamera()->SetSkyBoxTexture(tcmAH.Get());
 
     LimitValues();
 }

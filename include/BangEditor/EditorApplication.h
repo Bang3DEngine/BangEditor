@@ -11,7 +11,7 @@ class Debug;
 class DialogWindow;
 class Path;
 class Paths;
-class Resources;
+class Assets;
 class Scene;
 class Texture2D;
 class UIImageRenderer;
@@ -23,7 +23,7 @@ namespace BangEditor
 class Editor;
 class EditorDebug;
 class EditorPaths;
-class EditorResources;
+class EditorAssets;
 class EditorScene;
 class EditorSettings;
 
@@ -45,7 +45,7 @@ private:
     Debug *CreateDebug() const override;
     Paths *CreatePaths() const override;
     Settings *CreateSettings() const override;
-    Resources *CreateResources() const override;
+    Assets *CreateAssets() const override;
 
     Editor *GetEditor() const;
     static EditorApplication *GetInstance();

@@ -6,6 +6,7 @@
 #include "Bang/Alignment.h"
 #include "Bang/Array.h"
 #include "Bang/Assert.h"
+#include "Bang/Asset.h"
 #include "Bang/Color.h"
 #include "Bang/Component.h"
 #include "Bang/ComponentMacros.h"
@@ -22,7 +23,6 @@
 #include "Bang/MetaNode.h"
 #include "Bang/Paths.h"
 #include "Bang/RectTransform.h"
-#include "Bang/Resource.h"
 #include "Bang/SceneManager.h"
 #include "Bang/UIContentSizeFitter.h"
 #include "Bang/UIFocusable.h"
@@ -34,6 +34,7 @@
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/UMap.tcc"
+#include "BangEditor/AssetInspectorWidgetFactory.h"
 #include "BangEditor/ComponentInspectorWidget.h"
 #include "BangEditor/ComponentInspectorWidgetFactory.h"
 #include "BangEditor/Editor.h"
@@ -46,7 +47,6 @@
 #include "BangEditor/InspectorWidget.h"
 #include "BangEditor/MenuBar.h"
 #include "BangEditor/MenuItem.h"
-#include "BangEditor/ResourceInspectorWidgetFactory.h"
 #include "BangEditor/UIContextMenu.h"
 #include "BangEditor/UndoRedoManager.h"
 #include "BangEditor/UndoRedoSerializableChange.h"
@@ -172,12 +172,12 @@ void Inspector::ShowSerializable(Serializable *serializable)
 {
     if (serializable)
     {
-        if (Resource *res = DCAST<Resource *>(serializable))
+        if (Asset *asset = DCAST<Asset *>(serializable))
         {
-            Path resPath = res->GetResourceFilepath();
-            if (resPath.IsFile())
+            Path assetPath = asset->GetAssetFilepath();
+            if (assetPath.IsFile())
             {
-                ShowPath(resPath);
+                ShowPath(assetPath);
             }
         }
         else if (GameObject *gameObject = DCAST<GameObject *>(serializable))
@@ -201,7 +201,7 @@ void Inspector::ShowPath(const Path &path)
     {
         if (!path.IsDir())
         {
-            InspectorWidget *fiw = ResourceInspectorWidgetFactory::Create(path);
+            InspectorWidget *fiw = AssetInspectorWidgetFactory::Create(path);
             if (fiw || path.IsFile())
             {
                 Clear();

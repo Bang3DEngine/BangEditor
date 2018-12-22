@@ -18,7 +18,7 @@
 #include "Bang/Material.h"
 #include "Bang/MetaNode.h"
 #include "Bang/RenderPass.h"
-#include "Bang/ResourceHandle.h"
+#include "Bang/AssetHandle.h"
 #include "Bang/SceneManager.h"
 #include "Bang/String.h"
 #include "Bang/UIFocusable.h"
@@ -77,10 +77,10 @@ private:
     UIImageRenderer *p_cameraPreviewImg = nullptr;
     GBuffer *m_cameraPreviewGBuffer = nullptr;
 
-    RH<Material> m_currentMaterialBeingDragged;
+    AH<Material> m_currentMaterialBeingDragged;
     GameObject *p_lastOveredGameObject = nullptr;
     MetaNode m_prevGameObjectMetaBeforeDraggingMaterial;
-    Map<MeshRenderer *, RH<Material>> m_matDragMeshRenderersToPrevMaterials;
+    Map<MeshRenderer *, AH<Material>> m_matDragMeshRenderersToPrevMaterials;
 
     void RenderCameraPreviewIfSelected();
     Camera *GetSceneCamera(Scene *scene) override;

@@ -420,13 +420,13 @@ Path AnimatorSMEditorScene::GetAnimatorSMExtraInfoPath() const
 {
     if (GetAnimatorSM())
     {
-        Path resourcePath = GetAnimatorSM()->GetResourceFilepath();
-        if (resourcePath.IsFile())
+        Path assetPath = GetAnimatorSM()->GetAssetFilepath();
+        if (assetPath.IsFile())
         {
-            Path metaResourcePath =
-                MetaFilesManager::GetMetaFilepath(resourcePath);
+            Path metaAssetPath =
+                MetaFilesManager::GetMetaFilepath(assetPath);
             return Path(
-                metaResourcePath.GetAbsolute().Replace(".meta", ".metaed"));
+                metaAssetPath.GetAbsolute().Replace(".meta", ".metaed"));
         }
     }
     return Path::Empty();
@@ -509,7 +509,7 @@ void AnimatorSMEditorScene::ExportCurrentAnimatorStateMachineIfAny()
         }
 
         GetAnimatorSM()->ExportMetaToFile(MetaFilesManager::GetMetaFilepath(
-            GetAnimatorSM()->GetResourceFilepath()));
+            GetAnimatorSM()->GetAssetFilepath()));
         File::Write(extraInfoPath, extraInfoMeta.ToString());
 
         m_lastTimeAnimatorSMWasExported = Time::GetNow();

@@ -28,8 +28,8 @@
 #include "Bang/MouseButton.h"
 #include "Bang/Path.h"
 #include "Bang/RectTransform.h"
-#include "Bang/Resources.h"
-#include "Bang/Resources.tcc"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/Scene.h"
 #include "Bang/SceneManager.h"
 #include "Bang/Texture2D.h"
@@ -237,7 +237,7 @@ void UISceneEditContainer::ApplyDraggedMaterialToOveredGameObject()
             overedGameObject->GetComponents<MeshRenderer>();
         for (MeshRenderer *mr : mrs)
         {
-            RH<Material> prevMat = RH<Material>(mr->GetActiveMaterial());
+            AH<Material> prevMat = AH<Material>(mr->GetActiveMaterial());
             mr->SetMaterial(m_currentMaterialBeingDragged.Get());
             m_matDragMeshRenderersToPrevMaterials.Add(mr, prevMat);
         }
@@ -250,7 +250,7 @@ void UISceneEditContainer::RestoreDraggedMaterialToPreviousGameObjectOvered()
     for (const auto &pair : m_matDragMeshRenderersToPrevMaterials)
     {
         MeshRenderer *mr = pair.first;
-        RH<Material> previousMat = pair.second;
+        AH<Material> previousMat = pair.second;
         mr->SetMaterial(previousMat.Get());
         restoredMeshRenderers.PushBack(mr);
     }
@@ -346,7 +346,7 @@ void UISceneEditContainer::OnDragStarted(EventEmitter<IEventsDragDrop> *dd_)
         if (draggedPath.HasExtension(Extensions::GetMaterialExtension()))
         {
             m_currentMaterialBeingDragged =
-                Resources::Load<Material>(draggedPath);
+                Assets::Load<Material>(draggedPath);
             if (m_currentMaterialBeingDragged)
             {
                 Camera *edCam = EditorCamera::GetInstance()->GetCamera();

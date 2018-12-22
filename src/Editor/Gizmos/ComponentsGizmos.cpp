@@ -292,7 +292,7 @@ void ComponentsGizmos::RenderCameraGizmo(Camera *cam, bool isBeingSelected)
         AddSelectionPlaneFor(cam->GetGameObject(), params.scale, icon);
         RenderFactory::RenderIcon(icon, true, params);
 
-        // RH<Mesh> cameraMesh = MeshFactory::GetCamera();
+        // AH<Mesh> cameraMesh = MeshFactory::GetCamera();
         // Transform *camTransform = cam->GetGameObject()->GetTransform();
         // params.receivesLighting = true;
         // params.rotation = camTransform->GetRotation();

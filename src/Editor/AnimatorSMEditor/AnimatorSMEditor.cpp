@@ -15,8 +15,8 @@
 #include "Bang/IEventsValueChanged.h"
 #include "Bang/LayoutSizeType.h"
 #include "Bang/Path.h"
-#include "Bang/Resources.h"
-#include "Bang/Resources.tcc"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/Stretch.h"
 #include "Bang/UIButton.h"
 #include "Bang/UIFocusable.h"
@@ -201,9 +201,9 @@ void AnimatorSMEditor::Update()
         if (selectedPath.HasExtension(
                 Extensions::GetAnimatorStateMachineExtension()))
         {
-            RH<AnimatorStateMachine> animSMRH =
-                Resources::Load<AnimatorStateMachine>(selectedPath);
-            SetAnimatorSM(animSMRH.Get());
+            AH<AnimatorStateMachine> animSMAH =
+                Assets::Load<AnimatorStateMachine>(selectedPath);
+            SetAnimatorSM(animSMAH.Get());
         }
     }
 

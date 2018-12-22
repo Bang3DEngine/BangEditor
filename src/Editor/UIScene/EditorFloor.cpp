@@ -10,7 +10,7 @@
 #include "Bang/Material.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/Path.h"
-#include "Bang/ResourceHandle.h"
+#include "Bang/AssetHandle.h"
 #include "Bang/ShaderProgramFactory.h"
 #include "Bang/Transform.h"
 #include "BangEditor/EditorPaths.h"

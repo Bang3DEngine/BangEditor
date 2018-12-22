@@ -12,10 +12,10 @@
 #include "Bang/IEvents.h"
 #include "Bang/Mesh.h"
 #include "Bang/Quaternion.h"
-#include "Bang/ResourceHandle.h"
+#include "Bang/AssetHandle.h"
 #include "Bang/UMap.tcc"
 #include "BangEditor/BangEditor.h"
-#include "BangEditor/ResourcePreviewFactory.h"
+#include "BangEditor/AssetPreviewFactory.h"
 
 namespace Bang
 {
@@ -28,20 +28,20 @@ class Texture2D;
 using namespace Bang;
 namespace BangEditor
 {
-class MeshPreviewFactory : public ResourcePreviewFactory<Mesh>
+class MeshPreviewFactory : public AssetPreviewFactory<Mesh>
 {
 public:
     MeshPreviewFactory();
     virtual ~MeshPreviewFactory() override;
 
-    static RH<Texture2D> GetPreviewTextureFor(Mesh *Mesh);
-    static RH<Texture2D> GetPreviewTextureFor(
+    static AH<Texture2D> GetPreviewTextureFor(Mesh *Mesh);
+    static AH<Texture2D> GetPreviewTextureFor(
         Mesh *mesh,
-        const ResourcePreviewFactoryParameters &params);
+        const AssetPreviewFactoryParameters &params);
     static MeshPreviewFactory *GetActive();
 
 private:
-    // ResourcePreviewFactory
+    // AssetPreviewFactory
     void OnCreateSceneFirstTime(Scene *previewScene,
                                 Camera *previewCamera,
                                 GameObject *previewGoContainer) override;
@@ -50,13 +50,13 @@ private:
         Camera *previewCamera,
         GameObject *previewGoContainer,
         Mesh *mesh,
-        const ResourcePreviewFactoryParameters &params) override;
+        const AssetPreviewFactoryParameters &params) override;
     void OnUpdateTextureEnd(
         Scene *previewScene,
         Camera *previewCamera,
         GameObject *previewGoContainer,
         Mesh *mesh,
-        const ResourcePreviewFactoryParameters &params) override;
+        const AssetPreviewFactoryParameters &params) override;
 };
 }  // namespace BangEditor
 

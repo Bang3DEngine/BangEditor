@@ -2,9 +2,9 @@
 
 #include "Bang/GameObject.h"
 #include "Bang/Prefab.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/Resources.h"
-#include "Bang/Resources.tcc"
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/Scene.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/MenuItem.h"
@@ -29,10 +29,10 @@ void PrefabExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
         Scene *openScene = EditorSceneManager::GetOpenScene();
         if (openScene)
         {
-            RH<Prefab> prefabRH = Resources::Load<Prefab>(GetPath());
-            if (prefabRH)
+            AH<Prefab> prefabAH = Assets::Load<Prefab>(GetPath());
+            if (prefabAH)
             {
-                GameObject *gameObject = prefabRH.Get()->Instantiate();
+                GameObject *gameObject = prefabAH.Get()->Instantiate();
                 gameObject->SetParent(openScene);
             }
         }

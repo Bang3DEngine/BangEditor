@@ -17,7 +17,7 @@
 #include "Bang/Mesh.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
-#include "Bang/ResourceHandle.h"
+#include "Bang/AssetHandle.h"
 #include "Bang/Transform.h"
 #include "Bang/Vector3.h"
 #include "BangEditor/NotSelectableInEditor.h"

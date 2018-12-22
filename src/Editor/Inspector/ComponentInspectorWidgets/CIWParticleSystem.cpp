@@ -17,9 +17,9 @@
 #include "Bang/Particle.h"
 #include "Bang/ParticleSystem.h"
 #include "Bang/Path.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/Resources.h"
-#include "Bang/Resources.tcc"
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/Texture2D.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIComboBox.h"
@@ -184,7 +184,7 @@ void CIWParticleSystem::UpdateFromReference()
     ComponentInspectorWidget::UpdateFromReference();
 
     Mesh *mesh = GetParticleSystem()->GetMesh();
-    Path meshPath = mesh ? mesh->GetResourceFilepath() : Path::Empty();
+    Path meshPath = mesh ? mesh->GetAssetFilepath() : Path::Empty();
     p_meshInputFile->SetPath(meshPath);
 
     if (!p_lifeTimeInput->HasFocus())
@@ -207,7 +207,7 @@ void CIWParticleSystem::UpdateFromReference()
         GetParticleSystem()->GetComputeCollisions());
     p_textureInput->SetPath(
         GetParticleSystem()->GetTexture()
-            ? GetParticleSystem()->GetTexture()->GetResourceFilepath()
+            ? GetParticleSystem()->GetTexture()->GetAssetFilepath()
             : Path::Empty());
 
     if (!p_sheetSizeInput->HasFocus())
@@ -331,7 +331,7 @@ void CIWParticleSystem::OnValueChangedCIW(
     if (object == p_meshInputFile)
     {
         Path meshPath = p_meshInputFile->GetPath();
-        RH<Mesh> mesh = Resources::Load<Mesh>(meshPath);
+        AH<Mesh> mesh = Assets::Load<Mesh>(meshPath);
         GetParticleSystem()->SetMesh(mesh.Get());
     }
 
@@ -347,8 +347,8 @@ void CIWParticleSystem::OnValueChangedCIW(
 
     if (object == p_textureInput)
     {
-        RH<Texture2D> tex =
-            Resources::Load<Texture2D>(p_textureInput->GetPath());
+        AH<Texture2D> tex =
+            Assets::Load<Texture2D>(p_textureInput->GetPath());
         GetParticleSystem()->SetTexture(tex.Get());
     }
 

@@ -63,7 +63,7 @@ void CIWUIImageRenderer::UpdateFromReference()
     }
 
     Texture2D *tex = GetUIImageRenderer()->GetImageTexture();
-    p_imageInput->SetPath(tex ? tex->GetResourceFilepath() : Path::Empty());
+    p_imageInput->SetPath(tex ? tex->GetAssetFilepath() : Path::Empty());
 }
 
 UIImageRenderer *CIWUIImageRenderer::GetUIImageRenderer() const

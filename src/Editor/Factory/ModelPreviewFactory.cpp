@@ -10,9 +10,9 @@
 #include "Bang/Model.h"
 #include "Bang/Scene.h"
 #include "Bang/Texture2D.h"
-#include "BangEditor/EditorResources.h"
+#include "BangEditor/EditorAssets.h"
 #include "BangEditor/EditorTextureFactory.h"
-#include "BangEditor/ResourcePreviewFactory.tcc"
+#include "BangEditor/AssetPreviewFactory.tcc"
 
 namespace Bang
 {
@@ -30,36 +30,36 @@ ModelPreviewFactory::~ModelPreviewFactory()
 {
 }
 
-RH<Texture2D> ModelPreviewFactory::GetPreviewTextureFor(Model *model)
+AH<Texture2D> ModelPreviewFactory::GetPreviewTextureFor(Model *model)
 {
     return ModelPreviewFactory::GetPreviewTextureFor(
-        model, ResourcePreviewFactoryParameters());
+        model, AssetPreviewFactoryParameters());
 }
 
-RH<Texture2D> ModelPreviewFactory::GetPreviewTextureFor(
+AH<Texture2D> ModelPreviewFactory::GetPreviewTextureFor(
     Model *model,
-    const ResourcePreviewFactoryParameters &params)
+    const AssetPreviewFactoryParameters &params)
 {
-    RH<Texture2D> texRH;
+    AH<Texture2D> texAH;
     if (model)
     {
         if (model->GetMeshes().Size() >= 1)
         {
-            texRH = ModelPreviewFactory::GetActive()->GetPreviewTextureFor_(
+            texAH = ModelPreviewFactory::GetActive()->GetPreviewTextureFor_(
                 model, params);
         }
         else
         {
-            texRH.Set(EditorTextureFactory::GetIconForExtension(
+            texAH.Set(EditorTextureFactory::GetIconForExtension(
                 Extensions::GetAnimationExtension()));
         }
     }
-    return texRH;
+    return texAH;
 }
 
 ModelPreviewFactory *ModelPreviewFactory::GetActive()
 {
-    return EditorResources::GetInstance()->GetModelPreviewFactory();
+    return EditorAssets::GetInstance()->GetModelPreviewFactory();
 }
 
 void ModelPreviewFactory::OnCreateSceneFirstTime(Scene *previewScene,
@@ -74,7 +74,7 @@ void ModelPreviewFactory::OnUpdateTextureBegin(
     Camera *previewCamera,
     GameObject *previewGoContainer,
     Model *model,
-    const ResourcePreviewFactoryParameters &params)
+    const AssetPreviewFactoryParameters &params)
 {
     BANG_UNUSED_2(previewCamera, params);
 
@@ -100,7 +100,7 @@ void ModelPreviewFactory::OnUpdateTextureEnd(
     Camera *previewCamera,
     GameObject *previewGoContainer,
     Model *model,
-    const ResourcePreviewFactoryParameters &params)
+    const AssetPreviewFactoryParameters &params)
 {
     BANG_UNUSED_4(previewScene, previewCamera, model, params);
 

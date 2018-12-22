@@ -2,9 +2,9 @@
 
 #include "Bang/GameObject.h"
 #include "Bang/Model.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/Resources.h"
-#include "Bang/Resources.tcc"
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/Scene.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/MenuItem.h"
@@ -29,7 +29,7 @@ void ModelExplorerItem::OnCreateContextMenu(MenuItem *menuRootItem)
         Scene *openScene = EditorSceneManager::GetOpenScene();
         if (openScene)
         {
-            RH<Model> model = Resources::Load<Model>(GetPath());
+            AH<Model> model = Assets::Load<Model>(GetPath());
             if (model)
             {
                 GameObject *gameObject =

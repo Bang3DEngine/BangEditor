@@ -22,8 +22,8 @@
 #include "Bang/Mesh.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/Ray.h"
-#include "Bang/Resources.h"
-#include "Bang/Resources.tcc"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/Sphere.h"
 #include "Bang/Transform.h"
 #include "Bang/Vector2.h"
@@ -50,7 +50,7 @@ RotateGizmoAxis::RotateGizmoAxis()
     p_circleRenderer->GetMaterial()->SetLineWidth(2.0f);
     p_circleRenderer->GetGameObject()->AddComponent<NotSelectableInEditor>();
 
-    m_selectionMesh = Resources::Create<Mesh>();
+    m_selectionMesh = Assets::Create<Mesh>();
 
     p_selectionGo = GameObjectFactory::CreateGameObject(true);
     p_selectionGo->SetName("RotateGizmoAxisSelection");

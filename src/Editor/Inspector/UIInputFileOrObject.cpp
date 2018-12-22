@@ -7,7 +7,7 @@
 #include "Bang/IEventsValueChanged.h"
 #include "Bang/Paths.h"
 #include "Bang/RectTransform.h"
-#include "Bang/Resources.h"
+#include "Bang/Assets.h"
 #include "Bang/Stretch.h"
 #include "Bang/TextureFactory.h"
 #include "Bang/UIButton.h"

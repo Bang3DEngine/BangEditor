@@ -11,7 +11,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/IEvents.h"
 #include "Bang/IEventsValueChanged.h"
-#include "Bang/ResourceHandle.h"
+#include "Bang/AssetHandle.h"
 #include "Bang/String.h"
 #include "Bang/Time.h"
 #include "Bang/UIButton.h"
@@ -55,7 +55,7 @@ public:
 
 private:
     Time m_lastVariablesInputUpdateTime;
-    RH<AnimatorStateMachine> p_animatorSM;
+    AH<AnimatorStateMachine> p_animatorSM;
     AnimatorSMEditorScene *p_animatorEditorScene = nullptr;
 
     GameObject *p_sidebar = nullptr;

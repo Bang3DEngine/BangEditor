@@ -15,7 +15,7 @@ private:
     EditorMeshFactory();
     virtual ~EditorMeshFactory() override;
 
-    friend class EditorResources;
+    friend class EditorAssets;
 };
 }
 

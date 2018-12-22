@@ -20,9 +20,9 @@
 #include "Bang/Model.h"
 #include "Bang/Path.h"
 #include "Bang/Prefab.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/Resources.h"
-#include "Bang/Resources.tcc"
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/Scene.h"
 #include "Bang/UICanvas.h"
 #include "Bang/UIDirLayout.h"
@@ -254,8 +254,8 @@ void Hierarchy::OnDuplicate(HierarchyItem *item)
 
 void Hierarchy::OnCreatePrefab(HierarchyItem *item)
 {
-    RH<Prefab> prefabRH = Resources::Create<Prefab>();
-    prefabRH.Get()->SetGameObject(item->GetReferencedGameObject());
+    AH<Prefab> prefabAH = Assets::Create<Prefab>();
+    prefabAH.Get()->SetGameObject(item->GetReferencedGameObject());
 
     Path exportFilepath =
         Explorer::GetInstance()
@@ -263,7 +263,7 @@ void Hierarchy::OnCreatePrefab(HierarchyItem *item)
             .Append(item->GetReferencedGameObject()->GetName())
             .AppendExtension(Extensions::GetPrefabExtension())
             .GetDuplicatePath();
-    Resources::CreateResourceMetaAndImportFile(prefabRH.Get(), exportFilepath);
+    Assets::CreateAssetMetaAndImportFile(prefabAH.Get(), exportFilepath);
 
     Explorer::GetInstance()->ForceCheckFileChanges();
 }
@@ -368,8 +368,8 @@ void Hierarchy::OnDropFromOutside(UIDragDroppable *dropped,
             if (Extensions::Equals(expItem->GetPath().GetExtension(),
                                    Extensions::GetModelExtensions()))
             {
-                RH<Model> modelRH = Resources::Load<Model>(expItem->GetPath());
-                if (Model *model = modelRH.Get())
+                AH<Model> modelAH = Assets::Load<Model>(expItem->GetPath());
+                if (Model *model = modelAH.Get())
                 {
                     GameObject *newParent =
                         (newParentItem ? GetGameObjectFromItem(newParentItem)

@@ -3,7 +3,7 @@
 
 #include "Bang/Bang.h"
 #include "Bang/Component.h"
-#include "Bang/ResourceHandle.h"
+#include "Bang/AssetHandle.h"
 #include "BangEditor/BangEditor.h"
 
 using namespace Bang;
@@ -30,7 +30,7 @@ public:
 
 private:
     GameObject *p_targetGameObject = nullptr;
-    RH<Texture2D> p_filterTexture;
+    AH<Texture2D> p_filterTexture;
 };
 }
 

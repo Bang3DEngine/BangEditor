@@ -7,9 +7,9 @@
 #include "Bang/Model.h"
 #include "Bang/Path.h"
 #include "Bang/Paths.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/Resources.h"
-#include "Bang/Resources.tcc"
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "BangEditor/ExplorerItem.h"
 #include "BangEditor/ModelExplorerItem.h"
 #include "BangEditor/PrefabExplorerItem.h"
@@ -81,7 +81,7 @@ Array<ExplorerItem *> ExplorerItemFactory::CreateAndGetSubPathsExplorerItems(
     {
         if (path.HasExtension(Extensions::GetModelExtensions()))
         {
-            RH<Model> model = Resources::Load<Model>(path);
+            AH<Model> model = Assets::Load<Model>(path);
 
             for (const String &meshName : model.Get()->GetMeshesNames())
             {

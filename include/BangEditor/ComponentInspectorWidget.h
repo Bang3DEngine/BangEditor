@@ -12,7 +12,7 @@
 #include "Bang/IEvents.h"
 #include "Bang/IEventsFocus.h"
 #include "Bang/MetaNode.h"
-#include "Bang/ResourceHandle.h"
+#include "Bang/AssetHandle.h"
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SerializableInspectorWidget.h"

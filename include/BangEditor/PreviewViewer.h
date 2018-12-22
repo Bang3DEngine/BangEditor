@@ -12,11 +12,11 @@
 #include "Bang/GameObject.h"
 #include "Bang/IEvents.h"
 #include "Bang/IEventsFocus.h"
-#include "Bang/ResourceHandle.h"
+#include "Bang/AssetHandle.h"
 #include "Bang/String.h"
 #include "Bang/Texture2D.h"
 #include "BangEditor/BangEditor.h"
-#include "BangEditor/ResourcePreviewFactory.h"
+#include "BangEditor/AssetPreviewFactory.h"
 
 namespace Bang
 {
@@ -34,7 +34,7 @@ class PreviewViewer : public GameObject, public EventListener<IEventsFocus>
 
 public:
     using ImageProviderFunc =
-        std::function<RH<Texture2D>(const ResourcePreviewFactoryParameters &)>;
+        std::function<AH<Texture2D>(const AssetPreviewFactoryParameters &)>;
 
     PreviewViewer();
     virtual ~PreviewViewer() override;
@@ -50,7 +50,7 @@ private:
     UIImageRenderer *p_border = nullptr;
     UIImageRenderer *p_imgRenderer = nullptr;
     ImageProviderFunc m_previewImageProviderFunc;
-    ResourcePreviewFactoryParameters m_params;
+    AssetPreviewFactoryParameters m_params;
 
     // IEventsFocus
     virtual UIEventResult OnUIEvent(UIFocusable *focusable,

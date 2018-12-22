@@ -4,7 +4,7 @@
 #include "Bang/Axis.h"
 #include "Bang/BangDefines.h"
 #include "Bang/RenderPass.h"
-#include "Bang/ResourceHandle.h"
+#include "Bang/AssetHandle.h"
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"
@@ -42,7 +42,7 @@ private:
     Vector2 m_startingGrabMousePosNDC;
     Vector3 m_startingGrabAxisedSpherePoint;
 
-    RH<Mesh> m_selectionMesh;
+    AH<Mesh> m_selectionMesh;
     GameObject *p_selectionGo = nullptr;
     MeshRenderer *p_selectionRenderer = nullptr;
 

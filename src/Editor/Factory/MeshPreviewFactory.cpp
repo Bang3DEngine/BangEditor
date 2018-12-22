@@ -9,8 +9,8 @@
 #include "Bang/MeshRenderer.h"
 #include "Bang/Scene.h"
 #include "Bang/Texture2D.h"
-#include "BangEditor/EditorResources.h"
-#include "BangEditor/ResourcePreviewFactory.tcc"
+#include "BangEditor/EditorAssets.h"
+#include "BangEditor/AssetPreviewFactory.tcc"
 
 namespace Bang
 {
@@ -28,22 +28,22 @@ MeshPreviewFactory::~MeshPreviewFactory()
 {
 }
 
-RH<Texture2D> MeshPreviewFactory::GetPreviewTextureFor(Mesh *mesh)
+AH<Texture2D> MeshPreviewFactory::GetPreviewTextureFor(Mesh *mesh)
 {
     return MeshPreviewFactory::GetPreviewTextureFor(
-        mesh, ResourcePreviewFactoryParameters());
+        mesh, AssetPreviewFactoryParameters());
 }
 
-RH<Texture2D> MeshPreviewFactory::GetPreviewTextureFor(
+AH<Texture2D> MeshPreviewFactory::GetPreviewTextureFor(
     Mesh *mesh,
-    const ResourcePreviewFactoryParameters &params)
+    const AssetPreviewFactoryParameters &params)
 {
     return MeshPreviewFactory::GetActive()->GetPreviewTextureFor_(mesh, params);
 }
 
 MeshPreviewFactory *MeshPreviewFactory::GetActive()
 {
-    return EditorResources::GetInstance()->GetMeshPreviewFactory();
+    return EditorAssets::GetInstance()->GetMeshPreviewFactory();
 }
 
 void MeshPreviewFactory::OnCreateSceneFirstTime(Scene *previewScene,
@@ -66,7 +66,7 @@ void MeshPreviewFactory::OnUpdateTextureBegin(
     Camera *previewCamera,
     GameObject *previewGoContainer,
     Mesh *mesh,
-    const ResourcePreviewFactoryParameters &params)
+    const AssetPreviewFactoryParameters &params)
 {
     BANG_UNUSED_3(previewScene, previewCamera, params);
     ASSERT(previewScene);
@@ -84,7 +84,7 @@ void MeshPreviewFactory::OnUpdateTextureEnd(
     Camera *previewCamera,
     GameObject *previewGoContainer,
     Mesh *mesh,
-    const ResourcePreviewFactoryParameters &params)
+    const AssetPreviewFactoryParameters &params)
 {
     BANG_UNUSED_5(
         previewScene, previewCamera, previewGoContainer, mesh, params);

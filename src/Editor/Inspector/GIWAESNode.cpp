@@ -12,9 +12,9 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/IEventsValueChanged.h"
 #include "Bang/Path.h"
-#include "Bang/ResourceHandle.h"
-#include "Bang/Resources.h"
-#include "Bang/Resources.tcc"
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/String.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIImageRenderer.h"
@@ -97,7 +97,7 @@ void GIWAESNode::UpdateFromReference()
         p_nameInput->GetText()->SetContent(smNode->GetName());
         p_nodeAnimationInput->SetPath(
             smNode->GetAnimation()
-                ? smNode->GetAnimation()->GetResourceFilepath()
+                ? smNode->GetAnimation()->GetAssetFilepath()
                 : Path::Empty());
         p_speedInputNumber->SetValue(smNode->GetSpeed());
     }
@@ -114,7 +114,7 @@ void GIWAESNode::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
         else if (ee == p_nodeAnimationInput)
         {
             smNode->SetAnimation(
-                Resources::Load<Animation>(p_nodeAnimationInput->GetPath())
+                Assets::Load<Animation>(p_nodeAnimationInput->GetPath())
                     .Get());
         }
         else if (ee == p_speedInputNumber)
