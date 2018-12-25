@@ -2,10 +2,10 @@
 
 #include "Bang/AnimatorLayerMask.h"
 #include "Bang/AnimatorStateMachineLayer.h"
+#include "Bang/Assets.h"
 #include "Bang/Extensions.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/MetaFilesManager.h"
-#include "Bang/Assets.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UIInputText.h"

@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Bang/Array.tcc"
+#include "Bang/AssetHandle.h"
 #include "Bang/Bang.h"
 #include "Bang/BangDefines.h"
 #include "Bang/Color.h"
@@ -12,7 +13,6 @@
 #include "Bang/IEvents.h"
 #include "Bang/IEventsFocus.h"
 #include "Bang/MetaNode.h"
-#include "Bang/AssetHandle.h"
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SerializableInspectorWidget.h"

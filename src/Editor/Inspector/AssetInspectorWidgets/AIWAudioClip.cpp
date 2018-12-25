@@ -3,6 +3,7 @@
 #include "Bang/ALAudioSource.h"
 #include "Bang/Array.h"
 #include "Bang/Assert.h"
+#include "Bang/AssetHandle.h"
 #include "Bang/AudioManager.h"
 #include "Bang/AudioParams.h"
 #include "Bang/EventEmitter.h"
@@ -10,13 +11,12 @@
 #include "Bang/GameObject.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/LayoutSizeType.h"
-#include "Bang/AssetHandle.h"
 #include "Bang/UIButton.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UITextRenderer.h"
-#include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/AIWAsset.tcc"
+#include "BangEditor/EditorTextureFactory.h"
 
 namespace Bang
 {

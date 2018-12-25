@@ -1,10 +1,10 @@
 #include "BangEditor/PrefabExplorerItem.h"
 
-#include "Bang/GameObject.h"
-#include "Bang/Prefab.h"
 #include "Bang/AssetHandle.h"
 #include "Bang/Assets.h"
 #include "Bang/Assets.tcc"
+#include "Bang/GameObject.h"
+#include "Bang/Prefab.h"
 #include "Bang/Scene.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/MenuItem.h"

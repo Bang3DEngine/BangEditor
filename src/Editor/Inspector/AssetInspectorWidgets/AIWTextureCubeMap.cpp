@@ -1,5 +1,6 @@
 #include "BangEditor/AIWTextureCubeMap.h"
 
+#include "Bang/AssetHandle.h"
 #include "Bang/Color.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/Extensions.h"
@@ -10,7 +11,6 @@
 #include "Bang/Image.h"
 #include "Bang/ImageIO.h"
 #include "Bang/Path.h"
-#include "Bang/AssetHandle.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UILabel.h"
 #include "Bang/UITextRenderer.h"
@@ -160,10 +160,10 @@ void AIWTextureCubeMap::UpdateInputsFromAsset()
                                       : Path::Empty());
     p_leftTextureInput->SetPath(leftTex ? leftTex.Get()->GetAssetFilepath()
                                         : Path::Empty());
-    p_rightTextureInput->SetPath(
-        rightTex ? rightTex.Get()->GetAssetFilepath() : Path::Empty());
-    p_frontTextureInput->SetPath(
-        frontTex ? frontTex.Get()->GetAssetFilepath() : Path::Empty());
+    p_rightTextureInput->SetPath(rightTex ? rightTex.Get()->GetAssetFilepath()
+                                          : Path::Empty());
+    p_frontTextureInput->SetPath(frontTex ? frontTex.Get()->GetAssetFilepath()
+                                          : Path::Empty());
     p_backTextureInput->SetPath(backTex ? backTex.Get()->GetAssetFilepath()
                                         : Path::Empty());
 

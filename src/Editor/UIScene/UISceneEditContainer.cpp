@@ -5,6 +5,8 @@
 #include "Bang/AARect.h"
 #include "Bang/Array.h"
 #include "Bang/Assert.h"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/Camera.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventListener.tcc"
@@ -28,8 +30,6 @@
 #include "Bang/MouseButton.h"
 #include "Bang/Path.h"
 #include "Bang/RectTransform.h"
-#include "Bang/Assets.h"
-#include "Bang/Assets.tcc"
 #include "Bang/Scene.h"
 #include "Bang/SceneManager.h"
 #include "Bang/Texture2D.h"
@@ -345,8 +345,7 @@ void UISceneEditContainer::OnDragStarted(EventEmitter<IEventsDragDrop> *dd_)
         Path draggedPath = expItem->GetPath();
         if (draggedPath.HasExtension(Extensions::GetMaterialExtension()))
         {
-            m_currentMaterialBeingDragged =
-                Assets::Load<Material>(draggedPath);
+            m_currentMaterialBeingDragged = Assets::Load<Material>(draggedPath);
             if (m_currentMaterialBeingDragged)
             {
                 Camera *edCam = EditorCamera::GetInstance()->GetCamera();

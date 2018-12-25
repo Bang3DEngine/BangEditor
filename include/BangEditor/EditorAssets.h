@@ -2,8 +2,8 @@
 #define EDITORASSETS_H
 
 #include "Bang/Array.h"
-#include "Bang/BangDefines.h"
 #include "Bang/Assets.h"
+#include "Bang/BangDefines.h"
 #include "BangEditor/BangEditor.h"
 
 namespace Bang

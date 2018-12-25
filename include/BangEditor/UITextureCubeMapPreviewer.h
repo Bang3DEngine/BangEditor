@@ -4,18 +4,18 @@
 #include <vector>
 
 #include "Bang/Array.tcc"
+#include "Bang/AssetHandle.h"
 #include "Bang/Bang.h"
 #include "Bang/BangDefines.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventListener.tcc"
 #include "Bang/GameObject.h"
 #include "Bang/IEventsValueChanged.h"
-#include "Bang/AssetHandle.h"
 #include "Bang/String.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UIFocusable.h"
-#include "BangEditor/BangEditor.h"
 #include "BangEditor/AssetPreviewFactory.h"
+#include "BangEditor/BangEditor.h"
 
 namespace Bang
 {

@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "Bang/Array.h"
+#include "Bang/AssetHandle.h"
 #include "Bang/GameObject.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
@@ -14,14 +15,13 @@
 #include "Bang/Map.tcc"
 #include "Bang/Mesh.h"
 #include "Bang/RectTransform.h"
-#include "Bang/AssetHandle.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UIInputText.h"
-#include "BangEditor/ModelPreviewFactory.h"
-#include "BangEditor/PreviewViewer.h"
 #include "BangEditor/AIWAsset.tcc"
 #include "BangEditor/AssetInspectorWidget.h"
+#include "BangEditor/ModelPreviewFactory.h"
+#include "BangEditor/PreviewViewer.h"
 
 namespace Bang
 {

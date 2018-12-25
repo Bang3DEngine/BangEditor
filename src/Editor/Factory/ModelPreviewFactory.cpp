@@ -10,9 +10,9 @@
 #include "Bang/Model.h"
 #include "Bang/Scene.h"
 #include "Bang/Texture2D.h"
+#include "BangEditor/AssetPreviewFactory.tcc"
 #include "BangEditor/EditorAssets.h"
 #include "BangEditor/EditorTextureFactory.h"
-#include "BangEditor/AssetPreviewFactory.tcc"
 
 namespace Bang
 {

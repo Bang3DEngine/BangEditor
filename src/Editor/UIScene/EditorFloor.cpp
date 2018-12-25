@@ -2,6 +2,7 @@
 
 #include "Bang/Array.h"
 #include "Bang/Array.tcc"
+#include "Bang/AssetHandle.h"
 #include "Bang/Color.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
@@ -10,7 +11,6 @@
 #include "Bang/Material.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/Path.h"
-#include "Bang/AssetHandle.h"
 #include "Bang/ShaderProgramFactory.h"
 #include "Bang/Transform.h"
 #include "BangEditor/EditorPaths.h"

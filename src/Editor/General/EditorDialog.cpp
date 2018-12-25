@@ -2,6 +2,8 @@
 
 #include "Bang/Alignment.h"
 #include "Bang/Assert.h"
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
 #include "Bang/Camera.h"
 #include "Bang/Cursor.h"
 #include "Bang/Dialog.h"
@@ -19,8 +21,6 @@
 #include "Bang/Path.h"
 #include "Bang/Paths.h"
 #include "Bang/RectTransform.h"
-#include "Bang/AssetHandle.h"
-#include "Bang/Assets.h"
 #include "Bang/Scene.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/ShaderProgramFactory.h"

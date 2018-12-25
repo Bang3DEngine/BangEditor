@@ -2,9 +2,9 @@
 
 #include "Bang/AnimatorStateMachine.h"
 #include "Bang/AnimatorStateMachineBlendTreeNode.h"
+#include "Bang/Assets.h"
 #include "Bang/Extensions.h"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/Assets.h"
 #include "Bang/UIComboBox.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UIInputText.h"
@@ -97,8 +97,7 @@ void GIWAESNodeBlendTree::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
         if (ee == p_nodeSecondAnimationInput)
         {
             smNode->SetSecondAnimation(
-                Assets::Load<Animation>(
-                    p_nodeSecondAnimationInput->GetPath())
+                Assets::Load<Animation>(p_nodeSecondAnimationInput->GetPath())
                     .Get());
         }
         else if (ee == p_variableNameInput)

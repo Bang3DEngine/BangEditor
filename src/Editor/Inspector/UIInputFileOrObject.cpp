@@ -1,5 +1,6 @@
 #include "BangEditor/UIInputFileOrObject.h"
 
+#include "Bang/Assets.h"
 #include "Bang/Color.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
@@ -7,7 +8,6 @@
 #include "Bang/IEventsValueChanged.h"
 #include "Bang/Paths.h"
 #include "Bang/RectTransform.h"
-#include "Bang/Assets.h"
 #include "Bang/Stretch.h"
 #include "Bang/TextureFactory.h"
 #include "Bang/UIButton.h"

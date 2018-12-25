@@ -1,6 +1,7 @@
 #include "BangEditor/ScaleGizmoAxis.h"
 
 #include "Bang/Array.tcc"
+#include "Bang/AssetHandle.h"
 #include "Bang/AxisFunctions.h"
 #include "Bang/Camera.h"
 #include "Bang/GameObject.h"
@@ -16,7 +17,6 @@
 #include "Bang/MeshRenderer.h"
 #include "Bang/Plane.h"
 #include "Bang/Ray.h"
-#include "Bang/AssetHandle.h"
 #include "Bang/Transform.h"
 #include "Bang/Vector3.h"
 #include "BangEditor/EditorCamera.h"

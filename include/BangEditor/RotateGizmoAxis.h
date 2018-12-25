@@ -1,10 +1,10 @@
 #ifndef ROTATEGIZMOAXIS_H
 #define ROTATEGIZMOAXIS_H
 
+#include "Bang/AssetHandle.h"
 #include "Bang/Axis.h"
 #include "Bang/BangDefines.h"
 #include "Bang/RenderPass.h"
-#include "Bang/AssetHandle.h"
 #include "Bang/String.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SelectionGizmo.h"

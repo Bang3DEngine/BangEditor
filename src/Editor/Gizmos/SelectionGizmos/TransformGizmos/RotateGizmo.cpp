@@ -4,6 +4,7 @@
 
 #include "Bang/Array.h"
 #include "Bang/Array.tcc"
+#include "Bang/AssetHandle.h"
 #include "Bang/Axis.h"
 #include "Bang/Camera.h"
 #include "Bang/Color.h"
@@ -17,7 +18,6 @@
 #include "Bang/Mesh.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
-#include "Bang/AssetHandle.h"
 #include "Bang/Transform.h"
 #include "Bang/Vector3.h"
 #include "BangEditor/NotSelectableInEditor.h"

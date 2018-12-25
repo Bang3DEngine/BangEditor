@@ -423,8 +423,7 @@ Path AnimatorSMEditorScene::GetAnimatorSMExtraInfoPath() const
         Path assetPath = GetAnimatorSM()->GetAssetFilepath();
         if (assetPath.IsFile())
         {
-            Path metaAssetPath =
-                MetaFilesManager::GetMetaFilepath(assetPath);
+            Path metaAssetPath = MetaFilesManager::GetMetaFilepath(assetPath);
             return Path(
                 metaAssetPath.GetAbsolute().Replace(".meta", ".metaed"));
         }

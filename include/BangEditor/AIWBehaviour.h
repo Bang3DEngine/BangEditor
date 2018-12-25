@@ -5,8 +5,8 @@
 #include "Bang/BangDefines.h"
 #include "Bang/Color.h"
 #include "Bang/String.h"
-#include "BangEditor/BangEditor.h"
 #include "BangEditor/AssetInspectorWidget.h"
+#include "BangEditor/BangEditor.h"
 
 namespace Bang
 {

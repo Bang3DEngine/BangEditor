@@ -4,6 +4,9 @@
 
 #include "Bang/Alignment.h"
 #include "Bang/Array.tcc"
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventEmitter.tcc"
 #include "Bang/EventListener.tcc"
@@ -14,9 +17,6 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/IEvents.h"
 #include "Bang/Path.h"
-#include "Bang/AssetHandle.h"
-#include "Bang/Assets.h"
-#include "Bang/Assets.tcc"
 #include "Bang/UICanvas.h"
 #include "Bang/UIComboBox.h"
 #include "Bang/UIInputNumber.h"
@@ -107,8 +107,7 @@ void CIWUITextRenderer::UpdateFromReference()
         int(GetUITextRenderer()->GetVerticalAlignment()));
 
     Font *font = GetUITextRenderer()->GetFont();
-    p_fontFileInput->SetPath(font ? font->GetAssetFilepath()
-                                  : Path::Empty());
+    p_fontFileInput->SetPath(font ? font->GetAssetFilepath() : Path::Empty());
 }
 
 UITextRenderer *CIWUITextRenderer::GetUITextRenderer() const

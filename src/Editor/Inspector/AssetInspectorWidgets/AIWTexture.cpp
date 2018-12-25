@@ -1,6 +1,7 @@
 #include "BangEditor/AIWTexture.h"
 
 #include "Bang/AspectRatioMode.h"
+#include "Bang/AssetHandle.h"
 #include "Bang/Color.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/GL.h"
@@ -10,7 +11,6 @@
 #include "Bang/MetaFilesManager.h"
 #include "Bang/Path.h"
 #include "Bang/RectTransform.h"
-#include "Bang/AssetHandle.h"
 #include "Bang/Texture2D.h"
 #include "Bang/UIAspectRatioFitter.h"
 #include "Bang/UICheckBox.h"

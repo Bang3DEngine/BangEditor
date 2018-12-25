@@ -4,6 +4,9 @@
 
 #include "Bang/Array.h"
 #include "Bang/Array.tcc"
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventEmitter.tcc"
 #include "Bang/EventListener.tcc"
@@ -17,9 +20,6 @@
 #include "Bang/Particle.h"
 #include "Bang/ParticleSystem.h"
 #include "Bang/Path.h"
-#include "Bang/AssetHandle.h"
-#include "Bang/Assets.h"
-#include "Bang/Assets.tcc"
 #include "Bang/Texture2D.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIComboBox.h"
@@ -347,8 +347,7 @@ void CIWParticleSystem::OnValueChangedCIW(
 
     if (object == p_textureInput)
     {
-        AH<Texture2D> tex =
-            Assets::Load<Texture2D>(p_textureInput->GetPath());
+        AH<Texture2D> tex = Assets::Load<Texture2D>(p_textureInput->GetPath());
         GetParticleSystem()->SetTexture(tex.Get());
     }
 

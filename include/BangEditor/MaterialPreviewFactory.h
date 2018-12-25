@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Bang/Array.tcc"
+#include "Bang/AssetHandle.h"
 #include "Bang/Bang.h"
 #include "Bang/BangDefines.h"
 #include "Bang/EventEmitter.tcc"
@@ -12,10 +13,9 @@
 #include "Bang/IEvents.h"
 #include "Bang/Material.h"
 #include "Bang/Quaternion.h"
-#include "Bang/AssetHandle.h"
 #include "Bang/UMap.tcc"
-#include "BangEditor/BangEditor.h"
 #include "BangEditor/AssetPreviewFactory.h"
+#include "BangEditor/BangEditor.h"
 
 namespace Bang
 {

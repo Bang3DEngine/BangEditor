@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Bang/Array.tcc"
+#include "Bang/AssetHandle.h"
 #include "Bang/Bang.h"
 #include "Bang/BangDefines.h"
 #include "Bang/EventEmitter.tcc"
@@ -18,7 +19,6 @@
 #include "Bang/Material.h"
 #include "Bang/MetaNode.h"
 #include "Bang/RenderPass.h"
-#include "Bang/AssetHandle.h"
 #include "Bang/SceneManager.h"
 #include "Bang/String.h"
 #include "Bang/UIFocusable.h"

@@ -1,5 +1,7 @@
 #include "BangEditor/EditorTextureFactory.h"
 
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/Behaviour.h"
 #include "Bang/Component.h"
 #include "Bang/Extensions.h"
@@ -8,8 +10,6 @@
 #include "Bang/Material.h"
 #include "Bang/Mesh.h"
 #include "Bang/Model.h"
-#include "Bang/Assets.h"
-#include "Bang/Assets.tcc"
 #include "Bang/Serializable.h"
 #include "Bang/Texture2D.h"
 #include "Bang/TextureFactory.h"

@@ -1,10 +1,10 @@
 #ifndef EDITORMESHFACTORYUITABSCENE_H
 #define EDITORMESHFACTORYUITABSCENE_H
 
+#include "Bang/AssetHandle.h"
 #include "Bang/Bang.h"
 #include "Bang/GameObject.h"
 #include "Bang/Plane.h"
-#include "Bang/AssetHandle.h"
 #include "BangEditor/BangEditor.h"
 
 using namespace Bang;

@@ -1,5 +1,6 @@
 #include "BangEditor/EditorMeshFactoryUITabScene.h"
 
+#include "Bang/Assets.h"
 #include "Bang/BoxCollider.h"
 #include "Bang/Camera.h"
 #include "Bang/DebugRenderer.h"
@@ -19,7 +20,6 @@
 #include "Bang/Plane.h"
 #include "Bang/Random.h"
 #include "Bang/RectTransform.h"
-#include "Bang/Assets.h"
 #include "Bang/RigidBody.h"
 #include "Bang/Scene.h"
 #include "Bang/SphereCollider.h"

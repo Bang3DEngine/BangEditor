@@ -1,16 +1,16 @@
 #include "BangEditor/AIWAnimatorStateMachine.h"
 
+#include "Bang/AssetHandle.h"
 #include "Bang/GameObject.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/AssetHandle.h"
 #include "Bang/UIButton.h"
 #include "Bang/UILayoutElement.h"
+#include "BangEditor/AIWAsset.tcc"
 #include "BangEditor/AnimatorSMEditor.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorTextureFactory.h"
-#include "BangEditor/AIWAsset.tcc"
 
 namespace Bang
 {

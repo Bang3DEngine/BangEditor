@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Bang/Array.tcc"
+#include "Bang/AssetHandle.h"
 #include "Bang/Bang.h"
 #include "Bang/BangDefines.h"
 #include "Bang/EventEmitter.tcc"
@@ -12,11 +13,10 @@
 #include "Bang/GameObject.h"
 #include "Bang/IEvents.h"
 #include "Bang/IEventsFocus.h"
-#include "Bang/AssetHandle.h"
 #include "Bang/String.h"
 #include "Bang/Texture2D.h"
-#include "BangEditor/BangEditor.h"
 #include "BangEditor/AssetPreviewFactory.h"
+#include "BangEditor/BangEditor.h"
 
 namespace Bang
 {

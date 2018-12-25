@@ -3,11 +3,11 @@
 
 #include <functional>
 
+#include "Bang/AssetHandle.h"
 #include "Bang/BangDefines.h"
 #include "Bang/Color.h"
 #include "Bang/Map.h"
 #include "Bang/Path.h"
-#include "Bang/AssetHandle.h"
 #include "Bang/String.h"
 #include "Bang/TextureFactory.h"
 #include "BangEditor/BangEditor.h"

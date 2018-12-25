@@ -3,6 +3,8 @@
 #include <array>
 #include <functional>
 
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/CodePreprocessor.h"
 #include "Bang/EventListener.tcc"
 #include "Bang/Extensions.h"
@@ -12,8 +14,6 @@
 #include "Bang/MetaFilesManager.h"
 #include "Bang/Path.h"
 #include "Bang/Paths.h"
-#include "Bang/Assets.h"
-#include "Bang/Assets.tcc"
 #include "Bang/Set.h"
 #include "Bang/Set.tcc"
 #include "Bang/Shader.h"

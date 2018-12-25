@@ -3,6 +3,9 @@
 #include "Bang/Animation.h"
 #include "Bang/AnimatorStateMachineNode.h"
 #include "Bang/Assert.h"
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/Color.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventListener.tcc"
@@ -12,9 +15,6 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/IEventsValueChanged.h"
 #include "Bang/Path.h"
-#include "Bang/AssetHandle.h"
-#include "Bang/Assets.h"
-#include "Bang/Assets.tcc"
 #include "Bang/String.h"
 #include "Bang/UICheckBox.h"
 #include "Bang/UIImageRenderer.h"
@@ -96,9 +96,8 @@ void GIWAESNode::UpdateFromReference()
     {
         p_nameInput->GetText()->SetContent(smNode->GetName());
         p_nodeAnimationInput->SetPath(
-            smNode->GetAnimation()
-                ? smNode->GetAnimation()->GetAssetFilepath()
-                : Path::Empty());
+            smNode->GetAnimation() ? smNode->GetAnimation()->GetAssetFilepath()
+                                   : Path::Empty());
         p_speedInputNumber->SetValue(smNode->GetSpeed());
     }
 }
@@ -114,8 +113,7 @@ void GIWAESNode::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
         else if (ee == p_nodeAnimationInput)
         {
             smNode->SetAnimation(
-                Assets::Load<Animation>(p_nodeAnimationInput->GetPath())
-                    .Get());
+                Assets::Load<Animation>(p_nodeAnimationInput->GetPath()).Get());
         }
         else if (ee == p_speedInputNumber)
         {

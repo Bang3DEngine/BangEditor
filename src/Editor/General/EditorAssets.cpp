@@ -2,13 +2,13 @@
 
 #include "Bang/Array.tcc"
 #include "Bang/Path.h"
+#include "BangEditor/AssetPreviewFactory.tcc"
 #include "BangEditor/EditorMeshFactory.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/MaterialPreviewFactory.h"
 #include "BangEditor/MeshPreviewFactory.h"
 #include "BangEditor/ModelPreviewFactory.h"
-#include "BangEditor/AssetPreviewFactory.tcc"
 
 namespace Bang
 {

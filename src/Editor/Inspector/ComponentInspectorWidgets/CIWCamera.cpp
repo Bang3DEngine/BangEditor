@@ -3,6 +3,9 @@
 #include <vector>
 
 #include "Bang/Array.tcc"
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/Camera.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventEmitter.tcc"
@@ -13,9 +16,6 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/IEvents.h"
 #include "Bang/Path.h"
-#include "Bang/AssetHandle.h"
-#include "Bang/Assets.h"
-#include "Bang/Assets.tcc"
 #include "Bang/Scene.h"
 #include "Bang/TextureCubeMap.h"
 #include "Bang/UICheckBox.h"
@@ -212,8 +212,7 @@ void CIWCamera::OnValueChangedCIW(EventEmitter<IEventsValueChanged> *object)
     AH<TextureCubeMap> tcmAH;
     if (p_textureCubeMapInput->GetPath().IsFile())
     {
-        tcmAH =
-            Assets::Load<TextureCubeMap>(p_textureCubeMapInput->GetPath());
+        tcmAH = Assets::Load<TextureCubeMap>(p_textureCubeMapInput->GetPath());
     }
     GetCamera()->SetSkyBoxTexture(tcmAH.Get());
 

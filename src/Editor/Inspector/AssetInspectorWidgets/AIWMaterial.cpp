@@ -1,5 +1,8 @@
 #include "BangEditor/AIWMaterial.h"
 
+#include "Bang/AssetHandle.h"
+#include "Bang/Assets.h"
+#include "Bang/Assets.tcc"
 #include "Bang/EventEmitter.h"
 #include "Bang/Extensions.h"
 #include "Bang/Flags.h"
@@ -11,9 +14,6 @@
 #include "Bang/NeededUniformFlags.h"
 #include "Bang/Path.h"
 #include "Bang/RenderPass.h"
-#include "Bang/AssetHandle.h"
-#include "Bang/Assets.h"
-#include "Bang/Assets.tcc"
 #include "Bang/Shader.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/ShaderProgramFactory.h"
@@ -22,9 +22,9 @@
 #include "Bang/UIComboBox.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UISlider.h"
+#include "BangEditor/AIWAsset.tcc"
 #include "BangEditor/MaterialPreviewFactory.h"
 #include "BangEditor/PreviewViewer.h"
-#include "BangEditor/AIWAsset.tcc"
 #include "BangEditor/UIInputColor.h"
 #include "BangEditor/UIInputFile.h"
 #include "BangEditor/UIInputVector.h"
@@ -272,10 +272,8 @@ void AIWMaterial::UpdateInputsFromAsset()
     ShaderProgram *sp = GetMaterial()->GetShaderProgram();
     Shader *vs = sp ? sp->GetVertexShader() : nullptr;
     Shader *fs = sp ? sp->GetFragmentShader() : nullptr;
-    p_vertexShaderInput->SetPath(vs ? vs->GetAssetFilepath()
-                                    : Path::Empty());
-    p_fragmentShaderInput->SetPath(fs ? fs->GetAssetFilepath()
-                                      : Path::Empty());
+    p_vertexShaderInput->SetPath(vs ? vs->GetAssetFilepath() : Path::Empty());
+    p_fragmentShaderInput->SetPath(fs ? fs->GetAssetFilepath() : Path::Empty());
 }
 
 Texture2D *AIWMaterial::GetIconTexture() const
@@ -283,8 +281,7 @@ Texture2D *AIWMaterial::GetIconTexture() const
     return MaterialPreviewFactory::GetPreviewTextureFor(GetMaterial()).Get();
 }
 
-void AIWMaterial::OnValueChangedAIWAsset(
-    EventEmitter<IEventsValueChanged> *obj)
+void AIWMaterial::OnValueChangedAIWAsset(EventEmitter<IEventsValueChanged> *obj)
 {
     if (!GetMaterial())
     {

@@ -5,8 +5,8 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/UIComboBox.h"
 #include "Bang/UISlider.h"
-#include "BangEditor/EditorTextureFactory.h"
 #include "BangEditor/AIWAsset.tcc"
+#include "BangEditor/EditorTextureFactory.h"
 
 namespace Bang
 {

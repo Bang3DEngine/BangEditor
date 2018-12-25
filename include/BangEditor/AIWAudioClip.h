@@ -12,8 +12,8 @@
 #include "Bang/EventListener.tcc"
 #include "Bang/IEvents.h"
 #include "Bang/String.h"
-#include "BangEditor/BangEditor.h"
 #include "BangEditor/AIWAsset.h"
+#include "BangEditor/BangEditor.h"
 
 namespace Bang
 {

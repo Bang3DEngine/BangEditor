@@ -1,9 +1,9 @@
 #ifndef SELECTIONOPTIONS_H
 #define SELECTIONOPTIONS_H
 
+#include "Bang/AssetHandle.h"
 #include "Bang/Bang.h"
 #include "Bang/Component.h"
-#include "Bang/AssetHandle.h"
 #include "BangEditor/BangEditor.h"
 
 using namespace Bang;

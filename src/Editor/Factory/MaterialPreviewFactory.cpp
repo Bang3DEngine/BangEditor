@@ -6,8 +6,8 @@
 #include "Bang/MeshRenderer.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Transform.h"
-#include "BangEditor/EditorAssets.h"
 #include "BangEditor/AssetPreviewFactory.tcc"
+#include "BangEditor/EditorAssets.h"
 
 namespace Bang
 {
