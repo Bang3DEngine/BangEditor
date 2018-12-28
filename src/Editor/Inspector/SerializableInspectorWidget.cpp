@@ -423,7 +423,14 @@ void SerializableInspectorWidget::UpdateWidgetsContentFromMeta(
             }
             else if (UIComboBox *comboBox = widget->GetComponent<UIComboBox>())
             {
-                comboBox->SetSelectionByValue(metaAttr.Get<int>());
+                if (comboBox->GetMultiCheck())
+                {
+                    comboBox->SetSelectionForFlag(metaAttr.Get<int>());
+                }
+                else
+                {
+                    comboBox->SetSelectionByValue(metaAttr.Get<int>());
+                }
             }
             else if (UIInputNumber *inputNumber =
                          widget->GetComponent<UIInputNumber>())
@@ -469,14 +476,14 @@ bool SerializableInspectorWidget::NeedsToRecreateWidget(
 
 String GetStringValueFromWidget(GameObject *widget)
 {
-    String value = "";
+    String valueStr = "";
     if (UIInputVector *inputVec = DCAST<UIInputVector *>(widget))
     {
         switch (inputVec->GetSize())
         {
-            case 2: value = String::ToString(inputVec->GetVector2()); break;
-            case 3: value = String::ToString(inputVec->GetVector3()); break;
-            default: value = String::ToString(inputVec->GetVector4()); break;
+            case 2: valueStr = String::ToString(inputVec->GetVector2()); break;
+            case 3: valueStr = String::ToString(inputVec->GetVector3()); break;
+            default: valueStr = String::ToString(inputVec->GetVector4()); break;
         }
     }
     else if (UIInputFile *inputFile = DCAST<UIInputFile *>(widget))
@@ -484,45 +491,48 @@ String GetStringValueFromWidget(GameObject *widget)
         if (inputFile->GetShowPreview())
         {
             GUID guid = MetaFilesManager::GetGUID(inputFile->GetPath());
-            value = String::ToString(guid);
+            valueStr = String::ToString(guid);
         }
         else
         {
-            value = inputFile->GetPath().GetAbsolute();
+            valueStr = inputFile->GetPath().GetAbsolute();
         }
     }
     else if (UIComboBox *comboBox = widget->GetComponent<UIComboBox>())
     {
-        value = String::ToString(comboBox->GetSelectedValue());
+        valueStr = String::ToString(comboBox->GetMultiCheck()
+                                        ? comboBox->GetSelectedValuesForFlag()
+                                        : comboBox->GetSelectedValue());
     }
     else if (UIInputObject *inputObject = DCAST<UIInputObject *>(widget))
     {
-        value = String::ToString(inputObject->GetObjectPtr());
+        valueStr = String::ToString(inputObject->GetObjectPtr());
     }
     else if (UIInputColor *inputColor = DCAST<UIInputColor *>(widget))
     {
-        value = String::ToString(inputColor->GetColor());
+        valueStr = String::ToString(inputColor->GetColor());
     }
     else if (UICheckBox *inputCheckBox = widget->GetComponent<UICheckBox>())
     {
-        value = inputCheckBox->IsChecked() ? "True" : "False";
+        valueStr = inputCheckBox->IsChecked() ? "True" : "False";
     }
     else if (UISlider *slider = widget->GetComponent<UISlider>())
     {
-        value = String::ToString(
+        valueStr = String::ToString(
             slider->GetValue(),
             SCAST<int>(slider->GetInputNumber()->GetDecimalPlaces()));
     }
     else if (UIInputNumber *inputNumber = widget->GetComponent<UIInputNumber>())
     {
-        value = String::ToString(inputNumber->GetValue(),
-                                 SCAST<int>(inputNumber->GetDecimalPlaces()));
+        valueStr =
+            String::ToString(inputNumber->GetValue(),
+                             SCAST<int>(inputNumber->GetDecimalPlaces()));
     }
     else if (UIInputText *inputText = widget->GetComponent<UIInputText>())
     {
-        value = inputText->GetText()->GetContent();
+        valueStr = inputText->GetText()->GetContent();
     }
-    return value;
+    return valueStr;
 }
 
 MetaNode SerializableInspectorWidget::GetMetaFromWidget(

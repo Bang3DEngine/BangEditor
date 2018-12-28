@@ -81,6 +81,8 @@ void GIWAESNodeBlendTree::UpdateFromReference()
             smNode->GetSecondAnimation()
                 ? smNode->GetSecondAnimation()->GetAssetFilepath()
                 : Path::Empty());
+        p_variableNameInput->SetSelectionByLabel(
+            smNode->GetBlendVariableName());
         p_secondAnimationSpeedInput->SetValue(
             smNode->GetSecondAnimationSpeed());
     }

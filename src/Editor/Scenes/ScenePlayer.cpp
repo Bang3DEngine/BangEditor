@@ -174,7 +174,8 @@ void ScenePlayer::StopScene()
         SceneManager::LoadSceneInstantly(sp->p_editOpenScene, false);
         if (sp->p_playOpenScene)
         {
-            GameObject::Destroy(sp->p_playOpenScene);
+            GameObject::DestroyImmediate(sp->p_playOpenScene);
+            sp->p_playOpenScene = nullptr;
         }
 
         ScenePlayer::SetPlayState(PlayState::EDITING);
