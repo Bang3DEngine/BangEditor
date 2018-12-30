@@ -105,6 +105,7 @@ Scene *ScenePlayer::GetPlayOpenScene() const
     return p_playOpenScene;
 }
 
+#include "Bang/Application.h"
 void ScenePlayer::PlayScene()
 {
     if (ScenePlayer::GetPlayState() != PlayState::PLAYING)
@@ -120,17 +121,13 @@ void ScenePlayer::PlayScene()
             bool behavioursReady = edBehaviourMgr->PrepareBehavioursLibrary();
             if (behavioursReady)
             {
-                Scene *openScene = EditorSceneManager::GetOpenScene();
-                if (openScene)
+                if (Scene *openScene = EditorSceneManager::GetOpenScene())
                 {
                     ScenePlayer::SetPlayState(PlayState::JUST_BEFORE_PLAYING);
 
                     // Create new scene cloning the open scene into it
                     sp->p_playOpenScene = GameObjectFactory::CreateScene(false);
                     openScene->CloneInto(sp->p_playOpenScene, true);
-
-                    // Close the open scene
-                    SceneManager::LoadSceneInstantly(nullptr, false);
 
                     // Now set the open scene in the editor
                     SceneManager::LoadSceneInstantly(sp->p_playOpenScene,

@@ -43,6 +43,7 @@ class MenuItem;
 class UIContextMenu;
 
 class Inspector : public GameObject,
+                  public EventListener<IEventsDestroy>,
                   public EventListener<IEventsEditor>,
                   public EventListener<IEventsComponent>,
                   public EventListener<IEventsFileTracker>,

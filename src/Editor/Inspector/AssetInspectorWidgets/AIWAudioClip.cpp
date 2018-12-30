@@ -136,8 +136,6 @@ void AIWAudioClip::OnValueChangedAIWAsset(
 
 void AIWAudioClip::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
-    GameObject::OnDestroyed(object);
-
     ASSERT(object == p_alAudioSourceBeingPlayed);
     p_alAudioSourceBeingPlayed = nullptr;
     Stop();

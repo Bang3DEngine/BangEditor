@@ -283,8 +283,6 @@ void Inspector::OnSceneLoaded(Scene *scene, const Path &)
 
 void Inspector::OnDestroyed(EventEmitter<IEventsDestroy> *ee)
 {
-    GameObject::OnDestroyed(ee);
-
     ASSERT(ee == p_currentGameObject);
     Clear();
 }

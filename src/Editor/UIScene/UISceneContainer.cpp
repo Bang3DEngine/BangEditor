@@ -214,10 +214,8 @@ void UISceneContainer::OnValueChanged(EventEmitter<IEventsValueChanged> *)
     p_sceneImage->SetRenderMode(renderMode);
 }
 
-void UISceneContainer::OnDestroyed(EventEmitter<IEventsDestroy> *object)
+void UISceneContainer::OnDestroyed(EventEmitter<IEventsDestroy> *)
 {
-    GameObject::OnDestroyed(object);
-
     SetScene(nullptr);
 }
 

@@ -191,9 +191,8 @@ void ASMTransitionConditionInput::UpdateFromVariable()
     }
 }
 
-void ASMTransitionConditionInput::OnDestroyed(EventEmitter<IEventsDestroy> *ee)
+void ASMTransitionConditionInput::OnDestroyed(EventEmitter<IEventsDestroy> *)
 {
-    GameObject::OnDestroyed(ee);
     GameObject::Destroy(this);
 }
 

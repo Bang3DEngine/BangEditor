@@ -79,7 +79,7 @@ Hierarchy::Hierarchy()
 
     GameObjectFactory::CreateUIGameObjectInto(this);
 
-    p_tree = GameObjectFactory::CreateUITree();
+    p_uiTree = GameObjectFactory::CreateUITree();
     GetUITree()->GetUIList()->GetScrollPanel()->SetForceHorizontalFit(true);
 
     UIScrollPanel *scrollPanel = GetUITree()->GetUIList()->GetScrollPanel();
@@ -467,8 +467,6 @@ void Hierarchy::OnSceneLoaded(Scene *scene, const Path &)
 
 void Hierarchy::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
-    GameObject::OnDestroyed(object);
-
     if (GameObject *destroyedGo = DCAST<GameObject *>(object))
     {
         HierarchyItem *hItem = GetItemFromGameObject(destroyedGo);
@@ -495,7 +493,7 @@ void Hierarchy::TreeSelectionCallback(GOItem *item, UIList::Action action)
 
 void Hierarchy::AddGameObject(GameObject *go)
 {
-    if (!go->GetComponentInAncestorsAndThis<HideInHierarchy>())
+    if (!go->HasComponent<HideInHierarchy>())
     {
         bool topItem = (go->GetScene() == go->GetParent());
 
@@ -503,7 +501,6 @@ void Hierarchy::AddGameObject(GameObject *go)
         hItem->SetReferencedGameObject(go);
 
         // Get index inside parent, without counting hidden ones
-        HierarchyItem *parentItem = GetItemFromGameObject(go->GetParent());
         int indexInsideParent = go->GetParent()->GetChildren().IndexOf(go);
         for (GameObject *child : go->GetParent()->GetChildren())
         {
@@ -515,6 +512,7 @@ void Hierarchy::AddGameObject(GameObject *go)
 
         if (indexInsideParent >= 0)
         {
+            HierarchyItem *parentItem = GetItemFromGameObject(go->GetParent());
             GetUITree()->AddItem(
                 hItem, topItem ? nullptr : parentItem, indexInsideParent);
             m_gameObjectToItem.Add(go, hItem);
@@ -574,5 +572,5 @@ GameObject *Hierarchy::GetGameObjectFromItem(GOItem *item) const
 
 UITree *Hierarchy::GetUITree() const
 {
-    return p_tree;
+    return p_uiTree;
 }

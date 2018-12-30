@@ -180,8 +180,6 @@ UIFocusable *ContextMenu::GetFocusable() const
 
 void ContextMenu::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
-    GameObject::OnDestroyed(object);
-
     if (object == p_rootItem)
     {
         p_rootItem = nullptr;

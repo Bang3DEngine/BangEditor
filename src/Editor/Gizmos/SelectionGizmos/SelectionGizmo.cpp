@@ -135,8 +135,6 @@ void SelectionGizmo::OnGrabEnd()
 
 void SelectionGizmo::OnDestroyed(EventEmitter<IEventsDestroy> *object)
 {
-    GameObject::OnDestroyed(object);
-
     ASSERT(!GetReferencedGameObject() || object == GetReferencedGameObject());
     SetReferencedGameObject(nullptr);
 }

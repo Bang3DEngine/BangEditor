@@ -39,7 +39,8 @@ class UISceneToolbarDown;
 class UISceneContainer : public GameObject,
                          public EventListener<IEventsFocus>,
                          public EventListener<IEventsValueChanged>,
-                         public EventListener<IEventsTransform>
+                         public EventListener<IEventsTransform>,
+                         public EventListener<IEventsDestroy>
 {
 public:
     UISceneContainer();

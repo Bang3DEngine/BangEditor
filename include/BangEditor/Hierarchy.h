@@ -49,7 +49,8 @@ class Hierarchy : public GameObject,
                   public EventListener<IEventsFocus>,
                   public EventListener<IEventsSceneManager>,
                   public EventListener<IEventsHierarchyItem>,
-                  public EventListener<IEventsUITree>
+                  public EventListener<IEventsUITree>,
+                  public EventListener<IEventsDestroy>
 {
     GAMEOBJECT_EDITOR(Hierarchy);
 
@@ -112,7 +113,7 @@ public:
     static Hierarchy *GetInstance();
 
 private:
-    UITree *p_tree = nullptr;
+    UITree *p_uiTree = nullptr;
     UIContextMenu *p_contextMenu = nullptr;
     UMap<GameObject *, HierarchyItem *> m_gameObjectToItem;
 

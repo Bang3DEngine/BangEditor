@@ -28,7 +28,7 @@ namespace BangEditor
 class AESNode;
 class UIInputFile;
 
-class GIWAESNode : public InspectorWidget
+class GIWAESNode : public InspectorWidget, public EventListener<IEventsDestroy>
 {
 public:
     GIWAESNode();

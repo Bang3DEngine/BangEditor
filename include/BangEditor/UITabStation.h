@@ -30,7 +30,9 @@ namespace BangEditor
 {
 class UITabContainer;
 
-class UITabStation : public GameObject, public EventListener<IEventsDragDrop>
+class UITabStation : public GameObject,
+                     public EventListener<IEventsDragDrop>,
+                     public EventListener<IEventsDestroy>
 {
     GAMEOBJECT_EDITOR(UITabStation);
 

@@ -41,6 +41,7 @@ class UIContextMenu;
 
 class AESNode : public GameObject,
                 public EventListener<IEventsFocus>,
+                public EventListener<IEventsDestroy>,
                 public EventListener<IEventsAnimatorStateMachineNode>
 {
     GAMEOBJECT_EDITOR(AESNode);

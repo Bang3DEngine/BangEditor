@@ -36,7 +36,8 @@ namespace BangEditor
 class AESConnectionLine;
 class UIInputArray;
 
-class GIWAESConnectionLine : public InspectorWidget
+class GIWAESConnectionLine : public InspectorWidget,
+                             public EventListener<IEventsDestroy>
 {
 public:
     GIWAESConnectionLine();

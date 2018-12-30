@@ -490,8 +490,4 @@ void AESNode::OnDestroyed(EventEmitter<IEventsDestroy> *object)
         GameObject::Destroy(this);
         Object::PropagateObjectDestruction(this);
     }
-    else
-    {
-        GameObject::OnDestroyed(object);
-    }
 }

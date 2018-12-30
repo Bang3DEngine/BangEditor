@@ -373,9 +373,8 @@ void UITabStation::OnDrop(EventEmitter<IEventsDragDrop> *dragDropEmitter)
     }
 }
 
-void UITabStation::OnDestroyed(EventEmitter<IEventsDestroy> *object)
+void UITabStation::OnDestroyed(EventEmitter<IEventsDestroy> *)
 {
-    GameObject::OnDestroyed(object);
 }
 
 UITabStation *UITabStation::GetChildStation(Side side) const

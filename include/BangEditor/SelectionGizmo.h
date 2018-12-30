@@ -20,7 +20,8 @@ class EventEmitter;
 using namespace Bang;
 namespace BangEditor
 {
-class SelectionGizmo : public GameObject
+class SelectionGizmo : public GameObject, public EventListener<IEventsDestroy>
+
 {
 public:
     enum class SelectionState

@@ -81,8 +81,7 @@ UIInputColor::UIInputColor()
 
 UIInputColor::~UIInputColor()
 {
-    Object::PropagateObjectDestruction(m_colorPickerReporter);
-    delete m_colorPickerReporter;
+    GameObject::Destroy(m_colorPickerReporter);
 }
 
 void UIInputColor::Update()
@@ -94,7 +93,7 @@ void UIInputColor::Update()
     }
 }
 
-void UIInputColor::OnValueChanged(EventEmitter<IEventsValueChanged> *object)
+void UIInputColor::OnValueChanged(EventEmitter<IEventsValueChanged> *)
 {
     // Dont do anything here, since this is being called from the
     // color picker window loop, and nasty things can happen

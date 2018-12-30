@@ -33,7 +33,8 @@ namespace BangEditor
 {
 class ASMTransitionConditionInput : public GameObject,
                                     public EventEmitter<IEventsValueChanged>,
-                                    public EventListener<IEventsValueChanged>
+                                    public EventListener<IEventsValueChanged>,
+                                    public EventListener<IEventsDestroy>
 {
 public:
     ASMTransitionConditionInput();

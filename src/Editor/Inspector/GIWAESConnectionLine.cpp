@@ -340,8 +340,4 @@ void GIWAESConnectionLine::OnDestroyed(EventEmitter<IEventsDestroy> *object)
         SetSelectedSMTransition(nullptr);
         Inspector::GetActive()->Clear();
     }
-    else
-    {
-        GameObject::OnDestroyed(object);
-    }
 }
