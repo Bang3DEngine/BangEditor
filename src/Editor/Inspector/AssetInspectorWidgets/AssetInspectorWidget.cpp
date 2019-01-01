@@ -45,7 +45,7 @@ void AssetInspectorWidget::UpdateFromFileWhenChanged()
 
 Texture2D *AssetInspectorWidget::GetIconTexture() const
 {
-    return EditorTextureFactory::GetCheckerboard();
+    return EditorTextureFactory::GetIconForPath(GetPath());
 }
 
 Color AssetInspectorWidget::GetIconTint() const

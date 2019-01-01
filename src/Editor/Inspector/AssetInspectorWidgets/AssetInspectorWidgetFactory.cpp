@@ -4,9 +4,11 @@
 #include "Bang/GameObject.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/Path.h"
+#include "Bang/ShaderProgram.h"
 #include "BangEditor/AIWAnimation.h"
 #include "BangEditor/AIWAnimatorLayerMask.h"
 #include "BangEditor/AIWAnimatorStateMachine.h"
+#include "BangEditor/AIWAsset.h"
 #include "BangEditor/AIWAudioClip.h"
 #include "BangEditor/AIWBehaviour.h"
 #include "BangEditor/AIWMaterial.h"
@@ -67,9 +69,9 @@ InspectorWidget *AssetInspectorWidgetFactory::Create(const Path &path)
     {
         aiw = new AIWBehaviour();
     }
-    else
+    else if (path.HasExtension(Extensions::GetShaderProgramExtension()))
     {
-        aiw = new AssetInspectorWidget();
+        aiw = new AIWAsset<ShaderProgram>();
     }
 
     if (aiw)

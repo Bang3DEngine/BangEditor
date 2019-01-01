@@ -105,6 +105,16 @@ void AIWAsset<T>::EndUndoRedo()
 }
 
 template <class T>
+void AIWAsset<T>::OnValueChangedAIWAsset(EventEmitter<IEventsValueChanged> *)
+{
+}
+
+template <class T>
+void AIWAsset<T>::UpdateInputsFromAsset()
+{
+}
+
+template <class T>
 Array<Path> AIWAsset<T>::GetUndoRedoPaths() const
 {
     if (Asset *res = GetAsset().Get())

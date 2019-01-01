@@ -35,8 +35,8 @@ protected:
     void EndUndoRedo();
 
     virtual void OnValueChangedAIWAsset(
-        EventEmitter<IEventsValueChanged> *object) = 0;
-    virtual void UpdateInputsFromAsset() = 0;
+        EventEmitter<IEventsValueChanged> *object);
+    virtual void UpdateInputsFromAsset();
     virtual Array<Path> GetUndoRedoPaths() const;
     virtual void OnAssetSet();
 
@@ -54,8 +54,10 @@ private:
 
     // IEventsAsset
     virtual void OnAssetChanged(Asset *asset) override;
+
+    friend class AssetInspectorWidgetFactory;
 };
-}  // namespace BangEditor
+}
 
 #include "BangEditor/AIWAsset.tcc"
 
