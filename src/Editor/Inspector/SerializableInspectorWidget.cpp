@@ -40,8 +40,11 @@ void SerializableInspectorWidget::UpdateFromReference()
     ReflectStruct reflectStruct = GetReflectableReflectStruct();
     UpdateReflectWidgetsFromReflection(reflectStruct, this);
 
-    MetaNode reflectableMeta = GetSerializable()->GetMeta();
-    UpdateWidgetsContentFromMeta(reflectableMeta);
+    if (GetSerializable())
+    {
+        MetaNode reflectableMeta = GetSerializable()->GetMeta();
+        UpdateWidgetsContentFromMeta(reflectableMeta);
+    }
 }
 
 void SerializableInspectorWidget::SetSerializable(Serializable *serializable)
@@ -50,11 +53,14 @@ void SerializableInspectorWidget::SetSerializable(Serializable *serializable)
     {
         p_serializable = serializable;
 
-        SetTitle(GetSerializable()->GetClassName());
+        if (GetSerializable())
+        {
+            SetTitle(GetSerializable()->GetClassName());
 
-        EventListener<IEventsValueChanged>::SetReceiveEvents(false);
-        OnReflectableSet();
-        EventListener<IEventsValueChanged>::SetReceiveEvents(true);
+            EventListener<IEventsValueChanged>::SetReceiveEvents(false);
+            OnReflectableSet();
+            EventListener<IEventsValueChanged>::SetReceiveEvents(true);
+        }
     }
 }
 
@@ -617,6 +623,9 @@ void SerializableInspectorWidget::OnValueChanged(
 {
     InspectorWidget::OnValueChanged(object);
 
-    MetaNode meta = GetMetaFromReflectWidgets();
-    GetSerializable()->ImportMeta(meta);
+    if (GetSerializable())
+    {
+        MetaNode meta = GetMetaFromReflectWidgets();
+        GetSerializable()->ImportMeta(meta);
+    }
 }

@@ -5,7 +5,7 @@
 #include "Bang/Color.h"
 #include "Bang/Path.h"
 #include "BangEditor/BangEditor.h"
-#include "BangEditor/InspectorWidget.h"
+#include "BangEditor/SerializableInspectorWidget.h"
 
 namespace Bang
 {
@@ -15,7 +15,7 @@ class Texture2D;
 using namespace Bang;
 namespace BangEditor
 {
-class AssetInspectorWidget : public InspectorWidget
+class AssetInspectorWidget : public SerializableInspectorWidget
 {
 protected:
     AssetInspectorWidget() = default;
@@ -28,7 +28,7 @@ protected:
     void SetPath(const Path &path);
     Path GetPath() const;
 
-    virtual void UpdateFromFileWhenChanged() = 0;
+    virtual void UpdateFromFileWhenChanged();
     virtual Texture2D *GetIconTexture() const;
     virtual Color GetIconTint() const;
     void UpdateIcon();

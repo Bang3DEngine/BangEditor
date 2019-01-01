@@ -10,7 +10,7 @@ using namespace BangEditor;
 
 void AssetInspectorWidget::InitInnerWidgets()
 {
-    InspectorWidget::InitInnerWidgets();
+    SerializableInspectorWidget::InitInnerWidgets();
     GetInspectorWidgetTitle()
         ->GetEnabledCheckBox()
         ->GetGameObject()
@@ -20,7 +20,7 @@ void AssetInspectorWidget::InitInnerWidgets()
 
 void AssetInspectorWidget::Update()
 {
-    InspectorWidget::Update();
+    SerializableInspectorWidget::Update();
 }
 
 void AssetInspectorWidget::SetPath(const Path &path)
@@ -28,6 +28,7 @@ void AssetInspectorWidget::SetPath(const Path &path)
     if (path != GetPath())
     {
         m_path = path;
+
         UpdateFromFileWhenChanged();
     }
 }
@@ -35,6 +36,11 @@ void AssetInspectorWidget::SetPath(const Path &path)
 Path AssetInspectorWidget::GetPath() const
 {
     return m_path;
+}
+
+void AssetInspectorWidget::UpdateFromFileWhenChanged()
+{
+    SerializableInspectorWidget::UpdateFromReference();
 }
 
 Texture2D *AssetInspectorWidget::GetIconTexture() const

@@ -448,7 +448,7 @@ Color EditorTextureFactory::GetComponentIconTint(const String &componentName)
 
 Texture2D *EditorTextureFactory::GetIconForExtension(const String &ext)
 {
-    if (Extensions::Equals(ext, Extensions::GetTTFExtensions()))
+    if (Extensions::Equals(ext, Extensions::GetFontExtensions()))
     {
         return EditorTextureFactory::GetLetterIcon();
     }

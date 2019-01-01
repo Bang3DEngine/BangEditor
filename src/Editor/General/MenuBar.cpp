@@ -633,6 +633,12 @@ void MenuBar::OnCreateBehaviour(MenuItem *)
     CreateNewBehaviour();
 }
 
+void MenuBar::OnCreateShaderProgram(MenuItem *)
+{
+    OnCreateAssetFile<ShaderProgram>("Shader Program",
+                                     Extensions::GetShaderProgramExtension());
+}
+
 void MenuBar::OnCreatePhysicsMaterial(MenuItem *)
 {
     OnCreateAssetFile<PhysicsMaterial>(

@@ -1,3 +1,4 @@
+#define BANG_UNIFORMS_GBUFFER_TEXTURES
 #include "UI.frag"
 
 uniform int B_SceneRenderMode;

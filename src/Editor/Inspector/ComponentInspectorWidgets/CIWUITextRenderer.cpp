@@ -59,7 +59,7 @@ void CIWUITextRenderer::InitInnerWidgets()
     p_verticalAlignmentInput->AddItem("Bot", int(VerticalAlignment::BOT));
 
     p_fontFileInput = new UIInputFile();
-    p_fontFileInput->SetExtensions(Extensions::GetTTFExtensions());
+    p_fontFileInput->SetExtensions(Extensions::GetFontExtensions());
     p_fontFileInput->SetZoomable(false);
 
     p_colorInput->EventEmitter<IEventsValueChanged>::RegisterListener(this);

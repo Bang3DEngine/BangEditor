@@ -87,6 +87,7 @@ private:
 
     static void OnCreateMaterial(MenuItem *item);
     static void OnCreateBehaviour(MenuItem *item);
+    static void OnCreateShaderProgram(MenuItem *item);
     static void OnCreateTextureCubeMap(MenuItem *item);
     static void OnCreatePhysicsMaterial(MenuItem *item);
     static void OnCreateAnimatorLayerMask(MenuItem *item);

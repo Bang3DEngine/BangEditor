@@ -46,26 +46,6 @@ public:
     void Init() override;
 
 private:
-    UIInputColor *p_albedoColorInput = nullptr;
-    UIInputFile *p_albedoTextureInput = nullptr;
-    UIInputVector *p_albedoUvMultiplyInput = nullptr;
-    UIInputVector *p_albedoUvOffsetInput = nullptr;
-    UIInputFile *p_roughnessTextureInput = nullptr;
-    UIInputFile *p_metalnessTextureInput = nullptr;
-    UIInputFile *p_normalMapTextureInput = nullptr;
-    UIInputVector *p_normalMapUvMultiplyInput = nullptr;
-    UIInputVector *p_normalMapUvOffsetInput = nullptr;
-    UIInputNumber *p_normalMapMultiplyFactorInput = nullptr;
-    UICheckBox *p_receivesLightingCheckBox = nullptr;
-    UISlider *p_metalnessSlider = nullptr;
-    UISlider *p_roughnessSlider = nullptr;
-    UIInputNumber *p_lineWidthInput = nullptr;
-    UIComboBox *p_cullFaceInput = nullptr;
-    UICheckBox *p_renderWireframe = nullptr;
-    UIComboBox *p_renderPassInput = nullptr;
-    UIComboBox *p_neededUniformsInput = nullptr;
-    UIInputFile *p_vertexShaderInput = nullptr;
-    UIInputFile *p_fragmentShaderInput = nullptr;
     PreviewViewer *p_materialPreviewViewer = nullptr;
 
     AIWMaterial();

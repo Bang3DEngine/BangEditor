@@ -22,57 +22,61 @@ using namespace BangEditor;
 
 InspectorWidget *AssetInspectorWidgetFactory::Create(const Path &path)
 {
-    AssetInspectorWidget *riw = nullptr;
+    AssetInspectorWidget *aiw = nullptr;
     if (path.HasExtension(Extensions::GetMaterialExtension()))
     {
-        riw = new AIWMaterial();
+        aiw = new AIWMaterial();
     }
     else if (path.HasExtension(Extensions::GetPhysicsMaterialExtension()))
     {
-        riw = new AIWPhysicsMaterial();
+        aiw = new AIWPhysicsMaterial();
     }
     else if (path.HasExtension(Extensions::GetAnimatorStateMachineExtension()))
     {
-        riw = new AIWAnimatorStateMachine();
+        aiw = new AIWAnimatorStateMachine();
     }
     else if (path.HasExtension(Extensions::GetImageExtensions()))
     {
-        riw = new AIWTexture();
+        aiw = new AIWTexture();
     }
     else if (path.HasExtension(Extensions::GetAnimatorLayerMaskExtension()))
     {
-        riw = new AIWAnimatorLayerMask();
+        aiw = new AIWAnimatorLayerMask();
     }
     else if (path.HasExtension(Extensions::GetModelExtensions()))
     {
-        riw = new AIWModel();
+        aiw = new AIWModel();
     }
     else if (path.HasExtension(Extensions::GetMeshExtension()))
     {
-        riw = new AIWMesh();
+        aiw = new AIWMesh();
     }
     else if (path.HasExtension(Extensions::GetAudioClipExtensions()))
     {
-        riw = new AIWAudioClip();
+        aiw = new AIWAudioClip();
     }
     else if (path.HasExtension(Extensions::GetAnimationExtension()))
     {
-        riw = new AIWAnimation();
+        aiw = new AIWAnimation();
     }
     else if (path.HasExtension(Extensions::GetTextureCubeMapExtension()))
     {
-        riw = new AIWTextureCubeMap();
+        aiw = new AIWTextureCubeMap();
     }
     else if (path.HasExtension(Extensions::GetBehaviourExtensions()))
     {
-        riw = new AIWBehaviour();
+        aiw = new AIWBehaviour();
     }
-
-    if (riw)
+    else
     {
-        riw->Init();
-        riw->SetPath(path);
+        aiw = new AssetInspectorWidget();
     }
 
-    return riw;
+    if (aiw)
+    {
+        aiw->Init();
+        aiw->SetPath(path);
+    }
+
+    return aiw;
 }

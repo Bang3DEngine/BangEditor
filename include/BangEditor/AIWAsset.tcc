@@ -44,6 +44,8 @@ void AIWAsset<T>::SetAsset(AH<T> &asset)
             OnAssetChanged(GetAsset().Get());
             OnAssetSet();
         }
+
+        SetSerializable(GetAsset().Get());
     }
 }
 
