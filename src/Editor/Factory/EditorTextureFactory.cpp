@@ -282,6 +282,31 @@ Texture2D *EditorTextureFactory::GetEyeIcon()
     return EditorTextureFactory::GetTexture2D("Eye.png");
 }
 
+Texture2D *EditorTextureFactory::GetVertexShaderIcon()
+{
+    return EditorTextureFactory::GetTexture2D("VertexShaderIcon.png");
+}
+
+Texture2D *EditorTextureFactory::GetGeometryShaderIcon()
+{
+    return EditorTextureFactory::GetTexture2D("GeometryShaderIcon.png");
+}
+
+Texture2D *EditorTextureFactory::GetFragmentShaderIcon()
+{
+    return EditorTextureFactory::GetTexture2D("FragmentShaderIcon.png");
+}
+
+Texture2D *EditorTextureFactory::GetUnifiedShaderIcon()
+{
+    return EditorTextureFactory::GetTexture2D("UnifiedShaderIcon.png");
+}
+
+Texture2D *EditorTextureFactory::GetShaderProgramIcon()
+{
+    return EditorTextureFactory::GetTexture2D("ShaderProgramIcon.png");
+}
+
 Texture2D *EditorTextureFactory::GetAnchoredRectIcon()
 {
     return EditorTextureFactory::GetTexture2D("AnchoredRect.png");
@@ -455,6 +480,26 @@ Texture2D *EditorTextureFactory::GetIconForExtension(const String &ext)
     else if (Extensions::Equals(ext, Extensions::GetAudioClipExtensions()))
     {
         return TextureFactory::GetAudioIcon();
+    }
+    else if (Extensions::Equals(ext, Extensions::GetVertexShaderExtensions()))
+    {
+        return EditorTextureFactory::GetVertexShaderIcon();
+    }
+    else if (Extensions::Equals(ext, Extensions::GetGeometryShaderExtensions()))
+    {
+        return EditorTextureFactory::GetGeometryShaderIcon();
+    }
+    else if (Extensions::Equals(ext, Extensions::GetFragmentShaderExtensions()))
+    {
+        return EditorTextureFactory::GetFragmentShaderIcon();
+    }
+    else if (Extensions::Equals(ext, Extensions::GetUnifiedShaderExtension()))
+    {
+        return EditorTextureFactory::GetUnifiedShaderIcon();
+    }
+    else if (Extensions::Equals(ext, Extensions::GetShaderProgramExtension()))
+    {
+        return EditorTextureFactory::GetShaderProgramIcon();
     }
     else if (Extensions::Equals(ext, Extensions::GetSceneExtension()))
     {

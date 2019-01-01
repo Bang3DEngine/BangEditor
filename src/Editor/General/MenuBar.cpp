@@ -502,14 +502,16 @@ void MenuBar::CreateComponentsMenuInto(MenuItem *rootItem)
 
 void BangEditor::MenuBar::CreateAssetsMenuInto(BangEditor::MenuItem *rootItem)
 {
-    MenuItem *createMaterial = rootItem->AddItem("Material");
-    MenuItem *createPhysicsMaterial = rootItem->AddItem("Physics Material");
     MenuItem *createAnimatorSM = rootItem->AddItem("Animator State Machine");
     MenuItem *createAnimatorLayerMask =
         rootItem->AddItem("Animator Layer Mask");
     MenuItem *createBehaviour = rootItem->AddItem("Behaviour");
+    MenuItem *createMaterial = rootItem->AddItem("Material");
+    MenuItem *createPhysicsMaterial = rootItem->AddItem("Physics Material");
+    MenuItem *createShaderProgram = rootItem->AddItem("Shader Program");
     MenuItem *createTextureCubeMap = rootItem->AddItem("Texture Cube Map");
     createMaterial->SetSelectedCallback(MenuBar::OnCreateMaterial);
+    createShaderProgram->SetSelectedCallback(MenuBar::OnCreateShaderProgram);
     createAnimatorSM->SetSelectedCallback(
         MenuBar::OnCreateAnimatorStateMachine);
     createAnimatorLayerMask->SetSelectedCallback(

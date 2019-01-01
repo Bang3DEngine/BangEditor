@@ -63,6 +63,11 @@ public:
     static Texture2D *GetCircleIcon();
     static Texture2D *GetCircleHardIcon();
     static Texture2D *GetEyeIcon();
+    static Texture2D *GetVertexShaderIcon();
+    static Texture2D *GetGeometryShaderIcon();
+    static Texture2D *GetFragmentShaderIcon();
+    static Texture2D *GetUnifiedShaderIcon();
+    static Texture2D *GetShaderProgramIcon();
     static Texture2D *GetAnchoredRectIcon();
 
     static bool IsIconAnImage(const Path &path);
