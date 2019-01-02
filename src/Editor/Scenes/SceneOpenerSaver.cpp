@@ -12,6 +12,8 @@
 #include "Bang/SceneManager.h"
 #include "Bang/String.h"
 #include "BangEditor/Editor.h"
+#include "BangEditor/EditorProject.h"
+#include "BangEditor/EditorProjectManager.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/IEventsScenePlayer.h"
@@ -287,6 +289,9 @@ bool SceneOpenerSaver::OpenSceneInEditor(const Path &scenePath)
         {
             UndoRedoManager::Clear();
             SceneManager::LoadScene(scenePath, false);
+            EditorProjectManager::GetInstance()
+                ->GetCurrentProject()
+                ->SetLastOpenScenePath(scenePath);
             m_currentOpenScenePath = scenePath;
             m_numActionsDoneSinceLastSave = 0;
             return true;

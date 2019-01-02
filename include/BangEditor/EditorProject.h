@@ -12,9 +12,21 @@ class EditorProject : public Project
 {
 public:
     EditorProject();
-    virtual ~EditorProject();
+    virtual ~EditorProject() override;
 
+    void SetLastOpenScenePath(const Path &lastOpenScenePath);
+
+    const Path &GetLastOpenScenePath() const;
+
+    // Project
     bool OpenInitialScene() const override;
+
+    // Serializable
+    virtual void ImportMeta(const MetaNode &metaNode) override;
+    virtual void ExportMeta(MetaNode *metaNode) const override;
+
+private:
+    Path m_lastOpenScenePath = Path::Empty();
 };
 }
 
