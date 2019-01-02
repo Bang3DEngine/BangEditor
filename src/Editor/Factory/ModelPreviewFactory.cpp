@@ -91,7 +91,8 @@ void ModelPreviewFactory::OnUpdateTextureBegin(
         previewGoContainer->GetComponentsInDescendantsAndThis<MeshRenderer>();
     for (MeshRenderer *mr : meshRenderers)
     {
-        mr->GetMaterial()->SetCullFace(GL::CullFaceExt::NONE);
+        mr->GetMaterial()->GetShaderProgramProperties().SetCullFace(
+            GL::CullFaceExt::NONE);
     }
 }
 

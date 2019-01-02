@@ -56,7 +56,8 @@ void MeshPreviewFactory::OnCreateSceneFirstTime(Scene *previewScene,
     meshGo->SetName("MeshContainer");
 
     MeshRenderer *mr = meshGo->AddComponent<MeshRenderer>();
-    mr->GetMaterial()->SetCullFace(GL::CullFaceExt::NONE);
+    mr->GetMaterial()->GetShaderProgramProperties().SetCullFace(
+        GL::CullFaceExt::NONE);
 
     meshGo->SetParent(previewGoContainer);
 }

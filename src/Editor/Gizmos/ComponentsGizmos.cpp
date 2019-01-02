@@ -30,6 +30,7 @@
 #include "Bang/RenderFactory.h"
 #include "Bang/Rope.h"
 #include "Bang/Scene.h"
+#include "Bang/ShaderProgram.h"
 #include "Bang/SphereCollider.h"
 #include "Bang/Transform.h"
 #include "Bang/Vector3.h"
@@ -741,8 +742,10 @@ void ComponentsGizmos::AddSelectionPlaneFor(GameObject *go,
         GameObject *selPlane = GameObjectFactory::CreateGameObject();
 
         MeshRenderer *selPlaneRend = selPlane->AddComponent<MeshRenderer>();
-        selPlaneRend->GetMaterial()->SetCullFace(GL::CullFaceExt::NONE);
-        selPlaneRend->GetMaterial()->SetRenderPass(RenderPass::OVERLAY);
+        selPlaneRend->GetMaterial()->GetShaderProgramProperties().SetCullFace(
+            GL::CullFaceExt::NONE);
+        selPlaneRend->GetMaterial()->GetShaderProgramProperties().SetRenderPass(
+            RenderPass::OVERLAY);
         selPlaneRend->SetMesh(MeshFactory::GetPlane().Get());
         selPlane->SetVisible(false);
 

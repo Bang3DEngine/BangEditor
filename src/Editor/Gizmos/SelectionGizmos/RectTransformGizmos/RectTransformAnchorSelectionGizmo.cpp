@@ -29,12 +29,15 @@ RectTransformAnchorSelectionGizmo::RectTransformAnchorSelectionGizmo()
 
     p_anchorGO = GameObjectFactory::CreateUIGameObjectNamed("AnchorGO");
     p_anchorRenderer = p_anchorGO->AddComponent<UIImageRenderer>();
-    p_anchorRenderer->GetMaterial()->SetRenderPass(RenderPass::OVERLAY);
+    p_anchorRenderer->GetMaterial()->GetShaderProgramProperties().SetRenderPass(
+        RenderPass::OVERLAY);
     p_anchorRenderer->SetImageTexture(EditorTextureFactory::GetAnchorIcon());
 
     p_selectionGO = GameObjectFactory::CreateUIGameObjectNamed("SelectionGO");
     p_selectionRenderer = p_selectionGO->AddComponent<UIImageRenderer>();
-    p_selectionRenderer->GetMaterial()->SetRenderPass(RenderPass::OVERLAY);
+    p_selectionRenderer->GetMaterial()
+        ->GetShaderProgramProperties()
+        .SetRenderPass(RenderPass::OVERLAY);
     p_selectionRenderer->SetVisible(false);
 
     p_anchorGO->SetParent(this);

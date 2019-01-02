@@ -21,6 +21,7 @@
 #include "Bang/MouseButton.h"
 #include "Bang/RectTransform.h"
 #include "Bang/RenderPass.h"
+#include "Bang/ShaderProgram.h"
 #include "Bang/TextureFactory.h"
 #include "Bang/UICanvas.h"
 #include "Bang/UIFocusable.h"
@@ -46,7 +47,8 @@ AESConnectionLine::AESConnectionLine()
 
     p_lineRenderer = AddComponent<LineRenderer>();
     p_lineRenderer->SetViewProjMode(GL::ViewProjMode::CANVAS);
-    p_lineRenderer->GetMaterial()->SetRenderPass(RenderPass::CANVAS);
+    p_lineRenderer->GetMaterial()->GetShaderProgramProperties().SetRenderPass(
+        RenderPass::CANVAS);
     p_lineRenderer->SetPoints({Vector3::Zero(), Vector3::Zero()});
 
     for (uint i : {0u, 1u, 2u})
@@ -185,7 +187,8 @@ void AESConnectionLine::BeforeRender()
         arrowImg->GetMaterial()->SetAlbedoColor(lineColor);
     }
     p_lineRenderer->GetMaterial()->SetAlbedoColor(lineColor);
-    p_lineRenderer->GetMaterial()->SetLineWidth(lineWidth);
+    p_lineRenderer->GetMaterial()->GetShaderProgramProperties().SetLineWidth(
+        lineWidth);
 
     for (uint i : {0u, 1u, 2u})
     {

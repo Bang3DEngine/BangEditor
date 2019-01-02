@@ -11,6 +11,7 @@
 #include "Bang/Material.h"
 #include "Bang/MaterialFactory.h"
 #include "Bang/Path.h"
+#include "Bang/ShaderProgram.h"
 #include "Bang/ShaderProgramFactory.h"
 #include "Bang/Transform.h"
 #include "BangEditor/EditorPaths.h"
@@ -31,7 +32,8 @@ EditorFloor::EditorFloor()
     m_lineRenderer = AddComponent<LineRenderer>();
     m_lineRenderer->GetMaterial()->SetAlbedoColor(Color::White());
     m_lineRenderer->GetMaterial()->SetReceivesLighting(false);
-    m_lineRenderer->GetMaterial()->SetLineWidth(2.0f);
+    m_lineRenderer->GetMaterial()->GetShaderProgramProperties().SetLineWidth(
+        2.0f);
     m_lineRenderer->SetReceivesShadows(false);
     m_lineRenderer->SetCastsShadows(false);
 
@@ -39,7 +41,8 @@ EditorFloor::EditorFloor()
         ShaderProgramFactory::GetDefaultVertexShaderPath(),
         EditorPaths::GetEditorAssetsDir().Append("Shaders").Append(
             "EditorFloor.frag"));
-    m_lineRenderer->GetMaterial()->SetRenderPass(RenderPass::OVERLAY);
+    m_lineRenderer->GetMaterial()->GetShaderProgramProperties().SetRenderPass(
+        RenderPass::OVERLAY);
     m_lineRenderer->GetMaterial()->SetShaderProgram(sp);
 
     Array<Vector3> floorLinePoints;

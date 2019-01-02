@@ -24,6 +24,7 @@
 #include "Bang/Mesh.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/Ray.h"
+#include "Bang/ShaderProgram.h"
 #include "Bang/Sphere.h"
 #include "Bang/Transform.h"
 #include "Bang/Vector2.h"
@@ -47,7 +48,8 @@ RotateGizmoAxis::RotateGizmoAxis()
     p_circleRenderer = AddComponent<LineRenderer>();
     p_circleRenderer->SetMaterial(
         MaterialFactory::GetGizmosUnLightedOverlay().Get());
-    p_circleRenderer->GetMaterial()->SetLineWidth(2.0f);
+    p_circleRenderer->GetMaterial()->GetShaderProgramProperties().SetLineWidth(
+        2.0f);
     p_circleRenderer->GetGameObject()->AddComponent<NotSelectableInEditor>();
 
     m_selectionMesh = Assets::Create<Mesh>();
@@ -58,7 +60,9 @@ RotateGizmoAxis::RotateGizmoAxis()
     p_selectionRenderer = p_selectionGo->AddComponent<MeshRenderer>();
     p_selectionRenderer->SetMaterial(
         MaterialFactory::GetGizmosUnLightedOverlay().Get());
-    p_selectionRenderer->GetMaterial()->SetCullFace(GL::CullFaceExt::NONE);
+    p_selectionRenderer->GetMaterial()
+        ->GetShaderProgramProperties()
+        .SetCullFace(GL::CullFaceExt::NONE);
     p_selectionRenderer->SetMesh(m_selectionMesh.Get());
 
     p_selectionGo->SetParent(this);

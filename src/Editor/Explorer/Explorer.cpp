@@ -202,9 +202,20 @@ void Explorer::Update()
     GameObject::Update();
 
 #ifdef DEBUG
-    if (Input::GetKey(Key::P) && Input::GetKey(Key::NUM0))
+    if (Input::GetKey(Key::P))
     {
-        SetRootPath(EditorPaths::GetEngineAssetsDir());
+        if (Input::GetKeyDown(Key::NUM1))
+        {
+            SetRootPath(EditorPaths::GetEngineAssetsDir());
+        }
+        else if (Input::GetKeyDown(Key::NUM2))
+        {
+            SetRootPath(EditorPaths::GetEditorAssetsDir());
+        }
+        else if (Input::GetKeyDown(Key::NUM0))
+        {
+            SetRootPath(EditorPaths::GetProjectAssetsDir());
+        }
     }
 #endif
 }
@@ -392,22 +403,21 @@ void Explorer::AddItem(ExplorerItem *explorerItem)
 
     explorerItem->SetParent(p_itemsContainer);
 
-    explorerItem->GetFocusable()->AddEventCallback(
-        [this, explorerItem](UIFocusable *focusable, const UIEvent &event) {
-            if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
-            {
-                bool travelToDirectory =
-                    (explorerItem->GetPathString() != "..");
-                SelectPath(explorerItem->GetPath(), true, travelToDirectory);
-                return UIEventResult::INTERCEPT;
-            }
-            else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
-            {
-                OnItemDoubleClicked(focusable);
-                return UIEventResult::INTERCEPT;
-            }
-            return UIEventResult::IGNORE;
-        });
+    explorerItem->GetFocusable()->AddEventCallback([this, explorerItem](
+        UIFocusable *focusable, const UIEvent &event) {
+        if (event.type == UIEvent::Type::MOUSE_CLICK_FULL)
+        {
+            bool travelToDirectory = (explorerItem->GetPathString() != "..");
+            SelectPath(explorerItem->GetPath(), true, travelToDirectory);
+            return UIEventResult::INTERCEPT;
+        }
+        else if (event.type == UIEvent::Type::MOUSE_CLICK_DOUBLE)
+        {
+            OnItemDoubleClicked(focusable);
+            return UIEventResult::INTERCEPT;
+        }
+        return UIEventResult::IGNORE;
+    });
     explorerItem->EventEmitter<IEventsExplorerItem>::RegisterListener(this);
 
     p_items.PushBack(explorerItem);
