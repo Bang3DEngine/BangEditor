@@ -24,7 +24,6 @@ public:
     GameBuilder() = delete;
 
 private:
-    static bool CompileGameExecutable(BinType binType);
     static bool CreateDataDirectory(const Path &executableDir);
     static bool CreateBehavioursLibrary(const Path &executableDir,
                                         BinType binType);

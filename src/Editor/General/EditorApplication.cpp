@@ -7,6 +7,7 @@
 #include "BangEditor/EditorAssets.h"
 #include "BangEditor/EditorDebug.h"
 #include "BangEditor/EditorPaths.h"
+#include "BangEditor/EditorProjectManager.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorSettings.h"
@@ -17,7 +18,7 @@ class Debug;
 class Path;
 class Paths;
 class Assets;
-}  // namespace Bang
+}
 
 using namespace Bang;
 using namespace BangEditor;
@@ -87,6 +88,11 @@ Settings *EditorApplication::CreateSettings() const
 Assets *EditorApplication::CreateAssets() const
 {
     return new EditorAssets();
+}
+
+ProjectManager *EditorApplication::CreateProjectManager() const
+{
+    return new EditorProjectManager();
 }
 
 Editor *EditorApplication::GetEditor() const

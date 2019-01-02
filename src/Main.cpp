@@ -11,8 +11,8 @@
 #include "Bang/WindowManager.tcc"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/EditorApplication.h"
+#include "BangEditor/EditorProjectManager.h"
 #include "BangEditor/EditorWindow.h"
-#include "BangEditor/ProjectManager.h"
 #include "BangEditor/SelectProjectWindow.h"
 
 using namespace Bang;
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
     Window::SetActive(mainWindow);
     editorApplication.OpenEditorScene();
 
-    ProjectManager::OpenProject(projectToBeOpen);
+    EditorProjectManager::GetInstance()->OpenProject(projectToBeOpen);
 
     return editorApplication.MainLoop();
 }

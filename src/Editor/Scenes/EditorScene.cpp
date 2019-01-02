@@ -14,6 +14,7 @@
 #include "Bang/IEventsSceneManager.h"
 #include "Bang/Input.h"
 #include "Bang/Path.h"
+#include "Bang/ProjectManager.h"
 #include "Bang/RectTransform.h"
 #include "Bang/RenderFlags.h"
 #include "Bang/RenderPass.h"
@@ -40,7 +41,6 @@
 #include "BangEditor/IEventsTabHeader.h"
 #include "BangEditor/Inspector.h"
 #include "BangEditor/MenuBar.h"
-#include "BangEditor/ProjectManager.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/ScenePlayer.h"
 #include "BangEditor/UISceneEditContainer.h"
@@ -60,7 +60,6 @@ EditorScene::EditorScene()
 
 void EditorScene::Init()
 {
-    m_projectManager = new ProjectManager();
     m_scenePlayer = new ScenePlayer();
     m_editorClipboard = new EditorClipboard();
     m_undoRedoManager = new UndoRedoManager();
@@ -173,7 +172,6 @@ void EditorScene::Init()
 EditorScene::~EditorScene()
 {
     delete m_scenePlayer;
-    delete m_projectManager;
     delete m_undoRedoManager;
     delete m_sceneOpenerSaver;
     delete m_editorFileTracker;
@@ -364,51 +362,38 @@ ScenePlayer *EditorScene::GetScenePlayer() const
 {
     return m_scenePlayer;
 }
-ProjectManager *EditorScene::GetProjectManager() const
-{
-    return m_projectManager;
-}
-
 AnimatorSMEditor *EditorScene::GetAnimatorSMEditor() const
 {
     return p_animatorSMEditor;
 }
-
 EditorMeshFactoryUITab *EditorScene::GetEditorMeshFactoryTab() const
 {
     return p_editorMeshFactoryTab;
 }
-
 EditorClipboard *EditorScene::GetEditorClipboard() const
 {
     return m_editorClipboard;
 }
-
 UndoRedoManager *EditorScene::GetUndoRedoManager() const
 {
     return m_undoRedoManager;
 }
-
 SceneOpenerSaver *EditorScene::GetSceneOpenerSaver() const
 {
     return m_sceneOpenerSaver;
 }
-
 EditorFileTracker *EditorScene::GetEditorFileTracker() const
 {
     return m_editorFileTracker;
 }
-
 UISceneEditContainer *EditorScene::GetSceneEditContainer() const
 {
     return p_sceneEditContainer;
 }
-
 UIScenePlayContainer *EditorScene::GetScenePlayContainer() const
 {
     return p_scenePlayContainer;
 }
-
 EditSceneGameObjects *EditorScene::GetEditSceneGameObjects() const
 {
     return m_editSceneGameObjects;

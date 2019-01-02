@@ -25,25 +25,26 @@ void EditorSettings::Init()
     ImportFromFile();
 }
 
+void EditorSettings::SetRecentProjectFilepathsOpen(
+    const Array<Path> &recentProjectFilepathsOpen)
+{
+    m_recentProjectFilesOpen = recentProjectFilepathsOpen;
+    ExportToFile();
+}
+
 void EditorSettings::AddRecentProjectFilepathOpen(
     const Path &recentProjectFilePathOpen)
 {
-    EditorSettings *es = EditorSettings::GetInstance();
-    ASSERT(es);
-
-    if (!es->m_recentProjectFilesOpen.Contains(recentProjectFilePathOpen))
+    if (!m_recentProjectFilesOpen.Contains(recentProjectFilePathOpen))
     {
-        es->m_recentProjectFilesOpen.PushBack(recentProjectFilePathOpen);
-        es->ExportToFile();
+        m_recentProjectFilesOpen.PushBack(recentProjectFilePathOpen);
+        SetRecentProjectFilepathsOpen(m_recentProjectFilesOpen);
     }
 }
 
 const Array<Path> &EditorSettings::GetRecentProjectFilepathsOpen()
 {
-    EditorSettings *es = EditorSettings::GetInstance();
-    ASSERT(es);
-
-    return es->m_recentProjectFilesOpen;
+    return m_recentProjectFilesOpen;
 }
 
 void EditorSettings::ExportToFile()

@@ -9,7 +9,7 @@
 #include "Bang/Physics.h"
 #include "Bang/Time.h"
 #include "Bang/UIInputNumber.h"
-#include "BangEditor/ProjectManager.h"
+#include "BangEditor/EditorProjectManager.h"
 #include "BangEditor/UIInputVector.h"
 
 using namespace Bang;
@@ -85,5 +85,5 @@ void SIWPhysicsSettings::OnValueChanged(EventEmitter<IEventsValueChanged> *ee)
         SCAST<int>(p_maxSubStepsInput->GetValue()));
     Physics::GetInstance()->SetGravity(p_gravityInput->GetVector3());
 
-    ProjectManager::ExportCurrentProject();
+    EditorProjectManager::GetInstance()->ExportCurrentProject();
 }

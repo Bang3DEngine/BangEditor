@@ -14,15 +14,16 @@
 #include "Bang/Time.h"
 #include "BangEditor/EditorBehaviourManager.h"
 #include "BangEditor/EditorPaths.h"
-#include "BangEditor/Project.h"
-#include "BangEditor/ProjectManager.h"
+#include "BangEditor/EditorProject.h"
+#include "BangEditor/EditorProjectManager.h"
 
 using namespace Bang;
 using namespace BangEditor;
 
 Path GameBuilder::GetExecutablePath()
 {
-    Project *project = ProjectManager::GetCurrentProject();
+    EditorProject *project =
+        EditorProjectManager::GetInstance()->GetCurrentProject();
     Path outputExecutableFilepath =
         Paths::GetProjectDir()
             .Append(project->GetProjectName() + "_Game")
@@ -95,54 +96,8 @@ void GameBuilder::BuildGame(const String &gameName,
 
     Debug_Log("Build finished successfully! "
               "Game path: '"
-              << gameBinaryPath << "'");
-}
-
-bool GameBuilder::CompileGameExecutable(BinType binaryType)
-{ /*
-     const Path gameOutputFilepath = execDir.Append(buildGameDirectory).
-                                     Append("Game");
-     String debugOrRelease = (binaryType == BinType::BIN_DEBUG) ? "Debug" :
-     "Release";
-     String cmd = "cd " + execDir.GetAbsolute()                 + " && " +
-                  "mkdir -p " + buildGameDirectory              + " && " +
-                  "cd "       + buildGameDirectory              + " && " +
-                  "cmake"                                       + " " +
-                  "-DBUILD_GAME=ON"                             + " " +
-                  "-DBUILD_SHARED_LIBS=OFF"                     + " " +
-                  "-DCMAKE_BUILD_TYPE=" + debugOrRelease        + " " +
-                  " " + execDir.Append("..").GetAbsolute()      + " && " +
-                  "make -j4 "                                   + "" +
-                  "";
-     Debug_Log("Compiling game executable with: " << cmd);
-
-     SystemProcess process;
-     process.Start(cmd);
-
-     String out = "";
-     while (!process.WaitUntilFinished(0.1f))
-     {
-         String partialOut = process.ReadStandardOutput() +
-                             process.ReadStandardError();
-         if (!partialOut.IsEmpty())
-         {
-             out += partialOut;
-             Debug_Log(partialOut);
-         }
-     }
-
-     out += process.ReadStandardOutput() +
-            process.ReadStandardError();
-     process.Close();
-
-     Debug_Peek(gameOutputFilepath);
-     if (!gameOutputFilepath.IsFile())
-     {
-         Debug_Error(out);
-         return false;
-     }
- */
-    return true;
+              << gameBinaryPath
+              << "'");
 }
 
 bool GameBuilder::CreateDataDirectory(const Path &executableDir)
@@ -153,6 +108,13 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
     {
         return false;
     }
+
+    // Copy project file
+    Path projectFilepath = EditorProjectManager::GetInstance()
+                               ->GetCurrentProject()
+                               ->GetProjectFilepath();
+    Path gameProjectFilepath = dataDir.Append(projectFilepath.GetNameExt());
+    File::Duplicate(projectFilepath, gameProjectFilepath);
 
     // Copy the Engine needed directories into the Data directory
     Path bangDataDir = dataDir.Append("Bang");
@@ -165,8 +127,10 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
     if (!File::DuplicateDir(Paths::GetEngineAssetsDir(), bangAssetsDataDir))
     {
         Debug_Error("Could not duplicate engine assets directory '"
-                    << Paths::GetEngineAssetsDir() << "' into '"
-                    << bangAssetsDataDir << "'");
+                    << Paths::GetEngineAssetsDir()
+                    << "' into '"
+                    << bangAssetsDataDir
+                    << "'");
         return false;
     }
 
@@ -175,8 +139,10 @@ bool GameBuilder::CreateDataDirectory(const Path &executableDir)
     if (!File::DuplicateDir(Paths::GetProjectAssetsDir(), gameDataAssetsDir))
     {
         Debug_Error("Could not duplicate assets directory '"
-                    << Paths::GetProjectAssetsDir() << "' into '"
-                    << gameDataAssetsDir << "'");
+                    << Paths::GetProjectAssetsDir()
+                    << "' into '"
+                    << gameDataAssetsDir
+                    << "'");
         return false;
     }
 
@@ -211,7 +177,8 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
                                  .AppendExtension("o");
 
         Debug_Log("Compiling '" << behaviourSourcePath << "' into '"
-                                << outputObjPath << "'...");
+                                << outputObjPath
+                                << "'...");
         Compiler::Result res = behaviourMgr->CompileBehaviourObject(
             behaviourSourcePath, outputObjPath, binType);
 
@@ -230,7 +197,8 @@ bool GameBuilder::CreateBehavioursLibrary(const Path &executableDir,
             .AppendExtension(Extensions::GetDynamicLibExtension())
             .AppendExtension(String::ToString(Time::GetNow().GetMillis()));
     Debug_Log("Merging behaviour objects " << behaviourObjectsPaths << " into '"
-                                           << outputLibPath << "'...");
+                                           << outputLibPath
+                                           << "'...");
 
     Compiler::Result res = behaviourMgr->MergeBehaviourObjects(
         behaviourObjectsPaths, outputLibPath, binType);

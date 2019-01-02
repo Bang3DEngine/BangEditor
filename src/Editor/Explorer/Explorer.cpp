@@ -14,6 +14,7 @@
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/IEventsFileTracker.h"
+#include "Bang/IEventsProjectManager.h"
 #include "Bang/IEventsValueChanged.h"
 #include "Bang/Key.h"
 #include "Bang/LayoutSizeType.h"
@@ -41,6 +42,7 @@
 #include "BangEditor/EditorClipboard.h"
 #include "BangEditor/EditorFileTracker.h"
 #include "BangEditor/EditorPaths.h"
+#include "BangEditor/EditorProjectManager.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorTextureFactory.h"
@@ -48,10 +50,8 @@
 #include "BangEditor/ExplorerItemFactory.h"
 #include "BangEditor/IEventsEditor.h"
 #include "BangEditor/IEventsExplorerItem.h"
-#include "BangEditor/IEventsProjectManager.h"
 #include "BangEditor/MenuBar.h"
 #include "BangEditor/MenuItem.h"
-#include "BangEditor/ProjectManager.h"
 #include "BangEditor/QtProjectManager.h"
 #include "BangEditor/SceneOpenerSaver.h"
 #include "BangEditor/UIContextMenu.h"
@@ -59,10 +59,6 @@
 namespace Bang
 {
 class Texture2D;
-}
-
-namespace BangEditor
-{
 class Project;
 }
 

@@ -10,6 +10,7 @@
 #include "Bang/MetaFilesManager.h"
 #include "Bang/Path.h"
 #include "Bang/Paths.h"
+#include "Bang/ProjectManager.h"
 #include "Bang/SceneManager.h"
 #include "Bang/StreamOperators.h"
 #include "Bang/String.h"
@@ -55,32 +56,31 @@ int main(int argc, char **argv)
         return 5;
     }
 
+    Array<Path> projectFilepaths = dataDir.GetFiles(
+        FindFlag::DEFAULT, {Extensions::GetProjectExtension()});
+    Path projectFilepath =
+        (projectFilepaths.Size() >= 1 ? projectFilepaths.Front()
+                                      : Path::Empty());
+    if (projectFilepath.IsEmpty())
+    {
+        Debug_Error("Could not find project filepath in '" << dataDir
+                                                           << "' directory.");
+        return 6;
+    }
+
     Application app;
     app.Init(bangDataDir);
-
-    MetaFilesManager::CreateMissingMetaFiles(gameAssetsDir);
-    MetaFilesManager::LoadMetaFilepathGUIDs(gameAssetsDir);
-
-    Paths::SetProjectRoot(dataDir);
 
     Window *mainWindow = WindowManager::CreateWindow<Window>();
     Window::SetActive(mainWindow);
     mainWindow->SetTitle("Bang");
     mainWindow->Maximize();
 
-    Array<Path> sceneFilepaths = gameAssetsDir.GetFiles(
-        FindFlag::RECURSIVE, {Extensions::GetSceneExtension()});
-    if (sceneFilepaths.IsEmpty())
+    if (!ProjectManager::GetInstance()->OpenProject(projectFilepath))
     {
-        Debug_Error("No scene found in '" << gameAssetsDir << "'");
-        return 6;
+        Debug_Error("Could not open project or no scene was found...");
+        return 7;
     }
-
-    // Load the first scene
-    Paths::SortPathsByName(&sceneFilepaths);
-    Path scenePath = sceneFilepaths.Back();
-    Debug_Log("Opening scene " << scenePath);
-    SceneManager::LoadSceneInstantly(scenePath, false);
 
     // Find the behaviours library
     Path behavioursLibPath;
@@ -97,12 +97,14 @@ int main(int argc, char **argv)
     if (!behavioursLibPath.IsFile())
     {
         Debug_Warn("No behaviours library found in '" << librariesDir << "'");
-        // return 7;
+        // return 8;
     }
-
-    Debug_Log("Picking as Behaviours library: '"
-              << behavioursLibPath.GetAbsolute()
-              << "'");
+    else
+    {
+        Debug_Log("Picking as Behaviours library: '"
+                  << behavioursLibPath.GetAbsolute()
+                  << "'");
+    }
 
     // Set the behaviour library
     SceneManager::GetActive()->GetBehaviourManager()->SetBehavioursLibrary(

@@ -9,8 +9,8 @@
 #include "Bang/String.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/Thread.h"
-#include "BangEditor/Project.h"
-#include "BangEditor/ProjectManager.h"
+#include "BangEditor/EditorProject.h"
+#include "BangEditor/EditorProjectManager.h"
 
 using namespace Bang;
 using namespace BangEditor;
@@ -45,7 +45,7 @@ bool QtProjectManager::IsQtCreatorOpenedCurrentProject()
 
 void QtProjectManager::CreateQtProjectFile()
 {
-    Project *p_proj = ProjectManager::GetCurrentProject();
+    Project *p_proj = EditorProjectManager::GetInstance()->GetCurrentProject();
     Path projectDir = p_proj->GetProjectDirectory();
     const Path &engineIncludeDir = Paths::GetEngineIncludeDir();
     const Path &projAssetsDir = projectDir.Append("Assets");

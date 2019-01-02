@@ -11,6 +11,7 @@
 #include "Bang/File.h"
 #include "Bang/FileTracker.h"
 #include "Bang/IEventsFileTracker.h"
+#include "Bang/IEventsProjectManager.h"
 #include "Bang/MetaFilesManager.h"
 #include "Bang/Path.h"
 #include "Bang/Paths.h"
@@ -19,19 +20,14 @@
 #include "Bang/Shader.h"
 #include "Bang/ShaderProgram.h"
 #include "BangEditor/EditorPaths.h"
+#include "BangEditor/EditorProjectManager.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
-#include "BangEditor/IEventsProjectManager.h"
-#include "BangEditor/ProjectManager.h"
 
 namespace Bang
 {
 class Asset;
 class String;
-}  // namespace Bang
-
-namespace BangEditor
-{
 class Project;
 }
 
@@ -48,7 +44,7 @@ EditorFileTracker::EditorFileTracker()
     GetFileTracker()->TrackPath(EditorPaths::GetEditorAssetsDir());
 
     GetFileTracker()->EventEmitter<IEventsFileTracker>::RegisterListener(this);
-    ProjectManager::GetInstance()
+    EditorProjectManager::GetInstance()
         ->EventEmitter<IEventsProjectManager>::RegisterListener(this);
 }
 

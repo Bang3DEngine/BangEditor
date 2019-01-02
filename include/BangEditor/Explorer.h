@@ -12,6 +12,7 @@
 #include "Bang/IEvents.h"
 #include "Bang/IEventsFileTracker.h"
 #include "Bang/IEventsFocus.h"
+#include "Bang/IEventsProjectManager.h"
 #include "Bang/IEventsValueChanged.h"
 #include "Bang/List.h"
 #include "Bang/Path.h"
@@ -20,14 +21,12 @@
 #include "Bang/UMap.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/Editor.h"
+#include "BangEditor/EditorProjectManager.h"
 #include "BangEditor/ExplorerItem.h"
-#include "BangEditor/ProjectManager.h"
 #include "BangEditor/ShortcutManager.h"
 
 namespace Bang
 {
-class IEventsFileTracker;
-class IEventsValueChanged;
 class UIButton;
 class UIFocusable;
 class UIGridLayout;
@@ -36,6 +35,7 @@ class UIScrollPanel;
 class UISlider;
 template <class>
 class EventEmitter;
+class Project;
 }  // namespace Bang
 
 using namespace Bang;
@@ -43,10 +43,7 @@ namespace BangEditor
 {
 class ExplorerItem;
 class IEventsEditor;
-class IEventsExplorerItem;
-class IEventsProjectManager;
 class MenuItem;
-class Project;
 class UIContextMenu;
 
 class Explorer : public GameObject,

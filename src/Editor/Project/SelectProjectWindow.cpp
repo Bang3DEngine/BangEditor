@@ -28,10 +28,10 @@
 #include "Bang/UIVerticalLayout.h"
 #include "Bang/WindowManager.h"
 #include "BangEditor/EditorPaths.h"
+#include "BangEditor/EditorProject.h"
+#include "BangEditor/EditorProjectManager.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/EditorSettings.h"
-#include "BangEditor/Project.h"
-#include "BangEditor/ProjectManager.h"
 
 namespace Bang
 {
@@ -152,7 +152,7 @@ SelectProjectScene::SelectProjectScene()
     rplSP->SetHorizontalShowScrollMode(ShowScrollMode::WHEN_NEEDED);
     recentProjectsList->Clear();
     const Array<Path> &recentProjects =
-        EditorSettings::GetRecentProjectFilepathsOpen();
+        EditorSettings::GetInstance()->GetRecentProjectFilepathsOpen();
     for (const Path &recentProjectPath : recentProjects)
     {
         GameObject *entry = new RecentProjectListEntry(recentProjectPath);
@@ -209,8 +209,9 @@ void SelectProjectScene::NewProject()
                               "NewProject");
         if (!projectName.IsEmpty())
         {
-            Project *proj = ProjectManager::CreateNewProject(newProjectDirPath,
-                                                             projectName);
+            EditorProject *proj =
+                EditorProjectManager::GetInstance()->CreateNewProject(
+                    newProjectDirPath, projectName);
             ConfirmOpenProject(proj->GetProjectFilepath());
         }
     }

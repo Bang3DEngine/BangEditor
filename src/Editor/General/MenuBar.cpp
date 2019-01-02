@@ -77,13 +77,13 @@
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/EditorDialog.h"
+#include "BangEditor/EditorProjectManager.h"
 #include "BangEditor/EditorScene.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/Explorer.h"
 #include "BangEditor/GameBuilder.h"
 #include "BangEditor/Inspector.h"
 #include "BangEditor/MenuItem.h"
-#include "BangEditor/ProjectManager.h"
 #include "BangEditor/SIWEditorSettings.h"
 #include "BangEditor/SIWPhysicsSettings.h"
 #include "BangEditor/SIWRenderSettings.h"
@@ -260,7 +260,7 @@ void MenuBar::Update()
     m_undoItem->SetOverAndActionEnabled(UndoRedoManager::CanUndo());
     m_redoItem->SetOverAndActionEnabled(UndoRedoManager::CanRedo());
     m_projectSettingsItem->SetOverAndActionEnabledRecursively(
-        (ProjectManager::GetCurrentProject() != nullptr));
+        (EditorProjectManager::GetInstance()->GetCurrentProject() != nullptr));
 
     bool thereIsGameObjectSelected = (Editor::GetSelectedGameObject());
     m_alignGameObjectWithViewItem->SetOverAndActionEnabled(

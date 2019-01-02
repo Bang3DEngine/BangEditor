@@ -12,26 +12,22 @@
 #include "Bang/EventListener.h"
 #include "Bang/FileTracker.h"
 #include "Bang/IEventsFileTracker.h"
-#include "Bang/IEventsFileTracker.h"
+#include "Bang/IEventsProjectManager.h"
 #include "Bang/Time.h"
 #include "Bang/USet.h"
 #include "BangEditor/BangEditor.h"
-#include "BangEditor/ProjectManager.h"
 
 namespace Bang
 {
-class IEventsFileTracker;
 class FileTracker;
 class Path;
 class String;
+class Project;
 }
 
 using namespace Bang;
 namespace BangEditor
 {
-class IEventsProjectManager;
-class Project;
-
 class EditorFileTracker : public EventListener<IEventsFileTracker>,
                           public EventListener<IEventsProjectManager>,
                           public EventEmitter<IEventsFileTracker>

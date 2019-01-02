@@ -15,7 +15,7 @@ class Assets;
 class Scene;
 class Texture2D;
 class UIImageRenderer;
-}  // namespace Bang
+}
 
 using namespace Bang;
 namespace BangEditor
@@ -46,6 +46,7 @@ private:
     Paths *CreatePaths() const override;
     Settings *CreateSettings() const override;
     Assets *CreateAssets() const override;
+    ProjectManager *CreateProjectManager() const override;
 
     Editor *GetEditor() const;
     static EditorApplication *GetInstance();

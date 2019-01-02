@@ -14,26 +14,28 @@ namespace BangEditor
 class EditorSettings : public Settings
 {
 public:
-    static void AddRecentProjectFilepathOpen(
-        const Path &recentProjectFilePathOpen);
-    static const Array<Path> &GetRecentProjectFilepathsOpen();
+    void SetRecentProjectFilepathsOpen(
+        const Array<Path> &recentProjectFilepathsOpen);
+    void AddRecentProjectFilepathOpen(const Path &recentProjectFilepathOpen);
+    const Array<Path> &GetRecentProjectFilepathsOpen();
+
+    static EditorSettings *GetInstance();
 
 private:
     Array<Path> m_recentProjectFilesOpen;
 
     EditorSettings();
-    virtual ~EditorSettings();
+    virtual ~EditorSettings() override;
 
     void Init() override;
     void ExportToFile();
     void ImportFromFile();
     static Path GetEditorSettingsPath();
 
-    static EditorSettings *GetInstance();
-
     friend class Editor;
     friend class EditorScene;
     friend class EditorApplication;
+    friend class EditorProjectManager;
 };
 }  // namespace BangEditor
 

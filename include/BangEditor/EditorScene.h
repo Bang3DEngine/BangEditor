@@ -51,7 +51,6 @@ class IEventsScenePlayer;
 class IEventsTabHeader;
 class Inspector;
 class MenuBar;
-class ProjectManager;
 class SceneOpenerSaver;
 class ScenePlayer;
 class UISceneContainer;
@@ -86,7 +85,6 @@ public:
     Inspector *GetInspector() const;
     Hierarchy *GetHierarchy() const;
     ScenePlayer *GetScenePlayer() const;
-    ProjectManager *GetProjectManager() const;
     EditorClipboard *GetEditorClipboard() const;
     UndoRedoManager *GetUndoRedoManager() const;
     AnimatorSMEditor *GetAnimatorSMEditor() const;
@@ -103,7 +101,6 @@ protected:
 
 private:
     ScenePlayer *m_scenePlayer = nullptr;
-    ProjectManager *m_projectManager = nullptr;
     EditorClipboard *m_editorClipboard = nullptr;
     UndoRedoManager *m_undoRedoManager = nullptr;
     SceneOpenerSaver *m_sceneOpenerSaver = nullptr;
