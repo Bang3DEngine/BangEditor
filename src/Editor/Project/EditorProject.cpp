@@ -19,7 +19,6 @@ void EditorProject::SetLastOpenScenePath(const Path &lastOpenScenePath)
     if (lastOpenScenePath != GetLastOpenScenePath())
     {
         m_lastOpenScenePath = lastOpenScenePath;
-        ExportMetaToFile(GetProjectFilepath());
     }
 }
 

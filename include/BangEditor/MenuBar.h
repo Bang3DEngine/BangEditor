@@ -82,6 +82,7 @@ private:
     static void OnUndo(MenuItem *item);
     static void OnRedo(MenuItem *item);
     static void OnEditorSettings(MenuItem *item);
+    static void OnBuildSettings(MenuItem *item);
     static void OnRenderSettings(MenuItem *item);
     static void OnPhysicsSettings(MenuItem *item);
 

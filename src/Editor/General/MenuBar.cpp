@@ -84,6 +84,7 @@
 #include "BangEditor/GameBuilder.h"
 #include "BangEditor/Inspector.h"
 #include "BangEditor/MenuItem.h"
+#include "BangEditor/SIWBuildSettings.h"
 #include "BangEditor/SIWEditorSettings.h"
 #include "BangEditor/SIWPhysicsSettings.h"
 #include "BangEditor/SIWRenderSettings.h"
@@ -141,11 +142,14 @@ MenuBar::MenuBar()
     m_projectSettingsItem = m_editItem->AddItem("Project Settings");
     m_undoItem->SetSelectedCallback(MenuBar::OnUndo);
     m_redoItem->SetSelectedCallback(MenuBar::OnRedo);
+    MenuItem *buildSettingsItem =
+        m_projectSettingsItem->AddItem("Build Settings");
     MenuItem *renderSettings =
         m_projectSettingsItem->AddItem("Render Settings");
     MenuItem *physicsSettings =
         m_projectSettingsItem->AddItem("Physics Settings");
     editorSettingsItem->SetSelectedCallback(MenuBar::OnEditorSettings);
+    buildSettingsItem->SetSelectedCallback(MenuBar::OnBuildSettings);
     renderSettings->SetSelectedCallback(MenuBar::OnRenderSettings);
     physicsSettings->SetSelectedCallback(MenuBar::OnPhysicsSettings);
 
@@ -587,6 +591,13 @@ void MenuBar::OnRedo(MenuItem *)
 void MenuBar::OnEditorSettings(MenuItem *)
 {
     SIWEditorSettings *siw = new SIWEditorSettings();
+    siw->Init();
+    Inspector::GetActive()->ShowInspectorWidget(siw);
+}
+
+void MenuBar::OnBuildSettings(MenuItem *)
+{
+    SIWBuildSettings *siw = new SIWBuildSettings();
     siw->Init();
     Inspector::GetActive()->ShowInspectorWidget(siw);
 }

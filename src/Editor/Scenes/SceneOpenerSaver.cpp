@@ -289,9 +289,13 @@ bool SceneOpenerSaver::OpenSceneInEditor(const Path &scenePath)
         {
             UndoRedoManager::Clear();
             SceneManager::LoadScene(scenePath, false);
-            EditorProjectManager::GetInstance()
-                ->GetCurrentProject()
-                ->SetLastOpenScenePath(scenePath);
+            if (EditorProject *edProj =
+                    EditorProjectManager::GetInstance()->GetCurrentProject())
+            {
+                edProj->SetLastOpenScenePath(scenePath);
+                edProj->ExportToProjectFile();
+            }
+
             m_currentOpenScenePath = scenePath;
             m_numActionsDoneSinceLastSave = 0;
             return true;
