@@ -345,14 +345,11 @@ Texture2D *EditorTextureFactory::GetComponentIcon(const String &componentName)
     }
     else if (componentName == "PointLight")
     {
-        Texture2D *tex = TextureFactory::GetLightBulbIcon();
-        tex->SetAlphaCutoff(0.5f);
-        return tex;
+        return TextureFactory::GetLightBulbIcon();
     }
     else if (componentName == "DirectionalLight")
     {
         Texture2D *tex = TextureFactory::GetSunIcon();
-        tex->SetAlphaCutoff(0.5f);
         return tex;
     }
     else if (componentName == "Behaviour")
@@ -378,21 +375,15 @@ Texture2D *EditorTextureFactory::GetComponentIcon(const String &componentName)
     }
     else if (componentName == "AudioSource" || componentName == "AudioListener")
     {
-        Texture2D *tex = TextureFactory::GetAudioIcon();
-        tex->SetAlphaCutoff(0.5f);
-        return tex;
+        return TextureFactory::GetAudioIcon();
     }
     else if (componentName == "ParticleSystem" || componentName == "Rope")
     {
-        Texture2D *tex = EditorTextureFactory::GetStarsIcon();
-        tex->SetAlphaCutoff(0.5f);
-        return tex;
+        return EditorTextureFactory::GetStarsIcon();
     }
     else if (componentName == "Camera")
     {
-        Texture2D *tex = EditorTextureFactory::GetCameraIcon();
-        tex->SetAlphaCutoff(0.5f);
-        return tex;
+        return EditorTextureFactory::GetCameraIcon();
     }
 
     return EditorTextureFactory::GetCubeIcon();
