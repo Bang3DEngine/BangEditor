@@ -153,13 +153,13 @@ void EditorFileTracker::CheckForShaderModifications(const Path &modifiedPath)
     }
 }
 
-void EditorFileTracker::CheckForBehaviourModifications(const Path &modifiedPath)
+void EditorFileTracker::CheckForBehaviourModifications(const Path &)
 {
 }
 
 void EditorFileTracker::OnPathAdded(const Path &addedPath)
 {
-    MetaFilesManager::OnPathAdded(addedPath);
+    MetaFilesManager::RegisterFilepath(addedPath);
 
     EventEmitter<IEventsFileTracker>::PropagateToListeners(
         &IEventsFileTracker::OnPathAdded, addedPath);
