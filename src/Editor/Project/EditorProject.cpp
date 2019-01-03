@@ -68,11 +68,4 @@ void EditorProject::ExportMeta(MetaNode *metaNode) const
 
     GUID lastOpenSceneGUID = MetaFilesManager::GetGUID(GetLastOpenScenePath());
     metaNode->Set("LastOpenSceneGUID", lastOpenSceneGUID);
-
-    Path initialScenePath = GetInitialScenePath();
-    if (initialScenePath.IsFile())
-    {
-        SceneOpenerSaver::GetInstance()->OpenSceneInEditor(initialScenePath);
-    }
-    return initialScenePath.IsFile();
 }
