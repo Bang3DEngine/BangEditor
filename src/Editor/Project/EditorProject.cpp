@@ -15,10 +15,10 @@ EditorProject::~EditorProject()
 
 bool EditorProject::OpenInitialScene() const
 {
-    Path firstFoundScenePath = GetFirstFoundScenePath();
-    if (firstFoundScenePath.IsFile())
+    Path initialScenePath = GetInitialScenePath();
+    if (initialScenePath.IsFile())
     {
-        SceneOpenerSaver::GetInstance()->OpenSceneInEditor(firstFoundScenePath);
+        SceneOpenerSaver::GetInstance()->OpenSceneInEditor(initialScenePath);
     }
-    return firstFoundScenePath.IsFile();
+    return initialScenePath.IsFile();
 }
