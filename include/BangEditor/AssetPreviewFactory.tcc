@@ -155,7 +155,7 @@ void AssetPreviewFactory<T>::FillTextureWithPreview(
 
     // Set camera
     Transform *camTR = GetPreviewCamera()->GetGameObject()->GetTransform();
-    Sphere goSphere = GetPreviewGameObjectContainer()->GetBoundingSphere();
+    Sphere goSphere = GetPreviewGameObjectContainer()->GetBoundingSphereWorld();
     float halfFov = Math::DegToRad(GetPreviewCamera()->GetFovDegrees() / 2.0f);
     float camDist = goSphere.GetRadius() / Math::Tan(halfFov) * 1.1f;
     camDist *= params.camDistanceMultiplier;

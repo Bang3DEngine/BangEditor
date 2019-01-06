@@ -288,7 +288,7 @@ void EditorCamera::FocusScene(Scene *scene)
         float sceneRadius = 1.0f;
         Vector3 sceneCenter = Vector3::Zero();
 
-        Sphere bSphere = scene->GetBoundingSphere();
+        Sphere bSphere = scene->GetBoundingSphereWorld();
         if (!Math::IsInfinity(bSphere.GetRadius()) &&
             !Math::IsNaN(bSphere.GetRadius()))
         {
@@ -364,7 +364,7 @@ void EditorCamera::GetLookAtFocusParams(GameObject *lookAtGo,
                                         Quaternion *targetRot)
 {
     Camera *cam = GetCamera();
-    Sphere focusBSphere = lookAtGo->GetBoundingSphere();
+    Sphere focusBSphere = lookAtGo->GetBoundingSphereWorld();
 
     Vector3 thisPos = GetTransform()->GetPosition();
     Vector3 focusPos = (!Math::IsInfinity(focusBSphere.GetRadius())

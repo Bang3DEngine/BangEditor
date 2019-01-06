@@ -125,7 +125,7 @@ void EditorMeshFactoryUITabScene::Update()
 
     if (justChangedModel)
     {
-        m_cameraOrbitPoint = p_modelContainer->GetBoundingSphere().GetCenter();
+        m_cameraOrbitPoint = p_modelContainer->GetBoundingSphereWorld().GetCenter();
         p_modelContainer->SetParent(p_scene);
         ResetCamera();
     }
@@ -172,7 +172,7 @@ void EditorMeshFactoryUITabScene::Update()
             }
         }
 
-        Sphere goSphere = p_modelContainer->GetBoundingSphere();
+        Sphere goSphere = p_modelContainer->GetBoundingSphereWorld();
         float halfFov = Math::DegToRad(p_sceneCamera->GetFovDegrees() / 2.0f);
         float camDist = goSphere.GetRadius() / Math::Tan(halfFov) * 1.1f;
         camDist *= m_currentCameraZoom;
@@ -205,7 +205,7 @@ void EditorMeshFactoryUITabScene::Update()
             cube->SetParent(p_scene);
 
             AABox goAABox = p_modelContainer->GetAABBoxWorld();
-            float radius = p_modelContainer->GetBoundingSphere().GetRadius();
+            float radius = p_modelContainer->GetBoundingSphereWorld().GetRadius();
             cube->GetTransform()->SetScale(radius * 0.2f);
             cube->GetTransform()->SetPosition(
                 (radius * 0.5f + goAABox.GetSize().y) * Vector3::Up());

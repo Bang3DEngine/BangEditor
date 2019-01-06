@@ -133,15 +133,6 @@ void EditorScene::Init()
 
     // Editor cam creation
     Camera *cam = GameObjectFactory::CreateUICameraInto(this);
-    cam->RemoveRenderPass(RenderPass::SCENE_OPAQUE);
-    cam->RemoveRenderPass(RenderPass::SCENE_DECALS);
-    cam->RemoveRenderPass(RenderPass::SCENE_BEFORE_ADDING_LIGHTS);
-    cam->RemoveRenderPass(RenderPass::SCENE_AFTER_ADDING_LIGHTS);
-    cam->RemoveRenderPass(RenderPass::SCENE_TRANSPARENT);
-    cam->RemoveRenderPass(RenderPass::CANVAS_POSTPROCESS);
-    cam->RemoveRenderPass(RenderPass::OVERLAY);
-    cam->RemoveRenderPass(RenderPass::OVERLAY_POSTPROCESS);
-    cam->SetHDR(false);
 
 #ifdef DEBUG
     cam->AddRenderPass(RenderPass::OVERLAY);
@@ -237,7 +228,7 @@ void EditorScene::Update()
 
     if (Editor::IsEditingScene())
     {
-        Thread::SleepCurrentThread(1.0f / 60.0f);
+        // Thread::SleepCurrentThread(1.0f / 60.0f);
     }
 }
 
