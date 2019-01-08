@@ -295,13 +295,21 @@ void AESNode::Duplicate()
     uint idx = GetIndexInStateMachine();
     ASSERT(idx != SCAST<uint>(-1));
 
-    AnimatorStateMachineNode *newNode = new AnimatorStateMachineNode();
+    AnimatorStateMachineNode *nodeToCloneFrom = GetSMNode();
+    ASSERT(nodeToCloneFrom);
+
+    AnimatorStateMachineNode *newNode = nullptr;
+    if (DCAST<AnimatorStateMachineBlendTreeNode *>(nodeToCloneFrom))
+    {
+        newNode = new AnimatorStateMachineBlendTreeNode();
+    }
+    else
+    {
+        newNode = new AnimatorStateMachineNode();
+    }
     GetAnimatorSMLayer()->AddNode(newNode);
     AESNode *newAESNode = GetAESScene()->GetAESNodes().Back();
     ASSERT(newNode);
-
-    AnimatorStateMachineNode *nodeToCloneFrom = GetSMNode();
-    ASSERT(nodeToCloneFrom);
 
     nodeToCloneFrom->CloneInto(newNode, false);
     float localPosZ = newAESNode->GetRectTransform()->GetLocalPosition().z;
