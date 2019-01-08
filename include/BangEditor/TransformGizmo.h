@@ -40,7 +40,7 @@ enum class TransformGizmoMode
 
 class TransformGizmo : public SelectionGizmo
 {
-    GAMEOBJECT_EDITOR(TransformGizmo);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(TransformGizmo);
 
 public:
     TransformGizmo();

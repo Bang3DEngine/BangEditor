@@ -37,7 +37,7 @@ class UIContextMenu;
 
 class ComponentInspectorWidget : public SerializableInspectorWidget
 {
-    GAMEOBJECT_EDITOR(ComponentInspectorWidget);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(ComponentInspectorWidget);
 
 protected:
     ComponentInspectorWidget();

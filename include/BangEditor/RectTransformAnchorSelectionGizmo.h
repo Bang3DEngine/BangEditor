@@ -20,7 +20,7 @@ namespace BangEditor
 {
 class RectTransformAnchorSelectionGizmo : public SelectionGizmo
 {
-    GAMEOBJECT_EDITOR(RectTransformAnchorSelectionGizmo);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(RectTransformAnchorSelectionGizmo);
 
 public:
     enum class AnchorSide

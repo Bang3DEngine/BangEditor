@@ -40,7 +40,7 @@ class UITabHeader : public GameObject,
                     public EventEmitter<IEventsTabHeader>,
                     public EventListener<IEventsDragDrop>
 {
-    GAMEOBJECT_EDITOR(UITabHeader);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(UITabHeader);
 
 public:
     UITabHeader();

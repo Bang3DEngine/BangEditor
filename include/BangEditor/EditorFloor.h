@@ -18,7 +18,7 @@ namespace BangEditor
 {
 class EditorFloor : public GameObject
 {
-    GAMEOBJECT(EditorFloor);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(EditorFloor);
 
 public:
     EditorFloor();

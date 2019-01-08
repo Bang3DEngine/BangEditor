@@ -38,7 +38,7 @@ class UIInputFileOrObject : public GameObject,
                             public EventListener<IEventsDragDrop>,
                             public EventListener<IEventsFocus>
 {
-    GAMEOBJECT_EDITOR(UIInputFileOrObject);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(UIInputFileOrObject);
 
 public:
     UIInputFileOrObject();

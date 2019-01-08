@@ -54,7 +54,7 @@ class Explorer : public GameObject,
                  public EventListener<IEventsExplorerItem>,
                  public EventListener<IEventsProjectManager>
 {
-    GAMEOBJECT_EDITOR(Explorer);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(Explorer);
 
 public:
     Explorer();

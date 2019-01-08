@@ -40,7 +40,7 @@ class AnimatorSMEditor : public GameObject,
                          public EventListener<IEventsASMLayerInput>,
                          public EventListener<IEventsUIInputArray>
 {
-    GAMEOBJECT_EDITOR(AnimatorSMEditor);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(AnimatorSMEditor);
 
 public:
     AnimatorSMEditor();

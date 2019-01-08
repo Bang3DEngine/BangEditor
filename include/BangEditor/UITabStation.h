@@ -34,7 +34,7 @@ class UITabStation : public GameObject,
                      public EventListener<IEventsDragDrop>,
                      public EventListener<IEventsDestroy>
 {
-    GAMEOBJECT_EDITOR(UITabStation);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(UITabStation);
 
 public:
     UITabStation();

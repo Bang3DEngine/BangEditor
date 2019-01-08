@@ -28,7 +28,7 @@ class UITabContainer : public GameObject,
                        public EventEmitter<IEventsTabHeader>,
                        public EventListener<IEventsTabHeader>
 {
-    GAMEOBJECT_EDITOR(UITabContainer);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(UITabContainer);
 
 public:
     UITabContainer();

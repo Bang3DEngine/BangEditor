@@ -22,7 +22,7 @@ class RectTransformCornerSelectionGizmo;
 
 class RectTransformSelectionGizmo : public SelectionGizmo
 {
-    GAMEOBJECT_EDITOR(RectTransformSelectionGizmo);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(RectTransformSelectionGizmo);
 
 public:
     RectTransformSelectionGizmo();

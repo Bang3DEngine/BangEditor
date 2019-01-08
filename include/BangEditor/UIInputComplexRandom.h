@@ -29,7 +29,7 @@ class UIInputComplexRandom : public GameObject,
                              public EventListener<IEventsValueChanged>,
                              public EventEmitter<IEventsValueChanged>
 {
-    GAMEOBJECT_EDITOR(UIInputComplexRandom);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(UIInputComplexRandom);
 
 public:
     UIInputComplexRandom();

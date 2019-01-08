@@ -23,7 +23,7 @@ class UIInputFile;
 
 class CIWAnimator : public ComponentInspectorWidget
 {
-    GAMEOBJECT_EDITOR(CIWAnimator);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(CIWAnimator);
 
 public:
     CIWAnimator();

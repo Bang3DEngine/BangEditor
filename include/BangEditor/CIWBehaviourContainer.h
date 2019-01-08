@@ -26,7 +26,7 @@ class UIInputFile;
 
 class CIWBehaviourContainer : public ComponentInspectorWidget
 {
-    GAMEOBJECT_EDITOR(CIWBehaviourContainer);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(CIWBehaviourContainer);
 
 public:
     // InspectorWidget

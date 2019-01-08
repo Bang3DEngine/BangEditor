@@ -44,7 +44,7 @@ class AESNode : public GameObject,
                 public EventListener<IEventsDestroy>,
                 public EventListener<IEventsAnimatorStateMachineNode>
 {
-    GAMEOBJECT_EDITOR(AESNode);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(AESNode);
 
 public:
     AESNode();

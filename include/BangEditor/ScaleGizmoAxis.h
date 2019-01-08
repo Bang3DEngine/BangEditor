@@ -22,7 +22,7 @@ namespace BangEditor
 {
 class ScaleGizmoAxis : public TransformGizmoAxis
 {
-    GAMEOBJECT_EDITOR(ScaleGizmoAxis);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(ScaleGizmoAxis);
 
 public:
     ScaleGizmoAxis();

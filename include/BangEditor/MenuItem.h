@@ -25,7 +25,7 @@ namespace BangEditor
 {
 class MenuItem : public GameObject
 {
-    GAMEOBJECT(MenuItem);
+    GAMEOBJECT_WITHOUT_CLASS_ID(MenuItem);
 
 public:
     enum class MenuItemType

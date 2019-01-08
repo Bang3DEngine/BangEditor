@@ -26,7 +26,7 @@ class UIInputFile;
 
 class CIWUITextRenderer : public ComponentInspectorWidget
 {
-    GAMEOBJECT_EDITOR(CIWUITextRenderer);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(CIWUITextRenderer);
 
 public:
     CIWUITextRenderer() = default;

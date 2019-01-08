@@ -20,7 +20,7 @@ class ScaleGizmoAxis;
 
 class ScaleGizmo : public SelectionGizmo
 {
-    GAMEOBJECT_EDITOR(ScaleGizmo);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(ScaleGizmo);
 
 public:
     ScaleGizmo();

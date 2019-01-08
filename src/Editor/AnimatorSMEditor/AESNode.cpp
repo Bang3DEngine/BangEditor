@@ -298,15 +298,8 @@ void AESNode::Duplicate()
     AnimatorStateMachineNode *nodeToCloneFrom = GetSMNode();
     ASSERT(nodeToCloneFrom);
 
-    AnimatorStateMachineNode *newNode = nullptr;
-    if (DCAST<AnimatorStateMachineBlendTreeNode *>(nodeToCloneFrom))
-    {
-        newNode = new AnimatorStateMachineBlendTreeNode();
-    }
-    else
-    {
-        newNode = new AnimatorStateMachineNode();
-    }
+    AnimatorStateMachineNode *newNode =
+        SCAST<AnimatorStateMachineNode *>(nodeToCloneFrom->Clone(false));
     GetAnimatorSMLayer()->AddNode(newNode);
     AESNode *newAESNode = GetAESScene()->GetAESNodes().Back();
     ASSERT(newNode);

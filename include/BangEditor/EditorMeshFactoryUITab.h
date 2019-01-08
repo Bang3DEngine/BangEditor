@@ -16,7 +16,7 @@ namespace BangEditor
 class EditorMeshFactoryUITabScene;
 class EditorMeshFactoryUITab : public GameObject
 {
-    GAMEOBJECT_EDITOR(EditorMeshFactoryUITab);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(EditorMeshFactoryUITab);
 
 public:
     EditorMeshFactoryUITab();

@@ -33,7 +33,7 @@ class UISceneToolbar : public GameObject,
                        public EventEmitter<IEventsValueChanged>,
                        public EventListener<IEventsValueChanged>
 {
-    GAMEOBJECT_EDITOR(UISceneToolbar);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(UISceneToolbar);
 
 public:
     UISceneToolbar();

@@ -20,7 +20,7 @@ class TranslateGizmoAxis;
 
 class TranslateGizmo : public SelectionGizmo
 {
-    GAMEOBJECT_EDITOR(TranslateGizmo);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(TranslateGizmo);
 
 public:
     TranslateGizmo();

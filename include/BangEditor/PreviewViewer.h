@@ -30,7 +30,7 @@ namespace BangEditor
 {
 class PreviewViewer : public GameObject, public EventListener<IEventsFocus>
 {
-    GAMEOBJECT_EDITOR(PreviewViewer);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(PreviewViewer);
 
 public:
     using ImageProviderFunc =

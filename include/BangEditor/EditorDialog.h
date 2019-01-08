@@ -75,7 +75,7 @@ private:
 class ColorPickerReporter : public GameObject,
                             public EventEmitter<IEventsValueChanged>
 {
-    GAMEOBJECT_EDITOR(ColorPickerReporter);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(ColorPickerReporter);
 
 public:
     void SetPickedColor(const Color &color);

@@ -20,7 +20,7 @@ namespace BangEditor
 {
 class UISceneDebugStats : public GameObject
 {
-    GAMEOBJECT_EDITOR(UISceneDebugStats);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(UISceneDebugStats);
 
 public:
     UISceneDebugStats();

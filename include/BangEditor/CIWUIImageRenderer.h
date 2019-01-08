@@ -23,7 +23,7 @@ class UIInputFile;
 
 class CIWUIImageRenderer : public ComponentInspectorWidget
 {
-    GAMEOBJECT_EDITOR(CIWUIImageRenderer);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(CIWUIImageRenderer);
 
 public:
     CIWUIImageRenderer();

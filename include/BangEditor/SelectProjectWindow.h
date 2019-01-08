@@ -42,7 +42,7 @@ public:
 private:
     class RecentProjectListEntry : public GameObject
     {
-        GAMEOBJECT(RecentProjectListEntry);
+        GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(RecentProjectListEntry);
 
     public:
         RecentProjectListEntry();

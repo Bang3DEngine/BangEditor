@@ -19,7 +19,7 @@ namespace BangEditor
 {
 class UIInputObject : public UIInputFileOrObject
 {
-    GAMEOBJECT_EDITOR(UIInputObject);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(UIInputObject);
 
 public:
     UIInputObject();

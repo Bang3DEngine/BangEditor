@@ -34,7 +34,7 @@ class UIScenePlayContainer : public UISceneContainer,
                              public EventListener<IEventsScenePlayer>,
                              public EventListener<IEventsSceneManager>
 {
-    GAMEOBJECT_EDITOR(UIScenePlayContainer);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(UIScenePlayContainer);
 
 public:
     UIScenePlayContainer();

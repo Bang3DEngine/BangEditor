@@ -13,7 +13,7 @@ namespace BangEditor
 {
 class GameObjectSelectionGizmo : public SelectionGizmo
 {
-    GAMEOBJECT_EDITOR(GameObjectSelectionGizmo);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(GameObjectSelectionGizmo);
 
 public:
     GameObjectSelectionGizmo();

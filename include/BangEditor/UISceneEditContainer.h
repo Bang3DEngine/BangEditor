@@ -58,7 +58,7 @@ class UISceneEditContainer
       public EventListener<IEventsSceneManager>,
       public EventListener<IEventsDragDrop>
 {
-    GAMEOBJECT_EDITOR(UISceneEditContainer);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(UISceneEditContainer);
 
 public:
     UISceneEditContainer();

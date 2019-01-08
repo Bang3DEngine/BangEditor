@@ -33,7 +33,7 @@ class PreviewViewer;
 
 class AIWMesh : public AIWAsset<Mesh>
 {
-    GAMEOBJECT_EDITOR(AIWMesh);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(AIWMesh);
 
 public:
     // InspectorWidget

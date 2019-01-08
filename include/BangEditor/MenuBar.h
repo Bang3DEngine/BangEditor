@@ -24,7 +24,7 @@ class Shortcut;
 
 class MenuBar : public GameObject
 {
-    GAMEOBJECT_EDITOR(MenuBar);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(MenuBar);
 
 public:
     MenuBar();

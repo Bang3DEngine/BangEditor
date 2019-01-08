@@ -36,7 +36,7 @@ class UIContextMenu;
 
 class AESConnectionLine : public GameObject
 {
-    GAMEOBJECT_EDITOR(AESConnectionLine);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(AESConnectionLine);
 
 public:
     AESConnectionLine();

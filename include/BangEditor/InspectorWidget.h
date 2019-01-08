@@ -29,7 +29,7 @@ class InspectorWidgetTitle;
 class InspectorWidget : public GameObject,
                         public EventListener<IEventsValueChanged>
 {
-    GAMEOBJECT_EDITOR(InspectorWidget);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(InspectorWidget);
 
 public:
     InspectorWidget();
@@ -97,7 +97,7 @@ private:
 // Title GameObject for an InspectorWidget
 class InspectorWidgetTitle : public GameObject
 {
-    GAMEOBJECT_EDITOR(InspectorWidgetTitle);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(InspectorWidgetTitle);
 
 public:
     InspectorWidgetTitle();

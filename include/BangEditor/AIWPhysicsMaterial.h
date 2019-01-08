@@ -31,7 +31,7 @@ namespace BangEditor
 {
 class AIWPhysicsMaterial : public AIWAsset<PhysicsMaterial>
 {
-    GAMEOBJECT_EDITOR(AIWPhysicsMaterial);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(AIWPhysicsMaterial);
 
 public:
     // InspectorWidget

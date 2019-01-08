@@ -44,7 +44,7 @@ public:
 // Console
 class Console : public GameObject, public EventListener<IEventsDebug>
 {
-    GAMEOBJECT_EDITOR(Console);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(Console);
 
 public:
     Console();
@@ -73,7 +73,7 @@ private:
 // ConsoleUIListEntry
 class ConsoleUIListEntry : public GameObject
 {
-    GAMEOBJECT_EDITOR(ConsoleUIListEntry);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(ConsoleUIListEntry);
 
 public:
     ConsoleUIListEntry();

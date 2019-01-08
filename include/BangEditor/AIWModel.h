@@ -32,7 +32,7 @@ class PreviewViewer;
 
 class AIWModel : public AIWAsset<Model>
 {
-    GAMEOBJECT_EDITOR(AIWModel);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(AIWModel);
 
 public:
     // InspectorWidget

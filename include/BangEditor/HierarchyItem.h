@@ -44,7 +44,7 @@ class HierarchyItem : public GameObject,
                       public EventListener<IEventsFocus>,
                       public EventEmitter<IEventsHierarchyItem>
 {
-    GAMEOBJECT_EDITOR(HierarchyItem);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(HierarchyItem);
 
 public:
     HierarchyItem();

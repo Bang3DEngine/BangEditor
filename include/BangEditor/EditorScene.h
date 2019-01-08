@@ -67,7 +67,7 @@ class EditorScene : public Scene,
                     public EventListener<IEventsScenePlayer>,
                     public EventListener<IEventsSceneManager>
 {
-    GAMEOBJECT_EDITOR(EditorScene);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(EditorScene);
 
 public:
     // GameObject

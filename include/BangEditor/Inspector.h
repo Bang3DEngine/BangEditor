@@ -49,7 +49,7 @@ class Inspector : public GameObject,
                   public EventListener<IEventsFileTracker>,
                   public EventListener<IEventsSceneManager>
 {
-    GAMEOBJECT_EDITOR(Inspector);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(Inspector);
 
 public:
     Inspector();

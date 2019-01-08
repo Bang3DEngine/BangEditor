@@ -52,7 +52,7 @@ class Hierarchy : public GameObject,
                   public EventListener<IEventsUITree>,
                   public EventListener<IEventsDestroy>
 {
-    GAMEOBJECT_EDITOR(Hierarchy);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(Hierarchy);
 
 public:
     Hierarchy();

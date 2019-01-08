@@ -33,7 +33,7 @@ namespace BangEditor
 class UITextureCubeMapPreviewer : public GameObject,
                                   public EventEmitter<IEventsValueChanged>
 {
-    GAMEOBJECT_EDITOR(UITextureCubeMapPreviewer);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(UITextureCubeMapPreviewer);
 
 public:
     UITextureCubeMapPreviewer();

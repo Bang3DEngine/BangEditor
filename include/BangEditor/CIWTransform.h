@@ -22,7 +22,7 @@ class UIInputVector;
 
 class CIWTransform : public ComponentInspectorWidget
 {
-    GAMEOBJECT_EDITOR(CIWTransform);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(CIWTransform);
 
 public:
     CIWTransform() = default;

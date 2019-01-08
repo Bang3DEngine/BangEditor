@@ -34,7 +34,7 @@ namespace BangEditor
 class AIWAudioClip : public AIWAsset<AudioClip>,
                      public EventListener<IEventsDestroy>
 {
-    GAMEOBJECT_EDITOR(AIWAudioClip);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(AIWAudioClip);
 
 public:
     AIWAudioClip();

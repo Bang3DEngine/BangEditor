@@ -14,7 +14,7 @@ class MenuItem;
 
 class ModelExplorerItem : public ExplorerItem
 {
-    GAMEOBJECT_EDITOR(ModelExplorerItem);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(ModelExplorerItem);
 
 public:
     ModelExplorerItem();

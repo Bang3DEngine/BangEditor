@@ -14,7 +14,7 @@ class MenuItem;
 
 class PrefabExplorerItem : public ExplorerItem
 {
-    GAMEOBJECT_EDITOR(PrefabExplorerItem);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(PrefabExplorerItem);
 
 public:
     PrefabExplorerItem();

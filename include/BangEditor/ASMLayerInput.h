@@ -39,7 +39,7 @@ class ASMLayerInput : public GameObject,
                       public EventListener<IEventsFocus>,
                       public EventEmitter<IEventsASMLayerInput>
 {
-    GAMEOBJECT_EDITOR(ASMLayerInput);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(ASMLayerInput);
 
 public:
     ASMLayerInput();

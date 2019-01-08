@@ -40,7 +40,7 @@ class EditorCamera : public GameObject,
                      public EventListener<IEventsScenePlayer>,
                      public EventListener<IEventsSceneManager>
 {
-    GAMEOBJECT_EDITOR(EditorCamera);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(EditorCamera);
 
 public:
     EditorCamera();

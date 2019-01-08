@@ -64,7 +64,7 @@ class UIInputArray : public GameObject,
                      public EventEmitter<IEventsValueChanged>,
                      public EventEmitter<IEventsUIInputArray>
 {
-    GAMEOBJECT_EDITOR(UIInputArray);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(UIInputArray);
 
 public:
     UIInputArray();

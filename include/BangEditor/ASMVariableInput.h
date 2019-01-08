@@ -34,7 +34,7 @@ class ASMVariableInput : public GameObject,
                          public EventEmitter<IEventsValueChanged>,
                          public EventListener<IEventsValueChanged>
 {
-    GAMEOBJECT_EDITOR(ASMVariableInput);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(ASMVariableInput);
 
 public:
     ASMVariableInput();

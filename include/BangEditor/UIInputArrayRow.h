@@ -13,7 +13,7 @@ class UIInputArray;
 
 class UIInputArrayRow : public GameObject
 {
-    GAMEOBJECT_EDITOR(UIInputArrayRow);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(UIInputArrayRow);
 
 public:
     UIInputArrayRow();

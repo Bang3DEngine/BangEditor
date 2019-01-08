@@ -28,7 +28,7 @@ namespace BangEditor
 {
 class AIWAnimatorStateMachine : public AIWAsset<AnimatorStateMachine>
 {
-    GAMEOBJECT_EDITOR(AIWAnimatorStateMachine);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(AIWAnimatorStateMachine);
 
 public:
     AIWAnimatorStateMachine();

@@ -70,7 +70,7 @@ class ContextMenu : public GameObject,
                     public EventListener<IEventsDestroy>,
                     public EventListener<IEventsFocus>
 {
-    GAMEOBJECT_EDITOR(ContextMenu);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(ContextMenu);
 
 public:
     ContextMenu();

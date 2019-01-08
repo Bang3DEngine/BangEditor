@@ -28,7 +28,7 @@ class UIInputVector;
 
 class CIWParticleSystem : public ComponentInspectorWidget
 {
-    GAMEOBJECT_EDITOR(CIWParticleSystem);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(CIWParticleSystem);
 
 public:
     CIWParticleSystem() = default;

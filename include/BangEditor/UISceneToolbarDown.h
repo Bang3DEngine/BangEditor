@@ -34,7 +34,7 @@ namespace BangEditor
 class UISceneToolbarDown : public GameObject,
                            public EventListener<IEventsValueChanged>
 {
-    GAMEOBJECT_EDITOR(UISceneToolbarDown);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(UISceneToolbarDown);
 
 public:
     UISceneToolbarDown();

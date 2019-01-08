@@ -24,7 +24,7 @@ namespace BangEditor
 {
 class RotateGizmoAxis : public TransformGizmoAxis
 {
-    GAMEOBJECT_EDITOR(RotateGizmoAxis);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(RotateGizmoAxis);
 
 public:
     RotateGizmoAxis();

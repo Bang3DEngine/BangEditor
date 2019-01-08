@@ -23,7 +23,7 @@ class RotateGizmoAxis;
 
 class RotateGizmo : public SelectionGizmo
 {
-    GAMEOBJECT_EDITOR(RotateGizmo);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(RotateGizmo);
 
 public:
     RotateGizmo();

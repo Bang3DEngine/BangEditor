@@ -20,7 +20,7 @@ namespace BangEditor
 {
 class AIWBehaviour : public AssetInspectorWidget
 {
-    GAMEOBJECT_EDITOR(AIWBehaviour);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(AIWBehaviour);
 
 public:
     // InspectorWidget

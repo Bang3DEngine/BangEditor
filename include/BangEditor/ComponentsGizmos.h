@@ -31,7 +31,7 @@ namespace BangEditor
 {
 class ComponentsGizmos : public GameObject
 {
-    GAMEOBJECT_EDITOR(ComponentsGizmos);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(ComponentsGizmos);
 
 public:
     ComponentsGizmos();

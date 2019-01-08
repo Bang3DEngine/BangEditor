@@ -45,7 +45,7 @@ class ExplorerItem : public NavigatorItem,
                      public EventListener<IEventsDragDrop>,
                      public EventEmitter<IEventsExplorerItem>
 {
-    GAMEOBJECT_EDITOR(ExplorerItem);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(ExplorerItem);
 
 public:
     ExplorerItem();

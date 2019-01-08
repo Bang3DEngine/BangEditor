@@ -30,7 +30,7 @@ namespace BangEditor
 {
 class GameObjectInspectorWidget : public InspectorWidget
 {
-    GAMEOBJECT_EDITOR(GameObjectInspectorWidget);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(GameObjectInspectorWidget);
 
 public:
     GameObjectInspectorWidget();

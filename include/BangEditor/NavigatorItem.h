@@ -41,7 +41,7 @@ class MenuItem;
 
 class NavigatorItem : public GameObject, public EventListener<IEventsFocus>
 {
-    GAMEOBJECT_EDITOR(NavigatorItem);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(NavigatorItem);
 
 public:
     NavigatorItem();

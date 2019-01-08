@@ -13,7 +13,7 @@ class UIInputArray;
 
 class AIWAnimatorLayerMask : public AIWAsset<AnimatorLayerMask>
 {
-    GAMEOBJECT_EDITOR(AIWAnimatorLayerMask);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(AIWAnimatorLayerMask);
 
 public:
     // InspectorWidget

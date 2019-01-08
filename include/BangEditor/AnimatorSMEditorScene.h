@@ -46,7 +46,7 @@ class AnimatorSMEditorScene
       public EventListener<IEventsFocus>,
       public EventListener<IEventsAnimatorStateMachineLayer>
 {
-    GAMEOBJECT_EDITOR(AnimatorSMEditorScene);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(AnimatorSMEditorScene);
 
 public:
     AnimatorSMEditorScene();

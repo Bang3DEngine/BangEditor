@@ -31,7 +31,7 @@ namespace BangEditor
 {
 class AIWAnimation : public AIWAsset<Animation>
 {
-    GAMEOBJECT_EDITOR(AIWAnimation);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(AIWAnimation);
 
 public:
     // InspectorWidget

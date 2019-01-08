@@ -23,7 +23,7 @@ class UISceneDebugStats;
 
 class UISceneImage : public GameObject
 {
-    GAMEOBJECT_EDITOR(UISceneImage);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(UISceneImage);
 
 public:
     enum class RenderMode

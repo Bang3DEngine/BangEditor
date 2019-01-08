@@ -27,7 +27,7 @@ class UIInputFile;
 
 class CIWCamera : public ComponentInspectorWidget
 {
-    GAMEOBJECT_EDITOR(CIWCamera);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(CIWCamera);
 
 public:
     CIWCamera() = default;

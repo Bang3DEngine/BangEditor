@@ -33,7 +33,7 @@ class UITextureCubeMapPreviewer;
 
 class AIWTextureCubeMap : public AIWAsset<TextureCubeMap>
 {
-    GAMEOBJECT_EDITOR(AIWTextureCubeMap);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(AIWTextureCubeMap);
 
 public:
     AIWTextureCubeMap();

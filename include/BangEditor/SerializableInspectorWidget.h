@@ -20,11 +20,11 @@ namespace BangEditor
 {
 class SerializableInspectorWidget : public InspectorWidget
 {
-    GAMEOBJECT_EDITOR(SerializableInspectorWidget);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(SerializableInspectorWidget);
 
 public:
     SerializableInspectorWidget();
-    virtual ~SerializableInspectorWidget();
+    virtual ~SerializableInspectorWidget() override;
 
     // InspectorWidget
     virtual void InitInnerWidgets() override;

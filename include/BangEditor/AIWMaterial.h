@@ -39,7 +39,7 @@ class UIInputVector;
 
 class AIWMaterial : public AIWAsset<Material>
 {
-    GAMEOBJECT_EDITOR(AIWMaterial);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(AIWMaterial);
 
 public:
     // InspectorWidget

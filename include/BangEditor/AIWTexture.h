@@ -35,7 +35,7 @@ namespace BangEditor
 {
 class AIWTexture : public AIWAsset<Texture2D>
 {
-    GAMEOBJECT_EDITOR(AIWTexture);
+    GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(AIWTexture);
 
 public:
     // InspectorWidget
