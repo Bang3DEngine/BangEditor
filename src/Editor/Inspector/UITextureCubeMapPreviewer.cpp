@@ -5,7 +5,6 @@
 #include "Bang/GL.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/ICloneable.h"
 #include "Bang/IEventsRendererChanged.h"
 #include "Bang/IEventsValueChanged.h"
 #include "Bang/Input.h"

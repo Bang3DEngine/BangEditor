@@ -62,6 +62,7 @@ public:
     void Paste();
     void Duplicate();
     void CreatePrefab();
+    void ToggleEnable();
 
     void UpdateEnabledDisabledColor();
 

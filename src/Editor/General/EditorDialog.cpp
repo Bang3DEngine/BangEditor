@@ -394,8 +394,7 @@ void EditorDialog::CreateGetColorSceneInto(
     Path edShadersPath = EditorPaths::GetEditorAssetsDir().Append("Shaders");
     AH<ShaderProgram> colorPanelImgSP;
     colorPanelImgSP.Set(ShaderProgramFactory::Get(
-        EPATH("Shaders").Append("UIImageRenderer.vert"),
-        edShadersPath.Append("UIInputColor.frag")));
+        edShadersPath.Append("UIInputColor.bushader")));
     colorPanelImg->GetMaterial()->SetShaderProgram(colorPanelImgSP.Get());
 
     UISlider *hueSlider = GameObjectFactory::CreateUISlider();
@@ -408,8 +407,7 @@ void EditorDialog::CreateGetColorSceneInto(
 
     AH<ShaderProgram> hueImgSP;
     hueImgSP.Set(ShaderProgramFactory::Get(
-        EPATH("Shaders/UIImageRenderer.vert"),
-        edShadersPath.Append("UIInputColorOnlyHue.frag")));
+        edShadersPath.Append("UIInputColorOnlyHue.bushader")));
     UIImageRenderer *hueSliderGuide = hueSlider->GetGuideRenderer();
     hueSliderGuide->GetMaterial()->SetShaderProgram(hueImgSP.Get());
     hueSliderGuide->GetGameObject()->GetRectTransform()->SetAnchors(

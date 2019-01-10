@@ -197,7 +197,8 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                 {
                     UIButton *button =
                         (needsToRecreateVar
-                             ? GameObjectFactory::CreateUIButton()
+                             ? GameObjectFactory::CreateUIButton(
+                                   reflVar.GetName())
                              : prevWidget->GetComponent<UIButton>());
                     ASSERT(button);
 
@@ -471,7 +472,6 @@ bool SerializableInspectorWidget::NeedsToRecreateWidget(
     bool needsToRemoveWidget = false;
     needsToRemoveWidget |= (prvh.GetIsEnum() != crvh.GetIsEnum());
     needsToRemoveWidget |= (prvh.GetIsShown() != crvh.GetIsShown());
-    needsToRemoveWidget |= (prvh.GetIsButton() != crvh.GetIsButton());
     needsToRemoveWidget |= (prvh.GetIsButton() != crvh.GetIsButton());
     needsToRemoveWidget |= (prvh.GetIsSlider() != crvh.GetIsSlider());
     needsToRemoveWidget |= (prvh.GetIsEnumFlags() != crvh.GetIsEnumFlags());

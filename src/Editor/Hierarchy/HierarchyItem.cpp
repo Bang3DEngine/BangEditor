@@ -140,6 +140,12 @@ void HierarchyItem::CreatePrefab()
         &IEventsHierarchyItem::OnCreatePrefab, this);
 }
 
+void HierarchyItem::ToggleEnable()
+{
+    GetReferencedGameObject()->SetEnabled(
+        !GetReferencedGameObject()->IsEnabled());
+}
+
 void HierarchyItem::UpdateEnabledDisabledColor()
 {
     if (GetReferencedGameObject()->IsEnabledRecursively())
@@ -285,6 +291,11 @@ UIEventResult HierarchyItem::OnUIEvent(UIFocusable *, const UIEvent &event)
                 {
                     case Key::C:
                         Copy();
+                        return UIEventResult::INTERCEPT;
+                        break;
+
+                    case Key::E:
+                        ToggleEnable();
                         return UIEventResult::INTERCEPT;
                         break;
 
