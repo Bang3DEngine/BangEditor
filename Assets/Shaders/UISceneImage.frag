@@ -17,7 +17,7 @@ const int WORLD_POSITION   = 9;
 void main()
 {
     vec2 uv = B_FIn_AlbedoUv;
-    vec3 color = vec3(1,0,1);
+    vec3 color;
     switch (B_SceneRenderMode)
     {
         case COLOR:            color = B_SampleColor(uv).rgb;               break;
