@@ -18,7 +18,8 @@ class Serializable;
 using namespace Bang;
 namespace BangEditor
 {
-class SerializableInspectorWidget : public InspectorWidget
+class SerializableInspectorWidget : public InspectorWidget,
+                                    public EventListener<IEventsDestroy>
 {
     GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(SerializableInspectorWidget);
 
@@ -50,6 +51,9 @@ public:
     const Array<GameObject *> &GetWidgets() const;
 
 protected:
+    // IEventsDestroy
+    virtual void OnDestroyed(EventEmitter<IEventsDestroy> *object) override;
+
     // IEventsValueChanged
     virtual void OnValueChanged(
         EventEmitter<IEventsValueChanged> *object) override;

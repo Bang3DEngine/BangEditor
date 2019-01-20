@@ -203,7 +203,11 @@ void InspectorWidget::RemoveWidget(GameObject *widget, bool destroy)
     {
         widget->SetParent(nullptr);
     }
-    GameObject::Destroy(widgetContainer);
+
+    if (widgetContainer)
+    {
+        GameObject::Destroy(widgetContainer);
+    }
 }
 
 void InspectorWidget::SetWidgetEnabled(GameObject *widget, bool enabled)

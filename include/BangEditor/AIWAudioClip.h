@@ -31,8 +31,7 @@ class EventEmitter;
 using namespace Bang;
 namespace BangEditor
 {
-class AIWAudioClip : public AIWAsset<AudioClip>,
-                     public EventListener<IEventsDestroy>
+class AIWAudioClip : public AIWAsset<AudioClip>
 {
     GAMEOBJECT_EDITOR_WITHOUT_CLASS_ID(AIWAudioClip);
 

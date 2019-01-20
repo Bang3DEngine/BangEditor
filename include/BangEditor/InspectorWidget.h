@@ -45,6 +45,7 @@ public:
 
     const String &GetTitle() const;
     void SetBackgroundColor(const Color &bgColor);
+    InspectorWidgetTitle *GetInspectorWidgetTitle() const;
     const UMap<GameObject *, UILabel *> &GetWidgetToLabel() const;
 
 protected:
@@ -69,9 +70,7 @@ protected:
     GameObject *GetWidgetFromLabel(const String &labelStr) const;
     GameObject *GetWidgetsContainer() const;
 
-protected:
     virtual InspectorWidgetTitle *CreateTitleGameObject();
-    InspectorWidgetTitle *GetInspectorWidgetTitle() const;
 
     // IEventsValueChanged
     virtual void OnValueChanged(EventEmitter<IEventsValueChanged> *ee) override;

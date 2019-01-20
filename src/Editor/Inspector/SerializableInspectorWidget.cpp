@@ -51,11 +51,32 @@ void SerializableInspectorWidget::SetSerializable(Serializable *serializable)
 {
     if (serializable != GetSerializable())
     {
+        // Clear previous if any
+        if (GetSerializable())
+        {
+            Array<GameObject *> reflectWidgetsCpy = m_reflectWidgets;
+            for (GameObject *reflectWidget : reflectWidgetsCpy)
+            {
+                RemoveWidget(reflectWidget, true);
+            }
+
+            m_reflectWidgets.Clear();
+            m_previousReflectStruct = ReflectStruct();
+            m_reflectWidgetToReflectVar.Clear();
+            m_varNameToReflectWidget.Clear();
+        }
+
         p_serializable = serializable;
 
         if (GetSerializable())
         {
             SetTitle(GetSerializable()->GetClassName());
+
+            if (EventEmitter<IEventsDestroy> *ee =
+                    DCAST<EventEmitter<IEventsDestroy> *>(GetSerializable()))
+            {
+                ee->RegisterListener(this);
+            }
 
             EventListener<IEventsValueChanged>::SetReceiveEvents(false);
             OnReflectableSet();
@@ -589,6 +610,11 @@ const Map<String, GameObject *>
 const Array<GameObject *> &SerializableInspectorWidget::GetWidgets() const
 {
     return m_reflectWidgets;
+}
+
+void SerializableInspectorWidget::OnDestroyed(EventEmitter<IEventsDestroy> *)
+{
+    SetSerializable(nullptr);
 }
 
 Serializable *SerializableInspectorWidget::GetSerializable() const
