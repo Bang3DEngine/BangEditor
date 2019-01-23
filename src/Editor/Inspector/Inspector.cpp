@@ -424,7 +424,7 @@ void Inspector::SetCurrentWidgetBlocked(bool blocked)
     Array<Object *> childrenAndChildrenComps;
 
     Array<GameObject *> children =
-        GetWidgetsContainer()->GetChildrenRecursively();
+        GetWidgetsContainer()->GetDescendants();
     for (GameObject *child : children)
     {
         childrenAndChildrenComps.PushBack(child);

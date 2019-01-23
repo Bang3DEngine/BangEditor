@@ -76,9 +76,10 @@ void UIInputObject::SetObject(Object *object_)
 void UIInputObject::SetGUID(const GUID &guid)
 {
     Scene *sceneToLookObjectIn = SceneManager::GetObjectPtrLookupScene();
-    Object *object = sceneToLookObjectIn
-                         ? sceneToLookObjectIn->FindObjectInDescendants(guid)
-                         : nullptr;
+    Object *object =
+        sceneToLookObjectIn
+            ? sceneToLookObjectIn->GetObjectInDescendantsAndThis(guid)
+            : nullptr;
     SetObject(object);
 }
 
@@ -126,8 +127,8 @@ Object *UIInputObject::GetAcceptedObjectIn(GameObject *go) const
     Object *object = nullptr;
     if (go)
     {
-        object = go->FindObjectInDescendants(GetAcceptedClassIdBegin(),
-                                             GetAcceptedClassIdEnd());
+        object = go->GetObjectInDescendantsAndThis(GetAcceptedClassIdBegin(),
+                                                   GetAcceptedClassIdEnd());
     }
     return object;
 }
@@ -139,7 +140,7 @@ Object *UIInputObject::GetObjectInDragDroppable(
     {
         if (HierarchyItem *hierarchyItem =
                 dragDroppable->GetGameObject()
-                    ->FindObjectInDescendants<HierarchyItem>())
+                    ->GetObjectInDescendantsAndThis<HierarchyItem>())
         {
             GameObject *itemGo = hierarchyItem->GetReferencedGameObject();
             Object *object = GetAcceptedObjectIn(itemGo);
