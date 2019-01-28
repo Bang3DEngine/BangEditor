@@ -86,7 +86,6 @@ void GIWAESConnectionLine::InitInnerWidgets()
                 default: break;
             }
         });
-    p_transitionsList->SetWideSelectionMode(false);
     p_transitionsList->GetScrollPanel()->SetVerticalShowScrollMode(
         ShowScrollMode::WHEN_NEEDED);
     p_transitionsList->GetScrollPanel()->SetForceHorizontalFit(true);
