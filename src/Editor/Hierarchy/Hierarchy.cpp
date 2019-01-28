@@ -105,6 +105,7 @@ Hierarchy::Hierarchy()
         [this](GOItem *item, UIList::Action action) {
             this->TreeSelectionCallback(item, action);
         });
+    GetUITree()->SetDragDropEnabled(true);
     GetUITree()->EventEmitter<IEventsUITree>::RegisterListener(this);
     treeGo->SetParent(this);
 

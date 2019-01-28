@@ -103,8 +103,8 @@ void EditorScene::Init()
     p_tabStation->GetTabContainer()->AddTab("Game", p_scenePlayContainer);
     p_tabStation->GetTabContainer()->AddTab("AnimatorSM Editor",
                                             p_animatorSMEditor);
-    p_tabStation->GetTabContainer()->AddTab("Mesh Factory",
-                                            p_editorMeshFactoryTab);
+    // p_tabStation->GetTabContainer()->AddTab("Mesh Factory",
+    //                                         p_editorMeshFactoryTab);
     p_tabStation->GetChildStationAndCreateIfNeeded(Side::LEFT)
         ->GetTabContainer()
         ->AddTab("Hierarchy", p_hierarchy);
