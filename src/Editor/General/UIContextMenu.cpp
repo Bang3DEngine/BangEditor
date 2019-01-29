@@ -94,7 +94,7 @@ UIEventResult UIContextMenu::OnUIEvent(UIFocusable *, const UIEvent &event)
             if (event.mouse.button == MouseButton::RIGHT)
             {
                 ShowMenu();
-                return UIEventResult::INTERCEPT;
+                return UIEventResult::IGNORE;
             }
             break;
 
