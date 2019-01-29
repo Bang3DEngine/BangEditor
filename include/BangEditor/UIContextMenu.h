@@ -46,6 +46,7 @@ public:
     void ShowMenu();
     bool IsMenuBeingShown() const;
     void SetFocusable(UIFocusable *focusable);
+    void SetSceneToBeAddedTo(Scene *scene);
 
     using CreateContextMenuCallback =
         std::function<void(MenuItem *menuRootItem)>;
@@ -54,6 +55,7 @@ public:
 
 private:
     ContextMenu *p_menu = nullptr;
+    Scene *p_sceneToBeAddedTo = nullptr;
 
     CreateContextMenuCallback m_createContextMenuCallback;
 

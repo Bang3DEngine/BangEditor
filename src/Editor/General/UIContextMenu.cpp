@@ -50,7 +50,9 @@ void UIContextMenu::ShowMenu()
         }
         else
         {
-            p_menu->SetParent(EditorSceneManager::GetEditorScene());
+            p_menu->SetParent(p_sceneToBeAddedTo
+                                  ? p_sceneToBeAddedTo
+                                  : EditorSceneManager::GetEditorScene());
 
             UICanvas::GetActive(this)->SetFocus(p_menu->GetFocusable());
         }
@@ -66,6 +68,11 @@ void UIContextMenu::SetFocusable(UIFocusable *focusable)
 {
     focusable->EventEmitter<IEventsDestroy>::RegisterListener(this);
     focusable->EventEmitter<IEventsFocus>::RegisterListener(this);
+}
+
+void UIContextMenu::SetSceneToBeAddedTo(Scene *scene)
+{
+    p_sceneToBeAddedTo = scene;
 }
 
 void UIContextMenu::SetCreateContextMenuCallback(

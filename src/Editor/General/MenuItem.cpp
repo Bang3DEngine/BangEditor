@@ -212,25 +212,27 @@ void MenuItem::Update()
 
     if (p_topBg && GetItemType() == MenuItemType::TOP)
     {
-        UICanvas *canvas = UICanvas::GetActive(this);
-        bool mouseOver = canvas->IsMouseOver(this, true);
-        bool tintBg = mouseOver && !IsForcedShow();
+        if (UICanvas *canvas = UICanvas::GetActive(this))
+        {
+            bool mouseOver = canvas->IsMouseOver(this, true);
+            bool tintBg = mouseOver && !IsForcedShow();
 
-        Color topBgColor = Color::Zero();
-        if (tintBg && mouseOver)
-        {
-            topBgColor = UITheme::GetOverColor();
-        }
-        else if (mustDisplayChildren)
-        {
-            topBgColor = UITheme::GetSelectedColor();
-        }
-        else
-        {
-            topBgColor = Color::Zero();
-        }
+            Color topBgColor = Color::Zero();
+            if (tintBg && mouseOver)
+            {
+                topBgColor = UITheme::GetOverColor();
+            }
+            else if (mustDisplayChildren)
+            {
+                topBgColor = UITheme::GetSelectedColor();
+            }
+            else
+            {
+                topBgColor = Color::Zero();
+            }
 
-        p_topBg->SetTint(topBgColor);
+            p_topBg->SetTint(topBgColor);
+        }
     }
 
     if (p_rightArrow)
@@ -256,7 +258,10 @@ void MenuItem::OnListSelectionCallback(GameObject *item, UIList::Action action)
                     (action != UIList::Action::SELECTION_IN))
                 {
                     menuItem->m_selectedCallback(menuItem);
-                    UICanvas::GetActive(menuItem)->SetFocus(nullptr);
+                    if (UICanvas *canvas = UICanvas::GetActive(menuItem))
+                    {
+                        canvas->SetFocus(nullptr);
+                    }
                     menuItem->Close(true);
                 }
 
