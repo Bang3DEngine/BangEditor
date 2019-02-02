@@ -42,6 +42,7 @@ public:
 
     const Color &GetColor() const;
     bool HasFocus() const;
+    UIButton *GetSearchColorButton() const;
 
 protected:
     virtual ~UIInputColor() override;

@@ -121,3 +121,8 @@ bool UIInputColor::HasFocus() const
 {
     return !m_colorPickerReporter->HasFinished();
 }
+
+UIButton *UIInputColor::GetSearchColorButton() const
+{
+    return p_searchColorButton;
+}
