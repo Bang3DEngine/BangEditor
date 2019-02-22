@@ -135,30 +135,37 @@ void SerializableInspectorWidget::UpdateReflectWidgetsFromReflection(
                 if (reflVar.GetHints().GetIsEnum() ||
                     reflVar.GetHints().GetIsEnumFlags())
                 {
-                    UIComboBox *enumInput =
-                        (needsToRecreateVar
-                             ? GameObjectFactory::CreateUIComboBox()
-                             : prevWidget->GetComponent<UIComboBox>());
-                    ASSERT(enumInput);
-
-                    enumInput->SetMultiCheck(
-                        reflVar.GetHints().GetIsEnumFlags());
-
-                    const auto &enumFields =
-                        reflectStruct.GetEnumFields(reflVar.GetName());
-                    if (enumFields.Size() >= 1)
+                    UIComboBox *enumInput;
+                    if (needsToRecreateVar)
                     {
-                        for (const auto &enumFieldNameValuePair : enumFields)
+                        enumInput = GameObjectFactory::CreateUIComboBox();
+
+                        enumInput->SetMultiCheck(
+                            reflVar.GetHints().GetIsEnumFlags());
+
+                        const auto &enumFields =
+                            reflectStruct.GetEnumFields(reflVar.GetName());
+                        if (enumFields.Size() >= 1)
                         {
-                            const String &enumFieldName =
-                                enumFieldNameValuePair.first;
-                            uint enumFieldValue = enumFieldNameValuePair.second;
-                            enumInput->AddItem(enumFieldName,
-                                               SCAST<int>(enumFieldValue));
+                            for (const auto &enumFieldNameValuePair :
+                                 enumFields)
+                            {
+                                const String &enumFieldName =
+                                    enumFieldNameValuePair.first;
+                                uint enumFieldValue =
+                                    enumFieldNameValuePair.second;
+                                enumInput->AddItem(enumFieldName,
+                                                   SCAST<int>(enumFieldValue));
+                            }
+                            enumInput->EventEmitter<IEventsValueChanged>::
+                                RegisterListener(inspectorWidget);
                         }
-                        enumInput->EventEmitter<IEventsValueChanged>::
-                            RegisterListener(inspectorWidget);
                     }
+                    else
+                    {
+                        enumInput = prevWidget->GetComponent<UIComboBox>();
+                    }
+                    ASSERT(enumInput);
                     widget = enumInput->GetGameObject();
                 }
                 else
