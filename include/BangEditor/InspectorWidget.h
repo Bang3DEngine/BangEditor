@@ -13,7 +13,8 @@
 
 namespace Bang
 {
-class Color;
+template <typename>
+class ColorG;
 class UICheckBox;
 class UIImageRenderer;
 class UILabel;

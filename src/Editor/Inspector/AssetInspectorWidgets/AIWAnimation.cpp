@@ -5,7 +5,7 @@
 #include "Bang/Extensions.h"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/LayoutSizeType.h"
-#include "Bang/Math.h"
+#include "BangMath/Math.h"
 #include "Bang/UIComboBox.h"
 #include "Bang/UIInputNumber.h"
 #include "Bang/UIInputText.h"

@@ -1,6 +1,6 @@
 #include "BangEditor/TranslateGizmo.h"
 
-#include "Bang/Axis.h"
+#include "BangMath/Axis.h"
 #include "Bang/GameObject.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/Transform.h"

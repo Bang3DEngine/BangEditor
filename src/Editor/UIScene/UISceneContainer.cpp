@@ -2,7 +2,7 @@
 
 #include "Bang/Alignment.h"
 #include "Bang/Camera.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventListener.tcc"
 #include "Bang/GEngine.h"
@@ -20,7 +20,7 @@
 #include "Bang/UILayoutElement.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIVerticalLayout.h"
-#include "Bang/Vector2.h"
+#include "BangMath/Vector2.h"
 #include "BangEditor/UISceneImage.h"
 #include "BangEditor/UISceneToolbar.h"
 #include "BangEditor/UISceneToolbarDown.h"

@@ -1,6 +1,6 @@
 #include "BangEditor/UIInputObject.h"
 
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/Scene.h"

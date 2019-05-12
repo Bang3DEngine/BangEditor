@@ -1,10 +1,10 @@
 #include "BangEditor/RectTransformSelectionGizmo.h"
 
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/GameObject.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/Rect.h"
+#include "BangMath/Rect.h"
 #include "Bang/RectTransform.h"
 #include "Bang/RenderFactory.h"
 #include "BangEditor/RectTransformAnchorSelectionGizmo.h"

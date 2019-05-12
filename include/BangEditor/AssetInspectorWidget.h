@@ -2,7 +2,7 @@
 #define FILEINSPECTORWIDGET_H
 
 #include "Bang/BangDefines.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/Path.h"
 #include "BangEditor/BangEditor.h"
 #include "BangEditor/SerializableInspectorWidget.h"

@@ -1,7 +1,7 @@
 #ifndef ROTATEGIZMO_H
 #define ROTATEGIZMO_H
 
-#include "Bang/Axis.h"
+#include "BangMath/Axis.h"
 #include "Bang/BangDefines.h"
 #include "Bang/GameObject.h"
 #include "Bang/RenderPass.h"

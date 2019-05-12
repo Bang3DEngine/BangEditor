@@ -39,7 +39,7 @@
 #include "Bang/UISlider.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UIVerticalLayout.h"
-#include "Bang/Vector2.h"
+#include "BangMath/Vector2.h"
 #include "BangEditor/EditorPaths.h"
 #include "BangEditor/EditorSceneManager.h"
 #include "BangEditor/ExplorerItem.h"

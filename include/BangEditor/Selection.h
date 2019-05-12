@@ -1,17 +1,20 @@
 #ifndef SELECTION_H
 #define SELECTION_H
 
+#include "BangMath/Ray.h"
 #include "Bang/Array.h"
 #include "Bang/Bang.h"
 #include "Bang/BangDefines.h"
 #include "Bang/Map.h"
 #include "Bang/UMap.h"
-#include "Bang/Vector2.h"
+#include "BangMath/Vector2.h"
+#include "BangMath/Vector3.h"
 #include "BangEditor/BangEditor.h"
 
 namespace Bang
 {
-class Ray;
+template<typename>
+class RayG;
 class Camera;
 class Mesh;
 class Material;

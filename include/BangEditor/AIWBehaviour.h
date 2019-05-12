@@ -3,7 +3,7 @@
 
 #include "Bang/Bang.h"
 #include "Bang/BangDefines.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/String.h"
 #include "BangEditor/AssetInspectorWidget.h"
 #include "BangEditor/BangEditor.h"

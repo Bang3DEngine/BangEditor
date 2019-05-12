@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/EventEmitter.tcc"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"

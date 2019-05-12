@@ -3,7 +3,7 @@
 
 #include "Bang/Bang.h"
 #include "Bang/BangDefines.h"
-#include "Bang/Vector2.h"
+#include "BangMath/Vector2.h"
 #include "BangEditor/BangEditor.h"
 
 namespace Bang

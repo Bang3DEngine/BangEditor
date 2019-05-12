@@ -1,7 +1,7 @@
 #ifndef SCALEGIZMO_H
 #define SCALEGIZMO_H
 
-#include "Bang/Axis.h"
+#include "BangMath/Axis.h"
 #include "Bang/BangDefines.h"
 #include "Bang/GameObject.h"
 #include "Bang/String.h"

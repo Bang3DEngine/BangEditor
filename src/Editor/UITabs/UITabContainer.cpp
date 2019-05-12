@@ -8,7 +8,7 @@
 #include "Bang/EventEmitter.tcc"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/Math.h"
+#include "BangMath/Math.h"
 #include "Bang/Stretch.h"
 #include "Bang/UIHorizontalLayout.h"
 #include "Bang/UILayoutElement.h"

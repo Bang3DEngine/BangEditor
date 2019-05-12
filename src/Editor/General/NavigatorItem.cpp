@@ -2,7 +2,7 @@
 
 #include "Bang/Alignment.h"
 #include "Bang/AspectRatioMode.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/DPtr.tcc"
 #include "Bang/File.h"
 #include "Bang/GameObject.tcc"

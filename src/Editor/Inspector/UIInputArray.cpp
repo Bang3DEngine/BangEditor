@@ -2,7 +2,7 @@
 
 #include "Bang/Alignment.h"
 #include "Bang/Assert.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/EventListener.tcc"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"

@@ -2,7 +2,7 @@
 #define ROTATEGIZMOAXIS_H
 
 #include "Bang/AssetHandle.h"
-#include "Bang/Axis.h"
+#include "BangMath/Axis.h"
 #include "Bang/BangDefines.h"
 #include "Bang/RenderPass.h"
 #include "Bang/String.h"
@@ -12,7 +12,8 @@
 
 namespace Bang
 {
-class Color;
+template <typename>
+class ColorG;
 class GameObject;
 class LineRenderer;
 class Mesh;

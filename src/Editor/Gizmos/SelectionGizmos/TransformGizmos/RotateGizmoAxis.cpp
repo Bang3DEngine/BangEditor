@@ -14,28 +14,29 @@
 #include "Bang/GameObject.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/Geometry.h"
+#include "BangMath/Geometry.h"
 #include "Bang/Input.h"
 #include "Bang/Key.h"
 #include "Bang/LineRenderer.h"
 #include "Bang/Material.h"
 #include "Bang/MaterialFactory.h"
-#include "Bang/Math.h"
+#include "BangMath/Math.h"
 #include "Bang/Mesh.h"
 #include "Bang/MeshRenderer.h"
-#include "Bang/Ray.h"
+#include "BangMath/Ray.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/Sphere.h"
+#include "BangMath/Sphere.h"
 #include "Bang/Transform.h"
-#include "Bang/Vector2.h"
-#include "Bang/Vector3.h"
+#include "BangMath/Vector2.h"
+#include "BangMath/Vector3.h"
 #include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/Selection.h"
 #include "BangEditor/TransformGizmo.h"
 
 namespace Bang
 {
-class Color;
+template <typename>
+class ColorG;
 }
 
 using namespace Bang;
@@ -262,7 +263,7 @@ void RotateGizmoAxis::UpdateCirclePoints()
     Transform *camT = cam->GetGameObject()->GetTransform();
 
     constexpr int numSegments = 32;
-    constexpr float angleStep = SCAST<float>((Math::Pi * 2.0f) / numSegments);
+    constexpr float angleStep = ((Math::Pi<float>() * 2.0f) / numSegments);
 
     // Get circle points
     Array<Vector3> circlePoints;

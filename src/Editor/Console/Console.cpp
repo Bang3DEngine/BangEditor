@@ -1,7 +1,7 @@
 #include "BangEditor/Console.h"
 
 #include "Bang/Alignment.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/Debug.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventListener.tcc"

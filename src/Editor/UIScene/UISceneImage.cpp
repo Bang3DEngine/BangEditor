@@ -2,7 +2,7 @@
 
 #include "Bang/AssetHandle.h"
 #include "Bang/Camera.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GL.h"
 #include "Bang/GameObject.tcc"

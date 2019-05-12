@@ -3,8 +3,8 @@
 #include "Bang/Alignment.h"
 #include "Bang/Array.h"
 #include "Bang/Array.tcc"
-#include "Bang/Axis.h"
-#include "Bang/Color.h"
+#include "BangMath/Axis.h"
+#include "BangMath/Color.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/LayoutSizeType.h"
@@ -22,7 +22,7 @@
 #include "Bang/UIList.h"
 #include "Bang/UITextRenderer.h"
 #include "Bang/UITheme.h"
-#include "Bang/Vector2.h"
+#include "BangMath/Vector2.h"
 
 using namespace BangEditor;
 

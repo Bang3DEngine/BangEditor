@@ -5,7 +5,7 @@
 
 #include "Bang/Array.tcc"
 #include "Bang/BangDefines.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventEmitter.tcc"
 #include "Bang/EventListener.h"
@@ -13,7 +13,7 @@
 #include "Bang/IEvents.h"
 #include "Bang/IEventsValueChanged.h"
 #include "Bang/String.h"
-#include "Bang/Vector4.h"
+#include "BangMath/Vector4.h"
 #include "BangEditor/BangEditor.h"
 
 namespace Bang

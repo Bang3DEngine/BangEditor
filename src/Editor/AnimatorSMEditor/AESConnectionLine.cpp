@@ -7,17 +7,17 @@
 #include "Bang/AnimatorStateMachineNode.h"
 #include "Bang/AnimatorStateMachinePlayer.h"
 #include "Bang/Assert.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/DPtr.tcc"
 #include "Bang/GL.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/Geometry.h"
+#include "BangMath/Geometry.h"
 #include "Bang/Input.h"
 #include "Bang/Key.h"
 #include "Bang/LineRenderer.h"
 #include "Bang/Material.h"
-#include "Bang/Math.h"
+#include "BangMath/Math.h"
 #include "Bang/MouseButton.h"
 #include "Bang/RectTransform.h"
 #include "Bang/RenderPass.h"
@@ -27,8 +27,8 @@
 #include "Bang/UIFocusable.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UITheme.h"
-#include "Bang/Vector2.h"
-#include "Bang/Vector3.h"
+#include "BangMath/Vector2.h"
+#include "BangMath/Vector3.h"
 #include "BangEditor/AESNode.h"
 #include "BangEditor/AnimatorSMEditorScene.h"
 #include "BangEditor/GIWAESConnectionLine.h"
@@ -208,7 +208,7 @@ void AESConnectionLine::BeforeRender()
         Vector2 p1w =
             GetRectTransform()->FromLocalToWorldPoint(Vector3(p1, 0)).xy();
         float angle = Math::ATan2((p1w - p0w).x, (p1w - p0w).y);
-        angle += SCAST<float>(Math::Pi * 1.5f);
+        angle += (Math::Pi<float>() * 1.5f);
         Quaternion rotation = Quaternion::AngleAxis(angle, Vector3::Forward());
         arrowRT->SetLocalRotation(rotation);
 

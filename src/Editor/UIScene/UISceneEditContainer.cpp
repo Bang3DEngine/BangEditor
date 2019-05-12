@@ -2,7 +2,7 @@
 
 #include <utility>
 
-#include "Bang/AARect.h"
+#include "BangMath/AARect.h"
 #include "Bang/Array.h"
 #include "Bang/Assert.h"
 #include "Bang/Assets.h"
@@ -38,7 +38,7 @@
 #include "Bang/UIFocusable.h"
 #include "Bang/UIImageRenderer.h"
 #include "Bang/UILayoutIgnorer.h"
-#include "Bang/Vector2.h"
+#include "BangMath/Vector2.h"
 #include "BangEditor/EditSceneGameObjects.h"
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorCamera.h"

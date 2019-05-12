@@ -12,7 +12,7 @@
 #include "Bang/GameObject.tcc"
 #include "Bang/IEvents.h"
 #include "Bang/Model.h"
-#include "Bang/Quaternion.h"
+#include "BangMath/Quaternion.h"
 #include "Bang/UMap.tcc"
 #include "BangEditor/AssetPreviewFactory.h"
 #include "BangEditor/BangEditor.h"

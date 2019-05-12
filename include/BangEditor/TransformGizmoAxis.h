@@ -1,7 +1,7 @@
 #ifndef TRANSFORMGIZMOAXIS_H
 #define TRANSFORMGIZMOAXIS_H
 
-#include "Bang/Axis.h"
+#include "BangMath/Axis.h"
 #include "Bang/BangDefines.h"
 #include "Bang/GameObject.h"
 #include "BangEditor/BangEditor.h"
@@ -9,7 +9,8 @@
 
 namespace Bang
 {
-class Color;
+template<typename>
+class ColorG;
 class LineRenderer;
 class MeshRenderer;
 class Object;

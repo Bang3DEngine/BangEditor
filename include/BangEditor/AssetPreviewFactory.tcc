@@ -15,7 +15,7 @@
 #include "Bang/Scene.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/ShaderProgramFactory.h"
-#include "Bang/Sphere.h"
+#include "BangMath/Sphere.h"
 #include "Bang/TextureFactory.h"
 #include "Bang/Transform.h"
 

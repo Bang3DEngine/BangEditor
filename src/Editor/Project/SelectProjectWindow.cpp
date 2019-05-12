@@ -4,7 +4,7 @@
 #include "Bang/Array.tcc"
 #include "Bang/AspectRatioMode.h"
 #include "Bang/Camera.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/Dialog.h"
 #include "Bang/Extensions.h"
 #include "Bang/GameObject.h"

@@ -1,7 +1,7 @@
 #ifndef SCALEGIZMOAXIS_H
 #define SCALEGIZMOAXIS_H
 
-#include "Bang/Axis.h"
+#include "BangMath/Axis.h"
 #include "Bang/BangDefines.h"
 #include "Bang/RenderPass.h"
 #include "Bang/String.h"
@@ -11,7 +11,8 @@
 
 namespace Bang
 {
-class Color;
+template <typename>
+class ColorG;
 class GameObject;
 class LineRenderer;
 class MeshRenderer;

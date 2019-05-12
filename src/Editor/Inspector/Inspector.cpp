@@ -7,7 +7,7 @@
 #include "Bang/Array.h"
 #include "Bang/Assert.h"
 #include "Bang/Asset.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/Component.h"
 #include "Bang/ComponentMacros.h"
 #include "Bang/EventEmitter.h"

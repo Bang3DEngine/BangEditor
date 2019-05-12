@@ -5,7 +5,7 @@
 
 #include "Bang/AssetHandle.h"
 #include "Bang/BangDefines.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/Map.h"
 #include "Bang/Path.h"
 #include "Bang/String.h"

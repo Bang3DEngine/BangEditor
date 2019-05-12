@@ -2,7 +2,7 @@
 
 #include "Bang/AspectRatioMode.h"
 #include "Bang/AssetHandle.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/GL.h"
 #include "Bang/GameObject.h"

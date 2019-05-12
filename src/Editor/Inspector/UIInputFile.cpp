@@ -1,7 +1,7 @@
 #include "BangEditor/UIInputFile.h"
 
 #include "Bang/Assets.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/IEventsDragDrop.h"

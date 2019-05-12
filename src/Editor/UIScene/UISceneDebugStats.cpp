@@ -1,7 +1,7 @@
 #include "BangEditor/UISceneDebugStats.h"
 
 #include "Bang/Alignment.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/Object.h"

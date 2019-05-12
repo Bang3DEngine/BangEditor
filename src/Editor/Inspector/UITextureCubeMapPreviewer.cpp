@@ -10,7 +10,7 @@
 #include "Bang/Input.h"
 #include "Bang/Material.h"
 #include "Bang/MaterialFactory.h"
-#include "Bang/Matrix4.tcc"
+#include "BangMath/Matrix4.tcc"
 #include "Bang/Path.h"
 #include "Bang/RectTransform.h"
 #include "Bang/ShaderProgram.h"
@@ -19,7 +19,7 @@
 #include "Bang/UIAspectRatioFitter.h"
 #include "Bang/UIFocusable.h"
 #include "Bang/UIImageRenderer.h"
-#include "Bang/Vector2.h"
+#include "BangMath/Vector2.h"
 #include "BangEditor/EditorPaths.h"
 
 using namespace Bang;

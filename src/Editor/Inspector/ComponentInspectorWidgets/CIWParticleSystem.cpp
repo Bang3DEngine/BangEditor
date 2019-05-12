@@ -15,7 +15,7 @@
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/IEvents.h"
-#include "Bang/Math.h"
+#include "BangMath/Math.h"
 #include "Bang/Mesh.h"
 #include "Bang/Particle.h"
 #include "Bang/ParticleSystem.h"

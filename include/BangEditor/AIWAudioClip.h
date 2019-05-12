@@ -7,7 +7,7 @@
 #include "Bang/AudioClip.h"
 #include "Bang/Bang.h"
 #include "Bang/BangDefines.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/EventEmitter.tcc"
 #include "Bang/EventListener.tcc"
 #include "Bang/IEvents.h"

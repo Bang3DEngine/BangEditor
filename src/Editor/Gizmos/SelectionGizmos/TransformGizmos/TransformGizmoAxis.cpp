@@ -1,12 +1,12 @@
 #include "BangEditor/TransformGizmoAxis.h"
 
 #include "Bang/AxisFunctions.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/GameObject.h"
 #include "Bang/GameObject.tcc"
-#include "Bang/Math.h"
+#include "BangMath/Math.h"
 #include "Bang/Transform.h"
-#include "Bang/Vector3.h"
+#include "BangMath/Vector3.h"
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/UISceneToolbar.h"
 

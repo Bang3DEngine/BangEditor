@@ -1,12 +1,12 @@
 #include "BangEditor/ComponentsGizmos.h"
 
-#include "Bang/AABox.h"
+#include "BangMath/AABox.h"
 #include "Bang/AudioSource.h"
-#include "Bang/Axis.h"
+#include "BangMath/Axis.h"
 #include "Bang/BoxCollider.h"
 #include "Bang/Camera.h"
 #include "Bang/CapsuleCollider.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/Component.h"
 #include "Bang/Debug.h"
 #include "Bang/DecalRenderer.h"
@@ -18,14 +18,14 @@
 #include "Bang/GameObjectFactory.h"
 #include "Bang/HideFlags.h"
 #include "Bang/Material.h"
-#include "Bang/Math.h"
+#include "BangMath/Math.h"
 #include "Bang/Mesh.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/NavigationMesh.h"
 #include "Bang/ParticleSystem.h"
 #include "Bang/PointLight.h"
-#include "Bang/Quaternion.h"
+#include "BangMath/Quaternion.h"
 #include "Bang/ReflectionProbe.h"
 #include "Bang/RenderFactory.h"
 #include "Bang/Rope.h"
@@ -33,7 +33,7 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/SphereCollider.h"
 #include "Bang/Transform.h"
-#include "Bang/Vector3.h"
+#include "BangMath/Vector3.h"
 #include "BangEditor/Editor.h"
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/EditorSceneManager.h"
@@ -229,14 +229,14 @@ void ComponentsGizmos::RenderCapsuleColliderGizmo(CapsuleCollider *cc,
             case Axis3D::X:
                 params.rotation =
                     params.rotation *
-                    Quaternion::AngleAxis(SCAST<float>(Math::Pi) * 0.5f,
+                    Quaternion::AngleAxis(Math::Pi<float>() * 0.5f,
                                           Vector3::Forward());
                 break;
 
             case Axis3D::Z:
                 params.rotation =
                     params.rotation *
-                    Quaternion::AngleAxis(SCAST<float>(Math::Pi) * 0.5f,
+                    Quaternion::AngleAxis(Math::Pi<float>() * 0.5f,
                                           Vector3::Right());
                 break;
 
@@ -498,8 +498,8 @@ void ComponentsGizmos::RenderDirectionalLightGizmo(DirectionalLight *dirLight,
         const Vector3 center = lightGo->GetTransform()->GetPosition();
 
         params.thickness = 2.0f;
-        for (float ang = 0.0f; ang <= 2 * SCAST<float>(Math::Pi);
-             ang += SCAST<float>(Math::Pi) / 4.0f)
+        for (float ang = 0.0f; ang <= 2 * Math::Pi<float>();
+             ang += Math::Pi<float>() / 4.0f)
         {
             const Vector3 offx = right * Math::Cos(ang);
             const Vector3 offy = up * Math::Sin(ang);

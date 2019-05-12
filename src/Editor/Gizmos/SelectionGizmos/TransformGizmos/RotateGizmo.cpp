@@ -5,21 +5,21 @@
 #include "Bang/Array.h"
 #include "Bang/Array.tcc"
 #include "Bang/AssetHandle.h"
-#include "Bang/Axis.h"
+#include "BangMath/Axis.h"
 #include "Bang/Camera.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/GameObject.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
 #include "Bang/LineRenderer.h"
 #include "Bang/Material.h"
 #include "Bang/MaterialFactory.h"
-#include "Bang/Math.h"
+#include "BangMath/Math.h"
 #include "Bang/Mesh.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/Transform.h"
-#include "Bang/Vector3.h"
+#include "BangMath/Vector3.h"
 #include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/RotateGizmoAxis.h"
 
@@ -93,7 +93,7 @@ void RotateGizmo::Render(RenderPass rp, bool renderChildren)
 void RotateGizmo::CreateSphereBoundsPoints()
 {
     constexpr int numSegments = 32;
-    constexpr float angleStep = SCAST<float>((Math::Pi * 2.0f) / numSegments);
+    constexpr float angleStep = ((Math::Pi<float>() * 2.0f) / numSegments);
 
     // Get circle points
     Array<Vector3> circlePoints;

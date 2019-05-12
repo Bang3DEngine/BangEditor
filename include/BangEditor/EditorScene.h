@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "Bang/AARect.h"
+#include "BangMath/AARect.h"
 #include "Bang/Array.tcc"
 #include "Bang/BangDefines.h"
 #include "Bang/EventEmitter.tcc"

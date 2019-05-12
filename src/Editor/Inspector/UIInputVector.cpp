@@ -9,9 +9,9 @@
 #include "Bang/UIInputNumber.h"
 #include "Bang/UIInputText.h"
 #include "Bang/UILayoutElement.h"
-#include "Bang/Vector2.h"
-#include "Bang/Vector3.h"
-#include "Bang/Vector4.h"
+#include "BangMath/Vector2.h"
+#include "BangMath/Vector3.h"
+#include "BangMath/Vector4.h"
 
 using namespace Bang;
 using namespace BangEditor;

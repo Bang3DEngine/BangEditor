@@ -3,7 +3,7 @@
 #include "Bang/Alignment.h"
 #include "Bang/AudioManager.h"
 #include "Bang/Camera.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/EventEmitter.h"
 #include "Bang/EventListener.tcc"
 #include "Bang/Flags.h"

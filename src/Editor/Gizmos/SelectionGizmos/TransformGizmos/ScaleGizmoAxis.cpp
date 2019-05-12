@@ -7,7 +7,7 @@
 #include "Bang/GameObject.h"
 #include "Bang/GameObject.tcc"
 #include "Bang/GameObjectFactory.h"
-#include "Bang/Geometry.h"
+#include "BangMath/Geometry.h"
 #include "Bang/Input.h"
 #include "Bang/LineRenderer.h"
 #include "Bang/Material.h"
@@ -15,17 +15,18 @@
 #include "Bang/Mesh.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/MeshRenderer.h"
-#include "Bang/Plane.h"
-#include "Bang/Ray.h"
+#include "BangMath/Plane.h"
+#include "BangMath/Ray.h"
 #include "Bang/Transform.h"
-#include "Bang/Vector3.h"
+#include "BangMath/Vector3.h"
 #include "BangEditor/EditorCamera.h"
 #include "BangEditor/NotSelectableInEditor.h"
 #include "BangEditor/Selection.h"
 
 namespace Bang
 {
-class Color;
+template <typename>
+class ColorG;
 }
 
 using namespace Bang;

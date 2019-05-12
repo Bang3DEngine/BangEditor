@@ -3,7 +3,7 @@
 #include "Bang/Array.h"
 #include "Bang/Array.tcc"
 #include "Bang/AssetHandle.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/GBuffer.h"
 #include "Bang/GEngine.h"
 #include "Bang/GameObject.tcc"

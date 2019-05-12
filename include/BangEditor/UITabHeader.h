@@ -7,7 +7,7 @@
 #include "Bang/Array.tcc"
 #include "Bang/Bang.h"
 #include "Bang/BangDefines.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/DPtr.h"
 #include "Bang/DPtr.tcc"
 #include "Bang/EventEmitter.h"

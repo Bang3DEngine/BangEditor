@@ -16,7 +16,7 @@
 #include "Bang/Camera.h"
 #include "Bang/CapsuleCollider.h"
 #include "Bang/Cloth.h"
-#include "Bang/Color.h"
+#include "BangMath/Color.h"
 #include "Bang/DecalRenderer.h"
 #include "Bang/Dialog.h"
 #include "Bang/DirectionalLight.h"
