@@ -10,7 +10,7 @@
 #include "Bang/Input.h"
 #include "Bang/Material.h"
 #include "Bang/MaterialFactory.h"
-#include "BangMath/Matrix4.tcc"
+#include "BangMath/Matrix4.h"
 #include "Bang/Path.h"
 #include "Bang/RectTransform.h"
 #include "Bang/ShaderProgram.h"

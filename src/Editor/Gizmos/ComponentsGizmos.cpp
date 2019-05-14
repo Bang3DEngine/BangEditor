@@ -3,6 +3,7 @@
 #include "BangMath/AABox.h"
 #include "Bang/AudioSource.h"
 #include "BangMath/Axis.h"
+#include "BangMath/Quad.h"
 #include "Bang/BoxCollider.h"
 #include "Bang/Camera.h"
 #include "Bang/CapsuleCollider.h"

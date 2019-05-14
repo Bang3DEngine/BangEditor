@@ -4,6 +4,7 @@
 #include <utility>
 
 #include "Bang/Array.h"
+#include "BangMath/Plane.h"
 #include "Bang/Array.tcc"
 #include "Bang/Assert.h"
 #include "Bang/Assets.h"
